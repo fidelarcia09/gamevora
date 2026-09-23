@@ -243,6 +243,18 @@
     </div>
 
 </div>
+<script>
+const saldoGuardado = localStorage.getItem("gamevora_gvr");
 
+const saldo = saldoGuardado !== null
+    ? Number(saldoGuardado)
+    : 0;
+
+document.getElementById("saldoGVR").textContent = "⚡ " + saldo + " GVR";
+
+if (saldoGuardado === null) {
+    localStorage.setItem("gamevora_gvr", "0");
+}
+</script>
 </body>
 </html>
