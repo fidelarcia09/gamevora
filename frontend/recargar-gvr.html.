@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recargar GVR - Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #020b1c;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #00aaff;
+        }
+
+        .volver {
+            color: #00aaff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 30px 20px;
+            background: #081b38;
+            border: 1px solid #126dcc;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0, 140, 255, 0.15);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .descripcion {
+            color: #8fa3bd;
+            margin-bottom: 30px;
+        }
+
+        .opciones {
+            display: grid;
+            gap: 15px;
+        }
+
+        .opcion {
+            padding: 20px;
+            background: #041329;
+            border: 1px solid #164b82;
+            border-radius: 14px;
+            cursor: pointer;
+        }
+
+        .opcion:hover {
+            border-color: #00aaff;
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
+        }
+
+        .cantidad {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nota {
+            margin-top: 25px;
+            color: #71859f;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">⚡ GAME<span>VORA</span></div>
+    <a href="cuenta.html" class="volver">← Mi cuenta</a>
+</header>
+
+<main>
+
+    <div class="card">
+
+        <h1>Recargar GVR</h1>
+
+        <p class="descripcion">
+            Selecciona la cantidad de GVR que quieres añadir.
+        </p>
+
+        <div class="opciones">
+
+            <div class="opcion" onclick="seleccionarGVR(100)">
+                <div class="cantidad">⚡ 100 GVR</div>
+            </div>
+
+            <div class="opcion" onclick="seleccionarGVR(500)">
+                <div class="cantidad">⚡ 500 GVR</div>
+            </div>
+
+            <div class="opcion" onclick="seleccionarGVR(1000)">
+                <div class="cantidad">⚡ 1,000 GVR</div>
+            </div>
+
+            <div class="opcion" onclick="seleccionarGVR(5000)">
+                <div class="cantidad">⚡ 5,000 GVR</div>
+            </div>
+
+        </div>
+
+        <p class="nota">
+            Interfaz de prueba. El sistema de pagos se conectará posteriormente.
+        </p>
+
+    </div>
+
+</main>
+
+<script>
+function seleccionarGVR(cantidad) {
+    alert("Has seleccionado " + cantidad + " GVR.");
+}
+</script>
+
+</body>
+</html>
