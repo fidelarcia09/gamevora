@@ -174,8 +174,8 @@
             <option>2180 Bonds</option>
         </select>
 
-        <button class="continuar">
-            Continuar ⚡
+        <button class="continuar" type="button" onclick="continuarRecarga()">
+    Continuar ⚡
         </button>
 
         <p class="nota">
@@ -187,6 +187,31 @@
     </div>
 
 </div>
+<script>
+function continuarRecarga() {
 
+    const id = document.getElementById("idjugador").value.trim();
+    const cantidad = document.getElementById("cantidad").value;
+
+    if (id === "") {
+        alert("Escribe tu ID de Arena Breakout.");
+        return;
+    }
+
+    if (cantidad === "") {
+        alert("Selecciona una cantidad.");
+        return;
+    }
+
+    const url =
+        "resumen-arenabreakout.html?id=" +
+        encodeURIComponent(id) +
+        "&cantidad=" +
+        encodeURIComponent(cantidad);
+
+    window.location.href = url;
+}
+</script>
+    
 </body>
 </html>
