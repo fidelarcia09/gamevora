@@ -142,7 +142,9 @@
 
 <script>
 function seleccionarGVR(cantidad) {
-    alert("Has seleccionado " + cantidad + " GVR.");
+    window.location.href =
+        "confirmar-gvr.html?cantidad=" +
+        encodeURIComponent(cantidad);
 }
 </script>
 
