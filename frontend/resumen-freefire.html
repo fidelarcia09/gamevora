@@ -182,8 +182,8 @@
             <strong>Precio en GVR próximamente</strong>
         </div>
 
-        <button class="continuar" type="button">
-            Continuar ⚡
+        <button class="continuar" type="button" onclick="continuarPedido()">
+    Continuar ⚡
         </button>
 
         <p class="nota">
@@ -208,7 +208,21 @@
 
     document.getElementById("mostrarCantidad").textContent =
         cantidad || "No especificada";
+function continuarPedido() {
 
+    const parametros = new URLSearchParams(window.location.search);
+
+    const id = parametros.get("id");
+    const cantidad = parametros.get("cantidad");
+
+    const url =
+        "confirmar-pedido.html?id=" +
+        encodeURIComponent(id) +
+        "&cantidad=" +
+        encodeURIComponent(cantidad);
+
+    window.location.href = url;
+    }
 </script>
 
 </body>
