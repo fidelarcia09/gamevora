@@ -3,10 +3,397 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=frontend/index.html">
-    <title>Gamevora</title>
+
+    <title>Gamevora | Recargas Gaming</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* BARRA SUPERIOR */
+
+        header {
+            background: #08152d;
+            border-bottom: 1px solid #123b70;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #39a9ff;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: #ffffff;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .login {
+            border: 1px solid #168cff;
+            color: white;
+            background: transparent;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-weight: bold;
+        }
+
+        /* HERO */
+
+        .hero {
+            margin: 18px;
+            padding: 28px 20px;
+            border-radius: 20px;
+            background:
+                radial-gradient(circle at 90% 20%, #0b68c9 0%, transparent 35%),
+                linear-gradient(135deg, #071a38, #061022);
+            border: 1px solid #145ca3;
+            box-shadow: 0 0 25px rgba(0, 128, 255, 0.15);
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 span {
+            color: #20a7ff;
+        }
+
+        .hero p {
+            color: #a9bad0;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
+        .hero-button {
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            border: none;
+            padding: 13px 20px;
+            border-radius: 11px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0 0 18px rgba(0, 153, 255, 0.3);
+        }
+
+        /* SALDO */
+
+        .saldo {
+            margin: 18px;
+            padding: 18px;
+            border-radius: 16px;
+            background: #091a35;
+            border: 1px solid #154d86;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .saldo small {
+            color: #8298b4;
+        }
+
+        .saldo h2 {
+            margin-top: 5px;
+            color: #39b6ff;
+        }
+
+        .comprar {
+            background: #0d7cff;
+            border: none;
+            color: white;
+            padding: 10px 13px;
+            border-radius: 9px;
+            font-weight: bold;
+        }
+
+        /* SECCIONES */
+
+        .section {
+            padding: 10px 18px 25px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title h2 {
+            font-size: 21px;
+        }
+
+        .section-title span {
+            color: #399fff;
+            font-size: 13px;
+        }
+
+        /* JUEGOS */
+
+        .games {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 13px;
+        }
+
+        .game {
+            background: #0a1830;
+            border: 1px solid #173e68;
+            border-radius: 15px;
+            padding: 18px 12px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .game:hover {
+            transform: translateY(-3px);
+            border-color: #169cff;
+            box-shadow: 0 0 18px rgba(0, 153, 255, 0.18);
+        }
+
+        .game-icon {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .game h3 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .game p {
+            font-size: 12px;
+            color: #8195ad;
+        }
+
+        /* OFERTA */
+
+        .offer {
+            background: linear-gradient(135deg, #0b2348, #071426);
+            border: 1px solid #176ab2;
+            border-radius: 17px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .offer-info h3 {
+            margin-bottom: 7px;
+        }
+
+        .offer-info p {
+            color: #8fa5bd;
+            font-size: 13px;
+        }
+
+        .price {
+            text-align: right;
+        }
+
+        .price strong {
+            color: #35b8ff;
+            font-size: 19px;
+        }
+
+        .buy {
+            margin-top: 7px;
+            background: #087fff;
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        /* PIE */
+
+        footer {
+            text-align: center;
+            padding: 30px 18px;
+            color: #647890;
+            font-size: 12px;
+            border-top: 1px solid #102a49;
+            margin-top: 15px;
+        }
+
+        footer strong {
+            color: #279fff;
+        }
+    </style>
 </head>
+
 <body>
-    <p>Abriendo Gamevora...</p>
+
+<header>
+    <div class="logo">
+        <span class="rayo">⚡</span> GAME<span>VORA</span>
+    </div>
+
+    <button class="login">
+        Iniciar sesión
+    </button>
+</header>
+
+
+<section class="hero">
+
+    <h1>
+        Tu mundo gaming.<br>
+        <span>Un solo lugar.</span> ⚡
+    </h1>
+
+    <p>
+        Recargas digitales, ofertas y productos
+        para tus juegos favoritos.
+    </p>
+
+    <button class="hero-button">
+        Explorar juegos
+    </button>
+
+</section>
+
+
+<section class="saldo">
+
+    <div>
+        <small>Tu saldo</small>
+        <h2>0 GVR</h2>
+    </div>
+
+    <button class="comprar">
+        + Comprar GVR
+    </button>
+
+</section>
+
+
+<section class="section">
+
+    <div class="section-title">
+        <h2>🎮 Juegos</h2>
+        <span>Ver todos</span>
+    </div>
+
+    <div class="games">
+
+        <div class="game">
+            <div class="game-icon">🔥</div>
+            <h3>Free Fire</h3>
+            <p>Diamantes</p>
+        </div>
+
+        <div class="game">
+            <div class="game-icon">🔫</div>
+            <h3>Call of Duty</h3>
+            <p>CP Mobile</p>
+        </div>
+
+        <div class="game">
+            <div class="game-icon">🧱</div>
+            <h3>Roblox</h3>
+            <p>Robux</p>
+        </div>
+
+        <div class="game">
+            <div class="game-icon">🎮</div>
+            <h3>Próximamente</h3>
+            <p>Más juegos</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="section-title">
+        <h2>⚡ Recargas destacadas</h2>
+    </div>
+
+
+    <div class="offer">
+
+        <div class="offer-info">
+            <h3>🔥 Free Fire</h3>
+            <p>310 Diamantes</p>
+        </div>
+
+        <div class="price">
+            <strong>10 GVR</strong>
+            <br>
+            <button class="buy">
+                Comprar
+            </button>
+        </div>
+
+    </div>
+
+
+    <div class="offer">
+
+        <div class="offer-info">
+            <h3>🔫 Call of Duty Mobile</h3>
+            <p>420 CP</p>
+        </div>
+
+        <div class="price">
+            <strong>15 GVR</strong>
+            <br>
+            <button class="buy">
+                Comprar
+            </button>
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <p>
+        <strong>⚡ GAMEVORA</strong>
+    </p>
+
+    <p>
+        Plataforma de recargas digitales para gamers.
+    </p>
+
+    <br>
+
+    <p>
+        © 2026 Gamevora
+    </p>
+
+</footer>
+
 </body>
 </html>
