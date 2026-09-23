@@ -181,6 +181,40 @@
     </div>
 
 </div>
+<script>
+const pedidos = JSON.parse(
+    localStorage.getItem("gamevora_pedidos") || "[]"
+);
 
+const contenedorVacio = document.querySelector(".vacio");
+
+if (pedidos.length > 0 && contenedorVacio) {
+
+    pedidos.forEach((pedido) => {
+
+        const tarjeta = document.createElement("div");
+
+        tarjeta.className = "pedido-dinamico";
+
+        tarjeta.innerHTML = `
+            <div class="detalle">
+                <strong>${pedido.juego}</strong><br>
+                ID: ${pedido.id}<br>
+                Cantidad: ${pedido.cantidad}<br>
+                Estado: ${pedido.estado}<br>
+                Fecha: ${pedido.fecha}
+            </div>
+        `;
+
+        contenedorVacio.parentNode.insertBefore(
+            tarjeta,
+            contenedorVacio
+        );
+    });
+
+    contenedorVacio.style.display = "none";
+}
+</script>
+    
 </body>
   </html>
