@@ -151,7 +151,10 @@
     🇨🇺 TRANSFERENCIA CUBANA
 </button>
         </div>
-
+        
+<button class="continuar" type="button" onclick="continuarPago()">
+    Continuar ⚡
+</button>
         <div class="nota">
             Sistema de pagos en desarrollo.<br>
             Los métodos de pago reales se conectarán posteriormente.
@@ -172,6 +175,16 @@ if (cantidad) {
 } else {
     mostrarCantidad.textContent = "No especificada";
 }
+function continuarPago() {
+    const seleccionado = document.querySelector(".metodo.seleccionado");
+
+    if (!seleccionado) {
+        alert("Selecciona un método de pago.");
+        return;
+    }
+
+    alert("Método seleccionado: " + seleccionado.textContent.trim());
+}   
 </script>
 
 </body>
