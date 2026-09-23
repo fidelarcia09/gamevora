@@ -184,7 +184,7 @@
         </div>
 
         <button class="confirmar" type="button" onclick="confirmarPedido()">
-            Confirmar pedido ⚡
+    Confirmar pedido ⚡
         </button>
 
         <p class="nota">
@@ -214,13 +214,18 @@
 
     function confirmarPedido() {
 
-        alert(
-            "Pedido de prueba confirmado. ⚡\n\n" +
-            "Free Fire\n" +
-            "ID: " + (id || "No especificado") + "\n" +
-            "Cantidad: " + (cantidad || "No especificada")
-        );
+    const parametros = new URLSearchParams(window.location.search);
 
+    const id = parametros.get("id");
+    const cantidad = parametros.get("cantidad");
+
+    const url =
+        "pedido-realizado.html?id=" +
+        encodeURIComponent(id) +
+        "&cantidad=" +
+        encodeURIComponent(cantidad);
+
+    window.location.href = url;
     }
 
 </script>
