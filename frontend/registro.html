@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Crear cuenta | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .registro {
+            width: 100%;
+            max-width: 430px;
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 28px 22px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .logo .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .logo span {
+            color: #ffffff;
+        }
+
+        .titulo {
+            text-align: center;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            font-size: 24px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            color: #b8c9dc;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 17px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
+
+        .crear {
+            width: 100%;
+            padding: 14px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .login {
+            text-align: center;
+            margin-top: 20px;
+            color: #8195ad;
+            font-size: 13px;
+        }
+
+        .login a {
+            color: #28a9ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nota {
+            margin-top: 18px;
+            text-align: center;
+            color: #627b97;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="registro">
+
+    <div class="logo">
+        <span class="rayo">⚡</span> GAME<span>VORA</span>
+    </div>
+
+    <h1 class="titulo">Crear cuenta</h1>
+
+    <p class="descripcion">
+        Únete a Gamevora y comienza tu experiencia gaming.
+    </p>
+
+    <form>
+
+        <label for="usuario">Nombre de usuario</label>
+        <input
+            type="text"
+            id="usuario"
+            placeholder="Ej: Gamer123"
+            required
+        >
+
+        <label for="correo">Correo electrónico</label>
+        <input
+            type="email"
+            id="correo"
+            placeholder="tucorreo@email.com"
+            required
+        >
+
+        <label for="contrasena">Contraseña</label>
+        <input
+            type="password"
+            id="contrasena"
+            placeholder="Crea una contraseña"
+            required
+        >
+
+        <label for="confirmar">Confirmar contraseña</label>
+        <input
+            type="password"
+            id="confirmar"
+            placeholder="Repite tu contraseña"
+            required
+        >
+
+        <button class="crear" type="submit">
+            Crear cuenta ⚡
+        </button>
+
+    </form>
+
+    <div class="login">
+        ¿Ya tienes una cuenta?
+        <a href="#">Iniciar sesión</a>
+    </div>
+
+    <p class="nota">
+        Esta versión es una interfaz de prueba.
+        La creación de cuentas real se conectará posteriormente
+        al backend seguro de Gamevora.
+    </p>
+
+</div>
+
+</body>
+  </html>
