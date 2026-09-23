@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Confirmar pedido | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px;
+            border-bottom: 1px solid #12365c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #00baff;
+        }
+
+        .rayo {
+            color: #ffd21c;
+        }
+
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 30px 18px;
+        }
+
+        .contenedor {
+            max-width: 625px;
+            margin: auto;
+            background: #091a35;
+            border: 1px solid #14518c;
+            border-radius: 22px;
+            padding: 35px 20px;
+            text-align: center;
+        }
+
+        .icono {
+            font-size: 70px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .descripcion {
+            color: #8fa5bd;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .dato {
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        .dato span {
+            display: block;
+            color: #8195ad;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .dato strong {
+            font-size: 18px;
+        }
+
+        .total {
+            background: #0d2b55;
+            border: 1px solid #168cff;
+            border-radius: 15px;
+            padding: 22px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        .total span {
+            display: block;
+            color: #8fcaff;
+            margin-bottom: 10px;
+        }
+
+        .total strong {
+            font-size: 27px;
+        }
+
+        .confirmar {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 11px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .nota {
+            margin-top: 22px;
+            color: #627b97;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <span class="rayo">⚡</span> GAME<span>VORA</span>
+    </div>
+
+    <a href="codmobile.html" class="volver">
+        ← COD Mobile
+    </a>
+
+</header>
+
+<main>
+
+    <div class="contenedor">
+
+        <div class="icono">
+            🧾
+        </div>
+
+        <h1>
+            Confirmar pedido
+        </h1>
+
+        <p class="descripcion">
+            Revisa tu pedido antes de confirmarlo.
+        </p>
+
+        <div class="dato">
+            <span>Juego</span>
+            <strong>Call of Duty Mobile 🎯</strong>
+        </div>
+
+        <div class="dato">
+            <span>ID del jugador</span>
+            <strong id="mostrarId">No especificado</strong>
+        </div>
+
+        <div class="dato">
+            <span>Cantidad</span>
+            <strong id="mostrarCantidad">No especificada</strong>
+        </div>
+
+        <div class="total">
+            <span>Total a pagar</span>
+            <strong>Precio en GVR próximamente</strong>
+        </div>
+
+        <button
+            class="confirmar"
+            type="button"
+            onclick="confirmarPedido()">
+            Confirmar pedido ⚡
+        </button>
+
+        <p class="nota">
+            Esta es una interfaz de prueba.
+            La confirmación real del pedido,
+            el saldo GVR y la recarga se conectarán
+            posteriormente al backend de Gamevora.
+        </p>
+
+    </div>
+
+</main>
+
+<script>
+
+    const parametros =
+        new URLSearchParams(window.location.search);
+
+    const id =
+        parametros.get("id");
+
+    const cantidad =
+        parametros.get("cantidad");
+
+    document.getElementById("mostrarId").textContent =
+        id || "No especificado";
+
+    document.getElementById("mostrarCantidad").textContent =
+        cantidad || "No especificada";
+
+    function confirmarPedido() {
+
+        const url =
+            "pedido-realizado-codmobile.html?id=" +
+            encodeURIComponent(id) +
+            "&cantidad=" +
+            encodeURIComponent(cantidad);
+
+        window.location.href = url;
+    }
+
+</script>
+
+</body>
+</html>
