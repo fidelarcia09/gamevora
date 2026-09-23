@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Call of Duty Mobile | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            border-bottom: 1px solid #12385f;
+            background: #071225;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .logo .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .inicio {
+            text-decoration: none;
+            color: white;
+            border: 1px solid #168cff;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            padding: 25px 18px;
+        }
+
+        .juego {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+        }
+
+        .icono {
+            text-align: center;
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #b8c9dc;
+            font-size: 13px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 18px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
+
+        .recargar {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .nota {
+            text-align: center;
+            color: #627b97;
+            font-size: 11px;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <span class="rayo">⚡</span> GAMEVORA
+    </div>
+
+    <a href="juegos.html" class="inicio">
+        ← Juegos
+    </a>
+</header>
+
+<main class="contenedor">
+
+    <section class="juego">
+
+        <div class="icono">🎯</div>
+
+        <h1>Call of Duty Mobile</h1>
+
+        <p class="descripcion">
+            Recarga tus CP de Call of Duty Mobile de forma rápida y sencilla.
+        </p>
+
+        <label for="id">ID del jugador</label>
+
+        <input
+            type="text"
+            id="id"
+            placeholder="Escribe tu ID de Call of Duty"
+        >
+
+        <label for="cantidad">Cantidad</label>
+
+        <select id="cantidad">
+            <option value="">Selecciona una cantidad</option>
+            <option>80 CP</option>
+            <option>400 CP</option>
+            <option>800 CP</option>
+            <option>2000 CP</option>
+            <option>4000 CP</option>
+        </select>
+
+        <button class="recargar">
+            Continuar ⚡
+        </button>
+
+        <p class="nota">
+            Esta versión es una interfaz de prueba.
+            Las recargas reales se conectarán posteriormente
+            al sistema de Gamevora.
+        </p>
+
+    </section>
+
+</main>
+
+</body>
+</html>
