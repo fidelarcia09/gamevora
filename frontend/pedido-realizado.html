@@ -211,7 +211,31 @@
 
     document.getElementById("mostrarCantidad").textContent =
         cantidad || "No especificada";
+    const pedido = {
+    juego: "Free Fire",
+    id: id || "No especificado",
+    cantidad: cantidad || "No especificada",
+    estado: "Completado",
+    fecha: new Date().toLocaleString("es-ES")
+};
 
+const clavePedido = "gamevora_pedido_" + window.location.search;
+
+if (!sessionStorage.getItem(clavePedido) && id && cantidad) {
+
+    let pedidos = JSON.parse(
+        localStorage.getItem("gamevora_pedidos") || "[]"
+    );
+
+    pedidos.push(pedido);
+
+    localStorage.setItem(
+        "gamevora_pedidos",
+        JSON.stringify(pedidos)
+    );
+
+    sessionStorage.setItem(clavePedido, "guardado");
+        }
 </script>
 
 </body>
