@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pedido realizado | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px;
+            border-bottom: 1px solid #12365c;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #00baff;
+        }
+
+        .rayo {
+            color: #ffd21c;
+        }
+
+        main {
+            padding: 40px 18px;
+        }
+
+        .contenedor {
+            max-width: 625px;
+            margin: auto;
+            background: #091a35;
+            border: 1px solid #14518c;
+            border-radius: 22px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .check {
+            font-size: 75px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .descripcion {
+            color: #8fa5bd;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .dato {
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        .dato span {
+            display: block;
+            color: #8195ad;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .dato strong {
+            font-size: 18px;
+        }
+
+        .mensaje {
+            background: #0d2b55;
+            border: 1px solid #168cff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            color: #b9ddff;
+            line-height: 1.5;
+        }
+
+        .volver {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border-radius: 11px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .nota {
+            margin-top: 22px;
+            color: #627b97;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <span class="rayo">⚡</span> GAME<span>VORA</span>
+    </div>
+
+</header>
+
+<main>
+
+    <div class="contenedor">
+
+        <div class="check">
+            ✅
+        </div>
+
+        <h1>
+            ¡Pedido realizado!
+        </h1>
+
+        <p class="descripcion">
+            Tu pedido de Arena Breakout ha sido registrado.
+        </p>
+
+        <div class="dato">
+            <span>Juego</span>
+            <strong>Arena Breakout</strong>
+        </div>
+
+        <div class="dato">
+            <span>ID del jugador</span>
+            <strong id="mostrarId">No especificado</strong>
+        </div>
+
+        <div class="dato">
+            <span>Cantidad</span>
+            <strong id="mostrarCantidad">No especificada</strong>
+        </div>
+
+        <div class="mensaje">
+            ⚡ El pedido ha sido registrado correctamente.
+            Los sistemas de GVR y procesamiento real se
+            conectarán posteriormente.
+        </div>
+
+        <a href="juegos.html" class="volver">
+            Volver a juegos ⚡
+        </a>
+
+        <p class="nota">
+            Gamevora — sistema de pedidos en desarrollo.
+        </p>
+
+    </div>
+
+</main>
+
+<script>
+
+    const parametros =
+        new URLSearchParams(window.location.search);
+
+    const id =
+        parametros.get("id");
+
+    const cantidad =
+        parametros.get("cantidad");
+
+    document.getElementById("mostrarId").textContent =
+        id || "No especificado";
+
+    document.getElementById("mostrarCantidad").textContent =
+        cantidad || "No especificada";
+
+</script>
+
+</body>
+</html>
