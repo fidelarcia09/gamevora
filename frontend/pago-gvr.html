@@ -162,20 +162,16 @@
 </main>
 
 <script>
-    const parametros = new URLSearchParams(window.location.search);
-    const cantidad = parametros.get("cantidad");
+const parametros = new URLSearchParams(window.location.search);
+const cantidad = parametros.get("cantidad");
 
-    document.getElementById("mostrarCantidad").textContent =
-        cantidad ? "⚡ " + cantidad + " GVR" : "No especificada";
-    function seleccionarMetodo(boton) {
-    document.querySelectorAll(".metodo").forEach(function(elemento) {
-        elemento.classList.remove("seleccionado");
-    });
+const mostrarCantidad = document.getElementById("mostrarCantidad");
 
-    boton.classList.add("seleccionado");
-            }
-    });
-    }
+if (cantidad) {
+    mostrarCantidad.textContent = "⚡ " + cantidad + " GVR";
+} else {
+    mostrarCantidad.textContent = "No especificada";
+}
 </script>
 
 </body>
