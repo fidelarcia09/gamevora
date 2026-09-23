@@ -58,33 +58,19 @@
 
         /* BANNER */
 
-        .banner {
-            margin: 18px;
-            padding: 35px 20px;
-            border-radius: 20px;
-            text-align: center;
-            background:
-                radial-gradient(circle at 50% 20%, #0b68c9 0%, transparent 45%),
-                linear-gradient(135deg, #071a38, #061022);
-            border: 1px solid #145ca3;
-            box-shadow: 0 0 25px rgba(0, 128, 255, 0.15);
-        }
+        ..banner {
+    margin: 18px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #145ca3;
+    box-shadow: 0 0 25px rgba(0, 128, 255, 0.15);
+}
 
-        .banner h1 {
-            font-size: 31px;
-            line-height: 1.15;
-            margin-bottom: 12px;
-        }
-
-        .banner h1 span {
-            color: #20a7ff;
-        }
-
-        .banner p {
-            color: #a9bad0;
-            font-size: 15px;
-            line-height: 1.5;
-        }
+.banner-imagen {
+    display: block;
+    width: 100%;
+    height: auto;
+}
 
         /* JUEGOS */
 
@@ -173,6 +159,14 @@
 
 
 <section class="banner">
+
+    <img
+        src="imágenes/IMG-20260922-WA0011.jpg"
+        alt="Recarga tus juegos favoritos"
+        class="banner-imagen"
+    >
+
+</section>
 
     <h1>
         Recarga tus<br>
