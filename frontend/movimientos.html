@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Movimientos | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .contenedor {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #8195ad;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .movimiento {
+            background: #061226;
+            border: 1px solid #173d63;
+            border-radius: 13px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .fila {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tipo {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .fecha {
+            color: #7188a0;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .cantidad {
+            font-weight: bold;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        .positivo {
+            color: #38d996;
+        }
+
+        .negativo {
+            color: #ff6b6b;
+        }
+
+        .vacio {
+            text-align: center;
+            color: #7188a0;
+            font-size: 13px;
+            padding: 25px 10px;
+        }
+
+        .nota {
+            margin-top: 20px;
+            text-align: center;
+            color: #627b97;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <div class="header">
+
+        <div class="logo">
+            <span class="rayo">⚡</span> GAMEVORA
+        </div>
+
+        <a href="cuenta.html" class="volver">
+            ← Mi cuenta
+        </a>
+
+    </div>
+
+    <div class="card">
+
+        <h1>Movimientos GVR</h1>
+
+        <p class="descripcion">
+            Historial de movimientos de tu saldo.
+        </p>
+
+        <div class="movimiento">
+
+            <div class="fila">
+
+                <div>
+                    <div class="tipo">
+                        Saldo inicial
+                    </div>
+
+                    <div class="fecha">
+                        23 Sep 2026
+                    </div>
+                </div>
+
+                <div class="cantidad positivo">
+                    +0 GVR
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="vacio">
+            No hay más movimientos registrados.
+        </div>
+
+        <p class="nota">
+            Esta es una interfaz de prueba.
+            Los movimientos reales se cargarán posteriormente
+            desde el backend de Gamevora.
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+          </html>
