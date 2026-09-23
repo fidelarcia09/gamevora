@@ -172,8 +172,8 @@
             <option>4000 CP</option>
         </select>
 
-        <button class="recargar">
-            Continuar ⚡
+        <button class="recargar" type="button" onclick="continuarRecarga()">
+    Continuar ⚡
         </button>
 
         <p class="nota">
@@ -185,6 +185,30 @@
     </section>
 
 </main>
+<script>
+function continuarRecarga() {
 
+    const id = document.getElementById("id").value;
+    const cantidad = document.getElementById("cantidad").value;
+
+    if (id === "") {
+        alert("Escribe tu ID de Call of Duty Mobile.");
+        return;
+    }
+
+    if (cantidad === "") {
+        alert("Selecciona una cantidad.");
+        return;
+    }
+
+    const url =
+        "resumen-codmobile.html?id=" +
+        encodeURIComponent(id) +
+        "&cantidad=" +
+        encodeURIComponent(cantidad);
+
+    window.location.href = url;
+}
+</script>
 </body>
 </html>
