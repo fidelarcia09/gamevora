@@ -171,8 +171,8 @@
             <option>2180 diamantes</option>
         </select>
 
-        <button class="recargar">
-            Continuar ⚡
+        <button class="recargar" type="button" onclick="continuarRecarga()">
+    Continuar ⚡
         </button>
 
         <p class="nota">
@@ -184,6 +184,30 @@
     </section>
 
 </main>
+<script>
+function continuarRecarga() {
 
+    const id = document.getElementById("id").value.trim();
+    const cantidad = document.getElementById("cantidad").value;
+
+    if (id === "") {
+        alert("Escribe tu ID de Free Fire.");
+        return;
+    }
+
+    if (cantidad === "") {
+        alert("Selecciona una cantidad.");
+        return;
+    }
+
+    const url =
+        "resumen-freefire.html?id=" +
+        encodeURIComponent(id) +
+        "&cantidad=" +
+        encodeURIComponent(cantidad);
+
+    window.location.href = url;
+}
+</script>
 </body>
 </html>
