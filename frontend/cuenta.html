@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mi cuenta | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .contenedor {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 22px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        }
+
+        .avatar {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: #061226;
+            border: 2px solid #159dff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #8195ad;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .dato {
+            background: #061226;
+            border: 1px solid #173d63;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .dato-titulo {
+            color: #7891aa;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .dato-valor {
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .saldo {
+            margin-top: 18px;
+            margin-bottom: 18px;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            background: linear-gradient(135deg, #08244a, #063467);
+            border: 1px solid #168cff;
+            box-shadow: 0 0 20px rgba(0, 140, 255, 0.15);
+        }
+
+        .saldo-titulo {
+            color: #9bcfff;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .saldo-valor {
+            font-size: 28px;
+            font-weight: 900;
+            color: #ffffff;
+        }
+
+        .boton {
+            display: block;
+            width: 100%;
+            padding: 13px;
+            margin-top: 10px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .boton-secundario {
+            background: #0b203b;
+            border: 1px solid #20527e;
+        }
+
+        .nota {
+            margin-top: 20px;
+            text-align: center;
+            color: #627b97;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <div class="header">
+
+        <div class="logo">
+            <span class="rayo">⚡</span> GAMEVORA
+        </div>
+
+        <a href="index.html" class="volver">
+            ← Inicio
+        </a>
+
+    </div>
+
+    <div class="card">
+
+        <div class="avatar">
+            👤
+        </div>
+
+        <h1>Mi cuenta</h1>
+
+        <p class="subtitulo">
+            Información de tu cuenta Gamevora
+        </p>
+
+        <div class="dato">
+            <div class="dato-titulo">
+                Nombre de usuario
+            </div>
+
+            <div class="dato-valor">
+                Gamer123
+            </div>
+        </div>
+
+        <div class="dato">
+            <div class="dato-titulo">
+                Correo electrónico
+            </div>
+
+            <div class="dato-valor">
+                gamer@email.com
+            </div>
+        </div>
+
+        <div class="dato">
+            <div class="dato-titulo">
+                ID de cuenta
+            </div>
+
+            <div class="dato-valor">
+                GV-000001
+            </div>
+        </div>
+
+        <div class="saldo">
+
+            <div class="saldo-titulo">
+                Saldo disponible
+            </div>
+
+            <div class="saldo-valor">
+                ⚡ 0 GVR
+            </div>
+
+        </div>
+
+        <a href="#" class="boton">
+            Ver movimientos
+        </a>
+
+        <a href="#" class="boton boton-secundario">
+            Historial de pedidos
+        </a>
+
+        <p class="nota">
+            Esta es una interfaz de prueba.
+            Los datos reales de cada usuario y el saldo GVR
+            se conectarán posteriormente mediante el backend seguro de Gamevora.
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>
