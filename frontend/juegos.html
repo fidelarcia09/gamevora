@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Juegos | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* ENCABEZADO */
+
+        header {
+            background: #08152d;
+            border-bottom: 1px solid #123b70;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        .volver {
+            color: white;
+            text-decoration: none;
+            border: 1px solid #168cff;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        /* BANNER */
+
+        .banner {
+            margin: 18px;
+            padding: 35px 20px;
+            border-radius: 20px;
+            text-align: center;
+            background:
+                radial-gradient(circle at 50% 20%, #0b68c9 0%, transparent 45%),
+                linear-gradient(135deg, #071a38, #061022);
+            border: 1px solid #145ca3;
+            box-shadow: 0 0 25px rgba(0, 128, 255, 0.15);
+        }
+
+        .banner h1 {
+            font-size: 31px;
+            line-height: 1.15;
+            margin-bottom: 12px;
+        }
+
+        .banner h1 span {
+            color: #20a7ff;
+        }
+
+        .banner p {
+            color: #a9bad0;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* JUEGOS */
+
+        .juegos {
+            padding: 10px 18px 30px;
+        }
+
+        .titulo {
+            text-align: center;
+            margin: 15px 0 20px;
+            font-size: 24px;
+        }
+
+        .titulo span {
+            color: #20a7ff;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 13px;
+        }
+
+        .juego {
+            text-decoration: none;
+            color: white;
+            background: #091a35;
+            border: 1px solid #173e68;
+            border-radius: 16px;
+            padding: 22px 10px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .juego:hover {
+            transform: translateY(-3px);
+            border-color: #169cff;
+            box-shadow: 0 0 18px rgba(0, 153, 255, 0.20);
+        }
+
+        .icono {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .juego h3 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .juego p {
+            color: #8195ad;
+            font-size: 12px;
+        }
+
+        /* PIE */
+
+        footer {
+            text-align: center;
+            padding: 30px 18px;
+            color: #647890;
+            font-size: 12px;
+            border-top: 1px solid #102a49;
+            margin-top: 10px;
+        }
+
+        footer strong {
+            color: #279fff;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <span class="rayo">⚡</span> GAME<span>VORA</span>
+    </div>
+
+    <a href="index.html" class="volver">
+        Inicio
+    </a>
+
+</header>
+
+
+<section class="banner">
+
+    <h1>
+        Recarga tus<br>
+        <span>juegos favoritos</span> ⚡
+    </h1>
+
+    <p>
+        Diamantes, CP, Robux y mucho más.
+        <br>
+        Elige tu juego para comenzar.
+    </p>
+
+</section>
+
+
+<section class="juegos">
+
+    <h2 class="titulo">
+        Elige tu <span>juego</span>
+    </h2>
+
+    <div class="grid">
+
+        <a href="#" class="juego">
+            <div class="icono">🔥</div>
+            <h3>Free Fire</h3>
+            <p>Diamantes</p>
+        </a>
+
+        <a href="#" class="juego">
+            <div class="icono">🔫</div>
+            <h3>Call of Duty Mobile</h3>
+            <p>CP</p>
+        </a>
+
+        <a href="#" class="juego">
+            <div class="icono">🎮</div>
+            <h3>Mobile Legends</h3>
+            <p>Diamantes</p>
+        </a>
+
+        <a href="#" class="juego">
+            <div class="icono">🩸</div>
+            <h3>Blood Strike</h3>
+            <p>Gold</p>
+        </a>
+
+        <a href="#" class="juego">
+            <div class="icono">⚔️</div>
+            <h3>Clash of Clans</h3>
+            <p>Recargas</p>
+        </a>
+
+        <a href="#" class="juego">
+            <div class="icono">👑</div>
+            <h3>Clash Royale</h3>
+            <p>Recargas</p>
+        </a>
+
+        <a href="#" class="juego">
+            <div class="icono">🎯</div>
+            <h3>Arena Breakout</h3>
+            <p>Recargas</p>
+        </a>
+
+        <a href="#" class="juego">
+            <div class="icono">🧱</div>
+            <h3>Roblox</h3>
+            <p>Robux</p>
+        </a>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <p>
+        <strong>⚡ GAMEVORA</strong>
+    </p>
+
+    <p>
+        Recargas digitales para gamers.
+    </p>
+
+    <br>
+
+    <p>
+        © 2026 Gamevora
+    </p>
+
+</footer>
+
+</body>
+  </html>
