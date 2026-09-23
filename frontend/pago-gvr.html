@@ -99,7 +99,14 @@
             font-size: 18px;
             font-weight: bold;
         }
-
+        
+        .metodo.seleccionado {
+    background: #0d7cff;
+    color: white;
+    border-color: #00baff;
+    box-shadow: 0 0 18px rgba(0, 153, 255, 0.45);
+        }
+        
         .nota {
             color: #8da3c1;
             margin-top: 25px;
@@ -140,7 +147,7 @@
             </button>
 
             <button class="metodo" type="button" onclick="seleccionarMetodo('Transferencia cubana')">
-    🇨🇺 Transferencia cubana
+    🇨🇺 TRANSFERENCIA CUBANA
             </button>
 
         </div>
@@ -160,6 +167,19 @@
 
     document.getElementById("mostrarCantidad").textContent =
         cantidad ? "⚡ " + cantidad + " GVR" : "No especificada";
+    function seleccionarMetodo(metodo) {
+    document.querySelectorAll(".metodo").forEach(function(boton) {
+        boton.classList.remove("seleccionado");
+    });
+
+    const botones = document.querySelectorAll(".metodo");
+
+    botones.forEach(function(boton) {
+        if (boton.textContent.includes(metodo)) {
+            boton.classList.add("seleccionado");
+        }
+    });
+    }
 </script>
 
 </body>
