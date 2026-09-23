@@ -196,8 +196,6 @@
 
     document.getElementById("mostrarCantidad").textContent =
         cantidad || "No especificada";
-
-</script>
 const pedido = {
     juego: "Blood Strike",
     id: id || "No especificado",
@@ -222,6 +220,8 @@ if (!sessionStorage.getItem(clavePedido) && id && cantidad) {
     );
 
     sessionStorage.setItem(clavePedido, "guardado");
-}
+    }
+</script>
+    
 </body>
 </html>
