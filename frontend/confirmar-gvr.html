@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar GVR - Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #020b1c;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #00aaff;
+        }
+
+        .volver {
+            color: #00aaff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 30px 20px;
+            background: #081b38;
+            border: 1px solid #126dcc;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0, 140, 255, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .dato {
+            background: #041329;
+            border: 1px solid #164b82;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        .titulo {
+            color: #8fa3bd;
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .valor {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .boton {
+            display: block;
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nota {
+            text-align: center;
+            color: #71859f;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">⚡ GAME<span>VORA</span></div>
+    <a href="recargar-gvr.html" class="volver">← Volver</a>
+</header>
+
+<main>
+
+    <div class="card">
+
+        <h1>Confirmar recarga</h1>
+
+        <div class="dato">
+            <div class="titulo">Cantidad de GVR</div>
+            <div class="valor" id="mostrarCantidad">Cargando...</div>
+        </div>
+
+        <div class="dato">
+            <div class="titulo">Estado</div>
+            <div class="valor">Pendiente de pago</div>
+        </div>
+
+        <button class="boton" type="button" onclick="continuarPago()">
+            Continuar ⚡
+        </button>
+
+        <div class="nota">
+            El pago real se conectará posteriormente.
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+const parametros = new URLSearchParams(window.location.search);
+const cantidad = parametros.get("cantidad");
+
+document.getElementById("mostrarCantidad").textContent =
+    cantidad ? "⚡ " + cantidad + " GVR" : "No especificada";
+
+function continuarPago() {
+    if (!cantidad) {
+        alert("No se ha seleccionado una cantidad de GVR.");
+        return;
+    }
+
+    window.location.href =
+        "pago-gvr.html?cantidad=" +
+        encodeURIComponent(cantidad);
+}
+</script>
+
+</body>
+</html>
