@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pagar GVR - Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #020b1c;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+        }
+
+        .logo {
+            font-size: 34px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #168cff;
+        }
+
+        .volver {
+            color: #168cff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        main {
+            padding: 40px 18px;
+        }
+
+        .card {
+            max-width: 620px;
+            margin: auto;
+            background: #071a39;
+            border: 1px solid #126bdc;
+            border-radius: 22px;
+            padding: 40px 30px;
+            box-shadow: 0 0 30px rgba(0, 128, 255, 0.12);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 30px;
+        }
+
+        .dato {
+            background: #031127;
+            border: 1px solid #12375f;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .titulo {
+            color: #8da3c1;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .valor {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .metodos {
+            margin-top: 28px;
+        }
+
+        .metodos h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .metodo {
+            background: #031127;
+            border: 1px solid #145ca3;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .nota {
+            color: #8da3c1;
+            margin-top: 25px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">⚡ GAME<span>VORA</span></div>
+
+    <a href="cuenta.html" class="volver">← Mi cuenta</a>
+</header>
+
+<main>
+
+    <div class="card">
+
+        <h1>Pagar GVR</h1>
+
+        <div class="dato">
+            <div class="titulo">Cantidad seleccionada</div>
+            <div class="valor" id="mostrarCantidad">Cargando...</div>
+        </div>
+
+        <div class="metodos">
+
+            <h2>Métodos de pago</h2>
+
+            <div class="metodo">
+                💵 USD
+            </div>
+
+            <div class="metodo">
+                🪙 USDT
+            </div>
+
+            <div class="metodo">
+                🇨🇺 Transferencia cubana
+            </div>
+
+        </div>
+
+        <div class="nota">
+            Sistema de pagos en desarrollo.<br>
+            Los métodos de pago reales se conectarán posteriormente.
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+    const parametros = new URLSearchParams(window.location.search);
+    const cantidad = parametros.get("cantidad");
+
+    document.getElementById("mostrarCantidad").textContent =
+        cantidad ? "⚡ " + cantidad + " GVR" : "No especificada";
+</script>
+
+</body>
+  </html>
