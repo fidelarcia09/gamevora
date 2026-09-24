@@ -196,7 +196,13 @@ function continuarPago() {
         return;
     }
 
-    alert("Método seleccionado: " + seleccionado.textContent.trim());
+    const metodo = seleccionado.textContent.trim();
+
+window.location.href =
+    "confirmar-gvr.html?cantidad=" +
+    encodeURIComponent(cantidad) +
+    "&metodo=" +
+    encodeURIComponent(metodo);
 }   
 </script>
 
