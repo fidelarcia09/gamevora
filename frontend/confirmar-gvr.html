@@ -117,13 +117,18 @@
             <div class="titulo">Cantidad de GVR</div>
             <div class="valor" id="mostrarCantidad">Cargando...</div>
         </div>
-
+        
+        <div class="dato">
+    <div class="titulo">Método de pago</div>
+    <div class="valor" id="mostrarMetodo">Cargando...</div>
+        </div>
+        
         <div class="dato">
             <div class="titulo">Estado</div>
             <div class="valor">Pendiente de pago</div>
         </div>
 
-        <button class="boton" type="button" onclick="continuarPago()">
+        <button class="boton" type="button" onclick="confirmarPago()">
             Continuar ⚡
         </button>
 
@@ -137,22 +142,29 @@
 
 <script>
 const parametros = new URLSearchParams(window.location.search);
+
 const cantidad = parametros.get("cantidad");
+const metodo = parametros.get("metodo");
 
 document.getElementById("mostrarCantidad").textContent =
     cantidad ? "⚡ " + cantidad + " GVR" : "No especificada";
 
-function continuarPago() {
-    if (!cantidad) {
-        alert("No se ha seleccionado una cantidad de GVR.");
+document.getElementById("mostrarMetodo").textContent =
+    metodo ? metodo : "No especificado";
+
+function confirmarPago() {
+    if (!cantidad || !metodo) {
+        alert("Faltan datos de la compra.");
         return;
     }
 
-    window.location.href =
-        "pago-gvr.html?cantidad=" +
-        encodeURIComponent(cantidad);
+    alert(
+        "Compra preparada:\n\n" +
+        cantidad + " GVR\n" +
+        "Método: " + metodo
+    );
 }
-</script>
+        </script>
 
 </body>
 </html>
