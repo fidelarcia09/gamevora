@@ -147,11 +147,18 @@ const cantidad = parametros.get("cantidad");
 const metodo = parametros.get("metodo");
 
 const mostrarCantidad = document.getElementById("mostrarCantidad");
+const mostrarMetodo = document.getElementById("mostrarMetodo");
 
 if (cantidad) {
     mostrarCantidad.textContent = "⚡ " + cantidad + " GVR";
 } else {
     mostrarCantidad.textContent = "No especificada";
+}
+
+if (metodo) {
+    mostrarMetodo.textContent = metodo;
+} else {
+    mostrarMetodo.textContent = "No especificado";
 }
 
 function continuarPago() {
