@@ -156,7 +156,7 @@ if (cantidad) {
 }
 
 if (metodo) {
-    mostrarMetodo.textContent = metodo;
+    mostrarMetodo.textContent = "💵 " + metodo;
 } else {
     mostrarMetodo.textContent = "No especificado";
 }
@@ -171,6 +171,11 @@ function continuarPago() {
     const cantidadNumerica = Number(
         cantidad.replace(/,/g, "")
     );
+
+    if (isNaN(cantidadNumerica)) {
+        alert("La cantidad de GVR no es válida.");
+        return;
+    }
 
     const saldoActual = Number(
         localStorage.getItem("gamevora_gvr") || "0"
