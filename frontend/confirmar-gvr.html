@@ -146,25 +146,44 @@ const parametros = new URLSearchParams(window.location.search);
 const cantidad = parametros.get("cantidad");
 const metodo = parametros.get("metodo");
 
-document.getElementById("mostrarCantidad").textContent =
-    cantidad ? "⚡ " + cantidad + " GVR" : "No especificada";
+const mostrarCantidad = document.getElementById("mostrarCantidad");
 
-document.getElementById("mostrarMetodo").textContent =
-    metodo ? metodo : "No especificado";
+if (cantidad) {
+    mostrarCantidad.textContent = "⚡ " + cantidad + " GVR";
+} else {
+    mostrarCantidad.textContent = "No especificada";
+}
 
-function confirmarPago() {
+function continuarPago() {
+
     if (!cantidad || !metodo) {
         alert("Faltan datos de la compra.");
         return;
     }
 
-    alert(
-        "Compra preparada:\n\n" +
-        cantidad + " GVR\n" +
-        "Método: " + metodo
+    const cantidadNumerica = Number(
+        cantidad.replace(/,/g, "")
     );
+
+    const saldoActual = Number(
+        localStorage.getItem("gamevora_gvr") || "0"
+    );
+
+    const nuevoSaldo = saldoActual + cantidadNumerica;
+
+    localStorage.setItem(
+        "gamevora_gvr",
+        nuevoSaldo
+    );
+
+    alert(
+        "Recarga realizada correctamente.\n\n" +
+        "⚡ " + cantidadNumerica + " GVR añadidos."
+    );
+
+    window.location.href = "cuenta.html";
 }
-        </script>
+</script>
 
 </body>
 </html>
