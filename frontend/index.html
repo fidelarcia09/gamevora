@@ -267,14 +267,9 @@
         <span class="rayo">⚡</span> GAME<span>VORA</span>
     </div>
 
-    
-    <a href="cuenta.html" class="login">
-    Mi cuenta
-    </a>
-    
-    <a href="login.html" class="login">
-    Crear cuenta / Iniciar sesión
-    </a>
+    <div id="botonesCuenta">
+        <!-- Los botones aparecerán automáticamente -->
+    </div>
 </header>
 
 
@@ -420,6 +415,40 @@
     </p>
 
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const supabaseClient = window.supabase.createClient(
+    "https://gsuhzcavghsiolmipnzi.supabase.co",
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+);
+
+async function actualizarMenu() {
+
+    const { data: { session } } =
+        await supabaseClient.auth.getSession();
+
+    const botones = document.getElementById("botonesCuenta");
+
+    if (session) {
+
+        botones.innerHTML = `
+            <a href="cuenta.html" class="login">
+                Mi cuenta
+            </a>
+        `;
+
+    } else {
+
+        botones.innerHTML = `
+            <a href="login.html" class="login">
+                Crear cuenta / Iniciar sesión
+            </a>
+        `;
+    }
+}
+
+actualizarMenu();
+</script>
 </body>
     </html>
