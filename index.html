@@ -268,7 +268,7 @@
     </div>
 
     <div id="botonesCuenta">
-        <!-- Los botones aparecerán aquí automáticamente -->
+        <!-- Los botones aparecerán automáticamente -->
     </div>
 </header>
 
@@ -416,6 +416,8 @@
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
 
@@ -429,12 +431,13 @@ const supabaseClient = window.supabase.createClient(
 
 async function comprobarSesion() {
 
-    const { data, error } = await supabaseClient.auth.getSession();
-
     const contenedor = document.getElementById("botonesCuenta");
 
+    const { data, error } =
+        await supabaseClient.auth.getSession();
+
     if (error) {
-        console.error(error);
+        console.error("Error comprobando sesión:", error);
         return;
     }
 
