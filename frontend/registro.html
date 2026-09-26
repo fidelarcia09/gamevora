@@ -190,6 +190,62 @@
     </p>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+document.querySelector("form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const usuario = document.getElementById("usuario").value.trim();
+    const correo = document.getElementById("correo").value.trim();
+    const contrasena = document.getElementById("contrasena").value;
+    const confirmar = document.getElementById("confirmar").value;
+
+    if (!usuario || !correo || !contrasena || !confirmar) {
+        alert("Completa todos los campos.");
+        return;
+    }
+
+    if (contrasena !== confirmar) {
+        alert("Las contraseñas no coinciden.");
+        return;
+    }
+
+    if (contrasena.length < 8) {
+        alert("La contraseña debe tener al menos 8 caracteres.");
+        return;
+    }
+
+    const { data, error } = await supabaseClient.auth.signUp({
+        email: correo,
+        password: contrasena,
+        options: {
+            data: {
+                username: usuario
+            }
+        }
+    });
+
+    if (error) {
+        console.error(error);
+        alert("Error: " + error.message);
+        return;
+    }
+
+    alert("¡Cuenta creada correctamente! ⚡");
+
+    window.location.href = "cuenta.html";
+});
+                                                </script>
 </body>
   </html>
