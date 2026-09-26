@@ -242,9 +242,11 @@ document.querySelector("form").addEventListener("submit", async function(event) 
         return;
     }
 
-    alert("¡Cuenta creada correctamente! ⚡");
+    alert("¡Cuenta creada correctamente! ⚡\n\nAhora inicia sesión para entrar a tu cuenta.");
 
-    window.location.href = "cuenta.html";
+await supabaseClient.auth.signOut();
+
+window.location.href = "login.html";
 });
                                                 </script>
 </body>
