@@ -176,6 +176,36 @@
     </p>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const supabaseClient = window.supabase.createClient(
+    "https://gsuhzcavghsiolmipnzi.supabase.co",
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+);
+
+document.querySelector("form").addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const correo = document.getElementById("correo").value.trim();
+    const contrasena = document.getElementById("contrasena").value;
+
+    const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+            email: correo,
+            password: contrasena
+        });
+
+    if (error) {
+        alert("No se pudo iniciar sesión:\n\n" + error.message);
+        return;
+    }
+
+    alert("¡Inicio de sesión correcto! ⚡");
+
+    window.location.href = "../index.html";
+});
+</script>
 </body>
 </html>
