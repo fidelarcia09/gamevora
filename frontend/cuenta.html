@@ -145,7 +145,16 @@
             background: #0b203b;
             border: 1px solid #20527e;
         }
+        .boton-cerrar {
+    background: #8b1e2d;
+    border: 1px solid #ff4057;
+    cursor: pointer;
+}
 
+.boton-cerrar:hover {
+    background: #b42338;
+    box-shadow: 0 0 15px rgba(255, 64, 87, 0.25);
+}
         .nota {
             margin-top: 20px;
             text-align: center;
@@ -237,7 +246,11 @@
         <a href="pedidos.html" class="boton boton-secundario">
     Historial de pedidos
         </a>
-
+        
+        <button id="cerrarSesion" class="boton boton-cerrar">
+    🔴 Cerrar sesión
+        </button>
+        
         <p class="nota">
             Esta es una interfaz de prueba.
             Los datos reales de cada usuario y el saldo GVR
@@ -283,6 +296,17 @@ async function cargarCuenta() {
 }
 
 cargarCuenta();
+document.getElementById("cerrarSesion").addEventListener("click", async function() {
+
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+        alert("No se pudo cerrar la sesión: " + error.message);
+        return;
+    }
+
+    window.location.href = "login.html";
+});
 </script>
 </body>
 </html>
