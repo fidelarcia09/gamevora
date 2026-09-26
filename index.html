@@ -418,32 +418,24 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-
 const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
+    "https://gsuhzcavghsiolmipnzi.supabase.co",
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
 );
 
-async function comprobarSesion() {
+async function actualizarMenu() {
 
-    const contenedor = document.getElementById("botonesCuenta");
-
-    const { data, error } =
+    const { data: { session } } =
         await supabaseClient.auth.getSession();
 
-    if (error) {
-        console.error("Error comprobando sesión:", error);
-        return;
-    }
+    const botones = document.getElementById("botonesCuenta");
 
-    if (data.session) {
+    if (session) {
 
-        contenedor.innerHTML = `
+        botones.innerHTML = `
             <a href="frontend/cuenta.html" class="login">
                 Mi cuenta
             </a>
@@ -451,7 +443,7 @@ async function comprobarSesion() {
 
     } else {
 
-        contenedor.innerHTML = `
+        botones.innerHTML = `
             <a href="frontend/login.html" class="login">
                 Crear cuenta / Iniciar sesión
             </a>
@@ -459,7 +451,7 @@ async function comprobarSesion() {
     }
 }
 
-comprobarSesion();
+actualizarMenu();
 </script>
     
 </body>
