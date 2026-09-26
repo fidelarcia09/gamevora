@@ -189,8 +189,8 @@
                 Nombre de usuario
             </div>
 
-            <div class="dato-valor">
-                Gamer123
+            <div class="dato-valor" id="nombreUsuario">
+    Cargando...
             </div>
         </div>
 
@@ -199,8 +199,8 @@
                 Correo electrónico
             </div>
 
-            <div class="dato-valor">
-                gamer@email.com
+            <div class="dato-valor" id="correoUsuario">
+    Cargando...
             </div>
         </div>
 
@@ -209,8 +209,8 @@
                 ID de cuenta
             </div>
 
-            <div class="dato-valor">
-                GV-000001
+            <div class="dato-valor" id="idUsuario">
+    Cargando...
             </div>
         </div>
 
@@ -247,18 +247,42 @@
     </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const saldoGuardado = localStorage.getItem("gamevora_gvr");
+const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-const saldo = saldoGuardado !== null
-    ? Number(saldoGuardado)
-    : 0;
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-document.getElementById("saldoGVR").textContent = "⚡ " + saldo + " GVR";
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
 
-if (saldoGuardado === null) {
-    localStorage.setItem("gamevora_gvr", "0");
+async function cargarCuenta() {
+
+    const { data, error } = await supabaseClient.auth.getUser();
+
+    if (error || !data.user) {
+        alert("No hay una sesión iniciada.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    const usuario = data.user;
+
+    document.getElementById("correoUsuario").textContent =
+        usuario.email || "Sin correo";
+
+    document.getElementById("idUsuario").textContent =
+        usuario.id;
+
+    document.getElementById("nombreUsuario").textContent =
+        usuario.user_metadata?.username || "Usuario";
 }
+
+cargarCuenta();
 </script>
 </body>
 </html>
