@@ -293,9 +293,28 @@ async function cargarCuenta() {
 
     document.getElementById("nombreUsuario").textContent =
         usuario.user_metadata?.username || "Usuario";
+
+    // Cargar saldo real desde la base de datos
+    const { data: wallet, error: walletError } =
+        await supabaseClient
+            .from("wallets")
+            .select("balance")
+            .eq("user_id", usuario.id)
+            .single();
+
+    if (walletError) {
+        console.error("Error cargando wallet:", walletError);
+        document.getElementById("saldoGVR").textContent =
+            "⚡ 0 GVR";
+        return;
+    }
+
+    document.getElementById("saldoGVR").textContent =
+        `⚡ ${wallet.balance} GVR`;
 }
 
 cargarCuenta();
+
 document.getElementById("cerrarSesion").addEventListener("click", async function() {
 
     const { error } = await supabaseClient.auth.signOut();
