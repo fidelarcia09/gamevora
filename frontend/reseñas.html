@@ -447,12 +447,8 @@ async function cargarReseñas() {
         promedio.toFixed(1);
 
 
-    document.getElementById(
-        "rayosPromedio"
-    ).textContent =
-        mostrarRayos(
-            Math.round(promedio)
-        );
+    document.getElementById("rayosPromedio").innerHTML =
+    mostrarRayos(promedio);
 
 
     document.getElementById(
