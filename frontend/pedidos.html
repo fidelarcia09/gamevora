@@ -159,39 +159,93 @@
     </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const pedidos = JSON.parse(
-    localStorage.getItem("gamevora_pedidos") || "[]"
+const supabaseClient = window.supabase.createClient(
+    "https://gsuhzcavghsiolmipnzi.supabase.co",
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
 );
 
-const contenedorVacio = document.querySelector(".vacio");
+async function cargarPedidos() {
 
-if (pedidos.length > 0 && contenedorVacio) {
+    const {
+        data: { session },
+        error: sessionError
+    } = await supabaseClient.auth.getSession();
+
+    if (sessionError || !session) {
+        alert("Debes iniciar sesión primero.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    const { data: pedidos, error } = await supabaseClient
+        .from("game_orders")
+        .select(`
+            id,
+            price_gvr,
+            status,
+            player_id,
+            created_at,
+            completed_at,
+            game_products (
+                game,
+                product_name,
+                game_currency_amount
+            )
+        `)
+        .eq("user_id", session.user.id)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error(error);
+        alert("No se pudieron cargar los pedidos:\n\n" + error.message);
+        return;
+    }
+
+    const card = document.querySelector(".card");
+    const vacio = document.querySelector(".vacio");
+
+    if (!pedidos || pedidos.length === 0) {
+        vacio.textContent = "Todavía no tienes pedidos.";
+        return;
+    }
+
+    vacio.style.display = "none";
 
     pedidos.forEach((pedido) => {
 
-        const tarjeta = document.createElement("div");
+        const producto = pedido.game_products;
 
-        tarjeta.className = "pedido-dinamico";
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "pedido";
 
         tarjeta.innerHTML = `
+            <div class="fila">
+                <div class="juego">
+                    ${producto?.game || "Juego"}
+                </div>
+
+                <div class="estado">
+                    ${pedido.status}
+                </div>
+            </div>
+
             <div class="detalle">
-                <strong>${pedido.juego}</strong><br>
-                ID: ${pedido.id}<br>
-                Cantidad: ${pedido.cantidad}<br>
-                Estado: ${pedido.estado}<br>
-                Fecha: ${pedido.fecha}
+                Producto: ${producto?.product_name || "Producto"}<br>
+                ID del jugador: ${pedido.player_id || "No disponible"}<br>
+                Precio: ${pedido.price_gvr} GVR<br>
+                Pedido: ${pedido.id}<br>
+                Fecha: ${new Date(pedido.created_at).toLocaleString("es-ES")}
             </div>
         `;
 
-        contenedorVacio.parentNode.insertBefore(
-            tarjeta,
-            contenedorVacio
-        );
+        card.insertBefore(tarjeta, vacio);
     });
-
-    contenedorVacio.style.display = "none";
 }
+
+cargarPedidos();
 </script>
     
 </body>
