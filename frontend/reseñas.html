@@ -390,106 +390,6 @@ function mostrarRayos(cantidad) {
     return resultado;
 }
 
-
-async function cargarReseñas() {
-
-    const { data: reseñas, error } =
-        await supabaseClient
-            .from("reviews")
-            .select(`
-                id,
-                user_id,
-                rating,
-                comment,
-                created_at
-            `)
-            .order("created_at", {
-                ascending: false
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        document.getElementById(
-            "listaReseñas"
-        ).innerHTML = `
-            <div class="mensaje">
-                No se pudieron cargar las reseñas.
-            </div>
-        `;
-
-        return;
-    }
-
-
-    const lista =
-        document.getElementById("listaReseñas");
-
-    lista.innerHTML = "";
-
-
-    if (!reseñas || reseñas.length === 0) {
-
-        lista.innerHTML = `
-            <div class="mensaje">
-                Todavía no hay reseñas.
-                ¡Sé el primero en dejar la tuya! ⚡
-            </div>
-        `;
-
-        document.getElementById(
-            "promedio"
-        ).textContent = "0.0";
-
-        document.getElementById(
-            "contador"
-        ).textContent = "0 reseñas";
-
-        return;
-    }
-
-
-    const suma =
-        reseñas.reduce(
-            (total, reseña) =>
-                total + reseña.rating,
-            0
-        );
-
-    const promedio =
-        suma / reseñas.length;
-
-
-    document.getElementById(
-        "promedio"
-    ).textContent =
-        promedio.toFixed(1);
-
-
-    document.getElementById("rayosPromedio").innerHTML =
-    mostrarRayos(promedio);
-
-
-    document.getElementById(
-        "contador"
-    ).textContent =
-        reseñas.length === 1
-            ? "1 reseña"
-            : `${reseñas.length} reseñas`;
-
-
-    reseñas.forEach((reseña) => {
-
-        const tarjeta =
-            document.createElement("div");
-
-        tarjeta.className = "reseña";
-
-        const fecha =
-            new Date(
-                reseña.created_at
-            ).toLocaleDateString(
 async function cargarReseñas() {
 
     const { data: { user } } =
@@ -513,7 +413,7 @@ async function cargarReseñas() {
 
     if (error) {
 
-        console.error(error);
+        console.error("Error cargando reseñas:", error);
 
         document.getElementById(
             "listaReseñas"
@@ -540,17 +440,14 @@ async function cargarReseñas() {
             </div>
         `;
 
-        document.getElementById(
-            "promedio"
-        ).textContent = "0.0";
+        document.getElementById("promedio").textContent =
+            "0.0";
 
-        document.getElementById(
-            "rayosPromedio"
-        ).innerHTML = mostrarRayos(0);
+        document.getElementById("rayosPromedio").innerHTML =
+            mostrarRayos(0);
 
-        document.getElementById(
-            "contador"
-        ).textContent = "0 reseñas";
+        document.getElementById("contador").textContent =
+            "0 reseñas";
 
         return;
     }
@@ -565,19 +462,13 @@ async function cargarReseñas() {
     const promedio =
         suma / reseñas.length;
 
-    document.getElementById(
-        "promedio"
-    ).textContent =
+    document.getElementById("promedio").textContent =
         promedio.toFixed(1);
 
-    document.getElementById(
-        "rayosPromedio"
-    ).innerHTML =
+    document.getElementById("rayosPromedio").innerHTML =
         mostrarRayos(promedio);
 
-    document.getElementById(
-        "contador"
-    ).textContent =
+    document.getElementById("contador").textContent =
         reseñas.length === 1
             ? "1 reseña"
             : `${reseñas.length} reseñas`;
@@ -618,6 +509,7 @@ async function cargarReseñas() {
 
         `;
 
+        // Mostrar botón de eliminar solamente al administrador
         if (
             usuarioActual &&
             usuarioActual.id === GAMEVORA_OWNER_ID
@@ -644,7 +536,7 @@ async function cargarReseñas() {
 
     });
 
-    }
+    }    
 
 async function eliminarReseña(id) {
 
