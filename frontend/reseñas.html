@@ -212,7 +212,23 @@
             font-size: 13px;
             line-height: 1.5;
         }
+        
+        .boton-eliminar {
+    margin-top: 12px;
+    padding: 8px 12px;
+    border: 1px solid #ff4057;
+    border-radius: 8px;
+    background: #35101a;
+    color: #ff6475;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
+.boton-eliminar:hover {
+    background: #571522;
+    box-shadow: 0 0 10px rgba(255, 64, 87, 0.25);
+}
         .mensaje {
             text-align: center;
             color: #7188a0;
@@ -328,6 +344,10 @@ const supabaseClient = window.supabase.createClient(
 );
 
 let ratingSeleccionado = 0;
+const GAMEVORA_OWNER_ID =
+    "c8a0fe0c-6ba0-4459-8b82-fb392b648a5f";
+
+let usuarioActual = null;
 
 const opcionesRayos =
     document.querySelectorAll(".rayo-opcion");
@@ -470,9 +490,109 @@ async function cargarReseñas() {
             new Date(
                 reseña.created_at
             ).toLocaleDateString(
-                "es-ES"
-            );
+async function cargarReseñas() {
 
+    const { data: { user } } =
+        await supabaseClient.auth.getUser();
+
+    usuarioActual = user;
+
+    const { data: reseñas, error } =
+        await supabaseClient
+            .from("reviews")
+            .select(`
+                id,
+                user_id,
+                rating,
+                comment,
+                created_at
+            `)
+            .order("created_at", {
+                ascending: false
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "listaReseñas"
+        ).innerHTML = `
+            <div class="mensaje">
+                No se pudieron cargar las reseñas.
+            </div>
+        `;
+
+        return;
+    }
+
+    const lista =
+        document.getElementById("listaReseñas");
+
+    lista.innerHTML = "";
+
+    if (!reseñas || reseñas.length === 0) {
+
+        lista.innerHTML = `
+            <div class="mensaje">
+                Todavía no hay reseñas.
+                ¡Sé el primero en dejar la tuya! ⚡
+            </div>
+        `;
+
+        document.getElementById(
+            "promedio"
+        ).textContent = "0.0";
+
+        document.getElementById(
+            "rayosPromedio"
+        ).innerHTML = mostrarRayos(0);
+
+        document.getElementById(
+            "contador"
+        ).textContent = "0 reseñas";
+
+        return;
+    }
+
+    const suma =
+        reseñas.reduce(
+            (total, reseña) =>
+                total + reseña.rating,
+            0
+        );
+
+    const promedio =
+        suma / reseñas.length;
+
+    document.getElementById(
+        "promedio"
+    ).textContent =
+        promedio.toFixed(1);
+
+    document.getElementById(
+        "rayosPromedio"
+    ).innerHTML =
+        mostrarRayos(promedio);
+
+    document.getElementById(
+        "contador"
+    ).textContent =
+        reseñas.length === 1
+            ? "1 reseña"
+            : `${reseñas.length} reseñas`;
+
+    reseñas.forEach((reseña) => {
+
+        const tarjeta =
+            document.createElement("div");
+
+        tarjeta.className = "reseña";
+
+        const fecha =
+            new Date(
+                reseña.created_at
+            ).toLocaleDateString("es-ES");
 
         tarjeta.innerHTML = `
 
@@ -498,14 +618,70 @@ async function cargarReseñas() {
 
         `;
 
+        if (
+            usuarioActual &&
+            usuarioActual.id === GAMEVORA_OWNER_ID
+        ) {
+
+            const botonEliminar =
+                document.createElement("button");
+
+            botonEliminar.className =
+                "boton-eliminar";
+
+            botonEliminar.textContent =
+                "🗑️ Eliminar reseña";
+
+            botonEliminar.addEventListener(
+                "click",
+                () => eliminarReseña(reseña.id)
+            );
+
+            tarjeta.appendChild(botonEliminar);
+        }
 
         lista.appendChild(tarjeta);
 
     });
 
+    }
+
+async function eliminarReseña(id) {
+
+    const confirmar =
+        confirm(
+            "¿Seguro que quieres eliminar esta reseña?"
+        );
+
+    if (!confirmar) {
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("reviews")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo eliminar la reseña:\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+    alert(
+        "Reseña eliminada correctamente. ⚡"
+    );
+
+    cargarReseñas();
 }
-
-
+        
 async function publicarReseña() {
 
     const comentario =
