@@ -164,7 +164,7 @@
 
         <select id="cantidad">
             <option value="">Selecciona una cantidad</option>
-            <option>100 diamantes</option>
+            <option>110 diamantes</option>
             <option>310 diamantes</option>
             <option>520 diamantes</option>
             <option>1060 diamantes</option>
@@ -184,13 +184,20 @@
     </section>
 
 </main>
-<script>
-function continuarRecarga() {
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    const id = document.getElementById("id").value.trim();
+<script>
+const supabaseClient = window.supabase.createClient(
+    "https://gsuhzcavghsiolmipnzi.supabase.co",
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+);
+
+async function continuarRecarga() {
+
+    const idJugador = document.getElementById("id").value.trim();
     const cantidad = document.getElementById("cantidad").value;
 
-    if (id === "") {
+    if (idJugador === "") {
         alert("Escribe tu ID de Free Fire.");
         return;
     }
@@ -200,14 +207,61 @@ function continuarRecarga() {
         return;
     }
 
-    const url =
-        "resumen-freefire.html?id=" +
-        encodeURIComponent(id) +
-        "&cantidad=" +
-        encodeURIComponent(cantidad);
+    if (cantidad !== "110 Diamantes") {
+        alert("Para esta prueba selecciona 110 diamantes.");
+        return;
+    }
 
-    window.location.href = url;
+    const {
+        data: { session },
+        error: sessionError
+    } = await supabaseClient.auth.getSession();
+
+    if (sessionError || !session) {
+        alert("Debes iniciar sesión primero.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    const { data: producto, error: productoError } =
+        await supabaseClient
+            .from("game_products")
+            .select("id, price_gvr")
+            .eq("game", "Free Fire")
+            .eq("product_name", "110 Diamantes")
+            .eq("active", true)
+            .single();
+
+    if (productoError || !producto) {
+        console.error(productoError);
+        alert("No se encontró el producto.");
+        return;
+    }
+
+    const { data, error } =
+        await supabaseClient.rpc(
+            "purchase_game_product",
+            {
+                p_product_id: producto.id,
+                p_player_id: idJugador
+            }
+        );
+
+    if (error) {
+        console.error(error);
+        alert("No se pudo realizar la compra:\n\n" + error.message);
+        return;
+    }
+
+    alert(
+        "¡Compra realizada! ⚡\n\n" +
+        "110 diamantes\n" +
+        "Precio: " + producto.price_gvr + " GVR\n\n" +
+        "ID del pedido: " + data
+    );
+
+    window.location.href = "cuenta.html";
 }
-</script>
+        </script>
 </body>
 </html>
