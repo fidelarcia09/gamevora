@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reseñas | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .contenedor {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #8195ad;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        .resumen {
+            text-align: center;
+            padding: 15px;
+            background: #061226;
+            border: 1px solid #173d63;
+            border-radius: 15px;
+            margin-bottom: 22px;
+        }
+
+        .promedio {
+            font-size: 32px;
+            font-weight: bold;
+            color: #00b7ff;
+        }
+
+        .rayos {
+            color: #00b7ff;
+            font-size: 22px;
+            letter-spacing: 3px;
+            margin: 5px 0;
+            text-shadow: 0 0 10px #008cff;
+        }
+
+        .contador {
+            color: #8195ad;
+            font-size: 12px;
+        }
+
+        label {
+            display: block;
+            color: #b8c9dc;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .selector-rayos {
+            display: flex;
+            gap: 7px;
+            margin-bottom: 18px;
+        }
+
+        .rayo-opcion {
+            border: 1px solid #204c78;
+            background: #061226;
+            color: #4c6680;
+            border-radius: 9px;
+            padding: 8px 11px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .rayo-opcion.seleccionado {
+            color: #00b7ff;
+            border-color: #159dff;
+            box-shadow: 0 0 10px rgba(0, 157, 255, 0.25);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 110px;
+            resize: vertical;
+            padding: 13px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        textarea:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
+
+        .publicar {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .publicar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .reseña {
+            background: #061226;
+            border: 1px solid #173d63;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .reseña-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 7px;
+        }
+
+        .usuario {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .fecha {
+            color: #627b97;
+            font-size: 11px;
+        }
+
+        .rayos-reseña {
+            color: #00b7ff;
+            font-size: 17px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 7px #008cff;
+        }
+
+        .comentario {
+            color: #b8c9dc;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .mensaje {
+            text-align: center;
+            color: #7188a0;
+            font-size: 13px;
+            padding: 20px 5px;
+        }
+
+        .nota {
+            text-align: center;
+            color: #627b97;
+            font-size: 11px;
+            line-height: 1.5;
+            margin-top: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <div class="header">
+
+        <div class="logo">
+            <span class="rayo">⚡</span> GAMEVORA
+        </div>
+
+        <a href="cuenta.html" class="volver">
+            ← Mi cuenta
+        </a>
+
+    </div>
+
+    <div class="card">
+
+        <h1>Opiniones de la comunidad</h1>
+
+        <p class="descripcion">
+            Comparte tu experiencia con Gamevora.
+        </p>
+
+        <div class="resumen">
+
+            <div class="promedio" id="promedio">
+                0.0
+            </div>
+
+            <div class="rayos" id="rayosPromedio">
+                ⚡⚡⚡⚡⚡
+            </div>
+
+            <div class="contador" id="contador">
+                0 reseñas
+            </div>
+
+        </div>
+
+        <label>Tu valoración</label>
+
+        <div class="selector-rayos" id="selectorRayos">
+
+            <button class="rayo-opcion" data-rating="1">⚡</button>
+            <button class="rayo-opcion" data-rating="2">⚡</button>
+            <button class="rayo-opcion" data-rating="3">⚡</button>
+            <button class="rayo-opcion" data-rating="4">⚡</button>
+            <button class="rayo-opcion" data-rating="5">⚡</button>
+
+        </div>
+
+        <label for="comentario">
+            Tu reseña
+        </label>
+
+        <textarea
+            id="comentario"
+            maxlength="500"
+            placeholder="Escribe tu opinión sobre Gamevora..."
+        ></textarea>
+
+        <button
+            class="publicar"
+            id="botonPublicar"
+            type="button"
+        >
+            Publicar reseña ⚡
+        </button>
+
+        <p class="nota">
+            Solo puedes publicar una reseña cada 30 días.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div id="listaReseñas">
+            <div class="mensaje">
+                Cargando reseñas...
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const supabaseClient = window.supabase.createClient(
+    "https://gsuhzcavghsiolmipnzi.supabase.co",
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+);
+
+let ratingSeleccionado = 0;
+
+const opcionesRayos =
+    document.querySelectorAll(".rayo-opcion");
+
+opcionesRayos.forEach((boton) => {
+
+    boton.addEventListener("click", () => {
+
+        ratingSeleccionado =
+            Number(boton.dataset.rating);
+
+        opcionesRayos.forEach((rayo, index) => {
+
+            rayo.classList.toggle(
+                "seleccionado",
+                index < ratingSeleccionado
+            );
+
+        });
+
+    });
+
+});
+
+
+function mostrarRayos(cantidad) {
+
+    return "⚡".repeat(cantidad) +
+           "☆".repeat(5 - cantidad);
+
+}
+
+
+async function cargarReseñas() {
+
+    const { data: reseñas, error } =
+        await supabaseClient
+            .from("reviews")
+            .select(`
+                id,
+                user_id,
+                rating,
+                comment,
+                created_at
+            `)
+            .order("created_at", {
+                ascending: false
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "listaReseñas"
+        ).innerHTML = `
+            <div class="mensaje">
+                No se pudieron cargar las reseñas.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const lista =
+        document.getElementById("listaReseñas");
+
+    lista.innerHTML = "";
+
+
+    if (!reseñas || reseñas.length === 0) {
+
+        lista.innerHTML = `
+            <div class="mensaje">
+                Todavía no hay reseñas.
+                ¡Sé el primero en dejar la tuya! ⚡
+            </div>
+        `;
+
+        document.getElementById(
+            "promedio"
+        ).textContent = "0.0";
+
+        document.getElementById(
+            "contador"
+        ).textContent = "0 reseñas";
+
+        return;
+    }
+
+
+    const suma =
+        reseñas.reduce(
+            (total, reseña) =>
+                total + reseña.rating,
+            0
+        );
+
+    const promedio =
+        suma / reseñas.length;
+
+
+    document.getElementById(
+        "promedio"
+    ).textContent =
+        promedio.toFixed(1);
+
+
+    document.getElementById(
+        "rayosPromedio"
+    ).textContent =
+        mostrarRayos(
+            Math.round(promedio)
+        );
+
+
+    document.getElementById(
+        "contador"
+    ).textContent =
+        reseñas.length === 1
+            ? "1 reseña"
+            : `${reseñas.length} reseñas`;
+
+
+    reseñas.forEach((reseña) => {
+
+        const tarjeta =
+            document.createElement("div");
+
+        tarjeta.className = "reseña";
+
+        const fecha =
+            new Date(
+                reseña.created_at
+            ).toLocaleDateString(
+                "es-ES"
+            );
+
+
+        tarjeta.innerHTML = `
+
+            <div class="reseña-header">
+
+                <div class="usuario">
+                    Usuario de Gamevora
+                </div>
+
+                <div class="fecha">
+                    ${fecha}
+                </div>
+
+            </div>
+
+            <div class="rayos-reseña">
+                ${mostrarRayos(reseña.rating)}
+            </div>
+
+            <div class="comentario">
+                ${reseña.comment}
+            </div>
+
+        `;
+
+
+        lista.appendChild(tarjeta);
+
+    });
+
+}
+
+
+async function publicarReseña() {
+
+    const comentario =
+        document
+            .getElementById("comentario")
+            .value
+            .trim();
+
+
+    if (ratingSeleccionado === 0) {
+
+        alert(
+            "Selecciona entre 1 y 5 rayitos."
+        );
+
+        return;
+    }
+
+
+    if (comentario === "") {
+
+        alert(
+            "Escribe tu reseña."
+        );
+
+        return;
+    }
+
+
+    const {
+        data: { session },
+        error: sessionError
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if (sessionError || !session) {
+
+        alert(
+            "Debes iniciar sesión para dejar una reseña."
+        );
+
+        window.location.href =
+            "login.html";
+
+        return;
+    }
+
+
+    const boton =
+        document.getElementById(
+            "botonPublicar"
+        );
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Publicando...";
+
+
+    const { error } =
+        await supabaseClient
+            .from("reviews")
+            .insert({
+                user_id: session.user.id,
+                rating: ratingSeleccionado,
+                comment: comentario
+            });
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo publicar la reseña:\n\n" +
+            error.message
+        );
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Publicar reseña ⚡";
+
+        return;
+    }
+
+
+    alert(
+        "¡Reseña publicada correctamente! ⚡"
+    );
+
+
+    document
+        .getElementById("comentario")
+        .value = "";
+
+
+    ratingSeleccionado = 0;
+
+
+    opcionesRayos.forEach(
+        (rayo) =>
+            rayo.classList.remove(
+                "seleccionado"
+            )
+    );
+
+
+    boton.disabled = false;
+
+    boton.textContent =
+        "Publicar reseña ⚡";
+
+
+    cargarReseñas();
+
+}
+
+
+document
+    .getElementById("botonPublicar")
+    .addEventListener(
+        "click",
+        publicarReseña
+    );
+
+
+cargarReseñas();
+
+</script>
+
+</body>
+  </html>
