@@ -224,13 +224,25 @@ async function continuarRecarga() {
     }
 
     const { data: producto, error: productoError } =
-        await supabaseClient
-            .from("game_products")
-            .select("id, price_gvr")
-            .eq("game", "Free Fire")
-            .eq("product_name", "110 Diamantes")
-            .eq("active", true)
-            .single();
+    await supabaseClient
+        .from("game_products")
+        .select("id, game, product_name, price_gvr, active")
+        .eq("game", "Free Fire")
+        .eq("product_name", "110 Diamantes")
+        .maybeSingle();
+
+console.log("PRODUCTO:", producto);
+console.log("ERROR:", productoError);
+
+if (productoError) {
+    alert("Error buscando producto:\n\n" + productoError.message);
+    return;
+}
+
+if (!producto) {
+    alert("Supabase no encontró el producto.");
+    return;
+    }
 
     if (productoError || !producto) {
         console.error(productoError);
