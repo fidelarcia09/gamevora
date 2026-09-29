@@ -197,7 +197,16 @@
             margin-bottom: 8px;
             text-shadow: 0 0 7px #008cff;
         }
+        
+        .rayo-activo {
+    color: #00b7ff;
+    text-shadow: 0 0 10px #008cff;
+}
 
+.rayo-inactivo {
+    color: #29415c;
+    opacity: 0.45;
+}
         .comentario {
             color: #b8c9dc;
             font-size: 13px;
@@ -346,9 +355,19 @@ opcionesRayos.forEach((boton) => {
 
 function mostrarRayos(cantidad) {
 
-    return "⚡".repeat(cantidad) +
-           "☆".repeat(5 - cantidad);
+    let resultado = "";
 
+    for (let i = 1; i <= 5; i++) {
+
+        if (i <= cantidad) {
+            resultado += `<span class="rayo-activo">⚡</span>`;
+        } else {
+            resultado += `<span class="rayo-inactivo">⚡</span>`;
+        }
+
+    }
+
+    return resultado;
 }
 
 
