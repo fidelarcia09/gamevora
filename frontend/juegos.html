@@ -77,7 +77,7 @@
         .juegos {
             padding: 10px 18px 30px;
         }
-
+        
         .titulo {
             text-align: center;
             margin: 15px 0 20px;
@@ -104,6 +104,17 @@
             text-align: center;
             transition: 0.2s;
         }
+        
+        .juego-freefire {
+    background-image: url("./imagenes/IMG-20260926-WA0027.jpg");
+    background-size: cover;
+    background-position: center;
+    min-height: 330px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+        }
+        
         .proximo {
     opacity: 0.55;
     cursor: not-allowed;
@@ -130,15 +141,6 @@
             font-size: 42px;
             margin-bottom: 12px;
         }
-        
-        .icono img {
-    width: 150px;
-    height: 90px;
-    object-fit: contain;
-    border-radius: 10px;
-    display: block;
-    margin: 0 auto;
-            }
         
         .juego h3 {
             font-size: 15px;
@@ -200,10 +202,7 @@
 
     <div class="grid">
 
-        <a href="freefire.html" class="juego">
-    <div class="icono">
-        <img src="./imagenes/IMG-20260926-WA0027.jpg" alt="Free Fire">
-    </div>
+        <a href="freefire.html" class="juego juego-freefire">
     <h3>Free Fire</h3>
     <p>Diamantes</p>
         </a>
