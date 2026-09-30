@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Información GVR | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #08152d;
+            border-bottom: 1px solid #123b70;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #39a9ff;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .volver {
+            text-decoration: none;
+            color: white;
+            border: 1px solid #168cff;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .contenedor {
+            max-width: 700px;
+            margin: auto;
+            padding: 30px 18px 50px;
+        }
+
+        .titulo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .titulo .icono {
+            font-size: 48px;
+            color: #00b7ff;
+            text-shadow: 0 0 18px #008cff;
+            margin-bottom: 10px;
+        }
+
+        .titulo h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .titulo p {
+            color: #8fa5bd;
+            line-height: 1.5;
+        }
+
+        .tarjeta {
+            background: linear-gradient(135deg, #0a1d3b, #061124);
+            border: 1px solid #15538d;
+            border-radius: 17px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 18px rgba(0, 153, 255, 0.08);
+        }
+
+        .tarjeta h2 {
+            color: #19bfff;
+            font-size: 19px;
+            margin-bottom: 10px;
+        }
+
+        .tarjeta p {
+            color: #b3c2d4;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .pasos {
+            display: grid;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .paso {
+            background: #07172f;
+            border: 1px solid #143b63;
+            border-radius: 11px;
+            padding: 13px;
+            color: #c4d0de;
+            font-size: 14px;
+        }
+
+        .paso strong {
+            color: #19bfff;
+        }
+
+        .ejemplo {
+            text-align: center;
+            background: #07172f;
+            border: 1px solid #176ab2;
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 14px;
+        }
+
+        .operacion {
+            font-size: 23px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .resultado {
+            color: #00b7ff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .aviso {
+            border-color: #31506f;
+            background: #071426;
+        }
+
+        .aviso h2 {
+            color: #ffffff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px 18px;
+            color: #647890;
+            font-size: 12px;
+            border-top: 1px solid #102a49;
+        }
+
+        footer strong {
+            color: #279fff;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <span class="rayo">⚡</span> GAME<span>VORA</span>
+    </div>
+
+    <a href="../index.html" class="volver">
+        ← Inicio
+    </a>
+
+</header>
+
+
+<main class="contenedor">
+
+    <section class="titulo">
+
+        <div class="icono">
+            ⚡
+        </div>
+
+        <h1>
+            Información sobre GVR
+        </h1>
+
+        <p>
+            Conoce cómo funciona el saldo virtual de Gamevora.
+        </p>
+
+    </section>
+
+
+    <section class="tarjeta">
+
+        <h2>
+            ⚡ ¿Qué es GVR?
+        </h2>
+
+        <p>
+            GVR es el saldo virtual utilizado dentro de Gamevora
+            para realizar compras de productos y recargas disponibles
+            en la plataforma.
+        </p>
+
+    </section>
+
+
+    <section class="tarjeta">
+
+        <h2>
+            💎 ¿Para qué sirve?
+        </h2>
+
+        <p>
+            Puedes utilizar tu saldo GVR para comprar productos
+            y recargas de los juegos disponibles en Gamevora.
+        </p>
+
+    </section>
+
+
+    <section class="tarjeta">
+
+        <h2>
+            🔄 ¿Cómo funciona?
+        </h2>
+
+        <div class="pasos">
+
+            <div class="paso">
+                <strong>1.</strong>
+                Recargas tu saldo GVR.
+            </div>
+
+            <div class="paso">
+                <strong>2.</strong>
+                El saldo aparece en tu cuenta.
+            </div>
+
+            <div class="paso">
+                <strong>3.</strong>
+                Eliges el juego y producto que quieres.
+            </div>
+
+            <div class="paso">
+                <strong>4.</strong>
+                Realizas la compra utilizando tus GVR.
+            </div>
+
+            <div class="paso">
+                <strong>5.</strong>
+                Puedes consultar el estado del pedido desde tu cuenta.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="tarjeta">
+
+        <h2>
+            🧮 Ejemplo
+        </h2>
+
+        <p>
+            Supongamos que tienes 50 GVR y compras un producto
+            cuyo precio es de 25 GVR.
+        </p>
+
+        <div class="ejemplo">
+
+            <div class="operacion">
+                50 GVR − 25 GVR
+            </div>
+
+            <div class="resultado">
+                = 25 GVR restantes
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="tarjeta">
+
+        <h2>
+            👤 ¿Dónde puedo ver mi saldo?
+        </h2>
+
+        <p>
+            Puedes consultar tu saldo GVR desde la sección
+            <strong>Mi cuenta</strong>.
+            También podrás consultar tus movimientos y pedidos
+            realizados desde tu perfil.
+        </p>
+
+    </section>
+
+
+    <section class="tarjeta aviso">
+
+        <h2>
+            🔐 Importante
+        </h2>
+
+        <p>
+            GVR es un saldo virtual utilizado dentro de Gamevora.
+            No es una criptomoneda y no representa una cuenta bancaria
+            ni dinero en efectivo.
+        </p>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <p>
+        <strong>⚡ GAMEVORA</strong>
+    </p>
+
+    <p>
+        Plataforma de recargas digitales para gamers.
+    </p>
+
+    <br>
+
+    <p>
+        © 2026 Gamevora
+    </p>
+
+</footer>
+
+</body>
+  </html>
