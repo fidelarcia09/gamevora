@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Soporte | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .contenedor {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .navegacion {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .separador {
+            color: #31506f;
+            font-size: 13px;
+        }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 22px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        }
+
+        .icono {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: #061226;
+            border: 2px solid #159dff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            box-shadow: 0 0 20px rgba(0, 157, 255, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #8195ad;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .campo-titulo {
+            color: #9bcfff;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select,
+        input,
+        textarea {
+            width: 100%;
+            background: #061226;
+            border: 1px solid #173d63;
+            border-radius: 12px;
+            padding: 13px;
+            color: white;
+            outline: none;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 12px rgba(21, 157, 255, 0.15);
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        option {
+            background: #061226;
+            color: white;
+        }
+
+        .boton {
+            display: block;
+            width: 100%;
+            padding: 13px;
+            margin-top: 10px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton:hover {
+            box-shadow: 0 0 18px rgba(0, 174, 255, 0.25);
+        }
+
+        .mensaje {
+            text-align: center;
+            color: #8195ad;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+
+        .nota {
+            margin-top: 20px;
+            text-align: center;
+            color: #627b97;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .lista-tickets {
+            margin-top: 25px;
+        }
+
+        .ticket {
+            display: block;
+            background: #061226;
+            border: 1px solid #173d63;
+            border-radius: 14px;
+            padding: 15px;
+            margin-bottom: 12px;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .ticket:hover {
+            border-color: #159dff;
+            box-shadow: 0 0 15px rgba(21, 157, 255, 0.12);
+        }
+
+        .ticket-asunto {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .ticket-info {
+            color: #7891aa;
+            font-size: 12px;
+        }
+
+        .estado {
+            display: inline-block;
+            margin-top: 9px;
+            padding: 5px 9px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .estado-open {
+            color: #9bcfff;
+            background: #08244a;
+            border: 1px solid #168cff;
+        }
+
+        .estado-human {
+            color: #b8f3ff;
+            background: #063447;
+            border: 1px solid #00baff;
+        }
+
+        .estado-resolved {
+            color: #8ee8b0;
+            background: #092d20;
+            border: 1px solid #25c875;
+        }
+
+        .oculto {
+            display: none;
+        }
+
+        .boton-admin {
+            color: #9edcff;
+        }
+
+        @media (max-width: 430px) {
+
+            .header {
+                align-items: flex-start;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .volver {
+                font-size: 12px;
+            }
+
+            .separador {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <div class="header">
+
+        <div class="logo">
+            <span class="rayo">⚡</span> GAMEVORA
+        </div>
+
+        <div class="navegacion">
+
+            <a href="soporte.html" class="volver">
+                Soporte
+            </a>
+
+            <span class="separador">|</span>
+
+            <a href="cuenta.html" class="volver">
+                Mi Cuenta
+            </a>
+
+            <span id="separadorAdmin" class="separador oculto">|</span>
+
+            <a href="admin-soporte.html"
+               id="botonAdmin"
+               class="volver boton-admin oculto">
+                ⚙️ Administración
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="icono">
+            🎧
+        </div>
+
+        <h1>Soporte Gamevora</h1>
+
+        <p class="subtitulo">
+            Estamos aquí para ayudarte
+        </p>
+
+        <div id="formularioSoporte">
+
+            <div class="campo-titulo">
+                Categoría
+            </div>
+
+            <select id="categoria">
+                <option value="gvr">⚡ GVR y saldo</option>
+                <option value="game_topup">🎮 Recargas de juegos</option>
+                <option value="orders">📦 Pedidos</option>
+                <option value="payments">💳 Pagos</option>
+                <option value="account">👤 Cuenta</option>
+                <option value="other">❓ Otro</option>
+            </select>
+
+            <div class="campo-titulo">
+                Asunto
+            </div>
+
+            <input
+                type="text"
+                id="asunto"
+                maxlength="120"
+                placeholder="¿En qué necesitas ayuda?"
+            >
+
+            <div class="campo-titulo">
+                Mensaje
+            </div>
+
+            <textarea
+                id="mensaje"
+                maxlength="1000"
+                placeholder="Explícanos tu problema..."
+            ></textarea>
+
+            <button id="crearTicket" class="boton">
+                ⚡ Abrir conversación
+            </button>
+
+            <p id="mensajeResultado" class="mensaje"></p>
+
+        </div>
+
+        <div class="lista-tickets">
+
+            <div class="campo-titulo">
+                Mis conversaciones
+            </div>
+
+            <div id="listaTickets">
+                <p class="mensaje">
+                    Cargando conversaciones...
+                </p>
+            </div>
+
+        </div>
+
+        <p class="nota">
+            Tus conversaciones son privadas.
+            Solo tú y el equipo autorizado de Gamevora pueden acceder a ellas.
+        </p>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+let usuarioActual = null;
+
+
+/* ==============================
+   CARGAR USUARIO
+============================== */
+
+async function cargarUsuario() {
+
+    const { data, error } =
+        await supabaseClient.auth.getUser();
+
+    if (error || !data.user) {
+
+        alert("Debes iniciar sesión para utilizar soporte.");
+
+        window.location.href = "login.html";
+
+        return false;
+    }
+
+    usuarioActual = data.user;
+
+    return true;
+}
+
+
+/* ==============================
+   COMPROBAR ADMIN
+============================== */
+
+async function comprobarAdministrador() {
+
+    const { data, error } =
+        await supabaseClient.rpc(
+            "is_support_admin"
+        );
+
+    if (error) {
+
+        console.error(
+            "Error comprobando administrador:",
+            error
+        );
+
+        return;
+    }
+
+    if (data === true) {
+
+        document
+            .getElementById("botonAdmin")
+            .classList
+            .remove("oculto");
+
+        document
+            .getElementById("separadorAdmin")
+            .classList
+            .remove("oculto");
+    }
+}
+
+
+/* ==============================
+   CARGAR TICKETS
+============================== */
+
+async function cargarTickets() {
+
+    const lista =
+        document.getElementById("listaTickets");
+
+    const { data, error } =
+        await supabaseClient
+            .from("support_tickets")
+            .select(
+                "id, category, subject, status, created_at, updated_at"
+            )
+            .eq(
+                "user_id",
+                usuarioActual.id
+            )
+            .order(
+                "updated_at",
+                { ascending: false }
+            );
+
+    if (error) {
+
+        console.error(error);
+
+        lista.innerHTML =
+            `<p class="mensaje">
+                No se pudieron cargar tus conversaciones.
+            </p>`;
+
+        return;
+    }
+
+    if (!data || data.length === 0) {
+
+        lista.innerHTML =
+            `<p class="mensaje">
+                Todavía no tienes conversaciones.
+            </p>`;
+
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    data.forEach(ticket => {
+
+        const elemento =
+            document.createElement("div");
+
+        elemento.className = "ticket";
+
+        elemento.innerHTML = `
+            <div class="ticket-asunto">
+                ${escapeHtml(ticket.subject)}
+            </div>
+
+            <div class="ticket-info">
+                ${nombreCategoria(ticket.category)}
+            </div>
+
+            <span class="estado ${claseEstado(ticket.status)}">
+                ${nombreEstado(ticket.status)}
+            </span>
+        `;
+
+        elemento.addEventListener(
+            "click",
+            function() {
+
+                window.location.href =
+                    "ticket.html?id=" + ticket.id;
+
+            }
+        );
+
+        lista.appendChild(elemento);
+
+    });
+}
+
+
+/* ==============================
+   CREAR TICKET
+============================== */
+
+document
+    .getElementById("crearTicket")
+    .addEventListener(
+        "click",
+        async function() {
+
+            const categoria =
+                document
+                    .getElementById("categoria")
+                    .value;
+
+            const asunto =
+                document
+                    .getElementById("asunto")
+                    .value
+                    .trim();
+
+            const mensaje =
+                document
+                    .getElementById("mensaje")
+                    .value
+                    .trim();
+
+            const resultado =
+                document
+                    .getElementById("mensajeResultado");
+
+
+            if (!asunto) {
+
+                resultado.textContent =
+                    "Escribe un asunto.";
+
+                return;
+            }
+
+
+            if (!mensaje) {
+
+                resultado.textContent =
+                    "Escribe el mensaje.";
+
+                return;
+            }
+
+
+            resultado.textContent =
+                "Abriendo conversación...";
+
+
+            const { data, error } =
+                await supabaseClient.rpc(
+                    "create_support_ticket",
+                    {
+                        p_category: categoria,
+                        p_subject: asunto,
+                        p_message: mensaje
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(error);
+
+                resultado.textContent =
+                    "No se pudo abrir la conversación.";
+
+                return;
+            }
+
+
+            document
+                .getElementById("asunto")
+                .value = "";
+
+            document
+                .getElementById("mensaje")
+                .value = "";
+
+
+            resultado.textContent =
+                "Conversación creada correctamente ⚡";
+
+
+            await cargarTickets();
+
+
+            if (data) {
+
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            "ticket.html?id=" + data;
+
+                    },
+                    500
+                );
+            }
+
+        }
+    );
+
+
+/* ==============================
+   UTILIDADES
+============================== */
+
+function nombreCategoria(categoria) {
+
+    const categorias = {
+
+        gvr: "⚡ GVR y saldo",
+
+        game_topup: "🎮 Recargas de juegos",
+
+        orders: "📦 Pedidos",
+
+        payments: "💳 Pagos",
+
+        account: "👤 Cuenta",
+
+        other: "❓ Otro"
+
+    };
+
+    return categorias[categoria] || "❓ Otro";
+}
+
+
+function nombreEstado(status) {
+
+    const estados = {
+
+        open: "Abierto",
+
+        human: "En atención",
+
+        resolved: "Resuelto"
+
+    };
+
+    return estados[status] || status;
+}
+
+
+function claseEstado(status) {
+
+    if (status === "human") {
+
+        return "estado-human";
+    }
+
+    if (status === "resolved") {
+
+        return "estado-resolved";
+    }
+
+    return "estado-open";
+}
+
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+
+/* ==============================
+   INICIAR
+============================== */
+
+async function iniciar() {
+
+    const conectado =
+        await cargarUsuario();
+
+    if (!conectado) {
+        return;
+    }
+
+    await comprobarAdministrador();
+
+    await cargarTickets();
+}
+
+
+iniciar();
+
+</script>
+
+</body>
+</html>
