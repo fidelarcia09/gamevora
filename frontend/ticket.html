@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Soporte | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .contenedor {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .navegacion {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .separador {
+            color: #31506f;
+        }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, .15);
+        }
+
+        .titulo {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .asunto {
+            color: #8da6bf;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .estado {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            background: #0c3155;
+            color: #5dc8ff;
+            border: 1px solid #17649a;
+        }
+
+        .mensajes {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-right: 3px;
+        }
+
+        .mensaje {
+            max-width: 85%;
+            padding: 12px 14px;
+            border-radius: 14px;
+            line-height: 1.45;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .mensaje-usuario {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #087cff, #00aeea);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .mensaje-admin {
+            align-self: flex-start;
+            background: #102b4b;
+            border: 1px solid #20527e;
+            border-bottom-left-radius: 4px;
+        }
+
+        .mensaje-bot {
+            align-self: flex-start;
+            background: #071c32;
+            border: 1px solid #12618e;
+            border-bottom-left-radius: 4px;
+        }
+
+        .remitente {
+            font-size: 10px;
+            font-weight: bold;
+            opacity: .75;
+            margin-bottom: 5px;
+        }
+
+        .fecha {
+            font-size: 9px;
+            opacity: .55;
+            margin-top: 6px;
+        }
+
+        .formulario {
+            border-top: 1px solid #173d63;
+            padding-top: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #20527e;
+            background: #061226;
+            color: white;
+            outline: none;
+            font-size: 14px;
+        }
+
+        textarea:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 10px rgba(0, 157, 255, .15);
+        }
+
+        .boton {
+            width: 100%;
+            border: none;
+            padding: 13px;
+            margin-top: 10px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .mensaje-vacio,
+        .cargando {
+            text-align: center;
+            color: #7189a3;
+            padding: 25px 5px;
+            font-size: 13px;
+        }
+
+        .error {
+            color: #ff6578;
+            text-align: center;
+            padding: 20px 5px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 450px) {
+            body {
+                padding: 14px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .volver {
+                font-size: 12px;
+            }
+
+            .mensaje {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <div class="header">
+
+        <div class="logo">
+            <span class="rayo">⚡</span> GAMEVORA
+        </div>
+
+        <div class="navegacion">
+            <a href="soporte.html" class="volver">Soporte</a>
+
+            <span class="separador">|</span>
+
+            <a href="cuenta.html" class="volver">Mi Cuenta</a>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div id="contenido">
+
+            <div class="cargando">
+                Cargando conversación...
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+const contenido =
+document.getElementById("contenido");
+
+const params =
+new URLSearchParams(window.location.search);
+
+const ticketId =
+params.get("id");
+
+let usuarioActual = null;
+
+
+/* =========================
+   INICIAR
+========================= */
+
+async function iniciar() {
+
+    if (!ticketId) {
+
+        contenido.innerHTML = `
+            <div class="error">
+                No se encontró el ticket.
+            </div>
+        `;
+
+        return;
+    }
+
+    const { data, error } =
+        await supabaseClient.auth.getUser();
+
+    if (error || !data.user) {
+
+        window.location.href = "login.html";
+
+        return;
+    }
+
+    usuarioActual = data.user;
+
+    await cargarTicket();
+
+}
+
+
+/* =========================
+   CARGAR TICKET
+========================= */
+
+async function cargarTicket() {
+
+    const { data: ticket, error } =
+        await supabaseClient
+            .from("support_tickets")
+            .select(`
+                id,
+                user_id,
+                subject,
+                category,
+                status,
+                created_at,
+                updated_at
+            `)
+            .eq("id", ticketId)
+            .single();
+
+    if (error || !ticket) {
+
+        console.error(error);
+
+        contenido.innerHTML = `
+            <div class="error">
+                No tienes acceso a este ticket
+                o el ticket no existe.
+            </div>
+        `;
+
+        return;
+    }
+
+    const { data: mensajes, error: mensajesError } =
+        await supabaseClient
+            .from("support_messages")
+            .select(`
+                id,
+                sender_id,
+                sender_type,
+                message,
+                created_at
+            `)
+            .eq("ticket_id", ticketId)
+            .order("created_at", {
+                ascending: true
+            });
+
+    if (mensajesError) {
+
+        console.error(mensajesError);
+
+        contenido.innerHTML = `
+            <div class="error">
+                No se pudieron cargar los mensajes.
+            </div>
+        `;
+
+        return;
+    }
+
+    mostrarTicket(ticket, mensajes || []);
+}
+
+
+/* =========================
+   MOSTRAR TICKET
+========================= */
+
+function mostrarTicket(ticket, mensajes) {
+
+    let estadoTexto = "Abierto";
+
+    if (ticket.status === "human") {
+        estadoTexto = "Atención humana";
+    }
+
+    if (ticket.status === "resolved") {
+        estadoTexto = "Resuelto";
+    }
+
+    let mensajesHTML = "";
+
+    if (mensajes.length === 0) {
+
+        mensajesHTML = `
+            <div class="mensaje-vacio">
+                Todavía no hay mensajes.
+            </div>
+        `;
+
+    } else {
+
+        mensajes.forEach(mensaje => {
+
+            let clase = "mensaje-usuario";
+            let remitente = "Tú";
+
+            if (mensaje.sender_type === "admin") {
+
+                clase = "mensaje-admin";
+                remitente = "Soporte Gamevora";
+
+            }
+
+            if (mensaje.sender_type === "bot") {
+
+                clase = "mensaje-bot";
+                remitente = "🤖 Gamevora";
+
+            }
+
+            const fecha =
+                new Date(mensaje.created_at)
+                    .toLocaleString("es-ES");
+
+            mensajesHTML += `
+
+                <div class="mensaje ${clase}">
+
+                    <div class="remitente">
+                        ${remitente}
+                    </div>
+
+                    <div>
+                        ${escapeHTML(mensaje.message)}
+                    </div>
+
+                    <div class="fecha">
+                        ${fecha}
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+    const formulario =
+        ticket.status === "resolved"
+        ? `
+            <div class="mensaje-vacio">
+                Este ticket está resuelto.
+            </div>
+        `
+        : `
+            <div class="formulario">
+
+                <textarea
+                    id="mensaje"
+                    maxlength="1000"
+                    placeholder="Escribe tu mensaje..."
+                ></textarea>
+
+                <button
+                    id="enviar"
+                    class="boton"
+                >
+                    ⚡ Enviar mensaje
+                </button>
+
+            </div>
+        `;
+
+    contenido.innerHTML = `
+
+        <div class="titulo">
+            ${escapeHTML(ticket.subject)}
+        </div>
+
+        <div class="asunto">
+            Categoría: ${escapeHTML(ticket.category)}
+        </div>
+
+        <div class="estado">
+            ${estadoTexto}
+        </div>
+
+        <div class="mensajes">
+            ${mensajesHTML}
+        </div>
+
+        ${formulario}
+
+    `;
+
+    const zonaMensajes =
+        document.querySelector(".mensajes");
+
+    if (zonaMensajes) {
+        zonaMensajes.scrollTop =
+            zonaMensajes.scrollHeight;
+    }
+
+    const botonEnviar =
+        document.getElementById("enviar");
+
+    if (botonEnviar) {
+
+        botonEnviar.addEventListener(
+            "click",
+            enviarMensaje
+        );
+
+    }
+
+}
+
+
+/* =========================
+   ENVIAR MENSAJE
+========================= */
+
+async function enviarMensaje() {
+
+    const textarea =
+        document.getElementById("mensaje");
+
+    const boton =
+        document.getElementById("enviar");
+
+    const mensaje =
+        textarea.value.trim();
+
+    if (!mensaje) {
+
+        alert("Escribe un mensaje.");
+
+        return;
+    }
+
+    boton.disabled = true;
+    boton.textContent = "Enviando...";
+
+    const { error } =
+        await supabaseClient.rpc(
+            "send_support_message",
+            {
+                p_ticket_id: ticketId,
+                p_message: mensaje
+            }
+        );
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo enviar el mensaje:\n\n" +
+            error.message
+        );
+
+        boton.disabled = false;
+        boton.textContent = "⚡ Enviar mensaje";
+
+        return;
+    }
+
+    await cargarTicket();
+
+}
+
+
+/* =========================
+   SEGURIDAD HTML
+========================= */
+
+function escapeHTML(texto) {
+
+    return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================
+   ARRANCAR
+========================= */
+
+iniciar();
+
+</script>
+
+</body>
+</html>
