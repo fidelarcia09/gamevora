@@ -51,23 +51,23 @@
         }
 
         .login {
-    display: inline-block;
-    text-decoration: none;
-    white-space: nowrap;
-    border: 1px solid #168cff;
-    color: white;
-    background: transparent;
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 14px;
-    transition: 0.2s;
-}
+            display: inline-block;
+            text-decoration: none;
+            white-space: nowrap;
+            border: 1px solid #168cff;
+            color: white;
+            background: transparent;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.2s;
+        }
 
-.login:hover {
-    background: #0d7cff;
-    box-shadow: 0 0 15px rgba(0, 153, 255, 0.25);
-}
+        .login:hover {
+            background: #0d7cff;
+            box-shadow: 0 0 15px rgba(0, 153, 255, 0.25);
+        }
 
         /* HERO */
 
@@ -99,16 +99,16 @@
         }
 
         .hero-button {
-    display: inline-block;
-    text-decoration: none;
-    background: linear-gradient(90deg, #087cff, #00baff);
-    color: white;
-    border: none;
-    padding: 13px 20px;
-    border-radius: 11px;
-    font-weight: bold;
-    font-size: 15px;
-    box-shadow: 0 0 18px rgba(0, 153, 255, 0.3);
+            display: inline-block;
+            text-decoration: none;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            border: none;
+            padding: 13px 20px;
+            border-radius: 11px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0 0 18px rgba(0, 153, 255, 0.3);
         }
 
         /* SALDO */
@@ -243,6 +243,85 @@
             font-weight: bold;
         }
 
+        /* CARRUSEL GAMEVORA */
+
+        .gamevora-carrusel {
+            width: 100%;
+            max-width: 650px;
+            margin: 25px auto 0;
+            overflow: hidden;
+            border: 1px solid #176ab2;
+            border-radius: 16px;
+            background: #07172f;
+            box-shadow: 0 0 20px rgba(0, 153, 255, 0.15);
+        }
+
+        .gamevora-track {
+            display: flex;
+            transition: transform 0.6s ease;
+        }
+
+        .gamevora-slide {
+            min-width: 100%;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .gamevora-slide-text {
+            flex: 1;
+        }
+
+        .gamevora-slide-label {
+            color: #19bfff;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+
+        .gamevora-slide h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .gamevora-slide p {
+            color: #9db2c9;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .gamevora-slide-icon {
+            font-size: 38px;
+            filter: drop-shadow(0 0 10px rgba(0, 183, 255, 0.6));
+        }
+
+        .gamevora-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .gamevora-dot {
+            width: 7px;
+            height: 7px;
+            border: none;
+            border-radius: 50%;
+            background: #29415c;
+            padding: 0;
+        }
+
+        .gamevora-dot.activo {
+            width: 20px;
+            border-radius: 8px;
+            background: #00b7ff;
+            box-shadow: 0 0 8px #008cff;
+        }
+
         /* PIE */
 
         footer {
@@ -285,7 +364,7 @@
     </p>
 
     <a href="frontend/juegos.html" class="hero-button">
-    Explorar juegos
+        Explorar juegos
     </a>
 
 </section>
@@ -328,6 +407,104 @@
     ">
         GAMEVORA
     </div>
+
+    <!-- CARRUSEL ENTRE GAMEVORA Y TU MEJOR OPCIÓN -->
+
+    <div class="gamevora-carrusel">
+
+        <div class="gamevora-track" id="gamevoraTrack">
+
+            <div class="gamevora-slide">
+                <div class="gamevora-slide-text">
+
+                    <div class="gamevora-slide-label">
+                        GAMEVORA COMMUNITY
+                    </div>
+
+                    <h3>
+                        ⚡ ¿Ya dejaste tu reseña?
+                    </h3>
+
+                    <p>
+                        Tu opinión ayuda a mejorar Gamevora.
+                    </p>
+
+                </div>
+
+                <div class="gamevora-slide-icon">
+                    ⚡
+                </div>
+            </div>
+
+
+            <div class="gamevora-slide">
+                <div class="gamevora-slide-text">
+
+                    <div class="gamevora-slide-label">
+                        NOVEDADES
+                    </div>
+
+                    <h3>
+                        🚀 Nuevas actualizaciones
+                    </h3>
+
+                    <p>
+                        Descubre las novedades que estamos preparando.
+                    </p>
+
+                </div>
+
+                <div class="gamevora-slide-icon">
+                    🚀
+                </div>
+            </div>
+
+
+            <div class="gamevora-slide">
+                <div class="gamevora-slide-text">
+
+                    <div class="gamevora-slide-label">
+                        GVR
+                    </div>
+
+                    <h3>
+                        💎 Información sobre GVR
+                    </h3>
+
+                    <p>
+                        Conoce cómo funciona nuestro saldo virtual.
+                    </p>
+
+                </div>
+
+                <div class="gamevora-slide-icon">
+                    💎
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="gamevora-dots">
+
+        <button
+            class="gamevora-dot activo"
+            type="button">
+        </button>
+
+        <button
+            class="gamevora-dot"
+            type="button">
+        </button>
+
+        <button
+            class="gamevora-dot"
+            type="button">
+        </button>
+
+    </div>
+
 
     <div style="
         margin-top: 18px;
@@ -414,6 +591,7 @@
     </p>
 
 </footer>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -453,6 +631,56 @@ async function actualizarMenu() {
 
 actualizarMenu();
 </script>
+
+<script>
+
+const gamevoraTrack =
+    document.getElementById("gamevoraTrack");
+
+const gamevoraDots =
+    document.querySelectorAll(".gamevora-dot");
+
+let gamevoraActual = 0;
+
+function cambiarBannerGamevora(numero) {
+
+    gamevoraActual = numero;
+
+    gamevoraTrack.style.transform =
+        "translateX(-" + (numero * 100) + "%)";
+
+    gamevoraDots.forEach((dot, index) => {
+
+        dot.classList.toggle(
+            "activo",
+            index === numero
+        );
+
+    });
+}
+
+setInterval(() => {
+
+    let siguiente = gamevoraActual + 1;
+
+    if (siguiente >= 3) {
+        siguiente = 0;
+    }
+
+    cambiarBannerGamevora(siguiente);
+
+}, 4500);
+
+
+gamevoraDots.forEach((dot, index) => {
+
+    dot.addEventListener("click", () => {
+        cambiarBannerGamevora(index);
+    });
+
+});
+
+</script>
     
 </body>
-</html>
+    </html>
