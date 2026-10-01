@@ -498,15 +498,10 @@ document
                     "Resolviendo...";
 
                 const { error } =
-                    await supabaseClient
-                        .from("support_tickets")
-                        .update({
-                            status: "resolved",
-                            closed_at: new Date().toISOString(),
-                            updated_at: new Date().toISOString()
-                        })
-                        .eq("id", ticketId);
-
+    await supabaseClient
+        .from("support_tickets")
+        .delete()
+        .eq("id", ticketId);
                 if (error) {
 
                     console.error(error);
