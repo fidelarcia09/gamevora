@@ -41,25 +41,29 @@
             letter-spacing: 1px;
         }
         .logo {
-    disp.logo {
     display: flex;
     align-items: center;
     font-weight: 900;
     letter-spacing: -1px;
 }
 
-.logo-g-svg {
-    width: 43px;
-    height: 43px;
-    margin-right: 3px;
-    overflow: visible;
+.logo-g {
+    font-size: 38px;
+    font-weight: 1000;
+    font-style: italic;
+    color: #00b7ff;
+    text-shadow:
+        0 0 8px #008cff,
+        0 0 18px #006eff;
+    margin-right: 2px;
+    line-height: 1;
 }
 
 .logo-resto {
     font-size: 22px;
     font-weight: 900;
     color: white;
-    letter-spacing: -0.8px;
+    letter-spacing: -0.5px;
 }
         
         .navegacion {
@@ -402,60 +406,10 @@
 
 <header>
     <div class="logo">
-    <svg class="logo-g-svg" viewBox="0 0 120 120" aria-label="Gamevora">
-        <defs>
-            <linearGradient id="gGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#63e8ff"/>
-                <stop offset="45%" stop-color="#008cff"/>
-                <stop offset="100%" stop-color="#004cff"/>
-            </linearGradient>
-
-            <filter id="gGlow">
-                <feGaussianBlur stdDeviation="3" result="blur"/>
-                <feMerge>
-                    <feMergeNode in="blur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-        </defs>
-
-        <path
-            d="M94 25
-               L108 11
-               L101 43
-               L77 43
-               L84 31
-               C72 22 57 20 44 26
-               C29 33 21 47 21 62
-               C21 81 35 96 53 99
-               C67 101 80 95 88 85
-               L72 85
-               L82 68
-               L108 68
-               L101 101
-               L91 92
-               C80 105 65 112 49 109
-               C24 105 7 86 7 62
-               C7 38 22 18 43 11
-               C62 5 81 10 94 25 Z"
-            fill="url(#gGradient)"
-            filter="url(#gGlow)"
-        />
-
-        <path
-            d="M53 62 L83 62 L73 77 L43 77 Z"
-            fill="#050b18"
-        />
-
-        <path
-            d="M92 27 L105 14 L99 39"
-            fill="#63e8ff"
-        />
-    </svg>
-
-    <span class="logo-resto">AMEVORA</span>
+    <div class="logo">
+    <span class="logo-g">G</span><span class="logo-resto">AMEVORA</span>
     </div>
-
+        
 <div class="navegacion">
 
     <a href="frontend/soporte.html" class="boton-navegacion">
