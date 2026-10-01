@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,13 +34,13 @@
 
         header {
             width: 100%;
-            min-height: 72px;
             background: #08152d;
             border-bottom: 1px solid #123b70;
-            padding: 10px 18px;
+            padding: 14px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 10px;
             position: sticky;
             top: 0;
             z-index: 10;
@@ -52,41 +51,38 @@
         .logo {
             display: flex;
             align-items: center;
-            height: 52px;
+            height: 48px;
             min-width: 0;
+            text-decoration: none;
             flex-shrink: 1;
         }
 
         .logo-g {
-            width: 52px;
-            height: 52px;
-            flex: 0 0 52px;
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
             display: block;
 
             filter:
-                drop-shadow(0 0 4px rgba(0, 210, 255, .95))
-                drop-shadow(0 0 11px rgba(0, 110, 255, .85));
+                drop-shadow(0 0 4px rgba(0, 204, 255, .95))
+                drop-shadow(0 0 12px rgba(0, 100, 255, .75));
         }
 
         .g-main {
-            fill: url(#gamevoraBlue);
-        }
-
-        .g-cut {
-            fill: #061426;
+            fill: url(#gBlue);
         }
 
         .g-lightning {
-            fill: url(#gamevoraLightning);
+            fill: #071526;
         }
 
         .logo-resto {
-            margin-left: 4px;
+            margin-left: 3px;
             color: #f5f8ff;
             font-size: 23px;
             font-weight: 900;
             font-style: italic;
-            letter-spacing: -1.5px;
+            letter-spacing: -1.4px;
             line-height: 1;
             white-space: nowrap;
 
@@ -113,11 +109,6 @@
 
         .boton-navegacion:hover {
             color: #63caff;
-        }
-
-        .separador {
-            color: white;
-            font-weight: bold;
         }
 
         .boton-cuenta {
@@ -210,7 +201,6 @@
 
         .section {
             width: 100%;
-            max-width: 100%;
             padding: 10px 18px 25px;
         }
 
@@ -225,6 +215,11 @@
             font-size: 21px;
         }
 
+        .section-title span {
+            color: #399fff;
+            font-size: 13px;
+        }
+
         /* =========================
            OFERTAS
         ========================= */
@@ -232,6 +227,7 @@
         .offer {
             width: 100%;
             max-width: 100%;
+
             background:
                 linear-gradient(
                     135deg,
@@ -242,10 +238,12 @@
             border: 1px solid #176ab2;
             border-radius: 17px;
             padding: 18px;
+
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
+
+            gap: 15px;
             margin-bottom: 12px;
         }
 
@@ -283,18 +281,31 @@
         }
 
         /* =========================
-           CARRUSEL GAMEVORA
+           CARRUSEL
         ========================= */
 
         .gamevora-carrusel {
             width: 100%;
             max-width: 650px;
             margin: 25px auto 0;
+
             overflow: hidden;
+
             border: 1px solid #176ab2;
             border-radius: 16px;
+
             background: #07172f;
-            box-shadow: 0 0 20px rgba(0, 153, 255, 0.15);
+
+            box-shadow:
+                0 0 20px rgba(0, 153, 255, 0.15);
+        }
+
+        .gamevora-slide-link,
+        .gamevora-slide-link:hover,
+        .gamevora-slide-link:visited,
+        .gamevora-slide-link:active {
+            text-decoration: none !important;
+            color: inherit !important;
         }
 
         .gamevora-track {
@@ -305,21 +316,17 @@
 
         .gamevora-slide {
             min-width: 100%;
-            width: 100%;
+            max-width: 100%;
+
             padding: 18px 20px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
-            text-align: left;
-        }
 
-        .gamevora-slide-link,
-        .gamevora-slide-link:hover,
-        .gamevora-slide-link:visited,
-        .gamevora-slide-link:active {
-            text-decoration: none !important;
-            color: inherit !important;
+            gap: 15px;
+
+            text-align: left;
         }
 
         .gamevora-slide-text {
@@ -351,6 +358,7 @@
         .gamevora-slide-icon {
             font-size: 38px;
             flex-shrink: 0;
+
             filter:
                 drop-shadow(
                     0 0 10px
@@ -368,8 +376,10 @@
         .gamevora-dot {
             width: 7px;
             height: 7px;
+
             border: none;
             border-radius: 50%;
+
             background: #29415c;
             padding: 0;
         }
@@ -377,8 +387,11 @@
         .gamevora-dot.activo {
             width: 20px;
             border-radius: 8px;
+
             background: #00b7ff;
-            box-shadow: 0 0 8px #008cff;
+
+            box-shadow:
+                0 0 8px #008cff;
         }
 
         /* =========================
@@ -387,17 +400,132 @@
 
         footer {
             width: 100%;
-            max-width: 100%;
             text-align: center;
+
             padding: 30px 18px;
+
             color: #647890;
             font-size: 12px;
+
             border-top: 1px solid #102a49;
+
             margin-top: 15px;
         }
 
         footer strong {
             color: #279fff;
+        }
+
+        /* =========================
+           UNIVERSO GAMING
+        ========================= */
+
+        .universo {
+            width: 100%;
+            max-width: 100%;
+
+            margin: 35px 0;
+            padding: 45px 20px;
+
+            text-align: center;
+
+            position: relative;
+            overflow: hidden;
+
+            border-top:
+                1px solid
+                rgba(0, 153, 255, 0.25);
+
+            border-bottom:
+                1px solid
+                rgba(0, 153, 255, 0.25);
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(0, 119, 255, 0.18),
+                    transparent 60%
+                ),
+                linear-gradient(
+                    180deg,
+                    #06142b,
+                    #020916
+                );
+        }
+
+        .universo-label {
+            font-size: 14px;
+            letter-spacing: 6px;
+            color: #19bfff;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .universo-titulo {
+            font-size: clamp(
+                42px,
+                11vw,
+                76px
+            );
+
+            font-weight: 900;
+
+            letter-spacing: 2px;
+            line-height: 1;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #18bfff
+                );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            text-shadow:
+                0 0 25px
+                rgba(0, 174, 255, 0.25);
+        }
+
+        .mejor-opcion {
+            margin-top: 18px;
+
+            font-size: 17px;
+
+            letter-spacing: 5px;
+
+            font-weight: 700;
+
+            color: #ffffff;
+
+            text-transform: uppercase;
+        }
+
+        .linea-azul {
+            width: 90px;
+            height: 3px;
+
+            margin: 24px auto 0;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #00bfff,
+                    transparent
+                );
+
+            box-shadow:
+                0 0 12px #00bfff;
         }
 
         /* =========================
@@ -407,25 +535,21 @@
         @media (max-width: 600px) {
 
             header {
-                min-height: 70px;
-                padding: 9px 12px;
+                padding: 12px 14px;
             }
 
             .logo {
-                height: 48px;
-                min-width: 0;
+                height: 44px;
             }
 
             .logo-g {
-                width: 48px;
-                height: 48px;
-                flex-basis: 48px;
+                width: 44px;
+                height: 44px;
             }
 
             .logo-resto {
                 font-size: 20px;
-                letter-spacing: -1.3px;
-                margin-left: 3px;
+                letter-spacing: -1.2px;
             }
 
             .navegacion {
@@ -442,8 +566,8 @@
             }
 
             .hero {
-                margin: 16px 14px;
-                padding: 26px 18px;
+                margin: 14px;
+                padding: 25px 18px;
             }
 
             .hero h1 {
@@ -451,37 +575,64 @@
             }
 
             .hero p {
-                font-size: 17px;
+                font-size: 16px;
+            }
+
+            .universo {
+                padding:
+                    42px 12px
+                    45px;
+            }
+
+            .universo-label {
+                font-size: 12px;
+                letter-spacing: 4px;
+            }
+
+            .universo-titulo {
+                font-size: 48px;
+                letter-spacing: 1px;
+            }
+
+            .gamevora-carrusel {
+                margin-top: 25px;
             }
 
             .gamevora-slide {
-                padding: 18px 16px;
+                padding: 18px 20px;
             }
 
             .gamevora-slide h3 {
-                font-size: 17px;
+                font-size: 18px;
+            }
+
+            .gamevora-slide p {
+                font-size: 13px;
             }
 
             .gamevora-slide-icon {
                 font-size: 34px;
             }
+
+            .mejor-opcion {
+                font-size: 16px;
+                letter-spacing: 4px;
+            }
         }
 
-        @media (max-width: 430px) {
-
-            .logo-g {
-                width: 44px;
-                height: 44px;
-                flex-basis: 44px;
-            }
-
-            .logo {
-                height: 44px;
-            }
+        @media (max-width: 400px) {
 
             .logo-resto {
                 font-size: 18px;
-                letter-spacing: -1.2px;
+            }
+
+            .logo-g {
+                width: 40px;
+                height: 40px;
+            }
+
+            .logo {
+                height: 40px;
             }
 
             .boton-navegacion {
@@ -493,150 +644,115 @@
                 font-size: 12px;
             }
 
-            .separador {
-                font-size: 13px;
+            .hero h1 {
+                font-size: 27px;
+            }
+
+            .universo-titulo {
+                font-size: 42px;
+            }
+
+            .gamevora-slide {
+                gap: 8px;
+                padding: 16px;
+            }
+
+            .gamevora-slide-icon {
+                font-size: 30px;
             }
         }
 
     </style>
-
 </head>
 
 <body>
 
-<header>
+<!-- =========================
+     HEADER
+========================= -->
 
-    <!-- LOGO GAMEVORA -->
+<header>
 
     <div class="logo">
 
         <svg
             class="logo-g"
             viewBox="0 0 120 120"
-            xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
         >
 
             <defs>
 
                 <linearGradient
-                    id="gamevoraBlue"
+                    id="gBlue"
                     x1="0"
                     y1="0"
                     x2="1"
                     y2="1"
                 >
+
                     <stop
                         offset="0%"
-                        stop-color="#63edff"
+                        stop-color="#66e8ff"
                     />
 
                     <stop
-                        offset="32%"
-                        stop-color="#08c5ff"
+                        offset="35%"
+                        stop-color="#00bfff"
                     />
 
                     <stop
-                        offset="68%"
-                        stop-color="#087dff"
+                        offset="70%"
+                        stop-color="#0074ff"
                     />
 
                     <stop
                         offset="100%"
                         stop-color="#003cff"
                     />
-                </linearGradient>
 
-                <linearGradient
-                    id="gamevoraLightning"
-                    x1="0"
-                    y1="0"
-                    x2="1"
-                    y2="1"
-                >
-                    <stop
-                        offset="0%"
-                        stop-color="#16d9ff"
-                    />
-
-                    <stop
-                        offset="55%"
-                        stop-color="#008cff"
-                    />
-
-                    <stop
-                        offset="100%"
-                        stop-color="#174cff"
-                    />
                 </linearGradient>
 
             </defs>
 
-            <!-- G PRINCIPAL -->
-
             <path
                 class="g-main"
-                d="
-                M108 22
-                L72 22
-
-                C64 15 54 11 43 12
-                C21 14 7 33 7 56
-                C7 81 22 101 45 106
-                L63 82
-
-                C49 84 38 77 34 65
-                C30 51 37 37 49 32
-                C60 27 71 30 78 37
-
-                L68 51
-                L108 51
-                L94 69
-                L105 69
-
-                L70 108
-                L78 82
-                L57 82
-                L71 58
-                L38 58
-                L59 38
-                L92 38
-
-                Z
-                "
-            />
-
-            <!-- CORTE OSCURO -->
-
-            <path
-                class="g-cut"
-                d="
-                M61 57
-                L91 43
-                L78 58
-                L91 57
-                L61 84
-                L70 65
-                L55 66
-                Z
-                "
-            />
-
-            <!-- RAYO AZUL -->
+                d="M108 25
+                   L76 25
+                   C66 16 55 12 43 14
+                   C22 17 9 35 9 57
+                   C9 82 25 101 48 104
+                   L64 82
+                   C51 84 39 78 35 66
+                   C30 51 37 37 50 32
+                   C61 28 71 31 78 38
+                   L68 52
+                   L104 52
+                   L92 70
+                   L104 70
+                   L69 108
+                   L77 82
+                   L58 82
+                   L72 59
+                   L39 59
+                   L59 39
+                   L91 39
+                   Z"
+            >
+            </path>
 
             <path
                 class="g-lightning"
-                d="
-                M73 57
-                L108 39
-                L91 59
-                L105 57
-                L69 91
-                L79 68
-                L62 70
-                Z
-                "
-            />
+                d="M66 58
+                   L103 42
+                   L88 59
+                   L101 58
+                   L66 91
+                   L77 69
+                   L60 70
+                   Z"
+            >
+            </path>
 
         </svg>
 
@@ -646,8 +762,6 @@
 
     </div>
 
-
-    <!-- NAVEGACIÓN -->
 
     <div class="navegacion">
 
@@ -665,7 +779,8 @@
         <div
             id="botonesCuenta"
             class="boton-cuenta"
-        ></div>
+        >
+        </div>
 
     </div>
 
@@ -679,14 +794,23 @@
 <section class="hero">
 
     <h1>
+
         Tu mundo gaming.<br>
-        <span>Un solo lugar.</span> ⚡
+
+        <span>
+            Un solo lugar.
+        </span>
+
+        ⚡
+
     </h1>
+
 
     <p>
         Recargas digitales, ofertas y productos
         para tus juegos favoritos.
     </p>
+
 
     <a
         href="frontend/juegos.html"
@@ -702,76 +826,19 @@
      UNIVERSO GAMEVORA
 ========================= -->
 
-<section
-    style="
-        width:100%;
-        max-width:100%;
-        margin:35px 0;
-        padding:45px 20px;
-        text-align:center;
-        position:relative;
-        overflow:hidden;
-        border-top:1px solid rgba(0,153,255,0.25);
-        border-bottom:1px solid rgba(0,153,255,0.25);
+<section class="universo">
 
-        background:
-            radial-gradient(
-                circle at center,
-                rgba(0,119,255,0.18),
-                transparent 60%
-            ),
-            linear-gradient(
-                180deg,
-                #06142b,
-                #020916
-            );
-    "
->
-
-    <div
-        style="
-            font-size:14px;
-            letter-spacing:6px;
-            color:#19bfff;
-            font-weight:700;
-            margin-bottom:12px;
-            text-transform:uppercase;
-        "
-    >
+    <div class="universo-label">
         ⚡ EL UNIVERSO GAMING
     </div>
 
 
-    <div
-        style="
-            font-size:clamp(42px,11vw,76px);
-            font-weight:900;
-            letter-spacing:2px;
-            line-height:1;
-            font-family:Arial,Helvetica,sans-serif;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #ffffff,
-                    #18bfff
-                );
-
-            -webkit-background-clip:text;
-            -webkit-text-fill-color:transparent;
-
-            text-shadow:
-                0 0 25px
-                rgba(0,174,255,0.25);
-        "
-    >
+    <div class="universo-titulo">
         GAMEVORA
     </div>
 
 
-    <!-- =========================
-         CARRUSEL
-    ========================= -->
+    <!-- CARRUSEL -->
 
     <div class="gamevora-carrusel">
 
@@ -878,62 +945,40 @@
         <button
             class="gamevora-dot activo"
             type="button"
-        ></button>
+            aria-label="Banner 1"
+        >
+        </button>
 
         <button
             class="gamevora-dot"
             type="button"
-        ></button>
+            aria-label="Banner 2"
+        >
+        </button>
 
         <button
             class="gamevora-dot"
             type="button"
-        ></button>
+            aria-label="Banner 3"
+        >
+        </button>
 
     </div>
 
 
-    <!-- TU MEJOR OPCIÓN -->
-
-    <div
-        style="
-            margin-top:18px;
-            font-size:17px;
-            letter-spacing:5px;
-            font-weight:700;
-            color:#ffffff;
-            text-transform:uppercase;
-        "
-    >
+    <div class="mejor-opcion">
         TU MEJOR OPCIÓN
     </div>
 
 
-    <div
-        style="
-            width:90px;
-            height:3px;
-            margin:24px auto 0;
-            border-radius:10px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    #00bfff,
-                    transparent
-                );
-
-            box-shadow:
-                0 0 12px #00bfff;
-        "
-    ></div>
+    <div class="linea-azul">
+    </div>
 
 </section>
 
 
 <!-- =========================
-     RECARGAS
+     RECARGAS DESTACADAS
 ========================= -->
 
 <section class="section">
@@ -946,6 +991,8 @@
 
     </div>
 
+
+    <!-- FREE FIRE -->
 
     <div class="offer">
 
@@ -981,6 +1028,8 @@
 
     </div>
 
+
+    <!-- COD MOBILE -->
 
     <div class="offer">
 
@@ -1046,9 +1095,11 @@
 
 <!-- =========================
      SUPABASE
+     SOLO UNA VEZ
 ========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
@@ -1059,20 +1110,26 @@ const supabaseClient =
     );
 
 
+/* =========================
+   MENÚ DE CUENTA
+========================= */
+
 async function actualizarMenu() {
 
     const {
-        data: {
-            session
-        }
-    } =
-        await supabaseClient.auth.getSession();
+        data: { session }
+    } = await supabaseClient.auth.getSession();
 
 
     const botones =
         document.getElementById(
             "botonesCuenta"
         );
+
+
+    if (!botones) {
+        return;
+    }
 
 
     if (session) {
@@ -1108,14 +1165,10 @@ async function actualizarMenu() {
 
 actualizarMenu();
 
-</script>
 
-
-<!-- =========================
-     CARRUSEL JAVASCRIPT
-========================= -->
-
-<script>
+/* =========================
+   CARRUSEL GAMEVORA
+========================= */
 
 const gamevoraTrack =
     document.getElementById(
@@ -1133,6 +1186,11 @@ let gamevoraActual = 0;
 
 
 function cambiarBannerGamevora(numero) {
+
+    if (!gamevoraTrack) {
+        return;
+    }
+
 
     gamevoraActual = numero;
 
@@ -1157,6 +1215,8 @@ function cambiarBannerGamevora(numero) {
 }
 
 
+/* CAMBIO AUTOMÁTICO */
+
 setInterval(() => {
 
     let siguiente =
@@ -1164,9 +1224,7 @@ setInterval(() => {
 
 
     if (siguiente >= 3) {
-
         siguiente = 0;
-
     }
 
 
@@ -1176,6 +1234,8 @@ setInterval(() => {
 
 }, 4500);
 
+
+/* BOTONES */
 
 gamevoraDots.forEach(
     (dot, index) => {
@@ -1196,6 +1256,6 @@ gamevoraDots.forEach(
 
 </script>
 
-</body>
 
-    </html>
+</body>
+</html>
