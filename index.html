@@ -43,28 +43,35 @@
         .logo {
     display: flex;
     align-items: center;
-    height: 45px;
+    height: 46px;
     text-decoration: none;
 }
 
-.logo-g-custom {
+.logo-g {
     width: 43px;
     height: 43px;
-    display: block;
     flex-shrink: 0;
 
-    filter:
-        drop-shadow(0 0 4px #00b7ff)
-        drop-shadow(0 0 10px #007cff);
+    fill: #00b7ff;
 
-    margin-right: 1px;
+    filter:
+        drop-shadow(0 0 4px rgba(0,183,255,.8))
+        drop-shadow(0 0 11px rgba(0,115,255,.45));
+
+    transform: skewX(-5deg);
+}
+
+.logo-g .logo-cut {
+    fill: #071526;
 }
 
 .logo-resto {
+    margin-left: 1px;
+
+    color: #ffffff;
     font-size: 22px;
     font-weight: 900;
-    color: white;
-    letter-spacing: -0.7px;
+    letter-spacing: -1px;
     line-height: 1;
 }
         
@@ -408,50 +415,10 @@
 
 <header>
     <div class="logo">
-    <svg class="logo-g-custom" viewBox="0 0 100 100" aria-label="Gamevora">
-        <defs>
-            <linearGradient id="gamevoraG" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="20%" stop-color="#54d9ff"/>
-                <stop offset="55%" stop-color="#009dff"/>
-                <stop offset="100%" stop-color="#005eff"/>
-            </linearGradient>
-        </defs>
-
-        <!-- G principal -->
-        <path
-            d="M78 20
-               C68 10 55 5 42 7
-               C20 10 7 27 7 50
-               C7 76 24 93 48 93
-               C61 93 73 88 82 79
-               L82 49
-               L49 49
-               L49 62
-               L67 62
-               L67 71
-               C62 76 56 78 49 78
-               C34 78 24 67 24 50
-               C24 33 34 21 49 21
-               C58 21 65 25 71 31
-               Z"
-            fill="url(#gamevoraG)"
-        />
-
-        <!-- Corte eléctrico -->
-        <path
-            d="M58 47 L91 31 L76 50 L94 47 L62 67 L75 50 Z"
-            fill="#071526"
-        />
-
-        <!-- Brillo -->
-        <path
-            d="M25 28 L31 20 L37 18"
-            fill="none"
-            stroke="#ffffff"
-            stroke-width="3"
-            stroke-linecap="round"
-        />
+    <div class="logo">
+    <svg class="logo-g" viewBox="0 0 80 80" aria-hidden="true">
+        <path d="M68 19C59 10 49 6 38 6C19 6 6 20 6 40C6 61 19 74 38 74C50 74 60 70 68 62V39H39V51H55V57C51 60 46 62 40 62C29 62 22 54 22 40C22 27 29 19 40 19C47 19 53 22 58 27L68 19Z"/>
+        <path class="logo-cut" d="M47 39L72 26L62 39L73 38L49 54L57 41H47Z"/>
     </svg>
 
     <span class="logo-resto">AMEVORA</span>
