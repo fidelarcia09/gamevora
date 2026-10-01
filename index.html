@@ -40,7 +40,29 @@
             color: #39a9ff;
             letter-spacing: 1px;
         }
+        .navegacion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
+.boton-navegacion {
+    color: #28a9ff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.boton-navegacion:hover {
+    color: #63caff;
+}
+
+.boton-cuenta {
+    display: flex;
+    align-items: center;
+}
+        
         .logo span {
             color: #ffffff;
         }
@@ -362,13 +384,15 @@
     </div>
 
 <div class="navegacion">
-    <a href="frontend/soporte.html" class="volver">
+
+    <a href="soporte.html" class="boton-navegacion">
         Soporte
     </a>
 
     <span class="separador">|</span>
 
-    <div id="botonesCuenta"></div>
+    <div id="botonesCuenta" class="boton-cuenta"></div>
+
 </div>
         <!-- Los botones aparecerán automáticamente -->
     </div>
