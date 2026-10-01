@@ -285,6 +285,7 @@ const ticketId =
 params.get("id");
 
 let usuarioActual = null;
+let canalRealtime = null;
 
 
 /* =========================
@@ -318,6 +319,7 @@ async function iniciar() {
 
     await cargarTicket();
 
+    iniciarRealtime();
 }
 
 
@@ -418,46 +420,7 @@ function mostrarTicket(ticket, mensajes) {
 
         mensajes.forEach(mensaje => {
 
-            let clase = "mensaje-usuario";
-            let remitente = "Tú";
-
-            if (mensaje.sender_type === "admin") {
-
-                clase = "mensaje-admin";
-                remitente = "Soporte Gamevora";
-
-            }
-
-            if (mensaje.sender_type === "bot") {
-
-                clase = "mensaje-bot";
-                remitente = "🤖 Gamevora";
-
-            }
-
-            const fecha =
-                new Date(mensaje.created_at)
-                    .toLocaleString("es-ES");
-
-            mensajesHTML += `
-
-                <div class="mensaje ${clase}">
-
-                    <div class="remitente">
-                        ${remitente}
-                    </div>
-
-                    <div>
-                        ${escapeHTML(mensaje.message)}
-                    </div>
-
-                    <div class="fecha">
-                        ${fecha}
-                    </div>
-
-                </div>
-
-            `;
+            mensajesHTML += crearHTMLMensaje(mensaje);
 
         });
 
@@ -515,8 +478,10 @@ function mostrarTicket(ticket, mensajes) {
         document.querySelector(".mensajes");
 
     if (zonaMensajes) {
+
         zonaMensajes.scrollTop =
             zonaMensajes.scrollHeight;
+
     }
 
     const botonEnviar =
@@ -530,7 +495,139 @@ function mostrarTicket(ticket, mensajes) {
         );
 
     }
+}
 
+
+/* =========================
+   CREAR MENSAJE HTML
+========================= */
+
+function crearHTMLMensaje(mensaje) {
+
+    let clase = "mensaje-usuario";
+    let remitente = "Tú";
+
+    if (mensaje.sender_type === "admin") {
+
+        clase = "mensaje-admin";
+        remitente = "Soporte Gamevora";
+
+    }
+
+    if (mensaje.sender_type === "bot") {
+
+        clase = "mensaje-bot";
+        remitente = "🤖 Gamevora";
+
+    }
+
+    const fecha =
+        new Date(mensaje.created_at)
+            .toLocaleString("es-ES");
+
+    return `
+
+        <div
+            class="mensaje ${clase}"
+            data-message-id="${mensaje.id}"
+        >
+
+            <div class="remitente">
+                ${remitente}
+            </div>
+
+            <div>
+                ${escapeHTML(mensaje.message)}
+            </div>
+
+            <div class="fecha">
+                ${fecha}
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================
+   REALTIME
+========================= */
+
+function iniciarRealtime() {
+
+    canalRealtime =
+        supabaseClient
+            .channel("ticket-" + ticketId)
+
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "support_messages",
+                    filter: "ticket_id=eq." + ticketId
+                },
+                payload => {
+
+                    console.log(
+                        "Nuevo mensaje:",
+                        payload.new
+                    );
+
+                    agregarMensajeRealtime(
+                        payload.new
+                    );
+
+                }
+            )
+
+            .subscribe(status => {
+
+                console.log(
+                    "Realtime:",
+                    status
+                );
+
+            });
+}
+
+
+/* =========================
+   AGREGAR MENSAJE EN VIVO
+========================= */
+
+function agregarMensajeRealtime(mensaje) {
+
+    const zonaMensajes =
+        document.querySelector(".mensajes");
+
+    if (!zonaMensajes) {
+        return;
+    }
+
+    if (
+        document.querySelector(
+            `[data-message-id="${mensaje.id}"]`
+        )
+    ) {
+        return;
+    }
+
+    const mensajeVacio =
+        zonaMensajes.querySelector(".mensaje-vacio");
+
+    if (mensajeVacio) {
+        mensajeVacio.remove();
+    }
+
+    zonaMensajes.insertAdjacentHTML(
+        "beforeend",
+        crearHTMLMensaje(mensaje)
+    );
+
+    zonaMensajes.scrollTop =
+        zonaMensajes.scrollHeight;
 }
 
 
@@ -578,13 +675,17 @@ async function enviarMensaje() {
         );
 
         boton.disabled = false;
-        boton.textContent = "⚡ Enviar mensaje";
+        boton.textContent =
+            "⚡ Enviar mensaje";
 
         return;
     }
 
-    await cargarTicket();
+    textarea.value = "";
 
+    boton.disabled = false;
+    boton.textContent =
+        "⚡ Enviar mensaje";
 }
 
 
@@ -602,6 +703,24 @@ function escapeHTML(texto) {
         .replace(/'/g, "&#039;");
 
 }
+
+
+/* =========================
+   LIMPIAR REALTIME
+========================= */
+
+window.addEventListener(
+    "beforeunload",
+    () => {
+
+        if (canalRealtime) {
+            supabaseClient.removeChannel(
+                canalRealtime
+            );
+        }
+
+    }
+);
 
 
 /* =========================
