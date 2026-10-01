@@ -163,6 +163,30 @@
                 font-size: 12px;
             }
         }
+
+        .boton-resolver {
+    width: 100%;
+    margin-top: 12px;
+    padding: 11px;
+    border: 1px solid #247342;
+    border-radius: 10px;
+    background: #123820;
+    color: #68df8c;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.boton-resolver:hover {
+    background: #18502d;
+}
+
+.ticket-resuelto {
+    margin-top: 12px;
+    color: #68df8c;
+    font-size: 12px;
+    font-weight: bold;
+}
     </style>
 </head>
 
@@ -376,35 +400,53 @@ function mostrarTickets(tickets) {
 
         html += `
 
-            <div
-                class="ticket"
-                data-id="${ticket.id}"
-            >
+    <div
+        class="ticket"
+        data-id="${ticket.id}"
+    >
 
-                <div class="ticket-asunto">
-                    ${escapeHTML(ticket.subject)}
+        <div class="ticket-asunto">
+            ${escapeHTML(ticket.subject)}
+        </div>
+
+        <div class="ticket-info">
+            Usuario:
+            ${escapeHTML(ticket.user_id)}
+            <br>
+
+            Categoría:
+            ${escapeHTML(ticket.category)}
+            <br>
+
+            Última actividad:
+            ${fecha}
+        </div>
+
+        <span class="estado ${estadoClase}">
+            ${estadoTexto}
+        </span>
+
+        ${
+            ticket.status !== "resolved"
+            ? `
+                <button
+                    class="boton-resolver"
+                    data-id="${ticket.id}"
+                    type="button"
+                >
+                    ✅ Resolver ticket
+                </button>
+            `
+            : `
+                <div class="ticket-resuelto">
+                    ✅ Ticket resuelto
                 </div>
+            `
+        }
 
-                <div class="ticket-info">
-                    Usuario:
-                    ${escapeHTML(ticket.user_id)}
-                    <br>
+    </div>
 
-                    Categoría:
-                    ${escapeHTML(ticket.category)}
-                    <br>
-
-                    Última actividad:
-                    ${fecha}
-                </div>
-
-                <span class="estado ${estadoClase}">
-                    ${estadoTexto}
-                </span>
-
-            </div>
-
-        `;
+`;
 
     });
 
@@ -429,6 +471,65 @@ function mostrarTickets(tickets) {
 
         });
 
+document
+    .querySelectorAll(".boton-resolver")
+    .forEach(boton => {
+
+        boton.addEventListener(
+            "click",
+            async function(event) {
+
+                event.stopPropagation();
+
+                const ticketId =
+                    this.dataset.id;
+
+                const confirmar =
+                    confirm(
+                        "¿Quieres marcar este ticket como resuelto?"
+                    );
+
+                if (!confirmar) {
+                    return;
+                }
+
+                this.disabled = true;
+                this.textContent =
+                    "Resolviendo...";
+
+                const { error } =
+                    await supabaseClient
+                        .from("support_tickets")
+                        .update({
+                            status: "resolved",
+                            closed_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        })
+                        .eq("id", ticketId);
+
+                if (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "No se pudo resolver el ticket:\n\n" +
+                        error.message
+                    );
+
+                    this.disabled = false;
+                    this.textContent =
+                        "✅ Resolver ticket";
+
+                    return;
+                }
+
+                await cargarTickets();
+
+            }
+        );
+
+    });
+    
 }
 
 
