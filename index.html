@@ -41,38 +41,44 @@
             letter-spacing: 1px;
         }
         .logo {
+    disp.logo {
     display: flex;
     align-items: center;
-    height: 46px;
+    height: 48px;
     text-decoration: none;
 }
 
 .logo-g {
-    width: 43px;
-    height: 43px;
+    width: 48px;
+    height: 48px;
     flex-shrink: 0;
-
-    fill: #00b7ff;
+    display: block;
 
     filter:
-        drop-shadow(0 0 4px rgba(0,183,255,.8))
-        drop-shadow(0 0 11px rgba(0,115,255,.45));
-
-    transform: skewX(-5deg);
+        drop-shadow(0 0 4px rgba(0, 204, 255, .95))
+        drop-shadow(0 0 12px rgba(0, 100, 255, .75));
 }
 
-.logo-g .logo-cut {
+.g-main {
+    fill: url(#gBlue);
+}
+
+.g-lightning {
     fill: #071526;
 }
 
 .logo-resto {
-    margin-left: 1px;
+    margin-left: 3px;
 
-    color: #ffffff;
-    font-size: 22px;
+    color: #f5f8ff;
+    font-size: 23px;
     font-weight: 900;
-    letter-spacing: -1px;
+    font-style: italic;
+    letter-spacing: -1.4px;
     line-height: 1;
+
+    text-shadow:
+        0 0 3px rgba(255,255,255,.25);
 }
         
         .navegacion {
@@ -415,10 +421,54 @@
 
 <header>
     <div class="logo">
-    <div class="logo">
-    <svg class="logo-g" viewBox="0 0 80 80" aria-hidden="true">
-        <path d="M68 19C59 10 49 6 38 6C19 6 6 20 6 40C6 61 19 74 38 74C50 74 60 70 68 62V39H39V51H55V57C51 60 46 62 40 62C29 62 22 54 22 40C22 27 29 19 40 19C47 19 53 22 58 27L68 19Z"/>
-        <path class="logo-cut" d="M47 39L72 26L62 39L73 38L49 54L57 41H47Z"/>
+    <svg class="logo-g" viewBox="0 0 120 120" aria-hidden="true">
+        <defs>
+            <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#66e8ff"/>
+                <stop offset="35%" stop-color="#00bfff"/>
+                <stop offset="70%" stop-color="#0074ff"/>
+                <stop offset="100%" stop-color="#003cff"/>
+            </linearGradient>
+        </defs>
+
+        <!-- G exterior -->
+        <path
+            class="g-main"
+            d="M108 25
+               L76 25
+               C66 16 55 12 43 14
+               C22 17 9 35 9 57
+               C9 82 25 101 48 104
+               L64 82
+               C51 84 39 78 35 66
+               C30 51 37 37 50 32
+               C61 28 71 31 78 38
+               L68 52
+               L104 52
+               L92 70
+               L104 70
+               L69 108
+               L77 82
+               L58 82
+               L72 59
+               L39 59
+               L59 39
+               L91 39
+               Z"
+        />
+
+        <!-- rayo interior -->
+        <path
+            class="g-lightning"
+            d="M66 58
+               L103 42
+               L88 59
+               L101 58
+               L66 91
+               L77 69
+               L60 70
+               Z"
+        />
     </svg>
 
     <span class="logo-resto">AMEVORA</span>
