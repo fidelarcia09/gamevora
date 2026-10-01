@@ -28,9 +28,7 @@
             min-height: 100vh;
         }
 
-        /* =========================
-           BARRA SUPERIOR
-        ========================= */
+        /* BARRA SUPERIOR */
 
         header {
             width: 100%;
@@ -70,10 +68,6 @@
 
         .g-main {
             fill: url(#gBlue);
-        }
-
-        .g-lightning {
-            fill: #071526;
         }
 
         .logo-resto {
@@ -135,9 +129,7 @@
             box-shadow: 0 0 15px rgba(0, 153, 255, 0.25);
         }
 
-        /* =========================
-           HERO
-        ========================= */
+        /* HERO */
 
         .hero {
             width: auto;
@@ -195,9 +187,7 @@
             box-shadow: 0 0 18px rgba(0, 153, 255, 0.3);
         }
 
-        /* =========================
-           SECCIONES
-        ========================= */
+        /* SECCIONES */
 
         .section {
             width: 100%;
@@ -220,9 +210,7 @@
             font-size: 13px;
         }
 
-        /* =========================
-           OFERTAS
-        ========================= */
+        /* OFERTAS */
 
         .offer {
             width: 100%;
@@ -280,9 +268,7 @@
             font-weight: bold;
         }
 
-        /* =========================
-           CARRUSEL
-        ========================= */
+        /* CARRUSEL */
 
         .gamevora-carrusel {
             width: 100%;
@@ -394,9 +380,7 @@
                 0 0 8px #008cff;
         }
 
-        /* =========================
-           PIE
-        ========================= */
+        /* PIE */
 
         footer {
             width: 100%;
@@ -416,9 +400,7 @@
             color: #279fff;
         }
 
-        /* =========================
-           UNIVERSO GAMING
-        ========================= */
+        /* UNIVERSO GAMING */
 
         .universo {
             width: 100%;
@@ -528,9 +510,7 @@
                 0 0 12px #00bfff;
         }
 
-        /* =========================
-           MÓVIL
-        ========================= */
+        /* MÓVIL */
 
         @media (max-width: 600px) {
 
@@ -667,10 +647,6 @@
 
 <body>
 
-<!-- =========================
-     HEADER
-========================= -->
-
 <header>
 
     <div class="logo">
@@ -715,6 +691,7 @@
 
             </defs>
 
+            <!-- G AZUL -->
             <path
                 class="g-main"
                 d="M108 25
@@ -737,19 +714,6 @@
                    L39 59
                    L59 39
                    L91 39
-                   Z"
-            >
-            </path>
-
-            <path
-                class="g-lightning"
-                d="M66 58
-                   L103 42
-                   L88 59
-                   L101 58
-                   L66 91
-                   L77 69
-                   L60 70
                    Z"
             >
             </path>
@@ -787,10 +751,6 @@
 </header>
 
 
-<!-- =========================
-     HERO
-========================= -->
-
 <section class="hero">
 
     <h1>
@@ -822,10 +782,6 @@
 </section>
 
 
-<!-- =========================
-     UNIVERSO GAMEVORA
-========================= -->
-
 <section class="universo">
 
     <div class="universo-label">
@@ -837,8 +793,6 @@
         GAMEVORA
     </div>
 
-
-    <!-- CARRUSEL -->
 
     <div class="gamevora-carrusel">
 
@@ -938,8 +892,6 @@
     </div>
 
 
-    <!-- PUNTOS -->
-
     <div class="gamevora-dots">
 
         <button
@@ -977,10 +929,6 @@
 </section>
 
 
-<!-- =========================
-     RECARGAS DESTACADAS
-========================= -->
-
 <section class="section">
 
     <div class="section-title">
@@ -991,8 +939,6 @@
 
     </div>
 
-
-    <!-- FREE FIRE -->
 
     <div class="offer">
 
@@ -1028,8 +974,6 @@
 
     </div>
 
-
-    <!-- COD MOBILE -->
 
     <div class="offer">
 
@@ -1068,10 +1012,6 @@
 </section>
 
 
-<!-- =========================
-     FOOTER
-========================= -->
-
 <footer>
 
     <p>
@@ -1093,11 +1033,6 @@
 </footer>
 
 
-<!-- =========================
-     SUPABASE
-     SOLO UNA VEZ
-========================= -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
@@ -1109,10 +1044,6 @@ const supabaseClient =
         "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
     );
 
-
-/* =========================
-   MENÚ DE CUENTA
-========================= */
 
 async function actualizarMenu() {
 
@@ -1166,10 +1097,6 @@ async function actualizarMenu() {
 actualizarMenu();
 
 
-/* =========================
-   CARRUSEL GAMEVORA
-========================= */
-
 const gamevoraTrack =
     document.getElementById(
         "gamevoraTrack"
@@ -1215,8 +1142,6 @@ function cambiarBannerGamevora(numero) {
 }
 
 
-/* CAMBIO AUTOMÁTICO */
-
 setInterval(() => {
 
     let siguiente =
@@ -1234,8 +1159,6 @@ setInterval(() => {
 
 }, 4500);
 
-
-/* BOTONES */
 
 gamevoraDots.forEach(
     (dot, index) => {
@@ -1255,7 +1178,6 @@ gamevoraDots.forEach(
 );
 
 </script>
-
 
 </body>
 </html>
