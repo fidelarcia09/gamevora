@@ -44,55 +44,20 @@
     display: flex;
     align-items: center;
     height: 45px;
-    font-weight: 900;
-    letter-spacing: -1px;
+    text-decoration: none;
 }
 
-.logo-g {
-    position: relative;
-    display: inline-block;
-    font-size: 43px;
-    font-weight: 1000;
-    font-style: italic;
-    line-height: 1;
-    color: #00c8ff;
+.logo-g-custom {
+    width: 43px;
+    height: 43px;
+    display: block;
+    flex-shrink: 0;
 
-    text-shadow:
-        0 0 5px #00c8ff,
-        0 0 12px #008cff,
-        0 0 24px #006eff;
+    filter:
+        drop-shadow(0 0 4px #00b7ff)
+        drop-shadow(0 0 10px #007cff);
 
     margin-right: 1px;
-    transform: skewX(-7deg);
-}
-
-/* Corte eléctrico de la G */
-.logo-g::after {
-    content: "";
-    position: absolute;
-    width: 15px;
-    height: 4px;
-    background: #071526;
-    top: 22px;
-    right: -1px;
-    transform: rotate(-12deg);
-    box-shadow:
-        5px 5px 0 #071526;
-}
-
-/* Pequeño destello */
-.logo-g::before {
-    content: "";
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    background: #ffffff;
-    border-radius: 50%;
-    top: 4px;
-    left: 8px;
-    box-shadow:
-        0 0 6px #ffffff,
-        0 0 12px #00b7ff;
 }
 
 .logo-resto {
@@ -443,7 +408,53 @@
 
 <header>
     <div class="logo">
-    <span class="logo-g">G</span><span class="logo-resto">AMEVORA</span>
+    <svg class="logo-g-custom" viewBox="0 0 100 100" aria-label="Gamevora">
+        <defs>
+            <linearGradient id="gamevoraG" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="20%" stop-color="#54d9ff"/>
+                <stop offset="55%" stop-color="#009dff"/>
+                <stop offset="100%" stop-color="#005eff"/>
+            </linearGradient>
+        </defs>
+
+        <!-- G principal -->
+        <path
+            d="M78 20
+               C68 10 55 5 42 7
+               C20 10 7 27 7 50
+               C7 76 24 93 48 93
+               C61 93 73 88 82 79
+               L82 49
+               L49 49
+               L49 62
+               L67 62
+               L67 71
+               C62 76 56 78 49 78
+               C34 78 24 67 24 50
+               C24 33 34 21 49 21
+               C58 21 65 25 71 31
+               Z"
+            fill="url(#gamevoraG)"
+        />
+
+        <!-- Corte eléctrico -->
+        <path
+            d="M58 47 L91 31 L76 50 L94 47 L62 67 L75 50 Z"
+            fill="#071526"
+        />
+
+        <!-- Brillo -->
+        <path
+            d="M25 28 L31 20 L37 18"
+            fill="none"
+            stroke="#ffffff"
+            stroke-width="3"
+            stroke-linecap="round"
+        />
+    </svg>
+
+    <span class="logo-resto">AMEVORA</span>
     </div>
         
 <div class="navegacion">
