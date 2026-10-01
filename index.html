@@ -43,27 +43,64 @@
         .logo {
     display: flex;
     align-items: center;
+    height: 45px;
     font-weight: 900;
     letter-spacing: -1px;
 }
 
 .logo-g {
-    font-size: 38px;
+    position: relative;
+    display: inline-block;
+    font-size: 43px;
     font-weight: 1000;
     font-style: italic;
-    color: #00b7ff;
-    text-shadow:
-        0 0 8px #008cff,
-        0 0 18px #006eff;
-    margin-right: 2px;
     line-height: 1;
+    color: #00c8ff;
+
+    text-shadow:
+        0 0 5px #00c8ff,
+        0 0 12px #008cff,
+        0 0 24px #006eff;
+
+    margin-right: 1px;
+    transform: skewX(-7deg);
+}
+
+/* Corte eléctrico de la G */
+.logo-g::after {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 4px;
+    background: #071526;
+    top: 22px;
+    right: -1px;
+    transform: rotate(-12deg);
+    box-shadow:
+        5px 5px 0 #071526;
+}
+
+/* Pequeño destello */
+.logo-g::before {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #ffffff;
+    border-radius: 50%;
+    top: 4px;
+    left: 8px;
+    box-shadow:
+        0 0 6px #ffffff,
+        0 0 12px #00b7ff;
 }
 
 .logo-resto {
     font-size: 22px;
     font-weight: 900;
     color: white;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.7px;
+    line-height: 1;
 }
         
         .navegacion {
@@ -405,7 +442,6 @@
 <body>
 
 <header>
-    <div class="logo">
     <div class="logo">
     <span class="logo-g">G</span><span class="logo-resto">AMEVORA</span>
     </div>
