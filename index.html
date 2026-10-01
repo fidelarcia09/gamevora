@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <title>Gamevora | Recargas Gaming</title>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -33,16 +35,16 @@
 
         header {
             width: 100%;
+            min-height: 72px;
             background: #08152d;
             border-bottom: 1px solid #123b70;
-            padding: 12px 18px;
+            padding: 10px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 10;
-            min-height: 72px;
         }
 
         /* LOGO */
@@ -50,21 +52,32 @@
         .logo {
             display: flex;
             align-items: center;
-            height: 48px;
+            height: 52px;
             min-width: 0;
             flex-shrink: 1;
-            text-decoration: none;
         }
 
         .logo-g {
-            width: 48px;
-            height: 48px;
-            flex: 0 0 48px;
+            width: 52px;
+            height: 52px;
+            flex: 0 0 52px;
             display: block;
 
             filter:
-                drop-shadow(0 0 5px rgba(0, 204, 255, .9))
-                drop-shadow(0 0 14px rgba(0, 100, 255, .7));
+                drop-shadow(0 0 4px rgba(0, 210, 255, .95))
+                drop-shadow(0 0 11px rgba(0, 110, 255, .85));
+        }
+
+        .g-main {
+            fill: url(#gamevoraBlue);
+        }
+
+        .g-cut {
+            fill: #061426;
+        }
+
+        .g-lightning {
+            fill: url(#gamevoraLightning);
         }
 
         .logo-resto {
@@ -102,6 +115,11 @@
             color: #63caff;
         }
 
+        .separador {
+            color: white;
+            font-weight: bold;
+        }
+
         .boton-cuenta {
             display: flex;
             align-items: center;
@@ -132,14 +150,22 @@
 
         .hero {
             width: auto;
-            max-width: calc(100% - 36px);
+            max-width: 100%;
             margin: 18px;
             padding: 28px 20px;
             border-radius: 20px;
 
             background:
-                radial-gradient(circle at 90% 20%, #0b68c9 0%, transparent 35%),
-                linear-gradient(135deg, #071a38, #061022);
+                radial-gradient(
+                    circle at 90% 20%,
+                    #0b68c9 0%,
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #071a38,
+                    #061022
+                );
 
             border: 1px solid #145ca3;
             box-shadow: 0 0 25px rgba(0, 128, 255, 0.15);
@@ -164,7 +190,11 @@
         .hero-button {
             display: inline-block;
             text-decoration: none;
-            background: linear-gradient(90deg, #087cff, #00baff);
+            background: linear-gradient(
+                90deg,
+                #087cff,
+                #00baff
+            );
             color: white;
             border: none;
             padding: 13px 20px;
@@ -179,6 +209,8 @@
         ========================= */
 
         .section {
+            width: 100%;
+            max-width: 100%;
             padding: 10px 18px 25px;
         }
 
@@ -200,7 +232,13 @@
         .offer {
             width: 100%;
             max-width: 100%;
-            background: linear-gradient(135deg, #0b2348, #071426);
+            background:
+                linear-gradient(
+                    135deg,
+                    #0b2348,
+                    #071426
+                );
+
             border: 1px solid #176ab2;
             border-radius: 17px;
             padding: 18px;
@@ -245,7 +283,7 @@
         }
 
         /* =========================
-           CARRUSEL
+           CARRUSEL GAMEVORA
         ========================= */
 
         .gamevora-carrusel {
@@ -259,18 +297,9 @@
             box-shadow: 0 0 20px rgba(0, 153, 255, 0.15);
         }
 
-        .gamevora-slide-link,
-        .gamevora-slide-link:hover,
-        .gamevora-slide-link:visited,
-        .gamevora-slide-link:active {
-            text-decoration: none !important;
-            color: inherit !important;
-            display: block;
-        }
-
         .gamevora-track {
-            display: flex;
             width: 100%;
+            display: flex;
             transition: transform 0.6s ease;
         }
 
@@ -283,6 +312,14 @@
             justify-content: space-between;
             gap: 15px;
             text-align: left;
+        }
+
+        .gamevora-slide-link,
+        .gamevora-slide-link:hover,
+        .gamevora-slide-link:visited,
+        .gamevora-slide-link:active {
+            text-decoration: none !important;
+            color: inherit !important;
         }
 
         .gamevora-slide-text {
@@ -314,7 +351,11 @@
         .gamevora-slide-icon {
             font-size: 38px;
             flex-shrink: 0;
-            filter: drop-shadow(0 0 10px rgba(0, 183, 255, 0.6));
+            filter:
+                drop-shadow(
+                    0 0 10px
+                    rgba(0, 183, 255, 0.6)
+                );
         }
 
         .gamevora-dots {
@@ -346,6 +387,7 @@
 
         footer {
             width: 100%;
+            max-width: 100%;
             text-align: center;
             padding: 30px 18px;
             color: #647890;
@@ -359,33 +401,35 @@
         }
 
         /* =========================
-           RESPONSIVE MÓVIL
+           MÓVIL
         ========================= */
 
         @media (max-width: 600px) {
 
             header {
-                padding: 10px 12px;
-                min-height: 68px;
+                min-height: 70px;
+                padding: 9px 12px;
             }
 
             .logo {
-                height: 44px;
+                height: 48px;
+                min-width: 0;
             }
 
             .logo-g {
-                width: 44px;
-                height: 44px;
-                flex-basis: 44px;
+                width: 48px;
+                height: 48px;
+                flex-basis: 48px;
             }
 
             .logo-resto {
                 font-size: 20px;
-                letter-spacing: -1.4px;
+                letter-spacing: -1.3px;
+                margin-left: 3px;
             }
 
             .navegacion {
-                gap: 7px;
+                gap: 6px;
             }
 
             .boton-navegacion {
@@ -393,22 +437,25 @@
             }
 
             .login {
-                padding: 9px 11px;
+                padding: 9px 12px;
                 font-size: 13px;
             }
 
             .hero {
-                margin: 18px 12px;
-                max-width: calc(100% - 24px);
-                padding: 28px 20px;
+                margin: 16px 14px;
+                padding: 26px 18px;
             }
 
             .hero h1 {
-                font-size: 31px;
+                font-size: 30px;
+            }
+
+            .hero p {
+                font-size: 17px;
             }
 
             .gamevora-slide {
-                padding: 18px 14px;
+                padding: 18px 16px;
             }
 
             .gamevora-slide h3 {
@@ -420,21 +467,21 @@
             }
         }
 
-        @media (max-width: 420px) {
-
-            header {
-                padding-left: 10px;
-                padding-right: 10px;
-            }
+        @media (max-width: 430px) {
 
             .logo-g {
-                width: 40px;
-                height: 40px;
-                flex-basis: 40px;
+                width: 44px;
+                height: 44px;
+                flex-basis: 44px;
+            }
+
+            .logo {
+                height: 44px;
             }
 
             .logo-resto {
                 font-size: 18px;
+                letter-spacing: -1.2px;
             }
 
             .boton-navegacion {
@@ -442,11 +489,17 @@
             }
 
             .login {
-                padding: 8px 9px;
+                padding: 8px 10px;
                 font-size: 12px;
             }
+
+            .separador {
+                font-size: 13px;
+            }
         }
+
     </style>
+
 </head>
 
 <body>
@@ -454,82 +507,148 @@
 <header>
 
     <!-- LOGO GAMEVORA -->
+
     <div class="logo">
 
         <svg
             class="logo-g"
             viewBox="0 0 120 120"
             xmlns="http://www.w3.org/2000/svg"
-            aria-label="G"
+            aria-hidden="true"
         >
 
             <defs>
 
                 <linearGradient
-                    id="gamevoraG"
+                    id="gamevoraBlue"
                     x1="0"
                     y1="0"
                     x2="1"
                     y2="1"
                 >
-                    <stop offset="0%" stop-color="#66efff"/>
-                    <stop offset="35%" stop-color="#00cfff"/>
-                    <stop offset="70%" stop-color="#008cff"/>
-                    <stop offset="100%" stop-color="#0050ff"/>
+                    <stop
+                        offset="0%"
+                        stop-color="#63edff"
+                    />
+
+                    <stop
+                        offset="32%"
+                        stop-color="#08c5ff"
+                    />
+
+                    <stop
+                        offset="68%"
+                        stop-color="#087dff"
+                    />
+
+                    <stop
+                        offset="100%"
+                        stop-color="#003cff"
+                    />
+                </linearGradient>
+
+                <linearGradient
+                    id="gamevoraLightning"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="1"
+                >
+                    <stop
+                        offset="0%"
+                        stop-color="#16d9ff"
+                    />
+
+                    <stop
+                        offset="55%"
+                        stop-color="#008cff"
+                    />
+
+                    <stop
+                        offset="100%"
+                        stop-color="#174cff"
+                    />
                 </linearGradient>
 
             </defs>
 
-            <!-- G ANGULAR -->
+            <!-- G PRINCIPAL -->
+
             <path
+                class="g-main"
                 d="
-                M104 18
-                L66 18
-                C42 18 21 35 17 58
-                C13 81 27 101 48 106
-                L62 84
-                C50 81 43 73 43 62
-                C43 49 53 39 66 38
-                L91 38
-                L76 54
-                L104 54
-                L92 69
-                L104 69
+                M108 22
+                L72 22
+
+                C64 15 54 11 43 12
+                C21 14 7 33 7 56
+                C7 81 22 101 45 106
+                L63 82
+
+                C49 84 38 77 34 65
+                C30 51 37 37 49 32
+                C60 27 71 30 78 37
+
+                L68 51
+                L108 51
+                L94 69
+                L105 69
+
                 L70 108
                 L78 82
                 L57 82
-                L72 60
-                L39 60
-                L59 39
-                L88 39
+                L71 58
+                L38 58
+                L59 38
+                L92 38
+
                 Z
                 "
-                fill="url(#gamevoraG)"
             />
 
-            <!-- RAYO INTEGRADO -->
+            <!-- CORTE OSCURO -->
+
             <path
+                class="g-cut"
                 d="
-                M67 57
-                L105 40
-                L88 59
-                L101 58
-                L65 94
-                L76 70
-                L58 71
+                M61 57
+                L91 43
+                L78 58
+                L91 57
+                L61 84
+                L70 65
+                L55 66
                 Z
                 "
-                fill="#04101f"
+            />
+
+            <!-- RAYO AZUL -->
+
+            <path
+                class="g-lightning"
+                d="
+                M73 57
+                L108 39
+                L91 59
+                L105 57
+                L69 91
+                L79 68
+                L62 70
+                Z
+                "
             />
 
         </svg>
 
-        <span class="logo-resto">AMEVORA</span>
+        <span class="logo-resto">
+            AMEVORA
+        </span>
 
     </div>
 
 
     <!-- NAVEGACIÓN -->
+
     <div class="navegacion">
 
         <a
@@ -539,7 +658,9 @@
             Soporte
         </a>
 
-        <span class="separador">|</span>
+        <span class="separador">
+            |
+        </span>
 
         <div
             id="botonesCuenta"
@@ -581,47 +702,76 @@
      UNIVERSO GAMEVORA
 ========================= -->
 
-<section style="
-    margin: 35px 0;
-    padding: 45px 20px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    border-top: 1px solid rgba(0, 153, 255, 0.25);
-    border-bottom: 1px solid rgba(0, 153, 255, 0.25);
-    background:
-        radial-gradient(circle at center, rgba(0, 119, 255, 0.18), transparent 60%),
-        linear-gradient(180deg, #06142b, #020916);
-">
+<section
+    style="
+        width:100%;
+        max-width:100%;
+        margin:35px 0;
+        padding:45px 20px;
+        text-align:center;
+        position:relative;
+        overflow:hidden;
+        border-top:1px solid rgba(0,153,255,0.25);
+        border-bottom:1px solid rgba(0,153,255,0.25);
 
-    <div style="
-        font-size: 14px;
-        letter-spacing: 6px;
-        color: #19bfff;
-        font-weight: 700;
-        margin-bottom: 12px;
-        text-transform: uppercase;
-    ">
+        background:
+            radial-gradient(
+                circle at center,
+                rgba(0,119,255,0.18),
+                transparent 60%
+            ),
+            linear-gradient(
+                180deg,
+                #06142b,
+                #020916
+            );
+    "
+>
+
+    <div
+        style="
+            font-size:14px;
+            letter-spacing:6px;
+            color:#19bfff;
+            font-weight:700;
+            margin-bottom:12px;
+            text-transform:uppercase;
+        "
+    >
         ⚡ EL UNIVERSO GAMING
     </div>
 
 
-    <div style="
-        font-size: clamp(42px, 11vw, 76px);
-        font-weight: 900;
-        letter-spacing: 2px;
-        line-height: 1;
-        font-family: Arial, Helvetica, sans-serif;
-        background: linear-gradient(90deg, #ffffff, #18bfff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 25px rgba(0, 174, 255, 0.25);
-    ">
+    <div
+        style="
+            font-size:clamp(42px,11vw,76px);
+            font-weight:900;
+            letter-spacing:2px;
+            line-height:1;
+            font-family:Arial,Helvetica,sans-serif;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #18bfff
+                );
+
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+
+            text-shadow:
+                0 0 25px
+                rgba(0,174,255,0.25);
+        "
+    >
         GAMEVORA
     </div>
 
 
-    <!-- CARRUSEL -->
+    <!-- =========================
+         CARRUSEL
+    ========================= -->
 
     <div class="gamevora-carrusel">
 
@@ -745,32 +895,45 @@
 
     <!-- TU MEJOR OPCIÓN -->
 
-    <div style="
-        margin-top: 18px;
-        font-size: 17px;
-        letter-spacing: 5px;
-        font-weight: 700;
-        color: #ffffff;
-        text-transform: uppercase;
-    ">
+    <div
+        style="
+            margin-top:18px;
+            font-size:17px;
+            letter-spacing:5px;
+            font-weight:700;
+            color:#ffffff;
+            text-transform:uppercase;
+        "
+    >
         TU MEJOR OPCIÓN
     </div>
 
 
-    <div style="
-        width: 90px;
-        height: 3px;
-        margin: 24px auto 0;
-        border-radius: 10px;
-        background: linear-gradient(90deg, transparent, #00bfff, transparent);
-        box-shadow: 0 0 12px #00bfff;
-    "></div>
+    <div
+        style="
+            width:90px;
+            height:3px;
+            margin:24px auto 0;
+            border-radius:10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #00bfff,
+                    transparent
+                );
+
+            box-shadow:
+                0 0 12px #00bfff;
+        "
+    ></div>
 
 </section>
 
 
 <!-- =========================
-     RECARGAS DESTACADAS
+     RECARGAS
 ========================= -->
 
 <section class="section">
@@ -798,6 +961,7 @@
 
         </div>
 
+
         <div class="price">
 
             <strong>
@@ -806,7 +970,10 @@
 
             <br>
 
-            <button class="buy">
+            <button
+                class="buy"
+                type="button"
+            >
                 Comprar
             </button>
 
@@ -829,6 +996,7 @@
 
         </div>
 
+
         <div class="price">
 
             <strong>
@@ -837,7 +1005,10 @@
 
             <br>
 
-            <button class="buy">
+            <button
+                class="buy"
+                type="button"
+            >
                 Comprar
             </button>
 
@@ -855,7 +1026,9 @@
 <footer>
 
     <p>
-        <strong>⚡ GAMEVORA</strong>
+        <strong>
+            ⚡ GAMEVORA
+        </strong>
     </p>
 
     <p>
@@ -871,7 +1044,9 @@
 </footer>
 
 
-<!-- SUPABASE -->
+<!-- =========================
+     SUPABASE
+========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -887,34 +1062,43 @@ const supabaseClient =
 async function actualizarMenu() {
 
     const {
-        data: { session }
-    } = await supabaseClient.auth.getSession();
+        data: {
+            session
+        }
+    } =
+        await supabaseClient.auth.getSession();
 
 
     const botones =
-        document.getElementById("botonesCuenta");
+        document.getElementById(
+            "botonesCuenta"
+        );
 
 
     if (session) {
 
         botones.innerHTML = `
+
             <a
                 href="frontend/cuenta.html"
                 class="login"
             >
                 Mi cuenta
             </a>
+
         `;
 
     } else {
 
         botones.innerHTML = `
+
             <a
                 href="frontend/login.html"
                 class="login"
             >
-                Crear cuenta / Iniciar sesión
+                Mi cuenta
             </a>
+
         `;
 
     }
@@ -927,16 +1111,22 @@ actualizarMenu();
 </script>
 
 
-<!-- CARRUSEL -->
+<!-- =========================
+     CARRUSEL JAVASCRIPT
+========================= -->
 
 <script>
 
 const gamevoraTrack =
-    document.getElementById("gamevoraTrack");
+    document.getElementById(
+        "gamevoraTrack"
+    );
 
 
 const gamevoraDots =
-    document.querySelectorAll(".gamevora-dot");
+    document.querySelectorAll(
+        ".gamevora-dot"
+    );
 
 
 let gamevoraActual = 0;
@@ -948,7 +1138,9 @@ function cambiarBannerGamevora(numero) {
 
 
     gamevoraTrack.style.transform =
-        "translateX(-" + (numero * 100) + "%)";
+        "translateX(-" +
+        (numero * 100) +
+        "%)";
 
 
     gamevoraDots.forEach(
@@ -972,11 +1164,15 @@ setInterval(() => {
 
 
     if (siguiente >= 3) {
+
         siguiente = 0;
+
     }
 
 
-    cambiarBannerGamevora(siguiente);
+    cambiarBannerGamevora(
+        siguiente
+    );
 
 }, 4500);
 
@@ -987,7 +1183,11 @@ gamevoraDots.forEach(
         dot.addEventListener(
             "click",
             () => {
-                cambiarBannerGamevora(index);
+
+                cambiarBannerGamevora(
+                    index
+                );
+
             }
         );
 
@@ -996,6 +1196,6 @@ gamevoraDots.forEach(
 
 </script>
 
-
 </body>
-</html>
+
+    </html>
