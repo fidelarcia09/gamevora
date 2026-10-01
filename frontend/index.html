@@ -37,51 +37,117 @@
             background: #08152d;
             border-bottom: 1px solid #123b70;
             padding: 14px 18px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 10px;
+
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
         /* =========================
-           LOGO
+           LOGO GAMEVORA
         ========================= */
 
         .logo {
             display: flex;
             align-items: center;
+
             height: 48px;
+
             min-width: 0;
+
             text-decoration: none;
+
             flex-shrink: 1;
         }
 
         .logo-g {
+            position: relative;
+
             width: 48px;
             height: 48px;
-            flex-shrink: 0;
-            display: block;
 
-            filter:
-                drop-shadow(0 0 4px rgba(0, 204, 255, .95))
-                drop-shadow(0 0 12px rgba(0, 100, 255, .75));
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 45px;
+            font-weight: 900;
+            font-style: italic;
+
+            line-height: 1;
+
+            color: #18c8ff;
+
+            transform: skewX(-8deg);
+
+            text-shadow:
+                0 0 4px #ffffff,
+                0 0 8px #00c8ff,
+                0 0 18px #008cff,
+                0 0 30px rgba(0, 115, 255, 0.9);
         }
 
-        .g-main {
-            fill: url(#gBlue);
+        .logo-g::before {
+            content: "";
+
+            position: absolute;
+
+            width: 30px;
+            height: 9px;
+
+            right: -2px;
+            top: 9px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #5eeaff,
+                    #00aaff,
+                    #006cff
+                );
+
+            transform:
+                skewX(-25deg)
+                rotate(-4deg);
+
+            clip-path: polygon(
+                0 35%,
+                100% 0,
+                72% 45%,
+                100% 45%,
+                0 100%,
+                28% 55%,
+                0 55%
+            );
+
+            filter:
+                drop-shadow(0 0 5px #00c8ff)
+                drop-shadow(0 0 12px #0077ff);
         }
 
         .logo-resto {
-            margin-left: 3px;
+            margin-left: 2px;
+
             color: #f5f8ff;
+
             font-size: 23px;
+
             font-weight: 900;
+
             font-style: italic;
+
             letter-spacing: -1.4px;
+
             line-height: 1;
+
             white-space: nowrap;
 
             text-shadow:
@@ -95,15 +161,21 @@
         .navegacion {
             display: flex;
             align-items: center;
+
             gap: 8px;
+
             flex-shrink: 0;
         }
 
         .boton-navegacion {
             color: #28a9ff;
+
             text-decoration: none;
+
             font-size: 14px;
+
             font-weight: bold;
+
             white-space: nowrap;
         }
 
@@ -112,7 +184,7 @@
         }
 
         .separador {
-            color: #ffffff;
+            color: white;
         }
 
         .boton-cuenta {
@@ -122,17 +194,23 @@
 
         .login {
             display: inline-block;
+
             text-decoration: none;
+
             white-space: nowrap;
 
             border: 1px solid #168cff;
+
             color: white;
+
             background: transparent;
 
             padding: 10px 15px;
+
             border-radius: 10px;
 
             font-weight: bold;
+
             font-size: 14px;
 
             transition: 0.2s;
@@ -142,7 +220,8 @@
             background: #0d7cff;
 
             box-shadow:
-                0 0 15px rgba(0, 153, 255, 0.25);
+                0 0 15px
+                rgba(0, 153, 255, 0.25);
         }
 
         /* =========================
@@ -154,6 +233,7 @@
             max-width: 100%;
 
             margin: 18px;
+
             padding: 28px 20px;
 
             border-radius: 20px;
@@ -173,12 +253,15 @@
             border: 1px solid #145ca3;
 
             box-shadow:
-                0 0 25px rgba(0, 128, 255, 0.15);
+                0 0 25px
+                rgba(0, 128, 255, 0.15);
         }
 
         .hero h1 {
             font-size: 32px;
+
             line-height: 1.1;
+
             margin-bottom: 12px;
         }
 
@@ -188,7 +271,9 @@
 
         .hero p {
             color: #a9bad0;
+
             margin-bottom: 22px;
+
             line-height: 1.5;
         }
 
@@ -213,10 +298,12 @@
             border-radius: 11px;
 
             font-weight: bold;
+
             font-size: 15px;
 
             box-shadow:
-                0 0 18px rgba(0, 153, 255, 0.3);
+                0 0 18px
+                rgba(0, 153, 255, 0.3);
         }
 
         /* =========================
@@ -225,13 +312,18 @@
 
         .section {
             width: 100%;
-            padding: 10px 18px 25px;
+
+            padding:
+                10px 18px 25px;
         }
 
         .section-title {
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             margin-bottom: 15px;
         }
 
@@ -245,6 +337,7 @@
 
         .offer {
             width: 100%;
+
             max-width: 100%;
 
             background:
@@ -261,7 +354,9 @@
             padding: 18px;
 
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
 
             gap: 15px;
@@ -279,16 +374,19 @@
 
         .offer-info p {
             color: #8fa5bd;
+
             font-size: 13px;
         }
 
         .price {
             text-align: right;
+
             flex-shrink: 0;
         }
 
         .price strong {
             color: #35b8ff;
+
             font-size: 19px;
         }
 
@@ -314,6 +412,7 @@
 
         .gamevora-carrusel {
             width: 100%;
+
             max-width: 650px;
 
             margin: 25px auto 0;
@@ -327,19 +426,13 @@
             background: #07172f;
 
             box-shadow:
-                0 0 20px rgba(0, 153, 255, 0.15);
-        }
-
-        .gamevora-slide-link,
-        .gamevora-slide-link:hover,
-        .gamevora-slide-link:visited,
-        .gamevora-slide-link:active {
-            text-decoration: none !important;
-            color: inherit !important;
+                0 0 20px
+                rgba(0, 153, 255, 0.15);
         }
 
         .gamevora-track {
             width: 100%;
+
             display: flex;
 
             transition:
@@ -348,6 +441,7 @@
 
         .gamevora-slide {
             min-width: 100%;
+
             max-width: 100%;
 
             padding: 18px 20px;
@@ -363,8 +457,18 @@
             text-align: left;
         }
 
+        .gamevora-slide-link,
+        .gamevora-slide-link:hover,
+        .gamevora-slide-link:visited,
+        .gamevora-slide-link:active {
+            text-decoration: none !important;
+
+            color: inherit !important;
+        }
+
         .gamevora-slide-text {
             flex: 1;
+
             min-width: 0;
         }
 
@@ -382,7 +486,9 @@
 
         .gamevora-slide h3 {
             font-size: 18px;
+
             margin-bottom: 5px;
+
             overflow-wrap: break-word;
         }
 
@@ -398,6 +504,7 @@
 
         .gamevora-slide-icon {
             font-size: 38px;
+
             flex-shrink: 0;
 
             filter:
@@ -456,7 +563,8 @@
 
             font-size: 12px;
 
-            border-top: 1px solid #102a49;
+            border-top:
+                1px solid #102a49;
 
             margin-top: 15px;
         }
@@ -471,6 +579,7 @@
 
         .universo {
             width: 100%;
+
             max-width: 100%;
 
             margin: 35px 0;
@@ -519,11 +628,12 @@
         }
 
         .universo-titulo {
-            font-size: clamp(
-                42px,
-                11vw,
-                76px
-            );
+            font-size:
+                clamp(
+                    42px,
+                    11vw,
+                    76px
+                );
 
             font-weight: 900;
 
@@ -544,6 +654,7 @@
                 );
 
             -webkit-background-clip: text;
+
             -webkit-text-fill-color: transparent;
 
             text-shadow:
@@ -567,6 +678,7 @@
 
         .linea-azul {
             width: 90px;
+
             height: 3px;
 
             margin: 24px auto 0;
@@ -601,11 +713,15 @@
 
             .logo-g {
                 width: 44px;
+
                 height: 44px;
+
+                font-size: 41px;
             }
 
             .logo-resto {
                 font-size: 20px;
+
                 letter-spacing: -1.2px;
             }
 
@@ -619,11 +735,13 @@
 
             .login {
                 padding: 9px 12px;
+
                 font-size: 13px;
             }
 
             .hero {
                 margin: 14px;
+
                 padding: 25px 18px;
             }
 
@@ -643,11 +761,13 @@
 
             .universo-label {
                 font-size: 12px;
+
                 letter-spacing: 4px;
             }
 
             .universo-titulo {
                 font-size: 48px;
+
                 letter-spacing: 1px;
             }
 
@@ -673,9 +793,9 @@
 
             .mejor-opcion {
                 font-size: 16px;
+
                 letter-spacing: 4px;
             }
-
         }
 
         @media (max-width: 400px) {
@@ -686,7 +806,10 @@
 
             .logo-g {
                 width: 40px;
+
                 height: 40px;
+
+                font-size: 37px;
             }
 
             .logo {
@@ -699,6 +822,7 @@
 
             .login {
                 padding: 8px 10px;
+
                 font-size: 12px;
             }
 
@@ -712,13 +836,13 @@
 
             .gamevora-slide {
                 gap: 8px;
+
                 padding: 16px;
             }
 
             .gamevora-slide-icon {
                 font-size: 30px;
             }
-
         }
 
     </style>
@@ -730,73 +854,7 @@
 
     <div class="logo">
 
-        <svg
-            class="logo-g"
-            viewBox="0 0 120 120"
-            aria-hidden="true"
-        >
-
-            <defs>
-
-                <linearGradient
-                    id="gBlue"
-                    x1="0"
-                    y1="0"
-                    x2="1"
-                    y2="1"
-                >
-
-                    <stop
-                        offset="0%"
-                        stop-color="#66e8ff"
-                    />
-
-                    <stop
-                        offset="35%"
-                        stop-color="#00bfff"
-                    />
-
-                    <stop
-                        offset="70%"
-                        stop-color="#0074ff"
-                    />
-
-                    <stop
-                        offset="100%"
-                        stop-color="#003cff"
-                    />
-
-                </linearGradient>
-
-            </defs>
-
-            <path
-                class="g-main"
-                d="M108 25
-                   L76 25
-                   C66 16 55 12 43 14
-                   C22 17 9 35 9 57
-                   C9 82 25 101 48 104
-                   L64 82
-                   C51 84 39 78 35 66
-                   C30 51 37 37 50 32
-                   C61 28 71 31 78 38
-                   L68 52
-                   L104 52
-                   L92 70
-                   L104 70
-                   L69 108
-                   L77 82
-                   L58 82
-                   L72 59
-                   L39 59
-                   L59 39
-                   L91 39
-                   Z"
-            >
-            </path>
-
-        </svg>
+        <span class="logo-g">G</span>
 
         <span class="logo-resto">
             AMEVORA
@@ -804,13 +862,7 @@
 
     </div>
 
-
     <div class="navegacion">
-
-        <!--
-            ESTE INDEX ESTA DENTRO DE FRONTEND.
-            Por eso NO lleva "frontend/".
-        -->
 
         <a
             href="soporte.html"
@@ -833,11 +885,6 @@
 
 </header>
 
-
-<!-- =========================
-     HERO
-========================= -->
-
 <section class="hero">
 
     <h1>
@@ -852,14 +899,12 @@
 
     </h1>
 
-
     <p>
 
         Recargas digitales, ofertas y productos
         para tus juegos favoritos.
 
     </p>
-
 
     <a
         href="juegos.html"
@@ -870,11 +915,6 @@
 
 </section>
 
-
-<!-- =========================
-     UNIVERSO GAMEVORA
-========================= -->
-
 <section class="universo">
 
     <div class="universo-label">
@@ -883,17 +923,11 @@
 
     </div>
 
-
     <div class="universo-titulo">
 
         GAMEVORA
 
     </div>
-
-
-    <!-- =========================
-         CARRUSEL
-    ========================= -->
 
     <div class="gamevora-carrusel">
 
@@ -901,8 +935,6 @@
             class="gamevora-track"
             id="gamevoraTrack"
         >
-
-            <!-- RESEÑAS -->
 
             <a
                 href="reseñas.html"
@@ -925,7 +957,8 @@
 
                     <p>
 
-                        Tu opinión ayuda a mejorar Gamevora.
+                        Tu opinión ayuda a mejorar
+                        Gamevora.
 
                     </p>
 
@@ -938,9 +971,6 @@
                 </div>
 
             </a>
-
-
-            <!-- NOVEDADES -->
 
             <div class="gamevora-slide">
 
@@ -974,9 +1004,6 @@
                 </div>
 
             </div>
-
-
-            <!-- GVR -->
 
             <a
                 href="informacion-gvr.html"
@@ -1018,9 +1045,6 @@
 
     </div>
 
-
-    <!-- PUNTOS -->
-
     <div class="gamevora-dots">
 
         <button
@@ -1046,23 +1070,16 @@
 
     </div>
 
-
     <div class="mejor-opcion">
 
         TU MEJOR OPCIÓN
 
     </div>
 
-
     <div class="linea-azul">
     </div>
 
 </section>
-
-
-<!-- =========================
-     RECARGAS DESTACADAS
-========================= -->
 
 <section class="section">
 
@@ -1073,7 +1090,6 @@
         </h2>
 
     </div>
-
 
     <div class="offer">
 
@@ -1088,7 +1104,6 @@
             </p>
 
         </div>
-
 
         <div class="price">
 
@@ -1109,7 +1124,6 @@
 
     </div>
 
-
     <div class="offer">
 
         <div class="offer-info">
@@ -1123,7 +1137,6 @@
             </p>
 
         </div>
-
 
         <div class="price">
 
@@ -1145,11 +1158,6 @@
     </div>
 
 </section>
-
-
-<!-- =========================
-     FOOTER
-========================= -->
 
 <footer>
 
@@ -1178,13 +1186,9 @@
 
 </footer>
 
-
-<!-- =========================
-     SUPABASE
-========================= -->
+<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 
 <script>
 
@@ -1250,14 +1254,10 @@ async function actualizarMenu() {
 
 actualizarMenu();
 
-</script>
 
-
-<!-- =========================
-     CARRUSEL JS
-========================= -->
-
-<script>
+/* =========================
+   CARRUSEL
+========================= */
 
 const gamevoraTrack =
     document.getElementById(
@@ -1343,6 +1343,5 @@ gamevoraDots.forEach(
 
 </script>
 
-
 </body>
-            </html>
+                        </html>
