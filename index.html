@@ -14,11 +14,18 @@
             font-family: Arial, sans-serif;
         }
 
-        body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-        }
+        html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background: #050b18;
+    color: white;
+    min-height: 100vh;
+}
 
         /* BARRA SUPERIOR */
 
@@ -411,6 +418,34 @@
     text-decoration: none !important;
     color: inherit !important;
 }
+ /* CORRECCIÓN DE ANCHO EN MÓVIL */
+
+header,
+.hero,
+section,
+.gamevora-carrusel,
+.gamevora-track,
+footer {
+    max-width: 100%;
+}
+
+.hero {
+    width: auto;
+}
+
+.gamevora-slide {
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.gamevora-slide-text {
+    min-width: 0;
+}
+
+.gamevora-slide h3,
+.gamevora-slide p {
+    overflow-wrap: break-word;
+}       
         
     </style> 
 </head>
