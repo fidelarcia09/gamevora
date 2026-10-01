@@ -1,648 +1,737 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Gamevora | Recargas Gaming</title>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        html,
-        body {
-            width: 100%;
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-        }
-
-        /* BARRA SUPERIOR */
-
-        header {
-            width: 100%;
-            background: #08152d;
-            border-bottom: 1px solid #123b70;
-            padding: 14px 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        /* LOGO */
-
-        .logo {
-            display: flex;
-            align-items: center;
-            height: 48px;
-            min-width: 0;
-            text-decoration: none;
-            flex-shrink: 1;
-        }
-
-        .logo-g {
-            width: 48px;
-            height: 48px;
-            flex-shrink: 0;
-            display: block;
-
-            filter:
-                drop-shadow(0 0 4px rgba(0, 204, 255, .95))
-                drop-shadow(0 0 12px rgba(0, 100, 255, .75));
-        }
-
-        .g-main {
-            fill: url(#gBlue);
-        }
-
-        .logo-resto {
-            margin-left: 3px;
-            color: #f5f8ff;
-            font-size: 23px;
-            font-weight: 900;
-            font-style: italic;
-            letter-spacing: -1.4px;
-            line-height: 1;
-            white-space: nowrap;
-
-            text-shadow:
-                0 0 3px rgba(255,255,255,.25);
-        }
-
-        /* NAVEGACIÓN */
-
-        .navegacion {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .boton-navegacion {
-            color: #28a9ff;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .boton-navegacion:hover {
-            color: #63caff;
-        }
-
-        .boton-cuenta {
-            display: flex;
-            align-items: center;
-        }
-
-        .login {
-            display: inline-block;
-            text-decoration: none;
-            white-space: nowrap;
-            border: 1px solid #168cff;
-            color: white;
-            background: transparent;
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .login:hover {
-            background: #0d7cff;
-            box-shadow: 0 0 15px rgba(0, 153, 255, 0.25);
-        }
-
-        /* HERO */
-
-        .hero {
-            width: auto;
-            max-width: 100%;
-            margin: 18px;
-            padding: 28px 20px;
-            border-radius: 20px;
-
-            background:
-                radial-gradient(
-                    circle at 90% 20%,
-                    #0b68c9 0%,
-                    transparent 35%
-                ),
-                linear-gradient(
-                    135deg,
-                    #071a38,
-                    #061022
-                );
-
-            border: 1px solid #145ca3;
-            box-shadow: 0 0 25px rgba(0, 128, 255, 0.15);
-        }
-
-        .hero h1 {
-            font-size: 32px;
-            line-height: 1.1;
-            margin-bottom: 12px;
-        }
-
-        .hero h1 span {
-            color: #20a7ff;
-        }
-
-        .hero p {
-            color: #a9bad0;
-            margin-bottom: 22px;
-            line-height: 1.5;
-        }
-
-        .hero-button {
-            display: inline-block;
-            text-decoration: none;
-            background: linear-gradient(
-                90deg,
-                #087cff,
-                #00baff
-            );
-            color: white;
-            border: none;
-            padding: 13px 20px;
-            border-radius: 11px;
-            font-weight: bold;
-            font-size: 15px;
-            box-shadow: 0 0 18px rgba(0, 153, 255, 0.3);
-        }
-
-        /* SECCIONES */
-
-        .section {
-            width: 100%;
-            padding: 10px 18px 25px;
-        }
-
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .section-title h2 {
-            font-size: 21px;
-        }
-
-        .section-title span {
-            color: #399fff;
-            font-size: 13px;
-        }
-
-        /* OFERTAS */
-
-        .offer {
-            width: 100%;
-            max-width: 100%;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #0b2348,
-                    #071426
-                );
-
-            border: 1px solid #176ab2;
-            border-radius: 17px;
-            padding: 18px;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            gap: 15px;
-            margin-bottom: 12px;
-        }
-
-        .offer-info {
-            min-width: 0;
-        }
-
-        .offer-info h3 {
-            margin-bottom: 7px;
-        }
-
-        .offer-info p {
-            color: #8fa5bd;
-            font-size: 13px;
-        }
-
-        .price {
-            text-align: right;
-            flex-shrink: 0;
-        }
-
-        .price strong {
-            color: #35b8ff;
-            font-size: 19px;
-        }
-
-        .buy {
-            margin-top: 7px;
-            background: #087fff;
-            border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        /* CARRUSEL */
-
-        .gamevora-carrusel {
-            width: 100%;
-            max-width: 650px;
-            margin: 25px auto 0;
-
-            overflow: hidden;
-
-            border: 1px solid #176ab2;
-            border-radius: 16px;
-
-            background: #07172f;
-
-            box-shadow:
-                0 0 20px rgba(0, 153, 255, 0.15);
-        }
-
-        .gamevora-slide-link,
-        .gamevora-slide-link:hover,
-        .gamevora-slide-link:visited,
-        .gamevora-slide-link:active {
-            text-decoration: none !important;
-            color: inherit !important;
-        }
-
-        .gamevora-track {
-            width: 100%;
-            display: flex;
-            transition: transform 0.6s ease;
-        }
-
-        .gamevora-slide {
-            min-width: 100%;
-            max-width: 100%;
-
-            padding: 18px 20px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 15px;
-
-            text-align: left;
-        }
-
-        .gamevora-slide-text {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .gamevora-slide-label {
-            color: #19bfff;
-            font-size: 11px;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            margin-bottom: 6px;
-        }
-
-        .gamevora-slide h3 {
-            font-size: 18px;
-            margin-bottom: 5px;
-            overflow-wrap: break-word;
-        }
-
-        .gamevora-slide p {
-            color: #9db2c9;
-            font-size: 13px;
-            line-height: 1.4;
-            overflow-wrap: break-word;
-        }
-
-        .gamevora-slide-icon {
-            font-size: 38px;
-            flex-shrink: 0;
-
-            filter:
-                drop-shadow(
-                    0 0 10px
-                    rgba(0, 183, 255, 0.6)
-                );
-        }
-
-        .gamevora-dots {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 10px;
-        }
-
-        .gamevora-dot {
-            width: 7px;
-            height: 7px;
-
-            border: none;
-            border-radius: 50%;
-
-            background: #29415c;
-            padding: 0;
-        }
-
-        .gamevora-dot.activo {
-            width: 20px;
-            border-radius: 8px;
-
-            background: #00b7ff;
-
-            box-shadow:
-                0 0 8px #008cff;
-        }
-
-        /* PIE */
-
-        footer {
-            width: 100%;
-            text-align: center;
-
-            padding: 30px 18px;
-
-            color: #647890;
-            font-size: 12px;
-
-            border-top: 1px solid #102a49;
-
-            margin-top: 15px;
-        }
-
-        footer strong {
-            color: #279fff;
-        }
-
-        /* UNIVERSO GAMING */
-
-        .universo {
-            width: 100%;
-            max-width: 100%;
-
-            margin: 35px 0;
-            padding: 45px 20px;
-
-            text-align: center;
-
-            position: relative;
-            overflow: hidden;
-
-            border-top:
-                1px solid
-                rgba(0, 153, 255, 0.25);
-
-            border-bottom:
-                1px solid
-                rgba(0, 153, 255, 0.25);
-
-            background:
-                radial-gradient(
-                    circle at center,
-                    rgba(0, 119, 255, 0.18),
-                    transparent 60%
-                ),
-                linear-gradient(
-                    180deg,
-                    #06142b,
-                    #020916
-                );
-        }
-
-        .universo-label {
-            font-size: 14px;
-            letter-spacing: 6px;
-            color: #19bfff;
-            font-weight: 700;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-        }
-
-        .universo-titulo {
-            font-size: clamp(
-                42px,
-                11vw,
-                76px
-            );
-
-            font-weight: 900;
-
-            letter-spacing: 2px;
-            line-height: 1;
-
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #ffffff,
-                    #18bfff
-                );
-
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-
-            text-shadow:
-                0 0 25px
-                rgba(0, 174, 255, 0.25);
-        }
-
-        .mejor-opcion {
-            margin-top: 18px;
-
-            font-size: 17px;
-
-            letter-spacing: 5px;
-
-            font-weight: 700;
-
-            color: #ffffff;
-
-            text-transform: uppercase;
-        }
-
-        .linea-azul {
-            width: 90px;
-            height: 3px;
-
-            margin: 24px auto 0;
-
-            border-radius: 10px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    #00bfff,
-                    transparent
-                );
-
-            box-shadow:
-                0 0 12px #00bfff;
-        }
-
-        /* MÓVIL */
-
-        @media (max-width: 600px) {
-
-            header {
-                padding: 12px 14px;
-            }
-
-            .logo {
-                height: 44px;
-            }
-
-            .logo-g {
-                width: 44px;
-                height: 44px;
-            }
-
-            .logo-resto {
-                font-size: 20px;
-                letter-spacing: -1.2px;
-            }
-
-            .navegacion {
-                gap: 6px;
-            }
-
-            .boton-navegacion {
-                font-size: 13px;
-            }
-
-            .login {
-                padding: 9px 12px;
-                font-size: 13px;
-            }
-
-            .hero {
-                margin: 14px;
-                padding: 25px 18px;
-            }
-
-            .hero h1 {
-                font-size: 30px;
-            }
-
-            .hero p {
-                font-size: 16px;
-            }
-
-            .universo {
-                padding:
-                    42px 12px
-                    45px;
-            }
-
-            .universo-label {
-                font-size: 12px;
-                letter-spacing: 4px;
-            }
-
-            .universo-titulo {
-                font-size: 48px;
-                letter-spacing: 1px;
-            }
-
-            .gamevora-carrusel {
-                margin-top: 25px;
-            }
-
-            .gamevora-slide {
-                padding: 18px 20px;
-            }
-
-            .gamevora-slide h3 {
-                font-size: 18px;
-            }
-
-            .gamevora-slide p {
-                font-size: 13px;
-            }
-
-            .gamevora-slide-icon {
-                font-size: 34px;
-            }
-
-            .mejor-opcion {
-                font-size: 16px;
-                letter-spacing: 4px;
-            }
-        }
-
-        @media (max-width: 400px) {
-
-            .logo-resto {
-                font-size: 18px;
-            }
-
-            .logo-g {
-                width: 40px;
-                height: 40px;
-            }
-
-            .logo {
-                height: 40px;
-            }
-
-            .boton-navegacion {
-                font-size: 12px;
-            }
-
-            .login {
-                padding: 8px 10px;
-                font-size: 12px;
-            }
-
-            .hero h1 {
-                font-size: 27px;
-            }
-
-            .universo-titulo {
-                font-size: 42px;
-            }
-
-            .gamevora-slide {
-                gap: 8px;
-                padding: 16px;
-            }
-
-            .gamevora-slide-icon {
-                font-size: 30px;
-            }
-        }
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gamevora | Recargas Gaming</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+html,body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+body{
+    background:#050b18;
+    color:white;
+    min-height:100vh;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    width:100%;
+    background:#08152d;
+    border-bottom:1px solid #123b70;
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+/* =========================
+   LOGO GAMEVORA
+========================= */
+
+.logo{
+    display:flex;
+    align-items:center;
+    height:44px;
+    text-decoration:none;
+    flex-shrink:1;
+    min-width:0;
+}
+
+/* G PERSONALIZADA */
+
+.logo-g{
+    position:relative;
+    width:45px;
+    height:44px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-family:Arial,sans-serif;
+    font-size:42px;
+    font-weight:900;
+    font-style:italic;
+    line-height:1;
+
+    color:#19bfff;
+
+    transform:skewX(-8deg);
+
+    text-shadow:
+        0 0 4px #00bfff,
+        0 0 10px #008cff,
+        0 0 20px rgba(0,140,255,.8);
+}
+
+/* Corte de energía */
+
+.logo-g::after{
+    content:"";
+    position:absolute;
+
+    width:25px;
+    height:9px;
+
+    right:-1px;
+    top:19px;
+
+    background:#08152d;
+
+    clip-path:polygon(
+        0 45%,
+        100% 0,
+        65% 43%,
+        100% 43%,
+        0 100%,
+        35% 55%,
+        0 55%
+    );
+}
+
+/* Pequeño destello superior */
+
+.logo-g::before{
+    content:"";
+    position:absolute;
+
+    width:17px;
+    height:5px;
+
+    right:0;
+    top:8px;
+
+    background:#25c8ff;
+
+    transform:skewX(-20deg);
+
+    box-shadow:
+        0 0 6px #00bfff,
+        0 0 12px #008cff;
+
+    clip-path:polygon(
+        0 0,
+        100% 0,
+        72% 100%,
+        18% 100%
+    );
+}
+
+/* AMEVORA */
+
+.logo-resto{
+    margin-left:1px;
+
+    color:#f7f9ff;
+
+    font-size:23px;
+    font-weight:900;
+    font-style:italic;
+
+    letter-spacing:-1.5px;
+    line-height:1;
+
+    white-space:nowrap;
+
+    text-shadow:
+        0 0 3px rgba(255,255,255,.3);
+}
+
+/* =========================
+   NAVEGACIÓN
+========================= */
+
+.navegacion{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-shrink:0;
+}
+
+.boton-navegacion{
+    color:#28a9ff;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.boton-navegacion:hover{
+    color:#63caff;
+}
+
+.separador{
+    color:white;
+}
+
+.boton-cuenta{
+    display:flex;
+    align-items:center;
+}
+
+.login{
+    display:inline-block;
+    text-decoration:none;
+    white-space:nowrap;
+
+    border:1px solid #168cff;
+    color:white;
+
+    background:transparent;
+
+    padding:10px 15px;
+    border-radius:10px;
+
+    font-weight:bold;
+    font-size:14px;
+
+    transition:.2s;
+}
+
+.login:hover{
+    background:#0d7cff;
+
+    box-shadow:
+        0 0 15px rgba(0,153,255,.25);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    width:auto;
+    max-width:100%;
+
+    margin:18px;
+    padding:28px 20px;
+
+    border-radius:20px;
+
+    background:
+        radial-gradient(
+            circle at 90% 20%,
+            #0b68c9 0%,
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #071a38,
+            #061022
+        );
+
+    border:1px solid #145ca3;
+
+    box-shadow:
+        0 0 25px rgba(0,128,255,.15);
+}
+
+.hero h1{
+    font-size:32px;
+    line-height:1.1;
+    margin-bottom:12px;
+}
+
+.hero h1 span{
+    color:#20a7ff;
+}
+
+.hero p{
+    color:#a9bad0;
+    margin-bottom:22px;
+    line-height:1.5;
+}
+
+.hero-button{
+    display:inline-block;
+
+    text-decoration:none;
+
+    background:
+        linear-gradient(
+            90deg,
+            #087cff,
+            #00baff
+        );
+
+    color:white;
+
+    padding:13px 20px;
+
+    border-radius:11px;
+
+    font-weight:bold;
+    font-size:15px;
+
+    box-shadow:
+        0 0 18px rgba(0,153,255,.3);
+}
+
+/* =========================
+   UNIVERSO
+========================= */
+
+.universo{
+    width:100%;
+    max-width:100%;
+
+    margin:35px 0;
+    padding:45px 20px;
+
+    text-align:center;
+
+    position:relative;
+    overflow:hidden;
+
+    border-top:1px solid rgba(0,153,255,.25);
+    border-bottom:1px solid rgba(0,153,255,.25);
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(0,119,255,.18),
+            transparent 60%
+        ),
+        linear-gradient(
+            180deg,
+            #06142b,
+            #020916
+        );
+}
+
+.universo-label{
+    font-size:14px;
+    letter-spacing:6px;
+    color:#19bfff;
+    font-weight:700;
+    margin-bottom:12px;
+    text-transform:uppercase;
+}
+
+.universo-titulo{
+    font-size:clamp(42px,11vw,76px);
+
+    font-weight:900;
+
+    letter-spacing:2px;
+    line-height:1;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #18bfff
+        );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* =========================
+   CARRUSEL
+========================= */
+
+.gamevora-carrusel{
+    width:100%;
+    max-width:650px;
+
+    margin:25px auto 0;
+
+    overflow:hidden;
+
+    border:1px solid #176ab2;
+    border-radius:16px;
+
+    background:#07172f;
+
+    box-shadow:
+        0 0 20px rgba(0,153,255,.15);
+}
+
+.gamevora-track{
+    width:100%;
+    display:flex;
+
+    transition:
+        transform .6s ease;
+}
+
+.gamevora-slide{
+    min-width:100%;
+    max-width:100%;
+
+    padding:18px 20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:15px;
+
+    text-align:left;
+}
+
+.gamevora-slide-link,
+.gamevora-slide-link:hover,
+.gamevora-slide-link:visited,
+.gamevora-slide-link:active{
+    text-decoration:none!important;
+    color:inherit!important;
+}
+
+.gamevora-slide-text{
+    flex:1;
+    min-width:0;
+}
+
+.gamevora-slide-label{
+    color:#19bfff;
+
+    font-size:11px;
+    font-weight:bold;
+
+    letter-spacing:1.5px;
+
+    margin-bottom:6px;
+}
+
+.gamevora-slide h3{
+    font-size:18px;
+    margin-bottom:5px;
+}
+
+.gamevora-slide p{
+    color:#9db2c9;
+
+    font-size:13px;
+    line-height:1.4;
+}
+
+.gamevora-slide-icon{
+    font-size:38px;
+    flex-shrink:0;
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(0,183,255,.6)
+        );
+}
+
+/* PUNTOS */
+
+.gamevora-dots{
+    display:flex;
+    justify-content:center;
+
+    gap:6px;
+    margin-top:10px;
+}
+
+.gamevora-dot{
+    width:7px;
+    height:7px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#29415c;
+    padding:0;
+}
+
+.gamevora-dot.activo{
+    width:20px;
+
+    border-radius:8px;
+
+    background:#00b7ff;
+
+    box-shadow:
+        0 0 8px #008cff;
+}
+
+/* =========================
+   MEJOR OPCIÓN
+========================= */
+
+.mejor-opcion{
+    margin-top:18px;
+
+    font-size:17px;
+    letter-spacing:5px;
+
+    font-weight:700;
+    color:white;
+
+    text-transform:uppercase;
+}
+
+.linea-azul{
+    width:90px;
+    height:3px;
+
+    margin:24px auto 0;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #00bfff,
+            transparent
+        );
+
+    box-shadow:
+        0 0 12px #00bfff;
+}
+
+/* =========================
+   RECARGAS
+========================= */
+
+.section{
+    width:100%;
+    padding:10px 18px 25px;
+}
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:15px;
+}
+
+.section-title h2{
+    font-size:21px;
+}
+
+.offer{
+    width:100%;
+    max-width:100%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b2348,
+            #071426
+        );
+
+    border:1px solid #176ab2;
+
+    border-radius:17px;
+
+    padding:18px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:12px;
+}
+
+.offer-info{
+    min-width:0;
+}
+
+.offer-info h3{
+    margin-bottom:7px;
+}
+
+.offer-info p{
+    color:#8fa5bd;
+    font-size:13px;
+}
+
+.price{
+    text-align:right;
+    flex-shrink:0;
+}
+
+.price strong{
+    color:#35b8ff;
+    font-size:19px;
+}
+
+.buy{
+    margin-top:7px;
+
+    background:#087fff;
+
+    border:none;
+
+    color:white;
+
+    padding:8px 12px;
+
+    border-radius:8px;
+
+    font-weight:bold;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    width:100%;
+
+    text-align:center;
+
+    padding:30px 18px;
+
+    color:#647890;
+
+    font-size:12px;
+
+    border-top:1px solid #102a49;
+
+    margin-top:15px;
+}
+
+footer strong{
+    color:#279fff;
+}
+
+/* =========================
+   MÓVIL
+========================= */
+
+@media(max-width:600px){
+
+    header{
+        padding:12px 14px;
+    }
+
+    .logo{
+        height:42px;
+    }
+
+    .logo-g{
+        width:43px;
+        height:42px;
+        font-size:40px;
+    }
+
+    .logo-resto{
+        font-size:20px;
+        letter-spacing:-1.3px;
+    }
+
+    .navegacion{
+        gap:6px;
+    }
+
+    .boton-navegacion{
+        font-size:13px;
+    }
+
+    .login{
+        padding:9px 12px;
+        font-size:13px;
+    }
+
+    .hero{
+        margin:14px;
+        padding:25px 18px;
+    }
+
+    .hero h1{
+        font-size:30px;
+    }
+
+    .hero p{
+        font-size:16px;
+    }
+
+    .universo{
+        padding:42px 12px 45px;
+    }
+
+    .universo-label{
+        font-size:12px;
+        letter-spacing:4px;
+    }
+
+    .universo-titulo{
+        font-size:48px;
+        letter-spacing:1px;
+    }
+
+    .mejor-opcion{
+        font-size:16px;
+        letter-spacing:4px;
+    }
+}
+
+@media(max-width:400px){
+
+    .logo-resto{
+        font-size:18px;
+    }
+
+    .logo-g{
+        width:39px;
+        height:40px;
+        font-size:37px;
+    }
+
+    .logo{
+        height:40px;
+    }
+
+    .boton-navegacion{
+        font-size:12px;
+    }
+
+    .login{
+        padding:8px 10px;
+        font-size:12px;
+    }
+
+    .hero h1{
+        font-size:27px;
+    }
+
+    .universo-titulo{
+        font-size:42px;
+    }
+
+    .gamevora-slide{
+        gap:8px;
+        padding:16px;
+    }
+
+    .gamevora-slide-icon{
+        font-size:30px;
+    }
+}
+
+</style>
 </head>
 
 <body>
@@ -651,81 +740,13 @@
 
     <div class="logo">
 
-        <svg
-            class="logo-g"
-            viewBox="0 0 120 120"
-            aria-hidden="true"
-        >
-
-            <defs>
-
-                <linearGradient
-                    id="gBlue"
-                    x1="0"
-                    y1="0"
-                    x2="1"
-                    y2="1"
-                >
-
-                    <stop
-                        offset="0%"
-                        stop-color="#66e8ff"
-                    />
-
-                    <stop
-                        offset="35%"
-                        stop-color="#00bfff"
-                    />
-
-                    <stop
-                        offset="70%"
-                        stop-color="#0074ff"
-                    />
-
-                    <stop
-                        offset="100%"
-                        stop-color="#003cff"
-                    />
-
-                </linearGradient>
-
-            </defs>
-
-            <!-- G AZUL -->
-            <path
-                class="g-main"
-                d="M108 25
-                   L76 25
-                   C66 16 55 12 43 14
-                   C22 17 9 35 9 57
-                   C9 82 25 101 48 104
-                   L64 82
-                   C51 84 39 78 35 66
-                   C30 51 37 37 50 32
-                   C61 28 71 31 78 38
-                   L68 52
-                   L104 52
-                   L92 70
-                   L104 70
-                   L69 108
-                   L77 82
-                   L58 82
-                   L72 59
-                   L39 59
-                   L59 39
-                   L91 39
-                   Z"
-            >
-            </path>
-
-        </svg>
+        <span class="logo-g">G</span>
 
         <span class="logo-resto">
             AMEVORA
         </span>
 
     </div>
-
 
     <div class="navegacion">
 
@@ -736,15 +757,12 @@
             Soporte
         </a>
 
-        <span class="separador">
-            |
-        </span>
+        <span class="separador">|</span>
 
         <div
             id="botonesCuenta"
             class="boton-cuenta"
-        >
-        </div>
+        ></div>
 
     </div>
 
@@ -754,7 +772,6 @@
 <section class="hero">
 
     <h1>
-
         Tu mundo gaming.<br>
 
         <span>
@@ -762,15 +779,12 @@
         </span>
 
         ⚡
-
     </h1>
-
 
     <p>
         Recargas digitales, ofertas y productos
         para tus juegos favoritos.
     </p>
-
 
     <a
         href="frontend/juegos.html"
@@ -788,7 +802,6 @@
         ⚡ EL UNIVERSO GAMING
     </div>
 
-
     <div class="universo-titulo">
         GAMEVORA
     </div>
@@ -800,8 +813,6 @@
             class="gamevora-track"
             id="gamevoraTrack"
         >
-
-            <!-- RESEÑAS -->
 
             <a
                 href="frontend/reseñas.html"
@@ -831,8 +842,6 @@
             </a>
 
 
-            <!-- NOVEDADES -->
-
             <div class="gamevora-slide">
 
                 <div class="gamevora-slide-text">
@@ -857,8 +866,6 @@
 
             </div>
 
-
-            <!-- GVR -->
 
             <a
                 href="frontend/informacion-gvr.html"
@@ -897,23 +904,17 @@
         <button
             class="gamevora-dot activo"
             type="button"
-            aria-label="Banner 1"
-        >
-        </button>
+        ></button>
 
         <button
             class="gamevora-dot"
             type="button"
-            aria-label="Banner 2"
-        >
-        </button>
+        ></button>
 
         <button
             class="gamevora-dot"
             type="button"
-            aria-label="Banner 3"
-        >
-        </button>
+        ></button>
 
     </div>
 
@@ -922,9 +923,7 @@
         TU MEJOR OPCIÓN
     </div>
 
-
-    <div class="linea-azul">
-    </div>
+    <div class="linea-azul"></div>
 
 </section>
 
@@ -954,7 +953,6 @@
 
         </div>
 
-
         <div class="price">
 
             <strong>
@@ -963,10 +961,7 @@
 
             <br>
 
-            <button
-                class="buy"
-                type="button"
-            >
+            <button class="buy" type="button">
                 Comprar
             </button>
 
@@ -989,7 +984,6 @@
 
         </div>
 
-
         <div class="price">
 
             <strong>
@@ -998,10 +992,7 @@
 
             <br>
 
-            <button
-                class="buy"
-                type="button"
-            >
+            <button class="buy" type="button">
                 Comprar
             </button>
 
@@ -1033,23 +1024,28 @@
 </footer>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- SUPABASE -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
 const supabaseClient =
     window.supabase.createClient(
+
         "https://gsuhzcavghsiolmipnzi.supabase.co",
+
         "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+
     );
 
 
-async function actualizarMenu() {
+async function actualizarMenu(){
 
     const {
-        data: { session }
-    } = await supabaseClient.auth.getSession();
+        data:{session}
+    } =
+        await supabaseClient.auth.getSession();
 
 
     const botones =
@@ -1058,12 +1054,12 @@ async function actualizarMenu() {
         );
 
 
-    if (!botones) {
+    if(!botones){
         return;
     }
 
 
-    if (session) {
+    if(session){
 
         botones.innerHTML = `
 
@@ -1076,7 +1072,7 @@ async function actualizarMenu() {
 
         `;
 
-    } else {
+    }else{
 
         botones.innerHTML = `
 
@@ -1096,6 +1092,12 @@ async function actualizarMenu() {
 
 actualizarMenu();
 
+</script>
+
+
+<!-- CARRUSEL -->
+
+<script>
 
 const gamevoraTrack =
     document.getElementById(
@@ -1112,9 +1114,9 @@ const gamevoraDots =
 let gamevoraActual = 0;
 
 
-function cambiarBannerGamevora(numero) {
+function cambiarBannerGamevora(numero){
 
-    if (!gamevoraTrack) {
+    if(!gamevoraTrack){
         return;
     }
 
@@ -1129,7 +1131,7 @@ function cambiarBannerGamevora(numero) {
 
 
     gamevoraDots.forEach(
-        (dot, index) => {
+        (dot,index)=>{
 
             dot.classList.toggle(
                 "activo",
@@ -1142,13 +1144,13 @@ function cambiarBannerGamevora(numero) {
 }
 
 
-setInterval(() => {
+setInterval(()=>{
 
     let siguiente =
         gamevoraActual + 1;
 
 
-    if (siguiente >= 3) {
+    if(siguiente >= 3){
         siguiente = 0;
     }
 
@@ -1157,15 +1159,15 @@ setInterval(() => {
         siguiente
     );
 
-}, 4500);
+},4500);
 
 
 gamevoraDots.forEach(
-    (dot, index) => {
+    (dot,index)=>{
 
         dot.addEventListener(
             "click",
-            () => {
+            ()=>{
 
                 cambiarBannerGamevora(
                     index
@@ -1180,4 +1182,4 @@ gamevoraDots.forEach(
 </script>
 
 </body>
-</html>
+    </html>
