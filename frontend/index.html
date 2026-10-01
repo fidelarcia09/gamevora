@@ -21,10 +21,6 @@
             min-height: 100vh;
         }
 
-        /* =========================
-           BARRA SUPERIOR
-        ========================= */
-
         header {
             background: #08152d;
             border-bottom: 1px solid #123b70;
@@ -36,10 +32,6 @@
             top: 0;
             z-index: 10;
         }
-
-        /* =========================
-           LOGO GAMEVORA
-        ========================= */
 
         .logo {
             display: flex;
@@ -71,10 +63,6 @@
 
             transform: skewX(-8deg);
         }
-
-        /*
-           Corte eléctrico sobre la G
-        */
 
         .logo-g::after {
             content: "";
@@ -145,10 +133,6 @@
                 0 0 5px rgba(255,255,255,0.2);
         }
 
-        /* =========================
-           NAVEGACIÓN
-        ========================= */
-
         .navegacion {
             display: flex;
             align-items: center;
@@ -201,10 +185,6 @@
             box-shadow:
                 0 0 15px rgba(0, 153, 255, 0.25);
         }
-
-        /* =========================
-           HERO
-        ========================= */
 
         .hero {
             margin: 18px;
@@ -273,10 +253,6 @@
                 0 0 18px rgba(0, 153, 255, 0.3);
         }
 
-        /* =========================
-           SECCIONES
-        ========================= */
-
         .section {
             padding: 10px 18px 25px;
         }
@@ -291,10 +267,6 @@
         .section-title h2 {
             font-size: 21px;
         }
-
-        /* =========================
-           OFERTAS
-        ========================= */
 
         .offer {
             background:
@@ -350,10 +322,6 @@
 
             font-weight: bold;
         }
-
-        /* =========================
-           CARRUSEL GAMEVORA
-        ========================= */
 
         .gamevora-carrusel {
             width: 100%;
@@ -477,10 +445,6 @@
                 0 0 8px #008cff;
         }
 
-        /* =========================
-           PIE
-        ========================= */
-
         footer {
             text-align: center;
 
@@ -498,10 +462,6 @@
         footer strong {
             color: #279fff;
         }
-
-        /* =========================
-           MÓVIL
-        ========================= */
 
         @media (max-width: 430px) {
 
@@ -545,7 +505,6 @@
 
 <header>
 
-    <!-- LOGO NUEVO -->
     <div class="logo">
 
         <span class="logo-g">G</span>
@@ -556,15 +515,10 @@
 
     </div>
 
-
     <div class="navegacion">
 
-        <!-- IMPORTANTE:
-             Este index está en la raíz,
-             por eso usamos frontend/ -->
-
         <a
-            href="frontend/soporte.html"
+            href="soporte.html"
             class="boton-navegacion"
         >
             Soporte
@@ -582,10 +536,6 @@
 </header>
 
 
-<!-- =========================
-     HERO
-========================= -->
-
 <section class="hero">
 
     <h1>
@@ -600,7 +550,6 @@
 
     </h1>
 
-
     <p>
 
         Recargas digitales, ofertas y productos
@@ -608,12 +557,8 @@
 
     </p>
 
-
-    <!-- CORREGIDO:
-         juegos está dentro de frontend -->
-
     <a
-        href="frontend/juegos.html"
+        href="juegos.html"
         class="hero-button"
     >
         Explorar juegos
@@ -621,10 +566,6 @@
 
 </section>
 
-
-<!-- =========================
-     UNIVERSO GAMEVORA
-========================= -->
 
 <section
     style="
@@ -656,7 +597,6 @@
     "
 >
 
-
     <div
         style="
             font-size: 14px;
@@ -671,7 +611,6 @@
         ⚡ EL UNIVERSO GAMING
 
     </div>
-
 
     <div
         style="
@@ -702,10 +641,6 @@
     </div>
 
 
-    <!-- =========================
-         CARRUSEL
-    ========================= -->
-
     <div class="gamevora-carrusel">
 
         <div
@@ -713,11 +648,8 @@
             id="gamevoraTrack"
         >
 
-
-            <!-- RESEÑAS -->
-
             <a
-                href="frontend/reseñas.html"
+                href="reseñas.html"
                 class="
                     gamevora-slide
                     gamevora-slide-link
@@ -732,13 +664,11 @@
 
                     </div>
 
-
                     <h3>
 
                         ⚡ ¿Ya dejaste tu reseña?
 
                     </h3>
-
 
                     <p>
 
@@ -749,7 +679,6 @@
 
                 </div>
 
-
                 <div class="gamevora-slide-icon">
 
                     ⚡
@@ -758,8 +687,6 @@
 
             </a>
 
-
-            <!-- NOVEDADES -->
 
             <div class="gamevora-slide">
 
@@ -771,13 +698,11 @@
 
                     </div>
 
-
                     <h3>
 
                         🚀 Nuevas actualizaciones
 
                     </h3>
-
 
                     <p>
 
@@ -788,7 +713,6 @@
 
                 </div>
 
-
                 <div class="gamevora-slide-icon">
 
                     🚀
@@ -798,10 +722,8 @@
             </div>
 
 
-            <!-- GVR -->
-
             <a
-                href="frontend/informacion-gvr.html"
+                href="informacion-gvr.html"
                 class="
                     gamevora-slide
                     gamevora-slide-link
@@ -816,13 +738,11 @@
 
                     </div>
 
-
                     <h3>
 
                         ⚡ Información sobre GVR
 
                     </h3>
-
 
                     <p>
 
@@ -833,7 +753,6 @@
 
                 </div>
 
-
                 <div class="gamevora-slide-icon">
 
                     ⚡
@@ -842,13 +761,10 @@
 
             </a>
 
-
         </div>
 
     </div>
 
-
-    <!-- PUNTOS -->
 
     <div class="gamevora-dots">
 
@@ -857,12 +773,10 @@
             type="button"
         ></button>
 
-
         <button
             class="gamevora-dot"
             type="button"
         ></button>
-
 
         <button
             class="gamevora-dot"
@@ -871,8 +785,6 @@
 
     </div>
 
-
-    <!-- TEXTO FINAL -->
 
     <div
         style="
@@ -911,16 +823,10 @@
     >
     </div>
 
-
 </section>
 
 
-<!-- =========================
-     RECARGAS DESTACADAS
-========================= -->
-
 <section class="section">
-
 
     <div class="section-title">
 
@@ -994,13 +900,8 @@
 
     </div>
 
-
 </section>
 
-
-<!-- =========================
-     FOOTER
-========================= -->
 
 <footer>
 
@@ -1012,7 +913,6 @@
 
     </p>
 
-
     <p>
 
         Plataforma de recargas digitales
@@ -1020,9 +920,7 @@
 
     </p>
 
-
     <br>
-
 
     <p>
 
@@ -1032,10 +930,6 @@
 
 </footer>
 
-
-<!-- =========================
-     SUPABASE
-========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -1071,7 +965,7 @@ async function actualizarMenu() {
         botones.innerHTML = `
 
             <a
-                href="frontend/cuenta.html"
+                href="cuenta.html"
                 class="login"
             >
                 Mi cuenta
@@ -1084,7 +978,7 @@ async function actualizarMenu() {
         botones.innerHTML = `
 
             <a
-                href="frontend/login.html"
+                href="login.html"
                 class="login"
             >
                 Crear cuenta / Iniciar sesión
@@ -1101,10 +995,6 @@ actualizarMenu();
 
 </script>
 
-
-<!-- =========================
-     CARRUSEL
-========================= -->
 
 <script>
 
@@ -1189,4 +1079,4 @@ gamevoraDots.forEach(
 
 
 </body>
-    </html>
+                </html>
