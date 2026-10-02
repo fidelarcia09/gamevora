@@ -96,6 +96,29 @@
             border: 1px solid #17649a;
         }
 
+        .boton-ia {
+            width: 100%;
+            border: 1px solid #087cff;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #071f3d, #0b3158);
+            color: #4fc9ff;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(0, 153, 255, .15);
+        }
+
+        .boton-ia:hover {
+            background: linear-gradient(90deg, #0b3158, #0d477a);
+        }
+
+        .boton-ia:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
         .mensajes {
             display: flex;
             flex-direction: column;
@@ -349,13 +372,6 @@ async function iniciar() {
     iniciarRealtime();
 
 
-    /*
-       RESPALDO:
-       Actualizamos periódicamente los mensajes.
-       Esto permite que el administrador vea
-       mensajes aunque Realtime falle.
-    */
-
     setInterval(
         actualizarMensajes,
         2000
@@ -475,16 +491,16 @@ async function actualizarMensajes() {
     }
 
 
+    if (!mensajes) {
+        return;
+    }
+
+
     const zonaMensajes =
         document.querySelector(".mensajes");
 
 
     if (!zonaMensajes) {
-        return;
-    }
-
-
-    if (!mensajes) {
         return;
     }
 
@@ -563,6 +579,28 @@ function mostrarTicket(
     }
 
 
+    let botonIA = "";
+
+    if (
+        esAdmin &&
+        ticket.status === "human"
+    ) {
+
+        botonIA = `
+
+            <button
+                id="devolverIA"
+                class="boton-ia"
+                type="button"
+            >
+                🤖 Devolver a IA
+            </button>
+
+        `;
+
+    }
+
+
     const formulario =
         ticket.status === "resolved"
 
@@ -611,6 +649,8 @@ function mostrarTicket(
             ${estadoTexto}
         </div>
 
+        ${botonIA}
+
         <div class="mensajes">
             ${mensajesHTML}
         </div>
@@ -648,6 +688,111 @@ function mostrarTicket(
         );
 
     }
+
+
+    const botonDevolverIA =
+        document.getElementById(
+            "devolverIA"
+        );
+
+
+    if (botonDevolverIA) {
+
+        botonDevolverIA.addEventListener(
+            "click",
+            devolverAIA
+        );
+
+    }
+}
+
+
+/* =========================
+   DEVOLVER A IA
+========================= */
+
+async function devolverAIA() {
+
+    const boton =
+        document.getElementById(
+            "devolverIA"
+        );
+
+
+    if (!boton) {
+        return;
+    }
+
+
+    const confirmar =
+        confirm(
+            "¿Quieres devolver este ticket a la IA?\n\nLa IA volverá a responder los nuevos mensajes del usuario."
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Devolviendo a IA...";
+
+
+    const { data, error } =
+        await supabaseClient.rpc(
+            "devolver_ticket_a_ia",
+            {
+                p_ticket_id:
+                    ticketId
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Error devolviendo ticket a IA:",
+            error
+        );
+
+        alert(
+            "No se pudo devolver el ticket a la IA:\n\n" +
+            error.message
+        );
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "🤖 Devolver a IA";
+
+        return;
+    }
+
+
+    if (data !== true) {
+
+        alert(
+            "No se pudo devolver el ticket a la IA."
+        );
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "🤖 Devolver a IA";
+
+        return;
+    }
+
+
+    alert(
+        "🤖 El ticket volvió a la IA."
+    );
+
+
+    await cargarTicket();
 }
 
 
