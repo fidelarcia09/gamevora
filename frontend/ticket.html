@@ -206,6 +206,7 @@
         }
 
         @media (max-width: 450px) {
+
             body {
                 padding: 14px;
             }
@@ -236,11 +237,17 @@
         </div>
 
         <div class="navegacion">
-            <a href="soporte.html" class="volver">Soporte</a>
+
+            <a href="soporte.html" class="volver">
+                Soporte
+            </a>
 
             <span class="separador">|</span>
 
-            <a href="cuenta.html" class="volver">Mi Cuenta</a>
+            <a href="cuenta.html" class="volver">
+                Mi Cuenta
+            </a>
+
         </div>
 
     </div>
@@ -258,6 +265,7 @@
     </div>
 
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -286,6 +294,7 @@ params.get("id");
 
 let usuarioActual = null;
 let canalRealtime = null;
+let esAdmin = false;
 
 
 /* =========================
@@ -305,8 +314,10 @@ async function iniciar() {
         return;
     }
 
+
     const { data, error } =
         await supabaseClient.auth.getUser();
+
 
     if (error || !data.user) {
 
@@ -315,11 +326,40 @@ async function iniciar() {
         return;
     }
 
+
     usuarioActual = data.user;
+
+
+    /* =========================
+       COMPROBAR ADMIN
+    ========================= */
+
+    const { data: adminResultado } =
+        await supabaseClient.rpc(
+            "is_support_admin"
+        );
+
+
+    esAdmin = adminResultado === true;
+
 
     await cargarTicket();
 
+
     iniciarRealtime();
+
+
+    /*
+       RESPALDO:
+       Actualizamos periódicamente los mensajes.
+       Esto permite que el administrador vea
+       mensajes aunque Realtime falle.
+    */
+
+    setInterval(
+        actualizarMensajes,
+        2000
+    );
 }
 
 
@@ -344,6 +384,7 @@ async function cargarTicket() {
             .eq("id", ticketId)
             .single();
 
+
     if (error || !ticket) {
 
         console.error(error);
@@ -357,6 +398,7 @@ async function cargarTicket() {
 
         return;
     }
+
 
     const { data: mensajes, error: mensajesError } =
         await supabaseClient
@@ -373,6 +415,7 @@ async function cargarTicket() {
                 ascending: true
             });
 
+
     if (mensajesError) {
 
         console.error(mensajesError);
@@ -386,7 +429,81 @@ async function cargarTicket() {
         return;
     }
 
-    mostrarTicket(ticket, mensajes || []);
+
+    mostrarTicket(
+        ticket,
+        mensajes || []
+    );
+}
+
+
+/* =========================
+   ACTUALIZAR MENSAJES
+========================= */
+
+async function actualizarMensajes() {
+
+    if (!ticketId) {
+        return;
+    }
+
+
+    const { data: mensajes, error } =
+        await supabaseClient
+            .from("support_messages")
+            .select(`
+                id,
+                sender_id,
+                sender_type,
+                message,
+                created_at
+            `)
+            .eq("ticket_id", ticketId)
+            .order("created_at", {
+                ascending: true
+            });
+
+
+    if (error) {
+
+        console.error(
+            "Error actualizando mensajes:",
+            error
+        );
+
+        return;
+    }
+
+
+    const zonaMensajes =
+        document.querySelector(".mensajes");
+
+
+    if (!zonaMensajes) {
+        return;
+    }
+
+
+    if (!mensajes) {
+        return;
+    }
+
+
+    mensajes.forEach(mensaje => {
+
+        if (
+            !document.querySelector(
+                `[data-message-id="${mensaje.id}"]`
+            )
+        ) {
+
+            agregarMensajeRealtime(
+                mensaje
+            );
+
+        }
+
+    });
 }
 
 
@@ -394,19 +511,33 @@ async function cargarTicket() {
    MOSTRAR TICKET
 ========================= */
 
-function mostrarTicket(ticket, mensajes) {
+function mostrarTicket(
+    ticket,
+    mensajes
+) {
 
-    let estadoTexto = "Abierto";
+    let estadoTexto =
+        "Abierto";
+
 
     if (ticket.status === "human") {
-        estadoTexto = "Atención humana";
+
+        estadoTexto =
+            "Atención humana";
+
     }
+
 
     if (ticket.status === "resolved") {
-        estadoTexto = "Resuelto";
+
+        estadoTexto =
+            "Resuelto";
+
     }
 
+
     let mensajesHTML = "";
+
 
     if (mensajes.length === 0) {
 
@@ -418,22 +549,33 @@ function mostrarTicket(ticket, mensajes) {
 
     } else {
 
-        mensajes.forEach(mensaje => {
+        mensajes.forEach(
+            mensaje => {
 
-            mensajesHTML += crearHTMLMensaje(mensaje);
+                mensajesHTML +=
+                    crearHTMLMensaje(
+                        mensaje
+                    );
 
-        });
+            }
+        );
 
     }
 
+
     const formulario =
         ticket.status === "resolved"
+
         ? `
+
             <div class="mensaje-vacio">
                 Este ticket está resuelto.
             </div>
+
         `
+
         : `
+
             <div class="formulario">
 
                 <textarea
@@ -450,7 +592,9 @@ function mostrarTicket(ticket, mensajes) {
                 </button>
 
             </div>
+
         `;
+
 
     contenido.innerHTML = `
 
@@ -459,7 +603,8 @@ function mostrarTicket(ticket, mensajes) {
         </div>
 
         <div class="asunto">
-            Categoría: ${escapeHTML(ticket.category)}
+            Categoría:
+            ${escapeHTML(ticket.category)}
         </div>
 
         <div class="estado">
@@ -474,8 +619,12 @@ function mostrarTicket(ticket, mensajes) {
 
     `;
 
+
     const zonaMensajes =
-        document.querySelector(".mensajes");
+        document.querySelector(
+            ".mensajes"
+        );
+
 
     if (zonaMensajes) {
 
@@ -484,8 +633,12 @@ function mostrarTicket(ticket, mensajes) {
 
     }
 
+
     const botonEnviar =
-        document.getElementById("enviar");
+        document.getElementById(
+            "enviar"
+        );
+
 
     if (botonEnviar) {
 
@@ -502,28 +655,54 @@ function mostrarTicket(ticket, mensajes) {
    CREAR MENSAJE HTML
 ========================= */
 
-function crearHTMLMensaje(mensaje) {
+function crearHTMLMensaje(
+    mensaje
+) {
 
-    let clase = "mensaje-usuario";
-    let remitente = "Tú";
+    let clase =
+        "mensaje-usuario";
 
-    if (mensaje.sender_type === "admin") {
+    let remitente =
+        esAdmin
+            ? "👤 Usuario"
+            : "Tú";
 
-        clase = "mensaje-admin";
-        remitente = "Soporte Gamevora";
+
+    if (
+        mensaje.sender_type ===
+        "admin"
+    ) {
+
+        clase =
+            "mensaje-admin";
+
+        remitente =
+            "Soporte Gamevora";
 
     }
 
-    if (mensaje.sender_type === "bot") {
 
-        clase = "mensaje-bot";
-        remitente = "🤖 Soporte IA";
+    if (
+        mensaje.sender_type ===
+        "bot"
+    ) {
+
+        clase =
+            "mensaje-bot";
+
+        remitente =
+            "🤖 Soporte IA";
 
     }
+
 
     const fecha =
-        new Date(mensaje.created_at)
-            .toLocaleString("es-ES");
+        new Date(
+            mensaje.created_at
+        ).toLocaleString(
+            "es-ES"
+        );
+
 
     return `
 
@@ -537,7 +716,9 @@ function crearHTMLMensaje(mensaje) {
             </div>
 
             <div>
-                ${escapeHTML(mensaje.message)}
+                ${escapeHTML(
+                    mensaje.message
+                )}
             </div>
 
             <div class="fecha">
@@ -558,7 +739,12 @@ function iniciarRealtime() {
 
     canalRealtime =
         supabaseClient
-            .channel("ticket-" + ticketId)
+            .channel(
+                "ticket-" +
+                ticketId +
+                "-" +
+                Date.now()
+            )
 
             .on(
                 "postgres_changes",
@@ -566,14 +752,18 @@ function iniciarRealtime() {
                     event: "INSERT",
                     schema: "public",
                     table: "support_messages",
-                    filter: "ticket_id=eq." + ticketId
+                    filter:
+                        "ticket_id=eq." +
+                        ticketId
                 },
+
                 payload => {
 
                     console.log(
                         "Nuevo mensaje:",
                         payload.new
                     );
+
 
                     agregarMensajeRealtime(
                         payload.new
@@ -582,14 +772,16 @@ function iniciarRealtime() {
                 }
             )
 
-            .subscribe(status => {
+            .subscribe(
+                status => {
 
-                console.log(
-                    "Realtime:",
-                    status
-                );
+                    console.log(
+                        "Realtime:",
+                        status
+                    );
 
-            });
+                }
+            );
 }
 
 
@@ -597,34 +789,53 @@ function iniciarRealtime() {
    AGREGAR MENSAJE EN VIVO
 ========================= */
 
-function agregarMensajeRealtime(mensaje) {
+function agregarMensajeRealtime(
+    mensaje
+) {
 
     const zonaMensajes =
-        document.querySelector(".mensajes");
+        document.querySelector(
+            ".mensajes"
+        );
+
 
     if (!zonaMensajes) {
         return;
     }
+
 
     if (
         document.querySelector(
             `[data-message-id="${mensaje.id}"]`
         )
     ) {
+
         return;
+
     }
+
 
     const mensajeVacio =
-        zonaMensajes.querySelector(".mensaje-vacio");
+        zonaMensajes.querySelector(
+            ".mensaje-vacio"
+        );
+
 
     if (mensajeVacio) {
+
         mensajeVacio.remove();
+
     }
+
 
     zonaMensajes.insertAdjacentHTML(
         "beforeend",
-        crearHTMLMensaje(mensaje)
+
+        crearHTMLMensaje(
+            mensaje
+        )
     );
+
 
     zonaMensajes.scrollTop =
         zonaMensajes.scrollHeight;
@@ -638,52 +849,74 @@ function agregarMensajeRealtime(mensaje) {
 async function enviarMensaje() {
 
     const textarea =
-        document.getElementById("mensaje");
+        document.getElementById(
+            "mensaje"
+        );
 
     const boton =
-        document.getElementById("enviar");
+        document.getElementById(
+            "enviar"
+        );
+
 
     const mensaje =
         textarea.value.trim();
 
+
     if (!mensaje) {
 
-        alert("Escribe un mensaje.");
+        alert(
+            "Escribe un mensaje."
+        );
 
         return;
     }
 
+
     boton.disabled = true;
-    boton.textContent = "Enviando...";
+
+    boton.textContent =
+        "Enviando...";
+
 
     const { error } =
         await supabaseClient.rpc(
             "send_support_message",
             {
-                p_ticket_id: ticketId,
-                p_message: mensaje
+                p_ticket_id:
+                    ticketId,
+
+                p_message:
+                    mensaje
             }
         );
+
 
     if (error) {
 
         console.error(error);
+
 
         alert(
             "No se pudo enviar el mensaje:\n\n" +
             error.message
         );
 
+
         boton.disabled = false;
+
         boton.textContent =
             "⚡ Enviar mensaje";
 
         return;
     }
 
+
     textarea.value = "";
 
+
     boton.disabled = false;
+
     boton.textContent =
         "⚡ Enviar mensaje";
 }
@@ -693,14 +926,36 @@ async function enviarMensaje() {
    SEGURIDAD HTML
 ========================= */
 
-function escapeHTML(texto) {
+function escapeHTML(
+    texto
+) {
 
     return String(texto)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -714,9 +969,12 @@ window.addEventListener(
     () => {
 
         if (canalRealtime) {
-            supabaseClient.removeChannel(
-                canalRealtime
-            );
+
+            supabaseClient
+                .removeChannel(
+                    canalRealtime
+                );
+
         }
 
     }
