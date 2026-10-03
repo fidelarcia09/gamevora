@@ -113,6 +113,12 @@
             color: white;
             font-size: 15px;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        .continuar:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .nota {
@@ -174,44 +180,213 @@
             <option>2180 Bonds</option>
         </select>
 
-        <button class="continuar" type="button" onclick="continuarRecarga()">
-    Continuar ⚡
+        <button
+            class="continuar"
+            id="botonContinuar"
+            type="button"
+            onclick="continuarRecarga()"
+        >
+            Continuar ⚡
         </button>
 
         <p class="nota">
-            Esta versión es una interfaz de prueba.
-            Las recargas reales se conectarán posteriormente
-            al sistema de Gamevora.
+            La compra utiliza tu saldo GVR disponible.
+            La recarga del juego se procesará posteriormente.
         </p>
 
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-function continuarRecarga() {
 
-    const id = document.getElementById("idjugador").value.trim();
-    const cantidad = document.getElementById("cantidad").value;
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-    if (id === "") {
-        alert("Escribe tu ID de Arena Breakout.");
+const SUPABASE_ANON_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
+    );
+
+
+async function continuarRecarga() {
+
+    const boton =
+        document.getElementById("botonContinuar");
+
+    const idJugador =
+        document.getElementById("idjugador").value.trim();
+
+    const cantidad =
+        document.getElementById("cantidad").value;
+
+
+    /* =========================
+       VALIDACIONES
+    ========================= */
+
+    if (idJugador === "") {
+
+        alert(
+            "Escribe tu ID de Arena Breakout."
+        );
+
         return;
     }
+
 
     if (cantidad === "") {
-        alert("Selecciona una cantidad.");
+
+        alert(
+            "Selecciona una cantidad."
+        );
+
         return;
     }
 
-    const url =
-        "resumen-arenabreakout.html?id=" +
-        encodeURIComponent(id) +
-        "&cantidad=" +
-        encodeURIComponent(cantidad);
 
-    window.location.href = url;
+    /* =========================
+       COMPROBAR SESIÓN
+    ========================= */
+
+    const {
+        data: { session },
+        error: sessionError
+    } = await supabaseClient.auth.getSession();
+
+
+    if (sessionError || !session) {
+
+        alert(
+            "Debes iniciar sesión primero."
+        );
+
+        window.location.href = "login.html";
+
+        return;
+    }
+
+
+    /* =========================
+       DESACTIVAR BOTÓN
+    ========================= */
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Procesando...";
+
+
+    /* =========================
+       BUSCAR PRODUCTO
+    ========================= */
+
+    const {
+        data: producto,
+        error: productoError
+    } = await supabaseClient
+        .from("game_products")
+        .select(
+            "id, game, product_name, price_gvr, active"
+        )
+        .eq("game", "Arena Breakout")
+        .eq("product_name", cantidad)
+        .eq("active", true)
+        .maybeSingle();
+
+
+    if (productoError) {
+
+        alert(
+            "Error buscando producto:\n\n" +
+            productoError.message
+        );
+
+        boton.disabled = false;
+        boton.textContent = "Continuar ⚡";
+
+        return;
+    }
+
+
+    if (!producto) {
+
+        alert(
+            "Supabase no encontró este producto."
+        );
+
+        boton.disabled = false;
+        boton.textContent = "Continuar ⚡";
+
+        return;
+    }
+
+
+    /* =========================
+       REALIZAR COMPRA
+    ========================= */
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "purchase_game_product",
+        {
+            p_product_id: producto.id,
+            p_player_id: idJugador
+        }
+    );
+
+
+    if (error) {
+
+        alert(
+            "No se pudo realizar la compra:\n\n" +
+            error.message
+        );
+
+        boton.disabled = false;
+        boton.textContent = "Continuar ⚡";
+
+        return;
+    }
+
+
+    /* =========================
+       COMPRA EXITOSA
+    ========================= */
+
+    alert(
+        "¡Compra realizada! ⚡\n\n" +
+        "Arena Breakout\n" +
+        producto.product_name +
+        "\n" +
+        "Precio: " +
+        producto.price_gvr +
+        " GVR\n\n" +
+        "ID del pedido:\n" +
+        data
+    );
+
+
+    window.location.href =
+        "cuenta.html";
 }
+
 </script>
-    
+
 </body>
-</html>
+    </html>
