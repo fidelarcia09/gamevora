@@ -368,6 +368,95 @@ function mostrarError(mensaje) {
 
 
 // ================================
+// NOTIFICACIONES PUSH
+// ================================
+
+async function registrarNotificacionesPush() {
+
+    try {
+
+        if (!("serviceWorker" in navigator)) {
+
+            console.log(
+                "Service Worker no disponible"
+            );
+
+            return;
+        }
+
+
+        if (!("PushManager" in window)) {
+
+            console.log(
+                "Push Notifications no disponibles"
+            );
+
+            return;
+        }
+
+
+        const registro =
+            await navigator.serviceWorker.register(
+                "service-worker.js"
+            );
+
+
+        console.log(
+            "Service Worker registrado:",
+            registro.scope
+        );
+
+
+        const permiso =
+            await Notification.requestPermission();
+
+
+        if (permiso !== "granted") {
+
+            console.log(
+                "Permiso de notificaciones no concedido"
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "Permiso de notificaciones concedido"
+        );
+
+
+        const suscripcion =
+            await registro.pushManager.getSubscription();
+
+
+        if (suscripcion) {
+
+            console.log(
+                "Este dispositivo ya está registrado para Push"
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "Dispositivo listo para suscripción Push"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Error configurando notificaciones:",
+            error
+        );
+
+    }
+
+}
+
+
+// ================================
 // COMPROBAR ADMIN
 // ================================
 
@@ -467,10 +556,6 @@ async function cargarVentas() {
             }
         );
 
-
-    // ==================================
-    // ERROR DETALLADO
-    // ==================================
 
     if (error) {
 
@@ -977,6 +1062,9 @@ async function iniciar() {
 
 
     await cargarVentas();
+
+    // Activar configuración de notificaciones
+    await registrarNotificacionesPush();
 
 }
 
