@@ -6,6 +6,8 @@
 
     <title>Confirmar pedido | Gamevora</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -125,6 +127,12 @@
             color: white;
             font-size: 16px;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        .confirmar:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .nota {
@@ -183,8 +191,13 @@
             <strong>Precio en GVR próximamente</strong>
         </div>
 
-        <button class="confirmar" type="button" onclick="confirmarPedido()">
-    Confirmar pedido ⚡
+        <button
+            class="confirmar"
+            id="botonConfirmar"
+            type="button"
+            onclick="confirmarPedido()"
+        >
+            Confirmar pedido ⚡
         </button>
 
         <p class="nota">
@@ -200,24 +213,256 @@
 
 <script>
 
-    const parametros = new URLSearchParams(window.location.search);
+// ==========================================
+// SUPABASE
+// ==========================================
 
-    const id = parametros.get("id");
-    const cantidad = parametros.get("cantidad");
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-    document.getElementById("mostrarId").textContent =
-        id || "No especificado";
+const SUPABASE_ANON_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-    document.getElementById("mostrarCantidad").textContent =
-        cantidad || "No especificada";
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
+    );
 
 
-    function confirmarPedido() {
+// ==========================================
+// PARÁMETROS
+// ==========================================
 
-    const parametros = new URLSearchParams(window.location.search);
+const parametros =
+    new URLSearchParams(
+        window.location.search
+    );
 
-    const id = parametros.get("id");
-    const cantidad = parametros.get("cantidad");
+const id =
+    parametros.get("id");
+
+const cantidad =
+    parametros.get("cantidad");
+
+
+// ==========================================
+// MOSTRAR DATOS
+// ==========================================
+
+document.getElementById(
+    "mostrarId"
+).textContent =
+    id || "No especificado";
+
+
+document.getElementById(
+    "mostrarCantidad"
+).textContent =
+    cantidad || "No especificada";
+
+
+// ==========================================
+// CONFIRMAR PEDIDO
+// ==========================================
+
+async function confirmarPedido() {
+
+    if (!id || !cantidad) {
+
+        alert(
+            "Faltan datos del pedido."
+        );
+
+        return;
+    }
+
+
+    const boton =
+        document.getElementById(
+            "botonConfirmar"
+        );
+
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Registrando pedido...";
+
+
+    // ======================================
+    // COMPROBAR SESIÓN
+    // ======================================
+
+    const {
+        data: sessionData,
+        error: sessionError
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if (
+        sessionError ||
+        !sessionData?.session
+    ) {
+
+        console.error(
+            "Error de sesión:",
+            sessionError
+        );
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Confirmar pedido ⚡";
+
+        alert(
+            "Debes iniciar sesión para realizar este pedido."
+        );
+
+        return;
+    }
+
+
+    // ======================================
+    // OBTENER USUARIO
+    // ======================================
+
+    const {
+        data: userData,
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    const user =
+        userData?.user;
+
+
+    if (
+        userError ||
+        !user
+    ) {
+
+        console.error(
+            "Error obteniendo usuario:",
+            userError
+        );
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Confirmar pedido ⚡";
+
+        alert(
+            "No se pudo verificar tu usuario."
+        );
+
+        return;
+    }
+
+
+    // ======================================
+    // REGISTRAR RECARGA
+    // ======================================
+
+    const {
+        error: ventaError
+    } =
+        await supabaseClient
+            .from("ventas")
+            .insert({
+
+                tipo:
+                    "recarga",
+
+                usuario_id:
+                    user.id,
+
+                nombre_usuario:
+                    user.user_metadata?.username ||
+                    user.user_metadata?.nombre ||
+                    user.email?.split("@")[0] ||
+                    "Usuario",
+
+                correo_usuario:
+                    user.email,
+
+                juego:
+                    "Free Fire",
+
+                id_jugador:
+                    id,
+
+                producto:
+                    cantidad,
+
+                cantidad:
+                    Number(cantidad) || null,
+
+                gvr_comprado:
+                    null,
+
+                precio:
+                    null,
+
+                moneda:
+                    "GVR",
+
+                metodo_pago:
+                    "GVR",
+
+                estado:
+                    "pendiente"
+
+            });
+
+
+    // ======================================
+    // ERROR
+    // ======================================
+
+    if (ventaError) {
+
+        console.error(
+            "Error registrando recarga:",
+            ventaError
+        );
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Confirmar pedido ⚡";
+
+        alert(
+            "No se pudo registrar el pedido.\n\n" +
+            ventaError.message
+        );
+
+        return;
+    }
+
+
+    // ======================================
+    // PEDIDO REGISTRADO
+    // ======================================
+
+    alert(
+        "Pedido registrado correctamente.\n\n" +
+        "Estado: Pendiente"
+    );
+
+
+    // ======================================
+    // CONTINUAR AL RESULTADO
+    // ======================================
 
     const url =
         "pedido-realizado.html?id=" +
@@ -225,8 +470,9 @@
         "&cantidad=" +
         encodeURIComponent(cantidad);
 
-    window.location.href = url;
-    }
+    window.location.href =
+        url;
+}
 
 </script>
 
