@@ -117,6 +117,12 @@
             color: white;
             font-size: 15px;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        .recargar:disabled {
+            opacity: 0.6;
+            cursor: wait;
         }
 
         .nota {
@@ -159,56 +165,250 @@
             type="text"
             id="id"
             placeholder="Escribe tu ID de Call of Duty"
+            autocomplete="off"
         >
 
         <label for="cantidad">Cantidad</label>
 
         <select id="cantidad">
             <option value="">Selecciona una cantidad</option>
-            <option>80 CP</option>
-            <option>400 CP</option>
-            <option>800 CP</option>
-            <option>2000 CP</option>
-            <option>4000 CP</option>
+            <option value="80 CP">80 CP</option>
+            <option value="420 CP">420 CP</option>
+            <option value="880 CP">880 CP</option>
+            <option value="2400 CP">2400 CP</option>
+            <option value="5000 CP">5000 CP</option>
         </select>
 
-        <button class="recargar" type="button" onclick="continuarRecarga()">
-    Continuar ⚡
+        <button
+            class="recargar"
+            id="botonRecarga"
+            type="button"
+            onclick="continuarRecarga()"
+        >
+            Continuar ⚡
         </button>
 
         <p class="nota">
-            Esta versión es una interfaz de prueba.
-            Las recargas reales se conectarán posteriormente
-            al sistema de Gamevora.
+            La compra utiliza tu saldo GVR.
+            El pedido quedará registrado en Gamevora.
         </p>
 
     </section>
 
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-function continuarRecarga() {
 
-    const id = document.getElementById("id").value;
-    const cantidad = document.getElementById("cantidad").value;
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-    if (id === "") {
-        alert("Escribe tu ID de Call of Duty Mobile.");
+const SUPABASE_ANON_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
+    );
+
+
+async function continuarRecarga() {
+
+    const idJugador =
+        document.getElementById("id").value.trim();
+
+    const cantidad =
+        document.getElementById("cantidad").value;
+
+    const boton =
+        document.getElementById("botonRecarga");
+
+
+    if (idJugador === "") {
+
+        alert(
+            "Escribe tu ID de Call of Duty Mobile."
+        );
+
         return;
     }
+
 
     if (cantidad === "") {
-        alert("Selecciona una cantidad.");
+
+        alert(
+            "Selecciona una cantidad."
+        );
+
         return;
     }
 
-    const url =
-        "resumen-codmobile.html?id=" +
-        encodeURIComponent(id) +
-        "&cantidad=" +
-        encodeURIComponent(cantidad);
 
-    window.location.href = url;
+    boton.disabled = true;
+
+    boton.textContent = "Procesando...";
+
+
+    try {
+
+        /* =========================
+           COMPROBAR SESIÓN
+        ========================= */
+
+        const {
+            data: { session },
+            error: sessionError
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (sessionError || !session) {
+
+            alert(
+                "Debes iniciar sesión primero."
+            );
+
+            window.location.href = "login.html";
+
+            return;
+        }
+
+
+        /* =========================
+           BUSCAR PRODUCTO
+        ========================= */
+
+        const {
+            data: producto,
+            error: productoError
+        } =
+            await supabaseClient
+                .from("game_products")
+                .select(
+                    "id, game, product_name, game_currency_amount, price_gvr, active"
+                )
+                .eq("game", "COD Mobile")
+                .eq("product_name", cantidad)
+                .eq("active", true)
+                .maybeSingle();
+
+
+        console.log(
+            "PRODUCTO COD MOBILE:",
+            producto
+        );
+
+        console.log(
+            "ERROR PRODUCTO:",
+            productoError
+        );
+
+
+        if (productoError) {
+
+            alert(
+                "Error buscando el producto:\n\n" +
+                productoError.message
+            );
+
+            return;
+        }
+
+
+        if (!producto) {
+
+            alert(
+                "No se encontró ese producto de COD Mobile en Gamevora."
+            );
+
+            return;
+        }
+
+
+        /* =========================
+           REALIZAR COMPRA
+        ========================= */
+
+        const {
+            data: pedido,
+            error: compraError
+        } =
+            await supabaseClient.rpc(
+                "purchase_game_product",
+                {
+                    p_product_id: producto.id,
+                    p_player_id: idJugador
+                }
+            );
+
+
+        if (compraError) {
+
+            console.error(
+                "ERROR COMPRA:",
+                compraError
+            );
+
+            alert(
+                "No se pudo realizar la compra:\n\n" +
+                compraError.message
+            );
+
+            return;
+        }
+
+
+        /* =========================
+           COMPRA EXITOSA
+        ========================= */
+
+        alert(
+            "¡Compra realizada! ⚡\n\n" +
+
+            producto.product_name +
+            "\n" +
+
+            "Precio: " +
+            producto.price_gvr +
+            " GVR\n\n" +
+
+            "ID del pedido:\n" +
+            pedido
+        );
+
+
+        window.location.href =
+            "cuenta.html";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Ocurrió un error inesperado:\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Continuar ⚡";
+    }
 }
+
 </script>
+
 </body>
-</html>
+    </html>
