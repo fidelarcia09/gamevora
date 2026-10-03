@@ -190,12 +190,19 @@ const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
 
 const SUPABASE_ANON_KEY =
-    "sb_publishable_VEu9vcUF1mp0xS0fXHPdA_592bfknx";
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_ANON_KEY
+        SUPABASE_ANON_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
     );
 
 
@@ -300,34 +307,96 @@ async function continuarPago() {
     }
 
 
-    // ======================================
-    // OBTENER USUARIO
-    // ======================================
-
     botonContinuar.disabled = true;
 
     botonContinuar.textContent =
-        "Registrando compra...";
+        "Comprobando sesión...";
 
+
+    // ======================================
+    // COMPROBAR SESIÓN GUARDADA
+    // ======================================
 
     const {
-        data: {
-            user
-        },
-        error: authError
+        data: sessionData,
+        error: sessionError
     } =
-        await supabaseClient.auth.getUser();
+        await supabaseClient.auth.getSession();
 
 
-    if (authError || !user) {
+    console.log(
+        "Sesión encontrada:",
+        sessionData?.session
+    );
+
+
+    if (
+        sessionError ||
+        !sessionData?.session
+    ) {
 
         botonContinuar.disabled = false;
 
         botonContinuar.textContent =
             "Continuar ⚡";
 
+        console.error(
+            "Error de sesión:",
+            sessionError
+        );
+
         alert(
-            "Debes iniciar sesión para realizar esta compra."
+            "Gamevora no pudo detectar tu sesión.\n\n" +
+            "Aunque aparezcas conectado en tu cuenta, " +
+            "esta página no está recibiendo la sesión de Supabase."
+        );
+
+        return;
+    }
+
+
+    // ======================================
+    // OBTENER USUARIO
+    // ======================================
+
+    botonContinuar.textContent =
+        "Verificando usuario...";
+
+
+    const {
+        data: userData,
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    const user =
+        userData?.user;
+
+
+    console.log(
+        "Usuario detectado:",
+        user
+    );
+
+
+    if (
+        userError ||
+        !user
+    ) {
+
+        botonContinuar.disabled = false;
+
+        botonContinuar.textContent =
+            "Continuar ⚡";
+
+        console.error(
+            "Error obteniendo usuario:",
+            userError
+        );
+
+        alert(
+            "No se pudo verificar tu usuario en Gamevora."
         );
 
         return;
@@ -338,6 +407,10 @@ async function continuarPago() {
     // REGISTRAR VENTA
     // ======================================
 
+    botonContinuar.textContent =
+        "Registrando compra...";
+
+
     const {
         error: ventaError
     } =
@@ -345,7 +418,8 @@ async function continuarPago() {
             .from("ventas")
             .insert({
 
-                tipo: "gvr",
+                tipo:
+                    "gvr",
 
                 usuario_id:
                     user.id,
@@ -378,7 +452,7 @@ async function continuarPago() {
 
 
     // ======================================
-    // ERROR
+    // ERROR DE VENTA
     // ======================================
 
     if (ventaError) {
@@ -403,7 +477,7 @@ async function continuarPago() {
 
 
     // ======================================
-    // MODO DE PRUEBA ACTUAL
+    // MODO DE PRUEBA
     // ======================================
 
     const saldoActual =
