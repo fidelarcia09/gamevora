@@ -49,17 +49,18 @@
             font-size: 14px;
             font-weight: bold;
         }
-        
-        .navegacion {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
 
-.separador {
-    color: #31506f;
-    font-size: 14px;
-}
+        .navegacion {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .separador {
+            color: #31506f;
+            font-size: 14px;
+        }
+
         .card {
             background: #091a35;
             border: 1px solid #15518c;
@@ -112,6 +113,7 @@
             color: white;
             font-size: 15px;
             font-weight: bold;
+            word-break: break-word;
         }
 
         .saldo {
@@ -149,28 +151,45 @@
             color: white;
             font-size: 14px;
             font-weight: bold;
+            border: none;
         }
 
         .boton-secundario {
             background: #0b203b;
             border: 1px solid #20527e;
         }
-        .boton-cerrar {
-    background: #8b1e2d;
-    border: 1px solid #ff4057;
-    cursor: pointer;
-}
 
-.boton-cerrar:hover {
-    background: #b42338;
-    box-shadow: 0 0 15px rgba(255, 64, 87, 0.25);
-}
+        .boton-admin {
+            background: linear-gradient(90deg, #063c72, #087cff);
+            border: 1px solid #159dff;
+            box-shadow: 0 0 15px rgba(0, 140, 255, 0.18);
+        }
+
+        .boton-admin:hover {
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.35);
+        }
+
+        .boton-cerrar {
+            background: #8b1e2d;
+            border: 1px solid #ff4057;
+            cursor: pointer;
+        }
+
+        .boton-cerrar:hover {
+            background: #b42338;
+            box-shadow: 0 0 15px rgba(255, 64, 87, 0.25);
+        }
+
         .nota {
             margin-top: 20px;
             text-align: center;
             color: #627b97;
             font-size: 11px;
             line-height: 1.5;
+        }
+
+        #panelAdministracion {
+            display: none;
         }
     </style>
 </head>
@@ -186,15 +205,17 @@
         </div>
 
         <div class="navegacion">
-    <a href="reseñas.html" class="volver">
-        Reseñas
-    </a>
 
-    <span class="separador">|</span>
+            <a href="reseñas.html" class="volver">
+                Reseñas
+            </a>
 
-    <a href="../index.html" class="volver">
-        Inicio
-    </a>
+            <span class="separador">|</span>
+
+            <a href="../index.html" class="volver">
+                Inicio
+            </a>
+
         </div>
 
     </div>
@@ -212,33 +233,39 @@
         </p>
 
         <div class="dato">
+
             <div class="dato-titulo">
                 Nombre de usuario
             </div>
 
             <div class="dato-valor" id="nombreUsuario">
-    Cargando...
+                Cargando...
             </div>
+
         </div>
 
         <div class="dato">
+
             <div class="dato-titulo">
                 Correo electrónico
             </div>
 
             <div class="dato-valor" id="correoUsuario">
-    Cargando...
+                Cargando...
             </div>
+
         </div>
 
         <div class="dato">
+
             <div class="dato-titulo">
                 ID de cuenta
             </div>
 
             <div class="dato-valor" id="idUsuario">
-    Cargando...
+                Cargando...
             </div>
+
         </div>
 
         <div class="saldo">
@@ -248,27 +275,36 @@
             </div>
 
             <div class="saldo-valor" id="saldoGVR">
-    ⚡ 0 GVR
+                ⚡ 0 GVR
             </div>
 
         </div>
 
         <a href="movimientos.html" class="boton">
-    Ver movimientos
+            Ver movimientos
         </a>
-        
-        <a href="recargar-gvr.html" class="boton boton-gvr">
-    ⚡ Recargar GVR
+
+        <a href="recargar-gvr.html" class="boton">
+            ⚡ Recargar GVR
         </a>
-        
+
         <a href="pedidos.html" class="boton boton-secundario">
-    Historial de pedidos
+            Historial de pedidos
         </a>
-        
+
+        <!-- PANEL ADMINISTRACIÓN -->
+        <div id="panelAdministracion">
+
+            <a href="admin-ventas.html" class="boton boton-admin">
+                🛒 Panel de ventas
+            </a>
+
+        </div>
+
         <button id="cerrarSesion" class="boton boton-cerrar">
-    🔴 Cerrar sesión
+            🔴 Cerrar sesión
         </button>
-        
+
         <p class="nota">
             Esta es una interfaz de prueba.
             Los datos reales de cada usuario y el saldo GVR
@@ -278,26 +314,54 @@
     </div>
 
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+async function comprobarAdministrador() {
+
+    const { data, error } =
+        await supabaseClient.rpc("is_support_admin");
+
+    if (error) {
+
+        console.error(
+            "No se pudo comprobar administrador:",
+            error
+        );
+
+        return false;
+    }
+
+    return data === true;
+}
+
 
 async function cargarCuenta() {
 
-    const { data, error } = await supabaseClient.auth.getUser();
+    const { data, error } =
+        await supabaseClient.auth.getUser();
 
     if (error || !data.user) {
+
         alert("No hay una sesión iniciada.");
+
         window.location.href = "login.html";
+
         return;
     }
 
@@ -312,7 +376,28 @@ async function cargarCuenta() {
     document.getElementById("nombreUsuario").textContent =
         usuario.user_metadata?.username || "Usuario";
 
-    // Cargar saldo real desde la base de datos
+
+    /*
+       COMPROBACIÓN REAL DE ADMINISTRADOR
+
+       No usamos el correo ni el nombre.
+       Supabase decide si la cuenta está autorizada.
+    */
+
+    const esAdmin =
+        await comprobarAdministrador();
+
+    if (esAdmin) {
+
+        document.getElementById(
+            "panelAdministracion"
+        ).style.display = "block";
+
+    }
+
+
+    // Cargar saldo real
+
     const { data: wallet, error: walletError } =
         await supabaseClient
             .from("wallets")
@@ -320,30 +405,57 @@ async function cargarCuenta() {
             .eq("user_id", usuario.id)
             .single();
 
+
     if (walletError) {
-        console.error("Error cargando wallet:", walletError);
-        document.getElementById("saldoGVR").textContent =
-            "⚡ 0 GVR";
+
+        console.error(
+            "Error cargando wallet:",
+            walletError
+        );
+
+        document.getElementById(
+            "saldoGVR"
+        ).textContent = "⚡ 0 GVR";
+
         return;
     }
 
-    document.getElementById("saldoGVR").textContent =
+
+    document.getElementById(
+        "saldoGVR"
+    ).textContent =
         `⚡ ${wallet.balance} GVR`;
 }
 
+
 cargarCuenta();
 
-document.getElementById("cerrarSesion").addEventListener("click", async function() {
 
-    const { error } = await supabaseClient.auth.signOut();
+document
+    .getElementById("cerrarSesion")
+    .addEventListener(
+        "click",
+        async function() {
 
-    if (error) {
-        alert("No se pudo cerrar la sesión: " + error.message);
-        return;
-    }
+            const { error } =
+                await supabaseClient.auth.signOut();
 
-    window.location.href = "login.html";
-});
+            if (error) {
+
+                alert(
+                    "No se pudo cerrar la sesión: "
+                    + error.message
+                );
+
+                return;
+            }
+
+            window.location.href =
+                "login.html";
+        }
+    );
+
 </script>
+
 </body>
-</html>
+    </html>
