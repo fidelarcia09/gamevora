@@ -113,6 +113,12 @@
             color: white;
             font-size: 15px;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        .continuar:disabled {
+            opacity: 0.6;
+            cursor: wait;
         }
 
         .nota {
@@ -160,6 +166,7 @@
             type="text"
             id="idjugador"
             placeholder="Introduce tu ID"
+            autocomplete="off"
         >
 
         <label for="cantidad">
@@ -167,51 +174,270 @@
         </label>
 
         <select id="cantidad">
-            <option>100 Gold</option>
-            <option>310 Gold</option>
-            <option>520 Gold</option>
-            <option>1060 Gold</option>
-            <option>2180 Gold</option>
+
+            <option value="">
+                Selecciona una cantidad
+            </option>
+
+            <option value="100 Gold">
+                100 Gold
+            </option>
+
+            <option value="310 Gold">
+                310 Gold
+            </option>
+
+            <option value="520 Gold">
+                520 Gold
+            </option>
+
+            <option value="1060 Gold">
+                1060 Gold
+            </option>
+
+            <option value="2180 Gold">
+                2180 Gold
+            </option>
+
         </select>
 
-        <button class="continuar" type="button" onclick="continuarRecarga()">
-    Continuar ⚡
+        <button
+            class="continuar"
+            id="botonRecarga"
+            type="button"
+            onclick="continuarRecarga()"
+        >
+            Continuar ⚡
         </button>
 
         <p class="nota">
-            Esta versión es una interfaz de prueba.
-            Las recargas reales se conectarán posteriormente
-            al sistema de Gamevora.
+            La compra utiliza tu saldo GVR.
+            El pedido quedará registrado en Gamevora.
         </p>
 
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-function continuarRecarga() {
 
-    const id = document.getElementById("idjugador").value.trim();
-    const cantidad = document.getElementById("cantidad").value;
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-    if (id === "") {
-        alert("Escribe tu ID de Blood Strike.");
+const SUPABASE_ANON_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
+    );
+
+
+async function continuarRecarga() {
+
+    const idJugador =
+        document.getElementById("idjugador").value.trim();
+
+    const cantidad =
+        document.getElementById("cantidad").value;
+
+    const boton =
+        document.getElementById("botonRecarga");
+
+
+    if (idJugador === "") {
+
+        alert(
+            "Escribe tu ID de Blood Strike."
+        );
+
         return;
     }
+
 
     if (cantidad === "") {
-        alert("Selecciona una cantidad.");
+
+        alert(
+            "Selecciona una cantidad."
+        );
+
         return;
     }
 
-    const url =
-        "resumen-bloodstrike.html?id=" +
-        encodeURIComponent(id) +
-        "&cantidad=" +
-        encodeURIComponent(cantidad);
 
-    window.location.href = url;
+    boton.disabled = true;
+
+    boton.textContent =
+        "Procesando...";
+
+
+    try {
+
+        /* =========================
+           COMPROBAR SESIÓN
+        ========================= */
+
+        const {
+            data: { session },
+            error: sessionError
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (sessionError || !session) {
+
+            alert(
+                "Debes iniciar sesión primero."
+            );
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+
+        /* =========================
+           BUSCAR PRODUCTO
+        ========================= */
+
+        const {
+            data: producto,
+            error: productoError
+        } =
+            await supabaseClient
+                .from("game_products")
+                .select(
+                    "id, game, product_name, game_currency_amount, price_gvr, active"
+                )
+                .eq("game", "Blood Strike")
+                .eq("product_name", cantidad)
+                .eq("active", true)
+                .maybeSingle();
+
+
+        console.log(
+            "PRODUCTO BLOOD STRIKE:",
+            producto
+        );
+
+        console.log(
+            "ERROR PRODUCTO:",
+            productoError
+        );
+
+
+        if (productoError) {
+
+            alert(
+                "Error buscando el producto:\n\n" +
+                productoError.message
+            );
+
+            return;
+        }
+
+
+        if (!producto) {
+
+            alert(
+                "No se encontró ese producto de Blood Strike en Gamevora."
+            );
+
+            return;
+        }
+
+
+        /* =========================
+           REALIZAR COMPRA
+        ========================= */
+
+        const {
+            data: pedido,
+            error: compraError
+        } =
+            await supabaseClient.rpc(
+                "purchase_game_product",
+                {
+                    p_product_id:
+                        producto.id,
+
+                    p_player_id:
+                        idJugador
+                }
+            );
+
+
+        if (compraError) {
+
+            console.error(
+                "ERROR COMPRA:",
+                compraError
+            );
+
+            alert(
+                "No se pudo realizar la compra:\n\n" +
+                compraError.message
+            );
+
+            return;
+        }
+
+
+        /* =========================
+           COMPRA EXITOSA
+        ========================= */
+
+        alert(
+            "¡Compra realizada! ⚡\n\n" +
+
+            producto.product_name +
+
+            "\nPrecio: " +
+
+            producto.price_gvr +
+
+            " GVR\n\n" +
+
+            "ID del pedido:\n" +
+
+            pedido
+        );
+
+
+        window.location.href =
+            "cuenta.html";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Ocurrió un error inesperado:\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Continuar ⚡";
+    }
 }
+
 </script>
-    
+
 </body>
-</html>
+    </html>
