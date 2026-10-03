@@ -334,10 +334,14 @@
 
 <script>
 
-const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
 
 const SUPABASE_ANON_KEY =
-"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const VAPID_PUBLIC_KEY =
+    "BOTEc5uNWGMOVSZicoL3lqSEgQZdcOgQMiZF_JKbk-Yg9dmtU9Yp2yEuONOl3Y3IU42K0DevmR8vmSTCkpq69Ig";
 
 const supabaseClient =
     window.supabase.createClient(
@@ -364,6 +368,36 @@ function mostrarError(mensaje) {
 
     errorBox.style.display = "block";
 
+}
+
+
+// ================================
+// CONVERTIR VAPID PUBLIC KEY
+// ================================
+
+function convertirBase64UrlAUint8Array(base64UrlData) {
+
+    const padding =
+        "=".repeat(
+            (4 - base64UrlData.length % 4) % 4
+        );
+
+    const base64 =
+        (
+            base64UrlData +
+            padding
+        )
+        .replace(/-/g, "+")
+        .replace(/_/g, "/");
+
+    const rawData =
+        window.atob(base64);
+
+    return Uint8Array.from(
+        [...rawData].map(
+            char => char.charCodeAt(0)
+        )
+    );
 }
 
 
@@ -426,22 +460,102 @@ async function registrarNotificacionesPush() {
         );
 
 
-        const suscripcion =
+        let suscripcion =
             await registro.pushManager.getSubscription();
 
 
-        if (suscripcion) {
+        // Si no existe, crearla
+        if (!suscripcion) {
 
-            console.log(
-                "Este dispositivo ya está registrado para Push"
+            suscripcion =
+                await registro.pushManager.subscribe({
+
+                    userVisibleOnly: true,
+
+                    applicationServerKey:
+                        convertirBase64UrlAUint8Array(
+                            VAPID_PUBLIC_KEY
+                        )
+
+                });
+
+        }
+
+
+        console.log(
+            "Suscripción Push:",
+            suscripcion
+        );
+
+
+        const {
+            data: { user },
+            error: userError
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (userError || !user) {
+
+            console.error(
+                "No se pudo obtener el usuario:",
+                userError
             );
 
             return;
         }
 
 
+        const datosSuscripcion =
+            suscripcion.toJSON();
+
+
+        if (
+            !datosSuscripcion.endpoint ||
+            !datosSuscripcion.keys ||
+            !datosSuscripcion.keys.p256dh ||
+            !datosSuscripcion.keys.auth
+        ) {
+
+            throw new Error(
+                "La suscripción Push no contiene los datos necesarios."
+            );
+
+        }
+
+
+        const {
+            error: guardarError
+        } =
+            await supabaseClient
+                .from("admin_push_subscriptions")
+                .upsert(
+                    {
+                        user_id: user.id,
+                        endpoint:
+                            datosSuscripcion.endpoint,
+                        p256dh:
+                            datosSuscripcion.keys.p256dh,
+                        auth:
+                            datosSuscripcion.keys.auth,
+                        updated_at:
+                            new Date().toISOString()
+                    },
+                    {
+                        onConflict: "endpoint"
+                    }
+                );
+
+
+        if (guardarError) {
+
+            throw guardarError;
+
+        }
+
+
         console.log(
-            "Dispositivo listo para suscripción Push"
+            "✅ Dispositivo administrador registrado para Push."
         );
 
     } catch (error) {
@@ -449,6 +563,11 @@ async function registrarNotificacionesPush() {
         console.error(
             "Error configurando notificaciones:",
             error
+        );
+
+        mostrarError(
+            "No se pudo configurar el dispositivo para notificaciones Push.\n\n" +
+            error.message
         );
 
     }
@@ -465,7 +584,8 @@ async function comprobarAdministrador() {
     const {
         data: { user },
         error: authError
-    } = await supabaseClient.auth.getUser();
+    } =
+        await supabaseClient.auth.getUser();
 
 
     if (authError) {
@@ -490,19 +610,27 @@ async function comprobarAdministrador() {
     const {
         data,
         error
-    } = await supabaseClient.rpc(
-        "is_support_admin"
-    );
+    } =
+        await supabaseClient.rpc(
+            "is_support_admin"
+        );
 
 
     if (error) {
 
         mostrarError(
             "ERROR AL COMPROBAR ADMIN:\n\n" +
-            "Mensaje: " + error.message + "\n" +
-            "Código: " + error.code + "\n" +
-            "Detalles: " + error.details + "\n" +
-            "Ayuda: " + error.hint
+            "Mensaje: " +
+            error.message +
+            "\n" +
+            "Código: " +
+            error.code +
+            "\n" +
+            "Detalles: " +
+            error.details +
+            "\n" +
+            "Ayuda: " +
+            error.hint
         );
 
         console.error(
@@ -533,7 +661,9 @@ async function comprobarAdministrador() {
 async function cargarVentas() {
 
     const lista =
-        document.getElementById("listaVentas");
+        document.getElementById(
+            "listaVentas"
+        );
 
 
     lista.innerHTML = `
@@ -546,15 +676,16 @@ async function cargarVentas() {
     const {
         data,
         error
-    } = await supabaseClient
-        .from("ventas")
-        .select("*")
-        .order(
-            "created_at",
-            {
-                ascending: false
-            }
-        );
+    } =
+        await supabaseClient
+            .from("ventas")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
 
 
     if (error) {
@@ -594,7 +725,8 @@ async function cargarVentas() {
     }
 
 
-    todasLasVentas = data || [];
+    todasLasVentas =
+        data || [];
 
 
     actualizarEstadisticas();
@@ -632,7 +764,9 @@ function actualizarEstadisticas() {
         todasLasVentas.reduce(
             (total, venta) =>
                 total +
-                (Number(venta.gvr_comprado) || 0),
+                (Number(
+                    venta.gvr_comprado
+                ) || 0),
             0
         );
 
@@ -654,7 +788,8 @@ function actualizarEstadisticas() {
 
     document.getElementById(
         "gvrVendidos"
-    ).textContent = gvrVendidos;
+    ).textContent =
+        gvrVendidos;
 
 }
 
@@ -669,16 +804,34 @@ function escaparHTML(valor) {
         valor === null ||
         valor === undefined
     ) {
+
         return "—";
+
     }
 
 
     return String(valor)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
 }
 
 
@@ -758,7 +911,9 @@ function mostrarVentas() {
         ventasFiltradas
             .map(
                 venta =>
-                    crearVentaHTML(venta)
+                    crearVentaHTML(
+                        venta
+                    )
             )
             .join("");
 
@@ -771,13 +926,13 @@ function mostrarVentas() {
 
 function crearVentaHTML(venta) {
 
-    let tipoTexto =
+    const tipoTexto =
         venta.tipo === "gvr"
             ? "💎 Compra de GVR"
             : "🎮 Recarga de juego";
 
 
-    let claseEstado =
+    const claseEstado =
         "estado-" +
         escaparHTML(
             venta.estado
@@ -820,7 +975,6 @@ function crearVentaHTML(venta) {
 
             </div>
 
-
             <div class="datos">
 
                 <div class="dato">
@@ -832,7 +986,6 @@ function crearVentaHTML(venta) {
                     </div>
                 </div>
 
-
                 <div class="dato">
                     <small>Correo</small>
                     <div>
@@ -842,7 +995,6 @@ function crearVentaHTML(venta) {
                     </div>
                 </div>
 
-
                 <div class="dato">
                     <small>ID de usuario</small>
                     <div>
@@ -851,7 +1003,6 @@ function crearVentaHTML(venta) {
                         )}
                     </div>
                 </div>
-
 
                 ${
                     venta.juego
@@ -870,7 +1021,6 @@ function crearVentaHTML(venta) {
                     ""
                 }
 
-
                 ${
                     venta.id_jugador
                     ?
@@ -888,7 +1038,6 @@ function crearVentaHTML(venta) {
                     ""
                 }
 
-
                 ${
                     venta.producto
                     ?
@@ -905,7 +1054,6 @@ function crearVentaHTML(venta) {
                     :
                     ""
                 }
-
 
                 ${
                     venta.cantidad !== null &&
@@ -925,7 +1073,6 @@ function crearVentaHTML(venta) {
                     ""
                 }
 
-
                 ${
                     venta.gvr_comprado
                     ?
@@ -943,7 +1090,6 @@ function crearVentaHTML(venta) {
                     ""
                 }
 
-
                 <div class="dato">
                     <small>Precio</small>
                     <div>
@@ -956,7 +1102,6 @@ function crearVentaHTML(venta) {
                     </div>
                 </div>
 
-
                 <div class="dato">
                     <small>Método de pago</small>
                     <div>
@@ -965,7 +1110,6 @@ function crearVentaHTML(venta) {
                         )}
                     </div>
                 </div>
-
 
                 <div class="dato">
                     <small>Proveedor</small>
@@ -976,7 +1120,6 @@ function crearVentaHTML(venta) {
                     </div>
                 </div>
 
-
                 <div class="dato">
                     <small>ID orden proveedor</small>
                     <div>
@@ -985,7 +1128,6 @@ function crearVentaHTML(venta) {
                         )}
                     </div>
                 </div>
-
 
                 <div class="dato">
                     <small>Fecha</small>
@@ -1000,6 +1142,7 @@ function crearVentaHTML(venta) {
 
         </article>
     `;
+
 }
 
 
@@ -1057,13 +1200,14 @@ async function iniciar() {
 
 
     if (!esAdmin) {
+
         return;
+
     }
 
 
     await cargarVentas();
 
-    // Activar configuración de notificaciones
     await registrarNotificacionesPush();
 
 }
