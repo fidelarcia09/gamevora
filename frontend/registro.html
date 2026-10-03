@@ -99,6 +99,12 @@
             color: white;
             font-size: 15px;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        .crear:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .login {
@@ -121,6 +127,45 @@
             font-size: 11px;
             line-height: 1.5;
         }
+
+        .mensaje-exito {
+            display: none;
+            text-align: center;
+        }
+
+        .mensaje-exito .icono {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .mensaje-exito h2 {
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .mensaje-exito p {
+            color: #9bb0c8;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .correo-mostrado {
+            color: #28a9ff;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        .volver-login {
+            display: inline-block;
+            margin-top: 22px;
+            padding: 12px 20px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -132,116 +177,292 @@
         <span class="rayo">⚡</span> GAME<span>VORA</span>
     </div>
 
-    <h1 class="titulo">Crear cuenta</h1>
+    <!-- FORMULARIO DE REGISTRO -->
 
-    <p class="descripcion">
-        Únete a Gamevora y comienza tu experiencia gaming.
-    </p>
+    <div id="formularioRegistro">
 
-    <form>
+        <h1 class="titulo">Crear cuenta</h1>
 
-        <label for="usuario">Nombre de usuario</label>
-        <input
-            type="text"
-            id="usuario"
-            placeholder="Ej: Gamer123"
-            required
+        <p class="descripcion">
+            Únete a Gamevora y comienza tu experiencia gaming.
+        </p>
+
+        <form id="registroForm">
+
+            <label for="usuario">Nombre de usuario</label>
+
+            <input
+                type="text"
+                id="usuario"
+                placeholder="Ej: Gamer123"
+                required
+            >
+
+            <label for="correo">Correo electrónico</label>
+
+            <input
+                type="email"
+                id="correo"
+                placeholder="tucorreo@email.com"
+                required
+            >
+
+            <label for="contrasena">Contraseña</label>
+
+            <input
+                type="password"
+                id="contrasena"
+                placeholder="Crea una contraseña"
+                required
+            >
+
+            <label for="confirmar">Confirmar contraseña</label>
+
+            <input
+                type="password"
+                id="confirmar"
+                placeholder="Repite tu contraseña"
+                required
+            >
+
+            <button
+                class="crear"
+                id="botonCrear"
+                type="submit"
+            >
+                Crear cuenta ⚡
+            </button>
+
+        </form>
+
+        <div class="login">
+            ¿Ya tienes una cuenta?
+            <a href="login.html">Iniciar sesión</a>
+        </div>
+
+    </div>
+
+
+    <!-- MENSAJE DESPUÉS DEL REGISTRO -->
+
+    <div
+        class="mensaje-exito"
+        id="mensajeExito"
+    >
+
+        <div class="icono">📧</div>
+
+        <h2>Revisa tu correo</h2>
+
+        <p>
+            Hemos enviado un correo de confirmación a:
+        </p>
+
+        <p
+            class="correo-mostrado"
+            id="correoMostrado"
+        ></p>
+
+        <p style="margin-top: 14px;">
+            Abre el correo y confirma tu cuenta.
+            Después podrás iniciar sesión en Gamevora.
+        </p>
+
+        <a
+            class="volver-login"
+            href="login.html"
         >
+            Ir a iniciar sesión
+        </a>
 
-        <label for="correo">Correo electrónico</label>
-        <input
-            type="email"
-            id="correo"
-            placeholder="tucorreo@email.com"
-            required
-        >
-
-        <label for="contrasena">Contraseña</label>
-        <input
-            type="password"
-            id="contrasena"
-            placeholder="Crea una contraseña"
-            required
-        >
-
-        <label for="confirmar">Confirmar contraseña</label>
-        <input
-            type="password"
-            id="confirmar"
-            placeholder="Repite tu contraseña"
-            required
-        >
-
-        <button class="crear" type="submit">
-            Crear cuenta ⚡
-        </button>
-
-    </form>
-
-    <div class="login">
-    ¿Ya tienes una cuenta?
-    <a href="login.html">Iniciar sesión</a>
     </div>
 
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
 
-document.querySelector("form").addEventListener("submit", async function(event) {
-    event.preventDefault();
 
-    const usuario = document.getElementById("usuario").value.trim();
-    const correo = document.getElementById("correo").value.trim();
-    const contrasena = document.getElementById("contrasena").value;
-    const confirmar = document.getElementById("confirmar").value;
+document
+    .getElementById("registroForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
 
-    if (!usuario || !correo || !contrasena || !confirmar) {
-        alert("Completa todos los campos.");
-        return;
-    }
+            event.preventDefault();
 
-    if (contrasena !== confirmar) {
-        alert("Las contraseñas no coinciden.");
-        return;
-    }
+            const usuario =
+                document
+                    .getElementById("usuario")
+                    .value
+                    .trim();
 
-    if (contrasena.length < 8) {
-        alert("La contraseña debe tener al menos 8 caracteres.");
-        return;
-    }
+            const correo =
+                document
+                    .getElementById("correo")
+                    .value
+                    .trim();
 
-    const { data, error } = await supabaseClient.auth.signUp({
-        email: correo,
-        password: contrasena,
-        options: {
-            data: {
-                username: usuario
+            const contrasena =
+                document
+                    .getElementById("contrasena")
+                    .value;
+
+            const confirmar =
+                document
+                    .getElementById("confirmar")
+                    .value;
+
+            const boton =
+                document
+                    .getElementById("botonCrear");
+
+
+            if (
+                !usuario ||
+                !correo ||
+                !contrasena ||
+                !confirmar
+            ) {
+
+                alert(
+                    "Completa todos los campos."
+                );
+
+                return;
             }
+
+
+            if (
+                contrasena !== confirmar
+            ) {
+
+                alert(
+                    "Las contraseñas no coinciden."
+                );
+
+                return;
+            }
+
+
+            if (
+                contrasena.length < 8
+            ) {
+
+                alert(
+                    "La contraseña debe tener al menos 8 caracteres."
+                );
+
+                return;
+            }
+
+
+            boton.disabled = true;
+
+            boton.textContent =
+                "Creando cuenta...";
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth.signUp({
+
+                        email: correo,
+
+                        password: contrasena,
+
+                        options: {
+
+                            data: {
+                                username: usuario
+                            }
+
+                        }
+
+                    });
+
+
+                if (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Error: " +
+                        error.message
+                    );
+
+                    boton.disabled = false;
+
+                    boton.textContent =
+                        "Crear cuenta ⚡";
+
+                    return;
+                }
+
+
+                /*
+                 * Con Confirm email activado,
+                 * Supabase envía el correo de
+                 * confirmación.
+                 */
+
+                document
+                    .getElementById(
+                        "formularioRegistro"
+                    )
+                    .style.display = "none";
+
+
+                document
+                    .getElementById(
+                        "mensajeExito"
+                    )
+                    .style.display = "block";
+
+
+                document
+                    .getElementById(
+                        "correoMostrado"
+                    )
+                    .textContent = correo;
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Ocurrió un error inesperado."
+                );
+
+                boton.disabled = false;
+
+                boton.textContent =
+                    "Crear cuenta ⚡";
+
+            }
+
         }
-    });
+    );
 
-    if (error) {
-        console.error(error);
-        alert("Error: " + error.message);
-        return;
-    }
+</script>
 
-    alert("¡Cuenta creada correctamente! ⚡\n\nAhora inicia sesión para entrar a tu cuenta.");
-
-await supabaseClient.auth.signOut();
-
-window.location.href = "login.html";
-});
-                                                </script>
 </body>
-  </html>
+    </html>
