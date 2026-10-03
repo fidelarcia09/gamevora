@@ -89,6 +89,21 @@
             box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
         }
 
+        .olvidaste {
+            display: block;
+            text-align: right;
+            margin-top: -8px;
+            margin-bottom: 17px;
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .olvidaste:hover {
+            text-decoration: underline;
+        }
+
         .entrar {
             width: 100%;
             padding: 14px;
@@ -99,6 +114,12 @@
             color: white;
             font-size: 15px;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        .entrar:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .crear {
@@ -138,7 +159,7 @@
         Entra a tu cuenta de Gamevora.
     </p>
 
-    <form>
+    <form id="formLogin">
 
         <label for="correo">Correo electrónico</label>
 
@@ -158,7 +179,11 @@
             required
         >
 
-        <button class="entrar" type="submit">
+        <a href="recuperar-contrasena.html" class="olvidaste">
+            ¿Olvidaste tu contraseña?
+        </a>
+
+        <button class="entrar" id="botonEntrar" type="submit">
             Iniciar sesión ⚡
         </button>
 
@@ -170,6 +195,7 @@
     </div>
 
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -178,12 +204,21 @@ const supabaseClient = window.supabase.createClient(
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
 );
 
-document.querySelector("form").addEventListener("submit", async function(event) {
+document.getElementById("formLogin").addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
-    const correo = document.getElementById("correo").value.trim();
-    const contrasena = document.getElementById("contrasena").value;
+    const correo =
+        document.getElementById("correo").value.trim();
+
+    const contrasena =
+        document.getElementById("contrasena").value;
+
+    const boton =
+        document.getElementById("botonEntrar");
+
+    boton.disabled = true;
+    boton.textContent = "Iniciando sesión...";
 
     const { data, error } =
         await supabaseClient.auth.signInWithPassword({
@@ -192,7 +227,35 @@ document.querySelector("form").addEventListener("submit", async function(event) 
         });
 
     if (error) {
-        alert("No se pudo iniciar sesión:\n\n" + error.message);
+
+        boton.disabled = false;
+        boton.textContent = "Iniciar sesión ⚡";
+
+        const mensaje =
+            (error.message || "").toLowerCase();
+
+        if (
+            mensaje.includes("email not confirmed") ||
+            mensaje.includes("email_not_confirmed") ||
+            mensaje.includes("correo no confirmado")
+        ) {
+
+            alert(
+                "📧 Correo no confirmado\n\n" +
+                "Debes confirmar tu correo electrónico antes de iniciar sesión.\n\n" +
+                "Revisa la bandeja de entrada de " +
+                correo +
+                " y también la carpeta de spam."
+            );
+
+            return;
+        }
+
+        alert(
+            "No se pudo iniciar sesión:\n\n" +
+            error.message
+        );
+
         return;
     }
 
@@ -201,5 +264,6 @@ document.querySelector("form").addEventListener("submit", async function(event) 
     window.location.href = "../index.html";
 });
 </script>
+
 </body>
 </html>
