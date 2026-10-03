@@ -73,6 +73,14 @@
             margin-bottom: 8px;
         }
 
+        .version-prueba {
+            text-align: center;
+            color: #00b7ff;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
         .descripcion {
             text-align: center;
             color: #8195ad;
@@ -167,6 +175,10 @@
 
         <h1>Confirmar pedido</h1>
 
+        <p class="version-prueba">
+            🧪 VERSIÓN NUEVA DE PRUEBA
+        </p>
+
         <p class="descripcion">
             Revisa tu pedido antes de confirmarlo.
         </p>
@@ -238,7 +250,7 @@ const supabaseClient =
 
 
 // ==========================================
-// PARÁMETROS
+// PARÁMETROS DEL PEDIDO
 // ==========================================
 
 const parametros =
@@ -261,7 +273,6 @@ document.getElementById(
     "mostrarId"
 ).textContent =
     id || "No especificado";
-
 
 document.getElementById(
     "mostrarCantidad"
@@ -370,59 +381,73 @@ async function confirmarPedido() {
 
 
     // ======================================
-    // REGISTRAR RECARGA
+    // DATOS DE LA VENTA
+    // ======================================
+
+    const datosVenta = {
+
+        tipo:
+            "recarga",
+
+        usuario_id:
+            user.id,
+
+        nombre_usuario:
+            user.user_metadata?.username ||
+            user.user_metadata?.nombre ||
+            user.email?.split("@")[0] ||
+            "Usuario",
+
+        correo_usuario:
+            user.email,
+
+        juego:
+            "Free Fire",
+
+        id_jugador:
+            id,
+
+        producto:
+            cantidad,
+
+        cantidad:
+            Number(cantidad) || null,
+
+        gvr_comprado:
+            null,
+
+        precio:
+            null,
+
+        moneda:
+            "GVR",
+
+        metodo_pago:
+            "GVR",
+
+        estado:
+            "pendiente"
+    };
+
+
+    console.log(
+        "DATOS DE VENTA:",
+        datosVenta
+    );
+
+
+    // ======================================
+    // GUARDAR EN VENTAS
     // ======================================
 
     const {
+        data: ventaData,
         error: ventaError
     } =
         await supabaseClient
             .from("ventas")
-            .insert({
-
-                tipo:
-                    "recarga",
-
-                usuario_id:
-                    user.id,
-
-                nombre_usuario:
-                    user.user_metadata?.username ||
-                    user.user_metadata?.nombre ||
-                    user.email?.split("@")[0] ||
-                    "Usuario",
-
-                correo_usuario:
-                    user.email,
-
-                juego:
-                    "Free Fire",
-
-                id_jugador:
-                    id,
-
-                producto:
-                    cantidad,
-
-                cantidad:
-                    Number(cantidad) || null,
-
-                gvr_comprado:
-                    null,
-
-                precio:
-                    null,
-
-                moneda:
-                    "GVR",
-
-                metodo_pago:
-                    "GVR",
-
-                estado:
-                    "pendiente"
-
-            });
+            .insert(datosVenta)
+            .select();
 
 
     // ======================================
@@ -432,7 +457,7 @@ async function confirmarPedido() {
     if (ventaError) {
 
         console.error(
-            "Error registrando recarga:",
+            "ERROR SUPABASE:",
             ventaError
         );
 
@@ -442,8 +467,13 @@ async function confirmarPedido() {
             "Confirmar pedido ⚡";
 
         alert(
-            "No se pudo registrar el pedido.\n\n" +
-            ventaError.message
+            "NO SE PUDO REGISTRAR LA VENTA\n\n" +
+            "Mensaje: " +
+            (ventaError.message || "Sin mensaje") +
+            "\n\nCódigo: " +
+            (ventaError.code || "Sin código") +
+            "\n\nDetalles: " +
+            (ventaError.details || "Sin detalles")
         );
 
         return;
@@ -451,17 +481,46 @@ async function confirmarPedido() {
 
 
     // ======================================
-    // PEDIDO REGISTRADO
+    // COMPROBAR QUE SUPABASE DEVOLVIÓ DATOS
+    // ======================================
+
+    console.log(
+        "VENTA REGISTRADA:",
+        ventaData
+    );
+
+
+    if (
+        !ventaData ||
+        ventaData.length === 0
+    ) {
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Confirmar pedido ⚡";
+
+        alert(
+            "El pedido fue procesado, pero Supabase no devolvió la venta registrada."
+        );
+
+        return;
+    }
+
+
+    // ======================================
+    // ÉXITO
     // ======================================
 
     alert(
-        "Pedido registrado correctamente.\n\n" +
+        "✅ PEDIDO REGISTRADO\n\n" +
+        "La venta fue guardada en Gamevora.\n\n" +
         "Estado: Pendiente"
     );
 
 
     // ======================================
-    // CONTINUAR AL RESULTADO
+    // IR AL RESULTADO
     // ======================================
 
     const url =
