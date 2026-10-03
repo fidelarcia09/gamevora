@@ -1,420 +1,348 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+    <title>Panel de Ventas | Gamevora</title>
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<title>Ventas | Gamevora</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-<style>
+        body {
+            background:
+                radial-gradient(circle at top, #102b55 0%, #06101f 45%, #02060d 100%);
+            color: white;
+            min-height: 100vh;
+        }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
+        header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 174, 255, 0.25);
+            background: rgba(2, 8, 18, 0.9);
+        }
 
-body {
-    background: #050b18;
-    color: white;
-    min-height: 100vh;
-    padding: 20px;
-}
+        .header-contenido {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
 
-.contenedor {
-    max-width: 1100px;
-    margin: auto;
-}
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #00aaff;
+            text-shadow: 0 0 15px rgba(0, 170, 255, 0.7);
+        }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    gap: 15px;
-}
+        .volver {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            background: rgba(0, 130, 255, 0.15);
+            border: 1px solid rgba(0, 170, 255, 0.3);
+        }
 
-.logo {
-    font-size: 24px;
-    font-weight: 900;
-}
+        .contenedor {
+            width: 95%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
 
-.rayo {
-    color: #00b7ff;
-    text-shadow: 0 0 12px #008cff;
-}
+        .titulo {
+            margin-bottom: 25px;
+        }
 
-.volver {
-    color: #28a9ff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-}
+        .titulo h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
 
-h1 {
-    font-size: 28px;
-    margin-bottom: 5px;
-}
+        .titulo p {
+            color: #9eb3ca;
+        }
 
-.subtitulo {
-    color: #8195ad;
-    font-size: 13px;
-    margin-bottom: 25px;
-}
+        .estadisticas {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
 
-.estadisticas {
-    display: grid;
-    grid-template-columns:
-        repeat(auto-fit, minmax(180px, 1fr));
+        .stat {
+            background: rgba(8, 24, 45, 0.9);
+            border: 1px solid rgba(0, 170, 255, 0.25);
+            border-radius: 15px;
+            padding: 20px;
+        }
 
-    gap: 12px;
-    margin-bottom: 25px;
-}
+        .stat span {
+            display: block;
+            color: #9eb3ca;
+            margin-bottom: 8px;
+        }
 
-.stat {
-    background: #091a35;
-    border: 1px solid #15518c;
-    border-radius: 15px;
-    padding: 18px;
-}
+        .stat strong {
+            font-size: 28px;
+            color: #00b7ff;
+        }
 
-.stat-titulo {
-    color: #7891aa;
-    font-size: 12px;
-    margin-bottom: 8px;
-}
+        .filtros {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-.stat-valor {
-    font-size: 25px;
-    font-weight: 900;
-}
+        .filtro {
+            border: 1px solid rgba(0, 170, 255, 0.3);
+            background: rgba(7, 25, 48, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
 
-.filtros {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 18px;
-}
+        .filtro.activo {
+            background: #0077ff;
+            border-color: #00b7ff;
+        }
 
-.filtro {
-    background: #0b203b;
-    color: #a9c8e8;
-    border: 1px solid #20527e;
-    padding: 10px 14px;
-    border-radius: 9px;
-    cursor: pointer;
-    font-weight: bold;
-}
+        .ventas {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-.filtro.activo {
-    background: #087cff;
-    color: white;
-    border-color: #00baff;
-}
+        .venta {
+            background: rgba(7, 20, 38, 0.95);
+            border: 1px solid rgba(0, 170, 255, 0.25);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 100, 255, 0.06);
+        }
 
-.ventas {
-    display: grid;
-    gap: 14px;
-}
+        .venta-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
 
-.venta {
-    background: #091a35;
-    border: 1px solid #15518c;
-    border-radius: 16px;
-    padding: 18px;
-}
+        .tipo {
+            font-weight: bold;
+            color: #00b7ff;
+            font-size: 18px;
+        }
 
-.venta-cabecera {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-}
+        .estado {
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
 
-.tipo {
-    font-size: 15px;
-    font-weight: 900;
-}
+        .estado-pendiente {
+            background: rgba(255, 190, 0, 0.15);
+            color: #ffd000;
+        }
 
-.estado {
-    padding: 6px 9px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: bold;
-}
+        .estado-procesando {
+            background: rgba(0, 150, 255, 0.15);
+            color: #00aaff;
+        }
 
-.pendiente {
-    background: #5d4300;
-    color: #ffd95c;
-}
+        .estado-completado {
+            background: rgba(0, 255, 130, 0.12);
+            color: #00ff91;
+        }
 
-.procesando {
-    background: #073f66;
-    color: #59c7ff;
-}
+        .estado-cancelado,
+        .estado-error {
+            background: rgba(255, 50, 50, 0.12);
+            color: #ff5555;
+        }
 
-.completado {
-    background: #064f35;
-    color: #61e6ae;
-}
+        .datos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
 
-.cancelado,
-.error {
-    background: #5d1622;
-    color: #ff7081;
-}
+        .dato {
+            background: rgba(0, 0, 0, 0.18);
+            padding: 10px;
+            border-radius: 9px;
+        }
 
-.datos {
-    display: grid;
-    grid-template-columns:
-        repeat(auto-fit, minmax(190px, 1fr));
+        .dato small {
+            display: block;
+            color: #7990a8;
+            margin-bottom: 4px;
+        }
 
-    gap: 10px;
-}
+        .dato div {
+            word-break: break-word;
+        }
 
-.dato {
-    background: #061226;
-    border: 1px solid #173d63;
-    border-radius: 10px;
-    padding: 11px;
-}
+        .vacio {
+            text-align: center;
+            padding: 50px 20px;
+            color: #8da3ba;
+            background: rgba(7, 20, 38, 0.8);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 170, 255, 0.15);
+        }
 
-.dato-titulo {
-    color: #7891aa;
-    font-size: 10px;
-    margin-bottom: 5px;
-}
+        #error {
+            display: none;
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: rgba(120, 0, 0, 0.2);
+            border: 1px solid #ff4040;
+            color: #ff8080;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
 
-.dato-valor {
-    font-size: 13px;
-    font-weight: bold;
-    word-break: break-word;
-}
+        @media (max-width: 800px) {
+            .estadisticas {
+                grid-template-columns: repeat(2, 1fr);
+            }
 
-.vacio {
-    text-align: center;
-    color: #6d86a1;
-    padding: 45px 20px;
-    background: #091a35;
-    border: 1px solid #15518c;
-    border-radius: 16px;
-}
+            .datos {
+                grid-template-columns: 1fr;
+            }
+        }
 
-.cargando {
-    text-align: center;
-    color: #7fa8ce;
-    padding: 30px;
-}
+        @media (max-width: 500px) {
+            .estadisticas {
+                grid-template-columns: 1fr 1fr;
+            }
 
-.error-panel {
-    background: #4b1420;
-    border: 1px solid #ff4057;
-    color: #ff9aa8;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    display: none;
-}
+            .stat strong {
+                font-size: 22px;
+            }
 
-@media (max-width: 600px) {
+            .venta-cabecera {
+                align-items: flex-start;
+                flex-direction: column;
+            }
 
-    body {
-        padding: 12px;
-    }
-
-    .header {
-        align-items: flex-start;
-    }
-
-    h1 {
-        font-size: 23px;
-    }
-
-}
-
-</style>
-
+            .titulo h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="contenedor">
+<header>
+    <div class="header-contenido">
 
-    <div class="header">
-
-        <div>
-            <div class="logo">
-                <span class="rayo">⚡</span> GAMEVORA
-            </div>
+        <div class="logo">
+            GAMEVORA
         </div>
 
-        <a
-            href="cuenta.html"
-            class="volver"
-        >
+        <a href="cuenta.html" class="volver">
             ← Mi cuenta
         </a>
 
     </div>
+</header>
 
+<main class="contenedor">
 
-    <h1>🛒 Panel de ventas</h1>
-
-    <p class="subtitulo">
-        Control de compras GVR y recargas de juegos
-    </p>
-
-
-    <div
-        id="errorPanel"
-        class="error-panel"
-    ></div>
-
-
-    <div class="estadisticas">
-
-        <div class="stat">
-
-            <div class="stat-titulo">
-                Ventas totales
-            </div>
-
-            <div
-                class="stat-valor"
-                id="totalVentas"
-            >
-                0
-            </div>
-
-        </div>
-
-
-        <div class="stat">
-
-            <div class="stat-titulo">
-                Pendientes
-            </div>
-
-            <div
-                class="stat-valor"
-                id="ventasPendientes"
-            >
-                0
-            </div>
-
-        </div>
-
-
-        <div class="stat">
-
-            <div class="stat-titulo">
-                Completadas
-            </div>
-
-            <div
-                class="stat-valor"
-                id="ventasCompletadas"
-            >
-                0
-            </div>
-
-        </div>
-
-
-        <div class="stat">
-
-            <div class="stat-titulo">
-                GVR vendidos
-            </div>
-
-            <div
-                class="stat-valor"
-                id="gvrVendidos"
-            >
-                0
-            </div>
-
-        </div>
-
+    <div class="titulo">
+        <h1>🛒 Panel de ventas</h1>
+        <p>Control de compras GVR y recargas de juegos</p>
     </div>
 
+    <div id="error"></div>
+
+    <section class="estadisticas">
+
+        <div class="stat">
+            <span>Ventas totales</span>
+            <strong id="totalVentas">0</strong>
+        </div>
+
+        <div class="stat">
+            <span>Pendientes</span>
+            <strong id="ventasPendientes">0</strong>
+        </div>
+
+        <div class="stat">
+            <span>Completadas</span>
+            <strong id="ventasCompletadas">0</strong>
+        </div>
+
+        <div class="stat">
+            <span>GVR vendidos</span>
+            <strong id="gvrVendidos">0</strong>
+        </div>
+
+    </section>
 
     <div class="filtros">
 
-        <button
-            class="filtro activo"
-            data-filtro="todas"
-        >
+        <button class="filtro activo" data-filtro="todas">
             Todas
         </button>
 
-        <button
-            class="filtro"
-            data-filtro="gvr"
-        >
+        <button class="filtro" data-filtro="gvr">
             💎 GVR
         </button>
 
-        <button
-            class="filtro"
-            data-filtro="recarga"
-        >
+        <button class="filtro" data-filtro="recarga">
             🎮 Recargas
         </button>
 
-        <button
-            class="filtro"
-            data-filtro="pendiente"
-        >
+        <button class="filtro" data-filtro="pendiente">
             🟡 Pendientes
         </button>
 
-        <button
-            class="filtro"
-            data-filtro="completado"
-        >
+        <button class="filtro" data-filtro="completado">
             🟢 Completadas
         </button>
 
     </div>
 
+    <section id="listaVentas" class="ventas">
 
-    <div
-        id="ventas"
-        class="ventas"
-    >
-
-        <div class="cargando">
+        <div class="vacio">
             Cargando ventas...
         </div>
 
-    </div>
+    </section>
 
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</main>
 
 <script>
 
-const SUPABASE_URL =
-    "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+const SUPABASE_ANON_KEY =
+"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
+        SUPABASE_ANON_KEY
     );
 
 
@@ -423,52 +351,83 @@ let todasLasVentas = [];
 let filtroActual = "todas";
 
 
+// ================================
+// MOSTRAR ERROR
+// ================================
+
+function mostrarError(mensaje) {
+
+    const errorBox =
+        document.getElementById("error");
+
+    errorBox.textContent = mensaje;
+
+    errorBox.style.display = "block";
+
+}
+
+
+// ================================
+// COMPROBAR ADMIN
+// ================================
+
 async function comprobarAdministrador() {
 
     const {
-        data: usuarioData,
-        error: usuarioError
-    } =
-        await supabaseClient.auth.getUser();
+        data: { user },
+        error: authError
+    } = await supabaseClient.auth.getUser();
 
 
-    if (
-        usuarioError ||
-        !usuarioData.user
-    ) {
+    if (authError) {
 
-        window.location.href =
-            "login.html";
+        mostrarError(
+            "ERROR DE AUTENTICACIÓN:\n" +
+            authError.message
+        );
+
+        return false;
+    }
+
+
+    if (!user) {
+
+        window.location.href = "index.html";
 
         return false;
     }
 
 
     const {
-        data: esAdmin,
+        data,
         error
-    } =
-        await supabaseClient.rpc(
-            "is_support_admin"
-        );
+    } = await supabaseClient.rpc(
+        "is_support_admin"
+    );
 
 
     if (error) {
 
-        console.error(error);
-
         mostrarError(
-            "No se pudo verificar el acceso administrativo."
+            "ERROR AL COMPROBAR ADMIN:\n\n" +
+            "Mensaje: " + error.message + "\n" +
+            "Código: " + error.code + "\n" +
+            "Detalles: " + error.details + "\n" +
+            "Ayuda: " + error.hint
+        );
+
+        console.error(
+            "Error is_support_admin:",
+            error
         );
 
         return false;
     }
 
 
-    if (esAdmin !== true) {
+    if (data !== true) {
 
-        window.location.href =
-            "cuenta.html";
+        window.location.href = "cuenta.html";
 
         return false;
     }
@@ -478,42 +437,73 @@ async function comprobarAdministrador() {
 }
 
 
+// ================================
+// CARGAR VENTAS
+// ================================
+
 async function cargarVentas() {
 
-    const acceso =
-        await comprobarAdministrador();
+    const lista =
+        document.getElementById("listaVentas");
 
 
-    if (!acceso) {
-        return;
-    }
+    lista.innerHTML = `
+        <div class="vacio">
+            Cargando ventas...
+        </div>
+    `;
 
 
     const {
         data,
         error
-    } =
-        await supabaseClient
-            .from("ventas")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+    } = await supabaseClient
+        .from("ventas")
+        .select("*")
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
 
+
+    // ==================================
+    // ERROR DETALLADO
+    // ==================================
 
     if (error) {
 
+        mostrarError(
+            "ERROR SUPABASE AL CARGAR VENTAS:\n\n" +
+
+            "Mensaje: " +
+            error.message +
+
+            "\n\nCódigo: " +
+            error.code +
+
+            "\n\nDetalles: " +
+            error.details +
+
+            "\n\nAyuda: " +
+            error.hint
+        );
+
+
         console.error(
-            "Error cargando ventas:",
+            "Error completo de Supabase:",
             error
         );
 
-        mostrarError(
-            "No se pudieron cargar las ventas."
-        );
+
+        lista.innerHTML = `
+            <div class="vacio">
+                No se pudieron cargar las ventas.
+                <br><br>
+                Revisa el mensaje de error de arriba.
+            </div>
+        `;
 
         return;
     }
@@ -521,12 +511,17 @@ async function cargarVentas() {
 
     todasLasVentas = data || [];
 
+
     actualizarEstadisticas();
 
     mostrarVentas();
 
 }
 
+
+// ================================
+// ESTADÍSTICAS
+// ================================
 
 function actualizarEstadisticas() {
 
@@ -548,13 +543,11 @@ function actualizarEstadisticas() {
         ).length;
 
 
-    const gvr =
+    const gvrVendidos =
         todasLasVentas.reduce(
             (total, venta) =>
                 total +
-                Number(
-                    venta.gvr_comprado || 0
-                ),
+                (Number(venta.gvr_comprado) || 0),
             0
         );
 
@@ -576,24 +569,54 @@ function actualizarEstadisticas() {
 
     document.getElementById(
         "gvrVendidos"
-    ).textContent = gvr;
+    ).textContent = gvrVendidos;
+
 }
 
 
+// ================================
+// ESCAPAR HTML
+// ================================
+
+function escaparHTML(valor) {
+
+    if (
+        valor === null ||
+        valor === undefined
+    ) {
+        return "—";
+    }
+
+
+    return String(valor)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+// ================================
+// MOSTRAR VENTAS
+// ================================
+
 function mostrarVentas() {
 
-    const contenedor =
-        document.getElementById("ventas");
+    const lista =
+        document.getElementById(
+            "listaVentas"
+        );
 
 
-    let ventas =
-        todasLasVentas;
+    let ventasFiltradas =
+        [...todasLasVentas];
 
 
     if (filtroActual === "gvr") {
 
-        ventas =
-            todasLasVentas.filter(
+        ventasFiltradas =
+            ventasFiltradas.filter(
                 venta =>
                     venta.tipo === "gvr"
             );
@@ -603,8 +626,8 @@ function mostrarVentas() {
 
     if (filtroActual === "recarga") {
 
-        ventas =
-            todasLasVentas.filter(
+        ventasFiltradas =
+            ventasFiltradas.filter(
                 venta =>
                     venta.tipo === "recarga"
             );
@@ -614,8 +637,8 @@ function mostrarVentas() {
 
     if (filtroActual === "pendiente") {
 
-        ventas =
-            todasLasVentas.filter(
+        ventasFiltradas =
+            ventasFiltradas.filter(
                 venta =>
                     venta.estado === "pendiente"
             );
@@ -625,8 +648,8 @@ function mostrarVentas() {
 
     if (filtroActual === "completado") {
 
-        ventas =
-            todasLasVentas.filter(
+        ventasFiltradas =
+            ventasFiltradas.filter(
                 venta =>
                     venta.estado === "completado"
             );
@@ -634,11 +657,11 @@ function mostrarVentas() {
     }
 
 
-    if (ventas.length === 0) {
+    if (ventasFiltradas.length === 0) {
 
-        contenedor.innerHTML = `
+        lista.innerHTML = `
             <div class="vacio">
-                No hay ventas registradas todavía.
+                No hay ventas para mostrar.
             </div>
         `;
 
@@ -646,42 +669,68 @@ function mostrarVentas() {
     }
 
 
-    contenedor.innerHTML =
-        ventas.map(
-            venta =>
-                crearVentaHTML(venta)
-        ).join("");
+    lista.innerHTML =
+        ventasFiltradas
+            .map(
+                venta =>
+                    crearVentaHTML(venta)
+            )
+            .join("");
 
 }
 
 
+// ================================
+// CREAR VENTA
+// ================================
+
 function crearVentaHTML(venta) {
 
-    const fecha =
-        new Date(
-            venta.created_at
-        ).toLocaleString(
-            "es-ES"
-        );
-
-
-    const nombreTipo =
+    let tipoTexto =
         venta.tipo === "gvr"
             ? "💎 Compra de GVR"
             : "🎮 Recarga de juego";
 
 
+    let claseEstado =
+        "estado-" +
+        escaparHTML(
+            venta.estado
+        );
+
+
+    let fecha = "—";
+
+
+    if (venta.created_at) {
+
+        fecha =
+            new Date(
+                venta.created_at
+            ).toLocaleString(
+                "es-ES",
+                {
+                    dateStyle: "medium",
+                    timeStyle: "short"
+                }
+            );
+
+    }
+
+
     return `
-        <div class="venta">
+        <article class="venta">
 
             <div class="venta-cabecera">
 
                 <div class="tipo">
-                    ${nombreTipo}
+                    ${tipoTexto}
                 </div>
 
-                <div class="estado ${venta.estado}">
-                    ${venta.estado}
+                <div class="estado ${claseEstado}">
+                    ${escaparHTML(
+                        venta.estado
+                    )}
                 </div>
 
             </div>
@@ -690,193 +739,188 @@ function crearVentaHTML(venta) {
             <div class="datos">
 
                 <div class="dato">
-                    <div class="dato-titulo">
-                        USUARIO
-                    </div>
-
-                    <div class="dato-valor">
+                    <small>Usuario</small>
+                    <div>
                         ${escaparHTML(
                             venta.nombre_usuario
-                            || "Sin nombre"
                         )}
                     </div>
                 </div>
 
 
                 <div class="dato">
-                    <div class="dato-titulo">
-                        CORREO
-                    </div>
-
-                    <div class="dato-valor">
+                    <small>Correo</small>
+                    <div>
                         ${escaparHTML(
                             venta.correo_usuario
-                            || "Sin correo"
                         )}
                     </div>
                 </div>
 
 
                 <div class="dato">
-                    <div class="dato-titulo">
-                        JUEGO
-                    </div>
-
-                    <div class="dato-valor">
+                    <small>ID de usuario</small>
+                    <div>
                         ${escaparHTML(
-                            venta.juego
-                            || "—"
+                            venta.usuario_id
                         )}
                     </div>
                 </div>
 
 
-                <div class="dato">
-                    <div class="dato-titulo">
-                        ID DEL JUGADOR
+                ${
+                    venta.juego
+                    ?
+                    `
+                    <div class="dato">
+                        <small>Juego</small>
+                        <div>
+                            ${escaparHTML(
+                                venta.juego
+                            )}
+                        </div>
                     </div>
+                    `
+                    :
+                    ""
+                }
 
-                    <div class="dato-valor">
+
+                ${
+                    venta.id_jugador
+                    ?
+                    `
+                    <div class="dato">
+                        <small>ID del jugador</small>
+                        <div>
+                            ${escaparHTML(
+                                venta.id_jugador
+                            )}
+                        </div>
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+
+                ${
+                    venta.producto
+                    ?
+                    `
+                    <div class="dato">
+                        <small>Producto</small>
+                        <div>
+                            ${escaparHTML(
+                                venta.producto
+                            )}
+                        </div>
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+
+                ${
+                    venta.cantidad !== null &&
+                    venta.cantidad !== undefined
+                    ?
+                    `
+                    <div class="dato">
+                        <small>Cantidad</small>
+                        <div>
+                            ${escaparHTML(
+                                venta.cantidad
+                            )}
+                        </div>
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+
+                ${
+                    venta.gvr_comprado
+                    ?
+                    `
+                    <div class="dato">
+                        <small>GVR comprado</small>
+                        <div>
+                            💎 ${escaparHTML(
+                                venta.gvr_comprado
+                            )} GVR
+                        </div>
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+
+                <div class="dato">
+                    <small>Precio</small>
+                    <div>
                         ${escaparHTML(
-                            venta.id_jugador
-                            || "—"
+                            venta.precio
                         )}
-                    </div>
-                </div>
-
-
-                <div class="dato">
-                    <div class="dato-titulo">
-                        PRODUCTO
-                    </div>
-
-                    <div class="dato-valor">
                         ${escaparHTML(
-                            venta.producto
-                            || "—"
+                            venta.moneda
                         )}
                     </div>
                 </div>
 
 
                 <div class="dato">
-                    <div class="dato-titulo">
-                        CANTIDAD
-                    </div>
-
-                    <div class="dato-valor">
-                        ${venta.cantidad ?? "—"}
-                    </div>
-                </div>
-
-
-                <div class="dato">
-                    <div class="dato-titulo">
-                        GVR COMPRADO
-                    </div>
-
-                    <div class="dato-valor">
-                        ${venta.gvr_comprado ?? "—"}
-                    </div>
-                </div>
-
-
-                <div class="dato">
-                    <div class="dato-titulo">
-                        PRECIO
-                    </div>
-
-                    <div class="dato-valor">
-                        ${venta.precio ?? "—"}
-                        ${escaparHTML(
-                            venta.moneda || ""
-                        )}
-                    </div>
-                </div>
-
-
-                <div class="dato">
-                    <div class="dato-titulo">
-                        MÉTODO DE PAGO
-                    </div>
-
-                    <div class="dato-valor">
+                    <small>Método de pago</small>
+                    <div>
                         ${escaparHTML(
                             venta.metodo_pago
-                            || "—"
                         )}
                     </div>
                 </div>
 
 
                 <div class="dato">
-                    <div class="dato-titulo">
-                        PROVEEDOR
-                    </div>
-
-                    <div class="dato-valor">
+                    <small>Proveedor</small>
+                    <div>
                         ${escaparHTML(
                             venta.proveedor
-                            || "—"
                         )}
                     </div>
                 </div>
 
 
                 <div class="dato">
-                    <div class="dato-titulo">
-                        ID ORDEN PROVEEDOR
-                    </div>
-
-                    <div class="dato-valor">
+                    <small>ID orden proveedor</small>
+                    <div>
                         ${escaparHTML(
                             venta.id_orden_proveedor
-                            || "—"
                         )}
                     </div>
                 </div>
 
 
                 <div class="dato">
-                    <div class="dato-titulo">
-                        FECHA
-                    </div>
-
-                    <div class="dato-valor">
-                        ${fecha}
+                    <small>Fecha</small>
+                    <div>
+                        ${escaparHTML(
+                            fecha
+                        )}
                     </div>
                 </div>
 
             </div>
 
-        </div>
+        </article>
     `;
 }
 
 
-function escaparHTML(valor) {
-
-    return String(valor)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
-
-function mostrarError(mensaje) {
-
-    const panel =
-        document.getElementById(
-            "errorPanel"
-        );
-
-    panel.textContent = mensaje;
-
-    panel.style.display = "block";
-}
-
+// ================================
+// FILTROS
+// ================================
 
 document
     .querySelectorAll(".filtro")
@@ -885,7 +929,7 @@ document
 
             boton.addEventListener(
                 "click",
-                function() {
+                () => {
 
                     document
                         .querySelectorAll(
@@ -899,13 +943,13 @@ document
                         );
 
 
-                    this.classList.add(
+                    boton.classList.add(
                         "activo"
                     );
 
 
                     filtroActual =
-                        this.dataset.filtro;
+                        boton.dataset.filtro;
 
 
                     mostrarVentas();
@@ -917,7 +961,27 @@ document
     );
 
 
-cargarVentas();
+// ================================
+// INICIO
+// ================================
+
+async function iniciar() {
+
+    const esAdmin =
+        await comprobarAdministrador();
+
+
+    if (!esAdmin) {
+        return;
+    }
+
+
+    await cargarVentas();
+
+}
+
+
+iniciar();
 
 </script>
 
