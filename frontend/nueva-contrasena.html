@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nueva contraseña | Gamevora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .box {
+            width: 100%;
+            max-width: 430px;
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 28px 22px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        .titulo {
+            text-align: center;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            font-size: 24px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            color: #b8c9dc;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 17px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
+
+        .guardar {
+            width: 100%;
+            padding: 14px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .guardar:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .mensaje {
+            display: none;
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .exito {
+            display: block;
+            background: #061a2e;
+            border: 1px solid #15518c;
+            color: #6fd8ff;
+        }
+
+        .error {
+            display: block;
+            background: #2a1015;
+            border: 1px solid #71313b;
+            color: #ff9ca8;
+        }
+
+        .volver {
+            text-align: center;
+            margin-top: 20px;
+            color: #8195ad;
+            font-size: 13px;
+        }
+
+        .volver a {
+            color: #28a9ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <div class="logo">
+        <span class="rayo">⚡</span> GAME<span>VORA</span>
+    </div>
+
+    <h1 class="titulo">
+        Nueva contraseña
+    </h1>
+
+    <p class="descripcion">
+        Crea una nueva contraseña para proteger tu cuenta de Gamevora.
+    </p>
+
+    <form id="formNuevaContrasena">
+
+        <label for="contrasena">
+            Nueva contraseña
+        </label>
+
+        <input
+            type="password"
+            id="contrasena"
+            placeholder="Nueva contraseña"
+            minlength="6"
+            required
+        >
+
+        <label for="confirmarContrasena">
+            Confirmar contraseña
+        </label>
+
+        <input
+            type="password"
+            id="confirmarContrasena"
+            placeholder="Repite tu contraseña"
+            minlength="6"
+            required
+        >
+
+        <button
+            class="guardar"
+            id="botonGuardar"
+            type="submit"
+        >
+            Guardar nueva contraseña 🔐
+        </button>
+
+    </form>
+
+    <div
+        id="mensaje"
+        class="mensaje"
+    ></div>
+
+    <div class="volver">
+        <a href="login.html">
+            ← Volver a iniciar sesión
+        </a>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const supabaseClient = window.supabase.createClient(
+    "https://gsuhzcavghsiolmipnzi.supabase.co",
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx",
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
+);
+
+const form =
+    document.getElementById("formNuevaContrasena");
+
+const boton =
+    document.getElementById("botonGuardar");
+
+const mensaje =
+    document.getElementById("mensaje");
+
+
+function mostrarMensaje(texto, tipo) {
+
+    mensaje.textContent = texto;
+
+    mensaje.className =
+        "mensaje " + tipo;
+}
+
+
+form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const contrasena =
+        document
+            .getElementById("contrasena")
+            .value;
+
+    const confirmar =
+        document
+            .getElementById("confirmarContrasena")
+            .value;
+
+    mensaje.className = "mensaje";
+    mensaje.textContent = "";
+
+    if (contrasena !== confirmar) {
+
+        mostrarMensaje(
+            "Las contraseñas no coinciden.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (contrasena.length < 6) {
+
+        mostrarMensaje(
+            "La contraseña debe tener al menos 6 caracteres.",
+            "error"
+        );
+
+        return;
+    }
+
+    boton.disabled = true;
+    boton.textContent = "Guardando...";
+
+    const { error } =
+        await supabaseClient.auth.updateUser({
+            password: contrasena
+        });
+
+    if (error) {
+
+        boton.disabled = false;
+        boton.textContent =
+            "Guardar nueva contraseña 🔐";
+
+        mostrarMensaje(
+            "No se pudo cambiar la contraseña.\n\n" +
+            error.message,
+            "error"
+        );
+
+        return;
+    }
+
+    mostrarMensaje(
+        "✅ Contraseña actualizada correctamente.\n\n" +
+        "Ya puedes iniciar sesión con tu nueva contraseña.",
+        "exito"
+    );
+
+    boton.style.display = "none";
+
+    document
+        .getElementById("contrasena")
+        .style.display = "none";
+
+    document
+        .getElementById("confirmarContrasena")
+        .style.display = "none";
+
+    document.querySelectorAll("label")
+        .forEach(function(label) {
+            label.style.display = "none";
+        });
+
+    setTimeout(function() {
+        window.location.href = "login.html";
+    }, 2500);
+
+});
+
+</script>
+
+</body>
+</html>
