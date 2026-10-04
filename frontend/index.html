@@ -1,1271 +1,1150 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Gamers Gold Top-Up | Recargas Gaming</title>
 
-    <title>Gamers Gold Top-Up | Recargas Gaming</title>
+<style>
 
-    <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    body {
+        background: #050b18;
+        color: white;
+        min-height: 100vh;
+    }
+
+    /* =========================
+       PANTALLA DE INICIO
+    ========================= */
+
+    #splash-screen {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100vh;
+        background: #020611;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999999;
+        opacity: 1;
+        transition: opacity 0.8s ease;
+        pointer-events: auto;
+    }
+
+    #splash-screen img {
+        display: block !important;
+        width: min(75vw, 360px);
+        max-width: 360px;
+        height: auto;
+        object-fit: contain;
+
+        filter:
+            drop-shadow(0 0 8px #00bfff)
+            drop-shadow(0 0 20px #008cff)
+            drop-shadow(
+                0 0 40px
+                rgba(0, 140, 255, 0.6)
+            );
+
+        animation:
+            aparecerLogo 1s ease-out;
+    }
+
+    @keyframes aparecerLogo {
+
+        0% {
+            opacity: 0;
+            transform: scale(0.75);
         }
 
-        html,
-        body {
-            width: 100%;
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-        }
-
-        /* =========================
-           PANTALLA DE INICIO
-        ========================= */
-
-        #splash-screen {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100vh;
-            background: #020611;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 999999;
+        100% {
             opacity: 1;
-            transition: opacity 0.8s ease;
-            pointer-events: auto;
+            transform: scale(1);
         }
 
-        #splash-screen img {
-            display: block !important;
-            width: min(75vw, 360px);
-            max-width: 360px;
-            height: auto;
-            object-fit: contain;
+    }
 
-            filter:
-                drop-shadow(0 0 8px #00bfff)
-                drop-shadow(0 0 20px #008cff)
-                drop-shadow(
-                    0 0 40px
-                    rgba(0, 140, 255, 0.6)
-                );
+    .splash-oculto {
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
 
-            animation:
-                aparecerLogo 1s ease-out;
-        }
+    /* =========================
+       BARRA SUPERIOR
+    ========================= */
 
-        @keyframes aparecerLogo {
+    header {
+        width: 100%;
+        background: #08152d;
+        border-bottom: 1px solid #123b70;
+        padding: 14px 18px;
 
-            0% {
-                opacity: 0;
-                transform: scale(0.75);
-            }
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+        gap: 10px;
 
-        }
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
 
-        .splash-oculto {
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
+    /* =========================
+       LOGO GAMERS GOLD TOP-UP
+    ========================= */
 
-        /* =========================
-           BARRA SUPERIOR
-        ========================= */
+    .logo {
+        display: flex;
+        align-items: center;
+        height: 48px;
+        min-width: 0;
+        text-decoration: none;
+        flex-shrink: 1;
+    }
+
+    .logo-g {
+        position: relative;
+
+        width: 48px;
+        height: 48px;
+
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 45px;
+        font-weight: 900;
+        font-style: italic;
+
+        line-height: 1;
+
+        color: #18c8ff;
+
+        transform: skewX(-8deg);
+
+        text-shadow:
+            0 0 4px #ffffff,
+            0 0 8px #00c8ff,
+            0 0 18px #008cff,
+            0 0 30px rgba(0, 115, 255, 0.9);
+    }
+
+    .logo-g::before {
+        content: "";
+
+        position: absolute;
+
+        width: 30px;
+        height: 9px;
+
+        right: -2px;
+        top: 9px;
+
+        background:
+            linear-gradient(
+                90deg,
+                #5eeaff,
+                #00aaff,
+                #006cff
+            );
+
+        transform:
+            skewX(-25deg)
+            rotate(-4deg);
+
+        clip-path: polygon(
+            0 35%,
+            100% 0,
+            72% 45%,
+            100% 45%,
+            0 100%,
+            28% 55%,
+            0 55%
+        );
+
+        filter:
+            drop-shadow(0 0 5px #00c8ff)
+            drop-shadow(0 0 12px #0077ff);
+    }
+
+    .logo-resto {
+        margin-left: 2px;
+
+        color: #f5f8ff;
+
+        font-size: 23px;
+
+        font-weight: 900;
+
+        font-style: italic;
+
+        letter-spacing: -1.4px;
+
+        line-height: 1;
+
+        white-space: nowrap;
+
+        text-shadow:
+            0 0 3px rgba(255,255,255,.25);
+    }
+
+    /* =========================
+       NAVEGACIÓN
+    ========================= */
+
+    .navegacion {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .boton-navegacion {
+        color: #28a9ff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .boton-navegacion:hover {
+        color: #63caff;
+    }
+
+    .separador {
+        color: white;
+    }
+
+    .boton-cuenta {
+        display: flex;
+        align-items: center;
+    }
+
+    .login {
+        display: inline-block;
+
+        text-decoration: none;
+
+        white-space: nowrap;
+
+        border: 1px solid #168cff;
+
+        color: white;
+
+        background: transparent;
+
+        padding: 10px 15px;
+
+        border-radius: 10px;
+
+        font-weight: bold;
+
+        font-size: 14px;
+
+        transition: 0.2s;
+    }
+
+    .login:hover {
+        background: #0d7cff;
+
+        box-shadow:
+            0 0 15px
+            rgba(0, 153, 255, 0.25);
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+        width: auto;
+        max-width: 100%;
+
+        margin: 18px;
+
+        padding: 28px 20px;
+
+        border-radius: 20px;
+
+        background:
+            radial-gradient(
+                circle at 90% 20%,
+                #0b68c9 0%,
+                transparent 35%
+            ),
+            linear-gradient(
+                135deg,
+                #071a38,
+                #061022
+            );
+
+        border: 1px solid #145ca3;
+
+        box-shadow:
+            0 0 25px
+            rgba(0, 128, 255, 0.15);
+    }
+
+    .hero h1 {
+        font-size: 32px;
+        line-height: 1.1;
+        margin-bottom: 12px;
+    }
+
+    .hero h1 span {
+        color: #20a7ff;
+    }
+
+    .hero p {
+        color: #a9bad0;
+        margin-bottom: 22px;
+        line-height: 1.5;
+    }
+
+    .hero-button {
+        display: inline-block;
+
+        text-decoration: none;
+
+        background:
+            linear-gradient(
+                90deg,
+                #087cff,
+                #00baff
+            );
+
+        color: white;
+
+        border: none;
+
+        padding: 13px 20px;
+
+        border-radius: 11px;
+
+        font-weight: bold;
+
+        font-size: 15px;
+
+        box-shadow:
+            0 0 18px
+            rgba(0, 153, 255, 0.3);
+    }
+
+    /* =========================
+       SECCIONES
+    ========================= */
+
+    .section {
+        width: 100%;
+        padding: 10px 18px 25px;
+    }
+
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .section-title h2 {
+        font-size: 21px;
+    }
+
+    /* =========================
+       OFERTAS
+    ========================= */
+
+    .offer {
+        width: 100%;
+        max-width: 100%;
+
+        background:
+            linear-gradient(
+                135deg,
+                #0b2348,
+                #071426
+            );
+
+        border: 1px solid #176ab2;
+
+        border-radius: 17px;
+
+        padding: 18px;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 15px;
+
+        margin-bottom: 12px;
+    }
+
+    .offer-info {
+        min-width: 0;
+    }
+
+    .offer-info h3 {
+        margin-bottom: 7px;
+    }
+
+    .offer-info p {
+        color: #8fa5bd;
+        font-size: 13px;
+    }
+
+    .price {
+        text-align: right;
+        flex-shrink: 0;
+    }
+
+    .price strong {
+        color: #35b8ff;
+        font-size: 19px;
+    }
+
+    .buy {
+        margin-top: 7px;
+
+        background: #087fff;
+
+        border: none;
+
+        color: white;
+
+        padding: 8px 12px;
+
+        border-radius: 8px;
+
+        font-weight: bold;
+    }
+
+    /* =========================
+       CARRUSEL
+    ========================= */
+
+    .gamevora-carrusel {
+        width: 100%;
+
+        max-width: 650px;
+
+        margin: 25px auto 0;
+
+        overflow: hidden;
+
+        border: 1px solid #176ab2;
+
+        border-radius: 16px;
+
+        background: #07172f;
+
+        box-shadow:
+            0 0 20px
+            rgba(0, 153, 255, 0.15);
+    }
+
+    .gamevora-track {
+        width: 100%;
+        display: flex;
+        transition:
+            transform 0.6s ease;
+    }
+
+    .gamevora-slide {
+        min-width: 100%;
+        max-width: 100%;
+
+        padding: 18px 20px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 15px;
+
+        text-align: left;
+    }
+
+    .gamevora-slide-link,
+    .gamevora-slide-link:hover,
+    .gamevora-slide-link:visited,
+    .gamevora-slide-link:active {
+        text-decoration: none !important;
+        color: inherit !important;
+    }
+
+    .gamevora-slide-text {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .gamevora-slide-label {
+        color: #19bfff;
+
+        font-size: 11px;
+
+        font-weight: bold;
+
+        letter-spacing: 1.5px;
+
+        margin-bottom: 6px;
+    }
+
+    .gamevora-slide h3 {
+        font-size: 18px;
+        margin-bottom: 5px;
+        overflow-wrap: break-word;
+    }
+
+    .gamevora-slide p {
+        color: #9db2c9;
+
+        font-size: 13px;
+
+        line-height: 1.4;
+
+        overflow-wrap: break-word;
+    }
+
+    .gamevora-slide-icon {
+        font-size: 38px;
+        flex-shrink: 0;
+
+        filter:
+            drop-shadow(
+                0 0 10px
+                rgba(0, 183, 255, 0.6)
+            );
+    }
+
+    .gamevora-dots {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+    .gamevora-dot {
+        width: 7px;
+        height: 7px;
+
+        border: none;
+
+        border-radius: 50%;
+
+        background: #29415c;
+
+        padding: 0;
+    }
+
+    .gamevora-dot.activo {
+        width: 20px;
+
+        border-radius: 8px;
+
+        background: #00b7ff;
+
+        box-shadow:
+            0 0 8px #008cff;
+    }
+
+    /* =========================
+       PIE
+    ========================= */
+
+    footer {
+        width: 100%;
+
+        text-align: center;
+
+        padding: 30px 18px;
+
+        color: #647890;
+
+        font-size: 12px;
+
+        border-top:
+            1px solid #102a49;
+
+        margin-top: 15px;
+    }
+
+    footer strong {
+        color: #279fff;
+    }
+
+    /* =========================
+       UNIVERSO GAMING
+    ========================= */
+
+    .universo {
+        width: 100%;
+
+        max-width: 100%;
+
+        margin: 35px 0;
+
+        padding: 45px 20px;
+
+        text-align: center;
+
+        position: relative;
+
+        overflow: hidden;
+
+        border-top:
+            1px solid
+            rgba(0, 153, 255, 0.25);
+
+        border-bottom:
+            1px solid
+            rgba(0, 153, 255, 0.25);
+
+        background:
+            radial-gradient(
+                circle at center,
+                rgba(0, 119, 255, 0.18),
+                transparent 60%
+            ),
+            linear-gradient(
+                180deg,
+                #06142b,
+                #020916
+            );
+    }
+
+    .universo-label {
+        font-size: 14px;
+
+        letter-spacing: 6px;
+
+        color: #19bfff;
+
+        font-weight: 700;
+
+        margin-bottom: 12px;
+
+        text-transform: uppercase;
+    }
+
+    .universo-titulo {
+        font-size:
+            clamp(
+                42px,
+                11vw,
+                76px
+            );
+
+        font-weight: 900;
+
+        letter-spacing: 2px;
+
+        line-height: 1;
+
+        font-family:
+            Arial,
+            Helvetica,
+            sans-serif;
+
+        background:
+            linear-gradient(
+                90deg,
+                #ffffff,
+                #18bfff
+            );
+
+        -webkit-background-clip: text;
+
+        -webkit-text-fill-color: transparent;
+
+        text-shadow:
+            0 0 25px
+            rgba(0, 174, 255, 0.25);
+    }
+
+    .mejor-opcion {
+        margin-top: 18px;
+
+        font-size: 17px;
+
+        letter-spacing: 5px;
+
+        font-weight: 700;
+
+        color: #ffffff;
+
+        text-transform: uppercase;
+    }
+
+    .linea-azul {
+        width: 90px;
+
+        height: 3px;
+
+        margin: 24px auto 0;
+
+        border-radius: 10px;
+
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                #00bfff,
+                transparent
+            );
+
+        box-shadow:
+            0 0 12px #00bfff;
+    }
+
+    /* =========================
+       MÓVIL
+    ========================= */
+
+    @media (max-width: 600px) {
 
         header {
-            width: 100%;
-            background: #08152d;
-            border-bottom: 1px solid #123b70;
-            padding: 14px 18px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 10px;
-
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            padding: 12px 14px;
         }
 
-        /* =========================
-           LOGO GAMERS GOLD TOP-UP
-        ========================= */
-
         .logo {
-            display: flex;
-            align-items: center;
-
-            height: 48px;
-
-            min-width: 0;
-
-            text-decoration: none;
-
-            flex-shrink: 1;
+            height: 44px;
         }
 
         .logo-g {
-            position: relative;
-
-            width: 48px;
-            height: 48px;
-
-            flex-shrink: 0;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 45px;
-            font-weight: 900;
-            font-style: italic;
-
-            line-height: 1;
-
-            color: #18c8ff;
-
-            transform: skewX(-8deg);
-
-            text-shadow:
-                0 0 4px #ffffff,
-                0 0 8px #00c8ff,
-                0 0 18px #008cff,
-                0 0 30px rgba(0, 115, 255, 0.9);
-        }
-
-        .logo-g::before {
-            content: "";
-
-            position: absolute;
-
-            width: 30px;
-            height: 9px;
-
-            right: -2px;
-            top: 9px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #5eeaff,
-                    #00aaff,
-                    #006cff
-                );
-
-            transform:
-                skewX(-25deg)
-                rotate(-4deg);
-
-            clip-path: polygon(
-                0 35%,
-                100% 0,
-                72% 45%,
-                100% 45%,
-                0 100%,
-                28% 55%,
-                0 55%
-            );
-
-            filter:
-                drop-shadow(0 0 5px #00c8ff)
-                drop-shadow(0 0 12px #0077ff);
+            width: 44px;
+            height: 44px;
+            font-size: 41px;
         }
 
         .logo-resto {
-            margin-left: 2px;
-
-            color: #f5f8ff;
-
-            font-size: 23px;
-
-            font-weight: 900;
-
-            font-style: italic;
-
-            letter-spacing: -1.4px;
-
-            line-height: 1;
-
-            white-space: nowrap;
-
-            text-shadow:
-                0 0 3px rgba(255,255,255,.25);
+            font-size: 20px;
+            letter-spacing: -1.2px;
         }
 
-        /* =========================
-           NAVEGACIÓN
-        ========================= */
-
         .navegacion {
-            display: flex;
-            align-items: center;
-
-            gap: 8px;
-
-            flex-shrink: 0;
+            gap: 6px;
         }
 
         .boton-navegacion {
-            color: #28a9ff;
-
-            text-decoration: none;
-
-            font-size: 14px;
-
-            font-weight: bold;
-
-            white-space: nowrap;
-        }
-
-        .boton-navegacion:hover {
-            color: #63caff;
-        }
-
-        .separador {
-            color: white;
-        }
-
-        .boton-cuenta {
-            display: flex;
-            align-items: center;
-        }
-
-        .login {
-            display: inline-block;
-
-            text-decoration: none;
-
-            white-space: nowrap;
-
-            border: 1px solid #168cff;
-
-            color: white;
-
-            background: transparent;
-
-            padding: 10px 15px;
-
-            border-radius: 10px;
-
-            font-weight: bold;
-
-            font-size: 14px;
-
-            transition: 0.2s;
-        }
-
-        .login:hover {
-            background: #0d7cff;
-
-            box-shadow:
-                0 0 15px
-                rgba(0, 153, 255, 0.25);
-        }
-
-        /* =========================
-           HERO
-        ========================= */
-
-        .hero {
-            width: auto;
-            max-width: 100%;
-
-            margin: 18px;
-
-            padding: 28px 20px;
-
-            border-radius: 20px;
-
-            background:
-                radial-gradient(
-                    circle at 90% 20%,
-                    #0b68c9 0%,
-                    transparent 35%
-                ),
-                linear-gradient(
-                    135deg,
-                    #071a38,
-                    #061022
-                );
-
-            border: 1px solid #145ca3;
-
-            box-shadow:
-                0 0 25px
-                rgba(0, 128, 255, 0.15);
-        }
-
-        .hero h1 {
-            font-size: 32px;
-
-            line-height: 1.1;
-
-            margin-bottom: 12px;
-        }
-
-        .hero h1 span {
-            color: #20a7ff;
-        }
-
-        .hero p {
-            color: #a9bad0;
-
-            margin-bottom: 22px;
-
-            line-height: 1.5;
-        }
-
-        .hero-button {
-            display: inline-block;
-
-            text-decoration: none;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #087cff,
-                    #00baff
-                );
-
-            color: white;
-
-            border: none;
-
-            padding: 13px 20px;
-
-            border-radius: 11px;
-
-            font-weight: bold;
-
-            font-size: 15px;
-
-            box-shadow:
-                0 0 18px
-                rgba(0, 153, 255, 0.3);
-        }
-
-        /* =========================
-           SECCIONES
-        ========================= */
-
-        .section {
-            width: 100%;
-
-            padding:
-                10px 18px 25px;
-        }
-
-        .section-title {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 15px;
-        }
-
-        .section-title h2 {
-            font-size: 21px;
-        }
-
-        /* =========================
-           OFERTAS
-        ========================= */
-
-        .offer {
-            width: 100%;
-
-            max-width: 100%;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #0b2348,
-                    #071426
-                );
-
-            border: 1px solid #176ab2;
-
-            border-radius: 17px;
-
-            padding: 18px;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 15px;
-
-            margin-bottom: 12px;
-        }
-
-        .offer-info {
-            min-width: 0;
-        }
-
-        .offer-info h3 {
-            margin-bottom: 7px;
-        }
-
-        .offer-info p {
-            color: #8fa5bd;
-
             font-size: 13px;
         }
 
-        .price {
-            text-align: right;
-
-            flex-shrink: 0;
+        .login {
+            padding: 9px 12px;
+            font-size: 13px;
         }
 
-        .price strong {
-            color: #35b8ff;
-
-            font-size: 19px;
+        .hero {
+            margin: 14px;
+            padding: 25px 18px;
         }
 
-        .buy {
-            margin-top: 7px;
-
-            background: #087fff;
-
-            border: none;
-
-            color: white;
-
-            padding: 8px 12px;
-
-            border-radius: 8px;
-
-            font-weight: bold;
+        .hero h1 {
+            font-size: 30px;
         }
 
-        /* =========================
-           CARRUSEL
-        ========================= */
+        .hero p {
+            font-size: 16px;
+        }
+
+        .universo {
+            padding:
+                42px 12px
+                45px;
+        }
+
+        .universo-label {
+            font-size: 12px;
+            letter-spacing: 4px;
+        }
+
+        .universo-titulo {
+            font-size: 48px;
+            letter-spacing: 1px;
+        }
 
         .gamevora-carrusel {
-            width: 100%;
-
-            max-width: 650px;
-
-            margin: 25px auto 0;
-
-            overflow: hidden;
-
-            border: 1px solid #176ab2;
-
-            border-radius: 16px;
-
-            background: #07172f;
-
-            box-shadow:
-                0 0 20px
-                rgba(0, 153, 255, 0.15);
-        }
-
-        .gamevora-track {
-            width: 100%;
-
-            display: flex;
-
-            transition:
-                transform 0.6s ease;
+            margin-top: 25px;
         }
 
         .gamevora-slide {
-            min-width: 100%;
-
-            max-width: 100%;
-
             padding: 18px 20px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            gap: 15px;
-
-            text-align: left;
-        }
-
-        .gamevora-slide-link,
-        .gamevora-slide-link:hover,
-        .gamevora-slide-link:visited,
-        .gamevora-slide-link:active {
-            text-decoration: none !important;
-
-            color: inherit !important;
-        }
-
-        .gamevora-slide-text {
-            flex: 1;
-
-            min-width: 0;
-        }
-
-        .gamevora-slide-label {
-            color: #19bfff;
-
-            font-size: 11px;
-
-            font-weight: bold;
-
-            letter-spacing: 1.5px;
-
-            margin-bottom: 6px;
         }
 
         .gamevora-slide h3 {
             font-size: 18px;
-
-            margin-bottom: 5px;
-
-            overflow-wrap: break-word;
         }
 
         .gamevora-slide p {
-            color: #9db2c9;
-
             font-size: 13px;
-
-            line-height: 1.4;
-
-            overflow-wrap: break-word;
         }
 
         .gamevora-slide-icon {
-            font-size: 38px;
-
-            flex-shrink: 0;
-
-            filter:
-                drop-shadow(
-                    0 0 10px
-                    rgba(0, 183, 255, 0.6)
-                );
-        }
-
-        .gamevora-dots {
-            display: flex;
-
-            justify-content: center;
-
-            gap: 6px;
-
-            margin-top: 10px;
-        }
-
-        .gamevora-dot {
-            width: 7px;
-            height: 7px;
-
-            border: none;
-
-            border-radius: 50%;
-
-            background: #29415c;
-
-            padding: 0;
-        }
-
-        .gamevora-dot.activo {
-            width: 20px;
-
-            border-radius: 8px;
-
-            background: #00b7ff;
-
-            box-shadow:
-                0 0 8px #008cff;
-        }
-
-        /* =========================
-           PIE
-        ========================= */
-
-        footer {
-            width: 100%;
-
-            text-align: center;
-
-            padding: 30px 18px;
-
-            color: #647890;
-
-            font-size: 12px;
-
-            border-top:
-                1px solid #102a49;
-
-            margin-top: 15px;
-        }
-
-        footer strong {
-            color: #279fff;
-        }
-
-        /* =========================
-           UNIVERSO GAMING
-        ========================= */
-
-        .universo {
-            width: 100%;
-
-            max-width: 100%;
-
-            margin: 35px 0;
-
-            padding: 45px 20px;
-
-            text-align: center;
-
-            position: relative;
-
-            overflow: hidden;
-
-            border-top:
-                1px solid
-                rgba(0, 153, 255, 0.25);
-
-            border-bottom:
-                1px solid
-                rgba(0, 153, 255, 0.25);
-
-            background:
-                radial-gradient(
-                    circle at center,
-                    rgba(0, 119, 255, 0.18),
-                    transparent 60%
-                ),
-                linear-gradient(
-                    180deg,
-                    #06142b,
-                    #020916
-                );
-        }
-
-        .universo-label {
-            font-size: 14px;
-
-            letter-spacing: 6px;
-
-            color: #19bfff;
-
-            font-weight: 700;
-
-            margin-bottom: 12px;
-
-            text-transform: uppercase;
-        }
-
-        .universo-titulo {
-            font-size:
-                clamp(
-                    42px,
-                    11vw,
-                    76px
-                );
-
-            font-weight: 900;
-
-            letter-spacing: 2px;
-
-            line-height: 1;
-
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #ffffff,
-                    #18bfff
-                );
-
-            -webkit-background-clip: text;
-
-            -webkit-text-fill-color: transparent;
-
-            text-shadow:
-                0 0 25px
-                rgba(0, 174, 255, 0.25);
+            font-size: 34px;
         }
 
         .mejor-opcion {
-            margin-top: 18px;
+            font-size: 16px;
+            letter-spacing: 4px;
+        }
+    }
 
-            font-size: 17px;
+    @media (max-width: 400px) {
 
-            letter-spacing: 5px;
-
-            font-weight: 700;
-
-            color: #ffffff;
-
-            text-transform: uppercase;
+        .logo-resto {
+            font-size: 18px;
         }
 
-        .linea-azul {
-            width: 90px;
-
-            height: 3px;
-
-            margin: 24px auto 0;
-
-            border-radius: 10px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    #00bfff,
-                    transparent
-                );
-
-            box-shadow:
-                0 0 12px #00bfff;
+        .logo-g {
+            width: 40px;
+            height: 40px;
+            font-size: 37px;
         }
 
-        /* =========================
-           MÓVIL
-        ========================= */
-
-        @media (max-width: 600px) {
-
-            header {
-                padding: 12px 14px;
-            }
-
-            .logo {
-                height: 44px;
-            }
-
-            .logo-g {
-                width: 44px;
-
-                height: 44px;
-
-                font-size: 41px;
-            }
-
-            .logo-resto {
-                font-size: 20px;
-
-                letter-spacing: -1.2px;
-            }
-
-            .navegacion {
-                gap: 6px;
-            }
-
-            .boton-navegacion {
-                font-size: 13px;
-            }
-
-            .login {
-                padding: 9px 12px;
-
-                font-size: 13px;
-            }
-
-            .hero {
-                margin: 14px;
-
-                padding: 25px 18px;
-            }
-
-            .hero h1 {
-                font-size: 30px;
-            }
-
-            .hero p {
-                font-size: 16px;
-            }
-
-            .universo {
-                padding:
-                    42px 12px
-                    45px;
-            }
-
-            .universo-label {
-                font-size: 12px;
-
-                letter-spacing: 4px;
-            }
-
-            .universo-titulo {
-                font-size: 48px;
-
-                letter-spacing: 1px;
-            }
-
-            .gamevora-carrusel {
-                margin-top: 25px;
-            }
-
-            .gamevora-slide {
-                padding: 18px 20px;
-            }
-
-            .gamevora-slide h3 {
-                font-size: 18px;
-            }
-
-            .gamevora-slide p {
-                font-size: 13px;
-            }
-
-            .gamevora-slide-icon {
-                font-size: 34px;
-            }
-
-            .mejor-opcion {
-                font-size: 16px;
-
-                letter-spacing: 4px;
-            }
+        .logo {
+            height: 40px;
         }
 
-        @media (max-width: 400px) {
-
-            .logo-resto {
-                font-size: 18px;
-            }
-
-            .logo-g {
-                width: 40px;
-
-                height: 40px;
-
-                font-size: 37px;
-            }
-
-            .logo {
-                height: 40px;
-            }
-
-            .boton-navegacion {
-                font-size: 12px;
-            }
-
-            .login {
-                padding: 8px 10px;
-
-                font-size: 12px;
-            }
-
-            .hero h1 {
-                font-size: 27px;
-            }
-
-            .universo-titulo {
-                font-size: 42px;
-            }
-
-            .gamevora-slide {
-                gap: 8px;
-
-                padding: 16px;
-            }
-
-            .gamevora-slide-icon {
-                font-size: 30px;
-            }
-
+        .boton-navegacion {
+            font-size: 12px;
         }
 
-    </style>
-</head>
+        .login {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
 
-<body>
+        .hero h1 {
+            font-size: 27px;
+        }
 
-<!-- =========================
+        .universo-titulo {
+            font-size: 42px;
+        }
+
+        .gamevora-slide {
+            gap: 8px;
+            padding: 16px;
+        }
+
+        .gamevora-slide-icon {
+            font-size: 30px;
+        }
+
+    }
+
+</style>
+
+</head><body><!-- =========================
      SPLASH GAMERS GOLD
-========================= -->
+========================= --><div id="splash-screen"><img
+    src="../imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
+    alt="Gamers Gold Top-Up"
+    loading="eager"
+>
 
-<div id="splash-screen">
+</div><header><div class="logo">
 
-    <img
-        src="../imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
-        alt="Gamers Gold Top-Up"
-        loading="eager"
-    >
+    <span class="logo-g">G</span>
+
+    <span class="logo-resto">
+        AMERS GOLD TOP-UP
+    </span>
 
 </div>
 
-<header>
-
-    <div class="logo">
-
-        <span class="logo-g">G</span>
-
-        <span class="logo-resto">
-            AMERS GOLD TOP-UP
-        </span>
-
-    </div>
-
-    <div class="navegacion">
-
-        <a
-            href="soporte.html"
-            class="boton-navegacion"
-        >
-            Soporte
-        </a>
-
-        <span class="separador">
-            |
-        </span>
-
-        <div
-            id="botonesCuenta"
-            class="boton-cuenta"
-        >
-        </div>
-
-    </div>
-
-</header>
-
-<section class="hero">
-
-    <h1>
-
-        Tu mundo gaming.<br>
-
-        <span>
-            Un solo lugar.
-        </span>
-
-        ⚡
-
-    </h1>
-
-    <p>
-
-        Recargas digitales, ofertas y productos
-        para tus juegos favoritos.
-
-    </p>
+<div class="navegacion">
 
     <a
-        href="juegos.html"
-        class="hero-button"
+        href="soporte.html"
+        class="boton-navegacion"
     >
-        Explorar juegos
+        Soporte
     </a>
 
-</section>
+    <span class="separador">
+        |
+    </span>
 
-<section class="universo">
-
-    <div class="universo-label">
-
-        ⚡ EL UNIVERSO GAMING
-
+    <div
+        id="botonesCuenta"
+        class="boton-cuenta"
+    >
     </div>
 
-    <div class="universo-titulo">
+</div>
 
-        GAMERS GOLD TOP-UP
+</header><section class="hero"><h1>
+    Tu mundo gaming.<br>
+    <span>Un solo lugar.</span> ⚡
+</h1>
 
-    </div>
+<p>
+    Recargas digitales, ofertas y productos
+    para tus juegos favoritos.
+</p>
 
-    <div class="gamevora-carrusel">
+<a
+    href="juegos.html"
+    class="hero-button"
+>
+    Explorar juegos
+</a>
 
-        <div
-            class="gamevora-track"
-            id="gamevoraTrack"
+</section><section class="universo"><div class="universo-label">
+    ⚡ EL UNIVERSO GAMING
+</div>
+
+<div class="universo-titulo">
+    GAMERS GOLD TOP-UP
+</div>
+
+<div class="gamevora-carrusel">
+
+    <div
+        class="gamevora-track"
+        id="gamevoraTrack"
+    >
+
+        <a
+            href="reseñas.html"
+            class="gamevora-slide gamevora-slide-link"
         >
 
-            <a
-                href="reseñas.html"
-                class="gamevora-slide gamevora-slide-link"
-            >
+            <div class="gamevora-slide-text">
 
-                <div class="gamevora-slide-text">
-
-                    <div class="gamevora-slide-label">
-
-                        GAMERS GOLD TOP-UP COMMUNITY
-
-                    </div>
-
-                    <h3>
-
-                        ⚡ ¿Ya dejaste tu reseña?
-
-                    </h3>
-
-                    <p>
-
-                        Tu opinión ayuda a mejorar
-                        Gamers Gold Top-Up.
-
-                    </p>
-
+                <div class="gamevora-slide-label">
+                    GAMERS GOLD TOP-UP COMMUNITY
                 </div>
 
-                <div class="gamevora-slide-icon">
+                <h3>
+                    ⚡ ¿Ya dejaste tu reseña?
+                </h3>
 
-                    ⚡
-
-                </div>
-
-            </a>
-
-            <div class="gamevora-slide">
-
-                <div class="gamevora-slide-text">
-
-                    <div class="gamevora-slide-label">
-
-                        NOVEDADES
-
-                    </div>
-
-                    <h3>
-
-                        🚀 Nuevas actualizaciones
-
-                    </h3>
-
-                    <p>
-
-                        Descubre las novedades
-                        que estamos preparando.
-
-                    </p>
-
-                </div>
-
-                <div class="gamevora-slide-icon">
-
-                    🚀
-
-                </div>
+                <p>
+                    Tu opinión ayuda a mejorar
+                    Gamers Gold Top-Up.
+                </p>
 
             </div>
 
-            <a
-                href="informacion-gvr.html"
-                class="gamevora-slide gamevora-slide-link"
-            >
+            <div class="gamevora-slide-icon">
+                ⚡
+            </div>
 
-                <div class="gamevora-slide-text">
+        </a>
 
-                    <div class="gamevora-slide-label">
+        <div class="gamevora-slide">
 
-                        GVR
+            <div class="gamevora-slide-text">
 
-                    </div>
-
-                    <h3>
-
-                        ⚡ Información sobre GVR
-
-                    </h3>
-
-                    <p>
-
-                        Conoce cómo funciona
-                        nuestro saldo virtual.
-
-                    </p>
-
+                <div class="gamevora-slide-label">
+                    NOVEDADES
                 </div>
 
-                <div class="gamevora-slide-icon">
+                <h3>
+                    🚀 Nuevas actualizaciones
+                </h3>
 
-                    ⚡
+                <p>
+                    Descubre las novedades
+                    que estamos preparando.
+                </p>
 
+            </div>
+
+            <div class="gamevora-slide-icon">
+                🚀
+            </div>
+
+        </div>
+
+        <a
+            href="informacion-gvr.html"
+            class="gamevora-slide gamevora-slide-link"
+        >
+
+            <div class="gamevora-slide-text">
+
+                <div class="gamevora-slide-label">
+                    GVR
                 </div>
 
-            </a>
+                <h3>
+                    ⚡ Información sobre GVR
+                </h3>
 
-        </div>
+                <p>
+                    Conoce cómo funciona
+                    nuestro saldo virtual.
+                </p>
 
-    </div>
+            </div>
 
-    <div class="gamevora-dots">
+            <div class="gamevora-slide-icon">
+                ⚡
+            </div>
 
-        <button
-            class="gamevora-dot activo"
-            type="button"
-            aria-label="Banner 1"
-        >
-        </button>
-
-        <button
-            class="gamevora-dot"
-            type="button"
-            aria-label="Banner 2"
-        >
-        </button>
-
-        <button
-            class="gamevora-dot"
-            type="button"
-            aria-label="Banner 3"
-        >
-        </button>
+        </a>
 
     </div>
 
-    <div class="mejor-opcion">
+</div>
 
-        TU MEJOR OPCIÓN
+<div class="gamevora-dots">
 
-    </div>
+    <button
+        class="gamevora-dot activo"
+        type="button"
+        aria-label="Banner 1"
+    ></button>
 
-    <div class="linea-azul">
-    </div>
+    <button
+        class="gamevora-dot"
+        type="button"
+        aria-label="Banner 2"
+    ></button>
 
-</section>
+    <button
+        class="gamevora-dot"
+        type="button"
+        aria-label="Banner 3"
+    ></button>
 
-<section class="section">
+</div>
 
-    <div class="section-title">
+<div class="mejor-opcion">
+    TU MEJOR OPCIÓN
+</div>
 
-        <h2>
-            ⚡ Recargas destacadas
-        </h2>
+<div class="linea-azul"></div>
 
-    </div>
+</section><section class="section"><div class="section-title">
 
-    <div class="offer">
+    <h2>
+        ⚡ Recargas destacadas
+    </h2>
 
-        <div class="offer-info">
+</div>
 
-            <h3>
-                🔥 Free Fire
-            </h3>
+<div class="offer">
 
-            <p>
-                310 Diamantes
-            </p>
+    <div class="offer-info">
 
-        </div>
+        <h3>
+            🔥 Free Fire
+        </h3>
 
-        <div class="price">
-
-            <strong>
-                10 GVR
-            </strong>
-
-            <br>
-
-            <button
-                class="buy"
-                type="button"
-            >
-                Comprar
-            </button>
-
-        </div>
+        <p>
+            310 Diamantes
+        </p>
 
     </div>
 
-    <div class="offer">
-
-        <div class="offer-info">
-
-            <h3>
-                🔫 Call of Duty Mobile
-            </h3>
-
-            <p>
-                420 CP
-            </p>
-
-        </div>
-
-        <div class="price">
-
-            <strong>
-                15 GVR
-            </strong>
-
-            <br>
-
-            <button
-                class="buy"
-                type="button"
-            >
-                Comprar
-            </button>
-
-        </div>
-
-    </div>
-
-</section>
-
-<footer>
-
-    <p>
+    <div class="price">
 
         <strong>
-            ⚡ GAMERS GOLD TOP-UP
+            10 GVR
         </strong>
 
-    </p>
+        <br>
 
-    <p>
+        <button
+            class="buy"
+            type="button"
+        >
+            Comprar
+        </button>
 
-        Plataforma de recargas digitales
-        para gamers.
+    </div>
 
-    </p>
+</div>
 
-    <br>
+<div class="offer">
 
-    <p>
+    <div class="offer-info">
 
-        © 2026 Gamers Gold Top-Up
+        <h3>
+            🔫 Call of Duty Mobile
+        </h3>
 
-    </p>
+        <p>
+            420 CP
+        </p>
 
-</footer>
+    </div>
 
-<!-- SUPABASE -->
+    <div class="price">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <strong>
+            15 GVR
+        </strong>
 
-<script>
+        <br>
+
+        <button
+            class="buy"
+            type="button"
+        >
+            Comprar
+        </button>
+
+    </div>
+
+</div>
+
+</section><footer><p>
+    <strong>
+        ⚡ GAMERS GOLD TOP-UP
+    </strong>
+</p>
+
+<p>
+    Plataforma de recargas digitales
+    para gamers.
+</p>
+
+<br>
+
+<p>
+    © 2026 Gamers Gold Top-Up
+</p>
+
+</footer><!-- SUPABASE --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 
 /* =========================
-   SPLASH POR SESIÓN
+   SPLASH
+   =========================
+   
+   El splash de entrada lo controla
+   el index.html principal.
+   
+   Este index NO modifica:
+   "gamersGoldSplashVisto"
+   
+   Así no entra en conflicto con
+   el index de afuera.
 ========================= */
 
 const splash =
@@ -1273,23 +1152,31 @@ const splash =
         "splash-screen"
     );
 
-const splashYaVisto =
-    sessionStorage.getItem(
-        "gamersGoldSplashVisto"
+/*
+   Si este frontend se abre directamente
+   sin pasar por el index principal,
+   mostramos el splash temporalmente.
+
+   Si viene desde el index principal,
+   no interferimos con su control.
+*/
+
+const vieneDelIndexPrincipal =
+    document.referrer &&
+    new URL(
+        document.referrer,
+        window.location.href
+    ).pathname.endsWith(
+        "/index.html"
     );
 
-if (splashYaVisto === "true") {
+if (vieneDelIndexPrincipal) {
 
     if (splash) {
         splash.remove();
     }
 
 } else {
-
-    sessionStorage.setItem(
-        "gamersGoldSplashVisto",
-        "true"
-    );
 
     setTimeout(() => {
 
@@ -1437,9 +1324,7 @@ setInterval(() => {
 
 
     if (siguiente >= 3) {
-
         siguiente = 0;
-
     }
 
 
@@ -1468,6 +1353,5 @@ gamevoraDots.forEach(
 );
 
 </script>
-
 </body>
-    </html>
+</html>
