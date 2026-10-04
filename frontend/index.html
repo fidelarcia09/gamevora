@@ -29,6 +29,85 @@
         }
 
         /* =========================
+           SPLASH / LOGO DE ENTRADA
+        ========================= */
+
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100vh;
+
+            background: #020611;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            z-index: 999999;
+
+            opacity: 1;
+
+            pointer-events: none;
+
+            animation:
+                ocultarSplash 0.8s ease forwards;
+
+            animation-delay: 3.7s;
+        }
+
+        #splash-screen img {
+            display: block;
+
+            width: min(75vw, 360px);
+
+            max-width: 360px;
+
+            height: auto;
+
+            object-fit: contain;
+
+            filter:
+                drop-shadow(0 0 8px #00bfff)
+                drop-shadow(0 0 20px #008cff)
+                drop-shadow(
+                    0 0 40px
+                    rgba(0, 140, 255, 0.6)
+                );
+
+            animation:
+                aparecerLogo 1s ease-out;
+        }
+
+        @keyframes aparecerLogo {
+
+            0% {
+                opacity: 0;
+                transform: scale(0.75);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+        }
+
+        @keyframes ocultarSplash {
+
+            0% {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+        }
+
+        /* =========================
            BARRA SUPERIOR
         ========================= */
 
@@ -843,12 +922,28 @@
             .gamevora-slide-icon {
                 font-size: 30px;
             }
+
         }
 
     </style>
 </head>
 
 <body>
+
+<!-- =========================
+     SPLASH DE ENTRADA
+========================= -->
+
+<div id="splash-screen">
+
+    <img
+        src="../imagenes/archivo_000000004c9c81f58dd5cfed4a31afe4.png"
+        alt="Gamers Gold Top-Up"
+        loading="eager"
+        onerror="this.style.display='none';"
+    >
+
+</div>
 
 <header>
 
@@ -1191,6 +1286,65 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
+/* =========================
+   SPLASH: SOLO UNA VEZ
+   POR SESIÓN
+========================= */
+
+(function() {
+
+    const splash =
+        document.getElementById(
+            "splash-screen"
+        );
+
+    if (!splash) {
+        return;
+    }
+
+    const splashMostrado =
+        sessionStorage.getItem(
+            "gamersGoldSplashMostrado"
+        );
+
+    if (splashMostrado === "true") {
+
+        splash.remove();
+
+        return;
+
+    }
+
+    sessionStorage.setItem(
+        "gamersGoldSplashMostrado",
+        "true"
+    );
+
+    /*
+       Seguridad adicional:
+       si la animación no funciona,
+       el splash desaparece igualmente
+       después de 4.5 segundos.
+    */
+
+    setTimeout(() => {
+
+        if (splash) {
+
+            splash.style.opacity = "0";
+
+            splash.style.visibility =
+                "hidden";
+
+            splash.remove();
+
+        }
+
+    }, 4500);
+
+})();
+
 
 const supabaseClient =
     window.supabase.createClient(
