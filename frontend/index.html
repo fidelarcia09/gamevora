@@ -1180,24 +1180,43 @@ const splash =
         "splash-screen"
     );
 
+const splashYaVisto =
+    sessionStorage.getItem(
+        "gamersGoldSplashVisto"
+    );
+
 
 if (splash) {
 
-    setTimeout(() => {
+    if (splashYaVisto === "true") {
 
-        splash.classList.add(
-            "splash-oculto"
+        splash.remove();
+
+    } else {
+
+        sessionStorage.setItem(
+            "gamersGoldSplashVisto",
+            "true"
         );
 
 
         setTimeout(() => {
 
-            splash.remove();
+            splash.classList.add(
+                "splash-oculto"
+            );
 
-        }, 800);
+
+            setTimeout(() => {
+
+                splash.remove();
+
+            }, 800);
 
 
-    }, 3700);
+        }, 3700);
+
+    }
 
 }
 
@@ -1356,4 +1375,4 @@ gamevoraDots.forEach(
 </script>
 
 </body>
-    </html>
+</html>
