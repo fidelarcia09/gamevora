@@ -156,10 +156,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
 const supabaseClient = window.supabase.createClient(
     "https://gsuhzcavghsiolmipnzi.supabase.co",
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
 );
+
 
 async function cargarPedidos() {
 
@@ -168,13 +170,27 @@ async function cargarPedidos() {
         error: sessionError
     } = await supabaseClient.auth.getSession();
 
+
     if (sessionError || !session) {
+
         alert("Debes iniciar sesión primero.");
+
         window.location.href = "login.html";
+
         return;
     }
 
-    const { data: pedidos, error } = await supabaseClient
+
+    /*
+    ============================================================
+    1. PEDIDOS NORMALES DE JUEGOS
+    ============================================================
+    */
+
+    const {
+        data: pedidosJuego,
+        error: errorJuegos
+    } = await supabaseClient
         .from("game_orders")
         .select(`
             id,
@@ -192,55 +208,358 @@ async function cargarPedidos() {
         .eq("user_id", session.user.id)
         .order("created_at", { ascending: false });
 
-    if (error) {
-        console.error(error);
-        alert("No se pudieron cargar los pedidos:\n\n" + error.message);
-        return;
+
+    if (errorJuegos) {
+
+        console.error(
+            "Error cargando pedidos de juegos:",
+            errorJuegos
+        );
+
     }
+
+
+    /*
+    ============================================================
+    2. COMPRAS / RECARGAS DE GVR
+    ============================================================
+    */
+
+    const {
+        data: ventas,
+        error: errorVentas
+    } = await supabaseClient
+        .from("ventas")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .order("created_at", { ascending: false });
+
+
+    if (errorVentas) {
+
+        console.error(
+            "Error cargando ventas GVR:",
+            errorVentas
+        );
+
+    }
+
+
+    /*
+    ============================================================
+    3. PREPARAR LISTA COMBINADA
+    ============================================================
+    */
+
+    const historial = [];
+
+
+    /*
+    PEDIDOS DE JUEGOS
+    */
+
+    if (pedidosJuego) {
+
+        pedidosJuego.forEach((pedido) => {
+
+            historial.push({
+
+                tipo: "juego",
+
+                fecha: pedido.created_at,
+
+                datos: pedido
+
+            });
+
+        });
+
+    }
+
+
+    /*
+    COMPRAS DE GVR
+    */
+
+    if (ventas) {
+
+        ventas.forEach((venta) => {
+
+            /*
+            Detectamos una compra de GVR.
+
+            Se acepta si:
+            - tiene gvr_comprado mayor que 0
+            - o el tipo contiene "gvr"
+            */
+
+            const gvrComprado = Number(
+                venta.gvr_comprado ?? 0
+            );
+
+
+            const tipoVenta = String(
+                venta.tipo ?? ""
+            ).toLowerCase();
+
+
+            const esGvr =
+                gvrComprado > 0 ||
+                tipoVenta.includes("gvr");
+
+
+            if (!esGvr) {
+                return;
+            }
+
+
+            historial.push({
+
+                tipo: "gvr",
+
+                fecha:
+                    venta.created_at ||
+                    venta.createdAt ||
+                    new Date().toISOString(),
+
+                datos: venta
+
+            });
+
+        });
+
+    }
+
+
+    /*
+    ============================================================
+    4. ORDENAR TODO POR FECHA
+    ============================================================
+    */
+
+    historial.sort((a, b) => {
+
+        return new Date(b.fecha) - new Date(a.fecha);
+
+    });
+
 
     const card = document.querySelector(".card");
+
     const vacio = document.querySelector(".vacio");
 
-    if (!pedidos || pedidos.length === 0) {
-        vacio.textContent = "Todavía no tienes pedidos.";
+
+    /*
+    ============================================================
+    5. SI NO HAY NADA
+    ============================================================
+    */
+
+    if (historial.length === 0) {
+
+        vacio.textContent =
+            "Todavía no tienes pedidos.";
+
         return;
+
     }
+
 
     vacio.style.display = "none";
 
-    pedidos.forEach((pedido) => {
 
-        const producto = pedido.game_products;
+    /*
+    ============================================================
+    6. MOSTRAR HISTORIAL
+    ============================================================
+    */
 
-        const tarjeta = document.createElement("div");
-        tarjeta.className = "pedido";
+    historial.forEach((item) => {
 
-        tarjeta.innerHTML = `
-            <div class="fila">
-                <div class="juego">
-                    ${producto?.game || "Juego"}
+
+        /*
+        ========================================================
+        PEDIDO DE JUEGO
+        ========================================================
+        */
+
+        if (item.tipo === "juego") {
+
+            const pedido = item.datos;
+
+            const producto =
+                pedido.game_products;
+
+
+            const tarjeta =
+                document.createElement("div");
+
+            tarjeta.className =
+                "pedido";
+
+
+            tarjeta.innerHTML = `
+
+                <div class="fila">
+
+                    <div class="juego">
+                        ${producto?.game || "Juego"}
+                    </div>
+
+                    <div class="estado">
+                        ${pedido.status || "Pendiente"}
+                    </div>
+
                 </div>
 
-                <div class="estado">
-                    ${pedido.status}
+
+                <div class="detalle">
+
+                    Producto:
+                    ${producto?.product_name || "Producto"}
+                    <br>
+
+                    ID del jugador:
+                    ${pedido.player_id || "No disponible"}
+                    <br>
+
+                    Precio:
+                    ${pedido.price_gvr ?? 0} GVR
+                    <br>
+
+                    Pedido:
+                    ${pedido.id}
+                    <br>
+
+                    Fecha:
+                    ${new Date(
+                        pedido.created_at
+                    ).toLocaleString("es-ES")}
+
                 </div>
-            </div>
 
-            <div class="detalle">
-                Producto: ${producto?.product_name || "Producto"}<br>
-                ID del jugador: ${pedido.player_id || "No disponible"}<br>
-                Precio: ${pedido.price_gvr} GVR<br>
-                Pedido: ${pedido.id}<br>
-                Fecha: ${new Date(pedido.created_at).toLocaleString("es-ES")}
-            </div>
-        `;
+            `;
 
-        card.insertBefore(tarjeta, vacio);
+
+            card.insertBefore(
+                tarjeta,
+                vacio
+            );
+
+        }
+
+
+        /*
+        ========================================================
+        COMPRA DE GVR
+        ========================================================
+        */
+
+        if (item.tipo === "gvr") {
+
+            const venta = item.datos;
+
+
+            const tarjeta =
+                document.createElement("div");
+
+            tarjeta.className =
+                "pedido";
+
+
+            const gvrComprado =
+                venta.gvr_comprado ??
+                venta.gvrComprado ??
+                0;
+
+
+            const precio =
+                venta.precio ??
+                venta.price ??
+                0;
+
+
+            const moneda =
+                venta.moneda ??
+                venta.currency ??
+                "USD";
+
+
+            const metodoPago =
+                venta.metodo_pago ??
+                venta.payment_method ??
+                "No especificado";
+
+
+            const estado =
+                venta.estado ??
+                venta.status ??
+                "Pendiente";
+
+
+            const idPedido =
+                venta.id ??
+                "No disponible";
+
+
+            tarjeta.innerHTML = `
+
+                <div class="fila">
+
+                    <div class="juego">
+                        💎 Compra de GVR
+                    </div>
+
+                    <div class="estado">
+                        ${estado}
+                    </div>
+
+                </div>
+
+
+                <div class="detalle">
+
+                    GVR comprado:
+                    ${gvrComprado} GVR
+                    <br>
+
+                    Precio:
+                    ${precio} ${moneda}
+                    <br>
+
+                    Método de pago:
+                    ${metodoPago}
+                    <br>
+
+                    Pedido:
+                    ${idPedido}
+                    <br>
+
+                    Fecha:
+                    ${new Date(
+                        item.fecha
+                    ).toLocaleString("es-ES")}
+
+                </div>
+
+            `;
+
+
+            card.insertBefore(
+                tarjeta,
+                vacio
+            );
+
+        }
+
     });
+
 }
 
+
 cargarPedidos();
+
 </script>
-    
+
 </body>
 </html>
