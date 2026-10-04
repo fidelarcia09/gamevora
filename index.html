@@ -30,83 +30,75 @@
 
 
         /* =========================
-   PANTALLA DE INICIO
-========================= */
+           PANTALLA DE INICIO
+           SOLO UNA VEZ POR SESIÓN
+        ========================= */
 
-#splash-screen {
-    position: fixed;
-    inset: 0;
+        #splash-screen {
+            position: fixed;
+            inset: 0;
 
-    width: 100%;
-    height: 100vh;
+            width: 100%;
+            height: 100vh;
 
-    background: #020611;
+            background: #020611;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-    z-index: 999999;
+            z-index: 999999;
 
-    opacity: 1;
+            opacity: 1;
 
-    animation: ocultarSplash 0.8s ease forwards;
-    animation-delay: 3.7s;
+            transition: opacity 0.8s ease;
 
-    pointer-events: none;
-}
-
-
-#splash-screen img {
-    display: block;
-
-    width: min(75vw, 360px);
-
-    max-width: 360px;
-
-    height: auto;
-
-    object-fit: contain;
-
-    filter:
-        drop-shadow(0 0 8px #00bfff)
-        drop-shadow(0 0 20px #008cff)
-        drop-shadow(
-            0 0 40px
-            rgba(0, 140, 255, 0.6)
-        );
-
-    animation: aparecerLogo 1s ease-out;
-}
+            pointer-events: auto;
+        }
 
 
-@keyframes aparecerLogo {
+        #splash-screen img {
+            display: block;
 
-    0% {
-        opacity: 0;
-        transform: scale(0.75);
-    }
+            width: min(75vw, 360px);
 
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+            max-width: 360px;
 
-}
+            height: auto;
+
+            object-fit: contain;
+
+            filter:
+                drop-shadow(0 0 8px #00bfff)
+                drop-shadow(0 0 20px #008cff)
+                drop-shadow(
+                    0 0 40px
+                    rgba(0, 140, 255, 0.6)
+                );
+
+            animation: aparecerLogo 1s ease-out;
+        }
 
 
-@keyframes ocultarSplash {
+        @keyframes aparecerLogo {
 
-    0% {
-        opacity: 1;
-    }
+            0% {
+                opacity: 0;
+                transform: scale(0.75);
+            }
 
-    100% {
-        opacity: 0;
-        visibility: hidden;
-    }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
 
-    }
+        }
+
+
+        .splash-oculto {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
 
 
         /* =========================
@@ -149,8 +141,6 @@
         }
 
 
-        /* G AZUL */
-
         .logo-g {
             position: relative;
 
@@ -180,8 +170,6 @@
                 0 0 30px rgba(0, 115, 255, 0.9);
         }
 
-
-        /* RAYO AZUL SOBRE LA G */
 
         .logo-g::before {
             content: "";
@@ -220,14 +208,6 @@
                 drop-shadow(0 0 5px #00c8ff)
                 drop-shadow(0 0 12px #0077ff);
         }
-
-
-        /*
-           IMPORTANTE:
-           NO HAY ::after NEGRO.
-           Así no vuelve a aparecer la pieza negra
-           delante de la G.
-        */
 
 
         .logo-resto {
@@ -1025,10 +1005,12 @@
 ========================= -->
 
 <div id="splash-screen">
+
     <img
         src="./frontend/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
         alt="Gamers Gold Top-Up"
     >
+
 </div>
 
 
@@ -1414,6 +1396,89 @@
 
 
 <script>
+
+
+/* =========================
+   SPLASH POR SESIÓN
+========================= */
+
+const splash =
+    document.getElementById(
+        "splash-screen"
+    );
+
+
+const splashYaVisto =
+    sessionStorage.getItem(
+        "gamersGoldSplashVisto"
+    );
+
+
+if (splashYaVisto === "true") {
+
+    /*
+       Ya apareció anteriormente
+       durante esta sesión.
+    */
+
+    if (splash) {
+
+        splash.remove();
+
+    }
+
+} else {
+
+    /*
+       Primera entrada de esta sesión.
+       Guardamos que ya apareció.
+    */
+
+    sessionStorage.setItem(
+        "gamersGoldSplashVisto",
+        "true"
+    );
+
+
+    /*
+       Después de 3.7 segundos
+       comienza el desvanecimiento.
+    */
+
+    setTimeout(() => {
+
+        if (splash) {
+
+            splash.classList.add(
+                "splash-oculto"
+            );
+
+
+            /*
+               Esperamos el final
+               de la transición.
+            */
+
+            setTimeout(() => {
+
+                if (splash) {
+
+                    splash.remove();
+
+                }
+
+            }, 800);
+
+        }
+
+    }, 3700);
+
+}
+
+
+/* =========================
+   SUPABASE
+========================= */
 
 const supabaseClient =
     window.supabase.createClient(
