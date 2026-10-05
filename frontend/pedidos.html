@@ -232,6 +232,7 @@ async function cargarPedidos() {
         .from("ventas")
         .select(`
             id,
+            tipo,
             usuario_id,
             nombre_usuario,
             correo_usuario,
@@ -303,16 +304,21 @@ async function cargarPedidos() {
 
         ventas.forEach((venta) => {
 
-            const gvrComprado =
-                Number(venta.gvr_comprado || 0);
-
-
             /*
-            Solo añadimos como compra de GVR
-            las ventas que realmente tienen GVR.
+            IMPORTANTE:
+
+            Las recargas de juegos también tienen
+            gvr_comprado porque indican cuánto GVR
+            costó la recarga.
+
+            Por eso NO debemos usar simplemente:
+            gvr_comprado > 0
+
+            Solo las ventas cuyo tipo sea realmente
+            "gvr" deben aparecer como Compra de GVR.
             */
 
-            if (gvrComprado > 0) {
+            if (venta.tipo === "gvr") {
 
                 historial.push({
 
