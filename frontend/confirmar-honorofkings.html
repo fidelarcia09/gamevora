@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Confirmar pedido | Honor of Kings | Gamers Gold Top-Up</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .contenedor {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 28px 22px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        }
+
+        .icono {
+            text-align: center;
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 25px;
+            margin-bottom: 25px;
+        }
+
+        .dato {
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .dato span {
+            display: block;
+            color: #8195ad;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .dato strong {
+            font-size: 15px;
+        }
+
+        .precio {
+            margin-top: 20px;
+            text-align: center;
+            color: #20a7ff;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .confirmar {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nota {
+            margin-top: 20px;
+            text-align: center;
+            color: #627b97;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <div class="header">
+
+        <div class="logo">
+            <span class="rayo">⚡</span> Gamers Gold
+        </div>
+
+        <a href="honorofkings.html" class="volver">
+            ← Volver
+        </a>
+
+    </div>
+
+    <div class="card">
+
+        <div class="icono">👑</div>
+
+        <h1>Confirmar pedido</h1>
+
+        <div class="dato">
+            <span>Juego</span>
+            <strong>Honor of Kings</strong>
+        </div>
+
+        <div class="dato">
+            <span>ID del jugador</span>
+            <strong id="mostrarId"></strong>
+        </div>
+
+        <div class="dato">
+            <span>Cantidad</span>
+            <strong id="mostrarCantidad"></strong>
+        </div>
+
+        <div class="precio" id="mostrarPrecio">
+            Cargando...
+        </div>
+
+        <button
+            class="confirmar"
+            type="button"
+            onclick="confirmarPedido()"
+        >
+            Confirmar pedido ⚡
+        </button>
+
+        <p class="nota">
+            Revisa los datos antes de confirmar tu pedido.
+        </p>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+const parametros =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const id =
+    parametros.get("id");
+
+const cantidad =
+    parametros.get("cantidad");
+
+document.getElementById(
+    "mostrarId"
+).textContent =
+    id || "No especificado";
+
+document.getElementById(
+    "mostrarCantidad"
+).textContent =
+    cantidad || "No especificada";
+
+
+async function cargarPrecio() {
+
+    if (!cantidad) {
+        return;
+    }
+
+    const {
+        data: producto,
+        error
+    } =
+        await supabaseClient
+            .from("game_products")
+            .select(
+                "price_gvr"
+            )
+            .eq("game", "Honor of Kings")
+            .eq("product_name", cantidad)
+            .eq("active", true)
+            .maybeSingle();
+
+    if (error || !producto) {
+
+        document.getElementById(
+            "mostrarPrecio"
+        ).textContent =
+            "Precio no disponible";
+
+        return;
+    }
+
+    document.getElementById(
+        "mostrarPrecio"
+    ).textContent =
+        producto.price_gvr + " GVR";
+}
+
+
+function confirmarPedido() {
+
+    const url =
+        "pedido-realizado-honorofkings.html?id=" +
+        encodeURIComponent(id) +
+        "&cantidad=" +
+        encodeURIComponent(cantidad);
+
+    window.location.href = url;
+}
+
+
+cargarPrecio();
+
+</script>
+
+</body>
+  </html>
