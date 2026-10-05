@@ -116,6 +116,11 @@
             cursor: pointer;
         }
 
+        .continuar:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .nota {
             margin-top: 20px;
             text-align: center;
@@ -232,7 +237,7 @@ async function cargarProductos() {
             await supabaseClient
                 .from("game_products")
                 .select(
-                    "product_name, game_currency_amount, price_gvr"
+                    "id, product_name, game_currency_amount, price_gvr"
                 )
                 .eq("game", "Honor of Kings")
                 .eq("active", true)
@@ -296,6 +301,9 @@ async function cargarProductos() {
 
 async function continuarRecarga() {
 
+    const boton =
+        document.getElementById("botonRecarga");
+
     const idJugador =
         document.getElementById("idjugador").value.trim();
 
@@ -320,30 +328,161 @@ async function continuarRecarga() {
         return;
     }
 
-    const {
-        data: { session }
-    } =
-        await supabaseClient.auth.getSession();
+    boton.disabled = true;
 
-    if (!session) {
+    boton.textContent =
+        "Procesando compra...";
+
+    try {
+
+        const {
+            data: { session }
+        } =
+            await supabaseClient.auth.getSession();
+
+        if (!session) {
+
+            alert(
+                "Debes iniciar sesión primero."
+            );
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+
+        /* ==========================================
+           BUSCAR PRODUCTO
+           ========================================== */
+
+        const {
+            data: producto,
+            error: productoError
+        } =
+            await supabaseClient
+                .from("game_products")
+                .select(
+                    "id, game, product_name, game_currency_amount, price_gvr, active"
+                )
+                .eq("game", "Honor of Kings")
+                .eq("product_name", cantidad)
+                .eq("active", true)
+                .maybeSingle();
+
+
+        if (productoError) {
+
+            console.error(
+                "ERROR BUSCANDO PRODUCTO:",
+                productoError
+            );
+
+            alert(
+                "No se pudo comprobar el producto."
+            );
+
+            return;
+        }
+
+
+        if (!producto) {
+
+            alert(
+                "Producto no disponible."
+            );
+
+            return;
+        }
+
+
+        /* ==========================================
+           REALIZAR COMPRA
+           ========================================== */
+
+        const {
+            data: pedido,
+            error: compraError
+        } =
+            await supabaseClient.rpc(
+                "purchase_game_product",
+                {
+                    p_product_id: producto.id,
+                    p_player_id: idJugador
+                }
+            );
+
+
+        /* ==========================================
+           ERROR DE COMPRA
+           ========================================== */
+
+        if (compraError) {
+
+            console.error(
+                "ERROR COMPRA HONOR:",
+                compraError
+            );
+
+            const mensaje =
+                compraError.message || "";
+
+            if (
+                mensaje
+                    .toLowerCase()
+                    .includes("saldo gvr insuficiente")
+            ) {
+
+                alert(
+                    "Saldo GVR insuficiente."
+                );
+
+            } else {
+
+                alert(
+                    mensaje ||
+                    "No se pudo realizar la compra."
+                );
+            }
+
+            return;
+        }
+
+
+        /* ==========================================
+           COMPRA EXITOSA
+           ========================================== */
 
         alert(
-            "Debes iniciar sesión primero."
+            "¡Compra realizada correctamente!\n\n" +
+            "Pedido: " +
+            pedido
         );
 
         window.location.href =
-            "login.html";
+            "cuenta.html";
 
-        return;
+
+    } catch (error) {
+
+        console.error(
+            "ERROR GENERAL:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Ocurrió un error al realizar la compra."
+        );
+
+    } finally {
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Continuar ⚡";
     }
-
-    const url =
-        "resumen-honorofkings.html?id=" +
-        encodeURIComponent(idJugador) +
-        "&cantidad=" +
-        encodeURIComponent(cantidad);
-
-    window.location.href = url;
 }
 
 
