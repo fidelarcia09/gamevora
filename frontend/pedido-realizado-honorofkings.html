@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pedido realizado | Honor of Kings | Gamers Gold Top-Up</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .contenedor {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 30px 22px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+            text-align: center;
+        }
+
+        .check {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #087cff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 0 25px rgba(0, 140, 255, 0.5);
+        }
+
+        h1 {
+            font-size: 27px;
+            margin-bottom: 12px;
+        }
+
+        .descripcion {
+            color: #8fa5bd;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .dato {
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .dato span {
+            display: block;
+            color: #8195ad;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .dato strong {
+            font-size: 15px;
+        }
+
+        .mensaje {
+            margin-top: 20px;
+            color: #8fa5bd;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .boton {
+            display: block;
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <div class="header">
+
+        <div class="logo">
+            <span class="rayo">⚡</span> Gamers Gold
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="check">
+            ✓
+        </div>
+
+        <h1>
+            ¡Pedido realizado!
+        </h1>
+
+        <p class="descripcion">
+            Tu pedido de Honor of Kings
+            ha sido registrado.
+        </p>
+
+        <div class="dato">
+            <span>Juego</span>
+            <strong>Honor of Kings</strong>
+        </div>
+
+        <div class="dato">
+            <span>ID del jugador</span>
+            <strong id="mostrarId"></strong>
+        </div>
+
+        <div class="dato">
+            <span>Cantidad</span>
+            <strong id="mostrarCantidad"></strong>
+        </div>
+
+        <p class="mensaje">
+            ⚡ El pedido ha sido registrado correctamente.
+            Los sistemas de GVR y procesamiento real se
+            conectarán posteriormente.
+        </p>
+
+        <a href="juegos.html" class="boton">
+            Volver a juegos
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+const parametros =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const id =
+    parametros.get("id");
+
+const cantidad =
+    parametros.get("cantidad");
+
+
+document.getElementById(
+    "mostrarId"
+).textContent =
+    id || "No especificado";
+
+
+document.getElementById(
+    "mostrarCantidad"
+).textContent =
+    cantidad || "No especificada";
+
+
+const pedido = {
+
+    juego: "Honor of Kings",
+
+    id:
+        id ||
+        "No especificado",
+
+    cantidad:
+        cantidad ||
+        "No especificada",
+
+    estado:
+        "Completado",
+
+    fecha:
+        new Date().toLocaleString("es-ES")
+};
+
+
+const clavePedido =
+    "gamevora_pedido_" +
+    window.location.search;
+
+
+if (
+    !sessionStorage.getItem(
+        clavePedido
+    ) &&
+    id &&
+    cantidad
+) {
+
+    let pedidos =
+        JSON.parse(
+            localStorage.getItem(
+                "gamevora_pedidos"
+            ) || "[]"
+        );
+
+
+    pedidos.push(
+        pedido
+    );
+
+
+    localStorage.setItem(
+        "gamevora_pedidos",
+        JSON.stringify(
+            pedidos
+        )
+    );
+
+
+    sessionStorage.setItem(
+        clavePedido,
+        "guardado"
+    );
+
+}
+
+</script>
+
+</body>
+</html>
