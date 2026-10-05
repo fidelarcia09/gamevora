@@ -106,6 +106,11 @@
             background: #0875dc;
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .volver {
             display: block;
             text-align: center;
@@ -146,6 +151,7 @@
             type="text"
             id="idJugador"
             placeholder="Escribe tu ID de jugador"
+            autocomplete="off"
         >
 
         <label for="cantidad">Selecciona tu recarga</label>
@@ -154,7 +160,10 @@
             <option value="">Cargando productos...</option>
         </select>
 
-        <button onclick="continuarPedido()">
+        <button
+            id="botonCompra"
+            onclick="continuarPedido()"
+        >
             Continuar
         </button>
 
@@ -171,108 +180,149 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-    const SUPABASE_URL =
-        "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-    const SUPABASE_KEY =
-        "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-    const supabaseClient =
-        supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
+const SUPABASE_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
+    );
+
+
+async function cargarProductos() {
+
+    const select =
+        document.getElementById("cantidad");
+
+    const mensaje =
+        document.getElementById("mensaje");
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("game_products")
+            .select(
+                "id, game, product_name, game_currency_amount, price_gvr, active"
+            )
+            .eq("game", "Genshin Impact")
+            .eq("active", true)
+            .order("game_currency_amount", {
+                ascending: true
+            });
+
+
+    if (error) {
+
+        console.error(
+            "ERROR PRODUCTOS GENSHIN:",
+            error
         );
 
-    async function cargarProductos() {
-
-        const select =
-            document.getElementById("cantidad");
-
-        const mensaje =
-            document.getElementById("mensaje");
-
-        const { data, error } =
-            await supabaseClient
-                .from("game_products")
-                .select("*")
-                .eq("game", "Genshin Impact")
-                .eq("active", true)
-                .order("game_currency_amount", {
-                    ascending: true
-                });
-
-        if (error) {
-
-            console.error(error);
-
-            select.innerHTML =
-                '<option value="">No se pudieron cargar las recargas</option>';
-
-            mensaje.textContent =
-                "Error al cargar los productos.";
-
-            return;
-        }
-
-        if (!data || data.length === 0) {
-
-            select.innerHTML =
-                '<option value="">No hay recargas disponibles</option>';
-
-            return;
-        }
-
         select.innerHTML =
-            '<option value="">Selecciona una recarga</option>';
+            '<option value="">No se pudieron cargar las recargas</option>';
 
-        data.forEach(producto => {
+        mensaje.textContent =
+            "Error al cargar los productos.";
 
-            const option =
-                document.createElement("option");
-
-            option.value =
-                producto.product_name;
-
-            option.textContent =
-                producto.product_name +
-                " — " +
-                producto.price_gvr +
-                " GVR";
-
-            select.appendChild(option);
-        });
+        return;
     }
 
-    async function continuarPedido() {
 
-        const idJugador =
-            document
-                .getElementById("idJugador")
-                .value
-                .trim();
+    if (!data || data.length === 0) {
 
-        const cantidad =
-            document
-                .getElementById("cantidad")
-                .value;
+        select.innerHTML =
+            '<option value="">No hay recargas disponibles</option>';
 
-        if (!idJugador) {
+        return;
+    }
 
-            alert(
-                "Escribe el ID de tu jugador."
-            );
 
-            return;
-        }
+    select.innerHTML =
+        '<option value="">Selecciona una recarga</option>';
 
-        if (!cantidad) {
 
-            alert(
-                "Selecciona una recarga."
-            );
+    data.forEach(producto => {
 
-            return;
-        }
+        const option =
+            document.createElement("option");
+
+        option.value =
+            producto.product_name;
+
+        option.textContent =
+            producto.product_name +
+            " — " +
+            producto.price_gvr +
+            " GVR";
+
+        select.appendChild(option);
+
+    });
+}
+
+
+async function continuarPedido() {
+
+    const boton =
+        document.getElementById("botonCompra");
+
+    const idJugador =
+        document
+            .getElementById("idJugador")
+            .value
+            .trim();
+
+    const cantidad =
+        document
+            .getElementById("cantidad")
+            .value;
+
+
+    if (!idJugador) {
+
+        alert(
+            "Escribe el ID de tu jugador."
+        );
+
+        return;
+    }
+
+
+    if (!cantidad) {
+
+        alert(
+            "Selecciona una recarga."
+        );
+
+        return;
+    }
+
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Procesando compra...";
+
+
+    try {
+
+        /* ==========================================
+           COMPROBAR SESIÓN
+           ========================================== */
 
         const {
             data: {
@@ -283,7 +333,12 @@
                 .auth
                 .getSession();
 
+
         if (!session) {
+
+            alert(
+                "Debes iniciar sesión primero."
+            );
 
             window.location.href =
                 "login.html";
@@ -291,16 +346,145 @@
             return;
         }
 
-        const url =
-            "resumen-genshinimpact.html?id=" +
-            encodeURIComponent(idJugador) +
-            "&cantidad=" +
-            encodeURIComponent(cantidad);
 
-        window.location.href = url;
+        /* ==========================================
+           BUSCAR PRODUCTO
+           ========================================== */
+
+        const {
+            data: producto,
+            error: productoError
+        } =
+            await supabaseClient
+                .from("game_products")
+                .select(
+                    "id, game, product_name, game_currency_amount, price_gvr, active"
+                )
+                .eq("game", "Genshin Impact")
+                .eq("product_name", cantidad)
+                .eq("active", true)
+                .maybeSingle();
+
+
+        if (productoError) {
+
+            console.error(
+                "ERROR BUSCANDO PRODUCTO GENSHIN:",
+                productoError
+            );
+
+            alert(
+                "No se pudo comprobar el producto."
+            );
+
+            return;
+        }
+
+
+        if (!producto) {
+
+            alert(
+                "Producto no disponible."
+            );
+
+            return;
+        }
+
+
+        /* ==========================================
+           REALIZAR COMPRA
+           ========================================== */
+
+        const {
+            data: pedido,
+            error: compraError
+        } =
+            await supabaseClient.rpc(
+                "purchase_game_product",
+                {
+                    p_product_id: producto.id,
+                    p_player_id: idJugador
+                }
+            );
+
+
+        /* ==========================================
+           ERROR DE COMPRA
+           ========================================== */
+
+        if (compraError) {
+
+            console.error(
+                "ERROR COMPRA GENSHIN:",
+                compraError
+            );
+
+            const mensajeError =
+                compraError.message || "";
+
+            if (
+                mensajeError
+                    .toLowerCase()
+                    .includes("saldo gvr insuficiente")
+            ) {
+
+                alert(
+                    "Saldo GVR insuficiente."
+                );
+
+            } else {
+
+                alert(
+                    mensajeError ||
+                    "No se pudo realizar la compra."
+                );
+            }
+
+            return;
+        }
+
+
+        /* ==========================================
+           COMPRA EXITOSA
+           ========================================== */
+
+        alert(
+            "¡Compra realizada correctamente!\n\n" +
+            "Pedido: " +
+            pedido
+        );
+
+
+        window.location.href =
+            "cuenta.html";
+
+
+    } catch (error) {
+
+        console.error(
+            "ERROR GENERAL GENSHIN:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Ocurrió un error al realizar la compra."
+        );
+
+
+    } finally {
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Continuar";
+
     }
+}
 
-    cargarProductos();
+
+cargarProductos();
+
 </script>
 
 </body>
