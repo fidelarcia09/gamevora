@@ -237,7 +237,7 @@ async function cargarProductos() {
             await supabaseClient
                 .from("game_products")
                 .select(
-                    "product_name, game_currency_amount, price_gvr"
+                    "id, product_name, game_currency_amount, price_gvr"
                 )
                 .eq("game", "PUBG Mobile")
                 .eq("active", true)
