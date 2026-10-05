@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Genshin Impact | Gamers Gold Top-Up</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #07152f;
+            padding: 18px;
+            text-align: center;
+            border-bottom: 1px solid #123a70;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #38a8ff;
+        }
+
+        .contenedor {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .tarjeta {
+            background: #0a1830;
+            border: 1px solid #164b8f;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(0, 140, 255, 0.15);
+        }
+
+        .icono {
+            font-size: 55px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #38a8ff;
+            margin-bottom: 10px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #a9bdd8;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d9e7f7;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #225b9d;
+            background: #07152b;
+            color: white;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #38a8ff;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #168cff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0875dc;
+        }
+
+        .volver {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #70c4ff;
+            text-decoration: none;
+        }
+
+        .cargando {
+            color: #9fb5d0;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">⚡ GAMERS GOLD</div>
+</header>
+
+<div class="contenedor">
+
+    <div class="tarjeta">
+
+        <div class="icono">⚔️</div>
+
+        <h1>Genshin Impact</h1>
+
+        <p class="descripcion">
+            Recarga Genshin Impact de forma rápida y sencilla.
+        </p>
+
+        <label for="idJugador">ID del jugador</label>
+
+        <input
+            type="text"
+            id="idJugador"
+            placeholder="Escribe tu ID de jugador"
+        >
+
+        <label for="cantidad">Selecciona tu recarga</label>
+
+        <select id="cantidad">
+            <option value="">Cargando productos...</option>
+        </select>
+
+        <button onclick="continuarPedido()">
+            Continuar
+        </button>
+
+        <a href="juegos.html" class="volver">
+            ← Volver a juegos
+        </a>
+
+        <p id="mensaje" class="cargando"></p>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    const SUPABASE_URL =
+        "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+    async function cargarProductos() {
+
+        const select =
+            document.getElementById("cantidad");
+
+        const mensaje =
+            document.getElementById("mensaje");
+
+        const { data, error } =
+            await supabaseClient
+                .from("game_products")
+                .select("*")
+                .eq("game", "Genshin Impact")
+                .eq("active", true)
+                .order("game_currency_amount", {
+                    ascending: true
+                });
+
+        if (error) {
+
+            console.error(error);
+
+            select.innerHTML =
+                '<option value="">No se pudieron cargar las recargas</option>';
+
+            mensaje.textContent =
+                "Error al cargar los productos.";
+
+            return;
+        }
+
+        if (!data || data.length === 0) {
+
+            select.innerHTML =
+                '<option value="">No hay recargas disponibles</option>';
+
+            return;
+        }
+
+        select.innerHTML =
+            '<option value="">Selecciona una recarga</option>';
+
+        data.forEach(producto => {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                producto.product_name;
+
+            option.textContent =
+                producto.product_name +
+                " — " +
+                producto.price_gvr +
+                " GVR";
+
+            select.appendChild(option);
+        });
+    }
+
+    async function continuarPedido() {
+
+        const idJugador =
+            document
+                .getElementById("idJugador")
+                .value
+                .trim();
+
+        const cantidad =
+            document
+                .getElementById("cantidad")
+                .value;
+
+        if (!idJugador) {
+
+            alert(
+                "Escribe el ID de tu jugador."
+            );
+
+            return;
+        }
+
+        if (!cantidad) {
+
+            alert(
+                "Selecciona una recarga."
+            );
+
+            return;
+        }
+
+        const {
+            data: {
+                session
+            }
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
+
+        if (!session) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+        const url =
+            "resumen-genshinimpact.html?id=" +
+            encodeURIComponent(idJugador) +
+            "&cantidad=" +
+            encodeURIComponent(cantidad);
+
+        window.location.href = url;
+    }
+
+    cargarProductos();
+</script>
+
+</body>
+</html>
