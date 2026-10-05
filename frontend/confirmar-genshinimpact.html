@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Confirmar pedido | Genshin Impact | Gamers Gold Top-Up</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #07152f;
+            padding: 18px;
+            text-align: center;
+            border-bottom: 1px solid #123a70;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #38a8ff;
+        }
+
+        .contenedor {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .tarjeta {
+            background: #0a1830;
+            border: 1px solid #164b8f;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(0, 140, 255, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #38a8ff;
+            margin-bottom: 25px;
+        }
+
+        .advertencia {
+            background: #101f36;
+            border: 1px solid #285b91;
+            color: #c4d8ef;
+            padding: 15px;
+            border-radius: 10px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .dato {
+            background: #07152b;
+            border: 1px solid #153b68;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .dato strong {
+            display: block;
+            color: #7dbfff;
+            margin-bottom: 5px;
+        }
+
+        .dato span {
+            color: white;
+            word-break: break-word;
+        }
+
+        .total {
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 12px;
+            background: #071b36;
+            border: 1px solid #168cff;
+            text-align: center;
+        }
+
+        .total strong {
+            display: block;
+            color: #70c4ff;
+            margin-bottom: 8px;
+        }
+
+        .total span {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 10px;
+            background: #168cff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0875dc;
+        }
+
+        .volver {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #70c4ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">⚡ GAMERS GOLD</div>
+</header>
+
+<div class="contenedor">
+
+    <div class="tarjeta">
+
+        <h1>Confirmar pedido</h1>
+
+        <div class="advertencia">
+            Revisa los datos antes de confirmar tu pedido.
+        </div>
+
+        <div class="dato">
+            <strong>Juego</strong>
+            <span>Genshin Impact</span>
+        </div>
+
+        <div class="dato">
+            <strong>ID del jugador</strong>
+            <span id="mostrarId">Cargando...</span>
+        </div>
+
+        <div class="dato">
+            <strong>Recarga</strong>
+            <span id="mostrarCantidad">Cargando...</span>
+        </div>
+
+        <div class="total">
+            <strong>Total</strong>
+            <span id="mostrarPrecio">
+                Cargando...
+            </span>
+        </div>
+
+        <button onclick="confirmarPedido()">
+            Confirmar pedido
+        </button>
+
+        <a href="genshinimpact.html" class="volver">
+            ← Volver
+        </a>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    const SUPABASE_URL =
+        "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const id =
+        parametros.get("id");
+
+    const cantidad =
+        parametros.get("cantidad");
+
+    document.getElementById(
+        "mostrarId"
+    ).textContent =
+        id || "No especificado";
+
+    document.getElementById(
+        "mostrarCantidad"
+    ).textContent =
+        cantidad || "No especificada";
+
+    async function cargarPrecio() {
+
+        if (!cantidad) {
+
+            document.getElementById(
+                "mostrarPrecio"
+            ).textContent =
+                "No disponible";
+
+            return;
+        }
+
+        const { data, error } =
+            await supabaseClient
+                .from("game_products")
+                .select("price_gvr")
+                .eq("game", "Genshin Impact")
+                .eq("product_name", cantidad)
+                .eq("active", true)
+                .maybeSingle();
+
+        if (error || !data) {
+
+            console.error(error);
+
+            document.getElementById(
+                "mostrarPrecio"
+            ).textContent =
+                "No disponible";
+
+            return;
+        }
+
+        document.getElementById(
+            "mostrarPrecio"
+        ).textContent =
+            data.price_gvr + " GVR";
+    }
+
+    function confirmarPedido() {
+
+        const url =
+            "pedido-realizado-genshinimpact.html?id=" +
+            encodeURIComponent(id) +
+            "&cantidad=" +
+            encodeURIComponent(cantidad);
+
+        window.location.href = url;
+    }
+
+    cargarPrecio();
+</script>
+
+</body>
+</html>
