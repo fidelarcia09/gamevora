@@ -18,25 +18,36 @@
             background: #050b18;
             color: white;
             min-height: 100vh;
-        }
-
-        header {
-            background: #07152f;
-            padding: 18px;
-            text-align: center;
-            border-bottom: 1px solid #123a70;
-        }
-
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            color: #38a8ff;
+            padding: 20px;
         }
 
         .contenedor {
             max-width: 500px;
-            margin: 40px auto;
-            padding: 20px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
         }
 
         .tarjeta {
@@ -111,14 +122,6 @@
             cursor: not-allowed;
         }
 
-        .volver {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #70c4ff;
-            text-decoration: none;
-        }
-
         .cargando {
             color: #9fb5d0;
             text-align: center;
@@ -129,11 +132,19 @@
 
 <body>
 
-<header>
-    <div class="logo">⚡ GAMERS GOLD</div>
-</header>
-
 <div class="contenedor">
+
+    <div class="header">
+
+        <div class="logo">
+            <span class="rayo">⚡</span> Gamers Gold Top-Up
+        </div>
+
+        <a href="juegos.html" class="volver">
+            ← Juegos
+        </a>
+
+    </div>
 
     <div class="tarjeta">
 
@@ -145,7 +156,9 @@
             Recarga Genshin Impact de forma rápida y sencilla.
         </p>
 
-        <label for="idJugador">ID del jugador</label>
+        <label for="idJugador">
+            ID del jugador
+        </label>
 
         <input
             type="text"
@@ -154,7 +167,9 @@
             autocomplete="off"
         >
 
-        <label for="cantidad">Selecciona tu recarga</label>
+        <label for="cantidad">
+            Selecciona tu recarga
+        </label>
 
         <select id="cantidad">
             <option value="">Cargando productos...</option>
@@ -166,10 +181,6 @@
         >
             Continuar
         </button>
-
-        <a href="juegos.html" class="volver">
-            ← Volver a juegos
-        </a>
 
         <p id="mensaje" class="cargando"></p>
 
@@ -320,10 +331,6 @@ async function continuarPedido() {
 
     try {
 
-        /* ==========================================
-           COMPROBAR SESIÓN
-           ========================================== */
-
         const {
             data: {
                 session
@@ -346,10 +353,6 @@ async function continuarPedido() {
             return;
         }
 
-
-        /* ==========================================
-           BUSCAR PRODUCTO
-           ========================================== */
 
         const {
             data: producto,
@@ -391,10 +394,6 @@ async function continuarPedido() {
         }
 
 
-        /* ==========================================
-           REALIZAR COMPRA
-           ========================================== */
-
         const {
             data: pedido,
             error: compraError
@@ -407,10 +406,6 @@ async function continuarPedido() {
                 }
             );
 
-
-        /* ==========================================
-           ERROR DE COMPRA
-           ========================================== */
 
         if (compraError) {
 
@@ -444,10 +439,6 @@ async function continuarPedido() {
         }
 
 
-        /* ==========================================
-           COMPRA EXITOSA
-           ========================================== */
-
         alert(
             "¡Compra realizada correctamente!\n\n" +
             "Pedido: " +
@@ -478,7 +469,6 @@ async function continuarPedido() {
 
         boton.textContent =
             "Continuar";
-
     }
 }
 
