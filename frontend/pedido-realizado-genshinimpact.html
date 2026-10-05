@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pedido realizado | Genshin Impact | Gamers Gold Top-Up</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #07152f;
+            padding: 18px;
+            text-align: center;
+            border-bottom: 1px solid #123a70;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #38a8ff;
+        }
+
+        .contenedor {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .tarjeta {
+            background: #0a1830;
+            border: 1px solid #164b8f;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(0, 140, 255, 0.15);
+        }
+
+        .check {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: #123d69;
+            border: 2px solid #38a8ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: #38a8ff;
+        }
+
+        h1 {
+            text-align: center;
+            color: #38a8ff;
+            margin-bottom: 12px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #a9bdd8;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .dato {
+            background: #07152b;
+            border: 1px solid #153b68;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .dato strong {
+            display: block;
+            color: #7dbfff;
+            margin-bottom: 5px;
+        }
+
+        .dato span {
+            color: white;
+            word-break: break-word;
+        }
+
+        .mensaje {
+            margin-top: 20px;
+            background: #071b36;
+            border: 1px solid #164b8f;
+            border-radius: 10px;
+            padding: 15px;
+            color: #bcd3ec;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 10px;
+            background: #168cff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0875dc;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">⚡ GAMERS GOLD</div>
+</header>
+
+<div class="contenedor">
+
+    <div class="tarjeta">
+
+        <div class="check">
+            ✓
+        </div>
+
+        <h1>¡Pedido realizado!</h1>
+
+        <p class="descripcion">
+            Tu pedido de Genshin Impact ha sido registrado.
+        </p>
+
+        <div class="dato">
+            <strong>Juego</strong>
+            <span>Genshin Impact</span>
+        </div>
+
+        <div class="dato">
+            <strong>ID del jugador</strong>
+            <span id="mostrarId">Cargando...</span>
+        </div>
+
+        <div class="dato">
+            <strong>Recarga</strong>
+            <span id="mostrarCantidad">Cargando...</span>
+        </div>
+
+        <div class="mensaje">
+            ⚡ El pedido ha sido registrado correctamente.
+            Los sistemas de GVR y procesamiento real se
+            conectarán posteriormente.
+        </div>
+
+        <button onclick="window.location.href='juegos.html'">
+            Volver a juegos
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const id =
+        parametros.get("id");
+
+    const cantidad =
+        parametros.get("cantidad");
+
+    document.getElementById(
+        "mostrarId"
+    ).textContent =
+        id || "No especificado";
+
+    document.getElementById(
+        "mostrarCantidad"
+    ).textContent =
+        cantidad || "No especificada";
+
+    const pedido = {
+        juego: "Genshin Impact",
+        id: id || "No especificado",
+        cantidad: cantidad || "No especificada",
+        estado: "Completado",
+        fecha: new Date().toLocaleString("es-ES")
+    };
+
+    const clavePedido =
+        "gamevora_pedido_" +
+        window.location.search;
+
+    if (
+        !sessionStorage.getItem(clavePedido) &&
+        id &&
+        cantidad
+    ) {
+
+        let pedidos =
+            JSON.parse(
+                localStorage.getItem(
+                    "gamevora_pedidos"
+                ) || "[]"
+            );
+
+        pedidos.push(pedido);
+
+        localStorage.setItem(
+            "gamevora_pedidos",
+            JSON.stringify(pedidos)
+        );
+
+        sessionStorage.setItem(
+            clavePedido,
+            "guardado"
+        );
+    }
+</script>
+
+</body>
+</html>
