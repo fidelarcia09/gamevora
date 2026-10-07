@@ -1,436 +1,165 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Free Fire | Gamers Gold Top-Up</title>
+  <title>Ofertas Especiales - Free Fire | Gamers Gold Top-Up</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-        }
+    body {
+      font-family: Arial, sans-serif;
+      background: #050b18;
+      color: white;
+      min-height: 100vh;
+    }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px;
-            border-bottom: 1px solid #12385f;
-            background: #071225;
-        }
+    header {
+      background: #07152d;
+      padding: 18px 20px;
+      text-align: center;
+      border-bottom: 1px solid #0d5cff;
+      box-shadow: 0 0 15px rgba(0, 110, 255, 0.35);
+    }
 
-        .logo {
-            font-size: 22px;
-            font-weight: 900;
-        }
+    header h1 {
+      color: #00aaff;
+      font-size: 24px;
+      font-style: italic;
+      text-shadow: 0 0 10px #008cff;
+    }
 
-        .logo .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
-        }
+    .contenedor {
+      width: 92%;
+      max-width: 600px;
+      margin: 25px auto;
+    }
 
-        .inicio {
-            text-decoration: none;
-            color: white;
-            border: 1px solid #168cff;
-            padding: 9px 13px;
-            border-radius: 9px;
-            font-size: 13px;
-        }
+    .volver {
+      display: inline-block;
+      color: #00aaff;
+      text-decoration: none;
+      font-size: 16px;
+      margin-bottom: 20px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
 
-        .contenedor {
-            width: 100%;
-            max-width: 500px;
-            margin: auto;
-            padding: 25px 18px;
-        }
+    .volver:hover {
+      background: rgba(0, 170, 255, 0.1);
+    }
 
-        .juego {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
-        }
+    .card {
+      background: #08162e;
+      border: 1px solid #0d5cff;
+      border-radius: 18px;
+      padding: 25px 18px;
+      box-shadow: 0 0 20px rgba(0, 100, 255, 0.25);
+    }
 
-        .icono {
-            text-align: center;
-            font-size: 55px;
-            margin-bottom: 10px;
-        }
+    .card h2 {
+      text-align: center;
+      color: #00aaff;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
 
-        h1 {
-            text-align: center;
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
+    .descripcion {
+      text-align: center;
+      color: #b9c7dc;
+      margin-bottom: 25px;
+      font-size: 15px;
+    }
 
-        .descripcion {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
+    .ofertas {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 7px;
-            color: #b8c9dc;
-            font-size: 13px;
-        }
+    .oferta-btn {
+      width: 100%;
+      min-height: 65px;
+      border: 1px solid #087cff;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0a1d3b, #082b5c);
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 0 10px rgba(0, 110, 255, 0.18);
+    }
 
-        input,
-        select {
-            width: 100%;
-            padding: 13px;
-            margin-bottom: 18px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            outline: none;
-            font-size: 15px;
-        }
+    .oferta-btn:hover {
+      transform: translateY(-2px);
+      border-color: #00aaff;
+      box-shadow: 0 0 18px rgba(0, 170, 255, 0.4);
+    }
 
-        input:focus,
-        select:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
-
-        .recargar {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* =========================
-           OFERTAS ESPECIALES
-           ========================= */
-
-        .separador-ofertas {
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid #12385f;
-        }
-
-        .boton-ofertas {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #168cff;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #061b3a, #0a2d5c);
-            color: #00baff;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
-            transition: 0.2s;
-        }
-
-        .boton-ofertas:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
-        }
-    </style>
+    .oferta-btn.seleccionado {
+      border-color: #00c8ff;
+      background: linear-gradient(135deg, #0b2c5c, #064d86);
+      box-shadow: 0 0 20px rgba(0, 190, 255, 0.45);
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
+  <header>
+    <h1>⚡ Gamers Gold Top-Up</h1>
+  </header>
 
-    <div class="logo">
-        <span class="rayo">⚡</span> Gamers Gold Top-Up
-    </div>
+  <div class="contenedor">
 
-    <a href="juegos.html" class="inicio">
-        ← Juegos
-    </a>
+    <!-- CORREGIDO: como ambos archivos están dentro de frontend -->
+    <a href="free-fire.html" class="volver">← Volver</a>
 
-</header>
+    <div class="card">
 
+      <h2>🎁 Ofertas Especiales</h2>
 
-<main class="contenedor">
+      <p class="descripcion">
+        Elige una oferta especial de Free Fire.
+      </p>
 
-    <section class="juego">
+      <div class="ofertas">
 
-        <div class="icono">🔥</div>
-
-        <h1>Free Fire</h1>
-
-        <p class="descripcion">
-            Recarga tu cuenta de Free Fire de forma rápida y sencilla.
-        </p>
-
-
-        <label for="id">
-            ID del jugador
-        </label>
-
-        <input
-            type="text"
-            id="id"
-            placeholder="Escribe tu ID de Free Fire"
-        >
-
-
-        <label for="cantidad">
-            Cantidad
-        </label>
-
-        <select id="cantidad">
-
-            <option value="">
-                Selecciona una cantidad
-            </option>
-
-            <option>
-                110 diamantes
-            </option>
-
-            <option>
-                310 diamantes
-            </option>
-
-            <option>
-                520 diamantes
-            </option>
-
-            <option>
-                1060 diamantes
-            </option>
-
-            <option>
-                2180 diamantes
-            </option>
-
-        </select>
-
-
-        <button
-            class="recargar"
-            type="button"
-            onclick="continuarRecarga()"
-        >
-            Continuar ⚡
+        <button class="oferta-btn" onclick="seleccionarOferta(this)">
+          🎟️ Booyah Pass
         </button>
 
+        <button class="oferta-btn" onclick="seleccionarOferta(this)">
+          💎 Membresía Semanal
+        </button>
 
-        <!-- =========================
-             OFERTAS ESPECIALES
-             ========================= -->
+        <button class="oferta-btn" onclick="seleccionarOferta(this)">
+          👑 Membresía Mensual
+        </button>
 
-        <div class="separador-ofertas">
+      </div>
 
-            <button
-                class="boton-ofertas"
-                type="button"
-                onclick="abrirOfertas()"
-            >
-                🎁 Ofertas Especiales
-            </button>
+    </div>
+  </div>
 
-        </div>
+  <script>
+    function seleccionarOferta(boton) {
 
-    </section>
+      document.querySelectorAll(".oferta-btn").forEach(btn => {
+        btn.classList.remove("seleccionado");
+      });
 
-</main>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-
-const supabaseClient = window.supabase.createClient(
-    "https://gsuhzcavghsiolmipnzi.supabase.co",
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
-);
-
-
-/* =========================
-   ABRIR OFERTAS ESPECIALES
-   ========================= */
-
-function abrirOfertas() {
-
-    window.location.href = "ofertas-free-fire.html";
-
-}
-
-
-/* =========================
-   RECARGA FREE FIRE
-   ========================= */
-
-async function continuarRecarga() {
-
-    const idJugador =
-        document.getElementById("id").value.trim();
-
-    const cantidad =
-        document.getElementById("cantidad").value;
-
-
-    if (idJugador === "") {
-
-        alert("Escribe tu ID de Free Fire.");
-
-        return;
+      boton.classList.add("seleccionado");
     }
-
-
-    if (cantidad === "") {
-
-        alert("Selecciona una cantidad.");
-
-        return;
-    }
-
-
-    if (cantidad.toLowerCase() !== "110 diamantes") {
-
-        alert(
-            "Para esta prueba selecciona 110 diamantes."
-        );
-
-        return;
-    }
-
-
-    const {
-        data: { session },
-        error: sessionError
-    } = await supabaseClient.auth.getSession();
-
-
-    if (sessionError || !session) {
-
-        alert("Debes iniciar sesión primero.");
-
-        window.location.href = "login.html";
-
-        return;
-    }
-
-
-    const {
-        data: producto,
-        error: productoError
-    } = await supabaseClient
-
-        .from("game_products")
-
-        .select(
-            "id, game, product_name, price_gvr, active"
-        )
-
-        .eq("game", "Free Fire")
-
-        .eq("product_name", "110 Diamantes")
-
-        .maybeSingle();
-
-
-    console.log("PRODUCTO:", producto);
-
-    console.log("ERROR:", productoError);
-
-
-    if (productoError) {
-
-        alert(
-            "Error buscando producto:\n\n" +
-            productoError.message
-        );
-
-        return;
-    }
-
-
-    if (!producto) {
-
-        alert(
-            "Supabase no encontró el producto."
-        );
-
-        return;
-    }
-
-
-    if (productoError || !producto) {
-
-        console.error(productoError);
-
-        alert(
-            "No se encontró el producto."
-        );
-
-        return;
-    }
-
-
-    const {
-        data,
-        error
-    } = await supabaseClient.rpc(
-        "purchase_game_product",
-        {
-            p_product_id: producto.id,
-            p_player_id: idJugador
-        }
-    );
-
-
-    if (error) {
-
-        console.error(error);
-
-        alert(
-            "No se pudo realizar la compra:\n\n" +
-            error.message
-        );
-
-        return;
-    }
-
-
-    alert(
-
-        "¡Compra realizada! ⚡\n\n" +
-
-        "110 diamantes\n" +
-
-        "Precio: " +
-        producto.price_gvr +
-        " GVR\n\n" +
-
-        "ID del pedido: " +
-        data
-
-    );
-
-
-    window.location.href = "cuenta.html";
-
-}
-
-</script>
+  </script>
 
 </body>
 </html>
