@@ -197,6 +197,10 @@
             border-top-color: #00baff;
         }
 
+        /* =========================
+           PRECIO
+           ========================= */
+
         .precio-oferta {
             margin-top: 18px;
 
@@ -223,6 +227,10 @@
             font-weight: 900;
         }
 
+        /* =========================
+           BOTONES PRINCIPALES
+           ========================= */
+
         .boton-principal {
             width: 100%;
 
@@ -247,6 +255,11 @@
             cursor: pointer;
         }
 
+        .boton-principal:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
         .boton-secundario {
             width: 100%;
 
@@ -266,6 +279,10 @@
 
             cursor: pointer;
         }
+
+        /* =========================
+           RESUMEN
+           ========================= */
 
         .resumen {
             background: #061226;
@@ -341,6 +358,10 @@
             box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
         }
 
+        /* =========================
+           ÉXITO
+           ========================= */
+
         .exito {
             text-align: center;
             padding: 10px 0;
@@ -386,13 +407,6 @@
             margin-top: 18px;
         }
 
-        .cargando {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 13px;
-            padding: 15px;
-        }
-
     </style>
 </head>
 
@@ -419,7 +433,6 @@
 
     <!-- =================================================
          PANTALLA 1
-         SELECCIONAR OFERTA
          ================================================= -->
 
     <section
@@ -440,19 +453,7 @@
         </p>
 
 
-        <div
-            id="estadoProductos"
-            class="cargando"
-        >
-            Cargando ofertas...
-        </div>
-
-
-        <div
-            id="listaOfertas"
-            class="lista-ofertas"
-            style="display:none;"
-        >
+        <div class="lista-ofertas">
 
 
             <!-- OFERTA 1 -->
@@ -529,7 +530,7 @@
                 id="precio"
                 class="precio"
             >
-                0 GVR
+                Precio pendiente
             </div>
 
         </div>
@@ -612,7 +613,7 @@
                 </span>
 
                 <span id="confirmarPrecio">
-                    0 GVR
+                    Precio pendiente
                 </span>
 
             </div>
@@ -660,7 +661,6 @@
 
     <!-- =================================================
          PANTALLA 3
-         PEDIDO REALIZADO
          ================================================= -->
 
     <section
@@ -743,92 +743,31 @@ const supabaseClient = window.supabase.createClient(
 
 let ofertaSeleccionada = "";
 
-let productoSeleccionado = null;
-
 let precioSeleccionado = 0;
 
 
 /* =================================================
-   CARGAR PRODUCTOS
+   PRODUCTOS TEMPORALES
    ================================================= */
 
-async function cargarOfertas() {
+const productosCODMobile = {
 
-    const {
-        data: productos,
-        error
-    } = await supabaseClient
-        .from("game_products")
-        .select(
-            "id, game, product_name, price_gvr, active"
-        )
-        .eq(
-            "game",
-            "COD Mobile"
-        )
-        .in(
-            "product_name",
-            [
-                "Battle Pass",
-                "Oferta de CP",
-                "Oferta Especial"
-            ]
-        )
-        .eq(
-            "active",
-            true
-        );
+    "Battle Pass": {
+        nombre: "Battle Pass",
+        precio: 0
+    },
 
+    "Oferta de CP": {
+        nombre: "Oferta de CP",
+        precio: 0
+    },
 
-    if (error) {
-
-        console.error(
-            "Error cargando productos:",
-            error
-        );
-
-        document.getElementById(
-            "estadoProductos"
-        ).textContent =
-            "No se pudieron cargar las ofertas.";
-
-        return;
+    "Oferta Especial": {
+        nombre: "Oferta Especial",
+        precio: 0
     }
 
-
-    if (!productos || productos.length === 0) {
-
-        document.getElementById(
-            "estadoProductos"
-        ).textContent =
-            "No hay ofertas disponibles.";
-
-        return;
-    }
-
-
-    window.productosOfertas = {};
-
-
-    productos.forEach(function(producto) {
-
-        window.productosOfertas[
-            producto.product_name
-        ] = producto;
-
-    });
-
-
-    document.getElementById(
-        "estadoProductos"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "listaOfertas"
-    ).style.display = "flex";
-
-}
+};
 
 
 /* =================================================
@@ -839,22 +778,6 @@ function seleccionarOferta(
     boton,
     nombre
 ) {
-
-    const producto =
-        window.productosOfertas[
-            nombre
-        ];
-
-
-    if (!producto) {
-
-        alert(
-            "Esta oferta no está disponible."
-        );
-
-        return;
-    }
-
 
     document
         .querySelectorAll(".boton-oferta")
@@ -873,21 +796,19 @@ function seleccionarOferta(
 
 
     ofertaSeleccionada =
-        producto.product_name;
-
-
-    productoSeleccionado =
-        producto;
+        nombre;
 
 
     precioSeleccionado =
-        Number(producto.price_gvr);
+        productosCODMobile[
+            nombre
+        ].precio;
 
 
     document.getElementById(
         "precio"
     ).textContent =
-        precioSeleccionado + " GVR";
+        "Precio pendiente";
 
 
     document.getElementById(
@@ -911,7 +832,6 @@ function seleccionarOferta(
 function irAConfirmacion() {
 
     if (
-        !productoSeleccionado ||
         ofertaSeleccionada === ""
     ) {
 
@@ -932,7 +852,7 @@ function irAConfirmacion() {
     document.getElementById(
         "confirmarPrecio"
     ).textContent =
-        precioSeleccionado + " GVR";
+        "Precio pendiente";
 
 
     document.getElementById(
@@ -1008,7 +928,9 @@ async function realizarPedido() {
     }
 
 
-    if (!productoSeleccionado) {
+    if (
+        ofertaSeleccionada === ""
+    ) {
 
         alert(
             "No hay ninguna oferta seleccionada."
@@ -1025,7 +947,8 @@ async function realizarPedido() {
     const {
         data: { session },
         error: sessionError
-    } = await supabaseClient.auth.getSession();
+    } =
+        await supabaseClient.auth.getSession();
 
 
     if (
@@ -1044,106 +967,25 @@ async function realizarPedido() {
     }
 
 
-    const boton =
-        document.getElementById(
-            "confirmarBtn"
-        );
+    /*
+     * LOS PRODUCTOS TODAVÍA NO EXISTEN
+     * EN SUPABASE.
+     *
+     * Por eso no ejecutamos todavía
+     * purchase_game_product.
+     */
 
-
-    boton.disabled = true;
-
-    boton.textContent =
-        "Procesando compra...";
-
-
-    /* ================================
-       COMPRA REAL
-       ================================ */
-
-    const {
-        data,
-        error
-    } = await supabaseClient.rpc(
-        "purchase_game_product",
-        {
-            p_product_id:
-                productoSeleccionado.id,
-
-            p_player_id:
-                idJugador
-        }
-    );
-
-
-    if (error) {
-
-        console.error(
-            "Error realizando compra:",
-            error
-        );
-
-
-        boton.disabled = false;
-
-        boton.textContent =
-            "Confirmar compra ⚡";
-
-
-        alert(
-            "No se pudo realizar la compra:\n\n" +
-            error.message
-        );
-
-        return;
-    }
-
-
-    /* ================================
-       PEDIDO REALIZADO
-       ================================ */
-
-    console.log(
-        "Compra realizada:",
-        data
-    );
-
-
-    document.getElementById(
-        "pedidoId"
-    ).textContent =
-        data;
-
-
-    document.getElementById(
-        "pantallaConfirmacion"
-    ).classList.remove(
-        "activa"
-    );
-
-
-    document.getElementById(
-        "pantallaExito"
-    ).classList.add(
-        "activa"
-    );
-
-
-    window.scrollTo(
-        0,
-        0
+    alert(
+        "El flujo está listo. ⚡\n\n" +
+        "Ahora solo falta crear el producto \"" +
+        ofertaSeleccionada +
+        "\" en Supabase."
     );
 
 }
-
-
-/* =================================================
-   INICIAR
-   ================================================= */
-
-cargarOfertas();
 
 </script>
 
 
 </body>
-    </html>
+</html>
