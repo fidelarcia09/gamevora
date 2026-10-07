@@ -10,7 +10,14 @@
 
 const supabaseClient = window.supabase.createClient(
     "https://gsuhzcavghsiolmipnzi.supabase.co",
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx",
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
 );
 
 
@@ -18,7 +25,8 @@ const supabaseClient = window.supabase.createClient(
    CONFIGURACIÓN DEL JUEGO
    ========================================================= */
 
-const CONFIG_OFERTAS = window.CONFIG_OFERTAS || {};
+const CONFIG_OFERTAS =
+    window.CONFIG_OFERTAS || {};
 
 const NOMBRE_JUEGO =
     CONFIG_OFERTAS.juego || "";
@@ -84,12 +92,11 @@ async function cargarOfertas() {
         lista.style.display =
             "none";
 
+        lista.innerHTML =
+            "";
+
     }
 
-
-    /* =====================================
-       OBTENER NOMBRES DE LAS OFERTAS
-       ===================================== */
 
     const nombresOfertas =
         OFERTAS_CONFIG.map(
@@ -112,9 +119,9 @@ async function cargarOfertas() {
     }
 
 
-    /* =====================================
+    /* =====================================================
        BUSCAR PRODUCTOS
-       ===================================== */
+       ===================================================== */
 
     const {
         data: productos,
@@ -142,7 +149,7 @@ async function cargarOfertas() {
     if (error) {
 
         console.error(
-            "Error cargando productos:",
+            "Error cargando ofertas:",
             error
         );
 
@@ -174,9 +181,9 @@ async function cargarOfertas() {
     }
 
 
-    /* =====================================
+    /* =====================================================
        GUARDAR PRODUCTOS
-       ===================================== */
+       ===================================================== */
 
     window.productosOfertas = {};
 
@@ -192,14 +199,11 @@ async function cargarOfertas() {
     );
 
 
-    /* =====================================
+    /* =====================================================
        CONSTRUIR BOTONES
-       ===================================== */
+       ===================================================== */
 
     if (lista) {
-
-        lista.innerHTML = "";
-
 
         OFERTAS_CONFIG.forEach(
             function(oferta) {
@@ -210,14 +214,10 @@ async function cargarOfertas() {
                     ];
 
 
-                /*
-                 * Si el producto no está activo
-                 * o todavía no existe en Supabase,
-                 * no mostramos esa oferta.
-                 */
-
                 if (!producto) {
+
                     return;
+
                 }
 
 
@@ -244,6 +244,10 @@ async function cargarOfertas() {
 
                     };
 
+
+                /* =========================================
+                   IMAGEN
+                   ========================================= */
 
                 const foto =
                     document.createElement(
@@ -296,6 +300,10 @@ async function cargarOfertas() {
 
                 }
 
+
+                /* =========================================
+                   NOMBRE
+                   ========================================= */
 
                 const nombre =
                     document.createElement(
@@ -418,12 +426,10 @@ function seleccionarOferta(
             "precio"
         );
 
-
     const cajaPrecio =
         document.getElementById(
             "precioSeleccionado"
         );
-
 
     const continuar =
         document.getElementById(
@@ -477,31 +483,60 @@ function irAConfirmacion() {
     }
 
 
-    document.getElementById(
-        "confirmarOferta"
-    ).textContent =
-        ofertaSeleccionada;
+    const confirmarOferta =
+        document.getElementById(
+            "confirmarOferta"
+        );
+
+    const confirmarPrecio =
+        document.getElementById(
+            "confirmarPrecio"
+        );
+
+    const pantallaOfertas =
+        document.getElementById(
+            "pantallaOfertas"
+        );
+
+    const pantallaConfirmacion =
+        document.getElementById(
+            "pantallaConfirmacion"
+        );
 
 
-    document.getElementById(
-        "confirmarPrecio"
-    ).textContent =
-        precioSeleccionado +
-        " GVR";
+    if (confirmarOferta) {
+
+        confirmarOferta.textContent =
+            ofertaSeleccionada;
+
+    }
 
 
-    document.getElementById(
-        "pantallaOfertas"
-    ).classList.remove(
-        "activa"
-    );
+    if (confirmarPrecio) {
+
+        confirmarPrecio.textContent =
+            precioSeleccionado +
+            " GVR";
+
+    }
 
 
-    document.getElementById(
-        "pantallaConfirmacion"
-    ).classList.add(
-        "activa"
-    );
+    if (pantallaOfertas) {
+
+        pantallaOfertas.classList.remove(
+            "activa"
+        );
+
+    }
+
+
+    if (pantallaConfirmacion) {
+
+        pantallaConfirmacion.classList.add(
+            "activa"
+        );
+
+    }
 
 
     window.scrollTo(
@@ -518,18 +553,33 @@ function irAConfirmacion() {
 
 function volverOfertas() {
 
-    document.getElementById(
-        "pantallaConfirmacion"
-    ).classList.remove(
-        "activa"
-    );
+    const pantallaConfirmacion =
+        document.getElementById(
+            "pantallaConfirmacion"
+        );
+
+    const pantallaOfertas =
+        document.getElementById(
+            "pantallaOfertas"
+        );
 
 
-    document.getElementById(
-        "pantallaOfertas"
-    ).classList.add(
-        "activa"
-    );
+    if (pantallaConfirmacion) {
+
+        pantallaConfirmacion.classList.remove(
+            "activa"
+        );
+
+    }
+
+
+    if (pantallaOfertas) {
+
+        pantallaOfertas.classList.add(
+            "activa"
+        );
+
+    }
 
 
     window.scrollTo(
@@ -547,12 +597,14 @@ function volverOfertas() {
 async function realizarPedido() {
 
     /*
-     * PROTECCIÓN CONTRA DOBLE CLIC
-     */
+       BLOQUEO CONTRA DOBLE CLIC
+    */
 
-    if (
-        procesandoCompra
-    ) {
+    if (procesandoCompra) {
+
+        console.log(
+            "Compra ya en proceso."
+        );
 
         return;
     }
@@ -562,6 +614,16 @@ async function realizarPedido() {
         document.getElementById(
             "idJugador"
         );
+
+
+    if (!campoId) {
+
+        alert(
+            "No se encontró el campo del ID del jugador."
+        );
+
+        return;
+    }
 
 
     const idJugador =
@@ -594,9 +656,10 @@ async function realizarPedido() {
     }
 
 
-    /* =====================================
-       ACTIVAR BLOQUEO INMEDIATAMENTE
-       ===================================== */
+    /*
+       ACTIVAR BLOQUEO ANTES
+       DE REALIZAR LA PETICIÓN
+    */
 
     procesandoCompra =
         true;
@@ -608,16 +671,20 @@ async function realizarPedido() {
         );
 
 
-    boton.disabled =
-        true;
+    if (boton) {
 
-    boton.textContent =
-        "Procesando compra...";
+        boton.disabled =
+            true;
+
+        boton.textContent =
+            "Procesando compra...";
+
+    }
 
 
-    /* =====================================
+    /* =====================================================
        COMPROBAR SESIÓN
-       ===================================== */
+       ===================================================== */
 
     const {
         data: { session },
@@ -635,11 +702,15 @@ async function realizarPedido() {
             false;
 
 
-        boton.disabled =
-            false;
+        if (boton) {
 
-        boton.textContent =
-            "Confirmar compra ⚡";
+            boton.disabled =
+                false;
+
+            boton.textContent =
+                "Confirmar compra ⚡";
+
+        }
 
 
         alert(
@@ -655,9 +726,9 @@ async function realizarPedido() {
     }
 
 
-    /* =====================================
-       COMPRA REAL
-       ===================================== */
+    /* =====================================================
+       REALIZAR UNA SOLA RPC
+       ===================================================== */
 
     const {
         data,
@@ -675,6 +746,10 @@ async function realizarPedido() {
         );
 
 
+    /* =====================================================
+       ERROR
+       ===================================================== */
+
     if (error) {
 
         console.error(
@@ -687,11 +762,15 @@ async function realizarPedido() {
             false;
 
 
-        boton.disabled =
-            false;
+        if (boton) {
 
-        boton.textContent =
-            "Confirmar compra ⚡";
+            boton.disabled =
+                false;
+
+            boton.textContent =
+                "Confirmar compra ⚡";
+
+        }
 
 
         alert(
@@ -704,9 +783,9 @@ async function realizarPedido() {
     }
 
 
-    /* =====================================
-       PEDIDO REALIZADO
-       ===================================== */
+    /* =====================================================
+       COMPRA CORRECTA
+       ===================================================== */
 
     console.log(
         "Compra realizada:",
@@ -714,24 +793,47 @@ async function realizarPedido() {
     );
 
 
-    document.getElementById(
-        "pedidoId"
-    ).textContent =
-        data;
+    const pedidoId =
+        document.getElementById(
+            "pedidoId"
+        );
 
 
-    document.getElementById(
-        "pantallaConfirmacion"
-    ).classList.remove(
-        "activa"
-    );
+    if (pedidoId) {
+
+        pedidoId.textContent =
+            data;
+
+    }
 
 
-    document.getElementById(
-        "pantallaExito"
-    ).classList.add(
-        "activa"
-    );
+    const pantallaConfirmacion =
+        document.getElementById(
+            "pantallaConfirmacion"
+        );
+
+    const pantallaExito =
+        document.getElementById(
+            "pantallaExito"
+        );
+
+
+    if (pantallaConfirmacion) {
+
+        pantallaConfirmacion.classList.remove(
+            "activa"
+        );
+
+    }
+
+
+    if (pantallaExito) {
+
+        pantallaExito.classList.add(
+            "activa"
+        );
+
+    }
 
 
     window.scrollTo(
@@ -815,6 +917,7 @@ document.addEventListener(
             volverExito.textContent =
                 "Volver a " +
                 NOMBRE_JUEGO;
+
 
             volverExito.onclick =
                 function() {
