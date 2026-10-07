@@ -83,11 +83,6 @@
             margin-bottom: 22px;
         }
 
-
-        /* =========================
-           PANTALLAS
-           ========================= */
-
         .pantalla {
             display: none;
         }
@@ -96,21 +91,11 @@
             display: block;
         }
 
-
-        /* =========================
-           LISTA DE OFERTAS
-           ========================= */
-
         .lista-ofertas {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
-
-
-        /* =========================
-           TARJETAS
-           ========================= */
 
         .boton-oferta {
             width: 100%;
@@ -143,11 +128,6 @@
             transform: translateY(-2px);
         }
 
-
-        /* =========================
-           FOTO
-           ========================= */
-
         .foto-oferta {
             width: 100%;
             flex: 1;
@@ -165,11 +145,6 @@
             color: #315779;
             font-size: 13px;
         }
-
-
-        /* =========================
-           NOMBRE
-           ========================= */
 
         .nombre-oferta {
             width: 100%;
@@ -194,11 +169,6 @@
             border-top: 1px solid #204c78;
         }
 
-
-        /* =========================
-           SELECCIONADA
-           ========================= */
-
         .boton-oferta.seleccionado {
             border-color: #00baff;
 
@@ -222,11 +192,6 @@
             color: #00baff;
             border-top-color: #00baff;
         }
-
-
-        /* =========================
-           PRECIO
-           ========================= */
 
         .precio-oferta {
             margin-top: 18px;
@@ -253,11 +218,6 @@
             font-size: 24px;
             font-weight: 900;
         }
-
-
-        /* =========================
-           BOTONES
-           ========================= */
 
         .boton-principal {
             width: 100%;
@@ -303,11 +263,6 @@
             cursor: pointer;
         }
 
-
-        /* =========================
-           CONFIRMAR PAGO
-           ========================= */
-
         .resumen {
             background: #061226;
 
@@ -346,10 +301,41 @@
             text-align: right;
         }
 
-
         /* =========================
-           PEDIDO REALIZADO
+           ID DEL JUGADOR
            ========================= */
+
+        .campo-id {
+            margin-top: 18px;
+        }
+
+        .campo-id label {
+            display: block;
+            color: #8fa5bd;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .campo-id input {
+            width: 100%;
+            padding: 13px;
+
+            background: #061226;
+
+            border: 1px solid #204c78;
+            border-radius: 10px;
+
+            color: white;
+
+            outline: none;
+
+            font-size: 15px;
+        }
+
+        .campo-id input:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
 
         .exito {
             text-align: center;
@@ -389,16 +375,18 @@
             font-weight: bold;
         }
 
-
-        /* =========================
-           NOTA
-           ========================= */
-
         .nota {
             text-align: center;
             color: #627b97;
             font-size: 11px;
             margin-top: 18px;
+        }
+
+        .cargando {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 13px;
+            padding: 15px;
         }
 
     </style>
@@ -448,7 +436,19 @@
         </p>
 
 
-        <div class="lista-ofertas">
+        <div
+            id="estadoProductos"
+            class="cargando"
+        >
+            Cargando ofertas...
+        </div>
+
+
+        <div
+            id="listaOfertas"
+            class="lista-ofertas"
+            style="display:none;"
+        >
 
 
             <!-- OFERTA 1 -->
@@ -456,11 +456,7 @@
             <button
                 class="boton-oferta"
                 type="button"
-                onclick="seleccionarOferta(
-                    this,
-                    '🎟️ Booyah Pass',
-                    100
-                )"
+                onclick="seleccionarOferta(this, 'Booyah Pass')"
             >
 
                 <div class="foto-oferta">
@@ -479,11 +475,7 @@
             <button
                 class="boton-oferta"
                 type="button"
-                onclick="seleccionarOferta(
-                    this,
-                    '💎 Membresía Semanal',
-                    80
-                )"
+                onclick="seleccionarOferta(this, 'Membresía Semanal')"
             >
 
                 <div class="foto-oferta">
@@ -502,11 +494,7 @@
             <button
                 class="boton-oferta"
                 type="button"
-                onclick="seleccionarOferta(
-                    this,
-                    '👑 Membresía Mensual',
-                    250
-                )"
+                onclick="seleccionarOferta(this, 'Membresía Mensual')"
             >
 
                 <div class="foto-oferta">
@@ -522,8 +510,6 @@
 
         </div>
 
-
-        <!-- PRECIO -->
 
         <div
             id="precioSeleccionado"
@@ -557,7 +543,7 @@
 
 
         <div class="nota">
-            Ofertas de prueba.
+            Ofertas especiales de Free Fire.
         </div>
 
     </section>
@@ -627,11 +613,27 @@
 
             </div>
 
+        </div>
+
+
+        <div class="campo-id">
+
+            <label for="idJugador">
+                ID del jugador de Free Fire
+            </label>
+
+            <input
+                type="text"
+                id="idJugador"
+                placeholder="Escribe tu ID de Free Fire"
+                autocomplete="off"
+            >
 
         </div>
 
 
         <button
+            id="confirmarBtn"
             class="boton-principal"
             type="button"
             onclick="realizarPedido()"
@@ -716,8 +718,23 @@
 </main>
 
 
+<!-- =================================================
+     SUPABASE
+     ================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
+
+/* =================================================
+   SUPABASE
+   ================================================= */
+
+const supabaseClient = window.supabase.createClient(
+    "https://gsuhzcavghsiolmipnzi.supabase.co",
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+);
 
 
 /* =================================================
@@ -726,8 +743,86 @@
 
 let ofertaSeleccionada = "";
 
+let productoSeleccionado = null;
+
 let precioSeleccionado = 0;
 
+
+/* =================================================
+   CARGAR PRODUCTOS DESDE SUPABASE
+   ================================================= */
+
+async function cargarOfertas() {
+
+    const {
+        data: productos,
+        error
+    } = await supabaseClient
+        .from("game_products")
+        .select(
+            "id, game, product_name, price_gvr, active"
+        )
+        .eq("game", "Free Fire")
+        .in(
+            "product_name",
+            [
+                "Booyah Pass",
+                "Membresía Semanal",
+                "Membresía Mensual"
+            ]
+        )
+        .eq("active", true);
+
+
+    if (error) {
+
+        console.error(
+            "Error cargando productos:",
+            error
+        );
+
+        document.getElementById(
+            "estadoProductos"
+        ).textContent =
+            "No se pudieron cargar las ofertas.";
+
+        return;
+    }
+
+
+    if (!productos || productos.length === 0) {
+
+        document.getElementById(
+            "estadoProductos"
+        ).textContent =
+            "No hay ofertas disponibles.";
+
+        return;
+    }
+
+
+    window.productosOfertas = {};
+
+
+    productos.forEach(function(producto) {
+
+        window.productosOfertas[
+            producto.product_name
+        ] = producto;
+
+    });
+
+
+    document.getElementById(
+        "estadoProductos"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "listaOfertas"
+    ).style.display = "flex";
+
+}
 
 
 /* =================================================
@@ -736,9 +831,24 @@ let precioSeleccionado = 0;
 
 function seleccionarOferta(
     boton,
-    nombre,
-    precio
+    nombre
 ) {
+
+    const producto =
+        window.productosOfertas[
+            nombre
+        ];
+
+
+    if (!producto) {
+
+        alert(
+            "Esta oferta no está disponible."
+        );
+
+        return;
+    }
+
 
     document
         .querySelectorAll(".boton-oferta")
@@ -756,28 +866,36 @@ function seleccionarOferta(
     );
 
 
-    ofertaSeleccionada = nombre;
+    ofertaSeleccionada =
+        producto.product_name;
 
-    precioSeleccionado = precio;
+
+    productoSeleccionado =
+        producto;
+
+
+    precioSeleccionado =
+        Number(producto.price_gvr);
 
 
     document.getElementById(
         "precio"
     ).textContent =
-        precio + " GVR";
+        precioSeleccionado + " GVR";
 
 
     document.getElementById(
         "precioSeleccionado"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
 
     document.getElementById(
         "continuarBtn"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
 }
-
 
 
 /* =================================================
@@ -787,8 +905,8 @@ function seleccionarOferta(
 function irAConfirmacion() {
 
     if (
-        ofertaSeleccionada === "" ||
-        precioSeleccionado <= 0
+        !productoSeleccionado ||
+        ofertaSeleccionada === ""
     ) {
 
         alert(
@@ -833,7 +951,6 @@ function irAConfirmacion() {
 }
 
 
-
 /* =================================================
    VOLVER A OFERTAS
    ================================================= */
@@ -862,35 +979,133 @@ function volverOfertas() {
 }
 
 
-
 /* =================================================
-   REALIZAR PEDIDO
+   REALIZAR PEDIDO REAL
    ================================================= */
 
-function realizarPedido() {
+async function realizarPedido() {
 
-    /*
-       POR AHORA ES SOLO EL FLUJO DE PRUEBA.
-
-       Aquí posteriormente conectaremos:
-
-       1. Supabase
-       2. game_products
-       3. purchase_game_product
-       4. ventas
-       5. notificación
-    */
+    const idJugador =
+        document
+            .getElementById("idJugador")
+            .value
+            .trim();
 
 
-    const idPrueba =
-        "OFERTA-" +
-        Date.now();
+    if (idJugador === "") {
+
+        alert(
+            "Escribe tu ID de Free Fire."
+        );
+
+        return;
+    }
+
+
+    if (!productoSeleccionado) {
+
+        alert(
+            "No hay ninguna oferta seleccionada."
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       COMPROBAR SESION
+       ================================ */
+
+    const {
+        data: { session },
+        error: sessionError
+    } = await supabaseClient.auth.getSession();
+
+
+    if (
+        sessionError ||
+        !session
+    ) {
+
+        alert(
+            "Debes iniciar sesión primero."
+        );
+
+        window.location.href =
+            "login.html";
+
+        return;
+    }
+
+
+    const boton =
+        document.getElementById(
+            "confirmarBtn"
+        );
+
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Procesando compra...";
+
+
+    /* ================================
+       REALIZAR COMPRA
+       ================================ */
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "purchase_game_product",
+        {
+            p_product_id:
+                productoSeleccionado.id,
+
+            p_player_id:
+                idJugador
+        }
+    );
+
+
+    if (error) {
+
+        console.error(
+            "Error realizando compra:",
+            error
+        );
+
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Confirmar compra ⚡";
+
+
+        alert(
+            "No se pudo realizar la compra:\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       PEDIDO REALIZADO
+       ================================ */
+
+    console.log(
+        "Compra realizada:",
+        data
+    );
 
 
     document.getElementById(
         "pedidoId"
     ).textContent =
-        idPrueba;
+        data;
 
 
     document.getElementById(
@@ -914,6 +1129,12 @@ function realizarPedido() {
 
 }
 
+
+/* =================================================
+   INICIAR
+   ================================================= */
+
+cargarOfertas();
 
 </script>
 
