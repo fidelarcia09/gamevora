@@ -82,38 +82,136 @@
             margin-bottom: 22px;
         }
 
+        /* =========================
+           LISTA DE OFERTAS
+           ========================= */
+
         .lista-ofertas {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 16px;
         }
+
+        /* =========================
+           TARJETAS CUADRADAS
+           ========================= */
 
         .boton-oferta {
             width: 100%;
-            padding: 12px 15px;
+            aspect-ratio: 1 / 1;
+
+            padding: 0;
+
             border: 1px solid #204c78;
-            border-radius: 10px;
+            border-radius: 16px;
+
             background: #061226;
             color: white;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: left;
+
             cursor: pointer;
+
+            overflow: hidden;
+
+            display: flex;
+            flex-direction: column;
+
             transition: 0.2s;
+
+            box-shadow: 0 0 12px rgba(0, 140, 255, 0.08);
         }
 
         .boton-oferta:hover {
             border-color: #159dff;
             background: #0a1d38;
-            box-shadow: 0 0 10px rgba(0, 157, 255, 0.2);
-            transform: translateY(-1px);
+            box-shadow: 0 0 18px rgba(0, 157, 255, 0.22);
+            transform: translateY(-2px);
         }
+
+        /* =========================
+           ESPACIO PARA LA FOTO
+           ========================= */
+
+        .foto-oferta {
+            width: 100%;
+            flex: 1;
+
+            background: #07172d;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-bottom: 1px solid #204c78;
+
+            overflow: hidden;
+        }
+
+        /*
+        Cuando tengas la foto simplemente
+        podremos ponerla aquí.
+        */
+
+        .foto-oferta span {
+            color: #315779;
+            font-size: 13px;
+        }
+
+        /* =========================
+           NOMBRE DE LA OFERTA
+           ========================= */
+
+        .nombre-oferta {
+            width: 100%;
+
+            min-height: 58px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 10px;
+
+            background: #091a35;
+
+            color: white;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            text-align: center;
+        }
+
+        /* =========================
+           OFERTA SELECCIONADA
+           ========================= */
 
         .boton-oferta.seleccionado {
             border-color: #00baff;
-            background: linear-gradient(90deg, #09244a, #0b315c);
-            box-shadow: 0 0 12px rgba(0, 186, 255, 0.25);
+
+            background: linear-gradient(
+                180deg,
+                #09244a,
+                #0b315c
+            );
+
+            box-shadow:
+                0 0 10px rgba(0, 186, 255, 0.25),
+                0 0 22px rgba(0, 140, 255, 0.15);
         }
+
+        .boton-oferta.seleccionado .foto-oferta {
+            border-bottom-color: #00baff;
+            background: #09213f;
+        }
+
+        .boton-oferta.seleccionado .nombre-oferta {
+            background: #0b315c;
+            color: #00baff;
+        }
+
+        /* =========================
+           NOTA
+           ========================= */
 
         .nota {
             text-align: center;
@@ -139,6 +237,7 @@
 
 </header>
 
+
 <main class="contenedor">
 
     <section class="ofertas">
@@ -151,33 +250,75 @@
             Elige una oferta especial de Free Fire.
         </p>
 
+
         <div class="lista-ofertas">
 
-            <button
-                class="boton-oferta"
-                type="button"
-                onclick="seleccionarOferta(this)"
-            >
-                🎟️ Booyah Pass
-            </button>
+
+            <!-- =========================
+                 OFERTA 1
+                 ========================= -->
 
             <button
                 class="boton-oferta"
                 type="button"
                 onclick="seleccionarOferta(this)"
             >
-                💎 Membresía Semanal
+
+                <div class="foto-oferta">
+                    <span>Foto de la oferta</span>
+                </div>
+
+                <div class="nombre-oferta">
+                    🎟️ Booyah Pass
+                </div>
+
             </button>
+
+
+            <!-- =========================
+                 OFERTA 2
+                 ========================= -->
 
             <button
                 class="boton-oferta"
                 type="button"
                 onclick="seleccionarOferta(this)"
             >
-                👑 Membresía Mensual
+
+                <div class="foto-oferta">
+                    <span>Foto de la oferta</span>
+                </div>
+
+                <div class="nombre-oferta">
+                    💎 Membresía Semanal
+                </div>
+
             </button>
+
+
+            <!-- =========================
+                 OFERTA 3
+                 ========================= -->
+
+            <button
+                class="boton-oferta"
+                type="button"
+                onclick="seleccionarOferta(this)"
+            >
+
+                <div class="foto-oferta">
+                    <span>Foto de la oferta</span>
+                </div>
+
+                <div class="nombre-oferta">
+                    👑 Membresía Mensual
+                </div>
+
+            </button>
+
 
         </div>
+
 
         <div class="nota">
             Ofertas de prueba.
@@ -187,6 +328,7 @@
 
 </main>
 
+
 <script>
 
 function seleccionarOferta(boton) {
@@ -194,7 +336,9 @@ function seleccionarOferta(boton) {
     document
         .querySelectorAll(".boton-oferta")
         .forEach(function(elemento) {
+
             elemento.classList.remove("seleccionado");
+
         });
 
     boton.classList.add("seleccionado");
@@ -204,4 +348,4 @@ function seleccionarOferta(boton) {
 </script>
 
 </body>
-                </html>
+</html>
