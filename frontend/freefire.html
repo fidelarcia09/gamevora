@@ -154,6 +154,7 @@
 <body>
 
 <header>
+
     <div class="logo">
         <span class="rayo">⚡</span> Gamers Gold Top-Up
     </div>
@@ -161,7 +162,9 @@
     <a href="juegos.html" class="inicio">
         ← Juegos
     </a>
+
 </header>
+
 
 <main class="contenedor">
 
@@ -175,7 +178,10 @@
             Recarga tu cuenta de Free Fire de forma rápida y sencilla.
         </p>
 
-        <label for="id">ID del jugador</label>
+
+        <label for="id">
+            ID del jugador
+        </label>
 
         <input
             type="text"
@@ -183,16 +189,39 @@
             placeholder="Escribe tu ID de Free Fire"
         >
 
-        <label for="cantidad">Cantidad</label>
+
+        <label for="cantidad">
+            Cantidad
+        </label>
 
         <select id="cantidad">
-            <option value="">Selecciona una cantidad</option>
-            <option>110 diamantes</option>
-            <option>310 diamantes</option>
-            <option>520 diamantes</option>
-            <option>1060 diamantes</option>
-            <option>2180 diamantes</option>
+
+            <option value="">
+                Selecciona una cantidad
+            </option>
+
+            <option>
+                110 diamantes
+            </option>
+
+            <option>
+                310 diamantes
+            </option>
+
+            <option>
+                520 diamantes
+            </option>
+
+            <option>
+                1060 diamantes
+            </option>
+
+            <option>
+                2180 diamantes
+            </option>
+
         </select>
+
 
         <button
             class="recargar"
@@ -234,30 +263,52 @@ const supabaseClient = window.supabase.createClient(
 );
 
 
+/* =========================
+   ABRIR OFERTAS ESPECIALES
+   ========================= */
+
 function abrirOfertas() {
 
-    alert("Ofertas Especiales próximamente.");
+    window.location.href = "ofertas-free-fire.html";
 
 }
 
 
+/* =========================
+   RECARGA FREE FIRE
+   ========================= */
+
 async function continuarRecarga() {
 
-    const idJugador = document.getElementById("id").value.trim();
-    const cantidad = document.getElementById("cantidad").value;
+    const idJugador =
+        document.getElementById("id").value.trim();
+
+    const cantidad =
+        document.getElementById("cantidad").value;
+
 
     if (idJugador === "") {
+
         alert("Escribe tu ID de Free Fire.");
+
         return;
     }
+
 
     if (cantidad === "") {
+
         alert("Selecciona una cantidad.");
+
         return;
     }
 
+
     if (cantidad.toLowerCase() !== "110 diamantes") {
-        alert("Para esta prueba selecciona 110 diamantes.");
+
+        alert(
+            "Para esta prueba selecciona 110 diamantes."
+        );
+
         return;
     }
 
@@ -269,55 +320,85 @@ async function continuarRecarga() {
 
 
     if (sessionError || !session) {
+
         alert("Debes iniciar sesión primero.");
+
         window.location.href = "login.html";
+
         return;
     }
 
 
-    const { data: producto, error: productoError } =
-        await supabaseClient
-            .from("game_products")
-            .select("id, game, product_name, price_gvr, active")
-            .eq("game", "Free Fire")
-            .eq("product_name", "110 Diamantes")
-            .maybeSingle();
+    const {
+        data: producto,
+        error: productoError
+    } = await supabaseClient
+
+        .from("game_products")
+
+        .select(
+            "id, game, product_name, price_gvr, active"
+        )
+
+        .eq("game", "Free Fire")
+
+        .eq("product_name", "110 Diamantes")
+
+        .maybeSingle();
 
 
     console.log("PRODUCTO:", producto);
+
     console.log("ERROR:", productoError);
 
 
     if (productoError) {
-        alert("Error buscando producto:\n\n" + productoError.message);
+
+        alert(
+            "Error buscando producto:\n\n" +
+            productoError.message
+        );
+
         return;
     }
 
 
     if (!producto) {
-        alert("Supabase no encontró el producto.");
+
+        alert(
+            "Supabase no encontró el producto."
+        );
+
         return;
     }
 
 
     if (productoError || !producto) {
+
         console.error(productoError);
-        alert("No se encontró el producto.");
+
+        alert(
+            "No se encontró el producto."
+        );
+
         return;
     }
 
 
-    const { data, error } =
-        await supabaseClient.rpc(
-            "purchase_game_product",
-            {
-                p_product_id: producto.id,
-                p_player_id: idJugador
-            }
-        );
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "purchase_game_product",
+        {
+            p_product_id: producto.id,
+            p_player_id: idJugador
+        }
+    );
 
 
     if (error) {
+
         console.error(error);
 
         alert(
@@ -330,14 +411,23 @@ async function continuarRecarga() {
 
 
     alert(
+
         "¡Compra realizada! ⚡\n\n" +
+
         "110 diamantes\n" +
-        "Precio: " + producto.price_gvr + " GVR\n\n" +
-        "ID del pedido: " + data
+
+        "Precio: " +
+        producto.price_gvr +
+        " GVR\n\n" +
+
+        "ID del pedido: " +
+        data
+
     );
 
 
     window.location.href = "cuenta.html";
+
 }
 
 </script>
