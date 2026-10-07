@@ -93,17 +93,17 @@
         }
 
         /* =========================
-           TARJETAS CUADRADAS
+           TARJETAS DE OFERTAS
            ========================= */
 
         .boton-oferta {
             width: 100%;
-            aspect-ratio: 1 / 1;
+            height: 150px;
 
             padding: 0;
 
             border: 1px solid #204c78;
-            border-radius: 16px;
+            border-radius: 14px;
 
             background: #061226;
             color: white;
@@ -141,15 +141,8 @@
             align-items: center;
             justify-content: center;
 
-            border-bottom: 1px solid #204c78;
-
             overflow: hidden;
         }
-
-        /*
-        Cuando tengas la foto simplemente
-        podremos ponerla aquí.
-        */
 
         .foto-oferta span {
             color: #315779;
@@ -163,22 +156,24 @@
         .nombre-oferta {
             width: 100%;
 
-            min-height: 58px;
+            min-height: 48px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            padding: 10px;
+            padding: 8px;
 
             background: #091a35;
 
             color: white;
 
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
 
             text-align: center;
+
+            border-top: 1px solid #204c78;
         }
 
         /* =========================
@@ -200,13 +195,13 @@
         }
 
         .boton-oferta.seleccionado .foto-oferta {
-            border-bottom-color: #00baff;
             background: #09213f;
         }
 
         .boton-oferta.seleccionado .nombre-oferta {
             background: #0b315c;
             color: #00baff;
+            border-top-color: #00baff;
         }
 
         /* =========================
@@ -230,7 +225,7 @@
         <span class="rayo">⚡</span> Gamers Gold Top-Up
     </div>
 
-    <!-- CORRECTO: vuelve a freefire.html -->
+    <!-- Vuelve a freefire.html -->
     <a href="freefire.html" class="volver">
         ← Volver
     </a>
