@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ofertas Especiales | Free Fire</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            border-bottom: 1px solid #12385f;
+            background: #071225;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .logo .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .volver {
+            text-decoration: none;
+            color: white;
+            border: 1px solid #168cff;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            padding: 25px 18px;
+        }
+
+        .ofertas {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+        }
+
+        .icono {
+            text-align: center;
+            font-size: 45px;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 25px;
+            margin-bottom: 7px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        .lista-ofertas {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .boton-oferta {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            background: #061226;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .boton-oferta:hover {
+            border-color: #159dff;
+            background: #0a1d38;
+            box-shadow: 0 0 10px rgba(0, 157, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .boton-oferta.seleccionado {
+            border-color: #00baff;
+            background: linear-gradient(90deg, #09244a, #0b315c);
+            box-shadow: 0 0 12px rgba(0, 186, 255, 0.25);
+        }
+
+        .nota {
+            text-align: center;
+            color: #627b97;
+            font-size: 11px;
+            margin-top: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <span class="rayo">⚡</span> Gamers Gold Top-Up
+    </div>
+
+    <a href="free-fire.html" class="volver">
+        ← Volver
+    </a>
+
+</header>
+
+
+<main class="contenedor">
+
+    <section class="ofertas">
+
+        <div class="icono">🎁</div>
+
+        <h1>Ofertas Especiales</h1>
+
+        <p class="descripcion">
+            Elige una oferta especial de Free Fire.
+        </p>
+
+
+        <div class="lista-ofertas">
+
+            <button
+                class="boton-oferta"
+                type="button"
+                onclick="seleccionarOferta(this)"
+            >
+                🎟️ Booyah Pass
+            </button>
+
+
+            <button
+                class="boton-oferta"
+                type="button"
+                onclick="seleccionarOferta(this)"
+            >
+                💎 Membresía Semanal
+            </button>
+
+
+            <button
+                class="boton-oferta"
+                type="button"
+                onclick="seleccionarOferta(this)"
+            >
+                👑 Membresía Mensual
+            </button>
+
+        </div>
+
+
+        <div class="nota">
+            Ofertas de prueba.
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+function seleccionarOferta(boton) {
+
+    document
+        .querySelectorAll(".boton-oferta")
+        .forEach(function(elemento) {
+            elemento.classList.remove("seleccionado");
+        });
+
+    boton.classList.add("seleccionado");
+
+}
+
+</script>
+
+</body>
+  </html>
