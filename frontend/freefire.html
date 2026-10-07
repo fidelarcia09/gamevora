@@ -117,91 +117,36 @@
             color: white;
             font-size: 15px;
             font-weight: bold;
-        }
-
-        /* =========================
-           OTRAS OFERTAS
-           ========================= */
-
-        .separador-ofertas {
-            margin: 30px 0 0;
-            border-top: 1px solid #12385f;
-            padding-top: 25px;
-        }
-
-        .titulo-ofertas {
-            text-align: center;
-            font-size: 21px;
-            margin-bottom: 7px;
-        }
-
-        .descripcion-ofertas {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 13px;
-            margin-bottom: 18px;
-        }
-
-        .ofertas-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .oferta {
-            background: #061226;
-            border: 1px solid #204c78;
-            border-radius: 14px;
-            padding: 16px;
-        }
-
-        .oferta-info {
-            width: 100%;
-        }
-
-        .oferta-nombre {
-            font-size: 15px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .oferta-descripcion {
-            color: #8fa5bd;
-            font-size: 12px;
-            line-height: 1.4;
-            margin-bottom: 8px;
-        }
-
-        .oferta-precio {
-            color: #00baff;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 9px;
-        }
-
-        .oferta-boton {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            font-size: 13px;
-            font-weight: bold;
             cursor: pointer;
         }
 
-        .oferta-boton:disabled {
-            opacity: 0.65;
-            cursor: not-allowed;
+        /* =========================
+           OFERTAS ESPECIALES
+           ========================= */
+
+        .separador-ofertas {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #12385f;
         }
 
-        .nota {
-            text-align: center;
-            color: #627b97;
-            font-size: 11px;
-            margin-top: 20px;
-            line-height: 1.5;
+        .boton-ofertas {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #168cff;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #061b3a, #0a2d5c);
+            color: #00baff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
+            transition: 0.2s;
+        }
+
+        .boton-ofertas:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
         }
     </style>
 </head>
@@ -231,6 +176,7 @@
         </p>
 
         <label for="id">ID del jugador</label>
+
         <input
             type="text"
             id="id"
@@ -248,85 +194,28 @@
             <option>2180 diamantes</option>
         </select>
 
-        <button class="recargar" type="button" onclick="continuarRecarga()">
+        <button
+            class="recargar"
+            type="button"
+            onclick="continuarRecarga()"
+        >
             Continuar ⚡
         </button>
 
 
         <!-- =========================
-             OTRAS OFERTAS
+             OFERTAS ESPECIALES
              ========================= -->
 
         <div class="separador-ofertas">
 
-            <h2 class="titulo-ofertas">
-                🎁 Otras Ofertas
-            </h2>
-
-            <p class="descripcion-ofertas">
-                Pases, membresías y ofertas especiales de Free Fire.
-            </p>
-
-            <div class="ofertas-grid">
-
-                <div class="oferta">
-
-                    <div class="oferta-info">
-
-                        <div class="oferta-nombre">
-                            Membresía semanal
-                        </div>
-
-                        <div class="oferta-descripcion">
-                            Beneficios especiales para tu cuenta.
-                        </div>
-
-                        <div class="oferta-precio">
-                            Próximamente
-                        </div>
-
-                        <button
-                            class="oferta-boton"
-                            type="button"
-                            disabled
-                        >
-                            Próximamente
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="oferta">
-
-                    <div class="oferta-info">
-
-                        <div class="oferta-nombre">
-                            Pase especial
-                        </div>
-
-                        <div class="oferta-descripcion">
-                            Consigue un pase especial de Free Fire.
-                        </div>
-
-                        <div class="oferta-precio">
-                            Próximamente
-                        </div>
-
-                        <button
-                            class="oferta-boton"
-                            type="button"
-                            disabled
-                        >
-                            Próximamente
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
+            <button
+                class="boton-ofertas"
+                type="button"
+                onclick="abrirOfertas()"
+            >
+                🎁 Ofertas Especiales
+            </button>
 
         </div>
 
@@ -343,6 +232,13 @@ const supabaseClient = window.supabase.createClient(
     "https://gsuhzcavghsiolmipnzi.supabase.co",
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
 );
+
+
+function abrirOfertas() {
+
+    alert("Ofertas Especiales próximamente.");
+
+}
 
 
 async function continuarRecarga() {
@@ -423,10 +319,12 @@ async function continuarRecarga() {
 
     if (error) {
         console.error(error);
+
         alert(
             "No se pudo realizar la compra:\n\n" +
             error.message
         );
+
         return;
     }
 
@@ -445,4 +343,4 @@ async function continuarRecarga() {
 </script>
 
 </body>
-            </html>
+</html>
