@@ -7,6 +7,7 @@
     <title>Ofertas Especiales | Free Fire</title>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -82,6 +83,20 @@
             margin-bottom: 22px;
         }
 
+
+        /* =========================
+           PANTALLAS
+           ========================= */
+
+        .pantalla {
+            display: none;
+        }
+
+        .pantalla.activa {
+            display: block;
+        }
+
+
         /* =========================
            LISTA DE OFERTAS
            ========================= */
@@ -92,8 +107,9 @@
             gap: 16px;
         }
 
+
         /* =========================
-           TARJETAS DE OFERTAS
+           TARJETAS
            ========================= */
 
         .boton-oferta {
@@ -127,8 +143,9 @@
             transform: translateY(-2px);
         }
 
+
         /* =========================
-           ESPACIO PARA LA FOTO
+           FOTO
            ========================= */
 
         .foto-oferta {
@@ -149,8 +166,9 @@
             font-size: 13px;
         }
 
+
         /* =========================
-           NOMBRE DE LA OFERTA
+           NOMBRE
            ========================= */
 
         .nombre-oferta {
@@ -176,8 +194,9 @@
             border-top: 1px solid #204c78;
         }
 
+
         /* =========================
-           OFERTA SELECCIONADA
+           SELECCIONADA
            ========================= */
 
         .boton-oferta.seleccionado {
@@ -204,6 +223,173 @@
             border-top-color: #00baff;
         }
 
+
+        /* =========================
+           PRECIO
+           ========================= */
+
+        .precio-oferta {
+            margin-top: 18px;
+
+            padding: 15px;
+
+            background: #061226;
+
+            border: 1px solid #204c78;
+
+            border-radius: 12px;
+
+            text-align: center;
+        }
+
+        .precio-titulo {
+            color: #8fa5bd;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .precio {
+            color: #00baff;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+
+        /* =========================
+           BOTONES
+           ========================= */
+
+        .boton-principal {
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 15px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: linear-gradient(
+                90deg,
+                #087cff,
+                #00baff
+            );
+
+            color: white;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .boton-secundario {
+            width: 100%;
+
+            padding: 13px;
+
+            margin-top: 10px;
+
+            border: 1px solid #168cff;
+            border-radius: 10px;
+
+            background: #061226;
+
+            color: white;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           CONFIRMAR PAGO
+           ========================= */
+
+        .resumen {
+            background: #061226;
+
+            border: 1px solid #204c78;
+
+            border-radius: 13px;
+
+            padding: 17px;
+
+            margin-top: 18px;
+        }
+
+        .fila {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+
+            padding: 11px 0;
+
+            border-bottom: 1px solid #12385f;
+
+            font-size: 13px;
+        }
+
+        .fila:last-child {
+            border-bottom: none;
+        }
+
+        .fila span:first-child {
+            color: #8fa5bd;
+        }
+
+        .fila span:last-child {
+            color: white;
+            font-weight: bold;
+            text-align: right;
+        }
+
+
+        /* =========================
+           PEDIDO REALIZADO
+           ========================= */
+
+        .exito {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .icono-exito {
+            font-size: 65px;
+            margin-bottom: 12px;
+        }
+
+        .exito h2 {
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .exito p {
+            color: #8fa5bd;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .pedido-id {
+            margin-top: 18px;
+
+            background: #061226;
+
+            border: 1px solid #204c78;
+
+            border-radius: 10px;
+
+            padding: 13px;
+
+            color: #00baff;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
         /* =========================
            NOTA
            ========================= */
@@ -214,18 +400,21 @@
             font-size: 11px;
             margin-top: 18px;
         }
+
     </style>
 </head>
 
+
 <body>
+
 
 <header>
 
     <div class="logo">
-        <span class="rayo">⚡</span> Gamers Gold Top-Up
+        <span class="rayo">⚡</span>
+        Gamers Gold Top-Up
     </div>
 
-    <!-- Vuelve a freefire.html -->
     <a href="freefire.html" class="volver">
         ← Volver
     </a>
@@ -235,11 +424,24 @@
 
 <main class="contenedor">
 
-    <section class="ofertas">
 
-        <div class="icono">🎁</div>
+    <!-- =================================================
+         PANTALLA 1
+         SELECCIONAR OFERTA
+         ================================================= -->
 
-        <h1>Ofertas Especiales</h1>
+    <section
+        id="pantallaOfertas"
+        class="ofertas pantalla activa"
+    >
+
+        <div class="icono">
+            🎁
+        </div>
+
+        <h1>
+            Ofertas Especiales
+        </h1>
 
         <p class="descripcion">
             Elige una oferta especial de Free Fire.
@@ -249,14 +451,16 @@
         <div class="lista-ofertas">
 
 
-            <!-- =========================
-                 OFERTA 1
-                 ========================= -->
+            <!-- OFERTA 1 -->
 
             <button
                 class="boton-oferta"
                 type="button"
-                onclick="seleccionarOferta(this)"
+                onclick="seleccionarOferta(
+                    this,
+                    '🎟️ Booyah Pass',
+                    100
+                )"
             >
 
                 <div class="foto-oferta">
@@ -270,14 +474,16 @@
             </button>
 
 
-            <!-- =========================
-                 OFERTA 2
-                 ========================= -->
+            <!-- OFERTA 2 -->
 
             <button
                 class="boton-oferta"
                 type="button"
-                onclick="seleccionarOferta(this)"
+                onclick="seleccionarOferta(
+                    this,
+                    '💎 Membresía Semanal',
+                    80
+                )"
             >
 
                 <div class="foto-oferta">
@@ -291,14 +497,16 @@
             </button>
 
 
-            <!-- =========================
-                 OFERTA 3
-                 ========================= -->
+            <!-- OFERTA 3 -->
 
             <button
                 class="boton-oferta"
                 type="button"
-                onclick="seleccionarOferta(this)"
+                onclick="seleccionarOferta(
+                    this,
+                    '👑 Membresía Mensual',
+                    250
+                )"
             >
 
                 <div class="foto-oferta">
@@ -315,32 +523,400 @@
         </div>
 
 
+        <!-- PRECIO -->
+
+        <div
+            id="precioSeleccionado"
+            class="precio-oferta"
+            style="display:none;"
+        >
+
+            <div class="precio-titulo">
+                Precio de la oferta
+            </div>
+
+            <div
+                id="precio"
+                class="precio"
+            >
+                0 GVR
+            </div>
+
+        </div>
+
+
+        <button
+            id="continuarBtn"
+            class="boton-principal"
+            type="button"
+            onclick="irAConfirmacion()"
+            style="display:none;"
+        >
+            Continuar ⚡
+        </button>
+
+
         <div class="nota">
             Ofertas de prueba.
         </div>
 
     </section>
 
+
+
+    <!-- =================================================
+         PANTALLA 2
+         CONFIRMAR PAGO
+         ================================================= -->
+
+    <section
+        id="pantallaConfirmacion"
+        class="ofertas pantalla"
+    >
+
+        <div class="icono">
+            💳
+        </div>
+
+        <h1>
+            Confirmar pago
+        </h1>
+
+        <p class="descripcion">
+            Revisa los datos antes de continuar.
+        </p>
+
+
+        <div class="resumen">
+
+            <div class="fila">
+
+                <span>
+                    Oferta
+                </span>
+
+                <span id="confirmarOferta">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="fila">
+
+                <span>
+                    Juego
+                </span>
+
+                <span>
+                    Free Fire
+                </span>
+
+            </div>
+
+
+            <div class="fila">
+
+                <span>
+                    Precio
+                </span>
+
+                <span id="confirmarPrecio">
+                    0 GVR
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <button
+            class="boton-principal"
+            type="button"
+            onclick="realizarPedido()"
+        >
+            Confirmar compra ⚡
+        </button>
+
+
+        <button
+            class="boton-secundario"
+            type="button"
+            onclick="volverOfertas()"
+        >
+            ← Cambiar oferta
+        </button>
+
+    </section>
+
+
+
+    <!-- =================================================
+         PANTALLA 3
+         PEDIDO REALIZADO
+         ================================================= -->
+
+    <section
+        id="pantallaExito"
+        class="ofertas pantalla"
+    >
+
+        <div class="exito">
+
+            <div class="icono-exito">
+                ✅
+            </div>
+
+            <h2>
+                ¡Pedido realizado!
+            </h2>
+
+            <p>
+                Tu solicitud de compra fue registrada
+                correctamente.
+            </p>
+
+
+            <div class="pedido-id">
+
+                ID del pedido:
+
+                <br>
+
+                <span id="pedidoId">
+                    -
+                </span>
+
+            </div>
+
+
+            <button
+                class="boton-principal"
+                type="button"
+                onclick="window.location.href='cuenta.html'"
+            >
+                Ir a mi cuenta ⚡
+            </button>
+
+
+            <button
+                class="boton-secundario"
+                type="button"
+                onclick="window.location.href='freefire.html'"
+            >
+                Volver a Free Fire
+            </button>
+
+        </div>
+
+    </section>
+
+
 </main>
+
 
 
 <script>
 
-function seleccionarOferta(boton) {
+
+/* =================================================
+   VARIABLES
+   ================================================= */
+
+let ofertaSeleccionada = "";
+
+let precioSeleccionado = 0;
+
+
+
+/* =================================================
+   SELECCIONAR OFERTA
+   ================================================= */
+
+function seleccionarOferta(
+    boton,
+    nombre,
+    precio
+) {
 
     document
         .querySelectorAll(".boton-oferta")
         .forEach(function(elemento) {
 
-            elemento.classList.remove("seleccionado");
+            elemento.classList.remove(
+                "seleccionado"
+            );
 
         });
 
-    boton.classList.add("seleccionado");
+
+    boton.classList.add(
+        "seleccionado"
+    );
+
+
+    ofertaSeleccionada = nombre;
+
+    precioSeleccionado = precio;
+
+
+    document.getElementById(
+        "precio"
+    ).textContent =
+        precio + " GVR";
+
+
+    document.getElementById(
+        "precioSeleccionado"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "continuarBtn"
+    ).style.display = "block";
 
 }
 
+
+
+/* =================================================
+   IR A CONFIRMACION
+   ================================================= */
+
+function irAConfirmacion() {
+
+    if (
+        ofertaSeleccionada === "" ||
+        precioSeleccionado <= 0
+    ) {
+
+        alert(
+            "Selecciona una oferta primero."
+        );
+
+        return;
+    }
+
+
+    document.getElementById(
+        "confirmarOferta"
+    ).textContent =
+        ofertaSeleccionada;
+
+
+    document.getElementById(
+        "confirmarPrecio"
+    ).textContent =
+        precioSeleccionado + " GVR";
+
+
+    document.getElementById(
+        "pantallaOfertas"
+    ).classList.remove(
+        "activa"
+    );
+
+
+    document.getElementById(
+        "pantallaConfirmacion"
+    ).classList.add(
+        "activa"
+    );
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
+
+/* =================================================
+   VOLVER A OFERTAS
+   ================================================= */
+
+function volverOfertas() {
+
+    document.getElementById(
+        "pantallaConfirmacion"
+    ).classList.remove(
+        "activa"
+    );
+
+
+    document.getElementById(
+        "pantallaOfertas"
+    ).classList.add(
+        "activa"
+    );
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
+
+/* =================================================
+   REALIZAR PEDIDO
+   ================================================= */
+
+function realizarPedido() {
+
+    /*
+       POR AHORA ES SOLO EL FLUJO DE PRUEBA.
+
+       Aquí posteriormente conectaremos:
+
+       1. Supabase
+       2. game_products
+       3. purchase_game_product
+       4. ventas
+       5. notificación
+    */
+
+
+    const idPrueba =
+        "OFERTA-" +
+        Date.now();
+
+
+    document.getElementById(
+        "pedidoId"
+    ).textContent =
+        idPrueba;
+
+
+    document.getElementById(
+        "pantallaConfirmacion"
+    ).classList.remove(
+        "activa"
+    );
+
+
+    document.getElementById(
+        "pantallaExito"
+    ).classList.add(
+        "activa"
+    );
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
 </script>
 
+
 </body>
-</html>
+    </html>
