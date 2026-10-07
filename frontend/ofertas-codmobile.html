@@ -98,50 +98,39 @@
         }
 
         /* =========================
-           BOTONES - IGUAL A FREE FIRE
+           OFERTAS - IGUAL A FREE FIRE
            ========================= */
 
         .boton-oferta {
             width: 100%;
             height: 150px;
-
             padding: 0;
-
             border: 1px solid #204c78;
             border-radius: 14px;
-
             background: #061226;
             color: white;
-
             cursor: pointer;
-
             overflow: hidden;
-
             display: flex;
             flex-direction: column;
-
-            transition: 0.2s;
-
-            box-shadow: 0 0 12px rgba(0, 140, 255, 0.08);
+            transition: .2s;
+            box-shadow: 0 0 12px rgba(0,140,255,.08);
         }
 
         .boton-oferta:hover {
             border-color: #159dff;
             background: #0a1d38;
-            box-shadow: 0 0 18px rgba(0, 157, 255, 0.22);
+            box-shadow: 0 0 18px rgba(0,157,255,.22);
             transform: translateY(-2px);
         }
 
         .foto-oferta {
             width: 100%;
             flex: 1;
-
             background: #07172d;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             overflow: hidden;
         }
 
@@ -152,39 +141,25 @@
 
         .nombre-oferta {
             width: 100%;
-
             min-height: 48px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             padding: 8px;
-
             background: #091a35;
-
             color: white;
-
             font-size: 14px;
             font-weight: bold;
-
             text-align: center;
-
             border-top: 1px solid #204c78;
         }
 
         .boton-oferta.seleccionado {
             border-color: #00baff;
-
-            background: linear-gradient(
-                180deg,
-                #09244a,
-                #0b315c
-            );
-
+            background: linear-gradient(180deg,#09244a,#0b315c);
             box-shadow:
-                0 0 10px rgba(0, 186, 255, 0.25),
-                0 0 22px rgba(0, 140, 255, 0.15);
+                0 0 10px rgba(0,186,255,.25),
+                0 0 22px rgba(0,140,255,.15);
         }
 
         .boton-oferta.seleccionado .foto-oferta {
@@ -203,15 +178,10 @@
 
         .precio-oferta {
             margin-top: 18px;
-
             padding: 15px;
-
             background: #061226;
-
             border: 1px solid #204c78;
-
             border-radius: 12px;
-
             text-align: center;
         }
 
@@ -228,55 +198,37 @@
         }
 
         /* =========================
-           BOTONES PRINCIPALES
+           BOTONES
            ========================= */
 
         .boton-principal {
             width: 100%;
-
             padding: 14px;
-
             margin-top: 15px;
-
             border: none;
             border-radius: 10px;
-
-            background: linear-gradient(
-                90deg,
-                #087cff,
-                #00baff
-            );
-
+            background: linear-gradient(90deg,#087cff,#00baff);
             color: white;
-
             font-size: 15px;
             font-weight: bold;
-
             cursor: pointer;
         }
 
         .boton-principal:disabled {
-            opacity: 0.6;
+            opacity: .6;
             cursor: wait;
         }
 
         .boton-secundario {
             width: 100%;
-
             padding: 13px;
-
             margin-top: 10px;
-
             border: 1px solid #168cff;
             border-radius: 10px;
-
             background: #061226;
-
             color: white;
-
             font-size: 14px;
             font-weight: bold;
-
             cursor: pointer;
         }
 
@@ -286,13 +238,9 @@
 
         .resumen {
             background: #061226;
-
             border: 1px solid #204c78;
-
             border-radius: 13px;
-
             padding: 17px;
-
             margin-top: 18px;
         }
 
@@ -300,11 +248,8 @@
             display: flex;
             justify-content: space-between;
             gap: 15px;
-
             padding: 11px 0;
-
             border-bottom: 1px solid #12385f;
-
             font-size: 13px;
         }
 
@@ -323,7 +268,7 @@
         }
 
         /* =========================
-           ID DEL JUGADOR
+           ID
            ========================= */
 
         .campo-id {
@@ -340,22 +285,17 @@
         .campo-id input {
             width: 100%;
             padding: 13px;
-
             background: #061226;
-
             border: 1px solid #204c78;
             border-radius: 10px;
-
             color: white;
-
             outline: none;
-
             font-size: 15px;
         }
 
         .campo-id input:focus {
             border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+            box-shadow: 0 0 8px rgba(0,157,255,.2);
         }
 
         /* =========================
@@ -385,17 +325,11 @@
 
         .pedido-id {
             margin-top: 18px;
-
             background: #061226;
-
             border: 1px solid #204c78;
-
             border-radius: 10px;
-
             padding: 13px;
-
             color: #00baff;
-
             font-size: 13px;
             font-weight: bold;
         }
@@ -410,9 +344,7 @@
     </style>
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -431,9 +363,9 @@
 <main class="contenedor">
 
 
-    <!-- =================================================
-         PANTALLA 1
-         ================================================= -->
+    <!-- =========================================
+         PANTALLA 1 - OFERTAS
+         ========================================= -->
 
     <section
         id="pantallaOfertas"
@@ -456,7 +388,7 @@
         <div class="lista-ofertas">
 
 
-            <!-- OFERTA 1 -->
+            <!-- BATTLE PASS -->
 
             <button
                 class="boton-oferta"
@@ -475,7 +407,7 @@
             </button>
 
 
-            <!-- OFERTA 2 -->
+            <!-- OFERTA CP -->
 
             <button
                 class="boton-oferta"
@@ -494,7 +426,7 @@
             </button>
 
 
-            <!-- OFERTA 3 -->
+            <!-- OFERTA ESPECIAL -->
 
             <button
                 class="boton-oferta"
@@ -512,9 +444,10 @@
 
             </button>
 
-
         </div>
 
+
+        <!-- PRECIO -->
 
         <div
             id="precioSeleccionado"
@@ -530,7 +463,7 @@
                 id="precio"
                 class="precio"
             >
-                Precio pendiente
+                0 GVR
             </div>
 
         </div>
@@ -548,17 +481,16 @@
 
 
         <div class="nota">
-            Ofertas especiales de Call of Duty Mobile.
+            Precios de prueba para COD Mobile.
         </div>
 
     </section>
 
 
 
-    <!-- =================================================
-         PANTALLA 2
-         CONFIRMAR PAGO
-         ================================================= -->
+    <!-- =========================================
+         PANTALLA 2 - CONFIRMACIÓN
+         ========================================= -->
 
     <section
         id="pantallaConfirmacion"
@@ -613,7 +545,7 @@
                 </span>
 
                 <span id="confirmarPrecio">
-                    Precio pendiente
+                    -
                 </span>
 
             </div>
@@ -659,9 +591,9 @@
 
 
 
-    <!-- =================================================
-         PANTALLA 3
-         ================================================= -->
+    <!-- =========================================
+         PANTALLA 3 - ÉXITO
+         ========================================= -->
 
     <section
         id="pantallaExito"
@@ -679,8 +611,7 @@
             </h2>
 
             <p>
-                Tu solicitud de compra fue registrada
-                correctamente.
+                Tu solicitud de compra fue registrada correctamente.
             </p>
 
 
@@ -718,7 +649,6 @@
 
     </section>
 
-
 </main>
 
 
@@ -727,9 +657,9 @@
 
 <script>
 
-/* =================================================
+/* =========================================
    SUPABASE
-   ================================================= */
+   ========================================= */
 
 const supabaseClient = window.supabase.createClient(
     "https://gsuhzcavghsiolmipnzi.supabase.co",
@@ -737,42 +667,42 @@ const supabaseClient = window.supabase.createClient(
 );
 
 
-/* =================================================
+/* =========================================
    VARIABLES
-   ================================================= */
+   ========================================= */
 
 let ofertaSeleccionada = "";
 
 let precioSeleccionado = 0;
 
 
-/* =================================================
-   PRODUCTOS TEMPORALES
-   ================================================= */
+/* =========================================
+   PRECIOS DE PRUEBA
+   ========================================= */
 
 const productosCODMobile = {
 
     "Battle Pass": {
         nombre: "Battle Pass",
-        precio: 0
+        precio: 100
     },
 
     "Oferta de CP": {
         nombre: "Oferta de CP",
-        precio: 0
+        precio: 150
     },
 
     "Oferta Especial": {
         nombre: "Oferta Especial",
-        precio: 0
+        precio: 250
     }
 
 };
 
 
-/* =================================================
+/* =========================================
    SELECCIONAR OFERTA
-   ================================================= */
+   ========================================= */
 
 function seleccionarOferta(
     boton,
@@ -795,20 +725,17 @@ function seleccionarOferta(
     );
 
 
-    ofertaSeleccionada =
-        nombre;
+    ofertaSeleccionada = nombre;
 
 
     precioSeleccionado =
-        productosCODMobile[
-            nombre
-        ].precio;
+        productosCODMobile[nombre].precio;
 
 
     document.getElementById(
         "precio"
     ).textContent =
-        "Precio pendiente";
+        precioSeleccionado + " GVR";
 
 
     document.getElementById(
@@ -825,9 +752,9 @@ function seleccionarOferta(
 }
 
 
-/* =================================================
-   IR A CONFIRMACION
-   ================================================= */
+/* =========================================
+   IR A CONFIRMACIÓN
+   ========================================= */
 
 function irAConfirmacion() {
 
@@ -852,7 +779,7 @@ function irAConfirmacion() {
     document.getElementById(
         "confirmarPrecio"
     ).textContent =
-        "Precio pendiente";
+        precioSeleccionado + " GVR";
 
 
     document.getElementById(
@@ -877,9 +804,9 @@ function irAConfirmacion() {
 }
 
 
-/* =================================================
+/* =========================================
    VOLVER A OFERTAS
-   ================================================= */
+   ========================================= */
 
 function volverOfertas() {
 
@@ -905,9 +832,9 @@ function volverOfertas() {
 }
 
 
-/* =================================================
+/* =========================================
    REALIZAR PEDIDO
-   ================================================= */
+   ========================================= */
 
 async function realizarPedido() {
 
@@ -918,7 +845,9 @@ async function realizarPedido() {
             .trim();
 
 
-    if (idJugador === "") {
+    if (
+        idJugador === ""
+    ) {
 
         alert(
             "Escribe tu ID de Call of Duty Mobile."
@@ -940,9 +869,9 @@ async function realizarPedido() {
     }
 
 
-    /* ================================
+    /* =====================================
        COMPROBAR SESIÓN
-       ================================ */
+       ===================================== */
 
     const {
         data: { session },
@@ -967,25 +896,166 @@ async function realizarPedido() {
     }
 
 
+    /* =====================================
+       BUSCAR PRODUCTO EN SUPABASE
+       ===================================== */
+
+    const {
+        data: producto,
+        error: productoError
+    } =
+        await supabaseClient
+            .from("game_products")
+            .select(
+                "id, game, product_name, price_gvr, active"
+            )
+            .eq(
+                "game",
+                "COD Mobile"
+            )
+            .eq(
+                "product_name",
+                ofertaSeleccionada
+            )
+            .eq(
+                "active",
+                true
+            )
+            .maybeSingle();
+
+
     /*
-     * LOS PRODUCTOS TODAVÍA NO EXISTEN
-     * EN SUPABASE.
-     *
-     * Por eso no ejecutamos todavía
-     * purchase_game_product.
+     * TODAVÍA NO ESTÁ CREADO EN SUPABASE.
      */
 
-    alert(
-        "El flujo está listo. ⚡\n\n" +
-        "Ahora solo falta crear el producto \"" +
-        ofertaSeleccionada +
-        "\" en Supabase."
+    if (
+        productoError
+    ) {
+
+        console.error(
+            productoError
+        );
+
+        alert(
+            "No se pudo comprobar el producto."
+        );
+
+        return;
+    }
+
+
+    if (
+        !producto
+    ) {
+
+        alert(
+            "El producto todavía no está creado en Supabase.\n\n" +
+            "Oferta: " +
+            ofertaSeleccionada +
+            "\n" +
+            "Precio de prueba: " +
+            precioSeleccionado +
+            " GVR"
+        );
+
+        return;
+    }
+
+
+    /* =====================================
+       DESDE AQUÍ YA ES COMPRA REAL
+       ===================================== */
+
+    const boton =
+        document.getElementById(
+            "confirmarBtn"
+        );
+
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Procesando compra...";
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.rpc(
+            "purchase_game_product",
+            {
+                p_product_id:
+                    producto.id,
+
+                p_player_id:
+                    idJugador
+            }
+        );
+
+
+    if (
+        error
+    ) {
+
+        console.error(
+            error
+        );
+
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Confirmar compra ⚡";
+
+
+        alert(
+            error.message ||
+            "No se pudo realizar la compra."
+        );
+
+        return;
+    }
+
+
+    /* =====================================
+       PEDIDO REALIZADO
+       ===================================== */
+
+    console.log(
+        "Pedido COD Mobile:",
+        data
+    );
+
+
+    document.getElementById(
+        "pedidoId"
+    ).textContent =
+        data;
+
+
+    document.getElementById(
+        "pantallaConfirmacion"
+    ).classList.remove(
+        "activa"
+    );
+
+
+    document.getElementById(
+        "pantallaExito"
+    ).classList.add(
+        "activa"
+    );
+
+
+    window.scrollTo(
+        0,
+        0
     );
 
 }
 
 </script>
-
 
 </body>
 </html>
