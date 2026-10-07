@@ -7,6 +7,7 @@
     <title>Ofertas Especiales | Call of Duty Mobile</title>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -82,9 +83,13 @@
             margin-bottom: 22px;
         }
 
-        /* =========================
-           LISTA DE OFERTAS
-           ========================= */
+        .pantalla {
+            display: none;
+        }
+
+        .pantalla.activa {
+            display: block;
+        }
 
         .lista-ofertas {
             display: flex;
@@ -93,17 +98,17 @@
         }
 
         /* =========================
-           TARJETAS CUADRADAS
+           BOTONES - IGUAL A FREE FIRE
            ========================= */
 
         .boton-oferta {
             width: 100%;
-            aspect-ratio: 1 / 1;
+            height: 150px;
 
             padding: 0;
 
             border: 1px solid #204c78;
-            border-radius: 16px;
+            border-radius: 14px;
 
             background: #061226;
             color: white;
@@ -127,10 +132,6 @@
             transform: translateY(-2px);
         }
 
-        /* =========================
-           FOTO
-           ========================= */
-
         .foto-oferta {
             width: 100%;
             flex: 1;
@@ -141,8 +142,6 @@
             align-items: center;
             justify-content: center;
 
-            border-bottom: 1px solid #204c78;
-
             overflow: hidden;
         }
 
@@ -151,34 +150,28 @@
             font-size: 13px;
         }
 
-        /* =========================
-           NOMBRE
-           ========================= */
-
         .nombre-oferta {
             width: 100%;
 
-            min-height: 58px;
+            min-height: 48px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            padding: 10px;
+            padding: 8px;
 
             background: #091a35;
 
             color: white;
 
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
 
             text-align: center;
-        }
 
-        /* =========================
-           SELECCIONADA
-           ========================= */
+            border-top: 1px solid #204c78;
+        }
 
         .boton-oferta.seleccionado {
             border-color: #00baff;
@@ -195,131 +188,223 @@
         }
 
         .boton-oferta.seleccionado .foto-oferta {
-            border-bottom-color: #00baff;
             background: #09213f;
         }
 
         .boton-oferta.seleccionado .nombre-oferta {
             background: #0b315c;
             color: #00baff;
+            border-top-color: #00baff;
         }
 
-        /* =========================
-           FORMULARIO DE COMPRA
-           ========================= */
+        .precio-oferta {
+            margin-top: 18px;
 
-        .formulario-compra {
-            display: none;
+            padding: 15px;
 
-            margin-top: 22px;
+            background: #061226;
 
-            padding-top: 22px;
+            border: 1px solid #204c78;
 
-            border-top: 1px solid #12385f;
-        }
+            border-radius: 12px;
 
-        .formulario-compra.mostrar {
-            display: block;
-        }
-
-        .oferta-seleccionada {
             text-align: center;
+        }
 
+        .precio-titulo {
+            color: #8fa5bd;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .precio {
             color: #00baff;
+            font-size: 24px;
+            font-weight: 900;
+        }
 
-            font-size: 14px;
+        .boton-principal {
+            width: 100%;
 
+            padding: 14px;
+
+            margin-top: 15px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: linear-gradient(
+                90deg,
+                #087cff,
+                #00baff
+            );
+
+            color: white;
+
+            font-size: 15px;
             font-weight: bold;
 
-            margin-bottom: 18px;
+            cursor: pointer;
         }
 
-        label {
-            display: block;
-
-            margin-bottom: 7px;
-
-            color: #b8c9dc;
-
-            font-size: 13px;
-        }
-
-        input {
+        .boton-secundario {
             width: 100%;
 
             padding: 13px;
 
-            margin-bottom: 18px;
+            margin-top: 10px;
+
+            border: 1px solid #168cff;
+            border-radius: 10px;
 
             background: #061226;
 
             color: white;
 
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .resumen {
+            background: #061226;
+
             border: 1px solid #204c78;
 
+            border-radius: 13px;
+
+            padding: 17px;
+
+            margin-top: 18px;
+        }
+
+        .fila {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+
+            padding: 11px 0;
+
+            border-bottom: 1px solid #12385f;
+
+            font-size: 13px;
+        }
+
+        .fila:last-child {
+            border-bottom: none;
+        }
+
+        .fila span:first-child {
+            color: #8fa5bd;
+        }
+
+        .fila span:last-child {
+            color: white;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        /* =========================
+           ID DEL JUGADOR
+           ========================= */
+
+        .campo-id {
+            margin-top: 18px;
+        }
+
+        .campo-id label {
+            display: block;
+            color: #8fa5bd;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .campo-id input {
+            width: 100%;
+            padding: 13px;
+
+            background: #061226;
+
+            border: 1px solid #204c78;
             border-radius: 10px;
+
+            color: white;
 
             outline: none;
 
             font-size: 15px;
         }
 
-        input:focus {
+        .campo-id input:focus {
             border-color: #159dff;
-
-            box-shadow:
-                0 0 8px rgba(0, 157, 255, 0.2);
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
         }
 
-        .continuar {
-            width: 100%;
+        .exito {
+            text-align: center;
+            padding: 10px 0;
+        }
 
-            padding: 14px;
+        .icono-exito {
+            font-size: 65px;
+            margin-bottom: 12px;
+        }
 
-            border: none;
+        .exito h2 {
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .exito p {
+            color: #8fa5bd;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .pedido-id {
+            margin-top: 18px;
+
+            background: #061226;
+
+            border: 1px solid #204c78;
 
             border-radius: 10px;
 
-            background:
-                linear-gradient(
-                    90deg,
-                    #087cff,
-                    #00baff
-                );
+            padding: 13px;
 
-            color: white;
+            color: #00baff;
 
-            font-size: 15px;
-
+            font-size: 13px;
             font-weight: bold;
-
-            cursor: pointer;
-        }
-
-        .continuar:disabled {
-            opacity: 0.6;
-
-            cursor: wait;
         }
 
         .nota {
             text-align: center;
-
             color: #627b97;
-
             font-size: 11px;
-
             margin-top: 18px;
         }
+
+        .cargando {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 13px;
+            padding: 15px;
+        }
+
     </style>
 </head>
 
+
 <body>
+
 
 <header>
 
     <div class="logo">
-        <span class="rayo">⚡</span> Gamers Gold Top-Up
+        <span class="rayo">⚡</span>
+        Gamers Gold Top-Up
     </div>
 
     <a href="codmobile.html" class="volver">
@@ -331,7 +416,16 @@
 
 <main class="contenedor">
 
-    <section class="ofertas">
+
+    <!-- =================================================
+         PANTALLA 1
+         SELECCIONAR OFERTA
+         ================================================= -->
+
+    <section
+        id="pantallaOfertas"
+        class="ofertas pantalla activa"
+    >
 
         <div class="icono">
             🎁
@@ -346,18 +440,27 @@
         </p>
 
 
-        <div class="lista-ofertas">
+        <div
+            id="estadoProductos"
+            class="cargando"
+        >
+            Cargando ofertas...
+        </div>
 
 
-            <!-- =========================
-                 OFERTA 1
-                 ========================= -->
+        <div
+            id="listaOfertas"
+            class="lista-ofertas"
+            style="display:none;"
+        >
+
+
+            <!-- OFERTA 1 -->
 
             <button
                 class="boton-oferta"
                 type="button"
-                data-producto="Battle Pass"
-                onclick="seleccionarOferta(this)"
+                onclick="seleccionarOferta(this, 'Battle Pass')"
             >
 
                 <div class="foto-oferta">
@@ -371,15 +474,12 @@
             </button>
 
 
-            <!-- =========================
-                 OFERTA 2
-                 ========================= -->
+            <!-- OFERTA 2 -->
 
             <button
                 class="boton-oferta"
                 type="button"
-                data-producto="Oferta de CP"
-                onclick="seleccionarOferta(this)"
+                onclick="seleccionarOferta(this, 'Oferta de CP')"
             >
 
                 <div class="foto-oferta">
@@ -393,15 +493,12 @@
             </button>
 
 
-            <!-- =========================
-                 OFERTA 3
-                 ========================= -->
+            <!-- OFERTA 3 -->
 
             <button
                 class="boton-oferta"
                 type="button"
-                data-producto="Oferta Especial"
-                onclick="seleccionarOferta(this)"
+                onclick="seleccionarOferta(this, 'Oferta Especial')"
             >
 
                 <div class="foto-oferta">
@@ -414,28 +511,120 @@
 
             </button>
 
+
         </div>
 
 
-        <!-- =========================
-             FORMULARIO DE COMPRA
-             ========================= -->
-
         <div
-            class="formulario-compra"
-            id="formularioCompra"
+            id="precioSeleccionado"
+            class="precio-oferta"
+            style="display:none;"
         >
 
-            <div
-                class="oferta-seleccionada"
-                id="ofertaSeleccionada"
-            ></div>
+            <div class="precio-titulo">
+                Precio de la oferta
+            </div>
 
+            <div
+                id="precio"
+                class="precio"
+            >
+                0 GVR
+            </div>
+
+        </div>
+
+
+        <button
+            id="continuarBtn"
+            class="boton-principal"
+            type="button"
+            onclick="irAConfirmacion()"
+            style="display:none;"
+        >
+            Continuar ⚡
+        </button>
+
+
+        <div class="nota">
+            Ofertas especiales de Call of Duty Mobile.
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         PANTALLA 2
+         CONFIRMAR PAGO
+         ================================================= -->
+
+    <section
+        id="pantallaConfirmacion"
+        class="ofertas pantalla"
+    >
+
+        <div class="icono">
+            💳
+        </div>
+
+        <h1>
+            Confirmar pago
+        </h1>
+
+        <p class="descripcion">
+            Revisa los datos antes de continuar.
+        </p>
+
+
+        <div class="resumen">
+
+            <div class="fila">
+
+                <span>
+                    Oferta
+                </span>
+
+                <span id="confirmarOferta">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="fila">
+
+                <span>
+                    Juego
+                </span>
+
+                <span>
+                    Call of Duty Mobile
+                </span>
+
+            </div>
+
+
+            <div class="fila">
+
+                <span>
+                    Precio
+                </span>
+
+                <span id="confirmarPrecio">
+                    0 GVR
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="campo-id">
 
             <label for="idJugador">
-                ID del jugador
+                ID del jugador de Call of Duty Mobile
             </label>
-
 
             <input
                 type="text"
@@ -444,64 +633,228 @@
                 autocomplete="off"
             >
 
+        </div>
+
+
+        <button
+            id="confirmarBtn"
+            class="boton-principal"
+            type="button"
+            onclick="realizarPedido()"
+        >
+            Confirmar compra ⚡
+        </button>
+
+
+        <button
+            class="boton-secundario"
+            type="button"
+            onclick="volverOfertas()"
+        >
+            ← Cambiar oferta
+        </button>
+
+    </section>
+
+
+
+    <!-- =================================================
+         PANTALLA 3
+         PEDIDO REALIZADO
+         ================================================= -->
+
+    <section
+        id="pantallaExito"
+        class="ofertas pantalla"
+    >
+
+        <div class="exito">
+
+            <div class="icono-exito">
+                ✅
+            </div>
+
+            <h2>
+                ¡Pedido realizado!
+            </h2>
+
+            <p>
+                Tu solicitud de compra fue registrada
+                correctamente.
+            </p>
+
+
+            <div class="pedido-id">
+
+                ID del pedido:
+
+                <br>
+
+                <span id="pedidoId">
+                    -
+                </span>
+
+            </div>
+
 
             <button
-                class="continuar"
-                id="botonCompra"
+                class="boton-principal"
                 type="button"
-                onclick="continuarCompra()"
+                onclick="window.location.href='cuenta.html'"
             >
-                Continuar ⚡
+                Ir a mi cuenta ⚡
+            </button>
+
+
+            <button
+                class="boton-secundario"
+                type="button"
+                onclick="window.location.href='codmobile.html'"
+            >
+                Volver a Call of Duty Mobile
             </button>
 
         </div>
 
-
-        <div class="nota">
-            Ofertas de prueba.
-        </div>
-
     </section>
+
 
 </main>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
 
-const SUPABASE_URL =
-    "https://gsuhzcavghsiolmipnzi.supabase.co";
+/* =================================================
+   SUPABASE
+   ================================================= */
 
-const SUPABASE_ANON_KEY =
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
-        {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
-        }
-    );
+const supabaseClient = window.supabase.createClient(
+    "https://gsuhzcavghsiolmipnzi.supabase.co",
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+);
 
 
-/* =========================
+/* =================================================
    VARIABLES
-   ========================= */
+   ================================================= */
 
-let ofertaSeleccionada = null;
+let ofertaSeleccionada = "";
+
+let productoSeleccionado = null;
+
+let precioSeleccionado = 0;
 
 
-/* =========================
+/* =================================================
+   CARGAR PRODUCTOS
+   ================================================= */
+
+async function cargarOfertas() {
+
+    const {
+        data: productos,
+        error
+    } = await supabaseClient
+        .from("game_products")
+        .select(
+            "id, game, product_name, price_gvr, active"
+        )
+        .eq(
+            "game",
+            "COD Mobile"
+        )
+        .in(
+            "product_name",
+            [
+                "Battle Pass",
+                "Oferta de CP",
+                "Oferta Especial"
+            ]
+        )
+        .eq(
+            "active",
+            true
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Error cargando productos:",
+            error
+        );
+
+        document.getElementById(
+            "estadoProductos"
+        ).textContent =
+            "No se pudieron cargar las ofertas.";
+
+        return;
+    }
+
+
+    if (!productos || productos.length === 0) {
+
+        document.getElementById(
+            "estadoProductos"
+        ).textContent =
+            "No hay ofertas disponibles.";
+
+        return;
+    }
+
+
+    window.productosOfertas = {};
+
+
+    productos.forEach(function(producto) {
+
+        window.productosOfertas[
+            producto.product_name
+        ] = producto;
+
+    });
+
+
+    document.getElementById(
+        "estadoProductos"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "listaOfertas"
+    ).style.display = "flex";
+
+}
+
+
+/* =================================================
    SELECCIONAR OFERTA
-   ========================= */
+   ================================================= */
 
-function seleccionarOferta(boton) {
+function seleccionarOferta(
+    boton,
+    nombre
+) {
+
+    const producto =
+        window.productosOfertas[
+            nombre
+        ];
+
+
+    if (!producto) {
+
+        alert(
+            "Esta oferta no está disponible."
+        );
+
+        return;
+    }
+
 
     document
         .querySelectorAll(".boton-oferta")
@@ -520,57 +873,129 @@ function seleccionarOferta(boton) {
 
 
     ofertaSeleccionada =
-        boton.dataset.producto;
+        producto.product_name;
+
+
+    productoSeleccionado =
+        producto;
+
+
+    precioSeleccionado =
+        Number(producto.price_gvr);
 
 
     document.getElementById(
-        "ofertaSeleccionada"
+        "precio"
     ).textContent =
-        "Oferta seleccionada: " +
-        ofertaSeleccionada;
+        precioSeleccionado + " GVR";
 
 
     document.getElementById(
-        "formularioCompra"
-    ).classList.add(
-        "mostrar"
-    );
+        "precioSeleccionado"
+    ).style.display =
+        "block";
 
 
     document.getElementById(
-        "idJugador"
-    ).focus();
+        "continuarBtn"
+    ).style.display =
+        "block";
 
 }
 
 
-/* =========================
-   REALIZAR COMPRA
-   ========================= */
+/* =================================================
+   IR A CONFIRMACION
+   ================================================= */
 
-async function continuarCompra() {
+function irAConfirmacion() {
+
+    if (
+        !productoSeleccionado ||
+        ofertaSeleccionada === ""
+    ) {
+
+        alert(
+            "Selecciona una oferta primero."
+        );
+
+        return;
+    }
+
+
+    document.getElementById(
+        "confirmarOferta"
+    ).textContent =
+        ofertaSeleccionada;
+
+
+    document.getElementById(
+        "confirmarPrecio"
+    ).textContent =
+        precioSeleccionado + " GVR";
+
+
+    document.getElementById(
+        "pantallaOfertas"
+    ).classList.remove(
+        "activa"
+    );
+
+
+    document.getElementById(
+        "pantallaConfirmacion"
+    ).classList.add(
+        "activa"
+    );
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
+/* =================================================
+   VOLVER A OFERTAS
+   ================================================= */
+
+function volverOfertas() {
+
+    document.getElementById(
+        "pantallaConfirmacion"
+    ).classList.remove(
+        "activa"
+    );
+
+
+    document.getElementById(
+        "pantallaOfertas"
+    ).classList.add(
+        "activa"
+    );
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
+
+
+/* =================================================
+   REALIZAR PEDIDO
+   ================================================= */
+
+async function realizarPedido() {
 
     const idJugador =
         document
             .getElementById("idJugador")
             .value
             .trim();
-
-
-    const boton =
-        document.getElementById(
-            "botonCompra"
-        );
-
-
-    if (!ofertaSeleccionada) {
-
-        alert(
-            "Selecciona una oferta."
-        );
-
-        return;
-    }
 
 
     if (idJugador === "") {
@@ -583,190 +1008,142 @@ async function continuarCompra() {
     }
 
 
+    if (!productoSeleccionado) {
+
+        alert(
+            "No hay ninguna oferta seleccionada."
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       COMPROBAR SESIÓN
+       ================================ */
+
+    const {
+        data: { session },
+        error: sessionError
+    } = await supabaseClient.auth.getSession();
+
+
+    if (
+        sessionError ||
+        !session
+    ) {
+
+        alert(
+            "Debes iniciar sesión primero."
+        );
+
+        window.location.href =
+            "login.html";
+
+        return;
+    }
+
+
+    const boton =
+        document.getElementById(
+            "confirmarBtn"
+        );
+
+
     boton.disabled = true;
 
     boton.textContent =
-        "Procesando...";
+        "Procesando compra...";
 
 
-    try {
+    /* ================================
+       COMPRA REAL
+       ================================ */
 
-        /* =========================
-           COMPROBAR SESIÓN
-        ========================= */
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "purchase_game_product",
+        {
+            p_product_id:
+                productoSeleccionado.id,
 
-        const {
-            data: { session },
-            error: sessionError
-        } =
-            await supabaseClient.auth.getSession();
-
-
-        if (sessionError || !session) {
-
-            alert(
-                "Debes iniciar sesión primero."
-            );
-
-            window.location.href =
-                "login.html";
-
-            return;
+            p_player_id:
+                idJugador
         }
+    );
 
 
-        /* =========================
-           BUSCAR PRODUCTO
-           
-           LOS NOMBRES SE CAMBIARÁN
-           CUANDO CREAMOS LOS PRODUCTOS
-           ========================= */
-
-        const {
-            data: producto,
-            error: productoError
-        } =
-            await supabaseClient
-                .from("game_products")
-                .select(
-                    "id, game, product_name, game_currency_amount, price_gvr, active"
-                )
-                .eq(
-                    "game",
-                    "COD Mobile"
-                )
-                .eq(
-                    "product_name",
-                    ofertaSeleccionada
-                )
-                .eq(
-                    "active",
-                    true
-                )
-                .maybeSingle();
-
-
-        console.log(
-            "PRODUCTO COD MOBILE:",
-            producto
-        );
-
-        console.log(
-            "ERROR PRODUCTO:",
-            productoError
-        );
-
-
-        if (productoError) {
-
-            alert(
-                "Error buscando el producto:\n\n" +
-                productoError.message
-            );
-
-            return;
-        }
-
-
-        if (!producto) {
-
-            alert(
-                "Todavía no existe este producto en Supabase.\n\n" +
-                "Oferta: " +
-                ofertaSeleccionada
-            );
-
-            return;
-        }
-
-
-        /* =========================
-           REALIZAR COMPRA
-           ========================= */
-
-        const {
-            data: pedido,
-            error: compraError
-        } =
-            await supabaseClient.rpc(
-                "purchase_game_product",
-                {
-                    p_product_id:
-                        producto.id,
-
-                    p_player_id:
-                        idJugador
-                }
-            );
-
-
-        if (compraError) {
-
-            console.error(
-                "ERROR COMPRA:",
-                compraError
-            );
-
-            alert(
-                "No se pudo realizar la compra:\n\n" +
-                compraError.message
-            );
-
-            return;
-        }
-
-
-        /* =========================
-           COMPRA EXITOSA
-           ========================= */
-
-        alert(
-
-            "¡Compra realizada! ⚡\n\n" +
-
-            producto.product_name +
-            "\n" +
-
-            "Precio: " +
-            producto.price_gvr +
-            " GVR\n\n" +
-
-            "ID del pedido:\n" +
-            pedido
-
-        );
-
-
-        window.location.href =
-            "cuenta.html";
-
-
-    } catch (error) {
+    if (error) {
 
         console.error(
+            "Error realizando compra:",
             error
         );
 
 
-        alert(
-
-            "Ocurrió un error inesperado:\n\n" +
-            error.message
-
-        );
-
-    } finally {
-
         boton.disabled = false;
 
         boton.textContent =
-            "Continuar ⚡";
+            "Confirmar compra ⚡";
 
+
+        alert(
+            "No se pudo realizar la compra:\n\n" +
+            error.message
+        );
+
+        return;
     }
+
+
+    /* ================================
+       PEDIDO REALIZADO
+       ================================ */
+
+    console.log(
+        "Compra realizada:",
+        data
+    );
+
+
+    document.getElementById(
+        "pedidoId"
+    ).textContent =
+        data;
+
+
+    document.getElementById(
+        "pantallaConfirmacion"
+    ).classList.remove(
+        "activa"
+    );
+
+
+    document.getElementById(
+        "pantallaExito"
+    ).classList.add(
+        "activa"
+    );
+
+
+    window.scrollTo(
+        0,
+        0
+    );
 
 }
 
+
+/* =================================================
+   INICIAR
+   ================================================= */
+
+cargarOfertas();
+
 </script>
+
 
 </body>
     </html>
