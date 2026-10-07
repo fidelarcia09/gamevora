@@ -11,141 +11,162 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
         }
 
         body {
+            font-family: Arial, sans-serif;
             background: #050b18;
             color: white;
             min-height: 100vh;
+        }
+
+        header {
             padding: 20px;
-        }
-
-        .contenedor {
-            max-width: 500px;
-            margin: auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 900;
-        }
-
-        .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 174, 255, 0.25);
         }
 
         .volver {
-            color: #28a9ff;
+            display: inline-block;
+            color: #00bfff;
             text-decoration: none;
-            font-size: 14px;
             font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            font-style: italic;
+            color: #00d9ff;
+            text-shadow: 0 0 12px rgba(0, 217, 255, 0.5);
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
         }
 
         .card {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 28px 22px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+            background: #0a1428;
+            border: 1px solid rgba(0, 174, 255, 0.25);
+            border-radius: 18px;
+            padding: 25px 20px;
+            box-shadow: 0 0 25px rgba(0, 174, 255, 0.08);
         }
 
         .icono {
-            text-align: center;
-            font-size: 55px;
-            margin-bottom: 10px;
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #111d35;
+            font-size: 42px;
+            border: 1px solid rgba(0, 174, 255, 0.25);
         }
 
         h1 {
             text-align: center;
-            font-size: 26px;
-            margin-bottom: 10px;
+            font-size: 25px;
+            margin-bottom: 8px;
         }
 
         .descripcion {
             text-align: center;
-            color: #8fa5bd;
+            color: #9aa8bd;
             font-size: 14px;
-            line-height: 1.5;
             margin-bottom: 25px;
         }
 
         label {
             display: block;
-            margin-bottom: 7px;
-            color: #b8c9dc;
-            font-size: 13px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #cbd5e1;
+            font-weight: bold;
         }
 
         input,
         select {
             width: 100%;
-            padding: 13px;
-            margin-bottom: 18px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
+            padding: 14px;
             border-radius: 10px;
-            font-size: 15px;
+            border: 1px solid #233553;
+            background: #071020;
+            color: white;
             outline: none;
+            margin-bottom: 18px;
+            font-size: 15px;
         }
 
         input:focus,
         select:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+            border-color: #00bfff;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.15);
         }
 
-        .continuar {
+        button {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             border: none;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            font-size: 15px;
+            border-radius: 11px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.2s;
         }
 
-        .continuar:disabled {
-            opacity: 0.6;
-            cursor: wait;
+        #botonRecarga {
+            background: #00bfff;
+            color: #00111c;
         }
 
-        .nota {
-            margin-top: 20px;
+        #botonRecarga:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 18px rgba(0, 191, 255, 0.35);
+        }
+
+        .boton-ofertas {
+            margin-top: 12px;
+            background: #101e38;
+            color: #00d9ff;
+            border: 1px solid rgba(0, 217, 255, 0.35);
+        }
+
+        .boton-ofertas:hover {
+            background: #142746;
+            border-color: #00d9ff;
+            transform: translateY(-1px);
+        }
+
+        .mensaje {
             text-align: center;
-            color: #627b97;
-            font-size: 11px;
-            line-height: 1.5;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #ff7373;
+            min-height: 20px;
+        }
+
+        .cargando {
+            opacity: 0.6;
+            pointer-events: none;
         }
     </style>
 </head>
 
 <body>
 
+<header>
+    <a href="index.html" class="volver">← Juegos</a>
+    <div class="logo">GAMERS GOLD TOP-UP</div>
+</header>
+
 <div class="contenedor">
-
-    <div class="header">
-
-        <div class="logo">
-            <span class="rayo">⚡</span> Gamers Gold Top-Up
-        </div>
-
-        <a href="juegos.html" class="volver">
-            ← Juegos
-        </a>
-
-    </div>
 
     <div class="card">
 
@@ -154,8 +175,7 @@
         <h1>PUBG Mobile</h1>
 
         <p class="descripcion">
-            Recarga tus UC de PUBG Mobile
-            de forma rápida y sencilla.
+            Selecciona tu cantidad de UC y realiza tu recarga.
         </p>
 
         <label for="idjugador">
@@ -165,7 +185,7 @@
         <input
             type="text"
             id="idjugador"
-            placeholder="Introduce tu ID"
+            placeholder="Escribe tu ID de PUBG Mobile"
             autocomplete="off"
         >
 
@@ -174,21 +194,30 @@
         </label>
 
         <select id="cantidad">
-
-            <option value="">
-                Selecciona una cantidad
-            </option>
-
+            <option value="">Cargando productos...</option>
         </select>
 
         <button
-            class="continuar"
             id="botonRecarga"
             type="button"
             onclick="continuarRecarga()"
         >
             Continuar ⚡
         </button>
+
+        <!-- OFERTAS ESPECIALES -->
+        <button
+            class="boton-ofertas"
+            type="button"
+            onclick="window.location.href='ofertas-pubg.html'"
+        >
+            🎁 Ofertas especiales
+        </button>
+
+        <div
+            id="mensaje"
+            class="mensaje"
+        ></div>
 
     </div>
 
@@ -218,290 +247,241 @@ const supabaseClient =
     );
 
 
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
+
+const idJugador =
+    document.getElementById("idjugador");
+
+const cantidad =
+    document.getElementById("cantidad");
+
+const botonRecarga =
+    document.getElementById("botonRecarga");
+
+const mensaje =
+    document.getElementById("mensaje");
+
+
+/* =========================================================
+   CARGAR PRODUCTOS PUBG MOBILE
+   ========================================================= */
+
 async function cargarProductos() {
 
-    const select =
-        document.getElementById("cantidad");
+    cantidad.innerHTML =
+        '<option value="">Cargando productos...</option>';
+
+    const { data, error } =
+        await supabaseClient
+            .from("game_products")
+            .select(
+                "id, game, product_name, game_currency_amount, price_gvr, active"
+            )
+            .eq("game", "PUBG Mobile")
+            .eq("active", true)
+            .order("game_currency_amount", {
+                ascending: true
+            });
+
+    if (error) {
+
+        console.error(
+            "Error cargando productos:",
+            error
+        );
+
+        cantidad.innerHTML =
+            '<option value="">No se pudieron cargar</option>';
+
+        return;
+    }
+
+    if (!data || data.length === 0) {
+
+        cantidad.innerHTML =
+            '<option value="">No hay productos disponibles</option>';
+
+        return;
+    }
+
+    cantidad.innerHTML =
+        '<option value="">Selecciona una cantidad</option>';
+
+    data.forEach(producto => {
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            producto.product_name;
+
+        option.textContent =
+            `${producto.product_name} — ${producto.price_gvr} GVR`;
+
+        cantidad.appendChild(option);
+
+    });
+
+}
+
+
+/* =========================================================
+   CONTINUAR RECARGA
+   ========================================================= */
+
+async function continuarRecarga() {
+
+    mensaje.textContent = "";
+
+    const id =
+        idJugador.value.trim();
+
+    const productoNombre =
+        cantidad.value;
+
+    if (!id) {
+
+        mensaje.textContent =
+            "Escribe tu ID de jugador.";
+
+        return;
+    }
+
+    if (!productoNombre) {
+
+        mensaje.textContent =
+            "Selecciona una cantidad.";
+
+        return;
+    }
+
+    botonRecarga.disabled = true;
+    botonRecarga.classList.add("cargando");
+    botonRecarga.textContent = "Procesando...";
+
 
     try {
 
+        /* =====================================================
+           VERIFICAR SESIÓN
+           ===================================================== */
+
         const {
-            data: productos,
-            error
+            data: {
+                session
+            }
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (!session) {
+
+            mensaje.textContent =
+                "Debes iniciar sesión para realizar una recarga.";
+
+            return;
+        }
+
+
+        /* =====================================================
+           BUSCAR PRODUCTO EXACTO
+           ===================================================== */
+
+        const {
+            data: producto,
+            error: errorProducto
         } =
             await supabaseClient
                 .from("game_products")
                 .select(
-                    "id, product_name, game_currency_amount, price_gvr"
+                    "id, game, product_name, price_gvr, active"
                 )
                 .eq("game", "PUBG Mobile")
+                .eq("product_name", productoNombre)
                 .eq("active", true)
-                .order(
-                    "game_currency_amount",
-                    {
-                        ascending: true
-                    }
-                );
+                .single();
 
 
-        console.log(
-            "PRODUCTOS PUBG MOBILE:",
-            productos
-        );
+        if (errorProducto || !producto) {
+
+            mensaje.textContent =
+                "No se encontró el producto seleccionado.";
+
+            return;
+        }
+
+
+        /* =====================================================
+           REALIZAR COMPRA
+           ===================================================== */
+
+        const {
+            data: resultado,
+            error
+        } =
+            await supabaseClient.rpc(
+                "purchase_game_product",
+                {
+                    p_product_id: producto.id,
+                    p_player_id: id
+                }
+            );
 
 
         if (error) {
 
             console.error(
-                "ERROR PRODUCTOS PUBG:",
+                "Error en la compra:",
                 error
             );
 
-            return;
-        }
-
-
-        if (!productos || productos.length === 0) {
-
-            const opcion =
-                document.createElement("option");
-
-            opcion.value = "";
-
-            opcion.textContent =
-                "No hay productos disponibles";
-
-            select.appendChild(opcion);
+            mensaje.textContent =
+                error.message ||
+                "No se pudo realizar la compra.";
 
             return;
         }
 
 
-        productos.forEach(producto => {
-
-            const opcion =
-                document.createElement("option");
-
-            opcion.value =
-                producto.product_name;
-
-            opcion.textContent =
-                producto.product_name +
-                " — " +
-                producto.price_gvr +
-                " GVR";
-
-            select.appendChild(opcion);
-
-        });
-
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
-}
-
-
-async function continuarRecarga() {
-
-    const idJugador =
-        document.getElementById("idjugador").value.trim();
-
-    const cantidad =
-        document.getElementById("cantidad").value;
-
-    const boton =
-        document.getElementById("botonRecarga");
-
-
-    if (idJugador === "") {
-
-        alert(
-            "Escribe tu ID de PUBG Mobile."
-        );
-
-        return;
-    }
-
-
-    if (cantidad === "") {
-
-        alert(
-            "Selecciona una cantidad."
-        );
-
-        return;
-    }
-
-
-    boton.disabled = true;
-
-    boton.textContent =
-        "Procesando...";
-
-
-    try {
-
-        /* =========================
-           COMPROBAR SESIÓN
-        ========================= */
-
-        const {
-            data: { session },
-            error: sessionError
-        } =
-            await supabaseClient.auth.getSession();
-
-
-        if (sessionError || !session) {
-
-            alert(
-                "Debes iniciar sesión primero."
-            );
-
-            window.location.href =
-                "login.html";
-
-            return;
-        }
-
-
-        /* =========================
-           BUSCAR PRODUCTO
-        ========================= */
-
-        const {
-            data: producto,
-            error: productoError
-        } =
-            await supabaseClient
-                .from("game_products")
-                .select(
-                    "id, game, product_name, game_currency_amount, price_gvr, active"
-                )
-                .eq("game", "PUBG Mobile")
-                .eq("product_name", cantidad)
-                .eq("active", true)
-                .maybeSingle();
-
-
-        console.log(
-            "PRODUCTO PUBG MOBILE:",
-            producto
-        );
-
-        console.log(
-            "ERROR PRODUCTO:",
-            productoError
-        );
-
-
-        if (productoError) {
-
-            alert(
-                "Error buscando el producto:\n\n" +
-                productoError.message
-            );
-
-            return;
-        }
-
-
-        if (!producto) {
-
-            alert(
-                "No se encontró ese producto de PUBG Mobile en Gamevora."
-            );
-
-            return;
-        }
-
-
-        /* =========================
-           REALIZAR COMPRA
-        ========================= */
-
-        const {
-            data: pedido,
-            error: compraError
-        } =
-            await supabaseClient.rpc(
-                "purchase_game_product",
-                {
-                    p_product_id:
-                        producto.id,
-
-                    p_player_id:
-                        idJugador
-                }
-            );
-
-
-        if (compraError) {
-
-            console.error(
-                "ERROR COMPRA:",
-                compraError
-            );
-
-            alert(
-                "No se pudo realizar la compra:\n\n" +
-                compraError.message
-            );
-
-            return;
-        }
-
-
-        /* =========================
+        /* =====================================================
            COMPRA EXITOSA
-        ========================= */
+           ===================================================== */
 
-        alert(
-            "¡Compra realizada! ⚡\n\n" +
-
-            producto.product_name +
-
-            "\nPrecio: " +
-
-            producto.price_gvr +
-
-            " GVR\n\n" +
-
-            "ID del pedido:\n" +
-
-            pedido
+        console.log(
+            "Compra realizada:",
+            resultado
         );
-
 
         window.location.href =
-            "cuenta.html";
-
+            `confirmar-gvr.html?order=${resultado}`;
 
     } catch (error) {
 
-        console.error(error);
-
-        alert(
-            "Ocurrió un error inesperado:\n\n" +
-            error.message
+        console.error(
+            "Error inesperado:",
+            error
         );
+
+        mensaje.textContent =
+            "Ocurrió un error. Inténtalo nuevamente.";
 
     } finally {
 
-        boton.disabled = false;
-
-        boton.textContent =
+        botonRecarga.disabled = false;
+        botonRecarga.classList.remove("cargando");
+        botonRecarga.textContent =
             "Continuar ⚡";
+
     }
+
 }
 
 
-/* =========================
-   CARGAR PRODUCTOS
-========================= */
+/* =========================================================
+   INICIAR
+   ========================================================= */
 
 cargarProductos();
 
