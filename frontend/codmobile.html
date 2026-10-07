@@ -125,6 +125,35 @@
             cursor: wait;
         }
 
+        /* =========================
+           OFERTAS ESPECIALES
+           ========================= */
+
+        .separador-ofertas {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #12385f;
+        }
+
+        .boton-ofertas {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #168cff;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #061b3a, #0a2d5c);
+            color: #00baff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
+            transition: 0.2s;
+        }
+
+        .boton-ofertas:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
+        }
+
         .nota {
             text-align: center;
             color: #627b97;
@@ -138,6 +167,7 @@
 <body>
 
 <header>
+
     <div class="logo">
         <span class="rayo">⚡</span> Gamers Gold Top-Up
     </div>
@@ -145,7 +175,9 @@
     <a href="juegos.html" class="inicio">
         ← Juegos
     </a>
+
 </header>
+
 
 <main class="contenedor">
 
@@ -159,7 +191,10 @@
             Recarga tus CP de Call of Duty Mobile de forma rápida y sencilla.
         </p>
 
-        <label for="id">ID del jugador</label>
+
+        <label for="id">
+            ID del jugador
+        </label>
 
         <input
             type="text"
@@ -168,16 +203,39 @@
             autocomplete="off"
         >
 
-        <label for="cantidad">Cantidad</label>
+
+        <label for="cantidad">
+            Cantidad
+        </label>
 
         <select id="cantidad">
-            <option value="">Selecciona una cantidad</option>
-            <option value="80 CP">80 CP</option>
-            <option value="420 CP">420 CP</option>
-            <option value="880 CP">880 CP</option>
-            <option value="2400 CP">2400 CP</option>
-            <option value="5000 CP">5000 CP</option>
+
+            <option value="">
+                Selecciona una cantidad
+            </option>
+
+            <option value="80 CP">
+                80 CP
+            </option>
+
+            <option value="420 CP">
+                420 CP
+            </option>
+
+            <option value="880 CP">
+                880 CP
+            </option>
+
+            <option value="2400 CP">
+                2400 CP
+            </option>
+
+            <option value="5000 CP">
+                5000 CP
+            </option>
+
         </select>
+
 
         <button
             class="recargar"
@@ -188,9 +246,34 @@
             Continuar ⚡
         </button>
 
+
+        <!-- =========================
+             OFERTAS ESPECIALES
+             ========================= -->
+
+        <div class="separador-ofertas">
+
+            <button
+                class="boton-ofertas"
+                type="button"
+                onclick="abrirOfertas()"
+            >
+                🎁 Ofertas Especiales
+            </button>
+
+        </div>
+
+
+        <div class="nota">
+            Recarga segura y rápida.
+            <br>
+            Gamers Gold Top-Up ⚡
+        </div>
+
     </section>
 
 </main>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -215,6 +298,22 @@ const supabaseClient =
         }
     );
 
+
+/* =========================
+   ABRIR OFERTAS ESPECIALES
+   ========================= */
+
+function abrirOfertas() {
+
+    window.location.href =
+        "ofertas-codmobile.html";
+
+}
+
+
+/* =========================
+   RECARGA COD MOBILE
+   ========================= */
 
 async function continuarRecarga() {
 
@@ -250,7 +349,8 @@ async function continuarRecarga() {
 
     boton.disabled = true;
 
-    boton.textContent = "Procesando...";
+    boton.textContent =
+        "Procesando...";
 
 
     try {
@@ -272,7 +372,8 @@ async function continuarRecarga() {
                 "Debes iniciar sesión primero."
             );
 
-            window.location.href = "login.html";
+            window.location.href =
+                "login.html";
 
             return;
         }
@@ -322,7 +423,7 @@ async function continuarRecarga() {
         if (!producto) {
 
             alert(
-                "No se encontró ese producto de COD Mobile en Gamevora."
+                "No se encontró ese producto de COD Mobile en Gamers Gold Top-Up."
             );
 
             return;
@@ -367,6 +468,7 @@ async function continuarRecarga() {
         ========================= */
 
         alert(
+
             "¡Compra realizada! ⚡\n\n" +
 
             producto.product_name +
@@ -378,6 +480,7 @@ async function continuarRecarga() {
 
             "ID del pedido:\n" +
             pedido
+
         );
 
 
@@ -390,8 +493,10 @@ async function continuarRecarga() {
         console.error(error);
 
         alert(
+
             "Ocurrió un error inesperado:\n\n" +
             error.message
+
         );
 
     } finally {
@@ -400,7 +505,9 @@ async function continuarRecarga() {
 
         boton.textContent =
             "Continuar ⚡";
+
     }
+
 }
 
 </script>
