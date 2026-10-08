@@ -6,8 +6,7 @@ self.addEventListener("push", function (event) {
     // =========================================================
 
     const LOGO =
-        "/frontend/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png";
-
+    "/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png";
 
     let data = {
         title: "Nueva Venta Gamers Gold",
