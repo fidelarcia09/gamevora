@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ofertas Especiales | Arena Breakout</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            border-bottom: 1px solid #12385f;
+            background: #071225;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .logo .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .volver {
+            text-decoration: none;
+            color: white;
+            border: 1px solid #168cff;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            padding: 25px 18px;
+        }
+
+        .ofertas {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+        }
+
+        .icono {
+            text-align: center;
+            font-size: 45px;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 25px;
+            margin-bottom: 7px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        .pantalla {
+            display: none;
+        }
+
+        .pantalla.activa {
+            display: block;
+        }
+
+        .lista-ofertas {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .boton-oferta {
+            width: 100%;
+            height: 150px;
+            padding: 0;
+            border: 1px solid #204c78;
+            border-radius: 14px;
+            background: #061226;
+            color: white;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: 0.2s;
+            box-shadow: 0 0 12px rgba(0, 140, 255, 0.08);
+        }
+
+        .boton-oferta:hover {
+            border-color: #159dff;
+            background: #0a1d38;
+            box-shadow: 0 0 18px rgba(0, 157, 255, 0.22);
+            transform: translateY(-2px);
+        }
+
+        .foto-oferta {
+            width: 100%;
+            flex: 1;
+            background: #07172d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .foto-oferta span {
+            color: #315779;
+            font-size: 13px;
+        }
+
+        .nombre-oferta {
+            width: 100%;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            background: #091a35;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            border-top: 1px solid #204c78;
+        }
+
+        .boton-oferta.seleccionado {
+            border-color: #00baff;
+            background: linear-gradient(
+                180deg,
+                #09244a,
+                #0b315c
+            );
+            box-shadow:
+                0 0 10px rgba(0, 186, 255, 0.25),
+                0 0 22px rgba(0, 140, 255, 0.15);
+        }
+
+        .boton-oferta.seleccionado .foto-oferta {
+            background: #09213f;
+        }
+
+        .boton-oferta.seleccionado .nombre-oferta {
+            background: #0b315c;
+            color: #00baff;
+            border-top-color: #00baff;
+        }
+
+        .precio-oferta {
+            margin-top: 18px;
+            padding: 15px;
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .precio-titulo {
+            color: #8fa5bd;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .precio {
+            color: #00baff;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .boton-principal {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(
+                90deg,
+                #087cff,
+                #00baff
+            );
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton-principal:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .boton-secundario {
+            width: 100%;
+            padding: 13px;
+            margin-top: 10px;
+            border: 1px solid #168cff;
+            border-radius: 10px;
+            background: #061226;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .resumen {
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 13px;
+            padding: 17px;
+            margin-top: 18px;
+        }
+
+        .fila {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 11px 0;
+            border-bottom: 1px solid #12385f;
+            font-size: 13px;
+        }
+
+        .fila:last-child {
+            border-bottom: none;
+        }
+
+        .fila span:first-child {
+            color: #8fa5bd;
+        }
+
+        .fila span:last-child {
+            color: white;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .campo-id {
+            margin-top: 18px;
+        }
+
+        .campo-id label {
+            display: block;
+            color: #8fa5bd;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .campo-id input {
+            width: 100%;
+            padding: 13px;
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            color: white;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .campo-id input:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
+
+        .exito {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .icono-exito {
+            font-size: 65px;
+            margin-bottom: 12px;
+        }
+
+        .exito h2 {
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .exito p {
+            color: #8fa5bd;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .pedido-id {
+            margin-top: 18px;
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            padding: 13px;
+            color: #00baff;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .nota {
+            text-align: center;
+            color: #627b97;
+            font-size: 11px;
+            margin-top: 18px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <span class="rayo">⚡</span>
+        Gamers Gold Top-Up
+    </div>
+
+    <a href="arenabreakout.html" class="volver">
+        ← Volver
+    </a>
+
+</header>
+
+
+<main class="contenedor">
+
+
+    <!-- ==============================
+         OFERTAS
+         ============================== -->
+
+    <section
+        id="pantallaOfertas"
+        class="ofertas pantalla activa"
+    >
+
+        <div class="icono">
+            🎁
+        </div>
+
+        <h1>
+            Ofertas Especiales
+        </h1>
+
+        <p class="descripcion">
+            Elige una oferta especial de Arena Breakout.
+        </p>
+
+
+        <div
+            id="listaOfertas"
+            class="lista-ofertas"
+        >
+        </div>
+
+
+        <div
+            id="precioSeleccionado"
+            class="precio-oferta"
+            style="display:none;"
+        >
+
+            <div class="precio-titulo">
+                Precio de la oferta
+            </div>
+
+            <div
+                id="precio"
+                class="precio"
+            >
+                0 GVR
+            </div>
+
+        </div>
+
+
+        <button
+            id="continuarBtn"
+            class="boton-principal"
+            type="button"
+            onclick="irAConfirmacion()"
+            style="display:none;"
+        >
+            Continuar ⚡
+        </button>
+
+
+        <div class="nota">
+            Ofertas especiales de Arena Breakout.
+        </div>
+
+    </section>
+
+
+    <!-- ==============================
+         CONFIRMACIÓN
+         ============================== -->
+
+    <section
+        id="pantallaConfirmacion"
+        class="ofertas pantalla"
+    >
+
+        <div class="icono">
+            💳
+        </div>
+
+        <h1>
+            Confirmar pago
+        </h1>
+
+        <p class="descripcion">
+            Revisa los datos antes de continuar.
+        </p>
+
+
+        <div class="resumen">
+
+            <div class="fila">
+
+                <span>
+                    Oferta
+                </span>
+
+                <span id="confirmarOferta">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="fila">
+
+                <span>
+                    Juego
+                </span>
+
+                <span>
+                    Arena Breakout
+                </span>
+
+            </div>
+
+
+            <div class="fila">
+
+                <span>
+                    Precio
+                </span>
+
+                <span id="confirmarPrecio">
+                    0 GVR
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="campo-id">
+
+            <label for="idJugador">
+                ID del jugador de Arena Breakout
+            </label>
+
+            <input
+                type="text"
+                id="idJugador"
+                placeholder="Escribe tu ID de Arena Breakout"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <button
+            id="confirmarBtn"
+            class="boton-principal"
+            type="button"
+            onclick="realizarPedido()"
+        >
+            Confirmar compra ⚡
+        </button>
+
+
+        <button
+            class="boton-secundario"
+            type="button"
+            onclick="volverOfertas()"
+        >
+            ← Cambiar oferta
+        </button>
+
+    </section>
+
+
+    <!-- ==============================
+         ÉXITO
+         ============================== -->
+
+    <section
+        id="pantallaExito"
+        class="ofertas pantalla"
+    >
+
+        <div class="exito">
+
+            <div class="icono-exito">
+                ✅
+            </div>
+
+            <h2>
+                ¡Pedido realizado!
+            </h2>
+
+            <p>
+                Tu solicitud de compra fue registrada correctamente.
+            </p>
+
+
+            <div class="pedido-id">
+
+                ID del pedido:
+
+                <br>
+
+                <span id="pedidoId">
+                    -
+                </span>
+
+            </div>
+
+
+            <button
+                class="boton-principal"
+                type="button"
+                onclick="window.location.href='cuenta.html'"
+            >
+                Ir a mi cuenta ⚡
+            </button>
+
+
+            <button
+                class="boton-secundario"
+                type="button"
+                onclick="window.location.href='arenabreakout.html'"
+            >
+                Volver a Arena Breakout
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+/* ==============================
+   OFERTAS
+   ============================== */
+
+const ofertas = [
+
+    {
+        nombre: "Beginner Select",
+        emoji: "🎯",
+        precio: 100
+    },
+
+    {
+        nombre: "Monthly Advanced Battle Pass",
+        emoji: "🎟️",
+        precio: 150
+    },
+
+    {
+        nombre: "Bulletproof Case (30d",
+        emoji: "🛡️",
+        precio: 200
+    },
+
+    {
+        nombre: "Bulletproof Case Privileges",
+        emoji: "🔒",
+        precio: 250
+    },
+
+    {
+        nombre: "Monthly Premium Battle Pass Activation",
+        emoji: "👑",
+        precio: 300
+    },
+
+    {
+        nombre: "Composition Case (30d",
+        emoji: "📦",
+        precio: 350
+    },
+
+    {
+        nombre: "Composite Case Privileges",
+        emoji: "💎",
+        precio: 400
+    },
+
+    {
+        nombre: "Pass Bundle Activation Pass Bundle",
+        emoji: "🎁",
+        precio: 450
+    }
+
+];
+
+
+let ofertaSeleccionada = null;
+
+
+/* ==============================
+   CREAR BOTONES
+   ============================== */
+
+const lista =
+    document.getElementById("listaOfertas");
+
+
+ofertas.forEach((oferta) => {
+
+    const boton =
+        document.createElement("button");
+
+    boton.type = "button";
+
+    boton.className =
+        "boton-oferta";
+
+
+    boton.innerHTML = `
+
+        <div class="foto-oferta">
+
+            <span style="font-size:42px;">
+                ${oferta.emoji}
+            </span>
+
+        </div>
+
+        <div class="nombre-oferta">
+
+            ${oferta.nombre}
+
+        </div>
+
+    `;
+
+
+    boton.onclick = () => {
+
+        document
+            .querySelectorAll(".boton-oferta")
+            .forEach((b) => {
+
+                b.classList.remove(
+                    "seleccionado"
+                );
+
+            });
+
+
+        boton.classList.add(
+            "seleccionado"
+        );
+
+
+        ofertaSeleccionada =
+            oferta;
+
+
+        document
+            .getElementById("precio")
+            .textContent =
+            oferta.precio + " GVR";
+
+
+        document
+            .getElementById("precioSeleccionado")
+            .style.display =
+            "block";
+
+
+        document
+            .getElementById("continuarBtn")
+            .style.display =
+            "block";
+
+    };
+
+
+    lista.appendChild(boton);
+
+});
+
+
+/* ==============================
+   CONFIRMACIÓN
+   ============================== */
+
+function irAConfirmacion() {
+
+    if (!ofertaSeleccionada) {
+
+        return;
+
+    }
+
+
+    document
+        .getElementById("confirmarOferta")
+        .textContent =
+        ofertaSeleccionada.nombre;
+
+
+    document
+        .getElementById("confirmarPrecio")
+        .textContent =
+        ofertaSeleccionada.precio + " GVR";
+
+
+    document
+        .getElementById("pantallaOfertas")
+        .classList.remove(
+            "activa"
+        );
+
+
+    document
+        .getElementById("pantallaConfirmacion")
+        .classList.add(
+            "activa"
+        );
+
+}
+
+
+/* ==============================
+   VOLVER A OFERTAS
+   ============================== */
+
+function volverOfertas() {
+
+    document
+        .getElementById("pantallaConfirmacion")
+        .classList.remove(
+            "activa"
+        );
+
+
+    document
+        .getElementById("pantallaOfertas")
+        .classList.add(
+            "activa"
+        );
+
+}
+
+
+/* ==============================
+   REALIZAR PEDIDO
+   ============================== */
+
+async function realizarPedido() {
+
+    const idJugador =
+        document
+            .getElementById("idJugador")
+            .value
+            .trim();
+
+
+    if (!idJugador) {
+
+        alert(
+            "Escribe tu ID de jugador."
+        );
+
+        return;
+
+    }
+
+
+    if (!ofertaSeleccionada) {
+
+        alert(
+            "Selecciona una oferta."
+        );
+
+        return;
+
+    }
+
+
+    const confirmarBtn =
+        document.getElementById(
+            "confirmarBtn"
+        );
+
+
+    confirmarBtn.disabled = true;
+
+    confirmarBtn.textContent =
+        "Procesando compra...";
+
+
+    try {
+
+        const {
+            data: {
+                user
+            }
+        } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+        if (!user) {
+
+            alert(
+                "Debes iniciar sesión para realizar la compra."
+            );
+
+            window.location.href =
+                "cuenta.html";
+
+            return;
+
+        }
+
+
+        /* ==============================
+           BUSCAR PRODUCTO
+           ============================== */
+
+        const {
+            data: producto,
+            error: productoError
+        } =
+        await supabaseClient
+            .from("game_products")
+            .select("id, product_name, price_gvr")
+            .eq(
+                "game",
+                "Arena Breakout"
+            )
+            .eq(
+                "product_name",
+                ofertaSeleccionada.nombre
+            )
+            .eq(
+                "active",
+                true
+            )
+            .maybeSingle();
+
+
+        if (productoError) {
+
+            throw productoError;
+
+        }
+
+
+        if (!producto) {
+
+            throw new Error(
+                "Esta oferta todavía no está disponible en Supabase."
+            );
+
+        }
+
+
+        /* ==============================
+           REALIZAR COMPRA
+           ============================== */
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .rpc(
+                "purchase_game_product",
+                {
+                    p_product_id:
+                        producto.id,
+
+                    p_player_id:
+                        idJugador
+                }
+            );
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        /* ==============================
+           OBTENER ID DEL PEDIDO
+           ============================== */
+
+        let pedidoId = null;
+
+
+        if (typeof data === "string") {
+
+            pedidoId = data;
+
+        }
+        else if (data && data.id) {
+
+            pedidoId = data.id;
+
+        }
+        else if (
+            Array.isArray(data) &&
+            data[0]
+        ) {
+
+            pedidoId =
+                data[0].id ||
+                data[0].order_id ||
+                data[0].game_order_id;
+
+        }
+
+
+        document
+            .getElementById("pedidoId")
+            .textContent =
+            pedidoId || "Registrado";
+
+
+        document
+            .getElementById(
+                "pantallaConfirmacion"
+            )
+            .classList.remove(
+                "activa"
+            );
+
+
+        document
+            .getElementById(
+                "pantallaExito"
+            )
+            .classList.add(
+                "activa"
+            );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            error.message ||
+            "No se pudo completar la compra."
+        );
+
+
+    } finally {
+
+        confirmarBtn.disabled =
+            false;
+
+        confirmarBtn.textContent =
+            "Confirmar compra ⚡";
+
+    }
+
+}
+
+</script>
+
+</body>
+  </html>
