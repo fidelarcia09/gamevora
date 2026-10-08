@@ -91,6 +91,10 @@
             display: block;
         }
 
+        /* ==========================================
+           BOTONES DE OFERTAS
+           ========================================== */
+
         .lista-ofertas {
             display: flex;
             flex-direction: column;
@@ -120,6 +124,19 @@
             transform: translateY(-2px);
         }
 
+        .boton-oferta.seleccionado {
+            border-color: #00baff;
+            background: linear-gradient(
+                180deg,
+                #09244a,
+                #0b315c
+            );
+
+            box-shadow:
+                0 0 10px rgba(0, 186, 255, 0.25),
+                0 0 22px rgba(0, 140, 255, 0.15);
+        }
+
         .foto-oferta {
             width: 100%;
             flex: 1;
@@ -128,11 +145,11 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            font-size: 42px;
         }
 
-        .foto-oferta span {
-            color: #315779;
-            font-size: 13px;
+        .boton-oferta.seleccionado .foto-oferta {
+            background: #09213f;
         }
 
         .nombre-oferta {
@@ -140,30 +157,15 @@
             min-height: 48px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 8px;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 14px;
             background: #091a35;
             color: white;
             font-size: 14px;
             font-weight: bold;
-            text-align: center;
+            text-align: left;
             border-top: 1px solid #204c78;
-        }
-
-        .boton-oferta.seleccionado {
-            border-color: #00baff;
-            background: linear-gradient(
-                180deg,
-                #09244a,
-                #0b315c
-            );
-            box-shadow:
-                0 0 10px rgba(0, 186, 255, 0.25),
-                0 0 22px rgba(0, 140, 255, 0.15);
-        }
-
-        .boton-oferta.seleccionado .foto-oferta {
-            background: #09213f;
         }
 
         .boton-oferta.seleccionado .nombre-oferta {
@@ -171,6 +173,17 @@
             color: #00baff;
             border-top-color: #00baff;
         }
+
+        .precio-boton {
+            color: #00baff;
+            white-space: nowrap;
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        /* ==========================================
+           PRECIO SELECCIONADO
+           ========================================== */
 
         .precio-oferta {
             margin-top: 18px;
@@ -192,6 +205,10 @@
             font-size: 24px;
             font-weight: 900;
         }
+
+        /* ==========================================
+           BOTONES PRINCIPALES
+           ========================================== */
 
         .boton-principal {
             width: 100%;
@@ -228,6 +245,10 @@
             cursor: pointer;
         }
 
+        /* ==========================================
+           RESUMEN
+           ========================================== */
+
         .resumen {
             background: #061226;
             border: 1px solid #204c78;
@@ -259,6 +280,10 @@
             text-align: right;
         }
 
+        /* ==========================================
+           ID
+           ========================================== */
+
         .campo-id {
             margin-top: 18px;
         }
@@ -285,6 +310,10 @@
             border-color: #159dff;
             box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
         }
+
+        /* ==========================================
+           ÉXITO
+           ========================================== */
 
         .exito {
             text-align: center;
@@ -316,13 +345,6 @@
             color: #00baff;
             font-size: 13px;
             font-weight: bold;
-        }
-
-        .cargando {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 13px;
-            padding: 15px;
         }
 
     </style>
@@ -369,21 +391,105 @@
         </p>
 
 
-        <div
-            id="estadoProductos"
-            class="cargando"
-        >
-            Cargando ofertas...
+        <div class="lista-ofertas">
+
+
+            <!-- ROYALE PASS -->
+
+            <button
+                class="boton-oferta"
+                type="button"
+                onclick="seleccionarOferta(
+                    this,
+                    'Royale Pass',
+                    100
+                )"
+            >
+
+                <div class="foto-oferta">
+                    🎟️
+                </div>
+
+                <div class="nombre-oferta">
+
+                    <span>
+                        Royale Pass
+                    </span>
+
+                    <span class="precio-boton">
+                        100 GVR
+                    </span>
+
+                </div>
+
+            </button>
+
+
+            <!-- ELITE ROYALE PASS -->
+
+            <button
+                class="boton-oferta"
+                type="button"
+                onclick="seleccionarOferta(
+                    this,
+                    'Elite Royale Pass',
+                    150
+                )"
+            >
+
+                <div class="foto-oferta">
+                    👑
+                </div>
+
+                <div class="nombre-oferta">
+
+                    <span>
+                        Elite Royale Pass
+                    </span>
+
+                    <span class="precio-boton">
+                        150 GVR
+                    </span>
+
+                </div>
+
+            </button>
+
+
+            <!-- ELITE PASS PLUS -->
+
+            <button
+                class="boton-oferta"
+                type="button"
+                onclick="seleccionarOferta(
+                    this,
+                    'Elite Pass Plus',
+                    200
+                )"
+            >
+
+                <div class="foto-oferta">
+                    🔥
+                </div>
+
+                <div class="nombre-oferta">
+
+                    <span>
+                        Elite Pass Plus
+                    </span>
+
+                    <span class="precio-boton">
+                        200 GVR
+                    </span>
+
+                </div>
+
+            </button>
+
         </div>
 
 
-        <div
-            id="listaOfertas"
-            class="lista-ofertas"
-            style="display:none;"
-        >
-        </div>
-
+        <!-- PRECIO SELECCIONADO -->
 
         <div
             id="precioSeleccionado"
@@ -461,7 +567,7 @@
                     Juego
                 </span>
 
-                <span id="juegoConfirmacion">
+                <span>
                     PUBG Mobile
                 </span>
 
@@ -583,46 +689,394 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
 
-window.CONFIG_OFERTAS = {
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-    juego: "PUBG Mobile",
+const SUPABASE_ANON_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-    paginaVolver: "pubgmobile.html",
-
-    textoId: "ID del jugador de PUBG Mobile",
-
-    placeholderId: "Escribe tu ID de PUBG Mobile",
-
-    ofertas: [
-
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
         {
-            nombre: "Royale Pass",
-            emoji: "🎟️"
-        },
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
+    );
 
-        {
-            nombre: "Elite Royale Pass",
-            emoji: "👑"
-        },
 
-        {
-            nombre: "Elite Pass Plus",
-            emoji: "🔥"
+/* ==========================================
+   VARIABLES
+   ========================================== */
+
+let ofertaSeleccionada = null;
+let precioSeleccionado = 0;
+let procesandoCompra = false;
+
+
+/* ==========================================
+   SELECCIONAR OFERTA
+   ========================================== */
+
+function seleccionarOferta(
+    boton,
+    nombre,
+    precio
+) {
+
+    if (procesandoCompra) {
+        return;
+    }
+
+
+    document
+        .querySelectorAll(".boton-oferta")
+        .forEach(function(elemento) {
+
+            elemento.classList.remove(
+                "seleccionado"
+            );
+
+        });
+
+
+    boton.classList.add(
+        "seleccionado"
+    );
+
+
+    ofertaSeleccionada =
+        nombre;
+
+    precioSeleccionado =
+        precio;
+
+
+    document
+        .getElementById("precio")
+        .textContent =
+        precio + " GVR";
+
+
+    document
+        .getElementById("precioSeleccionado")
+        .style.display =
+        "block";
+
+
+    document
+        .getElementById("continuarBtn")
+        .style.display =
+        "block";
+
+}
+
+
+/* ==========================================
+   IR A CONFIRMACIÓN
+   ========================================== */
+
+function irAConfirmacion() {
+
+    if (!ofertaSeleccionada) {
+
+        alert(
+            "Selecciona una oferta."
+        );
+
+        return;
+    }
+
+
+    document
+        .getElementById("confirmarOferta")
+        .textContent =
+        ofertaSeleccionada;
+
+
+    document
+        .getElementById("confirmarPrecio")
+        .textContent =
+        precioSeleccionado + " GVR";
+
+
+    document
+        .getElementById("pantallaOfertas")
+        .classList.remove(
+            "activa"
+        );
+
+
+    document
+        .getElementById("pantallaConfirmacion")
+        .classList.add(
+            "activa"
+        );
+
+}
+
+
+/* ==========================================
+   VOLVER A OFERTAS
+   ========================================== */
+
+function volverOfertas() {
+
+    document
+        .getElementById("pantallaConfirmacion")
+        .classList.remove(
+            "activa"
+        );
+
+
+    document
+        .getElementById("pantallaOfertas")
+        .classList.add(
+            "activa"
+        );
+
+}
+
+
+/* ==========================================
+   REALIZAR PEDIDO
+   ========================================== */
+
+async function realizarPedido() {
+
+    if (procesandoCompra) {
+        return;
+    }
+
+
+    const idJugador =
+        document
+            .getElementById("idJugador")
+            .value
+            .trim();
+
+
+    if (idJugador === "") {
+
+        alert(
+            "Escribe tu ID de PUBG Mobile."
+        );
+
+        return;
+    }
+
+
+    if (!ofertaSeleccionada) {
+
+        alert(
+            "Selecciona una oferta."
+        );
+
+        return;
+    }
+
+
+    procesandoCompra = true;
+
+
+    const boton =
+        document.getElementById(
+            "confirmarBtn"
+        );
+
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Procesando...";
+
+
+    try {
+
+
+        /* ======================================
+           SESIÓN
+           ====================================== */
+
+        const {
+            data: {
+                session
+            },
+            error: sessionError
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (
+            sessionError ||
+            !session
+        ) {
+
+            alert(
+                "Debes iniciar sesión primero."
+            );
+
+            procesandoCompra = false;
+
+            boton.disabled = false;
+
+            boton.textContent =
+                "Confirmar compra ⚡";
+
+            return;
         }
 
-    ]
 
-};
+        /* ======================================
+           BUSCAR PRODUCTO
+           ====================================== */
+
+        const {
+            data: producto,
+            error: productoError
+        } =
+            await supabaseClient
+
+                .from("game_products")
+
+                .select(
+                    "id, game, product_name, price_gvr, active"
+                )
+
+                .eq(
+                    "game",
+                    "PUBG Mobile"
+                )
+
+                .eq(
+                    "product_name",
+                    ofertaSeleccionada
+                )
+
+                .eq(
+                    "active",
+                    true
+                )
+
+                .maybeSingle();
+
+
+        if (
+            productoError ||
+            !producto
+        ) {
+
+            console.error(
+                productoError
+            );
+
+            alert(
+                "No se encontró esta oferta en Supabase."
+            );
+
+            procesandoCompra = false;
+
+            boton.disabled = false;
+
+            boton.textContent =
+                "Confirmar compra ⚡";
+
+            return;
+        }
+
+
+        /* ======================================
+           COMPRAR
+           ====================================== */
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.rpc(
+                "purchase_game_product",
+                {
+                    p_product_id:
+                        producto.id,
+
+                    p_player_id:
+                        idJugador
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                error
+            );
+
+            alert(
+                "No se pudo realizar la compra:\n\n" +
+                error.message
+            );
+
+            procesandoCompra = false;
+
+            boton.disabled = false;
+
+            boton.textContent =
+                "Confirmar compra ⚡";
+
+            return;
+        }
+
+
+        /* ======================================
+           ÉXITO
+           ====================================== */
+
+        document
+            .getElementById("pedidoId")
+            .textContent =
+            data;
+
+
+        document
+            .getElementById("pantallaConfirmacion")
+            .classList.remove(
+                "activa"
+            );
+
+
+        document
+            .getElementById("pantallaExito")
+            .classList.add(
+                "activa"
+            );
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            "Ocurrió un error inesperado."
+        );
+
+        procesandoCompra = false;
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Confirmar compra ⚡";
+    }
+
+}
 
 </script>
-
-
-<!-- MOTOR UNIVERSAL DE OFERTAS -->
-
-<script src="ofertas.js"></script>
 
 </body>
 </html>
