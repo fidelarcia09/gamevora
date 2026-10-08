@@ -1,3 +1,35 @@
+/* =========================================================
+   GAMERS GOLD TOP-UP
+   SERVICE WORKER
+   ========================================================= */
+
+
+/* =========================================================
+   ACTUALIZACIÓN DEL SERVICE WORKER
+   ========================================================= */
+
+self.addEventListener("install", function (event) {
+
+    event.waitUntil(
+        self.skipWaiting()
+    );
+
+});
+
+
+self.addEventListener("activate", function (event) {
+
+    event.waitUntil(
+        clients.claim()
+    );
+
+});
+
+
+/* =========================================================
+   NOTIFICACIONES PUSH
+   ========================================================= */
+
 self.addEventListener("push", function (event) {
 
     // =========================================================
