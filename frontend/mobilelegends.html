@@ -121,6 +121,35 @@
             cursor: wait;
         }
 
+        /* =========================
+           OFERTAS ESPECIALES
+        ========================= */
+
+        .separador-ofertas {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #12385f;
+        }
+
+        .boton-ofertas {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #168cff;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #061b3a, #0a2d5c);
+            color: #00baff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
+            transition: 0.2s;
+        }
+
+        .boton-ofertas:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
+        }
+
         .nota {
             margin-top: 20px;
             text-align: center;
@@ -210,6 +239,23 @@
             Continuar ⚡
         </button>
 
+
+        <!-- =========================
+             OFERTAS ESPECIALES
+        ========================= -->
+
+        <div class="separador-ofertas">
+
+            <button
+                class="boton-ofertas"
+                type="button"
+                onclick="abrirOfertas()"
+            >
+                🎁 Ofertas Especiales
+            </button>
+
+        </div>
+
     </div>
 
 </div>
@@ -237,6 +283,22 @@ const supabaseClient =
         }
     );
 
+
+/* =========================
+   OFERTAS ESPECIALES
+========================= */
+
+function abrirOfertas() {
+
+    window.location.href =
+        "ofertas-mobilelegends.html";
+
+}
+
+
+/* =========================
+   RECARGA NORMAL
+========================= */
 
 async function continuarRecarga() {
 
@@ -272,7 +334,8 @@ async function continuarRecarga() {
 
     boton.disabled = true;
 
-    boton.textContent = "Procesando...";
+    boton.textContent =
+        "Procesando...";
 
 
     try {
@@ -294,7 +357,8 @@ async function continuarRecarga() {
                 "Debes iniciar sesión primero."
             );
 
-            window.location.href = "login.html";
+            window.location.href =
+                "login.html";
 
             return;
         }
