@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ofertas Blood Strike | Gamers Gold Top-Up</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            border-bottom: 1px solid #12385f;
+            background: #071225;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .inicio {
+            color: white;
+            text-decoration: none;
+            border: 1px solid #168cff;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-size: 13px;
+        }
+
+        .contenedor {
+            max-width: 500px;
+            margin: auto;
+            padding: 25px 18px;
+        }
+
+        .pantalla {
+            display: none;
+        }
+
+        .pantalla.activa {
+            display: block;
+        }
+
+        .juego {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .lista-ofertas {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .boton-oferta {
+            width: 100%;
+            height: 150px;
+            border: 1px solid #168cff;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #061b3a, #0a2d5c);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
+            transition: 0.2s;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .boton-oferta:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
+        }
+
+        .boton-oferta.seleccionado {
+            border: 2px solid #00baff;
+            box-shadow:
+                0 0 18px rgba(0, 186, 255, 0.4);
+            background: linear-gradient(
+                90deg,
+                #092957,
+                #0b3970
+            );
+        }
+
+        .foto-oferta {
+            font-size: 38px;
+        }
+
+        .nombre-oferta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .precio-boton {
+            color: #00baff;
+            font-size: 14px;
+        }
+
+        .precio-seleccionado {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #00baff;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .continuar {
+            display: none;
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .continuar:hover {
+            transform: scale(1.01);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #b8c9dc;
+            font-size: 13px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 18px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
+
+        .boton-confirmar {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton-confirmar:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .resumen {
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            color: #b8c9dc;
+            font-size: 14px;
+        }
+
+        .resumen strong {
+            color: white;
+        }
+
+        .exito {
+            text-align: center;
+        }
+
+        .icono-exito {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .exito h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .exito p {
+            color: #8fa5bd;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .pedido-id {
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            padding: 12px;
+            color: #00baff;
+            font-size: 13px;
+            word-break: break-all;
+            margin-bottom: 20px;
+        }
+
+        .boton-final {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .boton-secundario {
+            background: #061b3a;
+            border: 1px solid #168cff;
+            color: #00baff;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <span class="rayo">⚡</span> Gamers Gold Top-Up
+    </div>
+
+    <a href="bloodstrike.html" class="inicio">
+        ← Blood Strike
+    </a>
+
+</header>
+
+
+<div class="contenedor">
+
+
+    <!-- =========================
+         PANTALLA OFERTAS
+    ========================= -->
+
+    <div
+        id="pantallaOfertas"
+        class="pantalla activa"
+    >
+
+        <div class="juego">
+
+            <h1>🎁 Ofertas Especiales</h1>
+
+            <p class="descripcion">
+                Elige una oferta especial de
+                Blood Strike.
+            </p>
+
+
+            <div class="lista-ofertas">
+
+
+                <!-- OFERTA 1 -->
+
+                <button
+                    class="boton-oferta"
+                    type="button"
+                    onclick="seleccionarOferta(
+                        this,
+                        'Semana de Bolsa de la Suerte',
+                        100
+                    )"
+                >
+
+                    <div class="foto-oferta">
+                        🎁
+                    </div>
+
+                    <div class="nombre-oferta">
+
+                        <span>
+                            Semana de Bolsa de la Suerte
+                        </span>
+
+                        <span class="precio-boton">
+                            100 GVR
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+                <!-- OFERTA 2 -->
+
+                <button
+                    class="boton-oferta"
+                    type="button"
+                    onclick="seleccionarOferta(
+                        this,
+                        'Level Up Pass',
+                        150
+                    )"
+                >
+
+                    <div class="foto-oferta">
+                        ⬆️
+                    </div>
+
+                    <div class="nombre-oferta">
+
+                        <span>
+                            Level Up Pass
+                        </span>
+
+                        <span class="precio-boton">
+                            150 GVR
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+                <!-- OFERTA 3 -->
+
+                <button
+                    class="boton-oferta"
+                    type="button"
+                    onclick="seleccionarOferta(
+                        this,
+                        'Strike Pass Elite',
+                        200
+                    )"
+                >
+
+                    <div class="foto-oferta">
+                        👑
+                    </div>
+
+                    <div class="nombre-oferta">
+
+                        <span>
+                            Strike Pass Elite
+                        </span>
+
+                        <span class="precio-boton">
+                            200 GVR
+                        </span>
+
+                    </div>
+
+                </button>
+
+
+                <!-- OFERTA 4 -->
+
+                <button
+                    class="boton-oferta"
+                    type="button"
+                    onclick="seleccionarOferta(
+                        this,
+                        'Strike Pass Premium',
+                        250
+                    )"
+                >
+
+                    <div class="foto-oferta">
+                        🔥
+                    </div>
+
+                    <div class="nombre-oferta">
+
+                        <span>
+                            Strike Pass Premium
+                        </span>
+
+                        <span class="precio-boton">
+                            250 GVR
+                        </span>
+
+                    </div>
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="precioSeleccionado"
+                class="precio-seleccionado"
+            >
+                Precio: <span id="precio">0 GVR</span>
+            </div>
+
+
+            <button
+                id="continuarBtn"
+                class="continuar"
+                type="button"
+                onclick="irAConfirmacion()"
+            >
+                Continuar ⚡
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         PANTALLA CONFIRMACIÓN
+    ========================= -->
+
+    <div
+        id="pantallaConfirmacion"
+        class="pantalla"
+    >
+
+        <div class="juego">
+
+            <h1>Confirmar oferta</h1>
+
+            <p class="descripcion">
+                Revisa los datos antes de realizar
+                tu compra.
+            </p>
+
+
+            <div class="resumen">
+
+                <div>
+                    <strong>Juego:</strong>
+                    Blood Strike
+                </div>
+
+                <div>
+                    <strong>Oferta:</strong>
+                    <span id="confirmarOferta"></span>
+                </div>
+
+                <div>
+                    <strong>Precio:</strong>
+                    <span id="confirmarPrecio"></span>
+                </div>
+
+            </div>
+
+
+            <label for="idJugador">
+                ID del jugador
+            </label>
+
+            <input
+                type="text"
+                id="idJugador"
+                placeholder="Escribe tu ID de Blood Strike"
+                autocomplete="off"
+            >
+
+
+            <button
+                id="confirmarBtn"
+                class="boton-confirmar"
+                type="button"
+                onclick="realizarCompra()"
+            >
+                Confirmar compra ⚡
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         PANTALLA ÉXITO
+    ========================= -->
+
+    <div
+        id="pantallaExito"
+        class="pantalla"
+    >
+
+        <div class="juego exito">
+
+            <div class="icono-exito">
+                ✅
+            </div>
+
+            <h2>
+                ¡Pedido realizado!
+            </h2>
+
+            <p>
+                Tu compra de Blood Strike
+                fue registrada correctamente.
+            </p>
+
+
+            <div class="pedido-id">
+
+                ID del pedido:
+
+                <br>
+
+                <strong id="pedidoId"></strong>
+
+            </div>
+
+
+            <a
+                href="cuenta.html"
+                class="boton-final"
+            >
+                Ir a mi cuenta
+            </a>
+
+
+            <a
+                href="bloodstrike.html"
+                class="boton-final boton-secundario"
+            >
+                Volver a Blood Strike
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
+    );
+
+
+let ofertaSeleccionada = null;
+
+let precioSeleccionado = 0;
+
+let procesandoCompra = false;
+
+
+/* =========================
+   SELECCIONAR OFERTA
+========================= */
+
+function seleccionarOferta(
+    boton,
+    nombre,
+    precio
+) {
+
+    if (procesandoCompra) {
+        return;
+    }
+
+
+    document
+        .querySelectorAll(".boton-oferta")
+        .forEach(function(elemento) {
+
+            elemento.classList.remove(
+                "seleccionado"
+            );
+
+        });
+
+
+    boton.classList.add(
+        "seleccionado"
+    );
+
+
+    ofertaSeleccionada =
+        nombre;
+
+    precioSeleccionado =
+        precio;
+
+
+    document.getElementById(
+        "precio"
+    ).textContent =
+        precio + " GVR";
+
+
+    document.getElementById(
+        "precioSeleccionado"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "continuarBtn"
+    ).style.display =
+        "block";
+}
+
+
+/* =========================
+   IR A CONFIRMACIÓN
+========================= */
+
+function irAConfirmacion() {
+
+    if (!ofertaSeleccionada) {
+
+        alert(
+            "Selecciona una oferta."
+        );
+
+        return;
+    }
+
+
+    document.getElementById(
+        "confirmarOferta"
+    ).textContent =
+        ofertaSeleccionada;
+
+
+    document.getElementById(
+        "confirmarPrecio"
+    ).textContent =
+        precioSeleccionado + " GVR";
+
+
+    document.getElementById(
+        "pantallaOfertas"
+    ).classList.remove(
+        "activa"
+    );
+
+
+    document.getElementById(
+        "pantallaConfirmacion"
+    ).classList.add(
+        "activa"
+    );
+
+}
+
+
+/* =========================
+   REALIZAR COMPRA
+========================= */
+
+async function realizarCompra() {
+
+    if (procesandoCompra) {
+        return;
+    }
+
+
+    const idJugador =
+        document.getElementById(
+            "idJugador"
+        ).value.trim();
+
+
+    if (idJugador === "") {
+
+        alert(
+            "Escribe tu ID de Blood Strike."
+        );
+
+        return;
+    }
+
+
+    if (!ofertaSeleccionada) {
+
+        alert(
+            "Selecciona una oferta."
+        );
+
+        return;
+    }
+
+
+    const boton =
+        document.getElementById(
+            "confirmarBtn"
+        );
+
+
+    procesandoCompra = true;
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Procesando...";
+
+
+    try {
+
+        /* =========================
+           COMPROBAR SESIÓN
+        ========================= */
+
+        const {
+            data: { session },
+            error: sessionError
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (sessionError || !session) {
+
+            alert(
+                "Debes iniciar sesión primero."
+            );
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+
+        /* =========================
+           BUSCAR PRODUCTO
+        ========================= */
+
+        const {
+            data: producto,
+            error: productoError
+        } =
+            await supabaseClient
+                .from("game_products")
+                .select(
+                    "id, game, product_name, price_gvr, active"
+                )
+                .eq(
+                    "game",
+                    "Blood Strike"
+                )
+                .eq(
+                    "product_name",
+                    ofertaSeleccionada
+                )
+                .eq(
+                    "active",
+                    true
+                )
+                .maybeSingle();
+
+
+        if (productoError) {
+
+            console.error(
+                "ERROR PRODUCTO:",
+                productoError
+            );
+
+            alert(
+                "Error buscando la oferta:\n\n" +
+                productoError.message
+            );
+
+            procesandoCompra = false;
+
+            return;
+        }
+
+
+        if (!producto) {
+
+            alert(
+                "No se encontró esta oferta de Blood Strike en Gamevora."
+            );
+
+            procesandoCompra = false;
+
+            return;
+        }
+
+
+        /* =========================
+           REALIZAR COMPRA
+        ========================= */
+
+        const {
+            data: pedido,
+            error: compraError
+        } =
+            await supabaseClient.rpc(
+                "purchase_game_product",
+                {
+                    p_product_id:
+                        producto.id,
+
+                    p_player_id:
+                        idJugador
+                }
+            );
+
+
+        if (compraError) {
+
+            console.error(
+                "ERROR COMPRA:",
+                compraError
+            );
+
+            alert(
+                "No se pudo realizar la compra:\n\n" +
+                compraError.message
+            );
+
+            procesandoCompra = false;
+
+            return;
+        }
+
+
+        /* =========================
+           ÉXITO
+        ========================= */
+
+        document.getElementById(
+            "pedidoId"
+        ).textContent =
+            pedido;
+
+
+        document.getElementById(
+            "pantallaConfirmacion"
+        ).classList.remove(
+            "activa"
+        );
+
+
+        document.getElementById(
+            "pantallaExito"
+        ).classList.add(
+            "activa"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            "Ocurrió un error inesperado:\n\n" +
+            error.message
+        );
+
+        procesandoCompra = false;
+
+    }
+
+}
+
+</script>
+
+</body>
+                      </html>
