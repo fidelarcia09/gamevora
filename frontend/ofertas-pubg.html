@@ -318,13 +318,6 @@
             font-weight: bold;
         }
 
-        .nota {
-            text-align: center;
-            color: #627b97;
-            font-size: 11px;
-            margin-top: 18px;
-        }
-
         .cargando {
             text-align: center;
             color: #8fa5bd;
@@ -354,9 +347,9 @@
 <main class="contenedor">
 
 
-    <!-- ==============================
-         OFERTAS
-         ============================== -->
+    <!-- ==========================================
+         PANTALLA DE OFERTAS
+         ========================================== -->
 
     <section
         id="pantallaOfertas"
@@ -371,10 +364,7 @@
             Ofertas Especiales
         </h1>
 
-        <p
-            id="descripcionOfertas"
-            class="descripcion"
-        >
+        <p class="descripcion">
             Elige una oferta especial de PUBG Mobile.
         </p>
 
@@ -425,20 +415,12 @@
             Continuar ⚡
         </button>
 
-
-        <div
-            id="notaOfertas"
-            class="nota"
-        >
-            Ofertas especiales de PUBG Mobile.
-        </div>
-
     </section>
 
 
-    <!-- ==============================
-         CONFIRMACIÓN
-         ============================== -->
+    <!-- ==========================================
+         PANTALLA DE CONFIRMACIÓN
+         ========================================== -->
 
     <section
         id="pantallaConfirmacion"
@@ -538,9 +520,9 @@
     </section>
 
 
-    <!-- ==============================
-         ÉXITO
-         ============================== -->
+    <!-- ==========================================
+         PANTALLA DE ÉXITO
+         ========================================== -->
 
     <section
         id="pantallaExito"
@@ -585,7 +567,6 @@
 
 
             <button
-                id="volverJuegoBtn"
                 class="boton-secundario"
                 type="button"
                 onclick="window.location.href='pubgmobile.html'"
@@ -639,11 +620,9 @@ window.CONFIG_OFERTAS = {
 </script>
 
 
+<!-- MOTOR UNIVERSAL DE OFERTAS -->
+
 <script src="ofertas.js"></script>
 
 </body>
 </html>
-
-Importante: no necesitas copiar ninguna función de compra de "pubgmobile.html". El motor "ofertas.js" hace todo eso.
-
-Y cuando terminemos PUBG, hacemos Honor of Kings → Genshin Impact → Blood Strike → Arena Breakout, manteniendo exactamente este mismo sistema.
