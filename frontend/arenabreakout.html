@@ -121,6 +121,29 @@
             cursor: not-allowed;
         }
 
+        .separador-ofertas {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid #164b8f;
+        }
+
+        .boton-ofertas {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #168cff;
+            border-radius: 10px;
+            background: #07152b;
+            color: #28a9ff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton-ofertas:hover {
+            background: #0a2345;
+            border-color: #38a8ff;
+        }
+
         .nota {
             margin-top: 20px;
             text-align: center;
@@ -149,9 +172,13 @@
 
     <div class="card">
 
-        <div class="icono">🎯</div>
+        <div class="icono">
+            🎯
+        </div>
 
-        <h1>Arena Breakout</h1>
+        <h1>
+            Arena Breakout
+        </h1>
 
         <p class="descripcion">
             Recarga tu cuenta de Arena Breakout
@@ -189,6 +216,18 @@
             Continuar ⚡
         </button>
 
+        <div class="separador-ofertas">
+
+            <button
+                class="boton-ofertas"
+                type="button"
+                onclick="abrirOfertas()"
+            >
+                🎁 Ofertas Especiales
+            </button>
+
+        </div>
+
     </div>
 
 </div>
@@ -217,16 +256,29 @@ const supabaseClient =
     );
 
 
+function abrirOfertas() {
+
+    window.location.href =
+        "ofertas-arena.html";
+
+}
+
+
 async function continuarRecarga() {
 
     const boton =
         document.getElementById("botonContinuar");
 
     const idJugador =
-        document.getElementById("idjugador").value.trim();
+        document
+            .getElementById("idjugador")
+            .value
+            .trim();
 
     const cantidad =
-        document.getElementById("cantidad").value;
+        document
+            .getElementById("cantidad")
+            .value;
 
 
     /* =========================
@@ -269,7 +321,8 @@ async function continuarRecarga() {
             "Debes iniciar sesión primero."
         );
 
-        window.location.href = "login.html";
+        window.location.href =
+            "login.html";
 
         return;
     }
@@ -297,9 +350,18 @@ async function continuarRecarga() {
         .select(
             "id, game, product_name, price_gvr, active"
         )
-        .eq("game", "Arena Breakout")
-        .eq("product_name", cantidad)
-        .eq("active", true)
+        .eq(
+            "game",
+            "Arena Breakout"
+        )
+        .eq(
+            "product_name",
+            cantidad
+        )
+        .eq(
+            "active",
+            true
+        )
         .maybeSingle();
 
 
@@ -311,7 +373,9 @@ async function continuarRecarga() {
         );
 
         boton.disabled = false;
-        boton.textContent = "Continuar ⚡";
+
+        boton.textContent =
+            "Continuar ⚡";
 
         return;
     }
@@ -324,7 +388,9 @@ async function continuarRecarga() {
         );
 
         boton.disabled = false;
-        boton.textContent = "Continuar ⚡";
+
+        boton.textContent =
+            "Continuar ⚡";
 
         return;
     }
@@ -340,8 +406,11 @@ async function continuarRecarga() {
     } = await supabaseClient.rpc(
         "purchase_game_product",
         {
-            p_product_id: producto.id,
-            p_player_id: idJugador
+            p_product_id:
+                producto.id,
+
+            p_player_id:
+                idJugador
         }
     );
 
@@ -354,7 +423,9 @@ async function continuarRecarga() {
         );
 
         boton.disabled = false;
-        boton.textContent = "Continuar ⚡";
+
+        boton.textContent =
+            "Continuar ⚡";
 
         return;
     }
@@ -379,6 +450,7 @@ async function continuarRecarga() {
 
     window.location.href =
         "cuenta.html";
+
 }
 
 </script>
