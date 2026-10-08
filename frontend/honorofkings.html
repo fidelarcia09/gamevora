@@ -121,6 +121,29 @@
             cursor: not-allowed;
         }
 
+        .separador-ofertas {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid #164b8f;
+        }
+
+        .boton-ofertas {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #168cff;
+            border-radius: 10px;
+            background: #07152b;
+            color: #28a9ff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton-ofertas:hover {
+            background: #0a2345;
+            border-color: #38a8ff;
+        }
+
         .nota {
             margin-top: 20px;
             text-align: center;
@@ -190,6 +213,18 @@
             Continuar ⚡
         </button>
 
+        <div class="separador-ofertas">
+
+            <button
+                class="boton-ofertas"
+                type="button"
+                onclick="abrirOfertas()"
+            >
+                🎁 Ofertas Especiales
+            </button>
+
+        </div>
+
     </div>
 
 </div>
@@ -216,6 +251,13 @@ const supabaseClient =
             }
         }
     );
+
+
+function abrirOfertas() {
+
+    window.location.href =
+        "ofertas-honor.html";
+}
 
 
 async function cargarProductos() {
@@ -347,11 +389,6 @@ async function continuarRecarga() {
             return;
         }
 
-
-        /* ==========================================
-           BUSCAR PRODUCTO
-           ========================================== */
-
         const {
             data: producto,
             error: productoError
@@ -365,7 +402,6 @@ async function continuarRecarga() {
                 .eq("product_name", cantidad)
                 .eq("active", true)
                 .maybeSingle();
-
 
         if (productoError) {
 
@@ -381,7 +417,6 @@ async function continuarRecarga() {
             return;
         }
 
-
         if (!producto) {
 
             alert(
@@ -390,11 +425,6 @@ async function continuarRecarga() {
 
             return;
         }
-
-
-        /* ==========================================
-           REALIZAR COMPRA
-           ========================================== */
 
         const {
             data: pedido,
@@ -407,11 +437,6 @@ async function continuarRecarga() {
                     p_player_id: idJugador
                 }
             );
-
-
-        /* ==========================================
-           ERROR DE COMPRA
-           ========================================== */
 
         if (compraError) {
 
@@ -444,11 +469,6 @@ async function continuarRecarga() {
             return;
         }
 
-
-        /* ==========================================
-           COMPRA EXITOSA
-           ========================================== */
-
         alert(
             "¡Compra realizada correctamente!\n\n" +
             "Pedido: " +
@@ -457,7 +477,6 @@ async function continuarRecarga() {
 
         window.location.href =
             "cuenta.html";
-
 
     } catch (error) {
 
@@ -486,4 +505,4 @@ cargarProductos();
 </script>
 
 </body>
-</html>
+    </html>
