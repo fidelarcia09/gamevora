@@ -122,6 +122,29 @@
             cursor: not-allowed;
         }
 
+        .separador-ofertas {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid #164b8f;
+        }
+
+        .boton-ofertas {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #168cff;
+            border-radius: 10px;
+            background: #07152b;
+            color: #28a9ff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton-ofertas:hover {
+            background: #0a2345;
+            border-color: #38a8ff;
+        }
+
         .cargando {
             color: #9fb5d0;
             text-align: center;
@@ -182,6 +205,16 @@
             Continuar
         </button>
 
+        <div class="separador-ofertas">
+            <button
+                class="boton-ofertas"
+                type="button"
+                onclick="abrirOfertas()"
+            >
+                🎁 Ofertas Especiales
+            </button>
+        </div>
+
         <p id="mensaje" class="cargando"></p>
 
     </div>
@@ -210,6 +243,13 @@ const supabaseClient =
             }
         }
     );
+
+
+function abrirOfertas() {
+
+    window.location.href =
+        "ofertas-genshin.html";
+}
 
 
 async function cargarProductos() {
@@ -478,4 +518,4 @@ cargarProductos();
 </script>
 
 </body>
-</html>
+    </html>
