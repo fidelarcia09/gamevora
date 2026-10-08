@@ -2,15 +2,15 @@
   "name": "Gamers Gold Top-Up",
   "short_name": "Gamers Gold",
   "description": "Recargas gaming rápidas y seguras.",
-  "start_url": "/gamevora/frontend/index.html",
-  "scope": "/gamevora/frontend/",
+  "start_url": "/gamevora/",
+  "scope": "/gamevora/",
   "display": "standalone",
   "background_color": "#050b18",
   "theme_color": "#050b18",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png",
+      "src": "/gamevora/frontend/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
