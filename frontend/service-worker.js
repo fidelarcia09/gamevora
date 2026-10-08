@@ -144,19 +144,3 @@ self.addEventListener("notificationclick", function (event) {
     );
 
 });
-
-🔥 Qué cambia
-
-Ahora todas las notificaciones tendrán como "icon" y "badge":
-
-"frontend/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
-
-Y eliminamos las rutas antiguas:
-
-"/gamevora/frontend/icon-192.png"
-
-También cambié los textos predeterminados de Gamevora → Gamers Gold Top-Up.
-
-Importante: después de subir el nuevo "service-worker.js" a GitHub, Chrome puede conservar temporalmente el Service Worker anterior. Si al probarlo todavía aparece el icono viejo, no significa que el código esté mal; primero hay que dejar que Chrome actualice el Service Worker.
-
-Y una cosa: Chrome/Android seguirá siendo quien dibuje la notificación, así que elementos propios de Chrome/Android no se pueden sustituir. Lo que sí estamos cambiando es el icono de nuestra notificación.
