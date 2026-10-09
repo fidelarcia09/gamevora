@@ -41,11 +41,11 @@ const TIEMPO_LIMITE_CATALOGO = 15000;
 CONFIGURACIÓN DEL JUEGO
 ========================================================= */
 
-const CONFIG_OFERTAS =
-    window.CONFIG_OFERTAS || {};
+const CONFIG_OFERTAS = window.CONFIG_OFERTAS || {};
 
-const NOMBRE_JUEGO =
-    CONFIG_OFERTAS.juego || "Free Fire";
+const NOMBRE_JUEGO = String(
+    CONFIG_OFERTAS.juego || "Free Fire"
+).trim();
 
 const PAGINA_VOLVER =
     CONFIG_OFERTAS.paginaVolver || "freefire.html";
@@ -56,8 +56,15 @@ const TEXTO_ID =
 const PLACEHOLDER_ID =
     CONFIG_OFERTAS.placeholderId || "Escribe tu ID";
 
-const JUEGO_NORMALIZADO =
-    NOMBRE_JUEGO.toLowerCase().trim();
+/* Normalizar nombres para evitar diferencias de escritura. */
+
+const JUEGO_NORMALIZADO = NOMBRE_JUEGO
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const JUEGOS_API = {
     "free fire": "free-fire",
@@ -68,8 +75,13 @@ const JUEGOS_API = {
     "arena breakout": "arena-breakout"
 };
 
-const JUEGO_API =
-    JUEGOS_API[JUEGO_NORMALIZADO];
+const JUEGO_API = JUEGOS_API[JUEGO_NORMALIZADO] || null;
+
+/* Diagnóstico de configuración. */
+
+console.log("[Gamers Gold] Juego recibido:", NOMBRE_JUEGO);
+console.log("[Gamers Gold] Juego normalizado:", JUEGO_NORMALIZADO);
+console.log("[Gamers Gold] Código de catálogo:", JUEGO_API);
 
 /* =========================================================
 VARIABLES
@@ -416,7 +428,8 @@ CONSULTAR CATÁLOGO NEXT LEVEL
 async function consultarCatalogoNextLevel() {
     if (!JUEGO_API) {
         throw new Error(
-            "Juego no configurado: " + NOMBRE_JUEGO
+            "Juego no configurado: " + NOMBRE_JUEGO +
+            ". Nombre recibido: " + JUEGO_NORMALIZADO
         );
     }
 
@@ -431,6 +444,8 @@ async function consultarCatalogoNextLevel() {
             URL_CATALOGO +
             "?game=" +
             encodeURIComponent(JUEGO_API);
+
+        console.log("[Gamers Gold] Consultando:", url);
 
         const respuesta = await fetch(url, {
             method: "GET",
@@ -564,21 +579,17 @@ async function cargarOfertas() {
     const botonContinuar =
         document.getElementById("continuarBtn");
 
-    const estadoCarga =
-        document.getElementById("estadoCarga");
+    if (!lista) {
+        console.error(
+            "[Gamers Gold] No existe el elemento #listaOfertas."
+        );
 
-    if (estadoCarga) {
-        estadoCarga.style.display = "none";
-    }
+        actualizarEstadoCarga(
+            "No se encontró el espacio para mostrar las ofertas.",
+            true
+        );
 
-    actualizarEstadoCarga(
-        "Conectando con el catálogo...",
-        true
-    );
-
-    if (lista) {
-        lista.style.display = "none";
-        lista.innerHTML = "";
+        return;
     }
 
     if (cajaPrecio) {
@@ -590,11 +601,19 @@ async function cargarOfertas() {
         botonContinuar.disabled = true;
     }
 
+    lista.innerHTML = "";
+    lista.style.display = "none";
+
     ofertaSeleccionada = "";
     productoSeleccionado = null;
     precioSeleccionado = 0;
 
     window.productosOfertas = {};
+
+    actualizarEstadoCarga(
+        "Conectando con el catálogo...",
+        true
+    );
 
     try {
         const productosProveedor =
@@ -621,7 +640,7 @@ async function cargarOfertas() {
 
                     if (!productoProveedor) {
                         console.warn(
-                            "Oferta no encontrada:",
+                            "[Gamers Gold] Oferta no encontrada en el catálogo:",
                             configuracion.id
                         );
 
@@ -649,14 +668,14 @@ async function cargarOfertas() {
             );
 
             console.warn(
-                "Juego:",
+                "[Gamers Gold] Juego:",
                 JUEGO_API,
-                "Productos recibidos:",
+                "| Productos recibidos:",
                 productosProveedor.length
             );
 
             console.log(
-                "IDs recibidos:",
+                "[Gamers Gold] IDs recibidos:",
                 productosProveedor.map(obtenerIdProveedor)
             );
 
@@ -706,7 +725,7 @@ async function cargarOfertas() {
         actualizarEstadoCarga("", false);
 
         console.log(
-            "Ofertas mostradas:",
+            "[Gamers Gold] Ofertas mostradas:",
             NOMBRE_JUEGO,
             ofertasDisponibles.map(function(oferta) {
                 return oferta.nombre;
@@ -715,7 +734,7 @@ async function cargarOfertas() {
 
     } catch (error) {
         console.error(
-            "Error cargando ofertas:",
+            "[Gamers Gold] Error cargando ofertas:",
             error
         );
 
@@ -881,9 +900,20 @@ function inicializarMotorOfertas() {
 
     if (!JUEGO_API) {
         actualizarEstadoCarga(
-            "Este juego todavía no está configurado en el motor.",
+            "Este juego todavía no está configurado: " +
+            NOMBRE_JUEGO + ".",
             true
         );
+
+        console.error(
+            "[Gamers Gold] Juego no reconocido:",
+            NOMBRE_JUEGO,
+            "| Nombre normalizado:",
+            JUEGO_NORMALIZADO,
+            "| Juegos válidos:",
+            Object.keys(JUEGOS_API)
+        );
+
         return;
     }
 
