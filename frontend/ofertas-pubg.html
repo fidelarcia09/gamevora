@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050b18">
 
     <title>Ofertas Especiales | PUBG Mobile - Gamers Gold Top-Up</title>
-
-    <meta name="theme-color" content="#050b18">
 
     <style>
         :root {
@@ -423,11 +422,14 @@
 
         .boton-principal,
         .boton-secundario {
+            display: block;
             width: 100%;
             padding: 14px;
             border-radius: 12px;
             font-size: 13px;
             font-weight: 900;
+            text-align: center;
+            text-decoration: none;
             transition: 0.2s;
         }
 
@@ -464,7 +466,7 @@
             color: white;
         }
 
-        /* ÉXITO / AVISO FINAL */
+        /* RESULTADO */
 
         .resultado {
             padding: 14px 0 4px;
@@ -555,9 +557,7 @@
             </a>
         </header>
 
-        <div class="etiqueta-juego">
-            PUBG MOBILE
-        </div>
+        <div class="etiqueta-juego">PUBG MOBILE</div>
 
         <h1 class="titulo-principal">
             OFERTAS <span>ESPECIALES</span>
@@ -569,7 +569,7 @@
 
         <section class="ofertas">
 
-            <!-- PANTALLA 1: LISTA DE OFERTAS -->
+            <!-- PANTALLA 1 -->
 
             <div id="pantallaOfertas" class="pantalla activa">
 
@@ -577,16 +577,24 @@
                     🎁 Ofertas de PUBG Mobile
                 </h2>
 
-                <p class="descripcion-seccion">
-                    Aquí aparecerán los pases y productos especiales
-                    disponibles. Los paquetes de UC se mantienen en
-                    la página principal.
+                <p
+                    id="descripcionOfertas"
+                    class="descripcion-seccion"
+                >
+                    Aquí aparecerán los pases y productos especiales.
+                    Los paquetes de UC se mantienen en la página principal.
                 </p>
 
                 <div id="estadoCarga" class="estado">
                     <span class="estado-icono">⚡</span>
                     Preparando las ofertas especiales...
                 </div>
+
+                <div
+                    id="estadoProductos"
+                    class="estado"
+                    style="display:none"
+                ></div>
 
                 <div
                     id="listaOfertas"
@@ -596,19 +604,37 @@
 
                 <div id="mensajeError" class="mensaje-error"></div>
 
+                <div
+                    id="precioSeleccionado"
+                    class="resumen"
+                    style="display:none"
+                >
+                    <div class="resumen-fila">
+                        <span>Producto seleccionado</span>
+                        <strong id="resumenProducto">—</strong>
+                    </div>
+
+                    <div class="resumen-fila">
+                        <span>Precio provisional</span>
+                        <strong id="precio" class="precio-resumen">
+                            0 GVR
+                        </strong>
+                    </div>
+                </div>
+
                 <button
-                    id="botonContinuar"
+                    id="continuarBtn"
                     class="boton-principal"
                     type="button"
                     disabled
                     style="margin-top:18px"
                 >
-                    Selecciona una oferta
+                    Compras próximamente
                 </button>
 
             </div>
 
-            <!-- PANTALLA 2: CONFIRMACIÓN -->
+            <!-- PANTALLA 2 -->
 
             <div id="pantallaConfirmacion" class="pantalla">
 
@@ -617,19 +643,19 @@
                 </h2>
 
                 <p class="descripcion-seccion">
-                    Revisa el producto seleccionado antes de continuar.
+                    Revisa el producto seleccionado.
                 </p>
 
                 <div class="resumen">
 
                     <div class="resumen-fila">
                         <span>Juego</span>
-                        <strong>PUBG Mobile</strong>
+                        <strong id="juegoConfirmacion">PUBG Mobile</strong>
                     </div>
 
                     <div class="resumen-fila">
                         <span>Producto</span>
-                        <strong id="resumenProducto">—</strong>
+                        <strong id="productoConfirmacion">—</strong>
                     </div>
 
                     <div class="resumen-fila">
@@ -639,9 +665,7 @@
 
                     <div class="resumen-fila">
                         <span>Estado</span>
-                        <strong style="color:#ffbd59">
-                            Próximamente
-                        </strong>
+                        <strong style="color:#ffbd59">Próximamente</strong>
                     </div>
 
                 </div>
@@ -663,8 +687,8 @@
                 <div class="aviso">
                     🔒 <strong>Modo de preparación:</strong>
                     las compras todavía no están habilitadas.
-                    El precio mostrado es provisional y no se realizará
-                    ningún cobro ni se descontará saldo.
+                    El precio es provisional. No se realizará ningún cobro
+                    ni se descontará saldo.
                 </div>
 
                 <div class="botones-accion">
@@ -689,7 +713,7 @@
 
             </div>
 
-            <!-- PANTALLA 3: INFORMACIÓN -->
+            <!-- PANTALLA 3 -->
 
             <div id="pantallaResultado" class="pantalla">
 
@@ -711,10 +735,8 @@
                     <br>
 
                     <p>
-                        Las compras de productos especiales de PUBG
-                        Mobile todavía no están habilitadas.
-                        Cuando terminemos la configuración,
-                        podrás continuar con el proceso de compra.
+                        Las compras de productos especiales de PUBG Mobile
+                        todavía no están habilitadas.
                     </p>
 
                     <div class="botones-accion">
@@ -730,11 +752,6 @@
                         <a
                             href="pubgmobile.html"
                             class="boton-secundario"
-                            style="
-                                display:block;
-                                text-align:center;
-                                text-decoration:none;
-                            "
                         >
                             Volver a PUBG Mobile
                         </a>
@@ -754,442 +771,150 @@
 
     </main>
 
+    <!-- Configuración para el motor universal -->
+
     <script>
-        /*
-         * PUBG MOBILE — OFERTAS ESPECIALES
-         *
-         * Esta página no realiza compras.
-         * No llama a purchase_game_product.
-         * No descuenta saldo.
-         * Los precios permanecen en 0 GVR.
-         *
-         * Catálogo:
-         * Edge Function nextlevel-catalogo.
-         */
+        window.CONFIG_OFERTAS = {
+            juego: "PUBG Mobile",
+            paginaVolver: "pubgmobile.html",
+            textoId: "ID del jugador de PUBG Mobile",
+            placeholderId: "Escribe tu ID de PUBG Mobile"
+        };
+    </script>
 
-        const URL_CATALOGO =
-            "https://gsuhzcavghsiolmipnzi.supabase.co/functions/v1/nextlevel-catalogo?game=pubg-mobile";
+    <!-- Cargar el motor universal UNA SOLA VEZ -->
 
-        const pantallaOfertas =
-            document.getElementById("pantallaOfertas");
+    <script src="ofertas.js?v=20261009pubg1" defer></script>
 
-        const pantallaConfirmacion =
-            document.getElementById("pantallaConfirmacion");
+    <!-- Interfaz de PUBG: no realiza compras -->
 
-        const pantallaResultado =
-            document.getElementById("pantallaResultado");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const pantallaOfertas =
+                document.getElementById("pantallaOfertas");
 
-        const estadoCarga =
-            document.getElementById("estadoCarga");
+            const pantallaConfirmacion =
+                document.getElementById("pantallaConfirmacion");
 
-        const listaOfertas =
-            document.getElementById("listaOfertas");
+            const pantallaResultado =
+                document.getElementById("pantallaResultado");
 
-        const mensajeError =
-            document.getElementById("mensajeError");
+            const botonContinuar =
+                document.getElementById("continuarBtn");
 
-        const botonContinuar =
-            document.getElementById("botonContinuar");
+            const botonCambiar =
+                document.getElementById("botonCambiar");
 
-        const botonCambiar =
-            document.getElementById("botonCambiar");
+            const botonVolverOfertas =
+                document.getElementById("botonVolverOfertas");
 
-        const botonVolverOfertas =
-            document.getElementById("botonVolverOfertas");
+            const listaOfertas =
+                document.getElementById("listaOfertas");
 
-        const idJugador =
-            document.getElementById("idJugador");
+            const estadoCarga =
+                document.getElementById("estadoCarga");
 
-        let ofertasDisponibles = [];
-        let ofertaSeleccionada = null;
+            const estadoProductos =
+                document.getElementById("estadoProductos");
 
-        function mostrarPantalla(pantalla) {
-            [
-                pantallaOfertas,
-                pantallaConfirmacion,
-                pantallaResultado
-            ].forEach(elemento => {
-                elemento.classList.remove("activa");
-            });
+            let productoActual = null;
 
-            pantalla.classList.add("activa");
+            function mostrarPantalla(pantalla) {
+                [
+                    pantallaOfertas,
+                    pantallaConfirmacion,
+                    pantallaResultado
+                ].forEach(function (elemento) {
+                    elemento.classList.remove("activa");
+                });
 
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        }
+                pantalla.classList.add("activa");
 
-        function obtenerNombre(producto) {
-            if (typeof producto === "string") {
-                return producto;
-            }
-
-            return (
-                producto?.product_name ||
-                producto?.name ||
-                producto?.nombre ||
-                producto?.title ||
-                producto?.productName ||
-                ""
-            ).toString().trim();
-        }
-
-        function obtenerId(producto) {
-            if (typeof producto === "string") {
-                return "";
-            }
-
-            return (
-                producto?.provider_product_id ||
-                producto?.product_id ||
-                producto?.productId ||
-                producto?.id ||
-                ""
-            ).toString();
-        }
-
-        function estaDisponible(producto) {
-            if (typeof producto?.available === "boolean") {
-                return producto.available;
-            }
-
-            if (typeof producto?.is_available === "boolean") {
-                return producto.is_available;
-            }
-
-            if (typeof producto?.available === "string") {
-                return producto.available.toLowerCase() === "true";
-            }
-
-            return true;
-        }
-
-        function esPaqueteUC(producto) {
-            const nombre = obtenerNombre(producto).toLowerCase();
-            const identificador = obtenerId(producto).toLowerCase();
-
-            return (
-                /\buc\b/i.test(nombre) ||
-                /\buc\b/i.test(identificador) ||
-                nombre.includes("unknown cash") ||
-                identificador.includes("unknown_cash")
-            );
-        }
-
-        function esProductoEspecial(producto) {
-            const nombre = obtenerNombre(producto).toLowerCase();
-            const identificador = obtenerId(producto).toLowerCase();
-
-            if (!nombre && !identificador) {
-                return false;
-            }
-
-            if (esPaqueteUC(producto)) {
-                return false;
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
             }
 
             /*
-             * No mostramos productos que no sean pases,
-             * membresías o productos especiales.
+             * El motor universal selecciona los productos.
+             * Este código solamente controla la navegación visual.
              */
-            const palabrasEspeciales = [
-                "pass",
-                "pase",
-                "royale",
-                "elite",
-                "membership",
-                "membresia",
-                "membresía",
-                "weekly",
-                "monthly",
-                "semanal",
-                "mensual",
-                "prime",
-                "plus",
-                "special",
-                "especial"
-            ];
 
-            const texto = nombre + " " + identificador;
+            document.addEventListener("click", function (evento) {
+                const tarjeta = evento.target.closest(".boton-oferta");
 
-            return palabrasEspeciales.some(palabra =>
-                texto.includes(palabra)
-            );
-        }
-
-        function obtenerProductos(datos) {
-            if (Array.isArray(datos)) {
-                return datos;
-            }
-
-            if (!datos || typeof datos !== "object") {
-                return [];
-            }
-
-            const posiblesListas = [
-                datos.products,
-                datos.productos,
-                datos.data,
-                datos.items,
-                datos.results,
-                datos.catalog,
-                datos.catalogue
-            ];
-
-            for (const lista of posiblesListas) {
-                if (Array.isArray(lista)) {
-                    return lista;
+                if (!tarjeta || !listaOfertas.contains(tarjeta)) {
+                    return;
                 }
 
-                if (lista && typeof lista === "object") {
-                    const anidadas = [
-                        lista.products,
-                        lista.productos,
-                        lista.items,
-                        lista.results
-                    ];
+                productoActual = tarjeta.querySelector(
+                    ".nombre-oferta"
+                )?.textContent || "";
 
-                    for (const anidada of anidadas) {
-                        if (Array.isArray(anidada)) {
-                            return anidada;
-                        }
-                    }
+                botonContinuar.disabled = !productoActual;
+
+                if (productoActual) {
+                    botonContinuar.textContent = "Ver resumen →";
                 }
-            }
-
-            return [];
-        }
-
-        function iconoOferta(nombre) {
-            const texto = nombre.toLowerCase();
-
-            if (texto.includes("plus")) {
-                return "🔥";
-            }
-
-            if (texto.includes("elite")) {
-                return "👑";
-            }
-
-            if (texto.includes("royale")) {
-                return "🎟️";
-            }
-
-            if (
-                texto.includes("membership") ||
-                texto.includes("membresía") ||
-                texto.includes("membresia")
-            ) {
-                return "💎";
-            }
-
-            if (texto.includes("prime")) {
-                return "⭐";
-            }
-
-            return "🎁";
-        }
-
-        function mostrarError(mensaje) {
-            mensajeError.textContent = mensaje;
-            mensajeError.style.display = "block";
-        }
-
-        function crearTarjeta(producto, indice) {
-            const nombre = obtenerNombre(producto);
-
-            const tarjeta = document.createElement("button");
-            tarjeta.type = "button";
-            tarjeta.className = "boton-oferta";
-
-            const imagen = document.createElement("div");
-            imagen.className = "foto-oferta";
-            imagen.textContent = iconoOferta(nombre);
-
-            const informacion = document.createElement("div");
-            informacion.className = "informacion-oferta";
-
-            const titulo = document.createElement("div");
-            titulo.className = "nombre-oferta";
-            titulo.textContent = nombre;
-
-            const descripcion = document.createElement("div");
-            descripcion.className = "descripcion-oferta";
-            descripcion.textContent =
-                "Producto especial de PUBG Mobile";
-
-            informacion.appendChild(titulo);
-            informacion.appendChild(descripcion);
-
-            const precio = document.createElement("div");
-            precio.className = "precio-oferta";
-            precio.textContent = "0 GVR";
-
-            const nota = document.createElement("small");
-            nota.textContent = "Próximamente";
-
-            precio.appendChild(nota);
-
-            tarjeta.appendChild(imagen);
-            tarjeta.appendChild(informacion);
-            tarjeta.appendChild(precio);
-
-            tarjeta.addEventListener("click", () => {
-                ofertaSeleccionada = producto;
-
-                document
-                    .querySelectorAll(".boton-oferta")
-                    .forEach(elemento => {
-                        elemento.classList.remove("seleccionado");
-                    });
-
-                tarjeta.classList.add("seleccionado");
-
-                botonContinuar.disabled = false;
-                botonContinuar.textContent = "Ver resumen →";
             });
 
-            return tarjeta;
-        }
+            botonContinuar.addEventListener("click", function () {
+                if (!productoActual) {
+                    return;
+                }
 
-        function renderizarOfertas(productos) {
-            listaOfertas.innerHTML = "";
+                document.getElementById(
+                    "productoConfirmacion"
+                ).textContent = productoActual;
 
-            ofertasDisponibles = productos
-                .filter(producto => obtenerNombre(producto))
-                .filter(producto => estaDisponible(producto))
-                .filter(esProductoEspecial);
+                document.getElementById(
+                    "resumenProducto"
+                ).textContent = productoActual;
 
-            if (ofertasDisponibles.length === 0) {
-                estadoCarga.innerHTML = `
-                    <span class="estado-icono">🎁</span>
-                    <strong>No hay ofertas especiales disponibles todavía.</strong>
-                    <br><br>
-                    Cuando los pases y productos especiales estén
-                    disponibles en el catálogo, aparecerán aquí.
-                `;
+                document.getElementById(
+                    "resultadoProducto"
+                ).textContent = productoActual;
 
-                listaOfertas.style.display = "none";
+                mostrarPantalla(pantallaConfirmacion);
+            });
+
+            botonCambiar.addEventListener("click", function () {
+                mostrarPantalla(pantallaOfertas);
+            });
+
+            botonVolverOfertas.addEventListener("click", function () {
+                productoActual = null;
                 botonContinuar.disabled = true;
-                botonContinuar.textContent = "Próximamente";
-                return;
-            }
+                botonContinuar.textContent = "Compras próximamente";
 
-            ofertasDisponibles.forEach((producto, indice) => {
-                listaOfertas.appendChild(
-                    crearTarjeta(producto, indice)
-                );
+                mostrarPantalla(pantallaOfertas);
             });
 
-            estadoCarga.style.display = "none";
-            listaOfertas.style.display = "grid";
+            /*
+             * No se conecta ninguna función de compra.
+             * No se llama a una RPC.
+             * No se descuenta saldo.
+             */
 
-            botonContinuar.disabled = true;
-            botonContinuar.textContent = "Selecciona una oferta";
-        }
-
-        async function cargarOfertas() {
-            estadoCarga.style.display = "block";
-            estadoCarga.innerHTML = `
-                <span class="estado-icono">⚡</span>
-                Cargando ofertas especiales...
-            `;
-
-            listaOfertas.style.display = "none";
-            mensajeError.style.display = "none";
-
-            try {
-                const respuesta = await fetch(URL_CATALOGO, {
-                    method: "GET",
-                    headers: {
-                        "Accept": "application/json"
-                    },
-                    cache: "no-store"
+            if (estadoCarga && estadoProductos) {
+                const observador = new MutationObserver(function () {
+                    if (
+                        estadoCarga.style.display === "none" ||
+                        listaOfertas.children.length > 0
+                    ) {
+                        estadoProductos.style.display = "none";
+                    }
                 });
 
-                if (!respuesta.ok) {
-                    throw new Error(
-                        "El catálogo respondió con HTTP " +
-                        respuesta.status
-                    );
-                }
-
-                const datos = await respuesta.json();
-                const productos = obtenerProductos(datos);
-
-                renderizarOfertas(productos);
-
-            } catch (error) {
-                console.error(
-                    "Error cargando ofertas de PUBG Mobile:",
-                    error
-                );
-
-                estadoCarga.innerHTML = `
-                    <span class="estado-icono">📡</span>
-                    No pudimos cargar las ofertas en este momento.
-                    <br>
-                    Inténtalo de nuevo dentro de unos segundos.
-                `;
-
-                mostrarError(
-                    "No se pudo consultar el catálogo. " +
-                    "Esto no afecta a las recargas de UC de la página principal."
-                );
-
-                const botonReintentar = document.createElement("button");
-                botonReintentar.type = "button";
-                botonReintentar.className = "boton-secundario";
-                botonReintentar.style.marginTop = "12px";
-                botonReintentar.textContent = "↻ Intentar de nuevo";
-
-                botonReintentar.addEventListener(
-                    "click",
-                    cargarOfertas
-                );
-
-                estadoCarga.appendChild(botonReintentar);
-            }
-        }
-
-        botonContinuar.addEventListener("click", () => {
-            if (!ofertaSeleccionada) {
-                return;
-            }
-
-            document.getElementById("resumenProducto").textContent =
-                obtenerNombre(ofertaSeleccionada);
-
-            mostrarPantalla(pantallaConfirmacion);
-        });
-
-        botonCambiar.addEventListener("click", () => {
-            mostrarPantalla(pantallaOfertas);
-        });
-
-        botonVolverOfertas.addEventListener("click", () => {
-            ofertaSeleccionada = null;
-            idJugador.value = "";
-
-            botonContinuar.disabled = true;
-            botonContinuar.textContent = "Selecciona una oferta";
-
-            document
-                .querySelectorAll(".boton-oferta")
-                .forEach(elemento => {
-                    elemento.classList.remove("seleccionado");
+                observador.observe(estadoCarga, {
+                    attributes: true,
+                    childList: true,
+                    subtree: true
                 });
-
-            mostrarPantalla(pantallaOfertas);
+            }
         });
-
-        /*
-         * Importante:
-         * No hay autenticación, RPC ni llamada de compra.
-         * El botón de compra permanece deshabilitado.
-         */
-        cargarOfertas();
     </script>
+
 </body>
-</html>
+                </html>
