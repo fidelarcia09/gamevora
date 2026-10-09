@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050b18">
+    <meta name="description" content="Recarga diamantes de Free Fire en Gamers Gold Top-Up.">
 
     <title>Free Fire | Gamers Gold Top-Up</title>
 
@@ -18,239 +20,287 @@
             background: #050b18;
             color: white;
             min-height: 100vh;
+            padding: 20px;
         }
 
-        header {
+        .contenedor {
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 12px;
-            padding: 18px;
-            border-bottom: 1px solid #12385f;
-            background: #071225;
+            margin-bottom: 25px;
         }
 
         .logo {
-            font-size: 22px;
+            font-size: 21px;
             font-weight: 900;
         }
 
-        .logo .rayo {
+        .rayo {
             color: #00b7ff;
             text-shadow: 0 0 12px #008cff;
         }
 
-        .inicio {
+        .volver {
+            color: #28a9ff;
             text-decoration: none;
-            color: white;
-            border: 1px solid #168cff;
-            padding: 9px 13px;
-            border-radius: 9px;
-            font-size: 13px;
+            font-size: 14px;
+            font-weight: bold;
             white-space: nowrap;
         }
 
-        .contenedor {
-            width: 100%;
-            max-width: 500px;
-            margin: auto;
-            padding: 25px 18px;
-        }
-
-        .juego {
+        .card {
             background: #091a35;
             border: 1px solid #15518c;
             border-radius: 20px;
             padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
         }
 
         .icono {
             text-align: center;
-            font-size: 55px;
+            font-size: 52px;
             margin-bottom: 10px;
         }
 
         h1 {
             text-align: center;
-            font-size: 28px;
-            margin-bottom: 8px;
+            font-size: 27px;
+            margin-bottom: 10px;
         }
 
         .descripcion {
             text-align: center;
             color: #8fa5bd;
             font-size: 14px;
-            margin-bottom: 25px;
-            line-height: 1.5;
+            line-height: 1.6;
+            margin-bottom: 22px;
         }
 
-        label {
+        .etiqueta {
             display: block;
-            margin-bottom: 7px;
+            margin: 18px 0 10px;
             color: #b8c9dc;
             font-size: 13px;
+            font-weight: bold;
         }
 
-        input,
-        select {
+        input {
             width: 100%;
             padding: 13px;
-            margin-bottom: 18px;
             background: #061226;
             color: white;
             border: 1px solid #204c78;
             border-radius: 10px;
-            outline: none;
             font-size: 15px;
+            outline: none;
         }
 
-        input:focus,
-        select:focus {
+        input:focus {
             border-color: #159dff;
             box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
         }
 
-        select:disabled {
-            opacity: 0.75;
+        .estado {
+            padding: 13px;
+            margin: 18px 0;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            background: #061226;
+            color: #a9c4df;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.5;
         }
 
-        .recargar {
+        .estado.error {
+            color: #ffaaaa;
+            border-color: #843d4b;
+        }
+
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .producto {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+            min-height: 110px;
+            padding: 15px 12px;
+            background: #061226;
+            color: white;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            text-align: left;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .producto:hover {
+            border-color: #168cff;
+        }
+
+        .producto.seleccionado {
+            border-color: #00baff;
+            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+        }
+
+        .producto-nombre {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .producto-estado {
+            color: #45c8ff;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .separador-ofertas {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #164b8f;
+        }
+
+        .boton {
             width: 100%;
             padding: 14px;
             border: none;
             border-radius: 10px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
             font-size: 15px;
             font-weight: bold;
-            cursor: pointer;
         }
 
-        .recargar:disabled {
-            opacity: 0.55;
+        .continuar {
+            margin-top: 18px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
             cursor: not-allowed;
-        }
-
-        .separador-ofertas {
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid #12385f;
+            opacity: 0.55;
         }
 
         .boton-ofertas {
-            width: 100%;
-            padding: 14px;
+            background: #07152b;
+            color: #28a9ff;
             border: 1px solid #168cff;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #061b3a, #0a2d5c);
-            color: #00baff;
-            font-size: 15px;
-            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
-            transition: 0.2s;
         }
 
-        .boton-ofertas:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
-        }
-
-        .estado-catalogo {
-            color: #8fa5bd;
-            font-size: 12px;
-            line-height: 1.5;
-            margin-top: -8px;
-            margin-bottom: 16px;
+        .nota {
+            margin-top: 20px;
+            text-align: center;
+            color: #8299b4;
+            font-size: 11px;
+            line-height: 1.6;
         }
 
         @media (max-width: 380px) {
-            header {
-                padding: 14px 10px;
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 22px 14px;
+            }
+
+            .catalogo {
+                grid-template-columns: 1fr;
             }
 
             .logo {
                 font-size: 17px;
-            }
-
-            .inicio {
-                padding: 8px;
-                font-size: 12px;
             }
         }
     </style>
 </head>
 
 <body>
+<div class="contenedor">
 
-<header>
-    <div class="logo">
-        <span class="rayo">⚡</span> Gamers Gold Top-Up
-    </div>
+    <header class="header">
+        <div class="logo">
+            <span class="rayo">⚡</span> Gamers Gold Top-Up
+        </div>
 
-    <a href="juegos.html" class="inicio">← Juegos</a>
-</header>
+        <a href="juegos.html" class="volver">← Juegos</a>
+    </header>
 
-<main class="contenedor">
-    <section class="juego">
-
+    <main class="card">
         <div class="icono">🔥</div>
 
         <h1>Free Fire</h1>
 
         <p class="descripcion">
-            Recarga tu cuenta de Free Fire de forma rápida y sencilla.
+            Selecciona tu paquete de diamantes de Free Fire.
         </p>
 
-        <label for="id">ID del jugador</label>
+        <label class="etiqueta" for="idjugador">
+            ID del jugador
+        </label>
 
         <input
             type="text"
-            id="id"
-            placeholder="Escribe tu ID de Free Fire"
+            id="idjugador"
+            placeholder="Introduce tu ID de Free Fire"
             autocomplete="off"
         >
 
-        <label for="cantidad">Selecciona una cantidad</label>
+        <label class="etiqueta">
+            Selecciona una cantidad de diamantes
+        </label>
 
-        <select id="cantidad" disabled>
-            <option value="">Cargando paquetes de diamantes...</option>
-        </select>
-
-        <p class="estado-catalogo" id="estadoCatalogo" aria-live="polite">
+        <div id="estadoCatalogo" class="estado" aria-live="polite">
             Conectando con el catálogo...
-        </p>
+        </div>
+
+        <div id="catalogo" class="catalogo"></div>
 
         <button
-            class="recargar"
-            id="botonRecargar"
+            id="botonContinuar"
+            class="boton continuar"
             type="button"
-            onclick="continuarRecarga()"
             disabled
         >
-            Continuar ⚡
+            Compras temporalmente desactivadas
         </button>
 
         <div class="separador-ofertas">
             <button
-                class="boton-ofertas"
+                class="boton boton-ofertas"
                 type="button"
                 onclick="abrirOfertas()"
             >
-                🎁 Ofertas Especiales
+                🎁 Ofertas especiales
             </button>
         </div>
 
-    </section>
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <p class="nota">
+            Consulta los paquetes de diamantes disponibles.
+            Las compras se habilitarán cuando se configuren
+            los precios de venta y el sistema de pedidos.
+        </p>
+    </main>
+</div>
 
 <script>
 "use strict";
 
-/* SUPABASE */
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -258,30 +308,35 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
-/* NEXT LEVEL */
-
 const URL_CATALOGO =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
-const selectCantidad = document.getElementById("cantidad");
-const botonRecargar = document.getElementById("botonRecargar");
+const catalogo = document.getElementById("catalogo");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
 
-let catalogoCargado = false;
-let ofertasDisponibles = [];
+let productoSeleccionado = null;
+let productosDisponibles = [];
 
-/* ABRIR OFERTAS ESPECIALES */
+/* =====================================================
+   OFERTAS ESPECIALES
+===================================================== */
 
 function abrirOfertas() {
     window.location.href = "ofertas-free-fire.html";
 }
 
-/* EXTRAER PRODUCTOS */
+/* =====================================================
+   ESTADO
+===================================================== */
+
+function mostrarEstado(mensaje, esError = false) {
+    estadoCatalogo.textContent = mensaje;
+    estadoCatalogo.classList.toggle("error", esError);
+}
+
+/* =====================================================
+   EXTRAER PRODUCTOS
+===================================================== */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) {
@@ -304,35 +359,19 @@ function extraerProductos(respuesta) {
         return respuesta.data;
     }
 
-    if (respuesta.data && Array.isArray(respuesta.data.products)) {
+    if (
+        respuesta.data &&
+        Array.isArray(respuesta.data.products)
+    ) {
         return respuesta.data.products;
     }
 
     return [];
 }
 
-/* REGIÓN */
-
-function esOfertaLATAM(producto) {
-    return String(producto.region || "")
-        .trim()
-        .toUpperCase() === "LATAM & USA";
-}
-
-/* NOMBRE REAL DEL PRODUCTO */
-
-function obtenerNombre(producto) {
-    return String(
-        producto.name ||
-        producto.productName ||
-        producto.product_name ||
-        producto.title ||
-        producto.productId ||
-        "Producto de Free Fire"
-    ).trim();
-}
-
-/* IDENTIFICADOR REAL */
+/* =====================================================
+   IDENTIFICAR PRODUCTOS
+===================================================== */
 
 function obtenerProductId(producto) {
     return String(
@@ -343,7 +382,30 @@ function obtenerProductId(producto) {
     ).trim();
 }
 
-/* IDENTIFICAR SOLO PAQUETES DE DIAMANTES */
+function obtenerNombre(producto) {
+    return String(
+        producto.name ||
+        producto.productName ||
+        producto.product_name ||
+        producto.title ||
+        obtenerProductId(producto) ||
+        "Paquete de Free Fire"
+    ).trim();
+}
+
+/* =====================================================
+   FILTRAR REGIÓN LATAM & USA
+===================================================== */
+
+function esOfertaLATAM(producto) {
+    return String(producto.region || "")
+        .trim()
+        .toUpperCase() === "LATAM & USA";
+}
+
+/* =====================================================
+   IDENTIFICAR PAQUETES DE DIAMANTES
+===================================================== */
 
 function esPaqueteDiamantes(producto) {
     const id = obtenerProductId(producto).toLowerCase();
@@ -364,20 +426,17 @@ function esPaqueteDiamantes(producto) {
     return esDiamantes && !esMembresiaOPase;
 }
 
-/* CARGAR CATÁLOGO */
+/* =====================================================
+   CARGAR CATÁLOGO DE NEXT LEVEL
+===================================================== */
 
-async function cargarCatalogoDiamantes() {
-    catalogoCargado = false;
-    ofertasDisponibles = [];
+async function cargarCatalogo() {
+    productoSeleccionado = null;
+    productosDisponibles = [];
 
-    selectCantidad.disabled = true;
-    botonRecargar.disabled = true;
+    catalogo.replaceChildren();
 
-    selectCantidad.innerHTML =
-        '<option value="">Cargando paquetes de diamantes...</option>';
-
-    estadoCatalogo.textContent =
-        "Conectando con el catálogo...";
+    mostrarEstado("Conectando con el catálogo...");
 
     try {
         const respuesta = await fetch(
@@ -393,9 +452,17 @@ async function cargarCatalogoDiamantes() {
             }
         );
 
-        const resultado = await respuesta.json();
+        let resultado;
 
-        console.log("RESPUESTA NEXT LEVEL:", resultado);
+        try {
+            resultado = await respuesta.json();
+        } catch {
+            throw new Error(
+                "El catálogo devolvió una respuesta no válida."
+            );
+        }
+
+        console.log("CATÁLOGO FREE FIRE:", resultado);
 
         if (!respuesta.ok) {
             throw new Error(
@@ -407,15 +474,18 @@ async function cargarCatalogoDiamantes() {
 
         const productos = extraerProductos(resultado);
 
-        console.log("PRODUCTOS RECIBIDOS:", productos);
-
         if (productos.length === 0) {
-            throw new Error("El catálogo no devolvió productos.");
+            throw new Error(
+                "Next Level no devolvió productos para Free Fire."
+            );
         }
 
-        /* SOLO DIAMANTES DISPONIBLES DE LATAM & USA */
+        /*
+         * Mostrar únicamente paquetes disponibles
+         * de diamantes de LATAM & USA.
+         */
 
-        ofertasDisponibles = productos.filter(producto =>
+        productosDisponibles = productos.filter(producto =>
             producto &&
             producto.available === true &&
             esOfertaLATAM(producto) &&
@@ -423,204 +493,77 @@ async function cargarCatalogoDiamantes() {
             esPaqueteDiamantes(producto)
         );
 
-        /* ELIMINAR OPCIONES ANTIGUAS */
-
-        selectCantidad.innerHTML = "";
-
-        const opcionInicial = document.createElement("option");
-        opcionInicial.value = "";
-        opcionInicial.textContent = "Selecciona una cantidad";
-
-        selectCantidad.appendChild(opcionInicial);
-
-        /* MOSTRAR LOS NOMBRES REALES DE NEXT LEVEL */
-
-        ofertasDisponibles.forEach(producto => {
-            const opcion = document.createElement("option");
-
-            opcion.value = obtenerProductId(producto);
-            opcion.textContent = obtenerNombre(producto);
-
-            selectCantidad.appendChild(opcion);
-        });
-
-        if (ofertasDisponibles.length === 0) {
-            selectCantidad.innerHTML =
-                '<option value="">No hay paquetes disponibles</option>';
-
-            estadoCatalogo.textContent =
-                "No se encontraron paquetes de diamantes para LATAM & USA.";
-
+        if (productosDisponibles.length === 0) {
+            mostrarEstado(
+                "No se encontraron paquetes de diamantes disponibles para LATAM & USA.",
+                true
+            );
             return;
         }
 
-        catalogoCargado = true;
+        productosDisponibles.forEach(producto => {
+            const tarjeta = document.createElement("button");
 
-        selectCantidad.disabled = false;
-        botonRecargar.disabled = false;
+            tarjeta.type = "button";
+            tarjeta.className = "producto";
 
-        estadoCatalogo.textContent =
-            ofertasDisponibles.length +
-            " paquetes de diamantes disponibles.";
+            const nombre = document.createElement("div");
+            nombre.className = "producto-nombre";
+            nombre.textContent = obtenerNombre(producto);
+
+            const estado = document.createElement("div");
+            estado.className = "producto-estado";
+            estado.textContent = "Seleccionar paquete";
+
+            tarjeta.append(nombre, estado);
+
+            tarjeta.addEventListener("click", () => {
+                document.querySelectorAll(".producto").forEach(elemento => {
+                    elemento.classList.remove("seleccionado");
+                });
+
+                tarjeta.classList.add("seleccionado");
+                productoSeleccionado = producto;
+
+                console.log(
+                    "PRODUCTO SELECCIONADO:",
+                    obtenerProductId(productoSeleccionado)
+                );
+            });
+
+            catalogo.appendChild(tarjeta);
+        });
+
+        mostrarEstado(
+            productosDisponibles.length +
+            " paquetes de diamantes disponibles."
+        );
 
         console.log(
             "PAQUETES MOSTRADOS:",
-            ofertasDisponibles.map(producto => ({
+            productosDisponibles.map(producto => ({
                 id: obtenerProductId(producto),
                 nombre: obtenerNombre(producto)
             }))
         );
 
     } catch (error) {
-        console.error("ERROR CARGANDO CATÁLOGO:", error);
+        console.error("ERROR CARGANDO FREE FIRE:", error);
 
-        catalogoCargado = false;
-        ofertasDisponibles = [];
+        catalogo.replaceChildren();
 
-        selectCantidad.innerHTML =
-            '<option value="">Error cargando paquetes</option>';
-
-        selectCantidad.disabled = true;
-        botonRecargar.disabled = true;
-
-        estadoCatalogo.textContent =
-            "No se pudo cargar el catálogo. Intenta recargar la página.";
+        mostrarEstado(
+            "No se pudo cargar el catálogo. " + error.message,
+            true
+        );
     }
 }
 
-/* COMPRA ACTUAL: SOLO 110 DIAMANTES */
+/* =====================================================
+   INICIALIZAR
+===================================================== */
 
-async function continuarRecarga() {
-    const idJugador =
-        document.getElementById("id").value.trim();
-
-    const productIdSeleccionado = selectCantidad.value;
-
-    if (!idJugador) {
-        alert("Escribe tu ID de Free Fire.");
-        return;
-    }
-
-    if (!productIdSeleccionado) {
-        alert("Selecciona un paquete de diamantes.");
-        return;
-    }
-
-    if (!catalogoCargado) {
-        alert("El catálogo todavía no está disponible.");
-        return;
-    }
-
-    const ofertaSeleccionada = ofertasDisponibles.find(
-        producto =>
-            obtenerProductId(producto) === productIdSeleccionado
-    );
-
-    if (!ofertaSeleccionada) {
-        alert("No se encontró el paquete seleccionado.");
-        return;
-    }
-
-    /* LOS DEMÁS PAQUETES AÚN NO TIENEN LA COMPRA ACTIVADA */
-
-    if (
-        obtenerProductId(ofertaSeleccionada) !==
-        "fz-free_fire_latam-110_diamonds"
-    ) {
-        alert(
-            "Este paquete todavía no tiene la compra habilitada. " +
-            "Estamos preparando sus productos y precios."
-        );
-        return;
-    }
-
-    botonRecargar.disabled = true;
-    botonRecargar.textContent = "Procesando...";
-
-    try {
-        const {
-            data: { session },
-            error: sessionError
-        } = await supabaseClient.auth.getSession();
-
-        if (sessionError || !session) {
-            alert("Debes iniciar sesión primero.");
-            window.location.href = "login.html";
-            return;
-        }
-
-        const {
-            data: producto,
-            error: productoError
-        } = await supabaseClient
-            .from("game_products")
-            .select("id, game, product_name, price_gvr, active")
-            .eq("game", "Free Fire")
-            .eq("product_name", "110 Diamantes")
-            .maybeSingle();
-
-        if (productoError) {
-            throw new Error(
-                "Error buscando el producto: " + productoError.message
-            );
-        }
-
-        if (!producto) {
-            throw new Error(
-                "Supabase no encontró el producto de 110 diamantes."
-            );
-        }
-
-        if (!producto.active) {
-            throw new Error(
-                "El producto de 110 diamantes no está activo."
-            );
-        }
-
-        const {
-            data,
-            error
-        } = await supabaseClient.rpc(
-            "purchase_game_product",
-            {
-                p_product_id: producto.id,
-                p_player_id: idJugador
-            }
-        );
-
-        if (error) {
-            throw new Error(error.message);
-        }
-
-        alert(
-            "¡Compra realizada! ⚡\n\n" +
-            "110 diamantes\n" +
-            "Precio: " + producto.price_gvr + " GVR\n\n" +
-            "ID del pedido: " + data
-        );
-
-        window.location.href = "cuenta.html";
-
-    } catch (error) {
-        console.error("ERROR DE COMPRA:", error);
-
-        alert(
-            "No se pudo completar la compra:\n\n" +
-            error.message
-        );
-
-    } finally {
-        botonRecargar.disabled = !catalogoCargado;
-        botonRecargar.textContent = "Continuar ⚡";
-    }
-}
-
-/* INICIAR */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    cargarCatalogoDiamantes
-);
+cargarCatalogo();
 </script>
 
 </body>
