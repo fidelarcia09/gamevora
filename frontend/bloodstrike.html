@@ -1,500 +1,501 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050b18">
+    <meta name="description" content="Recargas de Blood Strike en Gamers Gold Top-Up."><title>Blood Strike | Gamers Gold Top-Up</title>
 
-    <title>Blood Strike | Gamers Gold Top-Up</title>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+    body {
+        background: #050b18;
+        color: white;
+        min-height: 100vh;
+    }
 
-        body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 18px;
+        border-bottom: 1px solid #12385f;
+        background: #071225;
+    }
 
-        .contenedor {
-            max-width: 500px;
-            margin: auto;
-        }
+    .logo {
+        font-size: 22px;
+        font-weight: 900;
+    }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
+    .logo .rayo {
+        color: #00b7ff;
+        text-shadow: 0 0 12px #008cff;
+    }
+
+    .inicio {
+        text-decoration: none;
+        color: white;
+        border: 1px solid #168cff;
+        padding: 9px 13px;
+        border-radius: 9px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 500px;
+        margin: auto;
+        padding: 25px 18px;
+    }
+
+    .juego {
+        background: #091a35;
+        border: 1px solid #15518c;
+        border-radius: 20px;
+        padding: 25px 20px;
+        box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+    }
+
+    .icono {
+        text-align: center;
+        font-size: 55px;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 28px;
+        margin-bottom: 8px;
+    }
+
+    .descripcion {
+        text-align: center;
+        color: #8fa5bd;
+        font-size: 14px;
+        margin-bottom: 25px;
+        line-height: 1.5;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 7px;
+        color: #b8c9dc;
+        font-size: 13px;
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: 13px;
+        margin-bottom: 18px;
+        background: #061226;
+        color: white;
+        border: 1px solid #204c78;
+        border-radius: 10px;
+        outline: none;
+        font-size: 15px;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #159dff;
+        box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+    }
+
+    select:disabled {
+        opacity: 0.75;
+    }
+
+    .recargar {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #087cff, #00baff);
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .recargar:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+
+    .separador-ofertas {
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #12385f;
+    }
+
+    .boton-ofertas {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #168cff;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #061b3a, #0a2d5c);
+        color: #00baff;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
+        transition: 0.2s;
+    }
+
+    .boton-ofertas:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
+    }
+
+    .estado-catalogo {
+        color: #8fa5bd;
+        font-size: 12px;
+        line-height: 1.5;
+        margin-top: -8px;
+        margin-bottom: 16px;
+    }
+
+    @media (max-width: 380px) {
+        header {
+            padding: 14px 10px;
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: 900;
+            font-size: 17px;
         }
 
-        .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
+        .inicio {
+            padding: 8px;
+            font-size: 12px;
         }
+    }
+</style>
 
-        .volver {
-            color: #28a9ff;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-        }
+</head><body><header>
+    <div class="logo">
+        <span class="rayo">⚡</span> Gamers Gold Top-Up
+    </div><a href="juegos.html" class="inicio">← Juegos</a>
 
-        .card {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 28px 22px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-        }
+</header><main class="contenedor">
+    <section class="juego">    <div class="icono">🔥</div>
 
-        .icono {
-            text-align: center;
-            font-size: 55px;
-            margin-bottom: 10px;
-        }
+    <h1>Blood Strike</h1>
 
-        h1 {
-            text-align: center;
-            font-size: 26px;
-            margin-bottom: 10px;
-        }
+    <p class="descripcion">
+        Recarga tus BC de Blood Strike de forma rápida y sencilla.
+    </p>
 
-        .descripcion {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
+    <label for="idjugador">ID del jugador</label>
 
-        label {
-            display: block;
-            margin-bottom: 7px;
-            color: #b8c9dc;
-            font-size: 13px;
-        }
+    <input
+        type="text"
+        id="idjugador"
+        placeholder="Escribe tu ID de Blood Strike"
+        autocomplete="off"
+    >
 
-        input,
-        select {
-            width: 100%;
-            padding: 13px;
-            margin-bottom: 18px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-        }
+    <label for="cantidad">Selecciona una cantidad</label>
 
-        input:focus,
-        select:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
+    <select id="cantidad" disabled>
+        <option value="">Cargando paquetes de BC...</option>
+    </select>
 
-        .continuar {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    <p class="estado-catalogo" id="estadoCatalogo" aria-live="polite">
+        Conectando con el catálogo...
+    </p>
 
-        .continuar:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
+    <button
+        class="recargar"
+        id="botonRecargar"
+        type="button"
+        onclick="continuarRecarga()"
+        disabled
+    >
+        Continuar ⚡
+    </button>
 
-        /* =========================
-           OFERTAS ESPECIALES
-        ========================= */
-
-        .separador-ofertas {
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid #12385f;
-        }
-
-        .boton-ofertas {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #168cff;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #061b3a, #0a2d5c);
-            color: #00baff;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
-            transition: 0.2s;
-        }
-
-        .boton-ofertas:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
-        }
-
-        .nota {
-            margin-top: 20px;
-            text-align: center;
-            color: #627b97;
-            font-size: 11px;
-            line-height: 1.5;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="contenedor">
-
-    <div class="header">
-
-        <div class="logo">
-            <span class="rayo">⚡</span> Gamers Gold Top-Up
-        </div>
-
-        <a href="juegos.html" class="volver">
-            ← Juegos
-        </a>
-
-    </div>
-
-    <div class="card">
-
-        <div class="icono">🩸</div>
-
-        <h1>Blood Strike</h1>
-
-        <p class="descripcion">
-            Recarga tus Gold de Blood Strike
-            de forma rápida y sencilla.
-        </p>
-
-        <label for="idjugador">
-            ID del jugador
-        </label>
-
-        <input
-            type="text"
-            id="idjugador"
-            placeholder="Introduce tu ID"
-            autocomplete="off"
-        >
-
-        <label for="cantidad">
-            Cantidad
-        </label>
-
-        <select id="cantidad">
-
-            <option value="">
-                Selecciona una cantidad
-            </option>
-
-            <option value="100 Gold">
-                100 Gold
-            </option>
-
-            <option value="310 Gold">
-                310 Gold
-            </option>
-
-            <option value="520 Gold">
-                520 Gold
-            </option>
-
-            <option value="1060 Gold">
-                1060 Gold
-            </option>
-
-            <option value="2180 Gold">
-                2180 Gold
-            </option>
-
-        </select>
-
+    <div class="separador-ofertas">
         <button
-            class="continuar"
-            id="botonRecarga"
+            class="boton-ofertas"
             type="button"
-            onclick="continuarRecarga()"
+            onclick="abrirOfertas()"
         >
-            Continuar ⚡
+            🎁 Ofertas Especiales
         </button>
-
-
-        <!-- =========================
-             OFERTAS ESPECIALES
-        ========================= -->
-
-        <div class="separador-ofertas">
-
-            <button
-                class="boton-ofertas"
-                type="button"
-                onclick="abrirOfertas()"
-            >
-                🎁 Ofertas Especiales
-            </button>
-
-        </div>
-
     </div>
 
-</div>
+</section>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
+</main><script>
+"use strict";
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-const SUPABASE_ANON_KEY =
+const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
-        {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
-        }
-    );
+const URL_CATALOGO =
+    SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
+const selectCantidad =
+    document.getElementById("cantidad");
 
-/* =========================
-   ABRIR OFERTAS
-========================= */
+const botonRecargar =
+    document.getElementById("botonRecargar");
+
+const estadoCatalogo =
+    document.getElementById("estadoCatalogo");
+
+let catalogoCargado = false;
+let productosDisponibles = [];
+
+/* ABRIR OFERTAS ESPECIALES */
 
 function abrirOfertas() {
-
-    window.location.href =
-        "ofertas-bloodstrike.html";
-
+    window.location.href = "ofertas-bloodstrike.html";
 }
 
+/* EXTRAER PRODUCTOS DE LA RESPUESTA */
 
-/* =========================
-   RECARGA NORMAL
-========================= */
-
-async function continuarRecarga() {
-
-    const idJugador =
-        document.getElementById("idjugador").value.trim();
-
-    const cantidad =
-        document.getElementById("cantidad").value;
-
-    const boton =
-        document.getElementById("botonRecarga");
-
-
-    if (idJugador === "") {
-
-        alert(
-            "Escribe tu ID de Blood Strike."
-        );
-
-        return;
+function extraerProductos(respuesta) {
+    if (Array.isArray(respuesta)) {
+        return respuesta;
     }
 
-
-    if (cantidad === "") {
-
-        alert(
-            "Selecciona una cantidad."
-        );
-
-        return;
+    if (!respuesta || typeof respuesta !== "object") {
+        return [];
     }
 
+    if (Array.isArray(respuesta.productos)) {
+        return respuesta.productos;
+    }
 
-    boton.disabled = true;
+    if (Array.isArray(respuesta.products)) {
+        return respuesta.products;
+    }
 
-    boton.textContent =
-        "Procesando...";
+    if (Array.isArray(respuesta.data)) {
+        return respuesta.data;
+    }
 
+    if (
+        respuesta.data &&
+        Array.isArray(respuesta.data.products)
+    ) {
+        return respuesta.data.products;
+    }
+
+    return [];
+}
+
+/* OBTENER IDENTIFICADOR */
+
+function obtenerProductId(producto) {
+    return String(
+        producto.productId ||
+        producto.product_id ||
+        producto.id ||
+        ""
+    ).trim();
+}
+
+/* OBTENER NOMBRE */
+
+function obtenerNombre(producto) {
+    return String(
+        producto.name ||
+        producto.productName ||
+        producto.product_name ||
+        producto.title ||
+        obtenerProductId(producto)
+    ).trim();
+}
+
+/* IDENTIFICAR PAQUETES NORMALES DE BC */
+
+function esPaqueteBC(producto) {
+    const id = obtenerProductId(producto).toLowerCase();
+    const nombre = obtenerNombre(producto).toLowerCase();
+
+    const esBC =
+        id.includes("_bc") ||
+        /\bbc\b/i.test(nombre);
+
+    const esOfertaEspecial =
+        id.includes("lucky_bag") ||
+        id.includes("level_up_pass") ||
+        id.includes("strike_pass") ||
+        nombre.includes("pass") ||
+        nombre.includes("pase") ||
+        nombre.includes("bolsa de la suerte");
+
+    return esBC && !esOfertaEspecial;
+}
+
+/* CARGAR CATÁLOGO */
+
+async function cargarCatalogo() {
+    catalogoCargado = false;
+    productosDisponibles = [];
+
+    selectCantidad.disabled = true;
+    botonRecargar.disabled = true;
+
+    selectCantidad.innerHTML =
+        '<option value="">Cargando paquetes de BC...</option>';
+
+    estadoCatalogo.textContent =
+        "Conectando con el catálogo...";
 
     try {
+        const respuesta = await fetch(
+            URL_CATALOGO + "?game=blood-strike",
+            {
+                method: "GET",
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": "Bearer " + SUPABASE_KEY,
+                    "Accept": "application/json"
+                },
+                cache: "no-store"
+            }
+        );
 
-        /* =========================
-           COMPROBAR SESIÓN
-        ========================= */
+        let resultado;
 
-        const {
-            data: { session },
-            error: sessionError
-        } =
-            await supabaseClient.auth.getSession();
-
-
-        if (sessionError || !session) {
-
-            alert(
-                "Debes iniciar sesión primero."
+        try {
+            resultado = await respuesta.json();
+        } catch {
+            throw new Error(
+                "El catálogo devolvió una respuesta no válida."
             );
-
-            window.location.href =
-                "login.html";
-
-            return;
         }
-
-
-        /* =========================
-           BUSCAR PRODUCTO
-        ========================= */
-
-        const {
-            data: producto,
-            error: productoError
-        } =
-            await supabaseClient
-                .from("game_products")
-                .select(
-                    "id, game, product_name, game_currency_amount, price_gvr, active"
-                )
-                .eq("game", "Blood Strike")
-                .eq("product_name", cantidad)
-                .eq("active", true)
-                .maybeSingle();
-
 
         console.log(
-            "PRODUCTO BLOOD STRIKE:",
-            producto
+            "RESPUESTA NEXT LEVEL BLOOD STRIKE:",
+            resultado
         );
+
+        if (!respuesta.ok) {
+            throw new Error(
+                resultado.error ||
+                resultado.message ||
+                "Error HTTP " + respuesta.status
+            );
+        }
+
+        const productos = extraerProductos(resultado);
+
+        if (productos.length === 0) {
+            throw new Error(
+                "El catálogo no devolvió productos."
+            );
+        }
+
+        productosDisponibles = productos.filter(producto =>
+            producto &&
+            producto.available === true &&
+            obtenerProductId(producto) !== "" &&
+            esPaqueteBC(producto)
+        );
+
+        selectCantidad.innerHTML = "";
+
+        const opcionInicial =
+            document.createElement("option");
+
+        opcionInicial.value = "";
+        opcionInicial.textContent =
+            "Selecciona una cantidad";
+
+        selectCantidad.appendChild(opcionInicial);
+
+        productosDisponibles.forEach(producto => {
+            const opcion =
+                document.createElement("option");
+
+            opcion.value = obtenerProductId(producto);
+            opcion.textContent = obtenerNombre(producto);
+
+            selectCantidad.appendChild(opcion);
+        });
+
+        if (productosDisponibles.length === 0) {
+            selectCantidad.innerHTML =
+                '<option value="">No hay paquetes disponibles</option>';
+
+            estadoCatalogo.textContent =
+                "No se encontraron paquetes de BC disponibles.";
+
+            return;
+        }
+
+        catalogoCargado = true;
+        selectCantidad.disabled = false;
+
+        /*
+         * Las compras siguen deshabilitadas mientras
+         * terminamos de configurar precios y pedidos.
+         */
+
+        botonRecargar.disabled = true;
+
+        estadoCatalogo.textContent =
+            productosDisponibles.length +
+            " paquetes de BC disponibles. Precios pendientes de configurar.";
 
         console.log(
-            "ERROR PRODUCTO:",
-            productoError
+            "PAQUETES BC MOSTRADOS:",
+            productosDisponibles.map(producto => ({
+                id: obtenerProductId(producto),
+                nombre: obtenerNombre(producto)
+            }))
         );
-
-
-        if (productoError) {
-
-            alert(
-                "Error buscando el producto:\n\n" +
-                productoError.message
-            );
-
-            return;
-        }
-
-
-        if (!producto) {
-
-            alert(
-                "No se encontró ese producto de Blood Strike en Gamevora."
-            );
-
-            return;
-        }
-
-
-        /* =========================
-           REALIZAR COMPRA
-        ========================= */
-
-        const {
-            data: pedido,
-            error: compraError
-        } =
-            await supabaseClient.rpc(
-                "purchase_game_product",
-                {
-                    p_product_id:
-                        producto.id,
-
-                    p_player_id:
-                        idJugador
-                }
-            );
-
-
-        if (compraError) {
-
-            console.error(
-                "ERROR COMPRA:",
-                compraError
-            );
-
-            alert(
-                "No se pudo realizar la compra:\n\n" +
-                compraError.message
-            );
-
-            return;
-        }
-
-
-        /* =========================
-           COMPRA EXITOSA
-        ========================= */
-
-        alert(
-            "¡Compra realizada! ⚡\n\n" +
-
-            producto.product_name +
-
-            "\nPrecio: " +
-
-            producto.price_gvr +
-
-            " GVR\n\n" +
-
-            "ID del pedido:\n" +
-
-            pedido
-        );
-
-
-        window.location.href =
-            "cuenta.html";
-
 
     } catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Ocurrió un error inesperado:\n\n" +
-            error.message
+        console.error(
+            "ERROR CARGANDO BLOOD STRIKE:",
+            error
         );
 
-    } finally {
+        catalogoCargado = false;
+        productosDisponibles = [];
 
-        boton.disabled = false;
+        selectCantidad.innerHTML =
+            '<option value="">Error cargando paquetes</option>';
 
-        boton.textContent =
-            "Continuar ⚡";
+        selectCantidad.disabled = true;
+        botonRecargar.disabled = true;
+
+        estadoCatalogo.textContent =
+            "No se pudo cargar el catálogo. Intenta recargar la página.";
     }
 }
 
-</script>
+/* COMPRAS DESHABILITADAS TEMPORALMENTE */
 
-</body>
+function continuarRecarga() {
+    alert(
+        "Las compras de Blood Strike todavía están deshabilitadas. " +
+        "Estamos preparando los precios y la conexión de pedidos."
+    );
+}
+
+/* INICIAR */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    cargarCatalogo
+);
+</script></body>
 </html>
