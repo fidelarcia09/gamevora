@@ -8,6 +8,7 @@
    - Mobile Legends
    - Blood Strike
    - PUBG Mobile
+   - Honor of Kings
 
    IMPORTANTE:
    - Precios en 0 GVR durante la preparación.
@@ -42,10 +43,12 @@ const JUEGOS_API = {
     "free fire": "free-fire",
     "mobile legends": "mobile-legends",
     "blood strike": "blood-strike",
-    "pubg mobile": "pubg-mobile"
+    "pubg mobile": "pubg-mobile",
+    "honor of kings": "honor-of-kings"
 };
 
-const JUEGO_API = JUEGOS_API[JUEGO_NORMALIZADO];
+const JUEGO_API =
+    JUEGOS_API[JUEGO_NORMALIZADO];
 
 const URL_CATALOGO =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
@@ -237,6 +240,33 @@ const PRODUCTOS_PUBG_MOBILE = [
 ];
 
 /* =========================================================
+   OFERTAS DE HONOR OF KINGS
+========================================================= */
+
+const PRODUCTOS_HONOR_OF_KINGS = [
+    {
+        id: "fz-honor_of_kings-standard_purchase_rebate_pack",
+        nombre: "Standard Purchase Rebate Pack",
+        emoji: "🎁"
+    },
+    {
+        id: "fz-honor_of_kings-weekly_card",
+        nombre: "Weekly Card",
+        emoji: "📅"
+    },
+    {
+        id: "fz-honor_of_kings-premium_purchase_rebate_pack",
+        nombre: "Premium Purchase Rebate Pack",
+        emoji: "👑"
+    },
+    {
+        id: "fz-honor_of_kings-weekly_card_plus",
+        nombre: "Weekly Card Plus",
+        emoji: "⭐"
+    }
+];
+
+/* =========================================================
    OBTENER OFERTAS CONFIGURADAS
 ========================================================= */
 
@@ -253,6 +283,9 @@ function obtenerProductosConfigurados() {
 
         case "pubg mobile":
             return PRODUCTOS_PUBG_MOBILE;
+
+        case "honor of kings":
+            return PRODUCTOS_HONOR_OF_KINGS;
 
         default:
             return [];
@@ -652,7 +685,6 @@ function volverOfertas() {
         document.getElementById("pantallaConfirmacion");
 
     const pantallaOfertas =
-        document.getElementById("pantallaOfertas") ||
         document.getElementById("pantallaOfertas");
 
     if (pantallaConfirmacion) {
