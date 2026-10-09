@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050b18">
+    <meta name="description" content="Recarga Genesis Crystals de Genshin Impact en Gamers Gold Top-Up.">
 
     <title>Genshin Impact | Gamers Gold Top-Up</title>
 
@@ -22,7 +24,7 @@
         }
 
         .contenedor {
-            max-width: 500px;
+            max-width: 650px;
             margin: auto;
         }
 
@@ -30,11 +32,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
             margin-bottom: 25px;
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 21px;
             font-weight: 900;
         }
 
@@ -48,95 +51,160 @@
             text-decoration: none;
             font-size: 14px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         .tarjeta {
-            background: #0a1830;
-            border: 1px solid #164b8f;
-            border-radius: 18px;
-            padding: 25px;
-            box-shadow: 0 0 25px rgba(0, 140, 255, 0.15);
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
         }
 
         .icono {
-            font-size: 55px;
             text-align: center;
+            font-size: 52px;
             margin-bottom: 10px;
         }
 
         h1 {
             text-align: center;
-            color: #38a8ff;
+            font-size: 27px;
             margin-bottom: 10px;
         }
 
         .descripcion {
             text-align: center;
-            color: #a9bdd8;
-            margin-bottom: 25px;
-            line-height: 1.5;
+            color: #8fa5bd;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 22px;
         }
 
-        label {
+        .etiqueta {
             display: block;
-            margin-bottom: 8px;
-            color: #d9e7f7;
+            margin: 18px 0 10px;
+            color: #b8c9dc;
+            font-size: 13px;
             font-weight: bold;
         }
 
         input,
         select {
             width: 100%;
-            padding: 14px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            border: 1px solid #225b9d;
-            background: #07152b;
+            padding: 13px;
+            background: #061226;
             color: white;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            font-size: 15px;
             outline: none;
         }
 
         input:focus,
         select:focus {
-            border-color: #38a8ff;
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
         }
 
-        button {
-            width: 100%;
-            padding: 15px;
-            border: none;
+        .ayuda {
+            margin-top: 7px;
+            color: #8299b4;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .estado {
+            padding: 13px;
+            margin: 18px 0;
+            border: 1px solid #204c78;
             border-radius: 10px;
-            background: #168cff;
+            background: #061226;
+            color: #a9c4df;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .estado.error {
+            color: #ffaaaa;
+            border-color: #843d4b;
+        }
+
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .producto {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+            min-height: 125px;
+            padding: 15px 12px;
+            background: #061226;
             color: white;
-            font-size: 16px;
-            font-weight: bold;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            text-align: left;
             cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        button:hover {
-            background: #0875dc;
+        .producto:hover {
+            border-color: #168cff;
         }
 
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .producto.seleccionado {
+            border-color: #00baff;
+            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+        }
+
+        .producto-nombre {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .producto-estado {
+            color: #45c8ff;
+            font-size: 12px;
+            font-weight: bold;
         }
 
         .separador-ofertas {
-            margin-top: 14px;
-            padding-top: 14px;
+            margin-top: 22px;
+            padding-top: 18px;
             border-top: 1px solid #164b8f;
         }
 
-        .boton-ofertas {
+        .boton {
             width: 100%;
-            padding: 13px;
-            border: 1px solid #168cff;
+            padding: 14px;
+            border: none;
             border-radius: 10px;
-            background: #07152b;
-            color: #28a9ff;
             font-size: 15px;
             font-weight: bold;
+        }
+
+        .continuar {
+            margin-top: 18px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+
+        .boton-ofertas {
+            background: #07152b;
+            color: #28a9ff;
+            border: 1px solid #168cff;
             cursor: pointer;
         }
 
@@ -145,10 +213,30 @@
             border-color: #38a8ff;
         }
 
-        .cargando {
-            color: #9fb5d0;
+        .nota {
+            margin-top: 20px;
             text-align: center;
-            margin-bottom: 15px;
+            color: #8299b4;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 12px;
+            }
+
+            .tarjeta {
+                padding: 22px 14px;
+            }
+
+            .catalogo {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
         }
     </style>
 </head>
@@ -157,73 +245,96 @@
 
 <div class="contenedor">
 
-    <div class="header">
-
+    <header class="header">
         <div class="logo">
             <span class="rayo">⚡</span> Gamers Gold Top-Up
         </div>
 
-        <a href="juegos.html" class="volver">
-            ← Juegos
-        </a>
+        <a href="juegos.html" class="volver">← Juegos</a>
+    </header>
 
-    </div>
-
-    <div class="tarjeta">
+    <main class="tarjeta">
 
         <div class="icono">⚔️</div>
 
         <h1>Genshin Impact</h1>
 
         <p class="descripcion">
-            Recarga Genshin Impact de forma rápida y sencilla.
+            Selecciona tu paquete de Genesis Crystals.
         </p>
 
-        <label for="idJugador">
+        <label class="etiqueta" for="idJugador">
             ID del jugador
         </label>
 
         <input
             type="text"
             id="idJugador"
-            placeholder="Escribe tu ID de jugador"
+            placeholder="Introduce tu ID de jugador"
             autocomplete="off"
         >
 
-        <label for="cantidad">
-            Selecciona tu recarga
+        <p class="ayuda">
+            Introduce tu UID de Genshin Impact.
+        </p>
+
+        <label class="etiqueta" for="zonaJugador">
+            Servidor o zona
         </label>
 
-        <select id="cantidad">
-            <option value="">Cargando productos...</option>
+        <select id="zonaJugador">
+            <option value="">Selecciona tu servidor</option>
+            <option value="America">América</option>
+            <option value="Europe">Europa</option>
+            <option value="Asia">Asia</option>
+            <option value="TW_HK_MO">TW / HK / MO</option>
         </select>
 
+        <label class="etiqueta">
+            Selecciona una cantidad de Genesis Crystals
+        </label>
+
+        <div id="estadoCatalogo" class="estado" aria-live="polite">
+            Conectando con el catálogo de Next Level...
+        </div>
+
+        <div id="catalogo" class="catalogo"></div>
+
         <button
-            id="botonCompra"
-            onclick="continuarPedido()"
+            id="botonContinuar"
+            class="boton continuar"
+            type="button"
+            disabled
         >
-            Continuar
+            Compras temporalmente desactivadas
         </button>
 
         <div class="separador-ofertas">
             <button
-                class="boton-ofertas"
+                class="boton boton-ofertas"
                 type="button"
                 onclick="abrirOfertas()"
             >
-                🎁 Ofertas Especiales
+                🎁 Ofertas especiales
             </button>
         </div>
 
-        <p id="mensaje" class="cargando"></p>
+        <p class="nota">
+            Los paquetes se consultan desde Next Level.
+            Las compras se habilitarán cuando se configuren
+            los precios y se complete la integración del sistema de pedidos.
+        </p>
 
-    </div>
+    </main>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
+"use strict";
+
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -231,291 +342,267 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY,
-        {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
-        }
-    );
+const URL_CATALOGO =
+    SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
+const catalogo = document.getElementById("catalogo");
+const estadoCatalogo = document.getElementById("estadoCatalogo");
+
+let productoSeleccionado = null;
+let productosDisponibles = [];
+
+/*
+    Solo permitimos los siete productos nuevos
+    identificados en el catálogo de Next Level.
+*/
+
+const PRODUCTOS_PERMITIDOS = [
+    "fz-genshin_impact_global-60_genesis_crystals",
+    "fz-genshin_impact_global-300_30_genesis_crystals",
+    "fz-genshin_impact_global-blessing_of_the_welkin_moon",
+    "fz-genshin_impact_global-980_110_genesis_crystals",
+    "fz-genshin_impact_global-1980_260_genesis_crystals",
+    "fz-genshin_impact_global-3280_600_genesis_crystals",
+    "fz-genshin_impact_global-6480_1600_genesis_crystals"
+];
+
+/* =====================================================
+   NAVEGACIÓN
+===================================================== */
 
 function abrirOfertas() {
-
-    window.location.href =
-        "ofertas-genshin.html";
+    window.location.href = "ofertas-genshin.html";
 }
 
+/* =====================================================
+   MENSAJES
+===================================================== */
 
-async function cargarProductos() {
-
-    const select =
-        document.getElementById("cantidad");
-
-    const mensaje =
-        document.getElementById("mensaje");
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("game_products")
-            .select(
-                "id, game, product_name, game_currency_amount, price_gvr, active"
-            )
-            .eq("game", "Genshin Impact")
-            .eq("active", true)
-            .order("game_currency_amount", {
-                ascending: true
-            });
-
-
-    if (error) {
-
-        console.error(
-            "ERROR PRODUCTOS GENSHIN:",
-            error
-        );
-
-        select.innerHTML =
-            '<option value="">No se pudieron cargar las recargas</option>';
-
-        mensaje.textContent =
-            "Error al cargar los productos.";
-
-        return;
-    }
-
-
-    if (!data || data.length === 0) {
-
-        select.innerHTML =
-            '<option value="">No hay recargas disponibles</option>';
-
-        return;
-    }
-
-
-    select.innerHTML =
-        '<option value="">Selecciona una recarga</option>';
-
-
-    data.forEach(producto => {
-
-        const option =
-            document.createElement("option");
-
-        option.value =
-            producto.product_name;
-
-        option.textContent =
-            producto.product_name +
-            " — " +
-            producto.price_gvr +
-            " GVR";
-
-        select.appendChild(option);
-
-    });
+function mostrarEstado(mensaje, esError = false) {
+    estadoCatalogo.textContent = mensaje;
+    estadoCatalogo.classList.toggle("error", esError);
 }
 
+/* =====================================================
+   EXTRAER PRODUCTOS
+===================================================== */
 
-async function continuarPedido() {
-
-    const boton =
-        document.getElementById("botonCompra");
-
-    const idJugador =
-        document
-            .getElementById("idJugador")
-            .value
-            .trim();
-
-    const cantidad =
-        document
-            .getElementById("cantidad")
-            .value;
-
-
-    if (!idJugador) {
-
-        alert(
-            "Escribe el ID de tu jugador."
-        );
-
-        return;
+function extraerProductos(respuesta) {
+    if (Array.isArray(respuesta)) {
+        return respuesta;
     }
 
-
-    if (!cantidad) {
-
-        alert(
-            "Selecciona una recarga."
-        );
-
-        return;
+    if (!respuesta || typeof respuesta !== "object") {
+        return [];
     }
 
+    if (Array.isArray(respuesta.productos)) {
+        return respuesta.productos;
+    }
 
-    boton.disabled = true;
+    if (Array.isArray(respuesta.products)) {
+        return respuesta.products;
+    }
 
-    boton.textContent =
-        "Procesando compra...";
+    if (Array.isArray(respuesta.data)) {
+        return respuesta.data;
+    }
 
+    if (
+        respuesta.data &&
+        Array.isArray(respuesta.data.products)
+    ) {
+        return respuesta.data.products;
+    }
+
+    return [];
+}
+
+/* =====================================================
+   IDENTIFICAR PRODUCTOS
+===================================================== */
+
+function obtenerProductId(producto) {
+    return String(
+        producto.productId ||
+        producto.product_id ||
+        producto.id ||
+        ""
+    ).trim();
+}
+
+function obtenerNombre(producto) {
+    return String(
+        producto.name ||
+        producto.productName ||
+        producto.product_name ||
+        producto.title ||
+        obtenerProductId(producto)
+    ).trim();
+}
+
+/* =====================================================
+   CARGAR CATÁLOGO DE NEXT LEVEL
+===================================================== */
+
+async function cargarCatalogo() {
+    productoSeleccionado = null;
+    productosDisponibles = [];
+
+    catalogo.replaceChildren();
+
+    mostrarEstado("Conectando con el catálogo de Next Level...");
 
     try {
-
-        const {
-            data: {
-                session
+        const respuesta = await fetch(
+            URL_CATALOGO + "?game=genshin-impact",
+            {
+                method: "GET",
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": "Bearer " + SUPABASE_KEY,
+                    "Accept": "application/json"
+                },
+                cache: "no-store"
             }
-        } =
-            await supabaseClient
-                .auth
-                .getSession();
-
-
-        if (!session) {
-
-            alert(
-                "Debes iniciar sesión primero."
-            );
-
-            window.location.href =
-                "login.html";
-
-            return;
-        }
-
-
-        const {
-            data: producto,
-            error: productoError
-        } =
-            await supabaseClient
-                .from("game_products")
-                .select(
-                    "id, game, product_name, game_currency_amount, price_gvr, active"
-                )
-                .eq("game", "Genshin Impact")
-                .eq("product_name", cantidad)
-                .eq("active", true)
-                .maybeSingle();
-
-
-        if (productoError) {
-
-            console.error(
-                "ERROR BUSCANDO PRODUCTO GENSHIN:",
-                productoError
-            );
-
-            alert(
-                "No se pudo comprobar el producto."
-            );
-
-            return;
-        }
-
-
-        if (!producto) {
-
-            alert(
-                "Producto no disponible."
-            );
-
-            return;
-        }
-
-
-        const {
-            data: pedido,
-            error: compraError
-        } =
-            await supabaseClient.rpc(
-                "purchase_game_product",
-                {
-                    p_product_id: producto.id,
-                    p_player_id: idJugador
-                }
-            );
-
-
-        if (compraError) {
-
-            console.error(
-                "ERROR COMPRA GENSHIN:",
-                compraError
-            );
-
-            const mensajeError =
-                compraError.message || "";
-
-            if (
-                mensajeError
-                    .toLowerCase()
-                    .includes("saldo gvr insuficiente")
-            ) {
-
-                alert(
-                    "Saldo GVR insuficiente."
-                );
-
-            } else {
-
-                alert(
-                    mensajeError ||
-                    "No se pudo realizar la compra."
-                );
-            }
-
-            return;
-        }
-
-
-        alert(
-            "¡Compra realizada correctamente!\n\n" +
-            "Pedido: " +
-            pedido
         );
 
+        let resultado;
 
-        window.location.href =
-            "cuenta.html";
+        try {
+            resultado = await respuesta.json();
+        } catch {
+            throw new Error(
+                "El catálogo devolvió una respuesta no válida."
+            );
+        }
 
+        console.log(
+            "CATÁLOGO GENSHIN IMPACT:",
+            resultado
+        );
+
+        if (!respuesta.ok) {
+            throw new Error(
+                resultado.error ||
+                resultado.message ||
+                "Error HTTP " + respuesta.status
+            );
+        }
+
+        const productos = extraerProductos(resultado);
+
+        if (productos.length === 0) {
+            throw new Error(
+                "Next Level no devolvió productos para Genshin Impact."
+            );
+        }
+
+        /*
+            Filtrar exclusivamente los siete productos permitidos
+            y que el proveedor marque como disponibles.
+        */
+
+        const mapaProductos = new Map();
+
+        productos.forEach(producto => {
+            if (!producto || producto.available !== true) {
+                return;
+            }
+
+            const id = obtenerProductId(producto);
+
+            if (!PRODUCTOS_PERMITIDOS.includes(id)) {
+                return;
+            }
+
+            mapaProductos.set(id, producto);
+        });
+
+        /*
+            Mantener siempre el orden establecido.
+        */
+
+        productosDisponibles = PRODUCTOS_PERMITIDOS
+            .filter(id => mapaProductos.has(id))
+            .map(id => mapaProductos.get(id));
+
+        console.log(
+            "PRODUCTOS GENSHIN DISPONIBLES:",
+            productosDisponibles.map(producto => ({
+                id: obtenerProductId(producto),
+                nombre: obtenerNombre(producto)
+            }))
+        );
+
+        if (productosDisponibles.length === 0) {
+            mostrarEstado(
+                "No se encontraron productos disponibles en Next Level.",
+                true
+            );
+            return;
+        }
+
+        productosDisponibles.forEach(producto => {
+            const tarjeta = document.createElement("button");
+
+            tarjeta.type = "button";
+            tarjeta.className = "producto";
+
+            const nombre = document.createElement("div");
+            nombre.className = "producto-nombre";
+            nombre.textContent = obtenerNombre(producto);
+
+            const estado = document.createElement("div");
+            estado.className = "producto-estado";
+            estado.textContent = "Seleccionar paquete";
+
+            tarjeta.append(nombre, estado);
+
+            tarjeta.addEventListener("click", () => {
+                document.querySelectorAll(".producto").forEach(elemento => {
+                    elemento.classList.remove("seleccionado");
+                });
+
+                tarjeta.classList.add("seleccionado");
+                productoSeleccionado = producto;
+
+                console.log(
+                    "PRODUCTO SELECCIONADO:",
+                    obtenerProductId(productoSeleccionado)
+                );
+            });
+
+            catalogo.appendChild(tarjeta);
+        });
+
+        mostrarEstado(
+            productosDisponibles.length +
+            " paquetes disponibles."
+        );
 
     } catch (error) {
-
         console.error(
-            "ERROR GENERAL GENSHIN:",
+            "ERROR CARGANDO GENSHIN IMPACT:",
             error
         );
 
-        alert(
-            error.message ||
-            "Ocurrió un error al realizar la compra."
+        catalogo.replaceChildren();
+
+        mostrarEstado(
+            "No se pudo cargar el catálogo de Next Level. " +
+            error.message,
+            true
         );
-
-
-    } finally {
-
-        boton.disabled = false;
-
-        boton.textContent =
-            "Continuar";
     }
 }
 
+/* =====================================================
+   INICIALIZAR
+===================================================== */
 
-cargarProductos();
-
+cargarCatalogo();
 </script>
 
 </body>
-    </html>
+        </html>
