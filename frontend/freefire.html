@@ -24,14 +24,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
             padding: 18px;
             border-bottom: 1px solid #12385f;
             background: #071225;
         }
 
         .logo {
-            font-size: 19px;
+            font-size: 22px;
             font-weight: 900;
         }
 
@@ -47,12 +46,11 @@
             padding: 9px 13px;
             border-radius: 9px;
             font-size: 13px;
-            white-space: nowrap;
         }
 
         .contenedor {
             width: 100%;
-            max-width: 550px;
+            max-width: 500px;
             margin: auto;
             padding: 25px 18px;
         }
@@ -81,8 +79,8 @@
             text-align: center;
             color: #8fa5bd;
             font-size: 14px;
-            line-height: 1.5;
             margin-bottom: 25px;
+            line-height: 1.5;
         }
 
         label {
@@ -111,6 +109,10 @@
             box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
         }
 
+        select:disabled {
+            opacity: 0.75;
+        }
+
         .recargar {
             width: 100%;
             padding: 14px;
@@ -126,22 +128,6 @@
         .recargar:disabled {
             opacity: 0.55;
             cursor: not-allowed;
-        }
-
-        .estado-catalogo {
-            padding: 13px;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            background: #061226;
-            color: #9eb7d2;
-            font-size: 13px;
-            line-height: 1.5;
-            margin: 15px 0;
-        }
-
-        .estado-catalogo.error {
-            border-color: #8a3544;
-            color: #ffb5c0;
         }
 
         .separador-ofertas {
@@ -161,6 +147,12 @@
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
+            transition: 0.2s;
+        }
+
+        .boton-ofertas:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
         }
     </style>
 </head>
@@ -168,11 +160,15 @@
 <body>
 
 <header>
+
     <div class="logo">
         <span class="rayo">⚡</span> Gamers Gold Top-Up
     </div>
 
-    <a href="juegos.html" class="inicio">← Juegos</a>
+    <a href="juegos.html" class="inicio">
+        ← Juegos
+    </a>
+
 </header>
 
 <main class="contenedor">
@@ -184,11 +180,12 @@
         <h1>Free Fire</h1>
 
         <p class="descripcion">
-            Consulta los paquetes de diamantes disponibles
-            y recarga tu cuenta.
+            Recarga tu cuenta de Free Fire de forma rápida y sencilla.
         </p>
 
-        <label for="id">ID del jugador</label>
+        <label for="id">
+            ID del jugador
+        </label>
 
         <input
             type="text"
@@ -197,7 +194,9 @@
             autocomplete="off"
         >
 
-        <label for="cantidad">Selecciona una cantidad</label>
+        <label for="cantidad">
+            Selecciona una cantidad
+        </label>
 
         <select id="cantidad" disabled>
             <option value="">Cargando paquetes...</option>
@@ -214,6 +213,7 @@
         </button>
 
         <div class="separador-ofertas">
+
             <button
                 class="boton-ofertas"
                 type="button"
@@ -221,6 +221,7 @@
             >
                 🎁 Ofertas Especiales
             </button>
+
         </div>
 
     </section>
@@ -246,17 +247,16 @@ const URL_CATALOGO =
 
 const selectCantidad = document.getElementById("cantidad");
 const botonRecargar = document.getElementById("botonRecargar");
-const estadoCatalogo = document.createElement("div");
 
 let catalogoCargado = false;
 
-/* OFERTAS ESPECIALES */
+/* ABRIR OFERTAS ESPECIALES */
 
 function abrirOfertas() {
     window.location.href = "ofertas-free-fire.html";
 }
 
-/* LEER PRODUCTOS DE DISTINTOS FORMATOS */
+/* EXTRAER PRODUCTOS DE LA RESPUESTA */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) {
@@ -279,7 +279,10 @@ function extraerProductos(respuesta) {
         return respuesta.data;
     }
 
-    if (respuesta.data && Array.isArray(respuesta.data.products)) {
+    if (
+        respuesta.data &&
+        Array.isArray(respuesta.data.products)
+    ) {
         return respuesta.data.products;
     }
 
@@ -294,7 +297,7 @@ function extraerProductos(respuesta) {
     return [];
 }
 
-/* IDENTIFICAR LOS DIAMANTES POR SU ID O NOMBRE */
+/* IDENTIFICAR PAQUETES DE DIAMANTES */
 
 function identificarDiamantes(producto) {
     const identificador = String(
@@ -314,6 +317,7 @@ function identificarDiamantes(producto) {
 
     const texto = identificador + " " + nombre;
 
+    // Excluir membresías y Booyah Pass.
     if (
         texto.includes("weekly_membership") ||
         texto.includes("monthly_membership") ||
@@ -326,36 +330,63 @@ function identificarDiamantes(producto) {
         return null;
     }
 
-    const paquetes = [
+    /*
+     * Los IDs conocidos de Next Level incluyen:
+     * 110, 341, 572, 1166 y 2398.
+     *
+     * Esos IDs corresponden a paquetes que se muestran
+     * comercialmente como 110, 310, 520, 1060 y 2180.
+     */
+    const paquetesConocidos = [
         {
-            buscar: ["110_diamonds", "110 diamonds", "110 diamantes"],
+            id: "fz-free_fire_latam-110_diamonds",
             nombre: "110 diamantes",
             cantidad: 110
         },
         {
-            buscar: ["341_diamonds", "341 diamonds", "310 diamantes"],
+            id: "fz-free_fire_latam-341_diamonds",
             nombre: "310 diamantes",
             cantidad: 310
         },
         {
-            buscar: ["572_diamonds", "572 diamonds", "520 diamantes"],
+            id: "fz-free_fire_latam-572_diamonds",
             nombre: "520 diamantes",
             cantidad: 520
         },
         {
-            buscar: ["1166_diamonds", "1166 diamonds", "1060 diamantes"],
+            id: "fz-free_fire_latam-1166_diamonds",
             nombre: "1060 diamantes",
             cantidad: 1060
         },
         {
-            buscar: ["2398_diamonds", "2398 diamonds", "2180 diamantes"],
+            id: "fz-free_fire_latam-2398_diamonds",
             nombre: "2180 diamantes",
             cantidad: 2180
         }
     ];
 
-    for (const paquete of paquetes) {
-        if (paquete.buscar.some(valor => texto.includes(valor))) {
+    const coincidenciaId = paquetesConocidos.find(
+        paquete => identificador === paquete.id.toLowerCase()
+    );
+
+    if (coincidenciaId) {
+        return coincidenciaId;
+    }
+
+    /*
+     * Como alternativa, reconocer el nombre comercial
+     * si el proveedor no entrega uno de los IDs conocidos.
+     */
+    const coincidenciasNombre = [
+        { patron: /\b110\s*diamonds?\b|\b110\s*diamantes\b/, nombre: "110 diamantes", cantidad: 110 },
+        { patron: /\b310\s*diamonds?\b|\b310\s*diamantes\b/, nombre: "310 diamantes", cantidad: 310 },
+        { patron: /\b520\s*diamonds?\b|\b520\s*diamantes\b/, nombre: "520 diamantes", cantidad: 520 },
+        { patron: /\b1060\s*diamonds?\b|\b1060\s*diamantes\b/, nombre: "1060 diamantes", cantidad: 1060 },
+        { patron: /\b2180\s*diamonds?\b|\b2180\s*diamantes\b/, nombre: "2180 diamantes", cantidad: 2180 }
+    ];
+
+    for (const paquete of coincidenciasNombre) {
+        if (paquete.patron.test(nombre)) {
             return paquete;
         }
     }
@@ -363,11 +394,12 @@ function identificarDiamantes(producto) {
     return null;
 }
 
-/* CONSULTAR CATÁLOGO NEXT LEVEL */
+/* CARGAR EL CATÁLOGO REAL DE NEXT LEVEL */
 
 async function cargarCatalogoDiamantes() {
-    botonRecargar.disabled = true;
+    catalogoCargado = false;
     selectCantidad.disabled = true;
+    botonRecargar.disabled = true;
 
     selectCantidad.innerHTML =
         '<option value="">Cargando paquetes...</option>';
@@ -381,7 +413,8 @@ async function cargarCatalogoDiamantes() {
                     "apikey": SUPABASE_KEY,
                     "Authorization": "Bearer " + SUPABASE_KEY,
                     "Accept": "application/json"
-                }
+                },
+                cache: "no-store"
             }
         );
 
@@ -399,22 +432,19 @@ async function cargarCatalogoDiamantes() {
 
         const productos = extraerProductos(resultado);
 
-        console.log(
-            "PRODUCTOS RECIBIDOS:",
-            JSON.stringify(productos, null, 2)
-        );
+        console.log("PRODUCTOS RECIBIDOS:", productos);
 
         if (productos.length === 0) {
             throw new Error(
-                "El catálogo no devolvió una lista de productos."
+                "La respuesta no contiene productos reconocibles."
             );
         }
 
         const encontrados = new Map();
 
-        productos.forEach(producto => {
+        for (const producto of productos) {
             if (!producto || producto.available === false) {
-                return;
+                continue;
             }
 
             const paquete = identificarDiamantes(producto);
@@ -422,38 +452,45 @@ async function cargarCatalogoDiamantes() {
             if (paquete && !encontrados.has(paquete.cantidad)) {
                 encontrados.set(paquete.cantidad, paquete);
             }
-        });
+        }
 
-        const ordenados = Array.from(encontrados.values())
+        const paquetes = Array.from(encontrados.values())
             .sort((a, b) => a.cantidad - b.cantidad);
 
-        selectCantidad.innerHTML =
-            '<option value="">Selecciona una cantidad</option>';
+        // Vaciar el selector para eliminar las opciones antiguas.
+        selectCantidad.innerHTML = "";
 
-        ordenados.forEach(paquete => {
+        const opcionInicial = document.createElement("option");
+        opcionInicial.value = "";
+        opcionInicial.textContent = "Selecciona una cantidad";
+        selectCantidad.appendChild(opcionInicial);
+
+        // Añadir exclusivamente los paquetes reconocidos del catálogo.
+        for (const paquete of paquetes) {
             const opcion = document.createElement("option");
-
             opcion.value = paquete.nombre;
             opcion.textContent = paquete.nombre;
-
             selectCantidad.appendChild(opcion);
-        });
+        }
 
-        catalogoCargado = encontrados.has(110);
-
-        if (ordenados.length === 0) {
+        if (paquetes.length === 0) {
             selectCantidad.innerHTML =
-                '<option value="">No hay paquetes disponibles</option>';
+                '<option value="">No se encontraron paquetes</option>';
 
             throw new Error(
-                "No se reconocieron paquetes de diamantes en la respuesta."
+                "Next Level respondió, pero los IDs o nombres de sus productos " +
+                "no coinciden con los paquetes reconocidos. Revisa la consola."
             );
         }
+
+        catalogoCargado = paquetes.some(
+            paquete => paquete.cantidad === 110
+        );
 
         selectCantidad.disabled = false;
         botonRecargar.disabled = false;
 
-        console.log("PAQUETES MOSTRADOS:", ordenados);
+        console.log("PAQUETES MOSTRADOS:", paquetes);
 
     } catch (error) {
         console.error("ERROR CARGANDO CATÁLOGO:", error);
@@ -461,7 +498,7 @@ async function cargarCatalogoDiamantes() {
         catalogoCargado = false;
 
         selectCantidad.innerHTML =
-            '<option value="">No se pudieron cargar los paquetes</option>';
+            '<option value="">Error cargando paquetes</option>';
 
         selectCantidad.disabled = true;
         botonRecargar.disabled = true;
@@ -476,12 +513,12 @@ async function continuarRecarga() {
 
     const cantidad = selectCantidad.value;
 
-    if (!idJugador) {
+    if (idJugador === "") {
         alert("Escribe tu ID de Free Fire.");
         return;
     }
 
-    if (!cantidad) {
+    if (cantidad === "") {
         alert("Selecciona una cantidad.");
         return;
     }
@@ -491,10 +528,11 @@ async function continuarRecarga() {
         return;
     }
 
+    // No habilitar la compra de los otros paquetes todavía.
     if (cantidad !== "110 diamantes") {
         alert(
             "Este paquete todavía no tiene la compra habilitada. " +
-            "Podrás comprarlo cuando configuremos su producto y precio en GVR."
+            "La activaremos cuando configuremos su producto y precio en GVR."
         );
         return;
     }
@@ -525,7 +563,7 @@ async function continuarRecarga() {
 
     if (productoError) {
         alert(
-            "Error buscando el producto:\n\n" +
+            "Error buscando producto:\n\n" +
             productoError.message
         );
         return;
@@ -571,6 +609,8 @@ async function continuarRecarga() {
 
     window.location.href = "cuenta.html";
 }
+
+/* INICIAR CARGA DEL CATÁLOGO */
 
 document.addEventListener(
     "DOMContentLoaded",
