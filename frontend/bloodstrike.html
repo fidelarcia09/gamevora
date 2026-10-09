@@ -1,242 +1,308 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Recargas de Blood Strike en Gamers Gold Top-Up."><title>Blood Strike | Gamers Gold Top-Up</title>
+    <meta name="description" content="Recargas de BC de Blood Strike en Gamers Gold Top-Up.">
 
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
+    <title>Blood Strike | Gamers Gold Top-Up</title>
 
-    body {
-        background: #050b18;
-        color: white;
-        min-height: 100vh;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        padding: 18px;
-        border-bottom: 1px solid #12385f;
-        background: #071225;
-    }
+        body {
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    .logo {
-        font-size: 22px;
-        font-weight: 900;
-    }
+        .contenedor {
+            max-width: 650px;
+            margin: auto;
+        }
 
-    .logo .rayo {
-        color: #00b7ff;
-        text-shadow: 0 0 12px #008cff;
-    }
-
-    .inicio {
-        text-decoration: none;
-        color: white;
-        border: 1px solid #168cff;
-        padding: 9px 13px;
-        border-radius: 9px;
-        font-size: 13px;
-        white-space: nowrap;
-    }
-
-    .contenedor {
-        width: 100%;
-        max-width: 500px;
-        margin: auto;
-        padding: 25px 18px;
-    }
-
-    .juego {
-        background: #091a35;
-        border: 1px solid #15518c;
-        border-radius: 20px;
-        padding: 25px 20px;
-        box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
-    }
-
-    .icono {
-        text-align: center;
-        font-size: 55px;
-        margin-bottom: 10px;
-    }
-
-    h1 {
-        text-align: center;
-        font-size: 28px;
-        margin-bottom: 8px;
-    }
-
-    .descripcion {
-        text-align: center;
-        color: #8fa5bd;
-        font-size: 14px;
-        margin-bottom: 25px;
-        line-height: 1.5;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 7px;
-        color: #b8c9dc;
-        font-size: 13px;
-    }
-
-    input,
-    select {
-        width: 100%;
-        padding: 13px;
-        margin-bottom: 18px;
-        background: #061226;
-        color: white;
-        border: 1px solid #204c78;
-        border-radius: 10px;
-        outline: none;
-        font-size: 15px;
-    }
-
-    input:focus,
-    select:focus {
-        border-color: #159dff;
-        box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-    }
-
-    select:disabled {
-        opacity: 0.75;
-    }
-
-    .recargar {
-        width: 100%;
-        padding: 14px;
-        border: none;
-        border-radius: 10px;
-        background: linear-gradient(90deg, #087cff, #00baff);
-        color: white;
-        font-size: 15px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .recargar:disabled {
-        opacity: 0.55;
-        cursor: not-allowed;
-    }
-
-    .separador-ofertas {
-        margin-top: 30px;
-        padding-top: 25px;
-        border-top: 1px solid #12385f;
-    }
-
-    .boton-ofertas {
-        width: 100%;
-        padding: 14px;
-        border: 1px solid #168cff;
-        border-radius: 10px;
-        background: linear-gradient(90deg, #061b3a, #0a2d5c);
-        color: #00baff;
-        font-size: 15px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
-        transition: 0.2s;
-    }
-
-    .boton-ofertas:hover {
-        transform: scale(1.02);
-        box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
-    }
-
-    .estado-catalogo {
-        color: #8fa5bd;
-        font-size: 12px;
-        line-height: 1.5;
-        margin-top: -8px;
-        margin-bottom: 16px;
-    }
-
-    @media (max-width: 380px) {
-        header {
-            padding: 14px 10px;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .logo {
-            font-size: 17px;
+            font-size: 21px;
+            font-weight: 900;
         }
 
-        .inicio {
-            padding: 8px;
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        }
+
+        .icono {
+            text-align: center;
+            font-size: 52px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .etiqueta {
+            display: block;
+            margin: 18px 0 10px;
+            color: #b8c9dc;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
+
+        .estado {
+            padding: 13px;
+            margin: 18px 0;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            background: #061226;
+            color: #a9c4df;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .estado.error {
+            color: #ffaaaa;
+            border-color: #843d4b;
+        }
+
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .producto {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+            min-height: 110px;
+            padding: 15px 12px;
+            background: #061226;
+            color: white;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            text-align: left;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .producto:hover {
+            border-color: #168cff;
+        }
+
+        .producto.seleccionado {
+            border-color: #00baff;
+            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+        }
+
+        .producto-nombre {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .producto-estado {
+            color: #45c8ff;
             font-size: 12px;
+            font-weight: bold;
         }
-    }
-</style>
 
-</head><body><header>
-    <div class="logo">
-        <span class="rayo">⚡</span> Gamers Gold Top-Up
-    </div><a href="juegos.html" class="inicio">← Juegos</a>
+        .separador-ofertas {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #164b8f;
+        }
 
-</header><main class="contenedor">
-    <section class="juego">    <div class="icono">🔥</div>
+        .boton {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+        }
 
-    <h1>Blood Strike</h1>
+        .continuar {
+            margin-top: 18px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
 
-    <p class="descripcion">
-        Recarga tus BC de Blood Strike de forma rápida y sencilla.
-    </p>
+        .boton-ofertas {
+            background: #07152b;
+            color: #28a9ff;
+            border: 1px solid #168cff;
+            cursor: pointer;
+        }
 
-    <label for="idjugador">ID del jugador</label>
+        .nota {
+            margin-top: 20px;
+            text-align: center;
+            color: #8299b4;
+            font-size: 11px;
+            line-height: 1.6;
+        }
 
-    <input
-        type="text"
-        id="idjugador"
-        placeholder="Escribe tu ID de Blood Strike"
-        autocomplete="off"
-    >
+        @media (max-width: 380px) {
+            body {
+                padding: 12px;
+            }
 
-    <label for="cantidad">Selecciona una cantidad</label>
+            .card {
+                padding: 22px 14px;
+            }
 
-    <select id="cantidad" disabled>
-        <option value="">Cargando paquetes de BC...</option>
-    </select>
+            .catalogo {
+                grid-template-columns: 1fr;
+            }
 
-    <p class="estado-catalogo" id="estadoCatalogo" aria-live="polite">
-        Conectando con el catálogo...
-    </p>
+            .logo {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
 
-    <button
-        class="recargar"
-        id="botonRecargar"
-        type="button"
-        onclick="continuarRecarga()"
-        disabled
-    >
-        Continuar ⚡
-    </button>
+<body>
+<div class="contenedor">
 
-    <div class="separador-ofertas">
-        <button
-            class="boton-ofertas"
-            type="button"
-            onclick="abrirOfertas()"
+    <header class="header">
+        <div class="logo">
+            <span class="rayo">⚡</span> Gamers Gold Top-Up
+        </div>
+
+        <a href="juegos.html" class="volver">← Juegos</a>
+    </header>
+
+    <main class="card">
+
+        <div class="icono">🔥</div>
+
+        <h1>Blood Strike</h1>
+
+        <p class="descripcion">
+            Selecciona tu paquete de BC de Blood Strike.
+        </p>
+
+        <label class="etiqueta" for="idjugador">
+            ID del jugador
+        </label>
+
+        <input
+            type="text"
+            id="idjugador"
+            placeholder="Introduce tu ID de Blood Strike"
+            autocomplete="off"
         >
-            🎁 Ofertas Especiales
+
+        <label class="etiqueta">
+            Selecciona una cantidad de BC
+        </label>
+
+        <div id="estadoCatalogo" class="estado" aria-live="polite">
+            Conectando con el catálogo...
+        </div>
+
+        <div id="catalogo" class="catalogo"></div>
+
+        <button
+            id="botonContinuar"
+            class="boton continuar"
+            type="button"
+            disabled
+        >
+            Compras temporalmente desactivadas
         </button>
-    </div>
 
-</section>
+        <div class="separador-ofertas">
+            <button
+                class="boton boton-ofertas"
+                type="button"
+                onclick="abrirOfertas()"
+            >
+                🎁 Ofertas especiales
+            </button>
+        </div>
 
-</main><script>
+        <p class="nota">
+            Consulta los paquetes de BC disponibles de Blood Strike.
+            Las compras se habilitarán cuando se configuren
+            los precios de venta y el sistema de pedidos.
+        </p>
+
+    </main>
+</div>
+
+<script>
 "use strict";
+
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -247,25 +313,34 @@ const SUPABASE_KEY =
 const URL_CATALOGO =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
-const selectCantidad =
-    document.getElementById("cantidad");
-
-const botonRecargar =
-    document.getElementById("botonRecargar");
+const catalogo = document.getElementById("catalogo");
 
 const estadoCatalogo =
     document.getElementById("estadoCatalogo");
 
-let catalogoCargado = false;
+let productoSeleccionado = null;
 let productosDisponibles = [];
 
-/* ABRIR OFERTAS ESPECIALES */
+/* =====================================================
+   NAVEGACIÓN
+===================================================== */
 
 function abrirOfertas() {
     window.location.href = "ofertas-bloodstrike.html";
 }
 
-/* EXTRAER PRODUCTOS DE LA RESPUESTA */
+/* =====================================================
+   ESTADO DEL CATÁLOGO
+===================================================== */
+
+function mostrarEstado(mensaje, esError = false) {
+    estadoCatalogo.textContent = mensaje;
+    estadoCatalogo.classList.toggle("error", esError);
+}
+
+/* =====================================================
+   EXTRAER PRODUCTOS
+===================================================== */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) {
@@ -298,7 +373,9 @@ function extraerProductos(respuesta) {
     return [];
 }
 
-/* OBTENER IDENTIFICADOR */
+/* =====================================================
+   IDENTIFICAR PRODUCTOS
+===================================================== */
 
 function obtenerProductId(producto) {
     return String(
@@ -309,19 +386,20 @@ function obtenerProductId(producto) {
     ).trim();
 }
 
-/* OBTENER NOMBRE */
-
 function obtenerNombre(producto) {
     return String(
         producto.name ||
         producto.productName ||
         producto.product_name ||
         producto.title ||
-        obtenerProductId(producto)
+        obtenerProductId(producto) ||
+        "Paquete de Blood Strike"
     ).trim();
 }
 
-/* IDENTIFICAR PAQUETES NORMALES DE BC */
+/* =====================================================
+   IDENTIFICAR PAQUETES NORMALES DE BC
+===================================================== */
 
 function esPaqueteBC(producto) {
     const id = obtenerProductId(producto).toLowerCase();
@@ -342,20 +420,17 @@ function esPaqueteBC(producto) {
     return esBC && !esOfertaEspecial;
 }
 
-/* CARGAR CATÁLOGO */
+/* =====================================================
+   CARGAR CATÁLOGO DE NEXT LEVEL
+===================================================== */
 
 async function cargarCatalogo() {
-    catalogoCargado = false;
+    productoSeleccionado = null;
     productosDisponibles = [];
 
-    selectCantidad.disabled = true;
-    botonRecargar.disabled = true;
+    catalogo.replaceChildren();
 
-    selectCantidad.innerHTML =
-        '<option value="">Cargando paquetes de BC...</option>';
-
-    estadoCatalogo.textContent =
-        "Conectando con el catálogo...";
+    mostrarEstado("Conectando con el catálogo...");
 
     try {
         const respuesta = await fetch(
@@ -382,7 +457,7 @@ async function cargarCatalogo() {
         }
 
         console.log(
-            "RESPUESTA NEXT LEVEL BLOOD STRIKE:",
+            "CATÁLOGO BLOOD STRIKE:",
             resultado
         );
 
@@ -398,9 +473,14 @@ async function cargarCatalogo() {
 
         if (productos.length === 0) {
             throw new Error(
-                "El catálogo no devolvió productos."
+                "Next Level no devolvió productos para Blood Strike."
             );
         }
+
+        /*
+         * Mostrar solamente productos disponibles
+         * que correspondan a paquetes normales de BC.
+         */
 
         productosDisponibles = productos.filter(producto =>
             producto &&
@@ -409,53 +489,58 @@ async function cargarCatalogo() {
             esPaqueteBC(producto)
         );
 
-        selectCantidad.innerHTML = "";
-
-        const opcionInicial =
-            document.createElement("option");
-
-        opcionInicial.value = "";
-        opcionInicial.textContent =
-            "Selecciona una cantidad";
-
-        selectCantidad.appendChild(opcionInicial);
-
-        productosDisponibles.forEach(producto => {
-            const opcion =
-                document.createElement("option");
-
-            opcion.value = obtenerProductId(producto);
-            opcion.textContent = obtenerNombre(producto);
-
-            selectCantidad.appendChild(opcion);
-        });
-
         if (productosDisponibles.length === 0) {
-            selectCantidad.innerHTML =
-                '<option value="">No hay paquetes disponibles</option>';
-
-            estadoCatalogo.textContent =
-                "No se encontraron paquetes de BC disponibles.";
-
+            mostrarEstado(
+                "No se encontraron paquetes normales de BC disponibles.",
+                true
+            );
             return;
         }
 
-        catalogoCargado = true;
-        selectCantidad.disabled = false;
-
         /*
-         * Las compras siguen deshabilitadas mientras
-         * terminamos de configurar precios y pedidos.
+         * Crear una tarjeta por cada producto.
          */
 
-        botonRecargar.disabled = true;
+        productosDisponibles.forEach(producto => {
+            const tarjeta = document.createElement("button");
 
-        estadoCatalogo.textContent =
+            tarjeta.type = "button";
+            tarjeta.className = "producto";
+
+            const nombre = document.createElement("div");
+            nombre.className = "producto-nombre";
+            nombre.textContent = obtenerNombre(producto);
+
+            const etiqueta = document.createElement("div");
+            etiqueta.className = "producto-estado";
+            etiqueta.textContent = "Seleccionar paquete";
+
+            tarjeta.append(nombre, etiqueta);
+
+            tarjeta.addEventListener("click", () => {
+                document.querySelectorAll(".producto").forEach(elemento => {
+                    elemento.classList.remove("seleccionado");
+                });
+
+                tarjeta.classList.add("seleccionado");
+                productoSeleccionado = producto;
+
+                console.log(
+                    "PRODUCTO SELECCIONADO:",
+                    obtenerProductId(productoSeleccionado)
+                );
+            });
+
+            catalogo.appendChild(tarjeta);
+        });
+
+        mostrarEstado(
             productosDisponibles.length +
-            " paquetes de BC disponibles. Precios pendientes de configurar.";
+            " paquetes de BC disponibles."
+        );
 
         console.log(
-            "PAQUETES BC MOSTRADOS:",
+            "PAQUETES MOSTRADOS:",
             productosDisponibles.map(producto => ({
                 id: obtenerProductId(producto),
                 nombre: obtenerNombre(producto)
@@ -468,34 +553,21 @@ async function cargarCatalogo() {
             error
         );
 
-        catalogoCargado = false;
-        productosDisponibles = [];
+        catalogo.replaceChildren();
 
-        selectCantidad.innerHTML =
-            '<option value="">Error cargando paquetes</option>';
-
-        selectCantidad.disabled = true;
-        botonRecargar.disabled = true;
-
-        estadoCatalogo.textContent =
-            "No se pudo cargar el catálogo. Intenta recargar la página.";
+        mostrarEstado(
+            "No se pudo cargar el catálogo. " + error.message,
+            true
+        );
     }
 }
 
-/* COMPRAS DESHABILITADAS TEMPORALMENTE */
+/* =====================================================
+   INICIALIZAR
+===================================================== */
 
-function continuarRecarga() {
-    alert(
-        "Las compras de Blood Strike todavía están deshabilitadas. " +
-        "Estamos preparando los precios y la conexión de pedidos."
-    );
-}
+cargarCatalogo();
+</script>
 
-/* INICIAR */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    cargarCatalogo
-);
-</script></body>
+</body>
 </html>
