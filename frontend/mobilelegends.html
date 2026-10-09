@@ -1,243 +1,238 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Legends | Gamers Gold Top-Up</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Legends | Gamers Gold Top-Up</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
-        body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
+body {
+    background: #050b18;
+    color: white;
+    min-height: 100vh;
+    padding: 18px;
+}
 
-        .contenedor {
-            max-width: 500px;
-            margin: auto;
-        }
+.contenedor {
+    max-width: 520px;
+    margin: auto;
+}
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
 
-        .logo {
-            font-size: 23px;
-            font-weight: 900;
-        }
+.logo {
+    font-size: 20px;
+    font-weight: 900;
+}
 
-        .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
-        }
+.logo span {
+    color: #00b7ff;
+    text-shadow: 0 0 12px #008cff;
+}
 
-        .volver {
-            color: #28a9ff;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
+.volver {
+    color: #21adff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
 
-        .card {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 28px 22px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-        }
+.tarjeta {
+    background: #091a35;
+    border: 1px solid #15518c;
+    border-radius: 18px;
+    padding: 23px 18px;
+    box-shadow: 0 0 25px #007bff12;
+}
 
-        .icono {
-            text-align: center;
-            font-size: 55px;
-            margin-bottom: 10px;
-        }
+.icono {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 10px;
+}
 
-        h1 {
-            text-align: center;
-            font-size: 26px;
-            margin-bottom: 10px;
-        }
+h1 {
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 8px;
+}
 
-        .descripcion {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
+.descripcion {
+    color: #a5bad1;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
 
-        label {
-            display: block;
-            margin-bottom: 7px;
-            color: #b8c9dc;
-            font-size: 13px;
-        }
+h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
 
-        input, select {
-            width: 100%;
-            padding: 13px;
-            margin-bottom: 18px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-        }
+label {
+    display: block;
+    color: #b9cce0;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
 
-        input:focus, select:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
+input, select {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 17px;
+    background: #061226;
+    color: white;
+    border: 1px solid #204c78;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+}
 
-        select option {
-            background: #061226;
-            color: white;
-        }
+input:focus, select:focus {
+    border-color: #00aaff;
+}
 
-        .estado {
-            margin-top: -8px;
-            margin-bottom: 18px;
-            color: #8fa5bd;
-            font-size: 12px;
-            line-height: 1.5;
-        }
+select option {
+    background: #061226;
+}
 
-        .continuar, .recargar {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+.estado {
+    font-size: 12px;
+    color: #9ab1c9;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
 
-        .continuar:disabled, .recargar:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+.boton {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #087cff, #00baff);
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+}
 
-        .recargar {
-            margin-top: 10px;
-            background: #10294a;
-            border: 1px solid #168cff;
-        }
+.boton:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
 
-        .separador {
-            margin-top: 28px;
-            padding-top: 22px;
-            border-top: 1px solid #12385f;
-        }
+.ofertas {
+    display: block;
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #168dff;
+    background: #0b2345;
+    color: #55c8ff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+}
 
-        .nota {
-            margin-top: 20px;
-            text-align: center;
-            color: #627b97;
-            font-size: 11px;
-            line-height: 1.5;
-        }
+.ofertas:active {
+    background: #123663;
+}
 
-        @media (max-width: 380px) {
-            body {
-                padding: 12px;
-            }
+.nota {
+    text-align: center;
+    color: #7188a2;
+    font-size: 11px;
+    line-height: 1.5;
+    margin-top: 20px;
+}
 
-            .logo {
-                font-size: 18px;
-            }
+@media(max-width:380px) {
+    .logo {
+        font-size: 16px;
+    }
 
-            .card {
-                padding: 24px 16px;
-            }
-        }
-    </style>
+    .tarjeta {
+        padding: 20px 14px;
+    }
+}
+</style>
 </head>
 
 <body>
 <div class="contenedor">
 
-    <div class="header">
-        <div class="logo">
-            <span class="rayo">⚡</span> Gamers Gold Top-Up
-        </div>
+<header>
+    <div class="logo"><span>⚡</span> Gamers Gold Top-Up</div>
+    <a href="juegos.html" class="volver">← Juegos</a>
+</header>
 
-        <a href="juegos.html" class="volver">← Juegos</a>
-    </div>
+<main class="tarjeta">
 
-    <div class="card">
-        <div class="icono">🎮</div>
+    <div class="icono">💎</div>
 
-        <h1>Mobile Legends</h1>
+    <h1>Mobile Legends</h1>
 
-        <p class="descripcion">
-            Selecciona tu paquete directamente del catálogo
-            del proveedor.
-        </p>
+    <p class="descripcion">
+        Selecciona tus diamantes y prepara tu recarga.
+    </p>
 
-        <label for="idjugador">ID del jugador</label>
-        <input
-            id="idjugador"
-            type="text"
-            placeholder="Introduce tu ID"
-            autocomplete="off"
-        >
+    <h2>💎 Recargas de diamantes</h2>
 
-        <label for="zoneId">Zone ID</label>
-        <input
-            id="zoneId"
-            type="text"
-            placeholder="Introduce tu Zone ID"
-            autocomplete="off"
-        >
+    <label for="idjugador">ID del jugador</label>
+    <input
+        id="idjugador"
+        type="text"
+        placeholder="Introduce tu ID"
+        autocomplete="off"
+    >
 
-        <label for="cantidad">Paquete disponible</label>
-        <select id="cantidad" disabled>
-            <option value="">Cargando catálogo...</option>
-        </select>
+    <label for="zoneId">Zone ID</label>
+    <input
+        id="zoneId"
+        type="text"
+        placeholder="Introduce tu Zone ID"
+        autocomplete="off"
+    >
 
-        <p id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con Next Level...
-        </p>
+    <label for="cantidad">Selecciona tus diamantes</label>
 
-        <button
-            class="continuar"
-            id="botonRecarga"
-            type="button"
-            disabled
-        >
-            Cargando catálogo...
-        </button>
+    <select id="cantidad" disabled>
+        <option value="">Cargando diamantes...</option>
+    </select>
 
-        <div class="separador">
-            <button
-                class="recargar"
-                type="button"
-                onclick="abrirOfertas()"
-            >
-                🎁 Ofertas Especiales
-            </button>
-        </div>
+    <p id="estadoCatalogo" class="estado" aria-live="polite">
+        Conectando con el catálogo de Next Level...
+    </p>
 
-        <p class="nota">
-            Gamers Gold Top-Up · Recargas gaming
-        </p>
-    </div>
+    <button id="continuar" class="boton" type="button" disabled>
+        Cargando catálogo...
+    </button>
+
+    <a href="ofertas-mobilelegends.html" class="ofertas">
+        🎁 Ofertas Especiales
+    </a>
+
+    <p class="nota">
+        Gamers Gold Top-Up · Tu mundo gaming, un solo lugar.
+    </p>
+
+</main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -254,64 +249,18 @@ const SUPABASE_KEY =
 const CATALOGO_URL =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
-const supabaseClient = window.supabase.createClient(
+const cliente = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
 
 const selector = document.getElementById("cantidad");
 const estado = document.getElementById("estadoCatalogo");
-const boton = document.getElementById("botonRecarga");
+const boton = document.getElementById("continuar");
 
-let productosCatalogo = [];
-let catalogoCargado = false;
+let productosDiamantes = [];
 
-function abrirOfertas() {
-    window.location.href = "ofertas-mobilelegends.html";
-}
-
-function normalizar(valor) {
-    return String(valor || "")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase()
-        .trim();
-}
-
-function obtenerIdentificador(producto) {
-    return producto.productId ||
-           producto.product_id ||
-           producto.id ||
-           "";
-}
-
-function obtenerNombre(producto) {
-    return producto.name ||
-           producto.product_name ||
-           producto.title ||
-           "";
-}
-
-function obtenerRegion(producto) {
-    const region = producto.region ||
-                   producto.provider_region ||
-                   producto.game?.region ||
-                   "";
-
-    if (typeof region === "string") {
-        return region;
-    }
-
-    return region.name || region.code || "";
-}
-
-function obtenerDisponibilidad(producto) {
-    return producto.available !== false &&
-           producto.available !== 0 &&
-           producto.available !== "false";
-}
-
-function extraerProductos(datos) {
+function obtenerProductos(datos) {
     if (Array.isArray(datos)) return datos;
     if (Array.isArray(datos.productos)) return datos.productos;
     if (Array.isArray(datos.products)) return datos.products;
@@ -323,13 +272,64 @@ function extraerProductos(datos) {
     return [];
 }
 
+function nombreProducto(producto) {
+    return String(
+        producto.name ||
+        producto.product_name ||
+        producto.title ||
+        ""
+    );
+}
+
+function idProducto(producto) {
+    return producto.productId ||
+           producto.product_id ||
+           producto.id ||
+           "";
+}
+
+function regionProducto(producto) {
+    const region =
+        producto.region ||
+        producto.provider_region ||
+        producto.game?.region ||
+        "";
+
+    if (typeof region === "string") return region;
+
+    return region.name || region.code || "";
+}
+
+function esDiamantes(producto) {
+    const nombre = nombreProducto(producto)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+
+    /*
+     * Solo mostramos recargas de diamantes.
+     * Los pases, membresías y paquetes especiales
+     * quedan fuera de esta página.
+     */
+    const contieneDiamantes =
+        /\bdiamonds?\b/.test(nombre);
+
+    const esOfertaEspecial =
+        /\b(pass|pack|elite|twilight|weekly|monthly|membership)\b/
+        .test(nombre);
+
+    return contieneDiamantes && !esOfertaEspecial;
+}
+
+function disponible(producto) {
+    return producto.available !== false &&
+           producto.available !== 0 &&
+           producto.available !== "false";
+}
+
 async function cargarCatalogo() {
-    catalogoCargado = false;
     selector.disabled = true;
     boton.disabled = true;
-
-    estado.textContent = "Consultando el catálogo de Next Level...";
-    selector.innerHTML = "<option value=''>Cargando...</option>";
 
     try {
         const respuesta = await fetch(
@@ -346,15 +346,12 @@ async function cargarCatalogo() {
         );
 
         const texto = await respuesta.text();
-
         let datos;
 
         try {
             datos = JSON.parse(texto);
         } catch {
-            throw new Error(
-                "La respuesta del catálogo no es JSON válido."
-            );
+            throw new Error("Respuesta no válida del catálogo.");
         }
 
         if (!respuesta.ok) {
@@ -365,158 +362,105 @@ async function cargarCatalogo() {
             );
         }
 
-        console.log("Respuesta completa de Next Level:", datos);
+        const productos = obtenerProductos(datos);
 
-        const recibidos = extraerProductos(datos);
-
-        if (recibidos.length === 0) {
-            throw new Error(
-                "Next Level no devolvió productos. " +
-                "Revisa la respuesta de la función."
-            );
-        }
-
-        /*
-         * No limitamos el catálogo a LATAM:
-         * el proveedor devuelve productos Global y United States.
-         * Conservamos el identificador real de cada producto.
-         */
-        productosCatalogo = recibidos
-            .filter(producto => {
-                return obtenerIdentificador(producto) &&
-                       obtenerNombre(producto) &&
-                       obtenerDisponibilidad(producto);
-            })
-            .map(producto => ({
-                original: producto,
-                productId: obtenerIdentificador(producto),
-                name: obtenerNombre(producto),
-                region: obtenerRegion(producto)
-            }));
+        productosDiamantes = productos.filter(producto =>
+            disponible(producto) &&
+            esDiamantes(producto) &&
+            idProducto(producto)
+        );
 
         selector.innerHTML = "";
+
+        if (productosDiamantes.length === 0) {
+            selector.innerHTML =
+                '<option value="">No hay diamantes disponibles</option>';
+
+            estado.textContent =
+                "No encontramos recargas de diamantes disponibles. Intenta más tarde.";
+
+            return;
+        }
 
         const inicial = document.createElement("option");
         inicial.value = "";
         inicial.textContent = "Selecciona un paquete";
         selector.appendChild(inicial);
 
-        productosCatalogo.forEach(producto => {
+        productosDiamantes.forEach((producto, indice) => {
             const opcion = document.createElement("option");
 
-            opcion.value = producto.productId;
+            opcion.value = String(indice);
 
-            opcion.textContent = producto.region
-                ? producto.name + " — " + producto.region
-                : producto.name;
+            const region = regionProducto(producto);
+            opcion.textContent =
+                nombreProducto(producto) +
+                (region ? " · " + region : "");
 
             selector.appendChild(opcion);
         });
 
-        if (productosCatalogo.length === 0) {
-            selector.disabled = true;
-            estado.textContent =
-                "El proveedor respondió, pero no encontramos " +
-                "productos con identificadores y nombres válidos.";
-
-            boton.textContent = "Sin productos disponibles";
-            return;
-        }
-
         selector.disabled = false;
-        catalogoCargado = true;
+        boton.disabled = false;
+        boton.textContent = "Continuar";
 
         estado.textContent =
-            productosCatalogo.length +
-            " productos recibidos directamente de Next Level.";
-
-        boton.textContent = "Continuar ⚡";
-        actualizarBoton();
+            productosDiamantes.length +
+            " recargas de diamantes disponibles.";
 
     } catch (error) {
-        console.error("Error cargando catálogo:", error);
+        console.error("Error al cargar Mobile Legends:", error);
 
         selector.innerHTML =
-            "<option value=''>Catálogo no disponible</option>";
-
-        selector.disabled = true;
-        boton.disabled = true;
-        boton.textContent = "Catálogo no disponible";
+            '<option value="">Error al cargar los diamantes</option>';
 
         estado.textContent =
-            "No se pudo cargar el catálogo: " + error.message;
+            "No pudimos conectar con el catálogo. Recarga la página e inténtalo nuevamente.";
+
+        boton.textContent = "Intentar de nuevo";
+        boton.disabled = false;
     }
 }
 
-function actualizarBoton() {
-    boton.disabled = !(
-        catalogoCargado &&
-        productosCatalogo.some(
-            producto => producto.productId === selector.value
-        )
-    );
-}
+boton.addEventListener("click", async function() {
+    if (!productosDiamantes.length) {
+        await cargarCatalogo();
+        return;
+    }
 
-selector.addEventListener("change", actualizarBoton);
-
-/*
- * Por seguridad, esta página solo consulta y selecciona
- * productos. No realiza cobros ni crea pedidos al proveedor.
- *
- * La compra debe conectarse a una función de backend que:
- * 1. Valide la sesión del usuario.
- * 2. Verifique el precio y saldo GVR en el servidor.
- * 3. Reciba player ID y Zone ID.
- * 4. Envíe el pedido al endpoint de órdenes de Next Level.
- * 5. Registre la respuesta del proveedor y gestione errores.
- */
-boton.addEventListener("click", async () => {
-    const playerId =
+    const idJugador =
         document.getElementById("idjugador").value.trim();
 
     const zoneId =
         document.getElementById("zoneId").value.trim();
 
-    const producto = productosCatalogo.find(
-        item => item.productId === selector.value
-    );
+    const indice = selector.value;
 
-    if (!playerId || !zoneId) {
+    if (!idJugador || !zoneId) {
         alert("Introduce tu ID de jugador y tu Zone ID.");
         return;
     }
 
-    if (!producto) {
-        alert("Selecciona un producto válido.");
+    if (indice === "" ||
+        !productosDiamantes[Number(indice)]) {
+        alert("Selecciona primero tus diamantes.");
         return;
     }
 
-    try {
-        const { data: { session }, error } =
-            await supabaseClient.auth.getSession();
+    const producto = productosDiamantes[Number(indice)];
 
-        if (error || !session) {
-            alert("Debes iniciar sesión antes de continuar.");
-            window.location.href = "login.html";
-            return;
-        }
-
-        /*
-         * Todavía no se cobra ni se crea un pedido:
-         * falta implementar y verificar el endpoint de órdenes
-         * de Next Level y la compra con ambos identificadores.
-         */
-        alert(
-            "Producto seleccionado: " + producto.name +
-            "\nRegión: " + (producto.region || "No especificada") +
-            "\n\nEl catálogo funciona correctamente, pero la compra " +
-            "automática todavía no está conectada. No se ha cobrado GVR."
-        );
-
-    } catch (error) {
-        console.error(error);
-        alert("No se pudo comprobar la sesión del usuario.");
-    }
+    /*
+     * No cobramos ni creamos pedidos aquí:
+     * la compra con Next Level aún debe conectarse
+     * al proceso real de pedidos del proveedor.
+     */
+    alert(
+        "Paquete seleccionado: " + nombreProducto(producto) +
+        "\nRegión: " + (regionProducto(producto) || "No especificada") +
+        "\nID de jugador: " + idJugador +
+        "\nZone ID: " + zoneId +
+        "\n\nLa compra automática todavía no está conectada."
+    );
 });
 
 cargarCatalogo();
