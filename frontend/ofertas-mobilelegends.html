@@ -1,1064 +1,716 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ofertas Especiales | Mobile Legends</title>
 
-    <title>Ofertas Especiales | Mobile Legends</title>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
-    <style>
+body {
+    background: #050b18;
+    color: white;
+    min-height: 100vh;
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 18px;
+    border-bottom: 1px solid #12385f;
+    background: #071225;
+}
 
-        body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-        }
+.logo {
+    font-size: 19px;
+    font-weight: 900;
+}
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px;
-            border-bottom: 1px solid #12385f;
-            background: #071225;
-        }
+.logo .rayo {
+    color: #00b7ff;
+    text-shadow: 0 0 12px #008cff;
+}
 
-        .logo {
-            font-size: 20px;
-            font-weight: 900;
-        }
+.volver {
+    text-decoration: none;
+    color: white;
+    border: 1px solid #168cff;
+    padding: 9px 13px;
+    border-radius: 9px;
+    font-size: 13px;
+    white-space: nowrap;
+}
 
-        .logo .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
-        }
+.contenedor {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 25px 18px;
+}
 
-        .volver {
-            text-decoration: none;
-            color: white;
-            border: 1px solid #168cff;
-            padding: 9px 13px;
-            border-radius: 9px;
-            font-size: 13px;
-        }
+.ofertas {
+    background: #091a35;
+    border: 1px solid #15518c;
+    border-radius: 20px;
+    padding: 25px 20px;
+    box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+}
 
-        .contenedor {
-            width: 100%;
-            max-width: 500px;
-            margin: auto;
-            padding: 25px 18px;
-        }
+.icono {
+    text-align: center;
+    font-size: 45px;
+    margin-bottom: 8px;
+}
 
-        .ofertas {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
-        }
+h1 {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 7px;
+}
 
-        .icono {
-            text-align: center;
-            font-size: 45px;
-            margin-bottom: 8px;
-        }
+.descripcion {
+    text-align: center;
+    color: #8fa5bd;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
 
-        h1 {
-            text-align: center;
-            font-size: 25px;
-            margin-bottom: 7px;
-        }
+.subtitulo {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
 
-        .descripcion {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 13px;
-            margin-bottom: 22px;
-        }
+.estado {
+    background: #061226;
+    border: 1px solid #204c78;
+    border-radius: 10px;
+    padding: 13px;
+    color: #a5bdd7;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
 
-        .pantalla {
-            display: none;
-        }
+.lista-ofertas {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
 
-        .pantalla.activa {
-            display: block;
-        }
+.boton-oferta {
+    width: 100%;
+    min-height: 110px;
+    padding: 15px;
+    border: 1px solid #204c78;
+    border-radius: 14px;
+    background: #061226;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    text-align: left;
+    transition: .2s;
+}
 
-        .lista-ofertas {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+.boton-oferta:hover {
+    border-color: #159dff;
+    background: #0a1d38;
+}
 
-        .boton-oferta {
-            width: 100%;
-            height: 150px;
-            padding: 0;
-            border: 1px solid #204c78;
-            border-radius: 14px;
-            background: #061226;
-            color: white;
-            cursor: pointer;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: 0.2s;
-            box-shadow: 0 0 12px rgba(0, 140, 255, 0.08);
-        }
+.boton-oferta.seleccionado {
+    border-color: #00baff;
+    background: linear-gradient(180deg, #09244a, #0b315c);
+    box-shadow: 0 0 18px rgba(0, 186, 255, .15);
+}
 
-        .boton-oferta:hover {
-            border-color: #159dff;
-            background: #0a1d38;
-            box-shadow: 0 0 18px rgba(0, 157, 255, 0.22);
-            transform: translateY(-2px);
-        }
+.foto-oferta {
+    width: 55px;
+    height: 55px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0b2342;
+    border: 1px solid #204c78;
+    border-radius: 13px;
+    font-size: 28px;
+}
 
-        .boton-oferta.seleccionado {
-            border-color: #00baff;
-            background: linear-gradient(
-                180deg,
-                #09244a,
-                #0b315c
-            );
-            box-shadow:
-                0 0 10px rgba(0, 186, 255, 0.25),
-                0 0 22px rgba(0, 140, 255, 0.15);
-        }
+.info-oferta {
+    flex: 1;
+    min-width: 0;
+}
 
-        .foto-oferta {
-            width: 100%;
-            flex: 1;
-            background: #07172d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            font-size: 42px;
-        }
+.nombre-oferta {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    margin-bottom: 7px;
+}
 
-        .boton-oferta.seleccionado .foto-oferta {
-            background: #09213f;
-        }
+.region {
+    display: inline-block;
+    color: #81cfff;
+    font-size: 11px;
+    padding: 4px 7px;
+    border-radius: 20px;
+    border: 1px solid #204c78;
+    background: #0b2342;
+}
 
-        .nombre-oferta {
-            width: 100%;
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 8px 14px;
-            background: #091a35;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: left;
-            border-top: 1px solid #204c78;
-        }
+.flecha {
+    color: #00baff;
+    font-size: 22px;
+}
 
-        .boton-oferta.seleccionado .nombre-oferta {
-            background: #0b315c;
-            color: #00baff;
-            border-top-color: #00baff;
-        }
+.vacio {
+    padding: 20px 10px;
+    color: #8fa5bd;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.7;
+}
 
-        .precio-boton {
-            color: #00baff;
-            white-space: nowrap;
-            font-size: 14px;
-            font-weight: 900;
-        }
+.precio-oferta {
+    margin-top: 18px;
+    padding: 15px;
+    background: #061226;
+    border: 1px solid #204c78;
+    border-radius: 12px;
+    text-align: center;
+}
 
-        .precio-oferta {
-            margin-top: 18px;
-            padding: 15px;
-            background: #061226;
-            border: 1px solid #204c78;
-            border-radius: 12px;
-            text-align: center;
-        }
+.precio-titulo {
+    color: #8fa5bd;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
 
-        .precio-titulo {
-            color: #8fa5bd;
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
+.precio {
+    color: #00baff;
+    font-size: 18px;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+}
 
-        .precio {
-            color: #00baff;
-            font-size: 24px;
-            font-weight: 900;
-        }
+.boton-principal {
+    width: 100%;
+    padding: 14px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #087cff, #00baff);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        .boton-principal {
-            width: 100%;
-            padding: 14px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(
-                90deg,
-                #087cff,
-                #00baff
-            );
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+.boton-secundario {
+    width: 100%;
+    padding: 13px;
+    margin-top: 10px;
+    border: 1px solid #168cff;
+    border-radius: 10px;
+    background: #061226;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        .boton-principal:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
+.pantalla {
+    display: none;
+}
 
-        .boton-secundario {
-            width: 100%;
-            padding: 13px;
-            margin-top: 10px;
-            border: 1px solid #168cff;
-            border-radius: 10px;
-            background: #061226;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+.pantalla.activa {
+    display: block;
+}
 
-        .resumen {
-            background: #061226;
-            border: 1px solid #204c78;
-            border-radius: 13px;
-            padding: 17px;
-            margin-top: 18px;
-        }
+.resumen {
+    background: #061226;
+    border: 1px solid #204c78;
+    border-radius: 13px;
+    padding: 17px;
+    margin-top: 18px;
+}
 
-        .fila {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            padding: 11px 0;
-            border-bottom: 1px solid #12385f;
-            font-size: 13px;
-        }
+.fila {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 11px 0;
+    border-bottom: 1px solid #12385f;
+    font-size: 13px;
+}
 
-        .fila:last-child {
-            border-bottom: none;
-        }
+.fila:last-child {
+    border-bottom: none;
+}
 
-        .fila span:first-child {
-            color: #8fa5bd;
-        }
+.fila span:first-child {
+    color: #8fa5bd;
+}
 
-        .fila span:last-child {
-            color: white;
-            font-weight: bold;
-            text-align: right;
-        }
+.fila span:last-child {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
 
-        .campo-id {
-            margin-top: 18px;
-        }
+.campo-id {
+    margin-top: 18px;
+}
 
-        .campo-id label {
-            display: block;
-            color: #8fa5bd;
-            font-size: 12px;
-            margin-bottom: 7px;
-        }
+.campo-id label {
+    display: block;
+    color: #8fa5bd;
+    font-size: 12px;
+    margin-bottom: 7px;
+}
 
-        .campo-id input {
-            width: 100%;
-            padding: 13px;
-            background: #061226;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            color: white;
-            outline: none;
-            font-size: 15px;
-        }
+.campo-id input {
+    width: 100%;
+    padding: 13px;
+    background: #061226;
+    border: 1px solid #204c78;
+    border-radius: 10px;
+    color: white;
+    outline: none;
+    font-size: 15px;
+}
 
-        .campo-id input:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
+.nota {
+    text-align: center;
+    color: #7188a2;
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 22px;
+}
 
-        .exito {
-            text-align: center;
-            padding: 10px 0;
-        }
+@media(max-width:380px) {
+    header {
+        padding: 14px 10px;
+    }
 
-        .icono-exito {
-            font-size: 65px;
-            margin-bottom: 12px;
-        }
+    .logo {
+        font-size: 15px;
+    }
 
-        .exito h2 {
-            font-size: 23px;
-            margin-bottom: 10px;
-        }
+    .contenedor {
+        padding: 18px 10px;
+    }
 
-        .exito p {
-            color: #8fa5bd;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .pedido-id {
-            margin-top: 18px;
-            background: #061226;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            padding: 13px;
-            color: #00baff;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-    </style>
+    .ofertas {
+        padding: 20px 14px;
+    }
+}
+</style>
 </head>
 
 <body>
 
 <header>
-
     <div class="logo">
         <span class="rayo">⚡</span>
         Gamers Gold Top-Up
     </div>
 
-    <a href="mobilelegends.html" class="volver">
-        ← Volver
-    </a>
-
+    <a href="mobilelegends.html" class="volver">← Volver</a>
 </header>
-
 
 <main class="contenedor">
 
+    <section id="pantallaOfertas" class="ofertas pantalla activa">
 
-    <!-- ==============================
-         OFERTAS
-    ============================== -->
+        <div class="icono">🎁</div>
 
-    <section
-        id="pantallaOfertas"
-        class="ofertas pantalla activa"
-    >
-
-        <div class="icono">
-            🎁
-        </div>
-
-        <h1>
-            Ofertas Especiales
-        </h1>
+        <h1>Ofertas Especiales</h1>
 
         <p class="descripcion">
-            Elige una oferta especial de Mobile Legends.
+            Pases y paquetes especiales de Mobile Legends,
+            consultados directamente desde Next Level.
         </p>
 
+        <h2 class="subtitulo">🔥 Catálogo de ofertas</h2>
 
-        <div class="lista-ofertas">
-
-
-            <!-- WEEKLY ELITE PACK -->
-
-            <button
-                class="boton-oferta"
-                type="button"
-                onclick="seleccionarOferta(
-                    this,
-                    'Weekly Elite Pack',
-                    100
-                )"
-            >
-
-                <div class="foto-oferta">
-                    🎁
-                </div>
-
-                <div class="nombre-oferta">
-
-                    <span>
-                        Weekly Elite Pack
-                    </span>
-
-                    <span class="precio-boton">
-                        100 GVR
-                    </span>
-
-                </div>
-
-            </button>
-
-
-            <!-- WEEKLY PASS -->
-
-            <button
-                class="boton-oferta"
-                type="button"
-                onclick="seleccionarOferta(
-                    this,
-                    'Weekly Pass',
-                    150
-                )"
-            >
-
-                <div class="foto-oferta">
-                    🎟️
-                </div>
-
-                <div class="nombre-oferta">
-
-                    <span>
-                        Weekly Pass
-                    </span>
-
-                    <span class="precio-boton">
-                        150 GVR
-                    </span>
-
-                </div>
-
-            </button>
-
-
-            <!-- MONTHLY ELITE PACK -->
-
-            <button
-                class="boton-oferta"
-                type="button"
-                onclick="seleccionarOferta(
-                    this,
-                    'Monthly Elite Pack',
-                    250
-                )"
-            >
-
-                <div class="foto-oferta">
-                    👑
-                </div>
-
-                <div class="nombre-oferta">
-
-                    <span>
-                        Monthly Elite Pack
-                    </span>
-
-                    <span class="precio-boton">
-                        250 GVR
-                    </span>
-
-                </div>
-
-            </button>
-
-
-            <!-- THEWILIGHT PASS -->
-
-            <button
-                class="boton-oferta"
-                type="button"
-                onclick="seleccionarOferta(
-                    this,
-                    'Thewilight Pass',
-                    300
-                )"
-            >
-
-                <div class="foto-oferta">
-                    ✨
-                </div>
-
-                <div class="nombre-oferta">
-
-                    <span>
-                        Thewilight Pass
-                    </span>
-
-                    <span class="precio-boton">
-                        300 GVR
-                    </span>
-
-                </div>
-
-            </button>
-
-
+        <div id="estado" class="estado" aria-live="polite">
+            Consultando el catálogo de Next Level...
         </div>
 
+        <div id="listaOfertas" class="lista-ofertas"></div>
 
-        <div
-            id="precioSeleccionado"
-            class="precio-oferta"
-            style="display:none;"
-        >
+        <div id="seleccion" style="display:none;">
 
-            <div class="precio-titulo">
-                Precio de la oferta
+            <div class="precio-oferta">
+                <div class="precio-titulo">Oferta seleccionada</div>
+                <div id="nombreSeleccionado" class="precio">-</div>
+                <div id="regionSeleccionada" class="precio-titulo"></div>
             </div>
 
-            <div
-                id="precio"
-                class="precio"
-            >
-                0 GVR
-            </div>
-
+            <button id="continuar" class="boton-principal" type="button">
+                Continuar ⚡
+            </button>
         </div>
 
-
-        <button
-            id="continuarBtn"
-            class="boton-principal"
-            type="button"
-            onclick="irAConfirmacion()"
-            style="display:none;"
-        >
-            Continuar ⚡
+        <button id="reintentar" class="boton-secundario" type="button">
+            🔄 Actualizar ofertas
         </button>
 
     </section>
 
+    <section id="pantallaConfirmacion" class="ofertas pantalla">
 
-    <!-- ==============================
-         CONFIRMACIÓN
-    ============================== -->
+        <div class="icono">🎮</div>
 
-    <section
-        id="pantallaConfirmacion"
-        class="ofertas pantalla"
-    >
-
-        <div class="icono">
-            💳
-        </div>
-
-        <h1>
-            Confirmar pago
-        </h1>
+        <h1>Confirmar oferta</h1>
 
         <p class="descripcion">
-            Revisa los datos antes de continuar.
+            Comprueba el paquete y los datos del jugador.
         </p>
-
 
         <div class="resumen">
-
             <div class="fila">
-
-                <span>
-                    Oferta
-                </span>
-
-                <span id="confirmarOferta">
-                    -
-                </span>
-
+                <span>Oferta</span>
+                <span id="confirmarNombre">-</span>
             </div>
 
-
             <div class="fila">
-
-                <span>
-                    Juego
-                </span>
-
-                <span>
-                    Mobile Legends
-                </span>
-
+                <span>Región</span>
+                <span id="confirmarRegion">-</span>
             </div>
 
-
             <div class="fila">
-
-                <span>
-                    Precio
-                </span>
-
-                <span id="confirmarPrecio">
-                    0 GVR
-                </span>
-
+                <span>Proveedor</span>
+                <span>Next Level</span>
             </div>
-
         </div>
-
 
         <div class="campo-id">
-
-            <label for="idJugador">
-                ID del jugador de Mobile Legends
-            </label>
-
-            <input
-                type="text"
-                id="idJugador"
-                placeholder="Escribe tu ID de Mobile Legends"
-                autocomplete="off"
-            >
-
+            <label for="idJugador">ID del jugador</label>
+            <input id="idJugador" type="text"
+                   placeholder="Introduce tu ID de Mobile Legends"
+                   autocomplete="off">
         </div>
 
+        <div class="campo-id">
+            <label for="zoneId">Zone ID</label>
+            <input id="zoneId" type="text"
+                   placeholder="Introduce tu Zone ID"
+                   autocomplete="off">
+        </div>
 
-        <button
-            id="confirmarBtn"
-            class="boton-principal"
-            type="button"
-            onclick="realizarPedido()"
-        >
-            Confirmar compra ⚡
-        </button>
+        <p class="nota">
+            La selección no genera un pedido ni realiza un cobro.
+            La compra automática debe conectarse al sistema de pedidos
+            del proveedor antes de habilitar el pago.
+        </p>
 
-
-        <button
-            class="boton-secundario"
-            type="button"
-            onclick="volverOfertas()"
-        >
-            ← Cambiar oferta
+        <button id="volver" class="boton-secundario" type="button">
+            ← Volver a las ofertas
         </button>
 
     </section>
 
-
-    <!-- ==============================
-         ÉXITO
-    ============================== -->
-
-    <section
-        id="pantallaExito"
-        class="ofertas pantalla"
-    >
-
-        <div class="exito">
-
-            <div class="icono-exito">
-                ✅
-            </div>
-
-            <h2>
-                ¡Pedido realizado!
-            </h2>
-
-            <p>
-                Tu solicitud de compra fue registrada correctamente.
-            </p>
-
-
-            <div class="pedido-id">
-
-                ID del pedido:
-
-                <br>
-
-                <span id="pedidoId">
-                    -
-                </span>
-
-            </div>
-
-
-            <button
-                class="boton-principal"
-                type="button"
-                onclick="window.location.href='cuenta.html'"
-            >
-                Ir a mi cuenta ⚡
-            </button>
-
-
-            <button
-                class="boton-secundario"
-                type="button"
-                onclick="window.location.href='mobilelegends.html'"
-            >
-                Volver a Mobile Legends
-            </button>
-
-        </div>
-
-    </section>
-
+    <p class="nota">
+        Gamers Gold Top-Up · Tu mundo gaming, un solo lugar.
+    </p>
 
 </main>
 
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
 <script>
+"use strict";
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-const SUPABASE_ANON_KEY =
+const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
-        {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
-        }
-    );
+const CATALOGO_URL =
+    SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
+const estado = document.getElementById("estado");
+const lista = document.getElementById("listaOfertas");
 
+let ofertas = [];
 let ofertaSeleccionada = null;
-let precioSeleccionado = 0;
-let procesandoCompra = false;
 
+function obtenerProductos(datos) {
+    if (Array.isArray(datos)) return datos;
+    if (Array.isArray(datos.productos)) return datos.productos;
+    if (Array.isArray(datos.products)) return datos.products;
+    if (Array.isArray(datos.data)) return datos.data;
+    if (Array.isArray(datos.data?.products)) return datos.data.products;
+    return [];
+}
 
-/* =========================
-   SELECCIONAR OFERTA
-========================= */
+function nombreProducto(producto) {
+    return String(
+        producto.name ||
+        producto.product_name ||
+        producto.title ||
+        ""
+    ).trim();
+}
 
-function seleccionarOferta(
-    boton,
-    nombre,
-    precio
-) {
+function idProducto(producto) {
+    return producto.productId ||
+           producto.product_id ||
+           producto.id ||
+           "";
+}
 
-    if (procesandoCompra) return;
+function regionProducto(producto) {
+    const region =
+        producto.region ||
+        producto.provider_region ||
+        producto.game?.region ||
+        "";
 
+    if (typeof region === "string") return region;
 
-    document
-        .querySelectorAll(".boton-oferta")
-        .forEach(function(elemento) {
+    return region.name || region.code || "";
+}
 
-            elemento.classList.remove(
-                "seleccionado"
-            );
+function estaDisponible(producto) {
+    return producto.available !== false &&
+           producto.available !== 0 &&
+           producto.available !== "false";
+}
 
+function esOfertaEspecial(producto) {
+    const nombre = nombreProducto(producto)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+
+    /*
+     * Excluir diamantes normales para que no se mezclen
+     * con las ofertas especiales.
+     */
+    if (/\bdiamonds?\b/.test(nombre)) {
+        return false;
+    }
+
+    /*
+     * Reconocer los tipos de ofertas que devuelve
+     * el catálogo de Next Level.
+     */
+    return /\b(pass|pack|elite|twilight|weekly|monthly|membership)\b/
+        .test(nombre);
+}
+
+function iconoOferta(nombre) {
+    const n = nombre.toLowerCase();
+
+    if (n.includes("twilight")) return "🌙";
+    if (n.includes("monthly")) return "👑";
+    if (n.includes("weekly")) return "🎟️";
+    if (n.includes("elite")) return "🎁";
+    if (n.includes("pass")) return "🎫";
+    if (n.includes("pack")) return "🎁";
+
+    return "✨";
+}
+
+function mostrarPantalla(id) {
+    document.querySelectorAll(".pantalla").forEach(pantalla => {
+        pantalla.classList.remove("activa");
+    });
+
+    document.getElementById(id).classList.add("activa");
+}
+
+function renderizarOfertas() {
+    lista.innerHTML = "";
+    ofertaSeleccionada = null;
+
+    document.getElementById("seleccion").style.display = "none";
+
+    if (ofertas.length === 0) {
+        lista.innerHTML = `
+            <div class="vacio">
+                No se encontraron ofertas especiales disponibles
+                en la respuesta actual de Next Level.
+            </div>
+        `;
+        return;
+    }
+
+    ofertas.forEach((producto, indice) => {
+        const boton = document.createElement("button");
+        boton.type = "button";
+        boton.className = "boton-oferta";
+
+        const foto = document.createElement("div");
+        foto.className = "foto-oferta";
+        foto.textContent = iconoOferta(nombreProducto(producto));
+
+        const info = document.createElement("div");
+        info.className = "info-oferta";
+
+        const nombre = document.createElement("div");
+        nombre.className = "nombre-oferta";
+        nombre.textContent = nombreProducto(producto);
+
+        const region = document.createElement("span");
+        region.className = "region";
+        region.textContent = regionProducto(producto) || "Región no indicada";
+
+        info.appendChild(nombre);
+        info.appendChild(region);
+
+        const flecha = document.createElement("span");
+        flecha.className = "flecha";
+        flecha.textContent = "›";
+
+        boton.appendChild(foto);
+        boton.appendChild(info);
+        boton.appendChild(flecha);
+
+        boton.addEventListener("click", () => {
+            document.querySelectorAll(".boton-oferta").forEach(elemento => {
+                elemento.classList.remove("seleccionado");
+            });
+
+            boton.classList.add("seleccionado");
+            ofertaSeleccionada = producto;
+
+            document.getElementById("nombreSeleccionado").textContent =
+                nombreProducto(producto);
+
+            document.getElementById("regionSeleccionada").textContent =
+                "Región: " + (regionProducto(producto) || "No indicada");
+
+            document.getElementById("seleccion").style.display = "block";
         });
 
-
-    boton.classList.add(
-        "seleccionado"
-    );
-
-
-    ofertaSeleccionada = nombre;
-
-    precioSeleccionado = precio;
-
-
-    document.getElementById(
-        "precio"
-    ).textContent =
-        precio + " GVR";
-
-
-    document.getElementById(
-        "precioSeleccionado"
-    ).style.display =
-        "block";
-
-
-    document.getElementById(
-        "continuarBtn"
-    ).style.display =
-        "block";
+        lista.appendChild(boton);
+    });
 }
 
+async function cargarOfertas() {
+    const reintentar = document.getElementById("reintentar");
 
-/* =========================
-   IR A CONFIRMACIÓN
-========================= */
-
-function irAConfirmacion() {
-
-    if (!ofertaSeleccionada) {
-
-        alert(
-            "Selecciona una oferta."
-        );
-
-        return;
-    }
-
-
-    document.getElementById(
-        "confirmarOferta"
-    ).textContent =
-        ofertaSeleccionada;
-
-
-    document.getElementById(
-        "confirmarPrecio"
-    ).textContent =
-        precioSeleccionado + " GVR";
-
-
-    document.getElementById(
-        "pantallaOfertas"
-    ).classList.remove(
-        "activa"
-    );
-
-
-    document.getElementById(
-        "pantallaConfirmacion"
-    ).classList.add(
-        "activa"
-    );
-}
-
-
-/* =========================
-   VOLVER A OFERTAS
-========================= */
-
-function volverOfertas() {
-
-    document.getElementById(
-        "pantallaConfirmacion"
-    ).classList.remove(
-        "activa"
-    );
-
-
-    document.getElementById(
-        "pantallaOfertas"
-    ).classList.add(
-        "activa"
-    );
-}
-
-
-/* =========================
-   REALIZAR PEDIDO
-========================= */
-
-async function realizarPedido() {
-
-    if (procesandoCompra) return;
-
-
-    const idJugador =
-        document
-            .getElementById("idJugador")
-            .value
-            .trim();
-
-
-    if (idJugador === "") {
-
-        alert(
-            "Escribe tu ID de Mobile Legends."
-        );
-
-        return;
-    }
-
-
-    if (!ofertaSeleccionada) {
-
-        alert(
-            "Selecciona una oferta."
-        );
-
-        return;
-    }
-
-
-    procesandoCompra = true;
-
-
-    const boton =
-        document.getElementById(
-            "confirmarBtn"
-        );
-
-
-    boton.disabled = true;
-
-    boton.textContent =
-        "Procesando...";
-
+    reintentar.disabled = true;
+    reintentar.textContent = "Consultando...";
+    estado.textContent = "Consultando las ofertas especiales de Next Level...";
+    lista.innerHTML = "";
+    ofertas = [];
+    ofertaSeleccionada = null;
+    document.getElementById("seleccion").style.display = "none";
 
     try {
-
-
-        /* =========================
-           COMPROBAR SESIÓN
-        ========================= */
-
-        const {
-            data: { session },
-            error: sessionError
-        } =
-            await supabaseClient.auth.getSession();
-
-
-        if (
-            sessionError ||
-            !session
-        ) {
-
-            alert(
-                "Debes iniciar sesión primero."
-            );
-
-            procesandoCompra = false;
-
-            boton.disabled = false;
-
-            boton.textContent =
-                "Confirmar compra ⚡";
-
-            return;
-        }
-
-
-        /* =========================
-           BUSCAR PRODUCTO
-        ========================= */
-
-        const {
-            data: producto,
-            error: productoError
-        } =
-            await supabaseClient
-                .from("game_products")
-                .select(
-                    "id, game, product_name, price_gvr, active"
-                )
-                .eq(
-                    "game",
-                    "Mobile Legends"
-                )
-                .eq(
-                    "product_name",
-                    ofertaSeleccionada
-                )
-                .eq(
-                    "active",
-                    true
-                )
-                .maybeSingle();
-
-
-        if (
-            productoError ||
-            !producto
-        ) {
-
-            console.error(
-                productoError
-            );
-
-            alert(
-                "No se encontró esta oferta en Supabase."
-            );
-
-            procesandoCompra = false;
-
-            boton.disabled = false;
-
-            boton.textContent =
-                "Confirmar compra ⚡";
-
-            return;
-        }
-
-
-        /* =========================
-           REALIZAR COMPRA
-        ========================= */
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.rpc(
-                "purchase_game_product",
-                {
-                    p_product_id:
-                        producto.id,
-
-                    p_player_id:
-                        idJugador
-                }
-            );
-
-
-        if (error) {
-
-            console.error(error);
-
-            alert(
-                "No se pudo realizar la compra:\n\n" +
-                error.message
-            );
-
-            procesandoCompra = false;
-
-            boton.disabled = false;
-
-            boton.textContent =
-                "Confirmar compra ⚡";
-
-            return;
-        }
-
-
-        /* =========================
-           ÉXITO
-        ========================= */
-
-        document.getElementById(
-            "pedidoId"
-        ).textContent =
-            data;
-
-
-        document.getElementById(
-            "pantallaConfirmacion"
-        ).classList.remove(
-            "activa"
+        const respuesta = await fetch(
+            CATALOGO_URL + "?game=mobile-legends",
+            {
+                method: "GET",
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": "Bearer " + SUPABASE_KEY,
+                    "Accept": "application/json"
+                },
+                cache: "no-store"
+            }
         );
 
+        const texto = await respuesta.text();
 
-        document.getElementById(
-            "pantallaExito"
-        ).classList.add(
-            "activa"
+        let datos;
+
+        try {
+            datos = JSON.parse(texto);
+        } catch {
+            throw new Error("Next Level devolvió una respuesta no válida.");
+        }
+
+        if (!respuesta.ok) {
+            throw new Error(
+                datos.error ||
+                datos.message ||
+                "Error HTTP " + respuesta.status
+            );
+        }
+
+        console.log("Respuesta del catálogo Mobile Legends:", datos);
+
+        const productos = obtenerProductos(datos);
+
+        ofertas = productos.filter(producto =>
+            estaDisponible(producto) &&
+            idProducto(producto) &&
+            esOfertaEspecial(producto)
         );
 
+        /*
+         * No se inventan precios GVR.
+         * Esta pantalla muestra únicamente productos
+         * identificados como ofertas especiales.
+         */
+        renderizarOfertas();
+
+        estado.textContent =
+            "Next Level devolvió " + productos.length +
+            " productos. Ofertas especiales disponibles: " +
+            ofertas.length + ".";
+
+        if (ofertas.length === 0) {
+            estado.textContent +=
+                " Revisa la respuesta del catálogo en la consola del navegador " +
+                "si esperabas encontrar más productos.";
+        }
 
     } catch (error) {
+        console.error("Error cargando ofertas:", error);
 
-        console.error(error);
+        estado.textContent =
+            "No se pudieron cargar las ofertas: " + error.message;
 
-        alert(
-            "Ocurrió un error inesperado."
-        );
-
-        procesandoCompra = false;
-
-        boton.disabled = false;
-
-        boton.textContent =
-            "Confirmar compra ⚡";
+        lista.innerHTML = `
+            <div class="vacio">
+                Comprueba la conexión con Next Level e inténtalo de nuevo.
+            </div>
+        `;
+    } finally {
+        reintentar.disabled = false;
+        reintentar.textContent = "🔄 Actualizar ofertas";
     }
 }
 
+document.getElementById("continuar").addEventListener("click", () => {
+    if (!ofertaSeleccionada) {
+        alert("Selecciona primero una oferta especial.");
+        return;
+    }
+
+    document.getElementById("confirmarNombre").textContent =
+        nombreProducto(ofertaSeleccionada);
+
+    document.getElementById("confirmarRegion").textContent =
+        regionProducto(ofertaSeleccionada) || "No indicada";
+
+    mostrarPantalla("pantallaConfirmacion");
+});
+
+document.getElementById("volver").addEventListener("click", () => {
+    mostrarPantalla("pantallaOfertas");
+});
+
+document.getElementById("reintentar").addEventListener("click", cargarOfertas);
+
+cargarOfertas();
 </script>
 
 </body>
-  </html>
+    </html>
