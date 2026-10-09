@@ -2,6 +2,7 @@
 GAMERS GOLD TOP-UP
 MOTOR UNIVERSAL DE OFERTAS
 CATÁLOGO NEXT LEVEL
+JUEGOS: FREE FIRE, MOBILE LEGENDS Y BLOOD STRIKE
 ========================================================= */
 
 const SUPABASE_URL =
@@ -10,8 +11,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient =
-window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY,
 {
@@ -27,8 +27,7 @@ detectSessionInUrl: true
 CONFIGURACIÓN DEL JUEGO
 ========================================================= */
 
-const CONFIG_OFERTAS =
-window.CONFIG_OFERTAS || {};
+const CONFIG_OFERTAS = window.CONFIG_OFERTAS || {};
 
 const NOMBRE_JUEGO =
 CONFIG_OFERTAS.juego || "Free Fire";
@@ -47,7 +46,8 @@ NOMBRE_JUEGO.toLowerCase().trim();
 
 const JUEGO_API = {
 "free fire": "free-fire",
-"mobile legends": "mobile-legends"
+"mobile legends": "mobile-legends",
+"blood strike": "blood-strike"
 }[JUEGO_NORMALIZADO];
 
 /* =========================================================
@@ -55,8 +55,7 @@ CATÁLOGO NEXT LEVEL
 ========================================================= */
 
 const URL_CATALOGO =
-SUPABASE_URL +
-"/functions/v1/nextlevel-catalogo";
+SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
 /* =========================================================
 VARIABLES
@@ -91,8 +90,6 @@ emoji: "👑"
 
 /* =========================================================
 OFERTAS DE MOBILE LEGENDS
-Los identificadores deben coincidir con los devueltos
-realmente por Next Level.
 ========================================================= */
 
 const PRODUCTOS_MOBILE_LEGENDS = [
@@ -124,6 +121,33 @@ emoji: "🌌"
 ];
 
 /* =========================================================
+OFERTAS DE BLOOD STRIKE
+========================================================= */
+
+const PRODUCTOS_BLOOD_STRIKE = [
+{
+id: "fz-blood_strike-lucky_bag_week",
+nombre: "Semana de Bolsa de la Suerte",
+emoji: "🎁"
+},
+{
+id: "fz-blood_strike-level_up_pass",
+nombre: "Level Up Pass",
+emoji: "🚀"
+},
+{
+id: "fz-blood_strike-strike_pass_elite",
+nombre: "Strike Pass Elite",
+emoji: "🎟️"
+},
+{
+id: "fz-blood_strike-strike_pass_premium",
+nombre: "Strike Pass Premium",
+emoji: "👑"
+}
+];
+
+/* =========================================================
 OBTENER OFERTAS CONFIGURADAS
 ========================================================= */
 
@@ -134,6 +158,10 @@ return PRODUCTOS_FREE_FIRE;
 
 if (JUEGO_NORMALIZADO === "mobile legends") {
     return PRODUCTOS_MOBILE_LEGENDS;
+}
+
+if (JUEGO_NORMALIZADO === "blood strike") {
+    return PRODUCTOS_BLOOD_STRIKE;
 }
 
 return [];
@@ -241,6 +269,8 @@ if (botonContinuar) {
     botonContinuar.disabled = true;
 }
 
+window.productosOfertas = {};
+
 try {
     const productosProveedor =
         await consultarCatalogoNextLevel();
@@ -259,8 +289,9 @@ try {
 
     productosProveedor.forEach(function(producto) {
         if (producto.productId) {
-            productosPorId[producto.productId] =
-                producto;
+            productosPorId[
+                String(producto.productId).trim()
+            ] = producto;
         }
     });
 
@@ -282,6 +313,11 @@ try {
                 if (
                     productoProveedor.available === false
                 ) {
+                    console.warn(
+                        "Oferta no disponible:",
+                        configuracion.id
+                    );
+
                     return null;
                 }
 
@@ -292,14 +328,17 @@ try {
             })
             .filter(Boolean);
 
-    window.productosOfertas = {};
-
     if (ofertasDisponibles.length === 0) {
         if (estado) {
             estado.style.display = "block";
             estado.textContent =
                 "No hay ofertas especiales disponibles en este momento.";
         }
+
+        console.warn(
+            "No se encontraron ofertas configuradas para:",
+            NOMBRE_JUEGO
+        );
 
         return;
     }
@@ -436,7 +475,7 @@ if (continuar) {
 }
 
 /* =========================================================
-CONFIRMACIÓN
+CONFIRMACIÓN DESHABILITADA
 ========================================================= */
 
 function irAConfirmacion() {
@@ -482,57 +521,61 @@ alert(
 CONFIGURAR INTERFAZ
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener(
+"DOMContentLoaded",
+function() {
 const label =
 document.querySelector('label[for="idJugador"]');
 
-const input =
-    document.getElementById("idJugador");
+    const input =
+        document.getElementById("idJugador");
 
-const juegoConfirmacion =
-    document.getElementById("juegoConfirmacion");
+    const juegoConfirmacion =
+        document.getElementById("juegoConfirmacion");
 
-const volverExito =
-    document.getElementById("volverJuegoBtn");
+    const volverExito =
+        document.getElementById("volverJuegoBtn");
 
-const descripcion =
-    document.getElementById("descripcionOfertas");
+    const descripcion =
+        document.getElementById("descripcionOfertas");
 
-const nota =
-    document.getElementById("notaOfertas");
+    const nota =
+        document.getElementById("notaOfertas");
 
-if (label) {
-    label.textContent = TEXTO_ID;
+    if (label) {
+        label.textContent = TEXTO_ID;
+    }
+
+    if (input) {
+        input.placeholder = PLACEHOLDER_ID;
+    }
+
+    if (juegoConfirmacion) {
+        juegoConfirmacion.textContent =
+            NOMBRE_JUEGO;
+    }
+
+    if (volverExito) {
+        volverExito.textContent =
+            "Volver a " + NOMBRE_JUEGO;
+
+        volverExito.onclick = function() {
+            window.location.href = PAGINA_VOLVER;
+        };
+    }
+
+    if (descripcion) {
+        descripcion.textContent =
+            "Elige una oferta especial de " +
+            NOMBRE_JUEGO + ".";
+    }
+
+    if (nota) {
+        nota.textContent =
+            "Precios y compras próximamente disponibles.";
+    }
+
+    cargarOfertas();
 }
 
-if (input) {
-    input.placeholder = PLACEHOLDER_ID;
-}
-
-if (juegoConfirmacion) {
-    juegoConfirmacion.textContent = NOMBRE_JUEGO;
-}
-
-if (volverExito) {
-    volverExito.textContent =
-        "Volver a " + NOMBRE_JUEGO;
-
-    volverExito.onclick = function() {
-        window.location.href = PAGINA_VOLVER;
-    };
-}
-
-if (descripcion) {
-    descripcion.textContent =
-        "Elige una oferta especial de " +
-        NOMBRE_JUEGO + ".";
-}
-
-if (nota) {
-    nota.textContent =
-        "Precios y compras próximamente disponibles.";
-}
-
-cargarOfertas();
-
-});
+);
