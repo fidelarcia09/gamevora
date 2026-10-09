@@ -24,6 +24,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
             padding: 18px;
             border-bottom: 1px solid #12385f;
             background: #071225;
@@ -46,6 +47,7 @@
             padding: 9px 13px;
             border-radius: 9px;
             font-size: 13px;
+            white-space: nowrap;
         }
 
         .contenedor {
@@ -154,13 +156,35 @@
             transform: scale(1.02);
             box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
         }
+
+        .estado-catalogo {
+            color: #8fa5bd;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-top: -8px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 380px) {
+            header {
+                padding: 14px 10px;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
+
+            .inicio {
+                padding: 8px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
 <header>
-
     <div class="logo">
         <span class="rayo">⚡</span> Gamers Gold Top-Up
     </div>
@@ -168,11 +192,9 @@
     <a href="juegos.html" class="inicio">
         ← Juegos
     </a>
-
 </header>
 
 <main class="contenedor">
-
     <section class="juego">
 
         <div class="icono">🔥</div>
@@ -183,9 +205,7 @@
             Recarga tu cuenta de Free Fire de forma rápida y sencilla.
         </p>
 
-        <label for="id">
-            ID del jugador
-        </label>
+        <label for="id">ID del jugador</label>
 
         <input
             type="text"
@@ -194,13 +214,15 @@
             autocomplete="off"
         >
 
-        <label for="cantidad">
-            Selecciona una cantidad
-        </label>
+        <label for="cantidad">Selecciona una oferta</label>
 
         <select id="cantidad" disabled>
-            <option value="">Cargando paquetes...</option>
+            <option value="">Cargando ofertas de Next Level...</option>
         </select>
+
+        <p class="estado-catalogo" id="estadoCatalogo" aria-live="polite">
+            Conectando con el catálogo...
+        </p>
 
         <button
             class="recargar"
@@ -213,7 +235,6 @@
         </button>
 
         <div class="separador-ofertas">
-
             <button
                 class="boton-ofertas"
                 type="button"
@@ -221,16 +242,20 @@
             >
                 🎁 Ofertas Especiales
             </button>
-
         </div>
 
     </section>
-
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+"use strict";
+
+/* =========================================
+   SUPABASE
+========================================= */
+
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
 
@@ -242,21 +267,37 @@ const supabaseClient = window.supabase.createClient(
     SUPABASE_KEY
 );
 
+/* =========================================
+   CATÁLOGO NEXT LEVEL
+========================================= */
+
 const URL_CATALOGO =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
 const selectCantidad = document.getElementById("cantidad");
 const botonRecargar = document.getElementById("botonRecargar");
+const estadoCatalogo = document.getElementById("estadoCatalogo");
 
 let catalogoCargado = false;
+let ofertasDisponibles = [];
 
-/* ABRIR OFERTAS ESPECIALES */
+/*
+ * Este archivo muestra el catálogo real.
+ * La compra continúa usando game_products en Supabase.
+ * No se simulan compras a través de Next Level.
+ */
+
+/* =========================================
+   NAVEGACIÓN
+========================================= */
 
 function abrirOfertas() {
     window.location.href = "ofertas-free-fire.html";
 }
 
-/* EXTRAER PRODUCTOS DE LA RESPUESTA */
+/* =========================================
+   LEER LOS PRODUCTOS RECIBIDOS
+========================================= */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) {
@@ -279,130 +320,61 @@ function extraerProductos(respuesta) {
         return respuesta.data;
     }
 
-    if (
-        respuesta.data &&
-        Array.isArray(respuesta.data.products)
-    ) {
+    if (respuesta.data && Array.isArray(respuesta.data.products)) {
         return respuesta.data.products;
-    }
-
-    if (
-        respuesta.data &&
-        respuesta.data.data &&
-        Array.isArray(respuesta.data.data.products)
-    ) {
-        return respuesta.data.data.products;
     }
 
     return [];
 }
 
-/* IDENTIFICAR PAQUETES DE DIAMANTES */
+/* =========================================
+   VALIDAR REGIÓN Y NOMBRE DEL PRODUCTO
+========================================= */
 
-function identificarDiamantes(producto) {
-    const identificador = String(
+function esOfertaLATAM(producto) {
+    const region = String(producto.region || "")
+        .trim()
+        .toUpperCase();
+
+    return region === "LATAM & USA";
+}
+
+function obtenerNombre(producto) {
+    return String(
+        producto.name ||
+        producto.productName ||
+        producto.product_name ||
+        producto.title ||
+        producto.productId ||
+        "Producto de Free Fire"
+    ).trim();
+}
+
+function obtenerProductId(producto) {
+    return String(
         producto.productId ||
         producto.product_id ||
         producto.id ||
         ""
-    ).toLowerCase();
-
-    const nombre = String(
-        producto.productName ||
-        producto.product_name ||
-        producto.name ||
-        producto.title ||
-        ""
-    ).toLowerCase();
-
-    const texto = identificador + " " + nombre;
-
-    // Excluir membresías y Booyah Pass.
-    if (
-        texto.includes("weekly_membership") ||
-        texto.includes("monthly_membership") ||
-        texto.includes("booyah_pass") ||
-        texto.includes("booyah pass") ||
-        texto.includes("membership") ||
-        texto.includes("membresía") ||
-        texto.includes("membresia")
-    ) {
-        return null;
-    }
-
-    /*
-     * Los IDs conocidos de Next Level incluyen:
-     * 110, 341, 572, 1166 y 2398.
-     *
-     * Esos IDs corresponden a paquetes que se muestran
-     * comercialmente como 110, 310, 520, 1060 y 2180.
-     */
-    const paquetesConocidos = [
-        {
-            id: "fz-free_fire_latam-110_diamonds",
-            nombre: "110 diamantes",
-            cantidad: 110
-        },
-        {
-            id: "fz-free_fire_latam-341_diamonds",
-            nombre: "310 diamantes",
-            cantidad: 310
-        },
-        {
-            id: "fz-free_fire_latam-572_diamonds",
-            nombre: "520 diamantes",
-            cantidad: 520
-        },
-        {
-            id: "fz-free_fire_latam-1166_diamonds",
-            nombre: "1060 diamantes",
-            cantidad: 1060
-        },
-        {
-            id: "fz-free_fire_latam-2398_diamonds",
-            nombre: "2180 diamantes",
-            cantidad: 2180
-        }
-    ];
-
-    const coincidenciaId = paquetesConocidos.find(
-        paquete => identificador === paquete.id.toLowerCase()
-    );
-
-    if (coincidenciaId) {
-        return coincidenciaId;
-    }
-
-    /*
-     * Como alternativa, reconocer el nombre comercial
-     * si el proveedor no entrega uno de los IDs conocidos.
-     */
-    const coincidenciasNombre = [
-        { patron: /\b110\s*diamonds?\b|\b110\s*diamantes\b/, nombre: "110 diamantes", cantidad: 110 },
-        { patron: /\b310\s*diamonds?\b|\b310\s*diamantes\b/, nombre: "310 diamantes", cantidad: 310 },
-        { patron: /\b520\s*diamonds?\b|\b520\s*diamantes\b/, nombre: "520 diamantes", cantidad: 520 },
-        { patron: /\b1060\s*diamonds?\b|\b1060\s*diamantes\b/, nombre: "1060 diamantes", cantidad: 1060 },
-        { patron: /\b2180\s*diamonds?\b|\b2180\s*diamantes\b/, nombre: "2180 diamantes", cantidad: 2180 }
-    ];
-
-    for (const paquete of coincidenciasNombre) {
-        if (paquete.patron.test(nombre)) {
-            return paquete;
-        }
-    }
-
-    return null;
+    ).trim();
 }
 
-/* CARGAR EL CATÁLOGO REAL DE NEXT LEVEL */
+/* =========================================
+   CARGAR OFERTAS REALES
+========================================= */
 
 async function cargarCatalogoDiamantes() {
     catalogoCargado = false;
+    ofertasDisponibles = [];
+
     selectCantidad.disabled = true;
     botonRecargar.disabled = true;
 
     selectCantidad.innerHTML =
-        '<option value="">Cargando paquetes...</option>';
+        '<option value="">Cargando ofertas de Next Level...</option>';
+
+    estadoCatalogo.textContent =
+        "Conectando con el catálogo...";
 
     try {
         const respuesta = await fetch(
@@ -420,7 +392,7 @@ async function cargarCatalogoDiamantes() {
 
         const resultado = await respuesta.json();
 
-        console.log("RESPUESTA CATÁLOGO NEXT LEVEL:", resultado);
+        console.log("RESPUESTA NEXT LEVEL:", resultado);
 
         if (!respuesta.ok) {
             throw new Error(
@@ -432,7 +404,7 @@ async function cargarCatalogoDiamantes() {
 
         const productos = extraerProductos(resultado);
 
-        console.log("PRODUCTOS RECIBIDOS:", productos);
+        console.log("TOTAL DE PRODUCTOS RECIBIDOS:", productos.length);
 
         if (productos.length === 0) {
             throw new Error(
@@ -440,177 +412,223 @@ async function cargarCatalogoDiamantes() {
             );
         }
 
-        const encontrados = new Map();
+        /*
+         * Solo mostrar productos disponibles de LATAM & USA.
+         * Así se excluyen los 120 Diamonds de Indonesia.
+         *
+         * No convertimos 341 en 310 ni 572 en 520.
+         * Se muestra exactamente el nombre enviado por Next Level.
+         *
+         * Se incluyen diamantes, membresías y Booyah Pass.
+         */
 
-        for (const producto of productos) {
-            if (!producto || producto.available === false) {
-                continue;
-            }
+        ofertasDisponibles = productos.filter(producto => {
+            return producto &&
+                producto.available === true &&
+                esOfertaLATAM(producto) &&
+                obtenerProductId(producto) !== "";
+        });
 
-            const paquete = identificarDiamantes(producto);
+        console.log(
+            "OFERTAS LATAM DISPONIBLES:",
+            ofertasDisponibles
+        );
 
-            if (paquete && !encontrados.has(paquete.cantidad)) {
-                encontrados.set(paquete.cantidad, paquete);
-            }
-        }
-
-        const paquetes = Array.from(encontrados.values())
-            .sort((a, b) => a.cantidad - b.cantidad);
-
-        // Vaciar el selector para eliminar las opciones antiguas.
         selectCantidad.innerHTML = "";
 
         const opcionInicial = document.createElement("option");
         opcionInicial.value = "";
-        opcionInicial.textContent = "Selecciona una cantidad";
+        opcionInicial.textContent = "Selecciona una oferta";
         selectCantidad.appendChild(opcionInicial);
 
-        // Añadir exclusivamente los paquetes reconocidos del catálogo.
-        for (const paquete of paquetes) {
+        ofertasDisponibles.forEach(producto => {
             const opcion = document.createElement("option");
-            opcion.value = paquete.nombre;
-            opcion.textContent = paquete.nombre;
+
+            /*
+             * El valor es el identificador real de Next Level.
+             * No es una cantidad comercial inventada.
+             */
+            opcion.value = obtenerProductId(producto);
+            opcion.textContent = obtenerNombre(producto);
+
             selectCantidad.appendChild(opcion);
-        }
+        });
 
-        if (paquetes.length === 0) {
+        if (ofertasDisponibles.length === 0) {
             selectCantidad.innerHTML =
-                '<option value="">No se encontraron paquetes</option>';
+                '<option value="">No hay ofertas LATAM disponibles</option>';
 
-            throw new Error(
-                "Next Level respondió, pero los IDs o nombres de sus productos " +
-                "no coinciden con los paquetes reconocidos. Revisa la consola."
-            );
+            estadoCatalogo.textContent =
+                "No se encontraron ofertas disponibles para LATAM & USA.";
+
+            return;
         }
 
-        catalogoCargado = paquetes.some(
-            paquete => paquete.cantidad === 110
-        );
-
+        catalogoCargado = true;
         selectCantidad.disabled = false;
         botonRecargar.disabled = false;
 
-        console.log("PAQUETES MOSTRADOS:", paquetes);
+        estadoCatalogo.textContent =
+            ofertasDisponibles.length +
+            " ofertas reales disponibles en el catálogo.";
+
+        console.log(
+            "TOTAL DE OFERTAS MOSTRADAS:",
+            ofertasDisponibles.length
+        );
 
     } catch (error) {
-        console.error("ERROR CARGANDO CATÁLOGO:", error);
+        console.error("ERROR CARGANDO NEXT LEVEL:", error);
 
         catalogoCargado = false;
+        ofertasDisponibles = [];
 
         selectCantidad.innerHTML =
-            '<option value="">Error cargando paquetes</option>';
+            '<option value="">Error cargando ofertas</option>';
 
         selectCantidad.disabled = true;
         botonRecargar.disabled = true;
+
+        estadoCatalogo.textContent =
+            "No se pudo cargar el catálogo. Intenta recargar la página.";
     }
 }
 
-/* COMPRA ACTUAL: SOLO 110 DIAMANTES */
+/* =========================================
+   COMPRA ACTUAL DE 110 DIAMANTES
+========================================= */
 
 async function continuarRecarga() {
     const idJugador =
         document.getElementById("id").value.trim();
 
-    const cantidad = selectCantidad.value;
+    const productIdSeleccionado = selectCantidad.value;
 
-    if (idJugador === "") {
+    if (!idJugador) {
         alert("Escribe tu ID de Free Fire.");
         return;
     }
 
-    if (cantidad === "") {
-        alert("Selecciona una cantidad.");
+    if (!productIdSeleccionado) {
+        alert("Selecciona una oferta.");
         return;
     }
 
     if (!catalogoCargado) {
-        alert("El paquete de 110 diamantes no está disponible.");
+        alert("El catálogo todavía no está disponible.");
         return;
     }
 
-    // No habilitar la compra de los otros paquetes todavía.
-    if (cantidad !== "110 diamantes") {
-        alert(
-            "Este paquete todavía no tiene la compra habilitada. " +
-            "La activaremos cuando configuremos su producto y precio en GVR."
-        );
-        return;
-    }
-
-    const {
-        data: { session },
-        error: sessionError
-    } = await supabaseClient.auth.getSession();
-
-    if (sessionError || !session) {
-        alert("Debes iniciar sesión primero.");
-        window.location.href = "login.html";
-        return;
-    }
-
-    const {
-        data: producto,
-        error: productoError
-    } = await supabaseClient
-        .from("game_products")
-        .select("id, game, product_name, price_gvr, active")
-        .eq("game", "Free Fire")
-        .eq("product_name", "110 Diamantes")
-        .maybeSingle();
-
-    console.log("PRODUCTO SUPABASE:", producto);
-    console.log("ERROR PRODUCTO:", productoError);
-
-    if (productoError) {
-        alert(
-            "Error buscando producto:\n\n" +
-            productoError.message
-        );
-        return;
-    }
-
-    if (!producto) {
-        alert("Supabase no encontró el producto de 110 diamantes.");
-        return;
-    }
-
-    if (!producto.active) {
-        alert("El producto de 110 diamantes no está activo.");
-        return;
-    }
-
-    const {
-        data,
-        error
-    } = await supabaseClient.rpc(
-        "purchase_game_product",
-        {
-            p_product_id: producto.id,
-            p_player_id: idJugador
-        }
+    const ofertaSeleccionada = ofertasDisponibles.find(
+        producto =>
+            obtenerProductId(producto) === productIdSeleccionado
     );
 
-    if (error) {
+    if (!ofertaSeleccionada) {
+        alert("No se encontró la oferta seleccionada. Recarga la página.");
+        return;
+    }
+
+    /*
+     * Solo 110 Diamonds tiene habilitada la compra existente.
+     * Los demás productos se muestran, pero no se cobran todavía.
+     */
+    if (
+        obtenerProductId(ofertaSeleccionada) !==
+        "fz-free_fire_latam-110_diamonds"
+    ) {
+        alert(
+            "Esta oferta ya aparece en el catálogo, pero su compra " +
+            "todavía no está habilitada. Estamos preparando sus productos y precios."
+        );
+        return;
+    }
+
+    botonRecargar.disabled = true;
+    botonRecargar.textContent = "Procesando...";
+
+    try {
+        const {
+            data: { session },
+            error: sessionError
+        } = await supabaseClient.auth.getSession();
+
+        if (sessionError || !session) {
+            alert("Debes iniciar sesión primero.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const {
+            data: producto,
+            error: productoError
+        } = await supabaseClient
+            .from("game_products")
+            .select("id, game, product_name, price_gvr, active")
+            .eq("game", "Free Fire")
+            .eq("product_name", "110 Diamantes")
+            .maybeSingle();
+
+        if (productoError) {
+            throw new Error(
+                "Error buscando el producto en Supabase: " +
+                productoError.message
+            );
+        }
+
+        if (!producto) {
+            throw new Error(
+                "Supabase no encontró el producto de 110 diamantes."
+            );
+        }
+
+        if (!producto.active) {
+            throw new Error(
+                "El producto de 110 diamantes no está activo."
+            );
+        }
+
+        const {
+            data,
+            error
+        } = await supabaseClient.rpc(
+            "purchase_game_product",
+            {
+                p_product_id: producto.id,
+                p_player_id: idJugador
+            }
+        );
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        alert(
+            "¡Compra realizada! ⚡\n\n" +
+            "110 diamantes\n" +
+            "Precio: " + producto.price_gvr + " GVR\n\n" +
+            "ID del pedido: " + data
+        );
+
+        window.location.href = "cuenta.html";
+
+    } catch (error) {
         console.error("ERROR DE COMPRA:", error);
 
         alert(
-            "No se pudo realizar la compra:\n\n" +
+            "No se pudo completar la compra:\n\n" +
             error.message
         );
-        return;
+
+    } finally {
+        botonRecargar.disabled = !catalogoCargado;
+        botonRecargar.textContent = "Continuar ⚡";
     }
-
-    alert(
-        "¡Compra realizada! ⚡\n\n" +
-        "110 diamantes\n" +
-        "Precio: " + producto.price_gvr + " GVR\n\n" +
-        "ID del pedido: " + data
-    );
-
-    window.location.href = "cuenta.html";
 }
 
-/* INICIAR CARGA DEL CATÁLOGO */
+/* =========================================
+   INICIO
+========================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -619,4 +637,4 @@ document.addEventListener(
 </script>
 
 </body>
-</html>
+    </html>
