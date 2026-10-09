@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Consulta el catálogo de Arena Breakout en Gamers Gold Top-Up.">
+    <meta name="description" content="Recarga Bonds de Arena Breakout en Gamers Gold Top-Up.">
 
     <title>Arena Breakout | Gamers Gold Top-Up</title>
 
@@ -143,6 +143,12 @@
             border: 1px solid #164b75;
             border-radius: 13px;
             text-align: left;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .producto:hover {
+            border-color: #168cff;
         }
 
         .producto.seleccionado {
@@ -243,8 +249,7 @@
         <h1>Arena Breakout</h1>
 
         <p class="descripcion">
-            Explora los productos disponibles para Arena Breakout.
-            Selecciona un producto para consultar su información.
+            Selecciona tu paquete de Bonds de Arena Breakout.
         </p>
 
         <label class="etiqueta" for="idjugador">
@@ -258,10 +263,12 @@
             autocomplete="off"
         >
 
-        <label class="etiqueta">Catálogo de productos</label>
+        <label class="etiqueta">
+            Selecciona una cantidad de Bonds
+        </label>
 
-        <div id="estadoCatalogo" class="estado">
-            Cargando catálogo de Arena Breakout...
+        <div id="estadoCatalogo" class="estado" aria-live="polite">
+            Conectando con el catálogo de Next Level...
         </div>
 
         <div id="catalogo" class="catalogo"></div>
@@ -286,112 +293,313 @@
         </div>
 
         <p class="nota">
-            Catálogo informativo. Las compras estarán disponibles
-            cuando se configuren los precios y se verifique el sistema
-            de pedidos del proveedor.
+            Los paquetes se consultan desde Next Level.
+            Las compras se habilitarán cuando se configuren los precios
+            y se complete la integración del sistema de pedidos.
         </p>
     </main>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
+"use strict";
+
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
+
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-const SUPABASE_ANON_KEY =
+const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
+const URL_CATALOGO =
+    SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
 const catalogo = document.getElementById("catalogo");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
 
 let productoSeleccionado = null;
+let productosDisponibles = [];
+
+/*
+    Solo permitimos los seis paquetes de Bonds nuevos
+    que devuelve Next Level.
+*/
+
+const BONDS_PERMITIDOS = [
+    "fz-arena_breakout-66_bonds",
+    "fz-arena_breakout-335_bonds",
+    "fz-arena_breakout-675_bonds",
+    "fz-arena_breakout-1690_bonds",
+    "fz-arena_breakout-3400_bonds",
+    "fz-arena_breakout-6820_bonds"
+];
+
+/* =====================================================
+   NAVEGACIÓN
+===================================================== */
 
 function abrirOfertas() {
     window.location.href = "ofertas-arena.html";
 }
+
+/* =====================================================
+   ESTADO
+===================================================== */
 
 function mostrarEstado(mensaje, esError = false) {
     estadoCatalogo.textContent = mensaje;
     estadoCatalogo.classList.toggle("error", esError);
 }
 
-async function cargarCatalogo() {
-    mostrarEstado("Cargando productos...");
+/* =====================================================
+   EXTRAER PRODUCTOS DE LA RESPUESTA
+===================================================== */
 
-    const { data, error } = await supabaseClient
-        .from("game_products")
-        .select(
-            "id, game, product_name, game_currency_amount, price_gvr, active, provider, provider_product_id"
-        )
-        .eq("game", "Arena Breakout")
-        .eq("provider", "nextlevel")
-        .not("provider_product_id", "is", null)
-        .order("provider_cost", { ascending: true });
-
-    if (error) {
-        console.error("Error cargando catálogo:", error);
-        mostrarEstado(
-            "No se pudo cargar el catálogo. Inténtalo de nuevo más tarde.",
-            true
-        );
-        return;
+function extraerProductos(respuesta) {
+    if (Array.isArray(respuesta)) {
+        return respuesta;
     }
+
+    if (!respuesta || typeof respuesta !== "object") {
+        return [];
+    }
+
+    if (Array.isArray(respuesta.productos)) {
+        return respuesta.productos;
+    }
+
+    if (Array.isArray(respuesta.products)) {
+        return respuesta.products;
+    }
+
+    if (Array.isArray(respuesta.data)) {
+        return respuesta.data;
+    }
+
+    if (
+        respuesta.data &&
+        Array.isArray(respuesta.data.products)
+    ) {
+        return respuesta.data.products;
+    }
+
+    return [];
+}
+
+/* =====================================================
+   IDENTIFICAR PRODUCTO
+===================================================== */
+
+function obtenerProductId(producto) {
+    return String(
+        producto.productId ||
+        producto.product_id ||
+        producto.id ||
+        ""
+    ).trim();
+}
+
+function obtenerNombre(producto) {
+    return String(
+        producto.name ||
+        producto.productName ||
+        producto.product_name ||
+        producto.title ||
+        obtenerProductId(producto)
+    ).trim();
+}
+
+/* =====================================================
+   PRECIO INFORMATIVO DEL PROVEEDOR
+   No es el precio de venta en GVR.
+===================================================== */
+
+function obtenerPrecioProveedor(producto) {
+    const amount = Number(
+        producto.price && producto.price.amount
+    );
+
+    const currency = String(
+        producto.price && producto.price.currency || ""
+    ).trim();
+
+    if (Number.isFinite(amount) && amount > 0 && currency) {
+        return amount.toFixed(2) + " " + currency;
+    }
+
+    return "Precio de venta próximamente";
+}
+
+/* =====================================================
+   CARGAR CATÁLOGO DE NEXT LEVEL
+===================================================== */
+
+async function cargarCatalogo() {
+    productoSeleccionado = null;
+    productosDisponibles = [];
 
     catalogo.replaceChildren();
 
-    if (!data || data.length === 0) {
-        mostrarEstado("Todavía no hay productos de proveedor registrados.");
-        return;
-    }
+    mostrarEstado("Conectando con el catálogo de Next Level...");
 
-    mostrarEstado(
-        "Productos recibidos: " + data.length +
-        ". Las compras todavía no están habilitadas."
-    );
+    try {
+        const respuesta = await fetch(
+            URL_CATALOGO + "?game=arena-breakout",
+            {
+                method: "GET",
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": "Bearer " + SUPABASE_KEY,
+                    "Accept": "application/json"
+                },
+                cache: "no-store"
+            }
+        );
 
-    data.forEach(producto => {
-        const tarjeta = document.createElement("article");
-        tarjeta.className = "producto";
+        let resultado;
 
-        const nombre = document.createElement("div");
-        nombre.className = "producto-nombre";
-        nombre.textContent = producto.product_name;
+        try {
+            resultado = await respuesta.json();
+        } catch {
+            throw new Error(
+                "El catálogo devolvió una respuesta que no es JSON."
+            );
+        }
 
-        const precio = document.createElement("div");
-        precio.className = "producto-precio";
-        precio.textContent =
-            Number(producto.price_gvr) > 0
-                ? Number(producto.price_gvr) + " GVR"
-                : "Precio próximamente";
+        console.log(
+            "RESPUESTA CATÁLOGO ARENA BREAKOUT:",
+            resultado
+        );
 
-        const estado = document.createElement("div");
-        estado.className = "producto-estado";
-        estado.textContent = producto.active
-            ? "Disponible"
-            : "Próximamente";
+        if (!respuesta.ok) {
+            throw new Error(
+                resultado.error ||
+                resultado.message ||
+                "Error HTTP " + respuesta.status
+            );
+        }
 
-        tarjeta.append(nombre, precio, estado);
+        const productos = extraerProductos(resultado);
 
-        tarjeta.addEventListener("click", () => {
-            document.querySelectorAll(".producto").forEach(elemento => {
-                elemento.classList.remove("seleccionado");
-            });
+        if (productos.length === 0) {
+            throw new Error(
+                "Next Level no devolvió productos para Arena Breakout."
+            );
+        }
 
-            tarjeta.classList.add("seleccionado");
-            productoSeleccionado = producto;
+        /*
+            Filtrar exclusivamente los Bonds permitidos
+            y disponibles según Next Level.
+        */
+
+        const mapaProductos = new Map();
+
+        productos.forEach(producto => {
+            if (!producto || producto.available !== true) {
+                return;
+            }
+
+            const id = obtenerProductId(producto);
+
+            if (!BONDS_PERMITIDOS.includes(id)) {
+                return;
+            }
+
+            mapaProductos.set(id, producto);
         });
 
-        catalogo.appendChild(tarjeta);
-    });
+        /*
+            Mostrar en el orden establecido,
+            aunque el proveedor cambie el orden de respuesta.
+        */
+
+        productosDisponibles = BONDS_PERMITIDOS
+            .filter(id => mapaProductos.has(id))
+            .map(id => mapaProductos.get(id));
+
+        console.log(
+            "BONDS DISPONIBLES:",
+            productosDisponibles.map(producto => ({
+                id: obtenerProductId(producto),
+                nombre: obtenerNombre(producto)
+            }))
+        );
+
+        if (productosDisponibles.length === 0) {
+            mostrarEstado(
+                "No se encontraron Bonds disponibles en Next Level.",
+                true
+            );
+            return;
+        }
+
+        productosDisponibles.forEach(producto => {
+            const tarjeta = document.createElement("button");
+
+            tarjeta.type = "button";
+            tarjeta.className = "producto";
+
+            const nombre = document.createElement("div");
+            nombre.className = "producto-nombre";
+            nombre.textContent = obtenerNombre(producto);
+
+            const precio = document.createElement("div");
+            precio.className = "producto-precio";
+            precio.textContent = obtenerPrecioProveedor(producto);
+
+            const estado = document.createElement("div");
+            estado.className = "producto-estado";
+            estado.textContent = "Disponible en Next Level";
+
+            tarjeta.append(nombre, precio, estado);
+
+            tarjeta.addEventListener("click", () => {
+                document.querySelectorAll(".producto").forEach(elemento => {
+                    elemento.classList.remove("seleccionado");
+                });
+
+                tarjeta.classList.add("seleccionado");
+                productoSeleccionado = producto;
+
+                console.log(
+                    "BONDS SELECCIONADOS:",
+                    obtenerProductId(productoSeleccionado)
+                );
+            });
+
+            catalogo.appendChild(tarjeta);
+        });
+
+        mostrarEstado(
+            productosDisponibles.length +
+            " paquetes de Bonds disponibles. " +
+            "Los precios mostrados son los del proveedor, no precios finales."
+        );
+
+    } catch (error) {
+        console.error(
+            "ERROR CARGANDO ARENA BREAKOUT:",
+            error
+        );
+
+        catalogo.replaceChildren();
+
+        mostrarEstado(
+            "No se pudo cargar el catálogo de Next Level. " +
+            error.message,
+            true
+        );
+    }
 }
+
+/* =====================================================
+   INICIALIZAR
+===================================================== */
 
 cargarCatalogo();
 </script>
+
 </body>
 </html>
