@@ -1,611 +1,596 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Descubre las ofertas especiales de Mobile Legends en Gamers Gold Top-Up.">
+    <meta name="description" content="Descubre las ofertas especiales de Mobile Legends en Gamers Gold Top-Up."><title>Ofertas Especiales | Gamers Gold Top-Up</title>
 
-    <title>Ofertas Especiales | Gamers Gold Top-Up</title>
+<style>
+    :root {
+        --fondo: #050b18;
+        --panel: #091a35;
+        --panel-oscuro: #061226;
+        --azul: #087cff;
+        --cian: #00baff;
+        --borde: #204c78;
+        --texto-secundario: #8fa5bd;
+    }
 
-    <style>
-        :root {
-            --fondo: #050b18;
-            --panel: #091a35;
-            --panel-oscuro: #061226;
-            --azul: #087cff;
-            --cian: #00baff;
-            --borde: #204c78;
-            --texto-secundario: #8fa5bd;
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        background:
+            radial-gradient(ellipse at top, #0b2041 0%, transparent 48%),
+            var(--fondo);
+        color: white;
+    }
+
+    button,
+    input {
+        font: inherit;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 17px 18px;
+        border-bottom: 1px solid #12385f;
+        background: rgba(7, 18, 37, 0.96);
+    }
+
+    .logo {
+        font-size: clamp(14px, 3.8vw, 20px);
+        font-weight: 900;
+        letter-spacing: -0.4px;
+    }
+
+    .logo .rayo {
+        color: var(--cian);
+        text-shadow: 0 0 12px #008cff;
+    }
+
+    .volver {
+        flex-shrink: 0;
+        text-decoration: none;
+        color: white;
+        border: 1px solid #168cff;
+        padding: 10px 12px;
+        border-radius: 9px;
+        font-size: 12px;
+        transition: 0.2s;
+    }
+
+    .volver:hover {
+        background: #0b2c50;
+        border-color: var(--cian);
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 540px;
+        margin: auto;
+        padding: 25px 16px 35px;
+    }
+
+    .ofertas {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(155deg, #0b1e3b, var(--panel));
+        border: 1px solid #15518c;
+        border-radius: 20px;
+        padding: 25px 19px;
+        box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+    }
+
+    .ofertas::before {
+        content: "";
+        display: block;
+        height: 2px;
+        position: absolute;
+        top: 0;
+        left: 15%;
+        right: 15%;
+        background: linear-gradient(90deg, transparent, var(--cian), transparent);
+        opacity: 0.8;
+    }
+
+    .icono {
+        text-align: center;
+        font-size: 43px;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: clamp(22px, 5vw, 27px);
+        margin-bottom: 9px;
+    }
+
+    .descripcion {
+        text-align: center;
+        color: var(--texto-secundario);
+        font-size: 13px;
+        line-height: 1.6;
+        margin-bottom: 23px;
+    }
+
+    .etiqueta {
+        width: fit-content;
+        max-width: 100%;
+        margin: 0 auto 17px;
+        padding: 7px 12px;
+        color: var(--cian);
+        background: rgba(0, 186, 255, 0.08);
+        border: 1px solid rgba(0, 186, 255, 0.25);
+        border-radius: 30px;
+        font-size: 10px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-align: center;
+    }
+
+    .pantalla {
+        display: none;
+    }
+
+    .pantalla.activa {
+        display: block;
+        animation: aparecer 0.25s ease;
+    }
+
+    @keyframes aparecer {
+        from {
+            opacity: 0;
+            transform: translateY(5px);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
-        body {
-            min-height: 100vh;
-            background:
-                radial-gradient(ellipse at top, #0b2041 0%, transparent 48%),
-                var(--fondo);
-            color: white;
-        }
+    .lista-ofertas {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
 
-        button,
-        input {
-            font: inherit;
-        }
+    .boton-oferta {
+        position: relative;
+        width: 100%;
+        min-height: 145px;
+        padding: 0;
+        border: 1px solid var(--borde);
+        border-radius: 14px;
+        background: var(--panel-oscuro);
+        color: white;
+        cursor: pointer;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: border-color 0.2s, background 0.2s, transform 0.2s;
+        box-shadow: 0 0 12px rgba(0, 140, 255, 0.06);
+        -webkit-tap-highlight-color: transparent;
+    }
 
+    .boton-oferta:hover {
+        border-color: #159dff;
+        background: #0a1d38;
+        transform: translateY(-2px);
+        box-shadow: 0 0 18px rgba(0, 157, 255, 0.18);
+    }
+
+    .boton-oferta:focus-visible,
+    button:focus-visible,
+    a:focus-visible {
+        outline: 2px solid var(--cian);
+        outline-offset: 3px;
+    }
+
+    .foto-oferta {
+        width: 100%;
+        min-height: 95px;
+        flex: 1;
+        background:
+            radial-gradient(ellipse at center, rgba(0, 140, 255, 0.13), transparent 70%),
+            #07172d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        overflow: hidden;
+    }
+
+    .foto-oferta span {
+        color: #b4d9f7;
+        font-size: 14px;
+    }
+
+    .emoji-oferta {
+        font-size: 31px !important;
+        filter: drop-shadow(0 0 9px rgba(0, 186, 255, 0.2));
+    }
+
+    .nombre-oferta {
+        width: 100%;
+        min-height: 47px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        background: #091a35;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        border-top: 1px solid var(--borde);
+    }
+
+    .boton-oferta.seleccionado {
+        border-color: var(--cian);
+        background: linear-gradient(180deg, #09244a, #0b315c);
+        box-shadow: 0 0 10px rgba(0, 186, 255, 0.2);
+    }
+
+    .boton-oferta.seleccionado .foto-oferta {
+        background: #09213f;
+    }
+
+    .boton-oferta.seleccionado .nombre-oferta {
+        background: #0b315c;
+        color: var(--cian);
+        border-top-color: var(--cian);
+    }
+
+    .estado {
+        text-align: center;
+        color: var(--texto-secundario);
+        font-size: 13px;
+        line-height: 1.6;
+        padding: 17px 8px;
+    }
+
+    .estado.error {
+        color: #ffb4b4;
+    }
+
+    .precio-oferta {
+        margin-top: 18px;
+        padding: 15px;
+        background: var(--panel-oscuro);
+        border: 1px solid var(--borde);
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .precio-titulo {
+        color: var(--texto-secundario);
+        font-size: 12px;
+        margin-bottom: 7px;
+    }
+
+    .precio {
+        color: var(--cian);
+        font-size: 23px;
+        font-weight: 900;
+    }
+
+    .boton-principal,
+    .boton-secundario {
+        width: 100%;
+        min-height: 47px;
+        padding: 13px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .boton-principal {
+        margin-top: 15px;
+        border: none;
+        background: linear-gradient(90deg, #087cff, #00baff);
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 140, 255, 0.15);
+    }
+
+    .boton-principal:hover:not(:disabled) {
+        filter: brightness(1.1);
+    }
+
+    .boton-principal:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .boton-secundario {
+        margin-top: 10px;
+        border: 1px solid #168cff;
+        background: var(--panel-oscuro);
+        color: white;
+    }
+
+    .boton-secundario:hover {
+        background: #0b2545;
+    }
+
+    .resumen {
+        background: var(--panel-oscuro);
+        border: 1px solid var(--borde);
+        border-radius: 13px;
+        padding: 14px 16px;
+        margin-top: 18px;
+    }
+
+    .fila {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 12px 0;
+        border-bottom: 1px solid #12385f;
+        font-size: 13px;
+    }
+
+    .fila:last-child {
+        border-bottom: none;
+    }
+
+    .fila span:first-child {
+        color: var(--texto-secundario);
+    }
+
+    .fila span:last-child {
+        color: white;
+        font-weight: bold;
+        text-align: right;
+        overflow-wrap: anywhere;
+    }
+
+    .campo-id {
+        margin-top: 18px;
+    }
+
+    .campo-id label {
+        display: block;
+        color: var(--texto-secundario);
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .campo-id input {
+        width: 100%;
+        padding: 13px;
+        background: var(--panel-oscuro);
+        border: 1px solid var(--borde);
+        border-radius: 10px;
+        color: white;
+        outline: none;
+        font-size: 15px;
+    }
+
+    .campo-id input:focus {
+        border-color: #159dff;
+        box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+    }
+
+    .exito {
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .icono-exito {
+        font-size: 60px;
+        margin-bottom: 12px;
+    }
+
+    .exito h2 {
+        font-size: 23px;
+        margin-bottom: 10px;
+    }
+
+    .exito p {
+        color: var(--texto-secundario);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .pedido-id {
+        margin-top: 18px;
+        background: var(--panel-oscuro);
+        border: 1px solid var(--borde);
+        border-radius: 10px;
+        padding: 13px;
+        color: var(--cian);
+        font-size: 13px;
+        font-weight: bold;
+        overflow-wrap: anywhere;
+    }
+
+    .nota {
+        text-align: center;
+        color: #7890aa;
+        font-size: 11px;
+        line-height: 1.6;
+        margin-top: 18px;
+    }
+
+    @media (max-width: 360px) {
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            padding: 17px 18px;
-            border-bottom: 1px solid #12385f;
-            background: rgba(7, 18, 37, 0.96);
+            padding: 14px 10px;
         }
 
         .logo {
-            font-size: clamp(14px, 3.8vw, 20px);
-            font-weight: 900;
-            letter-spacing: -0.4px;
-        }
-
-        .logo .rayo {
-            color: var(--cian);
-            text-shadow: 0 0 12px #008cff;
+            font-size: 13px;
         }
 
         .volver {
-            flex-shrink: 0;
-            text-decoration: none;
-            color: white;
-            border: 1px solid #168cff;
-            padding: 10px 12px;
-            border-radius: 9px;
-            font-size: 12px;
-            transition: 0.2s;
-        }
-
-        .volver:hover {
-            background: #0b2c50;
-            border-color: var(--cian);
+            padding: 8px;
+            font-size: 11px;
         }
 
         .contenedor {
-            width: 100%;
-            max-width: 540px;
-            margin: auto;
-            padding: 25px 16px 35px;
+            padding: 18px 10px;
         }
 
         .ofertas {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(155deg, #0b1e3b, var(--panel));
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 25px 19px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+            padding: 22px 14px;
         }
+    }
 
-        .ofertas::before {
-            content: "";
-            display: block;
-            height: 2px;
-            position: absolute;
-            top: 0;
-            left: 15%;
-            right: 15%;
-            background: linear-gradient(90deg, transparent, var(--cian), transparent);
-            opacity: 0.8;
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
         }
+    }
+</style>
 
-        .icono {
-            text-align: center;
-            font-size: 43px;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: clamp(22px, 5vw, 27px);
-            margin-bottom: 9px;
-        }
-
-        .descripcion {
-            text-align: center;
-            color: var(--texto-secundario);
-            font-size: 13px;
-            line-height: 1.6;
-            margin-bottom: 23px;
-        }
-
-        .etiqueta {
-            width: fit-content;
-            margin: 0 auto 17px;
-            padding: 7px 12px;
-            color: var(--cian);
-            background: rgba(0, 186, 255, 0.08);
-            border: 1px solid rgba(0, 186, 255, 0.25);
-            border-radius: 30px;
-            font-size: 10px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .pantalla {
-            display: none;
-        }
-
-        .pantalla.activa {
-            display: block;
-            animation: aparecer 0.25s ease;
-        }
-
-        @keyframes aparecer {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .lista-ofertas {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .boton-oferta {
-            position: relative;
-            width: 100%;
-            min-height: 145px;
-            padding: 0;
-            border: 1px solid var(--borde);
-            border-radius: 14px;
-            background: var(--panel-oscuro);
-            color: white;
-            cursor: pointer;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: border-color 0.2s, background 0.2s, transform 0.2s;
-            box-shadow: 0 0 12px rgba(0, 140, 255, 0.06);
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .boton-oferta:hover {
-            border-color: #159dff;
-            background: #0a1d38;
-            transform: translateY(-2px);
-            box-shadow: 0 0 18px rgba(0, 157, 255, 0.18);
-        }
-
-        .boton-oferta:focus-visible,
-        button:focus-visible,
-        a:focus-visible {
-            outline: 2px solid var(--cian);
-            outline-offset: 3px;
-        }
-
-        .foto-oferta {
-            width: 100%;
-            min-height: 95px;
-            flex: 1;
-            background:
-                radial-gradient(ellipse at center, rgba(0, 140, 255, 0.13), transparent 70%),
-                #07172d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            overflow: hidden;
-        }
-
-        .foto-oferta span {
-            color: #b4d9f7;
-            font-size: 14px;
-        }
-
-        .emoji-oferta {
-            font-size: 31px !important;
-            filter: drop-shadow(0 0 9px rgba(0, 186, 255, 0.2));
-        }
-
-        .nombre-oferta {
-            width: 100%;
-            min-height: 47px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            background: #091a35;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: center;
-            border-top: 1px solid var(--borde);
-        }
-
-        .boton-oferta.seleccionado {
-            border-color: var(--cian);
-            background: linear-gradient(180deg, #09244a, #0b315c);
-            box-shadow: 0 0 10px rgba(0, 186, 255, 0.2);
-        }
-
-        .boton-oferta.seleccionado .foto-oferta {
-            background: #09213f;
-        }
-
-        .boton-oferta.seleccionado .nombre-oferta {
-            background: #0b315c;
-            color: var(--cian);
-            border-top-color: var(--cian);
-        }
-
-        .estado {
-            text-align: center;
-            color: var(--texto-secundario);
-            font-size: 13px;
-            line-height: 1.6;
-            padding: 17px 8px;
-        }
-
-        .estado.error {
-            color: #ffb4b4;
-        }
-
-        .precio-oferta {
-            margin-top: 18px;
-            padding: 15px;
-            background: var(--panel-oscuro);
-            border: 1px solid var(--borde);
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .precio-titulo {
-            color: var(--texto-secundario);
-            font-size: 12px;
-            margin-bottom: 7px;
-        }
-
-        .precio {
-            color: var(--cian);
-            font-size: 23px;
-            font-weight: 900;
-        }
-
-        .boton-principal,
-        .boton-secundario {
-            width: 100%;
-            min-height: 47px;
-            padding: 13px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .boton-principal {
-            margin-top: 15px;
-            border: none;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 140, 255, 0.15);
-        }
-
-        .boton-principal:hover:not(:disabled) {
-            filter: brightness(1.1);
-        }
-
-        .boton-principal:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .boton-secundario {
-            margin-top: 10px;
-            border: 1px solid #168cff;
-            background: var(--panel-oscuro);
-            color: white;
-        }
-
-        .boton-secundario:hover {
-            background: #0b2545;
-        }
-
-        .resumen {
-            background: var(--panel-oscuro);
-            border: 1px solid var(--borde);
-            border-radius: 13px;
-            padding: 14px 16px;
-            margin-top: 18px;
-        }
-
-        .fila {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            padding: 12px 0;
-            border-bottom: 1px solid #12385f;
-            font-size: 13px;
-        }
-
-        .fila:last-child {
-            border-bottom: none;
-        }
-
-        .fila span:first-child {
-            color: var(--texto-secundario);
-        }
-
-        .fila span:last-child {
-            color: white;
-            font-weight: bold;
-            text-align: right;
-            overflow-wrap: anywhere;
-        }
-
-        .campo-id {
-            margin-top: 18px;
-        }
-
-        .campo-id label {
-            display: block;
-            color: var(--texto-secundario);
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
-
-        .campo-id input {
-            width: 100%;
-            padding: 13px;
-            background: var(--panel-oscuro);
-            border: 1px solid var(--borde);
-            border-radius: 10px;
-            color: white;
-            outline: none;
-            font-size: 15px;
-        }
-
-        .campo-id input:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
-
-        .exito {
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        .icono-exito {
-            font-size: 60px;
-            margin-bottom: 12px;
-        }
-
-        .exito h2 {
-            font-size: 23px;
-            margin-bottom: 10px;
-        }
-
-        .exito p {
-            color: var(--texto-secundario);
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .pedido-id {
-            margin-top: 18px;
-            background: var(--panel-oscuro);
-            border: 1px solid var(--borde);
-            border-radius: 10px;
-            padding: 13px;
-            color: var(--cian);
-            font-size: 13px;
-            font-weight: bold;
-            overflow-wrap: anywhere;
-        }
-
-        .nota {
-            text-align: center;
-            color: #7890aa;
-            font-size: 11px;
-            line-height: 1.6;
-            margin-top: 18px;
-        }
-
-        @media (max-width: 360px) {
-            header {
-                padding: 14px 10px;
-            }
-
-            .logo {
-                font-size: 13px;
-            }
-
-            .volver {
-                padding: 8px;
-                font-size: 11px;
-            }
-
-            .contenedor {
-                padding: 18px 10px;
-            }
-
-            .ofertas {
-                padding: 22px 14px;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
+</head><body><header>
     <div class="logo">
         <span class="rayo">⚡</span>
         Gamers Gold Top-Up
+    </div><a href="mobilelegends.html" class="volver">← Volver</a>
+
+</header><main class="contenedor"><section id="pantallaOfertas" class="ofertas pantalla activa">
+
+    <div class="icono">🎁</div>
+
+    <h1>Ofertas Especiales</h1>
+
+    <p id="descripcionOfertas" class="descripcion">
+        Elige una oferta especial de Mobile Legends.
+    </p>
+
+    <div class="etiqueta">
+        MOBILE LEGENDS · OFERTAS ESPECIALES
     </div>
 
-    <a href="mobilelegends.html" class="volver">← Volver</a>
-</header>
+    <div id="estadoProductos" class="estado" role="status" aria-live="polite">
+        Conectando con el catálogo...
+    </div>
 
-<main class="contenedor">
+    <div id="listaOfertas" class="lista-ofertas" style="display:none;"></div>
 
-    <!-- OFERTAS ESPECIALES -->
-    <section id="pantallaOfertas" class="ofertas pantalla activa">
+    <div id="precioSeleccionado" class="precio-oferta" style="display:none;">
+        <div class="precio-titulo">Precio de la oferta</div>
+        <div id="precio" class="precio">Pendiente</div>
+    </div>
 
-        <div class="icono">🎁</div>
+    <button
+        id="continuarBtn"
+        class="boton-principal"
+        type="button"
+        onclick="irAConfirmacion()"
+        style="display:none;"
+        disabled
+    >
+        Continuar ⚡
+    </button>
 
-        <h1>Ofertas Especiales</h1>
+    <div id="notaOfertas" class="nota">
+        Los precios y las compras todavía no están habilitados.
+    </div>
+</section>
 
-        <p id="descripcionOfertas" class="descripcion">
-            Elige una oferta especial de Mobile Legends.
+<section id="pantallaConfirmacion" class="ofertas pantalla">
+
+    <div class="icono">💳</div>
+
+    <h1>Confirmar pedido</h1>
+
+    <p class="descripcion">
+        Revisa la oferta seleccionada y los datos de tu cuenta.
+    </p>
+
+    <div class="resumen">
+        <div class="fila">
+            <span>Oferta</span>
+            <span id="confirmarOferta">-</span>
+        </div>
+
+        <div class="fila">
+            <span>Juego</span>
+            <span id="juegoConfirmacion">Mobile Legends</span>
+        </div>
+
+        <div class="fila">
+            <span>Precio</span>
+            <span id="confirmarPrecio">Pendiente</span>
+        </div>
+    </div>
+
+    <div class="campo-id">
+        <label for="idJugador">ID del jugador de Mobile Legends</label>
+        <input
+            type="text"
+            id="idJugador"
+            placeholder="Escribe tu ID de jugador"
+            autocomplete="off"
+        >
+    </div>
+
+    <div class="campo-id">
+        <label for="zoneId">Zone ID</label>
+        <input
+            type="text"
+            id="zoneId"
+            placeholder="Escribe tu Zone ID"
+            autocomplete="off"
+        >
+    </div>
+
+    <button
+        id="confirmarBtn"
+        class="boton-principal"
+        type="button"
+        disabled
+    >
+        Compras desactivadas temporalmente
+    </button>
+
+    <button
+        class="boton-secundario"
+        type="button"
+        onclick="volverOfertas()"
+    >
+        ← Cambiar oferta
+    </button>
+</section>
+
+<section id="pantallaExito" class="ofertas pantalla">
+
+    <div class="exito">
+        <div class="icono-exito">ℹ️</div>
+
+        <h2>Compras en preparación</h2>
+
+        <p>
+            Estamos preparando esta función. Por ahora no se registran pedidos desde esta página.
         </p>
 
-        <div class="etiqueta">
-            MOBILE LEGENDS · OFERTAS ESPECIALES
-        </div>
-
-        <div id="estadoProductos" class="estado" role="status" aria-live="polite">
-            Conectando con el catálogo...
-        </div>
-
-        <div id="listaOfertas" class="lista-ofertas" style="display:none;"></div>
-
-        <div id="precioSeleccionado" class="precio-oferta" style="display:none;">
-            <div class="precio-titulo">Precio de la oferta</div>
-            <div id="precio" class="precio">Pendiente</div>
-        </div>
-
         <button
-            id="continuarBtn"
             class="boton-principal"
             type="button"
-            onclick="irAConfirmacion()"
-            style="display:none;"
-            disabled
+            onclick="window.location.href='mobilelegends.html'"
         >
-            Continuar ⚡
+            Volver a Mobile Legends ⚡
         </button>
+    </div>
+</section>
 
-        <div id="notaOfertas" class="nota">
-            Los precios y las compras todavía no están habilitados.
-        </div>
-    </section>
-
-    <!-- CONFIRMACIÓN -->
-    <section id="pantallaConfirmacion" class="ofertas pantalla">
-
-        <div class="icono">💳</div>
-
-        <h1>Confirmar pedido</h1>
-
-        <p class="descripcion">
-            Revisa la oferta seleccionada y los datos de tu cuenta.
-        </p>
-
-        <div class="resumen">
-            <div class="fila">
-                <span>Oferta</span>
-                <span id="confirmarOferta">-</span>
-            </div>
-
-            <div class="fila">
-                <span>Juego</span>
-                <span id="juegoConfirmacion">Mobile Legends</span>
-            </div>
-
-            <div class="fila">
-                <span>Precio</span>
-                <span id="confirmarPrecio">Pendiente</span>
-            </div>
-        </div>
-
-        <div class="campo-id">
-            <label for="idJugador">ID del jugador de Mobile Legends</label>
-            <input
-                type="text"
-                id="idJugador"
-                placeholder="Escribe tu ID de jugador"
-                autocomplete="off"
-            >
-        </div>
-
-        <div class="campo-id">
-            <label for="zoneId">Zone ID</label>
-            <input
-                type="text"
-                id="zoneId"
-                placeholder="Escribe tu Zone ID"
-                autocomplete="off"
-            >
-        </div>
-
-        <button
-            id="confirmarBtn"
-            class="boton-principal"
-            type="button"
-            disabled
-        >
-            Compras desactivadas temporalmente
-        </button>
-
-        <button
-            class="boton-secundario"
-            type="button"
-            onclick="volverOfertas()"
-        >
-            ← Cambiar oferta
-        </button>
-    </section>
-
-    <!-- ESTADO INFORMATIVO -->
-    <section id="pantallaExito" class="ofertas pantalla">
-
-        <div class="exito">
-            <div class="icono-exito">ℹ️</div>
-
-            <h2>Compras en preparación</h2>
-
-            <p>
-                Estamos preparando esta función. Por ahora no se registran pedidos desde esta página.
-            </p>
-
-            <button
-                class="boton-principal"
-                type="button"
-                onclick="window.location.href='mobilelegends.html'"
-            >
-                Volver a Mobile Legends ⚡
-            </button>
-        </div>
-    </section>
-
-</main>
-
-<!-- MISMO SCRIPT COMPARTIDO CON FREE FIRE -->
-<script>
+</main><script>
 window.CONFIG_OFERTAS = {
     juego: "Mobile Legends",
     paginaVolver: "mobilelegends.html",
@@ -613,33 +598,12 @@ window.CONFIG_OFERTAS = {
     placeholderId: "Escribe tu ID de jugador",
 
     ofertas: [
-        {
-            nombre: "Weekly Elite Pack",
-            emoji: "🎁"
-        },
-        {
-            nombre: "Weekly Pass",
-            emoji: "🎟️"
-        },
-        {
-            nombre: "Weekly Diamond Pass",
-            emoji: "💎"
-        },
-        {
-            nombre: "Monthly Elite Pack",
-            emoji: "👑"
-        },
-        {
-            nombre: "Twilight Pass",
-            emoji: "🌌"
-        }
+        { nombre: "Weekly Elite Pack", emoji: "🎁" },
+        { nombre: "Weekly Pass", emoji: "🎟️" },
+        { nombre: "Weekly Diamond Pass", emoji: "💎" },
+        { nombre: "Monthly Elite Pack", emoji: "👑" },
+        { nombre: "Twilight Pass", emoji: "🌌" }
     ]
 };
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="ofertas.js?v=20261009mobilelegends1"></script>
-
-</body>
+</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="ofertas.js?v=20261009mobilelegends2"></script></body>
 </html>
