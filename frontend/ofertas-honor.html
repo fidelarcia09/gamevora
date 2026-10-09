@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050b18">
+    <meta name="description" content="Descubre las ofertas especiales de Honor of Kings en Gamers Gold Top-Up.">
 
     <title>Ofertas Especiales | Honor of Kings</title>
 
     <style>
+        :root {
+            --fondo: #050b18;
+            --panel: #091a35;
+            --panel-oscuro: #061226;
+            --azul: #087cff;
+            --cian: #00baff;
+            --borde: #204c78;
+            --texto-secundario: #8fa5bd;
+        }
 
         * {
             box-sizing: border-box;
@@ -16,71 +27,117 @@
         }
 
         body {
-            background: #050b18;
-            color: white;
             min-height: 100vh;
+            background:
+                radial-gradient(ellipse at top, #0b2041 0%, transparent 48%),
+                var(--fondo);
+            color: white;
+        }
+
+        button,
+        input {
+            font: inherit;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px;
+            gap: 12px;
+            padding: 17px 18px;
             border-bottom: 1px solid #12385f;
-            background: #071225;
+            background: rgba(7, 18, 37, 0.96);
         }
 
         .logo {
-            font-size: 20px;
+            font-size: clamp(14px, 3.8vw, 20px);
             font-weight: 900;
+            letter-spacing: -0.4px;
         }
 
         .logo .rayo {
-            color: #00b7ff;
+            color: var(--cian);
             text-shadow: 0 0 12px #008cff;
         }
 
         .volver {
+            flex-shrink: 0;
             text-decoration: none;
             color: white;
             border: 1px solid #168cff;
-            padding: 9px 13px;
+            padding: 10px 12px;
             border-radius: 9px;
-            font-size: 13px;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .volver:hover {
+            background: #0b2c50;
+            border-color: var(--cian);
         }
 
         .contenedor {
             width: 100%;
-            max-width: 500px;
+            max-width: 540px;
             margin: auto;
-            padding: 25px 18px;
+            padding: 25px 16px 35px;
         }
 
         .ofertas {
-            background: #091a35;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(155deg, #0b1e3b, var(--panel));
             border: 1px solid #15518c;
             border-radius: 20px;
-            padding: 25px 20px;
+            padding: 25px 19px;
             box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+        }
+
+        .ofertas::before {
+            content: "";
+            display: block;
+            height: 2px;
+            position: absolute;
+            top: 0;
+            left: 15%;
+            right: 15%;
+            background: linear-gradient(90deg, transparent, var(--cian), transparent);
+            opacity: 0.8;
         }
 
         .icono {
             text-align: center;
-            font-size: 45px;
-            margin-bottom: 8px;
+            font-size: 43px;
+            margin-bottom: 10px;
         }
 
         h1 {
             text-align: center;
-            font-size: 25px;
-            margin-bottom: 7px;
+            font-size: clamp(22px, 5vw, 27px);
+            margin-bottom: 9px;
         }
 
         .descripcion {
             text-align: center;
-            color: #8fa5bd;
+            color: var(--texto-secundario);
             font-size: 13px;
-            margin-bottom: 22px;
+            line-height: 1.6;
+            margin-bottom: 23px;
+        }
+
+        .etiqueta {
+            width: fit-content;
+            max-width: 100%;
+            margin: 0 auto 17px;
+            padding: 7px 12px;
+            color: var(--cian);
+            background: rgba(0, 186, 255, 0.08);
+            border: 1px solid rgba(0, 186, 255, 0.25);
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-align: center;
         }
 
         .pantalla {
@@ -89,77 +146,102 @@
 
         .pantalla.activa {
             display: block;
+            animation: aparecer 0.25s ease;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .lista-ofertas {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
         }
 
         .boton-oferta {
+            position: relative;
             width: 100%;
-            height: 150px;
+            min-height: 145px;
             padding: 0;
-            border: 1px solid #204c78;
+            border: 1px solid var(--borde);
             border-radius: 14px;
-            background: #061226;
+            background: var(--panel-oscuro);
             color: white;
             cursor: pointer;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: 0.2s;
-            box-shadow: 0 0 12px rgba(0, 140, 255, 0.08);
+            transition: border-color 0.2s, background 0.2s, transform 0.2s;
+            box-shadow: 0 0 12px rgba(0, 140, 255, 0.06);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .boton-oferta:hover {
             border-color: #159dff;
             background: #0a1d38;
-            box-shadow: 0 0 18px rgba(0, 157, 255, 0.22);
             transform: translateY(-2px);
+            box-shadow: 0 0 18px rgba(0, 157, 255, 0.18);
+        }
+
+        .boton-oferta:focus-visible,
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--cian);
+            outline-offset: 3px;
         }
 
         .foto-oferta {
             width: 100%;
+            min-height: 95px;
             flex: 1;
-            background: #07172d;
+            background:
+                radial-gradient(ellipse at center, rgba(0, 140, 255, 0.13), transparent 70%),
+                #07172d;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 10px;
             overflow: hidden;
         }
 
         .foto-oferta span {
-            color: #315779;
-            font-size: 13px;
+            color: #b4d9f7;
+            font-size: 14px;
+        }
+
+        .emoji-oferta {
+            font-size: 31px !important;
+            filter: drop-shadow(0 0 9px rgba(0, 186, 255, 0.2));
         }
 
         .nombre-oferta {
             width: 100%;
-            min-height: 48px;
+            min-height: 47px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 8px;
+            padding: 10px;
             background: #091a35;
             color: white;
             font-size: 14px;
             font-weight: bold;
             text-align: center;
-            border-top: 1px solid #204c78;
+            border-top: 1px solid var(--borde);
         }
 
         .boton-oferta.seleccionado {
-            border-color: #00baff;
-            background: linear-gradient(
-                180deg,
-                #09244a,
-                #0b315c
-            );
-            box-shadow:
-                0 0 10px rgba(0, 186, 255, 0.25),
-                0 0 22px rgba(0, 140, 255, 0.15);
+            border-color: var(--cian);
+            background: linear-gradient(180deg, #09244a, #0b315c);
+            box-shadow: 0 0 10px rgba(0, 186, 255, 0.2);
         }
 
         .boton-oferta.seleccionado .foto-oferta {
@@ -168,71 +250,88 @@
 
         .boton-oferta.seleccionado .nombre-oferta {
             background: #0b315c;
-            color: #00baff;
-            border-top-color: #00baff;
+            color: var(--cian);
+            border-top-color: var(--cian);
+        }
+
+        .estado {
+            text-align: center;
+            color: var(--texto-secundario);
+            font-size: 13px;
+            line-height: 1.6;
+            padding: 17px 8px;
+        }
+
+        .estado.error {
+            color: #ffb4b4;
         }
 
         .precio-oferta {
             margin-top: 18px;
             padding: 15px;
-            background: #061226;
-            border: 1px solid #204c78;
+            background: var(--panel-oscuro);
+            border: 1px solid var(--borde);
             border-radius: 12px;
             text-align: center;
         }
 
         .precio-titulo {
-            color: #8fa5bd;
+            color: var(--texto-secundario);
             font-size: 12px;
-            margin-bottom: 5px;
+            margin-bottom: 7px;
         }
 
         .precio {
-            color: #00baff;
-            font-size: 24px;
+            color: var(--cian);
+            font-size: 23px;
             font-weight: 900;
         }
 
-        .boton-principal {
+        .boton-principal,
+        .boton-secundario {
             width: 100%;
-            padding: 14px;
-            margin-top: 15px;
-            border: none;
+            min-height: 47px;
+            padding: 13px;
             border-radius: 10px;
-            background: linear-gradient(
-                90deg,
-                #087cff,
-                #00baff
-            );
-            color: white;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .boton-principal {
+            margin-top: 15px;
+            border: none;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 140, 255, 0.15);
+        }
+
+        .boton-principal:hover:not(:disabled) {
+            filter: brightness(1.1);
         }
 
         .boton-principal:disabled {
             opacity: 0.6;
-            cursor: wait;
+            cursor: not-allowed;
         }
 
         .boton-secundario {
-            width: 100%;
-            padding: 13px;
             margin-top: 10px;
             border: 1px solid #168cff;
-            border-radius: 10px;
-            background: #061226;
+            background: var(--panel-oscuro);
             color: white;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
+        }
+
+        .boton-secundario:hover {
+            background: #0b2545;
         }
 
         .resumen {
-            background: #061226;
-            border: 1px solid #204c78;
+            background: var(--panel-oscuro);
+            border: 1px solid var(--borde);
             border-radius: 13px;
-            padding: 17px;
+            padding: 14px 16px;
             margin-top: 18px;
         }
 
@@ -240,7 +339,7 @@
             display: flex;
             justify-content: space-between;
             gap: 15px;
-            padding: 11px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #12385f;
             font-size: 13px;
         }
@@ -250,13 +349,14 @@
         }
 
         .fila span:first-child {
-            color: #8fa5bd;
+            color: var(--texto-secundario);
         }
 
         .fila span:last-child {
             color: white;
             font-weight: bold;
             text-align: right;
+            overflow-wrap: anywhere;
         }
 
         .campo-id {
@@ -265,16 +365,16 @@
 
         .campo-id label {
             display: block;
-            color: #8fa5bd;
+            color: var(--texto-secundario);
             font-size: 12px;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
         }
 
         .campo-id input {
             width: 100%;
             padding: 13px;
-            background: #061226;
-            border: 1px solid #204c78;
+            background: var(--panel-oscuro);
+            border: 1px solid var(--borde);
             border-radius: 10px;
             color: white;
             outline: none;
@@ -292,7 +392,7 @@
         }
 
         .icono-exito {
-            font-size: 65px;
+            font-size: 60px;
             margin-bottom: 12px;
         }
 
@@ -302,105 +402,118 @@
         }
 
         .exito p {
-            color: #8fa5bd;
+            color: var(--texto-secundario);
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .pedido-id {
             margin-top: 18px;
-            background: #061226;
-            border: 1px solid #204c78;
+            background: var(--panel-oscuro);
+            border: 1px solid var(--borde);
             border-radius: 10px;
             padding: 13px;
-            color: #00baff;
+            color: var(--cian);
             font-size: 13px;
             font-weight: bold;
+            overflow-wrap: anywhere;
         }
 
         .nota {
             text-align: center;
-            color: #627b97;
+            color: #7890aa;
             font-size: 11px;
+            line-height: 1.6;
             margin-top: 18px;
         }
 
-        .cargando {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 13px;
-            padding: 15px;
+        @media (max-width: 360px) {
+            header {
+                padding: 14px 10px;
+            }
+
+            .logo {
+                font-size: 13px;
+            }
+
+            .volver {
+                padding: 8px;
+                font-size: 11px;
+            }
+
+            .contenedor {
+                padding: 18px 10px;
+            }
+
+            .ofertas {
+                padding: 22px 14px;
+            }
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 
 <body>
 
 <header>
-
     <div class="logo">
         <span class="rayo">⚡</span>
         Gamers Gold Top-Up
     </div>
 
-    <a href="honorofkings.html" class="volver">
-        ← Volver
-    </a>
-
+    <a href="honorofkings.html" class="volver">← Volver</a>
 </header>
-
 
 <main class="contenedor">
 
-    <section
-        id="pantallaOfertas"
-        class="ofertas pantalla activa"
-    >
+    <!-- OFERTAS ESPECIALES -->
+    <section id="pantallaOfertas" class="ofertas pantalla activa">
 
-        <div class="icono">
-            🎁
-        </div>
+        <div class="icono">🎁</div>
 
-        <h1>
-            Ofertas Especiales
-        </h1>
+        <h1>Ofertas Especiales</h1>
 
-        <p class="descripcion">
+        <p id="descripcionOfertas" class="descripcion">
             Elige una oferta especial de Honor of Kings.
         </p>
 
+        <div class="etiqueta">
+            HONOR OF KINGS · OFERTAS ESPECIALES
+        </div>
+
         <div
             id="estadoProductos"
-            class="cargando"
+            class="estado"
+            role="status"
+            aria-live="polite"
         >
-            Cargando ofertas...
+            Conectando con el catálogo...
         </div>
 
         <div
             id="listaOfertas"
             class="lista-ofertas"
             style="display:none;"
-        >
-        </div>
+        ></div>
 
         <div
             id="precioSeleccionado"
             class="precio-oferta"
             style="display:none;"
         >
+            <div class="precio-titulo">Precio de la oferta</div>
 
-            <div class="precio-titulo">
-                Precio de la oferta
+            <div id="precio" class="precio">
+                Pendiente
             </div>
-
-            <div
-                id="precio"
-                class="precio"
-            >
-                0 GVR
-            </div>
-
         </div>
 
         <button
@@ -409,76 +522,48 @@
             type="button"
             onclick="irAConfirmacion()"
             style="display:none;"
+            disabled
         >
-            Continuar ⚡
+            Compras próximamente
         </button>
 
-        <div class="nota">
-            Ofertas especiales de Honor of Kings.
+        <div id="notaOfertas" class="nota">
+            Los precios y las compras todavía no están habilitados.
         </div>
 
     </section>
 
+    <!-- CONFIRMACIÓN INFORMATIVA: NO REGISTRA COMPRAS -->
+    <section id="pantallaConfirmacion" class="ofertas pantalla">
 
-    <section
-        id="pantallaConfirmacion"
-        class="ofertas pantalla"
-    >
+        <div class="icono">💳</div>
 
-        <div class="icono">
-            💳
-        </div>
-
-        <h1>
-            Confirmar pago
-        </h1>
+        <h1>Confirmar pago</h1>
 
         <p class="descripcion">
-            Revisa los datos antes de continuar.
+            Esta función estará disponible cuando terminemos de configurar los precios.
         </p>
 
         <div class="resumen">
 
             <div class="fila">
-
-                <span>
-                    Oferta
-                </span>
-
-                <span id="confirmarOferta">
-                    -
-                </span>
-
+                <span>Oferta</span>
+                <span id="confirmarOferta">-</span>
             </div>
 
             <div class="fila">
-
-                <span>
-                    Juego
-                </span>
-
-                <span id="juegoConfirmacion">
-                    Honor of Kings
-                </span>
-
+                <span>Juego</span>
+                <span id="juegoConfirmacion">Honor of Kings</span>
             </div>
 
             <div class="fila">
-
-                <span>
-                    Precio
-                </span>
-
-                <span id="confirmarPrecio">
-                    0 GVR
-                </span>
-
+                <span>Precio</span>
+                <span id="confirmarPrecio">Pendiente</span>
             </div>
 
         </div>
 
         <div class="campo-id">
-
             <label for="idJugador">
                 ID del jugador de Honor of Kings
             </label>
@@ -489,16 +574,15 @@
                 placeholder="Escribe tu ID de Honor of Kings"
                 autocomplete="off"
             >
-
         </div>
 
         <button
             id="confirmarBtn"
             class="boton-principal"
             type="button"
-            onclick="realizarPedido()"
+            disabled
         >
-            Confirmar compra ⚡
+            Compras desactivadas temporalmente
         </button>
 
         <button
@@ -511,52 +595,25 @@
 
     </section>
 
-
-    <section
-        id="pantallaExito"
-        class="ofertas pantalla"
-    >
+    <!-- ESTADO INFORMATIVO: NO SE CREAN PEDIDOS -->
+    <section id="pantallaExito" class="ofertas pantalla">
 
         <div class="exito">
 
-            <div class="icono-exito">
-                ✅
-            </div>
+            <div class="icono-exito">ℹ️</div>
 
-            <h2>
-                ¡Pedido realizado!
-            </h2>
+            <h2>Compras en preparación</h2>
 
             <p>
-                Tu solicitud de compra fue registrada correctamente.
+                Estamos preparando esta función. Por ahora no se registran pedidos desde esta página.
             </p>
-
-            <div class="pedido-id">
-
-                ID del pedido:
-
-                <br>
-
-                <span id="pedidoId">
-                    -
-                </span>
-
-            </div>
 
             <button
                 class="boton-principal"
                 type="button"
-                onclick="window.location.href='cuenta.html'"
-            >
-                Ir a mi cuenta ⚡
-            </button>
-
-            <button
-                class="boton-secundario"
-                type="button"
                 onclick="window.location.href='honorofkings.html'"
             >
-                Volver a Honor of Kings
+                Volver a Honor of Kings ⚡
             </button>
 
         </div>
@@ -565,391 +622,84 @@
 
 </main>
 
+<script>
+window.CONFIG_OFERTAS = {
+    juego: "Honor of Kings",
+    paginaVolver: "honorofkings.html",
+    textoId: "ID del jugador de Honor of Kings",
+    placeholderId: "Escribe tu ID de Honor of Kings",
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    ofertas: [
+        {
+            nombre: "Standard Purchase Rebate Pack",
+            emoji: "🎁"
+        },
+        {
+            nombre: "Weekly Card",
+            emoji: "📅"
+        },
+        {
+            nombre: "Premium Purchase Rebate Pack",
+            emoji: "👑"
+        },
+        {
+            nombre: "Weekly Card Plus",
+            emoji: "⭐"
+        }
+    ]
+};
+</script>
 
+<script src="ofertas.js?v=20261009honor1"></script>
 
 <script>
-
-const SUPABASE_URL =
-    "https://gsuhzcavghsiolmipnzi.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
+/*
+ * Mantener la pantalla de confirmación únicamente informativa.
+ * No se llama a purchase_game_product ni se crean pedidos.
+ */
+function irAConfirmacion() {
+    const oferta = window.productosOfertas || {};
+    const seleccionada = Object.values(oferta).find(
+        producto => producto.nombre ===
+            document.getElementById("confirmarOferta").textContent
     );
 
-
-const ofertas = [
-
-    {
-        nombre: "Standard Purchase Rebate Pack",
-        emoji: "🎁",
-        precio: 100
-    },
-
-    {
-        nombre: "Weekly Card",
-        emoji: "💳",
-        precio: 150
-    },
-
-    {
-        nombre: "Premium Purchase Rebate Pack",
-        emoji: "👑",
-        precio: 200
-    },
-
-    {
-        nombre: "Weekly Card Plus",
-        emoji: "💎",
-        precio: 250
-    }
-
-];
-
-
-let ofertaSeleccionada = null;
-
-
-const lista =
-    document.getElementById("listaOfertas");
-
-const estado =
-    document.getElementById("estadoProductos");
-
-const precioSeleccionado =
-    document.getElementById("precioSeleccionado");
-
-const precio =
-    document.getElementById("precio");
-
-const continuarBtn =
-    document.getElementById("continuarBtn");
-
-
-function mostrarOfertas() {
-
-    estado.style.display = "none";
-
-    lista.style.display = "flex";
-
-    lista.innerHTML = "";
-
-
-    ofertas.forEach((oferta, index) => {
-
-        const boton =
-            document.createElement("button");
-
-        boton.type = "button";
-
-        boton.className = "boton-oferta";
-
-
-        boton.innerHTML = `
-
-            <div class="foto-oferta">
-
-                <span style="font-size:42px;">
-                    ${oferta.emoji}
-                </span>
-
-            </div>
-
-            <div class="nombre-oferta">
-
-                ${oferta.nombre}
-
-            </div>
-
-        `;
-
-
-        boton.onclick = () => {
-
-            document
-                .querySelectorAll(".boton-oferta")
-                .forEach(b =>
-                    b.classList.remove("seleccionado")
-                );
-
-
-            boton.classList.add("seleccionado");
-
-
-            ofertaSeleccionada = oferta;
-
-
-            precio.textContent =
-                oferta.precio + " GVR";
-
-
-            precioSeleccionado.style.display =
-                "block";
-
-
-            continuarBtn.style.display =
-                "block";
-
-        };
-
-
-        lista.appendChild(boton);
-
-    });
-
-}
-
-
-mostrarOfertas();
-
-
-function irAConfirmacion() {
-
-    if (!ofertaSeleccionada) {
+    if (!seleccionada && !window.ofertaActualSeleccionada) {
+        alert("Selecciona una oferta primero.");
         return;
     }
 
+    const actual =
+        window.ofertaActualSeleccionada ||
+        seleccionada;
 
-    document
-        .getElementById("confirmarOferta")
-        .textContent =
-        ofertaSeleccionada.nombre;
+    if (!actual) {
+        alert("Selecciona una oferta primero.");
+        return;
+    }
 
+    document.getElementById("confirmarOferta").textContent =
+        actual.nombre;
 
-    document
-        .getElementById("confirmarPrecio")
-        .textContent =
-        ofertaSeleccionada.precio + " GVR";
+    document.getElementById("juegoConfirmacion").textContent =
+        "Honor of Kings";
 
+    document.getElementById("confirmarPrecio").textContent =
+        "Pendiente";
 
-    document
-        .getElementById("pantallaOfertas")
-        .classList.remove("activa");
+    document.getElementById("pantallaOfertas").classList.remove("activa");
 
+    document.getElementById("pantallaConfirmacion").classList.add("activa");
 
-    document
-        .getElementById("pantallaConfirmacion")
-        .classList.add("activa");
-
+    window.scrollTo(0, 0);
 }
-
 
 function volverOfertas() {
-
-    document
-        .getElementById("pantallaConfirmacion")
-        .classList.remove("activa");
-
-
-    document
-        .getElementById("pantallaOfertas")
-        .classList.add("activa");
-
+    document.getElementById("pantallaConfirmacion").classList.remove("activa");
+    document.getElementById("pantallaOfertas").classList.add("activa");
+    window.scrollTo(0, 0);
 }
-
-
-async function realizarPedido() {
-
-    const idJugador =
-        document
-            .getElementById("idJugador")
-            .value
-            .trim();
-
-
-    if (!idJugador) {
-
-        alert(
-            "Escribe tu ID de jugador."
-        );
-
-        return;
-    }
-
-
-    if (!ofertaSeleccionada) {
-
-        alert(
-            "Selecciona una oferta."
-        );
-
-        return;
-    }
-
-
-    const confirmarBtn =
-        document.getElementById(
-            "confirmarBtn"
-        );
-
-
-    confirmarBtn.disabled = true;
-
-    confirmarBtn.textContent =
-        "Procesando compra...";
-
-
-    try {
-
-        const {
-            data: {
-                user
-            }
-        } =
-        await supabaseClient
-            .auth
-            .getUser();
-
-
-        if (!user) {
-
-            alert(
-                "Debes iniciar sesión para realizar la compra."
-            );
-
-            window.location.href =
-                "cuenta.html";
-
-            return;
-        }
-
-
-        const {
-            data,
-            error
-        } =
-        await supabaseClient
-            .rpc(
-                "purchase_game_product",
-                {
-                    p_product_id:
-                        await obtenerProductoId(
-                            ofertaSeleccionada.nombre
-                        ),
-
-                    p_player_id:
-                        idJugador
-                }
-            );
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        let pedidoId = null;
-
-
-        if (typeof data === "string") {
-
-            pedidoId = data;
-
-        } else if (data && data.id) {
-
-            pedidoId = data.id;
-
-        } else if (Array.isArray(data) && data[0]) {
-
-            pedidoId =
-                data[0].id ||
-                data[0].order_id ||
-                data[0].game_order_id;
-
-        }
-
-
-        document
-            .getElementById("pedidoId")
-            .textContent =
-            pedidoId || "Registrado";
-
-
-        document
-            .getElementById("pantallaConfirmacion")
-            .classList.remove("activa");
-
-
-        document
-            .getElementById("pantallaExito")
-            .classList.add("activa");
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert(
-            error.message ||
-            "No se pudo completar la compra."
-        );
-
-    } finally {
-
-        confirmarBtn.disabled = false;
-
-        confirmarBtn.textContent =
-            "Confirmar compra ⚡";
-
-    }
-
-}
-
-
-async function obtenerProductoId(nombreOferta) {
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-        .from("game_products")
-        .select("id")
-        .eq(
-            "game",
-            "Honor of Kings"
-        )
-        .eq(
-            "product_name",
-            nombreOferta
-        )
-        .eq(
-            "active",
-            true
-        )
-        .limit(1)
-        .maybeSingle();
-
-
-    if (error) {
-
-        throw error;
-
-    }
-
-
-    if (!data) {
-
-        throw new Error(
-            "La oferta no está disponible todavía."
-        );
-
-    }
-
-
-    return data.id;
-
-}
-
 </script>
 
 </body>
-  </html>
+            </html>
