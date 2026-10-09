@@ -1,268 +1,266 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Mobile Legends | Gamers Gold Top-Up</title>
 
-    <title>Mobile Legends | Gamers Gold Top-Up</title>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+    body {
+        background: #050b18;
+        color: white;
+        min-height: 100vh;
+        padding: 20px;
+    }
 
+    .contenedor {
+        max-width: 500px;
+        margin: auto;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 25px;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: 900;
+    }
+
+    .rayo {
+        color: #00b7ff;
+        text-shadow: 0 0 12px #008cff;
+    }
+
+    .volver {
+        color: #28a9ff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .card {
+        background: #091a35;
+        border: 1px solid #15518c;
+        border-radius: 20px;
+        padding: 28px 22px;
+        box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+    }
+
+    .icono {
+        text-align: center;
+        font-size: 55px;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 26px;
+        margin-bottom: 10px;
+    }
+
+    .descripcion {
+        text-align: center;
+        color: #8fa5bd;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 7px;
+        color: #b8c9dc;
+        font-size: 13px;
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: 13px;
+        margin-bottom: 18px;
+        background: #061226;
+        color: white;
+        border: 1px solid #204c78;
+        border-radius: 10px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #159dff;
+        box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+    }
+
+    select option {
+        background: #061226;
+        color: white;
+    }
+
+    .estado-catalogo {
+        margin-top: -8px;
+        margin-bottom: 18px;
+        color: #8fa5bd;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .continuar {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #087cff, #00baff);
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .continuar:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .separador-ofertas {
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #12385f;
+    }
+
+    .boton-ofertas {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #168cff;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #061b3a, #0a2d5c);
+        color: #00baff;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
+        transition: 0.2s;
+    }
+
+    .boton-ofertas:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
+    }
+
+    .nota {
+        margin-top: 20px;
+        text-align: center;
+        color: #627b97;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 380px) {
         body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .contenedor {
-            max-width: 500px;
-            margin: auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
+            padding: 12px;
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: 900;
-        }
-
-        .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
-        }
-
-        .volver {
-            color: #28a9ff;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 19px;
         }
 
         .card {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 28px 22px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+            padding: 24px 16px;
         }
+    }
+</style>
 
-        .icono {
-            text-align: center;
-            font-size: 55px;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 26px;
-            margin-bottom: 10px;
-        }
-
-        .descripcion {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 7px;
-            color: #b8c9dc;
-            font-size: 13px;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 13px;
-            margin-bottom: 18px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-        }
-
-        input:focus,
-        select:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
-
-        .continuar {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .continuar:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
-
-        /* =========================
-           OFERTAS ESPECIALES
-        ========================= */
-
-        .separador-ofertas {
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid #12385f;
-        }
-
-        .boton-ofertas {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #168cff;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #061b3a, #0a2d5c);
-            color: #00baff;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 0 12px rgba(0, 140, 255, 0.15);
-            transition: 0.2s;
-        }
-
-        .boton-ofertas:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 18px rgba(0, 140, 255, 0.3);
-        }
-
-        .nota {
-            margin-top: 20px;
-            text-align: center;
-            color: #627b97;
-            font-size: 11px;
-            line-height: 1.5;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="contenedor">
-
-    <div class="header">
-
-        <div class="logo">
-            <span class="rayo">⚡</span> Gamers Gold Top-Up
-        </div>
-
-        <a href="juegos.html" class="volver">
-            ← Juegos
-        </a>
-
+</head><body><div class="contenedor"><div class="header">
+    <div class="logo">
+        <span class="rayo">⚡</span> Gamers Gold Top-Up
     </div>
 
-    <div class="card">
+    <a href="juegos.html" class="volver">
+        ← Juegos
+    </a>
+</div>
 
-        <div class="icono">🎮</div>
+<div class="card">
 
-        <h1>Mobile Legends</h1>
+    <div class="icono">🎮</div>
 
-        <p class="descripcion">
-            Recarga tus diamantes de Mobile Legends
-            de forma rápida y sencilla.
-        </p>
+    <h1>Mobile Legends</h1>
 
-        <label for="idjugador">
-            ID del jugador
-        </label>
+    <p class="descripcion">
+        Recarga tus diamantes de Mobile Legends
+        de forma rápida y sencilla.
+    </p>
 
-        <input
-            type="text"
-            id="idjugador"
-            placeholder="Introduce tu ID"
-            autocomplete="off"
-        >
+    <label for="idjugador">
+        ID del jugador
+    </label>
 
-        <label for="cantidad">
-            Cantidad
-        </label>
+    <input
+        type="text"
+        id="idjugador"
+        placeholder="Introduce tu ID"
+        autocomplete="off"
+    >
 
-        <select id="cantidad">
+    <label for="cantidad">
+        Paquete disponible
+    </label>
 
-            <option value="">
-                Selecciona una cantidad
-            </option>
+    <select id="cantidad" disabled>
+        <option value="">
+            Cargando catálogo...
+        </option>
+    </select>
 
-            <option value="86 diamantes">
-                86 diamantes
-            </option>
+    <p id="estadoCatalogo" class="estado-catalogo"
+       aria-live="polite">
+        Conectando con el catálogo de recargas...
+    </p>
 
-            <option value="172 diamantes">
-                172 diamantes
-            </option>
+    <button
+        class="continuar"
+        id="botonRecarga"
+        type="button"
+        onclick="continuarRecarga()"
+        disabled
+    >
+        Cargando catálogo...
+    </button>
 
-            <option value="257 diamantes">
-                257 diamantes
-            </option>
-
-            <option value="344 diamantes">
-                344 diamantes
-            </option>
-
-            <option value="429 diamantes">
-                429 diamantes
-            </option>
-
-        </select>
-
+    <div class="separador-ofertas">
         <button
-            class="continuar"
-            id="botonRecarga"
+            class="boton-ofertas"
             type="button"
-            onclick="continuarRecarga()"
+            onclick="abrirOfertas()"
         >
-            Continuar ⚡
+            🎁 Ofertas Especiales
         </button>
-
-
-        <!-- =========================
-             OFERTAS ESPECIALES
-        ========================= -->
-
-        <div class="separador-ofertas">
-
-            <button
-                class="boton-ofertas"
-                type="button"
-                onclick="abrirOfertas()"
-            >
-                🎁 Ofertas Especiales
-            </button>
-
-        </div>
-
     </div>
+
+    <p class="nota">
+        Gamers Gold Top-Up · Recargas gaming
+    </p>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+"use strict";
 
-<script>
+/* =========================================
+   CONFIGURACIÓN SUPABASE
+========================================= */
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -270,226 +268,449 @@ const SUPABASE_URL =
 const SUPABASE_ANON_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
-        {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
         }
-    );
+    }
+);
 
+/* =========================================
+   CATÁLOGO NEXT LEVEL
+========================================= */
 
-/* =========================
+const CATALOGO_URL =
+    SUPABASE_URL +
+    "/functions/v1/nextlevel-catalogo";
+
+const JUEGO_CATALOGO = "mobile-legends";
+
+let productosCatalogo = [];
+let catalogoCargado = false;
+
+/* =========================================
+   ELEMENTOS
+========================================= */
+
+const selectorCantidad =
+    document.getElementById("cantidad");
+
+const estadoCatalogo =
+    document.getElementById("estadoCatalogo");
+
+const botonRecarga =
+    document.getElementById("botonRecarga");
+
+/* =========================================
    OFERTAS ESPECIALES
-========================= */
+========================================= */
 
 function abrirOfertas() {
-
     window.location.href =
         "ofertas-mobilelegends.html";
-
 }
 
+/* =========================================
+   UTILIDADES
+========================================= */
 
-/* =========================
-   RECARGA NORMAL
-========================= */
+function normalizarTexto(valor) {
+    return String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+}
 
-async function continuarRecarga() {
+function esProductoDeDiamantes(producto) {
+    const nombre = normalizarTexto(producto.name);
+    const identificador = normalizarTexto(producto.productId);
 
-    const idJugador =
-        document.getElementById("idjugador").value.trim();
+    const esDiamantes =
+        nombre.includes("diamond") ||
+        nombre.includes("diamante") ||
+        identificador.includes("diamond") ||
+        identificador.includes("diamante");
 
-    const cantidad =
-        document.getElementById("cantidad").value;
+    const esOfertaEspecial =
+        nombre.includes("membership") ||
+        nombre.includes("membresia") ||
+        nombre.includes("pass") ||
+        nombre.includes("pase") ||
+        identificador.includes("membership") ||
+        identificador.includes("booyah_pass");
 
-    const boton =
-        document.getElementById("botonRecarga");
+    return esDiamantes && !esOfertaEspecial;
+}
 
+function esRegionAdmitida(producto) {
+    const region = normalizarTexto(producto.region);
 
-    if (idJugador === "") {
+    /*
+       Aceptamos productos identificados como LATAM
+       o LATAM & USA. No seleccionamos productos
+       de otras regiones.
+    */
 
-        alert(
-            "Escribe tu ID de Mobile Legends."
-        );
+    return (
+        region === "latam" ||
+        region === "latam & usa" ||
+        region === "latam y usa" ||
+        region === "latam/usa"
+    );
+}
 
-        return;
-    }
+/* =========================================
+   CARGAR CATÁLOGO
+========================================= */
 
+async function cargarCatalogo() {
+    catalogoCargado = false;
+    selectorCantidad.disabled = true;
+    botonRecarga.disabled = true;
 
-    if (cantidad === "") {
-
-        alert(
-            "Selecciona una cantidad."
-        );
-
-        return;
-    }
-
-
-    boton.disabled = true;
-
-    boton.textContent =
-        "Procesando...";
-
+    estadoCatalogo.textContent =
+        "Consultando productos de Mobile Legends...";
 
     try {
+        const respuesta = await fetch(
+            CATALOGO_URL +
+            "?game=" +
+            encodeURIComponent(JUEGO_CATALOGO),
+            {
+                method: "GET",
+                headers: {
+                    "apikey": SUPABASE_ANON_KEY,
+                    "Authorization":
+                        "Bearer " + SUPABASE_ANON_KEY
+                },
+                cache: "no-store"
+            }
+        );
 
-        /* =========================
-           COMPROBAR SESIÓN
-        ========================= */
+        const textoRespuesta = await respuesta.text();
+
+        let datos;
+
+        try {
+            datos = JSON.parse(textoRespuesta);
+        } catch {
+            throw new Error(
+                "El catálogo no devolvió una respuesta JSON válida."
+            );
+        }
+
+        if (!respuesta.ok) {
+            throw new Error(
+                datos.error ||
+                datos.message ||
+                "HTTP " + respuesta.status
+            );
+        }
+
+        console.log(
+            "CATÁLOGO MOBILE LEGENDS:",
+            datos
+        );
+
+        const productosRecibidos =
+            Array.isArray(datos.productos)
+                ? datos.productos
+                : Array.isArray(datos.products)
+                    ? datos.products
+                    : [];
+
+        if (productosRecibidos.length === 0) {
+            throw new Error(
+                "El proveedor no devolvió productos para este juego. " +
+                "Hay que comprobar el identificador admitido por Next Level."
+            );
+        }
+
+        productosCatalogo = productosRecibidos.filter(
+            producto => {
+                const disponible =
+                    producto.available === true;
+
+                return (
+                    disponible &&
+                    esRegionAdmitida(producto) &&
+                    esProductoDeDiamantes(producto) &&
+                    producto.productId &&
+                    producto.name
+                );
+            }
+        );
+
+        selectorCantidad.innerHTML = "";
+
+        const opcionInicial =
+            document.createElement("option");
+
+        opcionInicial.value = "";
+        opcionInicial.textContent =
+            "Selecciona un paquete";
+
+        selectorCantidad.appendChild(opcionInicial);
+
+        productosCatalogo.forEach(producto => {
+            const opcion =
+                document.createElement("option");
+
+            /*
+               El valor conserva el identificador REAL
+               devuelto por Next Level.
+            */
+
+            opcion.value = producto.productId;
+
+            /*
+               No inventamos cantidades ni precios.
+            */
+
+            opcion.textContent = producto.name;
+
+            selectorCantidad.appendChild(opcion);
+        });
+
+        if (productosCatalogo.length === 0) {
+            selectorCantidad.disabled = true;
+
+            estadoCatalogo.textContent =
+                "No se encontraron paquetes de diamantes disponibles " +
+                "para la región configurada.";
+
+            botonRecarga.textContent =
+                "Catálogo sin paquetes";
+
+            return;
+        }
+
+        selectorCantidad.disabled = false;
+        catalogoCargado = true;
+
+        estadoCatalogo.textContent =
+            productosCatalogo.length +
+            " paquetes disponibles en el catálogo.";
+
+        botonRecarga.textContent =
+            "Continuar ⚡";
+
+        actualizarBoton();
+
+    } catch (error) {
+        console.error(
+            "ERROR CARGANDO MOBILE LEGENDS:",
+            error
+        );
+
+        selectorCantidad.innerHTML = "";
+
+        const opcionError =
+            document.createElement("option");
+
+        opcionError.value = "";
+        opcionError.textContent =
+            "No se pudo cargar el catálogo";
+
+        selectorCantidad.appendChild(opcionError);
+
+        selectorCantidad.disabled = true;
+
+        estadoCatalogo.textContent =
+            "No se pudo conectar con el catálogo. " +
+            "Comprueba la consola y el identificador del juego.";
+
+        botonRecarga.disabled = true;
+        botonRecarga.textContent =
+            "Catálogo no disponible";
+    }
+}
+
+/* =========================================
+   CONTROL DEL BOTÓN
+========================================= */
+
+function actualizarBoton() {
+    const productoSeleccionado =
+        productosCatalogo.find(
+            producto =>
+                producto.productId === selectorCantidad.value
+        );
+
+    botonRecarga.disabled = !(
+        catalogoCargado &&
+        productoSeleccionado
+    );
+}
+
+selectorCantidad.addEventListener(
+    "change",
+    actualizarBoton
+);
+
+/* =========================================
+   PROCESAR RECARGA
+========================================= */
+
+async function continuarRecarga() {
+    const idJugador =
+        document.getElementById("idjugador")
+            .value.trim();
+
+    const productId =
+        selectorCantidad.value;
+
+    const productoSeleccionado =
+        productosCatalogo.find(
+            producto =>
+                producto.productId === productId
+        );
+
+    if (!idJugador) {
+        alert("Escribe tu ID de Mobile Legends.");
+        return;
+    }
+
+    if (!catalogoCargado || !productoSeleccionado) {
+        alert("Selecciona un paquete disponible.");
+        return;
+    }
+
+    const botonTextoOriginal = "Continuar ⚡";
+
+    botonRecarga.disabled = true;
+    botonRecarga.textContent = "Procesando...";
+
+    try {
+        /* COMPROBAR SESIÓN */
 
         const {
             data: { session },
             error: sessionError
-        } =
-            await supabaseClient.auth.getSession();
-
+        } = await supabaseClient.auth.getSession();
 
         if (sessionError || !session) {
+            alert("Debes iniciar sesión primero.");
 
-            alert(
-                "Debes iniciar sesión primero."
-            );
-
-            window.location.href =
-                "login.html";
-
+            window.location.href = "login.html";
             return;
         }
 
+        /*
+           IMPORTANTE:
+           El catálogo externo no significa que el producto
+           ya esté configurado para venderse con saldo GVR.
 
-        /* =========================
-           BUSCAR PRODUCTO
-        ========================= */
+           Buscamos una coincidencia exacta en game_products.
+           No compramos por productId externo ni inventamos
+           una equivalencia entre paquetes.
+        */
 
         const {
             data: producto,
             error: productoError
-        } =
-            await supabaseClient
-                .from("game_products")
-                .select(
-                    "id, game, product_name, game_currency_amount, price_gvr, active"
-                )
-                .eq("game", "Mobile Legends")
-                .eq("product_name", cantidad)
-                .eq("active", true)
-                .maybeSingle();
-
+        } = await supabaseClient
+            .from("game_products")
+            .select(
+                "id, game, product_name, game_currency_amount, price_gvr, active"
+            )
+            .eq("game", "Mobile Legends")
+            .eq("product_name", productoSeleccionado.name)
+            .eq("active", true)
+            .maybeSingle();
 
         console.log(
-            "PRODUCTO MOBILE LEGENDS:",
+            "PRODUCTO NEXT LEVEL SELECCIONADO:",
+            productoSeleccionado
+        );
+
+        console.log(
+            "PRODUCTO GVR EN SUPABASE:",
             producto
         );
 
-        console.log(
-            "ERROR PRODUCTO:",
-            productoError
-        );
-
-
         if (productoError) {
-
-            alert(
-                "Error buscando el producto:\n\n" +
+            throw new Error(
+                "Error buscando el producto en Supabase: " +
                 productoError.message
             );
-
-            return;
         }
 
-
         if (!producto) {
-
             alert(
-                "No se encontró ese producto de Mobile Legends en Gamevora."
+                "Este paquete aparece en el catálogo de Next Level, " +
+                "pero todavía no está configurado para comprarse con GVR.\n\n" +
+                "Paquete: " + productoSeleccionado.name + "\n\n" +
+                "Primero debemos registrar y configurar este producto " +
+                "en game_products."
             );
 
             return;
         }
 
-
-        /* =========================
-           REALIZAR COMPRA
-        ========================= */
+        /*
+           Mantenemos el RPC de compra actual.
+           Esto NO ejecuta por sí solo una recarga en Next Level.
+        */
 
         const {
             data: pedido,
             error: compraError
-        } =
-            await supabaseClient.rpc(
-                "purchase_game_product",
-                {
-                    p_product_id: producto.id,
-                    p_player_id: idJugador
-                }
-            );
-
+        } = await supabaseClient.rpc(
+            "purchase_game_product",
+            {
+                p_product_id: producto.id,
+                p_player_id: idJugador
+            }
+        );
 
         if (compraError) {
-
             console.error(
-                "ERROR COMPRA:",
+                "ERROR DE COMPRA:",
                 compraError
             );
 
-            alert(
-                "No se pudo realizar la compra:\n\n" +
-                compraError.message
-            );
-
-            return;
+            throw new Error(compraError.message);
         }
-
-
-        /* =========================
-           COMPRA EXITOSA
-        ========================= */
 
         alert(
             "¡Compra realizada! ⚡\n\n" +
-
             producto.product_name +
-            "\n" +
-
-            "Precio: " +
+            "\nPrecio: " +
             producto.price_gvr +
             " GVR\n\n" +
-
             "ID del pedido:\n" +
             pedido
         );
 
-
-        window.location.href =
-            "cuenta.html";
-
+        window.location.href = "cuenta.html";
 
     } catch (error) {
-
         console.error(error);
 
         alert(
-            "Ocurrió un error inesperado:\n\n" +
+            "No se pudo procesar la compra:\n\n" +
             error.message
         );
 
     } finally {
+        botonRecarga.textContent = botonTextoOriginal;
 
-        boton.disabled = false;
-
-        boton.textContent =
-            "Continuar ⚡";
+        actualizarBoton();
     }
 }
 
-</script>
+/* =========================================
+   INICIO
+========================================= */
 
-</body>
-</html>
+cargarCatalogo();
+
+</script></body>
+    </html>
