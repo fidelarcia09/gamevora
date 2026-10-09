@@ -189,9 +189,7 @@
         <span class="rayo">⚡</span> Gamers Gold Top-Up
     </div>
 
-    <a href="juegos.html" class="inicio">
-        ← Juegos
-    </a>
+    <a href="juegos.html" class="inicio">← Juegos</a>
 </header>
 
 <main class="contenedor">
@@ -214,10 +212,10 @@
             autocomplete="off"
         >
 
-        <label for="cantidad">Selecciona una oferta</label>
+        <label for="cantidad">Selecciona una cantidad</label>
 
         <select id="cantidad" disabled>
-            <option value="">Cargando ofertas de Next Level...</option>
+            <option value="">Cargando paquetes de diamantes...</option>
         </select>
 
         <p class="estado-catalogo" id="estadoCatalogo" aria-live="polite">
@@ -252,9 +250,7 @@
 <script>
 "use strict";
 
-/* =========================================
-   SUPABASE
-========================================= */
+/* SUPABASE */
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -267,9 +263,7 @@ const supabaseClient = window.supabase.createClient(
     SUPABASE_KEY
 );
 
-/* =========================================
-   CATÁLOGO NEXT LEVEL
-========================================= */
+/* NEXT LEVEL */
 
 const URL_CATALOGO =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
@@ -281,23 +275,13 @@ const estadoCatalogo = document.getElementById("estadoCatalogo");
 let catalogoCargado = false;
 let ofertasDisponibles = [];
 
-/*
- * Este archivo muestra el catálogo real.
- * La compra continúa usando game_products en Supabase.
- * No se simulan compras a través de Next Level.
- */
-
-/* =========================================
-   NAVEGACIÓN
-========================================= */
+/* ABRIR OFERTAS ESPECIALES */
 
 function abrirOfertas() {
     window.location.href = "ofertas-free-fire.html";
 }
 
-/* =========================================
-   LEER LOS PRODUCTOS RECIBIDOS
-========================================= */
+/* EXTRAER PRODUCTOS */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) {
@@ -327,17 +311,15 @@ function extraerProductos(respuesta) {
     return [];
 }
 
-/* =========================================
-   VALIDAR REGIÓN Y NOMBRE DEL PRODUCTO
-========================================= */
+/* REGIÓN */
 
 function esOfertaLATAM(producto) {
-    const region = String(producto.region || "")
+    return String(producto.region || "")
         .trim()
-        .toUpperCase();
-
-    return region === "LATAM & USA";
+        .toUpperCase() === "LATAM & USA";
 }
+
+/* NOMBRE REAL DEL PRODUCTO */
 
 function obtenerNombre(producto) {
     return String(
@@ -350,6 +332,8 @@ function obtenerNombre(producto) {
     ).trim();
 }
 
+/* IDENTIFICADOR REAL */
+
 function obtenerProductId(producto) {
     return String(
         producto.productId ||
@@ -359,9 +343,28 @@ function obtenerProductId(producto) {
     ).trim();
 }
 
-/* =========================================
-   CARGAR OFERTAS REALES
-========================================= */
+/* IDENTIFICAR SOLO PAQUETES DE DIAMANTES */
+
+function esPaqueteDiamantes(producto) {
+    const id = obtenerProductId(producto).toLowerCase();
+    const nombre = obtenerNombre(producto).toLowerCase();
+
+    const esDiamantes =
+        id.includes("_diamonds") ||
+        /\bdiamonds?\b|\bdiamantes\b/.test(nombre);
+
+    const esMembresiaOPase =
+        id.includes("membership") ||
+        id.includes("booyah_pass") ||
+        nombre.includes("membership") ||
+        nombre.includes("membresía") ||
+        nombre.includes("membresia") ||
+        nombre.includes("booyah pass");
+
+    return esDiamantes && !esMembresiaOPase;
+}
+
+/* CARGAR CATÁLOGO */
 
 async function cargarCatalogoDiamantes() {
     catalogoCargado = false;
@@ -371,7 +374,7 @@ async function cargarCatalogoDiamantes() {
     botonRecargar.disabled = true;
 
     selectCantidad.innerHTML =
-        '<option value="">Cargando ofertas de Next Level...</option>';
+        '<option value="">Cargando paquetes de diamantes...</option>';
 
     estadoCatalogo.textContent =
         "Conectando con el catálogo...";
@@ -404,50 +407,37 @@ async function cargarCatalogoDiamantes() {
 
         const productos = extraerProductos(resultado);
 
-        console.log("TOTAL DE PRODUCTOS RECIBIDOS:", productos.length);
+        console.log("PRODUCTOS RECIBIDOS:", productos);
 
         if (productos.length === 0) {
-            throw new Error(
-                "La respuesta no contiene productos reconocibles."
-            );
+            throw new Error("El catálogo no devolvió productos.");
         }
 
-        /*
-         * Solo mostrar productos disponibles de LATAM & USA.
-         * Así se excluyen los 120 Diamonds de Indonesia.
-         *
-         * No convertimos 341 en 310 ni 572 en 520.
-         * Se muestra exactamente el nombre enviado por Next Level.
-         *
-         * Se incluyen diamantes, membresías y Booyah Pass.
-         */
+        /* SOLO DIAMANTES DISPONIBLES DE LATAM & USA */
 
-        ofertasDisponibles = productos.filter(producto => {
-            return producto &&
-                producto.available === true &&
-                esOfertaLATAM(producto) &&
-                obtenerProductId(producto) !== "";
-        });
-
-        console.log(
-            "OFERTAS LATAM DISPONIBLES:",
-            ofertasDisponibles
+        ofertasDisponibles = productos.filter(producto =>
+            producto &&
+            producto.available === true &&
+            esOfertaLATAM(producto) &&
+            obtenerProductId(producto) !== "" &&
+            esPaqueteDiamantes(producto)
         );
+
+        /* ELIMINAR OPCIONES ANTIGUAS */
 
         selectCantidad.innerHTML = "";
 
         const opcionInicial = document.createElement("option");
         opcionInicial.value = "";
-        opcionInicial.textContent = "Selecciona una oferta";
+        opcionInicial.textContent = "Selecciona una cantidad";
+
         selectCantidad.appendChild(opcionInicial);
+
+        /* MOSTRAR LOS NOMBRES REALES DE NEXT LEVEL */
 
         ofertasDisponibles.forEach(producto => {
             const opcion = document.createElement("option");
 
-            /*
-             * El valor es el identificador real de Next Level.
-             * No es una cantidad comercial inventada.
-             */
             opcion.value = obtenerProductId(producto);
             opcion.textContent = obtenerNombre(producto);
 
@@ -456,35 +446,39 @@ async function cargarCatalogoDiamantes() {
 
         if (ofertasDisponibles.length === 0) {
             selectCantidad.innerHTML =
-                '<option value="">No hay ofertas LATAM disponibles</option>';
+                '<option value="">No hay paquetes disponibles</option>';
 
             estadoCatalogo.textContent =
-                "No se encontraron ofertas disponibles para LATAM & USA.";
+                "No se encontraron paquetes de diamantes para LATAM & USA.";
 
             return;
         }
 
         catalogoCargado = true;
+
         selectCantidad.disabled = false;
         botonRecargar.disabled = false;
 
         estadoCatalogo.textContent =
             ofertasDisponibles.length +
-            " ofertas reales disponibles en el catálogo.";
+            " paquetes de diamantes disponibles.";
 
         console.log(
-            "TOTAL DE OFERTAS MOSTRADAS:",
-            ofertasDisponibles.length
+            "PAQUETES MOSTRADOS:",
+            ofertasDisponibles.map(producto => ({
+                id: obtenerProductId(producto),
+                nombre: obtenerNombre(producto)
+            }))
         );
 
     } catch (error) {
-        console.error("ERROR CARGANDO NEXT LEVEL:", error);
+        console.error("ERROR CARGANDO CATÁLOGO:", error);
 
         catalogoCargado = false;
         ofertasDisponibles = [];
 
         selectCantidad.innerHTML =
-            '<option value="">Error cargando ofertas</option>';
+            '<option value="">Error cargando paquetes</option>';
 
         selectCantidad.disabled = true;
         botonRecargar.disabled = true;
@@ -494,9 +488,7 @@ async function cargarCatalogoDiamantes() {
     }
 }
 
-/* =========================================
-   COMPRA ACTUAL DE 110 DIAMANTES
-========================================= */
+/* COMPRA ACTUAL: SOLO 110 DIAMANTES */
 
 async function continuarRecarga() {
     const idJugador =
@@ -510,7 +502,7 @@ async function continuarRecarga() {
     }
 
     if (!productIdSeleccionado) {
-        alert("Selecciona una oferta.");
+        alert("Selecciona un paquete de diamantes.");
         return;
     }
 
@@ -525,21 +517,19 @@ async function continuarRecarga() {
     );
 
     if (!ofertaSeleccionada) {
-        alert("No se encontró la oferta seleccionada. Recarga la página.");
+        alert("No se encontró el paquete seleccionado.");
         return;
     }
 
-    /*
-     * Solo 110 Diamonds tiene habilitada la compra existente.
-     * Los demás productos se muestran, pero no se cobran todavía.
-     */
+    /* LOS DEMÁS PAQUETES AÚN NO TIENEN LA COMPRA ACTIVADA */
+
     if (
         obtenerProductId(ofertaSeleccionada) !==
         "fz-free_fire_latam-110_diamonds"
     ) {
         alert(
-            "Esta oferta ya aparece en el catálogo, pero su compra " +
-            "todavía no está habilitada. Estamos preparando sus productos y precios."
+            "Este paquete todavía no tiene la compra habilitada. " +
+            "Estamos preparando sus productos y precios."
         );
         return;
     }
@@ -571,8 +561,7 @@ async function continuarRecarga() {
 
         if (productoError) {
             throw new Error(
-                "Error buscando el producto en Supabase: " +
-                productoError.message
+                "Error buscando el producto: " + productoError.message
             );
         }
 
@@ -626,9 +615,7 @@ async function continuarRecarga() {
     }
 }
 
-/* =========================================
-   INICIO
-========================================= */
+/* INICIAR */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -637,4 +624,4 @@ document.addEventListener(
 </script>
 
 </body>
-    </html>
+</html>
