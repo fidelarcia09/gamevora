@@ -136,7 +136,7 @@
             justify-content: space-between;
             gap: 12px;
             min-width: 0;
-            min-height: 125px;
+            min-height: 110px;
             padding: 15px 12px;
             background: #061226;
             color: white;
@@ -163,15 +163,10 @@
             overflow-wrap: anywhere;
         }
 
-        .producto-precio {
-            color: #45c8ff;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
         .producto-estado {
-            color: #9fb3c9;
-            font-size: 11px;
+            color: #45c8ff;
+            font-size: 12px;
+            font-weight: bold;
         }
 
         .separador-ofertas {
@@ -268,7 +263,7 @@
         </label>
 
         <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo de Next Level...
+            Conectando con el catálogo...
         </div>
 
         <div id="catalogo" class="catalogo"></div>
@@ -293,9 +288,9 @@
         </div>
 
         <p class="nota">
-            Los paquetes se consultan desde Next Level.
-            Las compras se habilitarán cuando se configuren los precios
-            y se complete la integración del sistema de pedidos.
+            Consulta los paquetes disponibles de Arena Breakout.
+            Las compras se habilitarán cuando se configuren
+            los precios de venta y el sistema de pedidos.
         </p>
     </main>
 </div>
@@ -323,8 +318,8 @@ let productoSeleccionado = null;
 let productosDisponibles = [];
 
 /*
-    Solo permitimos los seis paquetes de Bonds nuevos
-    que devuelve Next Level.
+    Únicamente mostramos estos seis productos
+    de Bonds proporcionados por Next Level.
 */
 
 const BONDS_PERMITIDOS = [
@@ -345,7 +340,7 @@ function abrirOfertas() {
 }
 
 /* =====================================================
-   ESTADO
+   ESTADO DEL CATÁLOGO
 ===================================================== */
 
 function mostrarEstado(mensaje, esError = false) {
@@ -354,7 +349,7 @@ function mostrarEstado(mensaje, esError = false) {
 }
 
 /* =====================================================
-   EXTRAER PRODUCTOS DE LA RESPUESTA
+   EXTRAER PRODUCTOS
 ===================================================== */
 
 function extraerProductos(respuesta) {
@@ -389,7 +384,7 @@ function extraerProductos(respuesta) {
 }
 
 /* =====================================================
-   IDENTIFICAR PRODUCTO
+   IDENTIFICAR PRODUCTOS
 ===================================================== */
 
 function obtenerProductId(producto) {
@@ -412,27 +407,6 @@ function obtenerNombre(producto) {
 }
 
 /* =====================================================
-   PRECIO INFORMATIVO DEL PROVEEDOR
-   No es el precio de venta en GVR.
-===================================================== */
-
-function obtenerPrecioProveedor(producto) {
-    const amount = Number(
-        producto.price && producto.price.amount
-    );
-
-    const currency = String(
-        producto.price && producto.price.currency || ""
-    ).trim();
-
-    if (Number.isFinite(amount) && amount > 0 && currency) {
-        return amount.toFixed(2) + " " + currency;
-    }
-
-    return "Precio de venta próximamente";
-}
-
-/* =====================================================
    CARGAR CATÁLOGO DE NEXT LEVEL
 ===================================================== */
 
@@ -442,7 +416,7 @@ async function cargarCatalogo() {
 
     catalogo.replaceChildren();
 
-    mostrarEstado("Conectando con el catálogo de Next Level...");
+    mostrarEstado("Conectando con el catálogo...");
 
     try {
         const respuesta = await fetch(
@@ -464,12 +438,12 @@ async function cargarCatalogo() {
             resultado = await respuesta.json();
         } catch {
             throw new Error(
-                "El catálogo devolvió una respuesta que no es JSON."
+                "El catálogo devolvió una respuesta no válida."
             );
         }
 
         console.log(
-            "RESPUESTA CATÁLOGO ARENA BREAKOUT:",
+            "CATÁLOGO ARENA BREAKOUT:",
             resultado
         );
 
@@ -490,8 +464,9 @@ async function cargarCatalogo() {
         }
 
         /*
-            Filtrar exclusivamente los Bonds permitidos
-            y disponibles según Next Level.
+            Filtrar los seis Bonds permitidos.
+            No usamos los precios del proveedor para
+            mostrar precios de venta al cliente.
         */
 
         const mapaProductos = new Map();
@@ -511,8 +486,7 @@ async function cargarCatalogo() {
         });
 
         /*
-            Mostrar en el orden establecido,
-            aunque el proveedor cambie el orden de respuesta.
+            Mantener siempre el mismo orden.
         */
 
         productosDisponibles = BONDS_PERMITIDOS
@@ -545,15 +519,11 @@ async function cargarCatalogo() {
             nombre.className = "producto-nombre";
             nombre.textContent = obtenerNombre(producto);
 
-            const precio = document.createElement("div");
-            precio.className = "producto-precio";
-            precio.textContent = obtenerPrecioProveedor(producto);
-
             const estado = document.createElement("div");
             estado.className = "producto-estado";
-            estado.textContent = "Disponible en Next Level";
+            estado.textContent = "Seleccionar paquete";
 
-            tarjeta.append(nombre, precio, estado);
+            tarjeta.append(nombre, estado);
 
             tarjeta.addEventListener("click", () => {
                 document.querySelectorAll(".producto").forEach(elemento => {
@@ -564,7 +534,7 @@ async function cargarCatalogo() {
                 productoSeleccionado = producto;
 
                 console.log(
-                    "BONDS SELECCIONADOS:",
+                    "PRODUCTO SELECCIONADO:",
                     obtenerProductId(productoSeleccionado)
                 );
             });
@@ -574,8 +544,7 @@ async function cargarCatalogo() {
 
         mostrarEstado(
             productosDisponibles.length +
-            " paquetes de Bonds disponibles. " +
-            "Los precios mostrados son los del proveedor, no precios finales."
+            " paquetes de Bonds disponibles."
         );
 
     } catch (error) {
@@ -587,8 +556,7 @@ async function cargarCatalogo() {
         catalogo.replaceChildren();
 
         mostrarEstado(
-            "No se pudo cargar el catálogo de Next Level. " +
-            error.message,
+            "No se pudo cargar el catálogo. " + error.message,
             true
         );
     }
