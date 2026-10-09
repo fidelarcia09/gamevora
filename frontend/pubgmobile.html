@@ -1,357 +1,343 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PUBG Mobile | Gamers Gold Top-Up</title>
 
-    <title>PUBG Mobile | Gamers Gold Top-Up</title>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    :root {
+        --fondo: #07111f;
+        --tarjeta: #101f35;
+        --azul: #087cff;
+        --cian: #00d9ff;
+        --texto: #ffffff;
+        --secundario: #b5c7dc;
+        --borde: rgba(0, 217, 255, 0.22);
+    }
 
-        :root {
-            --fondo: #07111f;
-            --tarjeta: #101f35;
-            --azul: #087cff;
-            --cian: #00d9ff;
-            --texto: #ffffff;
-            --secundario: #b5c7dc;
-            --borde: rgba(0, 217, 255, 0.22);
-        }
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--fondo);
+        color: var(--texto);
+        min-height: 100vh;
+    }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: var(--fondo);
-            color: var(--texto);
-            min-height: 100vh;
-        }
+    header {
+        width: 100%;
+        padding: 18px 16px;
+        background: #09182a;
+        border-bottom: 1px solid var(--borde);
+    }
 
-        header {
-            width: 100%;
-            padding: 18px 16px;
-            background: #09182a;
-            border-bottom: 1px solid var(--borde);
-        }
+    .header-contenido {
+        width: 100%;
+        max-width: 1050px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
 
-        .header-contenido {
-            width: 100%;
-            max-width: 1050px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-        }
+    .logo {
+        color: var(--texto);
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+    }
 
+    .logo span {
+        color: var(--cian);
+    }
+
+    .volver {
+        display: inline-block;
+        color: var(--cian);
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    main {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 25px 16px 40px;
+    }
+
+    .tarjeta {
+        background: var(--tarjeta);
+        border: 1px solid var(--borde);
+        border-radius: 18px;
+        padding: 24px 18px;
+        box-shadow: 0 0 25px rgba(0, 119, 255, 0.08);
+    }
+
+    .imagen-juego {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .icono-juego {
+        width: 90px;
+        height: 90px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #073f75, #07111f);
+        border: 1px solid var(--borde);
+        font-size: 45px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 27px;
+        margin-bottom: 10px;
+    }
+
+    .descripcion {
+        color: var(--secundario);
+        font-size: 14px;
+        line-height: 1.6;
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .etiqueta {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 9px;
+    }
+
+    input,
+    select {
+        width: 100%;
+        min-height: 48px;
+        padding: 12px;
+        margin-bottom: 18px;
+        color: white;
+        background: #09182a;
+        border: 1px solid rgba(0, 217, 255, 0.3);
+        border-radius: 10px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: var(--cian);
+        box-shadow: 0 0 8px rgba(0, 217, 255, 0.12);
+    }
+
+    select option {
+        color: white;
+        background: #09182a;
+    }
+
+    input::placeholder {
+        color: #8da2ba;
+    }
+
+    select:disabled,
+    input:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+
+    .estado-catalogo {
+        color: var(--secundario);
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 0 0 18px;
+        overflow-wrap: anywhere;
+    }
+
+    .estado-catalogo.error {
+        color: #ff9292;
+    }
+
+    .estado-catalogo.exito {
+        color: #6dffba;
+    }
+
+    .aviso {
+        padding: 13px;
+        margin-bottom: 18px;
+        background: rgba(0, 119, 255, 0.09);
+        border: 1px solid rgba(0, 217, 255, 0.2);
+        border-radius: 10px;
+        color: #c8e7ff;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .recargar,
+    .ofertas {
+        width: 100%;
+        min-height: 48px;
+        padding: 13px 16px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .recargar {
+        color: white;
+        background: linear-gradient(90deg, #087cff, #00aaff);
+        border: none;
+        margin-bottom: 12px;
+    }
+
+    .recargar:disabled {
+        background: #263b52;
+        color: #9fb1c5;
+        cursor: not-allowed;
+        opacity: 0.8;
+    }
+
+    .ofertas {
+        color: var(--cian);
+        background: transparent;
+        border: 1px solid var(--cian);
+    }
+
+    .ofertas:hover {
+        background: rgba(0, 217, 255, 0.08);
+    }
+
+    .nota-final {
+        color: #91a8c0;
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.6;
+        margin-top: 18px;
+    }
+
+    footer {
+        padding: 20px 15px;
+        color: #7f94ac;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    @media (max-width: 380px) {
         .logo {
-            color: var(--texto);
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .logo span {
-            color: var(--cian);
+            font-size: 15px;
         }
 
         .volver {
-            display: inline-block;
-            color: var(--cian);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-
-        main {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 25px 16px 40px;
-        }
-
-        .tarjeta {
-            background: var(--tarjeta);
-            border: 1px solid var(--borde);
-            border-radius: 18px;
-            padding: 24px 18px;
-            box-shadow: 0 0 25px rgba(0, 119, 255, 0.08);
-        }
-
-        .imagen-juego {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .icono-juego {
-            width: 90px;
-            height: 90px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 20px;
-            background: linear-gradient(135deg, #073f75, #07111f);
-            border: 1px solid var(--borde);
-            font-size: 45px;
+            font-size: 12px;
         }
 
         h1 {
-            text-align: center;
-            font-size: 27px;
-            margin-bottom: 10px;
+            font-size: 23px;
         }
 
-        .descripcion {
-            color: var(--secundario);
-            font-size: 14px;
-            line-height: 1.6;
-            text-align: center;
-            margin-bottom: 24px;
+        .tarjeta {
+            padding: 20px 14px;
         }
+    }
+</style>
 
-        .etiqueta {
-            display: block;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 9px;
-        }
-
-        input,
-        select {
-            width: 100%;
-            min-height: 48px;
-            padding: 12px;
-            margin-bottom: 18px;
-            color: white;
-            background: #09182a;
-            border: 1px solid rgba(0, 217, 255, 0.3);
-            border-radius: 10px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        input:focus,
-        select:focus {
-            border-color: var(--cian);
-            box-shadow: 0 0 8px rgba(0, 217, 255, 0.12);
-        }
-
-        select option {
-            color: white;
-            background: #09182a;
-        }
-
-        input::placeholder {
-            color: #8da2ba;
-        }
-
-        select:disabled,
-        input:disabled {
-            opacity: 0.65;
-            cursor: not-allowed;
-        }
-
-        .estado-catalogo {
-            color: var(--secundario);
-            text-align: center;
-            font-size: 13px;
-            line-height: 1.6;
-            margin: 0 0 18px;
-            overflow-wrap: anywhere;
-        }
-
-        .estado-catalogo.error {
-            color: #ff9292;
-        }
-
-        .estado-catalogo.exito {
-            color: #6dffba;
-        }
-
-        .aviso {
-            padding: 13px;
-            margin-bottom: 18px;
-            background: rgba(0, 119, 255, 0.09);
-            border: 1px solid rgba(0, 217, 255, 0.2);
-            border-radius: 10px;
-            color: #c8e7ff;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .recargar,
-        .ofertas {
-            width: 100%;
-            min-height: 48px;
-            padding: 13px 16px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .recargar {
-            color: white;
-            background: linear-gradient(90deg, #087cff, #00aaff);
-            border: none;
-            margin-bottom: 12px;
-        }
-
-        .recargar:disabled {
-            background: #263b52;
-            color: #9fb1c5;
-            cursor: not-allowed;
-            opacity: 0.8;
-        }
-
-        .ofertas {
-            color: var(--cian);
-            background: transparent;
-            border: 1px solid var(--cian);
-        }
-
-        .ofertas:hover {
-            background: rgba(0, 217, 255, 0.08);
-        }
-
-        .nota-final {
-            color: #91a8c0;
-            text-align: center;
-            font-size: 12px;
-            line-height: 1.6;
-            margin-top: 18px;
-        }
-
-        footer {
-            padding: 20px 15px;
-            color: #7f94ac;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        @media (max-width: 380px) {
-            .logo {
-                font-size: 15px;
-            }
-
-            .volver {
-                font-size: 12px;
-            }
-
-            h1 {
-                font-size: 23px;
-            }
-
-            .tarjeta {
-                padding: 20px 14px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
+</head><body><header>
     <div class="header-contenido">
         <a class="logo" href="index.html">
             ⚡ Gamers <span>Gold</span> Top-Up
-        </a>
+        </a>    <a class="volver" href="juegos.html">
+        ← Juegos
+    </a>
+</div>
 
-        <a class="volver" href="juegos.html">
-            ← Juegos
-        </a>
+</header><main>
+    <section class="tarjeta">    <div class="imagen-juego">
+        <div class="icono-juego">🎯</div>
     </div>
-</header>
 
-<main>
-    <section class="tarjeta">
+    <h1>PUBG Mobile</h1>
 
-        <div class="imagen-juego">
-            <div class="icono-juego">🎯</div>
-        </div>
+    <p class="descripcion">
+        Selecciona el paquete de UC que deseas consultar e introduce
+        tu ID de jugador. Estamos preparando el sistema de recargas.
+    </p>
 
-        <h1>PUBG Mobile</h1>
+    <label class="etiqueta" for="idjugador">
+        ID de jugador
+    </label>
 
-        <p class="descripcion">
-            Selecciona el paquete que deseas consultar e introduce tu ID
-            de jugador. Estamos preparando el sistema de recargas.
-        </p>
+    <input
+        type="text"
+        id="idjugador"
+        placeholder="Escribe tu ID de PUBG Mobile"
+        autocomplete="off"
+        maxlength="40"
+    >
 
-        <label class="etiqueta" for="idjugador">
-            ID de jugador
-        </label>
+    <label class="etiqueta" for="cantidad">
+        Selecciona tu paquete de UC
+    </label>
 
-        <input
-            type="text"
-            id="idjugador"
-            placeholder="Escribe tu ID de PUBG Mobile"
-            autocomplete="off"
-            maxlength="40"
-        >
+    <select id="cantidad" disabled>
+        <option value="">Cargando paquetes de UC...</option>
+    </select>
 
-        <label class="etiqueta" for="cantidad">
-            Selecciona tu producto
-        </label>
+    <p
+        class="estado-catalogo"
+        id="estadoCatalogo"
+        aria-live="polite"
+    >
+        Conectando con el catálogo de PUBG Mobile...
+    </p>
 
-        <select id="cantidad" disabled>
-            <option value="">Cargando productos...</option>
-        </select>
+    <div class="aviso">
+        <strong>💙 Próximamente:</strong>
+        estamos preparando las recargas de PUBG Mobile.
+        Los paquetes se muestran a 0 GVR mientras terminamos
+        la configuración.
+    </div>
 
-        <p
-            class="estado-catalogo"
-            id="estadoCatalogo"
-            aria-live="polite"
-        >
-            Conectando con el catálogo de PUBG Mobile...
-        </p>
+    <button
+        type="button"
+        class="recargar"
+        id="botonRecargar"
+        disabled
+    >
+        Recargas próximamente
+    </button>
 
-        <div class="aviso">
-            <strong>💙 Próximamente:</strong>
-            estamos preparando las recargas de PUBG Mobile.
-            Los productos se muestran con precio de 0 GVR mientras
-            terminamos la configuración.
-        </div>
+    <button
+        type="button"
+        class="ofertas"
+        onclick="abrirOfertas()"
+    >
+        🎁 Ofertas Especiales
+    </button>
 
-        <button
-            type="button"
-            class="recargar"
-            id="botonRecargar"
-            disabled
-        >
-            Recargas próximamente
-        </button>
+    <p class="nota-final">
+        Gamers Gold Top-Up · Tu mundo gaming, un solo lugar.
+    </p>
 
-        <button
-            type="button"
-            class="ofertas"
-            onclick="abrirOfertas()"
-        >
-            🎁 Ofertas Especiales
-        </button>
+</section>
 
-        <p class="nota-final">
-            Gamers Gold Top-Up · Tu mundo gaming, un solo lugar.
-        </p>
-
-    </section>
-</main>
-
-<footer>
+</main><footer>
     © 2026 Gamers Gold Top-Up
-</footer>
-
-<script>
+</footer><script>
     "use strict";
 
     // ==========================================
-    // CONFIGURACIÓN DEL CATÁLOGO
+    // CONFIGURACIÓN
     // ==========================================
 
     const SUPABASE_URL =
@@ -372,10 +358,8 @@
     const botonRecargar =
         document.getElementById("botonRecargar");
 
-    let productosCatalogo = [];
-
     // ==========================================
-    // BOTÓN DE OFERTAS
+    // BOTÓN DE OFERTAS ESPECIALES
     // ==========================================
 
     function abrirOfertas() {
@@ -397,7 +381,7 @@
     }
 
     // ==========================================
-    // EXTRAER PRODUCTOS DE LA RESPUESTA
+    // EXTRAER PRODUCTOS
     // ==========================================
 
     function extraerProductos(respuesta) {
@@ -421,11 +405,17 @@
             return respuesta.data;
         }
 
-        if (respuesta.data && Array.isArray(respuesta.data.products)) {
+        if (
+            respuesta.data &&
+            Array.isArray(respuesta.data.products)
+        ) {
             return respuesta.data.products;
         }
 
-        if (respuesta.data && Array.isArray(respuesta.data.productos)) {
+        if (
+            respuesta.data &&
+            Array.isArray(respuesta.data.productos)
+        ) {
             return respuesta.data.productos;
         }
 
@@ -433,7 +423,7 @@
     }
 
     // ==========================================
-    // OBTENER DATOS DE CADA PRODUCTO
+    // IDENTIFICAR LOS PRODUCTOS
     // ==========================================
 
     function obtenerProductId(producto) {
@@ -458,9 +448,33 @@
         ).trim();
     }
 
+    // ==========================================
+    // MOSTRAR SOLAMENTE RECARGAS DE UC
+    // ==========================================
+
+    function esRecargaUC(producto) {
+        const nombre = obtenerNombre(producto).toLowerCase();
+        const id = obtenerProductId(producto).toLowerCase();
+
+        // Detecta nombres como:
+        // 60 UC, 325 UC, 660 UC, 1800 UC, etc.
+        const tieneUC =
+            /\buc\b/i.test(nombre) ||
+            /(?:^|[_-])uc(?:[_-]|$)/i.test(id);
+
+        // Excluye pases, membresías y otros productos especiales.
+        const esOfertaEspecial =
+            /pass|pase|royale|elite|membership|membresia|membresía/i
+                .test(nombre + " " + id);
+
+        return tieneUC && !esOfertaEspecial;
+    }
+
+    // ==========================================
+    // DISPONIBILIDAD
+    // ==========================================
+
     function productoDisponible(producto) {
-        // Si el proveedor informa explícitamente que no está disponible,
-        // no mostramos ese producto.
         if (
             producto.available === false ||
             producto.available === 0 ||
@@ -471,6 +485,10 @@
 
         return true;
     }
+
+    // ==========================================
+    // VERIFICAR JUEGO
+    // ==========================================
 
     function esProductoPUBG(producto) {
         const game = producto.game;
@@ -489,19 +507,17 @@
             nombreJuego
         ).toLowerCase().trim();
 
-        // Algunos formatos del catálogo no incluyen el nombre del juego
-        // en cada producto. En ese caso aceptamos el producto recibido
-        // desde la consulta específica de PUBG Mobile.
+        // El catálogo se consulta específicamente para PUBG Mobile.
         if (!nombreJuego) {
             return true;
         }
 
-        return (
-            nombreJuego.includes("pubg") ||
-            nombreJuego.includes("pubg-mobile") ||
-            nombreJuego.includes("pubg_mobile")
-        );
+        return nombreJuego.includes("pubg");
     }
+
+    // ==========================================
+    // VERIFICAR REGIÓN GLOBAL
+    // ==========================================
 
     function esRegionGlobal(producto) {
         const region = String(
@@ -511,20 +527,15 @@
             ""
         ).trim().toLowerCase();
 
-        // Si el proveedor no devuelve la región en cada producto,
-        // conservamos el producto recibido del catálogo de PUBG.
         if (!region) {
             return true;
         }
 
-        return (
-            region === "global" ||
-            region.includes("global")
-        );
+        return region.includes("global");
     }
 
     // ==========================================
-    // CARGAR CATÁLOGO NEXT LEVEL
+    // CARGAR CATÁLOGO DE PUBG MOBILE
     // ==========================================
 
     async function cargarProductos() {
@@ -535,7 +546,8 @@
 
         const opcionInicial = document.createElement("option");
         opcionInicial.value = "";
-        opcionInicial.textContent = "Cargando productos...";
+        opcionInicial.textContent = "Cargando paquetes de UC...";
+
         selectCantidad.appendChild(opcionInicial);
 
         mostrarEstado(
@@ -564,23 +576,19 @@
                 respuesta = JSON.parse(textoRespuesta);
             } catch {
                 throw new Error(
-                    "El catálogo devolvió una respuesta que no es JSON."
+                    "El catálogo devolvió una respuesta no válida."
                 );
             }
 
             if (!respuestaHTTP.ok) {
-                const mensajeError =
+                throw new Error(
                     respuesta.message ||
                     respuesta.error ||
-                    "No se pudo consultar el catálogo.";
-
-                throw new Error(mensajeError);
+                    "No se pudo consultar el catálogo."
+                );
             }
 
-            if (
-                respuesta &&
-                respuesta.success === false
-            ) {
+            if (respuesta && respuesta.success === false) {
                 throw new Error(
                     respuesta.message ||
                     respuesta.error ||
@@ -590,6 +598,7 @@
 
             let productos = extraerProductos(respuesta);
 
+            // Filtramos el catálogo para mostrar únicamente UC.
             productos = productos.filter(producto => {
                 return (
                     producto &&
@@ -597,11 +606,12 @@
                     obtenerProductId(producto) !== "" &&
                     productoDisponible(producto) &&
                     esProductoPUBG(producto) &&
-                    esRegionGlobal(producto)
+                    esRegionGlobal(producto) &&
+                    esRecargaUC(producto)
                 );
             });
 
-            // Evitamos mostrar dos veces el mismo productId.
+            // Evitamos productos duplicados.
             const productosUnicos = new Map();
 
             productos.forEach(producto => {
@@ -614,20 +624,39 @@
 
             productos = Array.from(productosUnicos.values());
 
-            productosCatalogo = productos;
+            // Ordenar los paquetes por cantidad de UC cuando
+            // el identificador contiene una cantidad reconocible.
+            productos.sort((a, b) => {
+                function obtenerCantidad(producto) {
+                    const texto =
+                        obtenerNombre(producto) + " " +
+                        obtenerProductId(producto);
+
+                    const coincidencia =
+                        texto.match(/(\d+)\s*uc\b/i) ||
+                        texto.match(/(\d+)_uc\b/i);
+
+                    return coincidencia
+                        ? Number(coincidencia[1])
+                        : Number.MAX_SAFE_INTEGER;
+                }
+
+                return obtenerCantidad(a) - obtenerCantidad(b);
+            });
 
             selectCantidad.innerHTML = "";
 
             const opcionSeleccion = document.createElement("option");
             opcionSeleccion.value = "";
-            opcionSeleccion.textContent = "Selecciona un producto";
+            opcionSeleccion.textContent = "Selecciona un paquete de UC";
+
             selectCantidad.appendChild(opcionSeleccion);
 
             if (productos.length === 0) {
                 selectCantidad.disabled = true;
 
                 mostrarEstado(
-                    "El catálogo respondió, pero no se encontraron productos disponibles para PUBG Mobile en la región Global.",
+                    "No se encontraron paquetes de UC disponibles para PUBG Mobile en la región Global.",
                     "error"
                 );
 
@@ -640,11 +669,10 @@
                 const id = obtenerProductId(producto);
                 const nombre = obtenerNombre(producto);
 
-                // El valor es el identificador real del proveedor.
+                // Conservamos el productId real del proveedor.
                 opcion.value = id;
 
-                // No mostramos precios del proveedor:
-                // todos los productos permanecen a 0 GVR.
+                // Los precios permanecen en cero.
                 opcion.textContent = nombre + " — 0 GVR";
 
                 selectCantidad.appendChild(opcion);
@@ -653,9 +681,9 @@
             selectCantidad.disabled = false;
 
             mostrarEstado(
-                "✅ Catálogo cargado: " +
+                "✅ Se cargaron " +
                 productos.length +
-                " productos disponibles. Las compras todavía están desactivadas.",
+                " paquetes de UC. Las compras todavía están desactivadas.",
                 "exito"
             );
 
@@ -676,33 +704,30 @@
 
             mostrarEstado(
                 "No se pudo cargar el catálogo. " +
-                (error.message || "Comprueba tu conexión e inténtalo de nuevo."),
+                (error.message || "Comprueba tu conexión."),
                 "error"
             );
         }
     }
 
     // ==========================================
-    // COMPRAS TEMPORALMENTE DESACTIVADAS
+    // COMPRAS DESACTIVADAS POR AHORA
     // ==========================================
 
     function continuarRecarga() {
         alert(
             "💙 Las recargas de PUBG Mobile todavía están en preparación. " +
-            "Los productos se muestran con precio de 0 GVR y las compras " +
-            "permanecerán desactivadas hasta terminar la integración."
+            "Las compras permanecerán desactivadas hasta terminar " +
+            "la integración."
         );
     }
 
-    // No se llama a purchase_game_product.
-    // No se crea ningún pedido.
+    // No se ejecutan compras ni se crean pedidos.
     // No se descuenta saldo.
-    // No se envía ninguna orden al proveedor.
+    // No se envían órdenes al proveedor.
 
     document.addEventListener("DOMContentLoaded", () => {
         cargarProductos();
     });
-</script>
-
-</body>
+</script></body>
 </html>
