@@ -1,26 +1,37 @@
 /* =========================================================
-   GAMERS GOLD TOP-UP
-   MOTOR UNIVERSAL DE OFERTAS
-   CATÁLOGO NEXT LEVEL
+GAMERS GOLD TOP-UP
+MOTOR UNIVERSAL DE OFERTAS
+CATÁLOGO NEXT LEVEL
 
-   JUEGOS:
-   - Free Fire
-   - Mobile Legends
-   - Blood Strike
-   - PUBG Mobile
-   - Honor of Kings
-
-   IMPORTANTE:
-   - Precios en 0 GVR durante la preparación.
-   - Compras deshabilitadas.
-   - No crea pedidos ni descuenta saldo.
+JUEGOS:
+FREE FIRE
+MOBILE LEGENDS
+BLOOD STRIKE
+PUBG MOBILE
+HONOR OF KINGS
 ========================================================= */
 
 const SUPABASE_URL =
-    "https://gsuhzcavghsiolmipnzi.supabase.co";
+"https://gsuhzcavghsiolmipnzi.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
+);
+
+/* =========================================================
+CONFIGURACIÓN DEL JUEGO
+========================================================= */
 
 const CONFIG_OFERTAS = window.CONFIG_OFERTAS || {};
 
@@ -47,25 +58,26 @@ const JUEGOS_API = {
     "honor of kings": "honor-of-kings"
 };
 
-const JUEGO_API =
-    JUEGOS_API[JUEGO_NORMALIZADO];
+const JUEGO_API = JUEGOS_API[JUEGO_NORMALIZADO];
+
+/* =========================================================
+CATÁLOGO NEXT LEVEL
+========================================================= */
 
 const URL_CATALOGO =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
 /* =========================================================
-   VARIABLES
+VARIABLES
 ========================================================= */
 
 let ofertaSeleccionada = "";
 let productoSeleccionado = null;
 let precioSeleccionado = 0;
-
-window.productosOfertas = {};
-window.ofertaActualSeleccionada = null;
+let procesandoCompra = false;
 
 /* =========================================================
-   OFERTAS DE FREE FIRE
+OFERTAS DE FREE FIRE
 ========================================================= */
 
 const PRODUCTOS_FREE_FIRE = [
@@ -87,7 +99,7 @@ const PRODUCTOS_FREE_FIRE = [
 ];
 
 /* =========================================================
-   OFERTAS DE MOBILE LEGENDS
+OFERTAS DE MOBILE LEGENDS
 ========================================================= */
 
 const PRODUCTOS_MOBILE_LEGENDS = [
@@ -119,7 +131,7 @@ const PRODUCTOS_MOBILE_LEGENDS = [
 ];
 
 /* =========================================================
-   OFERTAS DE BLOOD STRIKE
+OFERTAS DE BLOOD STRIKE
 ========================================================= */
 
 const PRODUCTOS_BLOOD_STRIKE = [
@@ -146,7 +158,7 @@ const PRODUCTOS_BLOOD_STRIKE = [
 ];
 
 /* =========================================================
-   OFERTAS DE PUBG MOBILE
+OFERTAS DE PUBG MOBILE
 ========================================================= */
 
 const PRODUCTOS_PUBG_MOBILE = [
@@ -238,7 +250,7 @@ const PRODUCTOS_PUBG_MOBILE = [
 ];
 
 /* =========================================================
-   OFERTAS DE HONOR OF KINGS
+OFERTAS DE HONOR OF KINGS
 ========================================================= */
 
 const PRODUCTOS_HONOR_OF_KINGS = [
@@ -265,76 +277,35 @@ const PRODUCTOS_HONOR_OF_KINGS = [
 ];
 
 /* =========================================================
-   OBTENER OFERTAS CONFIGURADAS
+OBTENER OFERTAS CONFIGURADAS
 ========================================================= */
 
 function obtenerProductosConfigurados() {
-    switch (JUEGO_NORMALIZADO) {
-        case "free fire":
-            return PRODUCTOS_FREE_FIRE;
-
-        case "mobile legends":
-            return PRODUCTOS_MOBILE_LEGENDS;
-
-        case "blood strike":
-            return PRODUCTOS_BLOOD_STRIKE;
-
-        case "pubg mobile":
-            return PRODUCTOS_PUBG_MOBILE;
-
-        case "honor of kings":
-            return PRODUCTOS_HONOR_OF_KINGS;
-
-        default:
-            return [];
-    }
-}
-
-/* =========================================================
-   NORMALIZAR RESPUESTA DEL CATÁLOGO
-========================================================= */
-
-function extraerListaProductos(resultado) {
-    if (Array.isArray(resultado)) {
-        return resultado;
+    if (JUEGO_NORMALIZADO === "free fire") {
+        return PRODUCTOS_FREE_FIRE;
     }
 
-    if (!resultado || typeof resultado !== "object") {
-        return [];
+    if (JUEGO_NORMALIZADO === "mobile legends") {
+        return PRODUCTOS_MOBILE_LEGENDS;
     }
 
-    const posiblesListas = [
-        resultado.productos,
-        resultado.products,
-        resultado.data,
-        resultado.items,
-        resultado.results
-    ];
+    if (JUEGO_NORMALIZADO === "blood strike") {
+        return PRODUCTOS_BLOOD_STRIKE;
+    }
 
-    for (const lista of posiblesListas) {
-        if (Array.isArray(lista)) {
-            return lista;
-        }
+    if (JUEGO_NORMALIZADO === "pubg mobile") {
+        return PRODUCTOS_PUBG_MOBILE;
+    }
 
-        if (lista && typeof lista === "object") {
-            for (const clave of [
-                "productos",
-                "products",
-                "items",
-                "results"
-            ]) {
-                if (Array.isArray(lista[clave])) {
-                    return lista[clave];
-                }
-            }
-        }
+    if (JUEGO_NORMALIZADO === "honor of kings") {
+        return PRODUCTOS_HONOR_OF_KINGS;
     }
 
     return [];
 }
 
 /* =========================================================
-   CONSULTAR CATÁLOGO NEXT LEVEL
+CONSULTAR CATÁLOGO NEXT LEVEL
 ========================================================= */
 
 async function consultarCatalogoNextLevel() {
@@ -345,8 +316,7 @@ async function consultarCatalogoNextLevel() {
     }
 
     const respuesta = await fetch(
-        URL_CATALOGO +
-        "?game=" +
+        URL_CATALOGO + "?game=" +
         encodeURIComponent(JUEGO_API),
         {
             method: "GET",
@@ -354,8 +324,7 @@ async function consultarCatalogoNextLevel() {
                 "apikey": SUPABASE_KEY,
                 "Authorization": "Bearer " + SUPABASE_KEY,
                 "Accept": "application/json"
-            },
-            cache: "no-store"
+            }
         }
     );
 
@@ -370,48 +339,74 @@ async function consultarCatalogoNextLevel() {
     }
 
     if (!respuesta.ok) {
+        console.error(
+            "Respuesta de Next Level:",
+            resultado
+        );
+
         throw new Error(
             resultado.error ||
+            resultado.message ||
             "No se pudo consultar el catálogo. HTTP " +
             respuesta.status
         );
     }
 
-    const productos = extraerListaProductos(resultado);
-
-    if (!productos.length) {
-        console.warn(
-            "Respuesta del catálogo sin productos:",
-            resultado
-        );
+    if (Array.isArray(resultado)) {
+        return resultado;
     }
 
-    return productos;
+    if (Array.isArray(resultado.productos)) {
+        return resultado.productos;
+    }
+
+    if (Array.isArray(resultado.products)) {
+        return resultado.products;
+    }
+
+    if (Array.isArray(resultado.data)) {
+        return resultado.data;
+    }
+
+    if (Array.isArray(resultado.items)) {
+        return resultado.items;
+    }
+
+    if (Array.isArray(resultado.results)) {
+        return resultado.results;
+    }
+
+    if (resultado.data && typeof resultado.data === "object") {
+        if (Array.isArray(resultado.data.products)) {
+            return resultado.data.products;
+        }
+
+        if (Array.isArray(resultado.data.items)) {
+            return resultado.data.items;
+        }
+
+        if (Array.isArray(resultado.data.results)) {
+            return resultado.data.results;
+        }
+    }
+
+    console.error(
+        "Formato inesperado del catálogo:",
+        resultado
+    );
+
+    throw new Error(
+        "No se encontró la lista de productos del catálogo."
+    );
 }
 
 /* =========================================================
-   IDENTIFICAR ID DEL PRODUCTO EN LA RESPUESTA
-========================================================= */
-
-function obtenerIdProveedor(producto) {
-    return String(
-        producto?.productId ||
-        producto?.product_id ||
-        producto?.provider_product_id ||
-        producto?.providerProductId ||
-        producto?.id ||
-        ""
-    ).trim();
-}
-
-/* =========================================================
-   CARGAR OFERTAS ESPECIALES
+CARGAR OFERTAS ESPECIALES
 ========================================================= */
 
 async function cargarOfertas() {
     const estado =
-        document.getElementById("estadoProductos") ||
-        document.getElementById("estadoCarga");
+        document.getElementById("estadoProductos");
 
     const lista =
         document.getElementById("listaOfertas");
@@ -420,8 +415,7 @@ async function cargarOfertas() {
         document.getElementById("precioSeleccionado");
 
     const botonContinuar =
-        document.getElementById("continuarBtn") ||
-        document.getElementById("botonContinuar");
+        document.getElementById("continuarBtn");
 
     if (estado) {
         estado.style.display = "block";
@@ -438,6 +432,7 @@ async function cargarOfertas() {
     }
 
     if (botonContinuar) {
+        botonContinuar.style.display = "none";
         botonContinuar.disabled = true;
     }
 
@@ -448,29 +443,45 @@ async function cargarOfertas() {
             await consultarCatalogoNextLevel();
 
         console.log("Juego consultado:", JUEGO_API);
-        console.log("Productos recibidos de Next Level:", productosProveedor);
+
+        console.log(
+            "Productos recibidos de Next Level:",
+            productosProveedor
+        );
 
         const productosPorId = {};
 
-        productosProveedor.forEach(producto => {
-            const id = obtenerIdProveedor(producto);
+        productosProveedor.forEach(function(producto) {
+            /*
+            CONSERVAMOS EL IDENTIFICADOR QUE USABA
+            TU ARCHIVO ORIGINAL: productId.
+            También aceptamos otras variantes.
+            */
+
+            const id =
+                producto.productId ||
+                producto.product_id ||
+                producto.provider_product_id ||
+                producto.providerProductId ||
+                producto.id;
 
             if (id) {
-                productosPorId[id] = producto;
+                productosPorId[String(id).trim()] = producto;
             }
         });
 
         const ofertasDisponibles =
             obtenerProductosConfigurados()
-                .map(configuracion => {
+                .map(function(configuracion) {
                     const productoProveedor =
                         productosPorId[configuracion.id];
 
                     if (!productoProveedor) {
                         console.warn(
-                            "Producto no encontrado:",
+                            "Oferta no encontrada en el catálogo:",
                             configuracion.id
                         );
+
                         return null;
                     }
 
@@ -479,9 +490,10 @@ async function cargarOfertas() {
                         productoProveedor.available === "false"
                     ) {
                         console.warn(
-                            "Producto no disponible:",
+                            "Oferta no disponible:",
                             configuracion.id
                         );
+
                         return null;
                     }
 
@@ -492,98 +504,92 @@ async function cargarOfertas() {
                 })
                 .filter(Boolean);
 
-        if (!ofertasDisponibles.length) {
+        if (ofertasDisponibles.length === 0) {
             if (estado) {
                 estado.style.display = "block";
                 estado.textContent =
                     "No hay ofertas especiales disponibles en este momento.";
             }
 
-            if (lista) {
-                lista.style.display = "none";
-            }
-
             console.warn(
-                "No se encontraron ofertas para:",
+                "No se encontraron ofertas configuradas para:",
                 NOMBRE_JUEGO
+            );
+
+            console.log(
+                "IDs recibidos:",
+                productosProveedor.map(function(producto) {
+                    return (
+                        producto.productId ||
+                        producto.product_id ||
+                        producto.provider_product_id ||
+                        producto.providerProductId ||
+                        producto.id ||
+                        "(sin ID)"
+                    );
+                })
             );
 
             return;
         }
 
-        ofertasDisponibles.forEach(oferta => {
+        ofertasDisponibles.forEach(function(oferta) {
             window.productosOfertas[oferta.id] = oferta;
 
-            if (!lista) return;
+            const boton =
+                document.createElement("button");
 
-            const boton = document.createElement("button");
             boton.type = "button";
             boton.className = "boton-oferta";
 
-            const foto = document.createElement("div");
+            const foto =
+                document.createElement("div");
+
             foto.className = "foto-oferta";
 
-            const emoji = document.createElement("span");
+            const emoji =
+                document.createElement("span");
+
             emoji.textContent = oferta.emoji;
-            emoji.style.fontSize = "30px";
+            emoji.style.fontSize = "38px";
 
             foto.appendChild(emoji);
 
-            const informacion = document.createElement("div");
-            informacion.className = "informacion-oferta";
+            const nombre =
+                document.createElement("div");
 
-            const nombre = document.createElement("div");
             nombre.className = "nombre-oferta";
             nombre.textContent = oferta.nombre;
 
-            const descripcion = document.createElement("div");
-            descripcion.className = "descripcion-oferta";
-            descripcion.textContent =
-                "Producto especial · Compra próximamente";
+            const estadoOferta =
+                document.createElement("div");
 
-            informacion.appendChild(nombre);
-            informacion.appendChild(descripcion);
-
-            const precio = document.createElement("div");
-            precio.className = "precio-oferta";
-            precio.textContent = "0 GVR";
-
-            const nota = document.createElement("small");
-            nota.textContent = "Pendiente";
-
-            precio.appendChild(nota);
+            estadoOferta.textContent = "Disponible";
+            estadoOferta.style.fontSize = "12px";
+            estadoOferta.style.marginTop = "8px";
 
             boton.appendChild(foto);
-            boton.appendChild(informacion);
-            boton.appendChild(precio);
+            boton.appendChild(nombre);
+            boton.appendChild(estadoOferta);
 
-            // Se puede seleccionar para consultar la oferta,
-            // pero nunca iniciar una compra.
-            boton.addEventListener("click", () => {
+            boton.onclick = function() {
                 seleccionarOferta(boton, oferta.id);
-            });
+            };
 
             lista.appendChild(boton);
         });
 
-        if (lista) {
-            lista.style.display = "grid";
-        }
+        lista.style.display = "flex";
 
         if (estado) {
             estado.style.display = "none";
         }
 
-        const notaOfertas = document.getElementById("notaOfertas");
-
-        if (notaOfertas) {
-            notaOfertas.textContent =
-                "Precios pendientes de configurar. Compras próximamente.";
-        }
-
         console.log(
             "Ofertas especiales mostradas:",
-            ofertasDisponibles.map(oferta => oferta.nombre)
+            ofertasDisponibles.map(function(oferta) {
+                return oferta.nombre;
+            })
         );
 
     } catch (error) {
@@ -598,20 +604,24 @@ async function cargarOfertas() {
 }
 
 /* =========================================================
-   SELECCIONAR OFERTA
+SELECCIONAR OFERTA
 ========================================================= */
 
 function seleccionarOferta(boton, idProducto) {
-    const oferta = window.productosOfertas[idProducto];
+    const oferta =
+        window.productosOfertas &&
+        window.productosOfertas[idProducto];
 
     if (!oferta) {
         alert("Esta oferta no está disponible.");
         return;
     }
 
-    document.querySelectorAll(".boton-oferta").forEach(elemento => {
-        elemento.classList.remove("seleccionado");
-    });
+    document
+        .querySelectorAll(".boton-oferta")
+        .forEach(function(elemento) {
+            elemento.classList.remove("seleccionado");
+        });
 
     boton.classList.add("seleccionado");
 
@@ -619,39 +629,34 @@ function seleccionarOferta(boton, idProducto) {
     ofertaSeleccionada = oferta.nombre;
     precioSeleccionado = 0;
 
-    window.ofertaActualSeleccionada = oferta;
+    const precio =
+        document.getElementById("precio");
 
-    const precio = document.getElementById("precio");
-    const cajaPrecio = document.getElementById("precioSeleccionado");
+    const cajaPrecio =
+        document.getElementById("precioSeleccionado");
 
     const continuar =
-        document.getElementById("continuarBtn") ||
-        document.getElementById("botonContinuar");
-
-    const resumenProducto = document.getElementById("resumenProducto");
+        document.getElementById("continuarBtn");
 
     if (precio) {
-        precio.textContent = "0 GVR";
+        precio.textContent =
+            "Precio pendiente de configurar";
     }
 
     if (cajaPrecio) {
         cajaPrecio.style.display = "block";
     }
 
-    if (resumenProducto) {
-        resumenProducto.textContent = oferta.nombre;
-    }
-
     if (continuar) {
+        continuar.style.display = "block";
         continuar.disabled = true;
-        continuar.textContent = "Compras próximamente";
+        continuar.textContent =
+            "Compra temporalmente deshabilitada";
     }
-
-    console.log("Oferta seleccionada:", ofertaSeleccionada);
 }
 
 /* =========================================================
-   CONFIRMACIÓN DESHABILITADA
+CONFIRMACIÓN DESHABILITADA
 ========================================================= */
 
 function irAConfirmacion() {
@@ -661,7 +666,7 @@ function irAConfirmacion() {
 }
 
 /* =========================================================
-   VOLVER A OFERTAS
+VOLVER A OFERTAS
 ========================================================= */
 
 function volverOfertas() {
@@ -683,7 +688,7 @@ function volverOfertas() {
 }
 
 /* =========================================================
-   PEDIDOS DESHABILITADOS
+PEDIDOS DESHABILITADOS TEMPORALMENTE
 ========================================================= */
 
 async function realizarPedido() {
@@ -693,67 +698,62 @@ async function realizarPedido() {
 }
 
 /* =========================================================
-   CONFIGURAR INTERFAZ
+CONFIGURAR INTERFAZ
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", function() {
-    const label =
-        document.querySelector('label[for="idJugador"]');
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+        const label =
+            document.querySelector('label[for="idJugador"]');
 
-    const input =
-        document.getElementById("idJugador");
+        const input =
+            document.getElementById("idJugador");
 
-    const juegoConfirmacion =
-        document.getElementById("juegoConfirmacion");
+        const juegoConfirmacion =
+            document.getElementById("juegoConfirmacion");
 
-    const volverExito =
-        document.getElementById("volverJuegoBtn");
+        const volverExito =
+            document.getElementById("volverJuegoBtn");
 
-    const descripcion =
-        document.getElementById("descripcionOfertas");
+        const descripcion =
+            document.getElementById("descripcionOfertas");
 
-    const nota =
-        document.getElementById("notaOfertas");
+        const nota =
+            document.getElementById("notaOfertas");
 
-    if (label) {
-        label.textContent = TEXTO_ID;
+        if (label) {
+            label.textContent = TEXTO_ID;
+        }
+
+        if (input) {
+            input.placeholder = PLACEHOLDER_ID;
+        }
+
+        if (juegoConfirmacion) {
+            juegoConfirmacion.textContent = NOMBRE_JUEGO;
+        }
+
+        if (volverExito) {
+            volverExito.textContent =
+                "Volver a " + NOMBRE_JUEGO;
+
+            volverExito.onclick = function() {
+                window.location.href = PAGINA_VOLVER;
+            };
+        }
+
+        if (descripcion) {
+            descripcion.textContent =
+                "Elige una oferta especial de " +
+                NOMBRE_JUEGO + ".";
+        }
+
+        if (nota) {
+            nota.textContent =
+                "Precios y compras próximamente disponibles.";
+        }
+
+        cargarOfertas();
     }
-
-    if (input) {
-        input.placeholder = PLACEHOLDER_ID;
-    }
-
-    if (juegoConfirmacion) {
-        juegoConfirmacion.textContent = NOMBRE_JUEGO;
-    }
-
-    if (volverExito) {
-        volverExito.textContent = "Volver a " + NOMBRE_JUEGO;
-
-        volverExito.onclick = function() {
-            window.location.href = PAGINA_VOLVER;
-        };
-    }
-
-    if (descripcion) {
-        descripcion.textContent =
-            "Elige una oferta especial de " + NOMBRE_JUEGO + ".";
-    }
-
-    if (nota) {
-        nota.textContent =
-            "Precios pendientes de configurar. Compras próximamente.";
-    }
-
-    cargarOfertas();
-});
-
-/* =========================================================
-   FUNCIONES GLOBALES
-========================================================= */
-
-window.cargarOfertas = cargarOfertas;
-window.seleccionarOferta = seleccionarOferta;
-window.irAConfirmacion = irAConfirmacion;
-window.volverOfertas = volverOfertas;
-window.realizarPedido = realizarPedido;
+);
