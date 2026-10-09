@@ -1,755 +1,645 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#071225">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050b18">
+    <meta name="description" content="Descubre las ofertas especiales de Mobile Legends en Gamers Gold Top-Up.">
 
-  <title>Ofertas especiales | Mobile Legends — Gamers Gold Top-Up</title>
+    <title>Ofertas Especiales | Gamers Gold Top-Up</title>
 
-  <style>
-    :root {
-      --fondo: #06101f;
-      --panel: #0c1b31;
-      --panel2: #102542;
-      --azul: #168cff;
-      --cian: #00e5ff;
-      --texto: #f4f8ff;
-      --muted: #9db0ca;
-      --borde: rgba(68, 158, 255, .23);
-      --verde: #29e7a0;
-    }
+    <style>
+        :root {
+            --fondo: #050b18;
+            --panel: #091a35;
+            --panel-oscuro: #061226;
+            --azul: #087cff;
+            --cian: #00baff;
+            --borde: #204c78;
+            --texto-secundario: #8fa5bd;
+        }
 
-    * {
-      box-sizing: border-box;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--texto);
-      background:
-        radial-gradient(ellipse at top, rgba(0, 119, 255, .17), transparent 45%),
-        var(--fondo);
-      font-family: Arial, Helvetica, sans-serif;
-    }
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse at top, #0b2041 0%, transparent 48%),
+                var(--fondo);
+            color: white;
+        }
 
-    button,
-    input {
-      font: inherit;
-    }
+        button,
+        input {
+            font: inherit;
+        }
 
-    button {
-      cursor: pointer;
-    }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 17px 18px;
+            border-bottom: 1px solid #12385f;
+            background: rgba(7, 18, 37, 0.96);
+        }
 
-    .barra {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 16px;
-      background: rgba(5, 15, 30, .94);
-      border-bottom: 1px solid var(--borde);
-    }
+        .logo {
+            font-size: clamp(14px, 3.8vw, 20px);
+            font-weight: 900;
+            letter-spacing: -0.4px;
+        }
 
-    .marca {
-      color: var(--texto);
-      font-weight: 900;
-      font-size: 16px;
-      letter-spacing: .4px;
-    }
+        .logo .rayo {
+            color: var(--cian);
+            text-shadow: 0 0 12px #008cff;
+        }
 
-    .marca span {
-      color: var(--cian);
-      font-style: italic;
-    }
+        .volver {
+            flex-shrink: 0;
+            text-decoration: none;
+            color: white;
+            border: 1px solid #168cff;
+            padding: 10px 12px;
+            border-radius: 9px;
+            font-size: 12px;
+            transition: 0.2s;
+        }
 
-    .volver {
-      padding: 10px 13px;
-      border: 1px solid var(--borde);
-      border-radius: 10px;
-      color: var(--texto);
-      background: #10213a;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: bold;
-      white-space: nowrap;
-    }
+        .volver:hover {
+            background: #0b2c50;
+            border-color: var(--cian);
+        }
 
-    .contenedor {
-      width: min(100% - 28px, 1000px);
-      margin: 0 auto;
-      padding: 28px 0 50px;
-    }
+        .contenedor {
+            width: 100%;
+            max-width: 540px;
+            margin: auto;
+            padding: 25px 16px 35px;
+        }
 
-    .hero {
-      padding: 25px 20px;
-      margin-bottom: 25px;
-      border: 1px solid var(--borde);
-      border-radius: 20px;
-      background: linear-gradient(135deg, #102c50, #09172b 75%);
-      box-shadow: 0 15px 45px rgba(0, 0, 0, .18);
-    }
+        .ofertas {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(155deg, #0b1e3b, var(--panel));
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 19px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+        }
 
-    .etiqueta {
-      display: inline-block;
-      padding: 7px 11px;
-      border: 1px solid rgba(0, 229, 255, .28);
-      border-radius: 30px;
-      color: var(--cian);
-      background: rgba(0, 229, 255, .08);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 1px;
-    }
+        .ofertas::before {
+            content: "";
+            display: block;
+            height: 2px;
+            position: absolute;
+            top: 0;
+            left: 15%;
+            right: 15%;
+            background: linear-gradient(90deg, transparent, var(--cian), transparent);
+            opacity: 0.8;
+        }
 
-    h1 {
-      margin: 16px 0 10px;
-      font-size: clamp(27px, 6vw, 42px);
-      line-height: 1.12;
-    }
+        .icono {
+            text-align: center;
+            font-size: 43px;
+            margin-bottom: 10px;
+        }
 
-    h1 span {
-      color: var(--cian);
-    }
+        h1 {
+            text-align: center;
+            font-size: clamp(22px, 5vw, 27px);
+            margin-bottom: 9px;
+        }
 
-    .descripcion {
-      max-width: 650px;
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 14px;
-    }
+        .descripcion {
+            text-align: center;
+            color: var(--texto-secundario);
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 23px;
+        }
 
-    .titulo-seccion {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin: 26px 0 16px;
-    }
+        .etiqueta {
+            width: fit-content;
+            margin: 0 auto 17px;
+            padding: 7px 12px;
+            color: var(--cian);
+            background: rgba(0, 186, 255, 0.08);
+            border: 1px solid rgba(0, 186, 255, 0.25);
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
 
-    .titulo-seccion h2 {
-      margin: 0;
-      font-size: 20px;
-    }
+        .pantalla {
+            display: none;
+        }
 
-    .actualizar {
-      padding: 9px 12px;
-      border: 1px solid var(--borde);
-      border-radius: 10px;
-      color: var(--cian);
-      background: #0d2038;
-      font-size: 12px;
-      font-weight: bold;
-    }
+        .pantalla.activa {
+            display: block;
+            animation: aparecer 0.25s ease;
+        }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-    }
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
 
-    .oferta {
-      position: relative;
-      overflow: hidden;
-      padding: 19px;
-      border: 1px solid var(--borde);
-      border-radius: 17px;
-      background: linear-gradient(160deg, var(--panel2), var(--panel));
-      transition: transform .2s, border-color .2s, box-shadow .2s;
-    }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    .oferta:hover {
-      transform: translateY(-3px);
-      border-color: rgba(0, 229, 255, .55);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, .2);
-    }
+        .lista-ofertas {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
 
-    .icono {
-      display: grid;
-      place-items: center;
-      width: 54px;
-      height: 54px;
-      margin-bottom: 15px;
-      border: 1px solid rgba(0, 229, 255, .2);
-      border-radius: 15px;
-      background: rgba(0, 229, 255, .08);
-      font-size: 28px;
-    }
+        .boton-oferta {
+            position: relative;
+            width: 100%;
+            min-height: 145px;
+            padding: 0;
+            border: 1px solid var(--borde);
+            border-radius: 14px;
+            background: var(--panel-oscuro);
+            color: white;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.2s, background 0.2s, transform 0.2s;
+            box-shadow: 0 0 12px rgba(0, 140, 255, 0.06);
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    .region {
-      display: inline-block;
-      margin-bottom: 10px;
-      padding: 5px 8px;
-      border-radius: 7px;
-      color: #9fdcff;
-      background: rgba(22, 140, 255, .12);
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .5px;
-    }
+        .boton-oferta:hover {
+            border-color: #159dff;
+            background: #0a1d38;
+            transform: translateY(-2px);
+            box-shadow: 0 0 18px rgba(0, 157, 255, 0.18);
+        }
 
-    .oferta h3 {
-      margin: 0 0 9px;
-      font-size: 18px;
-      line-height: 1.35;
-    }
+        .boton-oferta:focus-visible,
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--cian);
+            outline-offset: 3px;
+        }
 
-    .detalle {
-      min-height: 36px;
-      margin: 0 0 17px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
+        .foto-oferta {
+            width: 100%;
+            min-height: 95px;
+            flex: 1;
+            background:
+                radial-gradient(ellipse at center, rgba(0, 140, 255, 0.13), transparent 70%),
+                #07172d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            overflow: hidden;
+        }
 
-    .seleccionar {
-      width: 100%;
-      padding: 12px;
-      border: 0;
-      border-radius: 10px;
-      color: #03101f;
-      background: linear-gradient(90deg, var(--cian), #65baff);
-      font-weight: 900;
-      transition: filter .2s;
-    }
+        .foto-oferta span {
+            color: #b4d9f7;
+            font-size: 14px;
+        }
 
-    .seleccionar:hover {
-      filter: brightness(1.1);
-    }
+        .emoji-oferta {
+            font-size: 31px !important;
+            filter: drop-shadow(0 0 9px rgba(0, 186, 255, 0.2));
+        }
 
-    .estado {
-      padding: 28px 18px;
-      border: 1px dashed var(--borde);
-      border-radius: 15px;
-      color: var(--muted);
-      background: rgba(12, 27, 49, .65);
-      text-align: center;
-      line-height: 1.6;
-    }
+        .nombre-oferta {
+            width: 100%;
+            min-height: 47px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background: #091a35;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            border-top: 1px solid var(--borde);
+        }
 
-    .estado strong {
-      display: block;
-      margin-bottom: 7px;
-      color: var(--texto);
-      font-size: 16px;
-    }
+        .boton-oferta.seleccionado {
+            border-color: var(--cian);
+            background: linear-gradient(180deg, #09244a, #0b315c);
+            box-shadow: 0 0 10px rgba(0, 186, 255, 0.2);
+        }
 
-    .cargando {
-      display: inline-block;
-      width: 23px;
-      height: 23px;
-      margin-bottom: 10px;
-      border: 3px solid rgba(0, 229, 255, .18);
-      border-top-color: var(--cian);
-      border-radius: 50%;
-      animation: girar .8s linear infinite;
-    }
+        .boton-oferta.seleccionado .foto-oferta {
+            background: #09213f;
+        }
 
-    @keyframes girar {
-      to { transform: rotate(360deg); }
-    }
+        .boton-oferta.seleccionado .nombre-oferta {
+            background: #0b315c;
+            color: var(--cian);
+            border-top-color: var(--cian);
+        }
 
-    .panel-confirmacion {
-      display: none;
-      margin-top: 26px;
-      padding: 22px;
-      border: 1px solid rgba(0, 229, 255, .3);
-      border-radius: 17px;
-      background: linear-gradient(145deg, #102744, #09172b);
-    }
+        .estado {
+            text-align: center;
+            color: var(--texto-secundario);
+            font-size: 13px;
+            line-height: 1.6;
+            padding: 17px 8px;
+        }
 
-    .panel-confirmacion.visible {
-      display: block;
-    }
+        .estado.error {
+            color: #ffb4b4;
+        }
 
-    .panel-confirmacion h2 {
-      margin: 0 0 8px;
-      font-size: 22px;
-    }
+        .precio-oferta {
+            margin-top: 18px;
+            padding: 15px;
+            background: var(--panel-oscuro);
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            text-align: center;
+        }
 
-    .texto-ayuda {
-      margin: 0 0 20px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
+        .precio-titulo {
+            color: var(--texto-secundario);
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
 
-    .producto-elegido {
-      margin-bottom: 18px;
-      padding: 13px;
-      border-radius: 10px;
-      color: var(--cian);
-      background: rgba(0, 229, 255, .07);
-      font-weight: bold;
-    }
+        .precio {
+            color: var(--cian);
+            font-size: 23px;
+            font-weight: 900;
+        }
 
-    .campo {
-      margin-bottom: 15px;
-    }
+        .boton-principal,
+        .boton-secundario {
+            width: 100%;
+            min-height: 47px;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-    .campo label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 13px;
-      font-weight: bold;
-    }
+        .boton-principal {
+            margin-top: 15px;
+            border: none;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 140, 255, 0.15);
+        }
 
-    .campo input {
-      width: 100%;
-      padding: 13px;
-      outline: none;
-      border: 1px solid var(--borde);
-      border-radius: 10px;
-      color: var(--texto);
-      background: #071629;
-    }
+        .boton-principal:hover:not(:disabled) {
+            filter: brightness(1.1);
+        }
 
-    .campo input:focus {
-      border-color: var(--cian);
-    }
+        .boton-principal:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
 
-    .acciones {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-    }
+        .boton-secundario {
+            margin-top: 10px;
+            border: 1px solid #168cff;
+            background: var(--panel-oscuro);
+            color: white;
+        }
 
-    .boton-secundario {
-      padding: 12px 16px;
-      border: 1px solid var(--borde);
-      border-radius: 10px;
-      color: var(--texto);
-      background: #10213a;
-      font-weight: bold;
-    }
+        .boton-secundario:hover {
+            background: #0b2545;
+        }
 
-    .aviso {
-      margin-top: 20px;
-      padding: 13px;
-      border: 1px solid rgba(255, 190, 75, .25);
-      border-radius: 11px;
-      color: #ffda98;
-      background: rgba(255, 190, 75, .06);
-      font-size: 12px;
-      line-height: 1.6;
-    }
+        .resumen {
+            background: var(--panel-oscuro);
+            border: 1px solid var(--borde);
+            border-radius: 13px;
+            padding: 14px 16px;
+            margin-top: 18px;
+        }
 
-    footer {
-      padding: 20px 14px;
-      border-top: 1px solid var(--borde);
-      color: var(--muted);
-      text-align: center;
-      font-size: 12px;
-    }
+        .fila {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #12385f;
+            font-size: 13px;
+        }
 
-    @media (max-width: 480px) {
-      .barra {
-        padding: 13px;
-      }
+        .fila:last-child {
+            border-bottom: none;
+        }
 
-      .marca {
-        font-size: 13px;
-      }
+        .fila span:first-child {
+            color: var(--texto-secundario);
+        }
 
-      .volver {
-        padding: 9px;
-        font-size: 11px;
-      }
+        .fila span:last-child {
+            color: white;
+            font-weight: bold;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
 
-      .hero {
-        padding: 21px 16px;
-      }
+        .campo-id {
+            margin-top: 18px;
+        }
 
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+        .campo-id label {
+            display: block;
+            color: var(--texto-secundario);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .campo-id input {
+            width: 100%;
+            padding: 13px;
+            background: var(--panel-oscuro);
+            border: 1px solid var(--borde);
+            border-radius: 10px;
+            color: white;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .campo-id input:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
+
+        .exito {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .icono-exito {
+            font-size: 60px;
+            margin-bottom: 12px;
+        }
+
+        .exito h2 {
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .exito p {
+            color: var(--texto-secundario);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .pedido-id {
+            margin-top: 18px;
+            background: var(--panel-oscuro);
+            border: 1px solid var(--borde);
+            border-radius: 10px;
+            padding: 13px;
+            color: var(--cian);
+            font-size: 13px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .nota {
+            text-align: center;
+            color: #7890aa;
+            font-size: 11px;
+            line-height: 1.6;
+            margin-top: 18px;
+        }
+
+        @media (max-width: 360px) {
+            header {
+                padding: 14px 10px;
+            }
+
+            .logo {
+                font-size: 13px;
+            }
+
+            .volver {
+                padding: 8px;
+                font-size: 11px;
+            }
+
+            .contenedor {
+                padding: 18px 10px;
+            }
+
+            .ofertas {
+                padding: 22px 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <header class="barra">
-    <div class="marca"><span>G</span> GAMERS GOLD TOP-UP</div>
-    <a class="volver" href="mobilelegends.html">← Volver a Mobile Legends</a>
-  </header>
 
-  <main class="contenedor">
-    <section class="hero">
-      <span class="etiqueta">MOBILE LEGENDS</span>
-      <h1>Ofertas <span>especiales</span></h1>
-      <p class="descripcion">
-        Descubre los pases y paquetes especiales disponibles para Mobile Legends.
-        Selecciona la oferta que te interesa para continuar.
-      </p>
-    </section>
+<header>
+    <div class="logo">
+        <span class="rayo">⚡</span>
+        Gamers Gold Top-Up
+    </div>
 
-    <section>
-      <div class="titulo-seccion">
-        <h2>🎁 Ofertas disponibles</h2>
-        <button class="actualizar" id="btnActualizar" type="button">
-          ↻ Actualizar
-        </button>
-      </div>
+    <a href="mobilelegends.html" class="volver">← Volver</a>
+</header>
 
-      <div id="listaOfertas" class="grid" aria-live="polite">
-        <div class="estado">
-          <span class="cargando"></span>
-          <strong>Cargando ofertas...</strong>
-          Estamos consultando el catálogo.
-        </div>
-      </div>
-    </section>
+<main class="contenedor">
 
-    <section class="panel-confirmacion" id="panelConfirmacion">
-      <h2>Continuar con la oferta</h2>
-      <p class="texto-ayuda">
-        Comprueba el producto seleccionado e introduce los datos de tu cuenta.
-      </p>
+    <!-- OFERTAS ESPECIALES -->
+    <section id="pantallaOfertas" class="ofertas pantalla activa">
 
-      <div class="producto-elegido" id="productoElegido"></div>
+        <div class="icono">🎁</div>
 
-      <form id="formularioOferta">
-        <div class="campo">
-          <label for="playerId">ID del jugador</label>
-          <input
-            id="playerId"
-            name="playerId"
-            type="text"
-            autocomplete="off"
-            placeholder="Introduce tu ID de jugador"
-            required
-          >
+        <h1>Ofertas Especiales</h1>
+
+        <p id="descripcionOfertas" class="descripcion">
+            Elige una oferta especial de Mobile Legends.
+        </p>
+
+        <div class="etiqueta">
+            MOBILE LEGENDS · OFERTAS ESPECIALES
         </div>
 
-        <div class="campo">
-          <label for="zoneId">Zone ID</label>
-          <input
-            id="zoneId"
-            name="zoneId"
-            type="text"
-            autocomplete="off"
-            placeholder="Introduce tu Zone ID"
-            required
-          >
+        <div id="estadoProductos" class="estado" role="status" aria-live="polite">
+            Conectando con el catálogo...
         </div>
 
-        <div class="acciones">
-          <button class="seleccionar" type="submit">
-            Confirmar datos
-          </button>
+        <div id="listaOfertas" class="lista-ofertas" style="display:none;"></div>
 
-          <button
-            class="boton-secundario"
-            id="btnCancelar"
+        <div id="precioSeleccionado" class="precio-oferta" style="display:none;">
+            <div class="precio-titulo">Precio de la oferta</div>
+            <div id="precio" class="precio">Pendiente</div>
+        </div>
+
+        <button
+            id="continuarBtn"
+            class="boton-principal"
             type="button"
-          >
-            Cancelar
-          </button>
+            onclick="irAConfirmacion()"
+            style="display:none;"
+            disabled
+        >
+            Continuar ⚡
+        </button>
+
+        <div id="notaOfertas" class="nota">
+            Los precios y las compras todavía no están habilitados.
         </div>
-      </form>
-
-      <div class="aviso">
-        Esta pantalla permite consultar y seleccionar ofertas. La compra
-        automática y el envío del pedido al proveedor todavía deben estar
-        conectados antes de poder completar una recarga real.
-      </div>
     </section>
-  </main>
 
-  <footer>
-    © 2026 Gamers Gold Top-Up · Tu mundo gaming. Un solo lugar.
-  </footer>
+    <!-- CONFIRMACIÓN -->
+    <section id="pantallaConfirmacion" class="ofertas pantalla">
 
-  <script>
-    const CATALOGO_URL =
-      "https://gsuhzcavghsiolmipnzi.supabase.co/functions/v1/nextlevel-catalogo";
+        <div class="icono">💳</div>
 
-    const listaOfertas = document.getElementById("listaOfertas");
-    const btnActualizar = document.getElementById("btnActualizar");
-    const panelConfirmacion = document.getElementById("panelConfirmacion");
-    const productoElegido = document.getElementById("productoElegido");
-    const formularioOferta = document.getElementById("formularioOferta");
-    const btnCancelar = document.getElementById("btnCancelar");
+        <h1>Confirmar pedido</h1>
 
-    let ofertasCargadas = [];
-    let ofertaSeleccionada = null;
+        <p class="descripcion">
+            Revisa la oferta seleccionada y los datos de tu cuenta.
+        </p>
 
-    function normalizar(texto) {
-      return String(texto || "")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase()
-        .trim();
-    }
+        <div class="resumen">
+            <div class="fila">
+                <span>Oferta</span>
+                <span id="confirmarOferta">-</span>
+            </div>
 
-    function nombreProducto(producto) {
-      return String(
-        producto.name ||
-        producto.product_name ||
-        producto.title ||
-        "Oferta especial"
-      );
-    }
+            <div class="fila">
+                <span>Juego</span>
+                <span id="juegoConfirmacion">Mobile Legends</span>
+            </div>
 
-    function idProducto(producto) {
-      return producto.productId ||
-        producto.product_id ||
-        producto.provider_product_id ||
-        producto.id ||
-        "";
-    }
+            <div class="fila">
+                <span>Precio</span>
+                <span id="confirmarPrecio">Pendiente</span>
+            </div>
+        </div>
 
-    function esOfertaEspecial(producto) {
-      const nombre = normalizar(nombreProducto(producto));
+        <div class="campo-id">
+            <label for="idJugador">ID del jugador de Mobile Legends</label>
+            <input
+                type="text"
+                id="idJugador"
+                placeholder="Escribe tu ID de jugador"
+                autocomplete="off"
+            >
+        </div>
 
-      const palabrasEspeciales =
-        /\b(pass|pack|elite|twilight|weekly|monthly|membership)\b/;
+        <div class="campo-id">
+            <label for="zoneId">Zone ID</label>
+            <input
+                type="text"
+                id="zoneId"
+                placeholder="Escribe tu Zone ID"
+                autocomplete="off"
+            >
+        </div>
 
-      // Excluye recargas normales del tipo "110 Diamonds",
-      // pero permite ofertas como "Weekly Diamond Pass".
-      const esRecargaNormal =
-        /^\d+(?:\s*\+\s*\d+)?\s+diamonds?\b/.test(nombre);
+        <button
+            id="confirmarBtn"
+            class="boton-principal"
+            type="button"
+            disabled
+        >
+            Compras desactivadas temporalmente
+        </button>
 
-      return palabrasEspeciales.test(nombre) && !esRecargaNormal;
-    }
+        <button
+            class="boton-secundario"
+            type="button"
+            onclick="volverOfertas()"
+        >
+            ← Cambiar oferta
+        </button>
+    </section>
 
-    function obtenerProductos(respuesta) {
-      if (Array.isArray(respuesta)) {
-        return respuesta;
-      }
+    <!-- ESTADO INFORMATIVO -->
+    <section id="pantallaExito" class="ofertas pantalla">
 
-      if (Array.isArray(respuesta.productos)) {
-        return respuesta.productos;
-      }
+        <div class="exito">
+            <div class="icono-exito">ℹ️</div>
 
-      if (Array.isArray(respuesta.products)) {
-        return respuesta.products;
-      }
+            <h2>Compras en preparación</h2>
 
-      if (Array.isArray(respuesta.data)) {
-        return respuesta.data;
-      }
+            <p>
+                Estamos preparando esta función. Por ahora no se registran pedidos desde esta página.
+            </p>
 
-      if (respuesta.data && Array.isArray(respuesta.data.products)) {
-        return respuesta.data.products;
-      }
+            <button
+                class="boton-principal"
+                type="button"
+                onclick="window.location.href='mobilelegends.html'"
+            >
+                Volver a Mobile Legends ⚡
+            </button>
+        </div>
+    </section>
 
-      if (respuesta.data && Array.isArray(respuesta.data.productos)) {
-        return respuesta.data.productos;
-      }
+</main>
 
-      return [];
-    }
+<!-- MISMO SCRIPT COMPARTIDO CON FREE FIRE -->
+<script>
+window.CONFIG_OFERTAS = {
+    juego: "Mobile Legends",
+    paginaVolver: "mobilelegends.html",
+    textoId: "ID del jugador de Mobile Legends",
+    placeholderId: "Escribe tu ID de jugador",
 
-    function mostrarEstado(titulo, mensaje, error = false) {
-      listaOfertas.innerHTML = "";
-
-      const caja = document.createElement("div");
-      caja.className = "estado";
-      caja.style.gridColumn = "1 / -1";
-
-      const strong = document.createElement("strong");
-      strong.textContent = titulo;
-
-      const texto = document.createElement("div");
-      texto.textContent = mensaje;
-
-      if (error) {
-        strong.style.color = "#ffb0b0";
-      }
-
-      caja.append(strong, texto);
-      listaOfertas.appendChild(caja);
-    }
-
-    function iconoOferta(nombre) {
-      const n = normalizar(nombre);
-
-      if (n.includes("twilight")) return "🌌";
-      if (n.includes("diamond pass")) return "💎";
-      if (n.includes("weekly")) return "🎟️";
-      if (n.includes("monthly")) return "📦";
-      if (n.includes("elite")) return "👑";
-      if (n.includes("membership")) return "⭐";
-      return "🎁";
-    }
-
-    function crearTarjeta(producto, indice) {
-      const nombre = nombreProducto(producto);
-      const region = producto.region ||
-        producto.provider_region ||
-        (producto.game && producto.game.region) ||
-        "Global";
-
-      const tarjeta = document.createElement("article");
-      tarjeta.className = "oferta";
-
-      const icono = document.createElement("div");
-      icono.className = "icono";
-      icono.textContent = iconoOferta(nombre);
-
-      const etiquetaRegion = document.createElement("span");
-      etiquetaRegion.className = "region";
-      etiquetaRegion.textContent = region;
-
-      const titulo = document.createElement("h3");
-      titulo.textContent = nombre;
-
-      const detalle = document.createElement("p");
-      detalle.className = "detalle";
-      detalle.textContent = "Producto oficial del catálogo del proveedor.";
-
-      const boton = document.createElement("button");
-      boton.type = "button";
-      boton.className = "seleccionar";
-      boton.textContent = "Seleccionar oferta";
-
-      boton.addEventListener("click", () => {
-        seleccionarOferta(indice);
-      });
-
-      tarjeta.append(
-        icono,
-        etiquetaRegion,
-        titulo,
-        detalle,
-        boton
-      );
-
-      return tarjeta;
-    }
-
-    function renderizarOfertas(ofertas) {
-      listaOfertas.innerHTML = "";
-
-      if (!ofertas.length) {
-        mostrarEstado(
-          "No hay ofertas disponibles",
-          "No encontramos ofertas especiales disponibles en este momento. Puedes intentarlo de nuevo más tarde."
-        );
-        return;
-      }
-
-      ofertas.forEach((producto, indice) => {
-        listaOfertas.appendChild(crearTarjeta(producto, indice));
-      });
-    }
-
-    function seleccionarOferta(indice) {
-      ofertaSeleccionada = ofertasCargadas[indice];
-
-      if (!ofertaSeleccionada) {
-        return;
-      }
-
-      productoElegido.textContent =
-        "Oferta seleccionada: " + nombreProducto(ofertaSeleccionada);
-
-      panelConfirmacion.classList.add("visible");
-
-      panelConfirmacion.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    }
-
-    function cerrarConfirmacion() {
-      panelConfirmacion.classList.remove("visible");
-      formularioOferta.reset();
-      ofertaSeleccionada = null;
-    }
-
-    async function cargarOfertas() {
-      btnActualizar.disabled = true;
-      btnActualizar.textContent = "Cargando...";
-
-      mostrarEstado(
-        "Cargando ofertas...",
-        "Estamos consultando el catálogo."
-      );
-
-      cerrarConfirmacion();
-
-      try {
-        const respuesta = await fetch(
-          CATALOGO_URL + "?game=mobile-legends",
-          {
-            method: "GET",
-            cache: "no-store"
-          }
-        );
-
-        if (!respuesta.ok) {
-          throw new Error("No se pudo consultar el catálogo.");
+    ofertas: [
+        {
+            nombre: "Weekly Elite Pack",
+            emoji: "🎁"
+        },
+        {
+            nombre: "Weekly Pass",
+            emoji: "🎟️"
+        },
+        {
+            nombre: "Weekly Diamond Pass",
+            emoji: "💎"
+        },
+        {
+            nombre: "Monthly Elite Pack",
+            emoji: "👑"
+        },
+        {
+            nombre: "Twilight Pass",
+            emoji: "🌌"
         }
+    ]
+};
+</script>
 
-        const datos = await respuesta.json();
-        const productos = obtenerProductos(datos);
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        ofertasCargadas = productos.filter(producto => {
-          const identificador = idProducto(producto);
+<script src="ofertas.js?v=20261009mobilelegends1"></script>
 
-          const disponible =
-            producto.available !== false &&
-            producto.available !== 0 &&
-            String(producto.available).toLowerCase() !== "false";
-
-          return Boolean(identificador) &&
-            disponible &&
-            esOfertaEspecial(producto);
-        });
-
-        renderizarOfertas(ofertasCargadas);
-
-      } catch (error) {
-        console.error("Error al cargar las ofertas:", error);
-
-        mostrarEstado(
-          "No se pudieron cargar las ofertas",
-          "Comprueba tu conexión e inténtalo de nuevo.",
-          true
-        );
-      } finally {
-        btnActualizar.disabled = false;
-        btnActualizar.textContent = "↻ Actualizar";
-      }
-    }
-
-    btnActualizar.addEventListener("click", cargarOfertas);
-    btnCancelar.addEventListener("click", cerrarConfirmacion);
-
-    formularioOferta.addEventListener("submit", event => {
-      event.preventDefault();
-
-      if (!ofertaSeleccionada) {
-        alert("Selecciona una oferta primero.");
-        return;
-      }
-
-      const playerId = document.getElementById("playerId").value.trim();
-      const zoneId = document.getElementById("zoneId").value.trim();
-
-      if (!playerId || !zoneId) {
-        alert("Introduce el ID del jugador y el Zone ID.");
-        return;
-      }
-
-      alert(
-        "Datos introducidos correctamente.\n\n" +
-        "Producto: " + nombreProducto(ofertaSeleccionada) + "\n" +
-        "ID del jugador: " + playerId + "\n" +
-        "Zone ID: " + zoneId + "\n\n" +
-        "La compra todavía no se ha realizado porque falta conectar " +
-        "el envío del pedido al proveedor."
-      );
-    });
-
-    cargarOfertas();
-  </script>
 </body>
 </html>
