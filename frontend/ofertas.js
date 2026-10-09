@@ -30,7 +30,7 @@ const supabaseClient =
 
 
 /* =========================================================
-   CONFIGURACIÓN
+   CONFIGURACIÓN DEL JUEGO
    ========================================================= */
 
 const CONFIG_OFERTAS =
@@ -40,7 +40,7 @@ const NOMBRE_JUEGO =
     CONFIG_OFERTAS.juego || "Free Fire";
 
 const PAGINA_VOLVER =
-    CONFIG_OFERTAS.paginaVolver || "juegos.html";
+    CONFIG_OFERTAS.paginaVolver || "freefire.html";
 
 const TEXTO_ID =
     CONFIG_OFERTAS.textoId || "ID del jugador";
@@ -48,12 +48,9 @@ const TEXTO_ID =
 const PLACEHOLDER_ID =
     CONFIG_OFERTAS.placeholderId || "Escribe tu ID";
 
-const OFERTAS_CONFIG =
-    CONFIG_OFERTAS.ofertas || [];
-
 
 /* =========================================================
-   EDGE FUNCTION
+   CONEXIÓN CON NEXT LEVEL
    ========================================================= */
 
 const URL_CATALOGO =
@@ -75,71 +72,27 @@ let procesandoCompra = false;
 
 
 /* =========================================================
-   IDENTIFICADORES DE NEXT LEVEL
+   OFERTAS ESPECIALES DE FREE FIRE
+   SOLO ESTAS TRES SE MOSTRARÁN
    ========================================================= */
 
 const PRODUCTOS_FREE_FIRE = [
 
     {
-        id: "fz-free_fire_latam-110_diamonds",
-        nombre: "110 Diamantes",
-        cantidad: 110,
-        emoji: "💎"
-    },
-
-    {
-        id: "fz-free_fire_latam-341_diamonds",
-        nombre: "341 Diamantes",
-        cantidad: 341,
-        emoji: "💎"
-    },
-
-    {
-        id: "fz-free_fire_latam-572_diamonds",
-        nombre: "572 Diamantes",
-        cantidad: 572,
-        emoji: "💎"
-    },
-
-    {
-        id: "fz-free_fire_latam-1166_diamonds",
-        nombre: "1166 Diamantes",
-        cantidad: 1166,
-        emoji: "💎"
-    },
-
-    {
-        id: "fz-free_fire_latam-2398_diamonds",
-        nombre: "2398 Diamantes",
-        cantidad: 2398,
-        emoji: "💎"
-    },
-
-    {
-        id: "fz-free_fire_latam-6160_diamonds",
-        nombre: "6160 Diamantes",
-        cantidad: 6160,
-        emoji: "💎"
-    },
-
-    {
         id: "fz-free_fire_latam-booyah_pass",
         nombre: "Booyah Pass",
-        cantidad: 0,
         emoji: "🎟️"
     },
 
     {
         id: "fz-free_fire_latam-weekly_membership",
         nombre: "Membresía Semanal",
-        cantidad: 0,
-        emoji: "📅"
+        emoji: "💎"
     },
 
     {
         id: "fz-free_fire_latam-monthly_membership",
         nombre: "Membresía Mensual",
-        cantidad: 0,
         emoji: "👑"
     }
 
@@ -147,7 +100,7 @@ const PRODUCTOS_FREE_FIRE = [
 
 
 /* =========================================================
-   OBTENER CONFIGURACIÓN DE PRODUCTOS
+   OBTENER OFERTAS CONFIGURADAS
    ========================================================= */
 
 function obtenerProductosConfigurados() {
@@ -157,12 +110,6 @@ function obtenerProductosConfigurados() {
     ) {
         return PRODUCTOS_FREE_FIRE;
     }
-
-    /*
-       Para otros juegos añadiremos su mapeo
-       cuando comprobemos sus identificadores
-       reales en Next Level.
-    */
 
     return [];
 }
@@ -186,7 +133,19 @@ async function consultarCatalogoNextLevel() {
         }
     );
 
-    const resultado = await respuesta.json();
+    let resultado;
+
+    try {
+
+        resultado = await respuesta.json();
+
+    } catch {
+
+        throw new Error(
+            "El catálogo devolvió una respuesta no válida."
+        );
+
+    }
 
     if (!respuesta.ok) {
 
@@ -197,38 +156,39 @@ async function consultarCatalogoNextLevel() {
 
     }
 
-    let productos = [];
-
     if (Array.isArray(resultado)) {
 
-        productos = resultado;
-
-    } else if (
-        Array.isArray(resultado.productos)
-    ) {
-
-        productos = resultado.productos;
-
-    } else if (
-        Array.isArray(resultado.products)
-    ) {
-
-        productos = resultado.products;
-
-    } else if (
-        Array.isArray(resultado.data)
-    ) {
-
-        productos = resultado.data;
+        return resultado;
 
     }
 
-    return productos;
+    if (Array.isArray(resultado.productos)) {
+
+        return resultado.productos;
+
+    }
+
+    if (Array.isArray(resultado.products)) {
+
+        return resultado.products;
+
+    }
+
+    if (Array.isArray(resultado.data)) {
+
+        return resultado.data;
+
+    }
+
+    throw new Error(
+        "No se encontró la lista de productos del catálogo."
+    );
+
 }
 
 
 /* =========================================================
-   CARGAR OFERTAS
+   CARGAR OFERTAS ESPECIALES
    ========================================================= */
 
 async function cargarOfertas() {
@@ -293,29 +253,25 @@ async function cargarOfertas() {
         ) {
 
             throw new Error(
-                "La conexión del catálogo todavía está configurada para Free Fire."
+                "Este catálogo está configurado para Free Fire."
             );
 
         }
 
+
+        /* CONSULTAR NEXT LEVEL */
 
         const productosProveedor =
             await consultarCatalogoNextLevel();
 
 
         console.log(
-            "Catálogo recibido de Next Level:",
+            "Productos recibidos de Next Level:",
             productosProveedor
         );
 
 
-        const productosConfigurados =
-            obtenerProductosConfigurados();
-
-
-        /*
-           Indexar los productos recibidos por productId.
-        */
+        /* INDEXAR POR IDENTIFICADOR */
 
         const productosPorId = {};
 
@@ -334,15 +290,10 @@ async function cargarOfertas() {
         );
 
 
-        /*
-           Conservar únicamente productos que:
-           - Estén configurados.
-           - Existan en el catálogo.
-           - Estén disponibles.
-        */
+        /* CONSERVAR SOLAMENTE LAS TRES OFERTAS */
 
         const ofertasDisponibles =
-            productosConfigurados
+            obtenerProductosConfigurados()
                 .map(function(configuracion) {
 
                     const productoProveedor =
@@ -377,12 +328,10 @@ async function cargarOfertas() {
                 .filter(Boolean);
 
 
-        if (estado) {
+        window.productosOfertas = {};
 
-            estado.style.display = "none";
 
-        }
-
+        /* MOSTRAR MENSAJE SI NO HAY OFERTAS */
 
         if (
             ofertasDisponibles.length === 0
@@ -393,7 +342,7 @@ async function cargarOfertas() {
                 estado.style.display = "block";
 
                 estado.textContent =
-                    "No encontramos ofertas disponibles.";
+                    "No hay ofertas especiales disponibles en este momento.";
 
             }
 
@@ -402,8 +351,7 @@ async function cargarOfertas() {
         }
 
 
-        window.productosOfertas = {};
-
+        /* CREAR TARJETAS */
 
         ofertasDisponibles.forEach(
             function(oferta) {
@@ -412,16 +360,6 @@ async function cargarOfertas() {
                     oferta.id
                 ] = oferta;
 
-            }
-        );
-
-
-        /*
-           Construir las tarjetas.
-        */
-
-        ofertasDisponibles.forEach(
-            function(oferta) {
 
                 const boton =
                     document.createElement("button");
@@ -430,6 +368,8 @@ async function cargarOfertas() {
 
                 boton.className = "boton-oferta";
 
+
+                /* ICONO */
 
                 const foto =
                     document.createElement("div");
@@ -440,30 +380,38 @@ async function cargarOfertas() {
                 const emoji =
                     document.createElement("span");
 
-                emoji.textContent = oferta.emoji;
+                emoji.textContent =
+                    oferta.emoji;
 
                 emoji.style.fontSize = "38px";
 
                 foto.appendChild(emoji);
 
 
+                /* NOMBRE */
+
                 const nombre =
                     document.createElement("div");
 
                 nombre.className = "nombre-oferta";
 
-                nombre.textContent = oferta.nombre;
+                nombre.textContent =
+                    oferta.nombre;
 
+
+                /* ESTADO */
 
                 const estadoOferta =
                     document.createElement("div");
 
                 estadoOferta.textContent =
-                    "Disponible en el catálogo";
+                    "Disponible";
 
-                estadoOferta.style.fontSize = "12px";
+                estadoOferta.style.fontSize =
+                    "12px";
 
-                estadoOferta.style.marginTop = "8px";
+                estadoOferta.style.marginTop =
+                    "8px";
 
 
                 boton.appendChild(foto);
@@ -472,6 +420,8 @@ async function cargarOfertas() {
 
                 boton.appendChild(estadoOferta);
 
+
+                /* SELECCIÓN */
 
                 boton.onclick = function() {
 
@@ -489,32 +439,28 @@ async function cargarOfertas() {
         );
 
 
-        if (lista) {
-
-            lista.style.display = "flex";
-
-        }
+        lista.style.display = "flex";
 
 
         if (estado) {
 
-            estado.style.display = "block";
-
-            estado.textContent =
-                "Catálogo conectado correctamente.";
+            estado.style.display = "none";
 
         }
 
 
         console.log(
-            "Ofertas disponibles:",
-            ofertasDisponibles.length
+            "Ofertas especiales mostradas:",
+            ofertasDisponibles.map(
+                oferta => oferta.nombre
+            )
         );
+
 
     } catch (error) {
 
         console.error(
-            "Error cargando el catálogo:",
+            "Error cargando ofertas:",
             error
         );
 
@@ -523,8 +469,7 @@ async function cargarOfertas() {
             estado.style.display = "block";
 
             estado.textContent =
-                "No pudimos cargar las ofertas. " +
-                "Comprueba la conexión e inténtalo de nuevo.";
+                "No pudimos cargar las ofertas. Inténtalo de nuevo más tarde.";
 
         }
 
@@ -576,12 +521,6 @@ function seleccionarOferta(
 
     ofertaSeleccionada = oferta.nombre;
 
-    /*
-       Los precios se configurarán posteriormente.
-       No utilizamos el coste del proveedor como
-       precio de venta.
-    */
-
     precioSeleccionado = 0;
 
 
@@ -627,13 +566,13 @@ function seleccionarOferta(
 
 
 /* =========================================================
-   IR A CONFIRMACIÓN
+   CONFIRMACIÓN
    ========================================================= */
 
 function irAConfirmacion() {
 
     alert(
-        "Las compras todavía están deshabilitadas mientras configuramos los precios y la conexión de pedidos."
+        "Las compras estarán disponibles cuando terminemos de configurar los precios y conectar los pedidos con Next Level."
     );
 
 }
@@ -678,13 +617,13 @@ function volverOfertas() {
 
 
 /* =========================================================
-   COMPRAS DESHABILITADAS TEMPORALMENTE
+   PEDIDOS DESHABILITADOS TEMPORALMENTE
    ========================================================= */
 
 async function realizarPedido() {
 
     alert(
-        "Las compras estarán disponibles cuando terminemos de conectar y verificar los pedidos con Next Level."
+        "Las compras todavía están deshabilitadas. Estamos preparando la conexión de pedidos con Next Level."
     );
 
 }
@@ -731,13 +670,15 @@ document.addEventListener(
 
         if (label) {
 
-            label.textContent = TEXTO_ID;
+            label.textContent =
+                TEXTO_ID;
 
         }
 
         if (input) {
 
-            input.placeholder = PLACEHOLDER_ID;
+            input.placeholder =
+                PLACEHOLDER_ID;
 
         }
 
@@ -765,16 +706,16 @@ document.addEventListener(
         if (descripcion) {
 
             descripcion.textContent =
-                "Ofertas de " +
+                "Elige una oferta especial de " +
                 NOMBRE_JUEGO +
-                " disponibles en nuestro catálogo.";
+                ".";
 
         }
 
         if (nota) {
 
             nota.textContent =
-                "Los precios y las compras se habilitarán después de verificar la integración.";
+                "Precios y compras próximamente disponibles.";
 
         }
 
