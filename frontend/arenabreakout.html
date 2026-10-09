@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050b18">
+    <meta name="description" content="Consulta el catálogo de Arena Breakout en Gamers Gold Top-Up.">
 
     <title>Arena Breakout | Gamers Gold Top-Up</title>
 
@@ -22,7 +24,7 @@
         }
 
         .contenedor {
-            max-width: 500px;
+            max-width: 650px;
             margin: auto;
         }
 
@@ -30,11 +32,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
             margin-bottom: 25px;
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 21px;
             font-weight: 900;
         }
 
@@ -48,25 +51,26 @@
             text-decoration: none;
             font-size: 14px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         .card {
             background: #091a35;
             border: 1px solid #15518c;
             border-radius: 20px;
-            padding: 28px 22px;
+            padding: 25px 20px;
             box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
         }
 
         .icono {
             text-align: center;
-            font-size: 55px;
+            font-size: 52px;
             margin-bottom: 10px;
         }
 
         h1 {
             text-align: center;
-            font-size: 26px;
+            font-size: 27px;
             margin-bottom: 10px;
         }
 
@@ -74,22 +78,21 @@
             text-align: center;
             color: #8fa5bd;
             font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 25px;
+            line-height: 1.6;
+            margin-bottom: 22px;
         }
 
-        label {
+        .etiqueta {
             display: block;
-            margin-bottom: 7px;
+            margin: 18px 0 10px;
             color: #b8c9dc;
             font-size: 13px;
+            font-weight: bold;
         }
 
-        input,
-        select {
+        input {
             width: 100%;
             padding: 13px;
-            margin-bottom: 18px;
             background: #061226;
             color: white;
             border: 1px solid #204c78;
@@ -98,94 +101,153 @@
             outline: none;
         }
 
-        input:focus,
-        select:focus {
+        input:focus {
             border-color: #159dff;
             box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
         }
 
-        .continuar {
+        .estado {
+            padding: 13px;
+            margin: 18px 0;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            background: #061226;
+            color: #a9c4df;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .estado.error {
+            color: #ffaaaa;
+            border-color: #843d4b;
+        }
+
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .producto {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+            min-height: 125px;
+            padding: 15px 12px;
+            background: #061226;
+            color: white;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            text-align: left;
+        }
+
+        .producto.seleccionado {
+            border-color: #00baff;
+            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+        }
+
+        .producto-nombre {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .producto-precio {
+            color: #45c8ff;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .producto-estado {
+            color: #9fb3c9;
+            font-size: 11px;
+        }
+
+        .separador-ofertas {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #164b8f;
+        }
+
+        .boton {
             width: 100%;
             padding: 14px;
             border: none;
             border-radius: 10px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
             font-size: 15px;
             font-weight: bold;
-            cursor: pointer;
         }
 
-        .continuar:disabled {
-            opacity: 0.6;
+        .continuar {
+            margin-top: 18px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
             cursor: not-allowed;
-        }
-
-        .separador-ofertas {
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid #164b8f;
+            opacity: 0.55;
         }
 
         .boton-ofertas {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #168cff;
-            border-radius: 10px;
             background: #07152b;
             color: #28a9ff;
-            font-size: 15px;
-            font-weight: bold;
+            border: 1px solid #168cff;
             cursor: pointer;
-        }
-
-        .boton-ofertas:hover {
-            background: #0a2345;
-            border-color: #38a8ff;
         }
 
         .nota {
             margin-top: 20px;
             text-align: center;
-            color: #627b97;
+            color: #8299b4;
             font-size: 11px;
-            line-height: 1.5;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 22px 14px;
+            }
+
+            .catalogo {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
         }
     </style>
 </head>
 
 <body>
-
 <div class="contenedor">
 
-    <div class="header">
-
+    <header class="header">
         <div class="logo">
             <span class="rayo">⚡</span> Gamers Gold Top-Up
         </div>
 
-        <a href="juegos.html" class="volver">
-            ← Juegos
-        </a>
+        <a href="juegos.html" class="volver">← Juegos</a>
+    </header>
 
-    </div>
+    <main class="card">
+        <div class="icono">🎯</div>
 
-    <div class="card">
-
-        <div class="icono">
-            🎯
-        </div>
-
-        <h1>
-            Arena Breakout
-        </h1>
+        <h1>Arena Breakout</h1>
 
         <p class="descripcion">
-            Recarga tu cuenta de Arena Breakout
-            de forma rápida y sencilla.
+            Explora los productos disponibles para Arena Breakout.
+            Selecciona un producto para consultar su información.
         </p>
 
-        <label for="idjugador">
+        <label class="etiqueta" for="idjugador">
             ID del jugador
         </label>
 
@@ -193,267 +255,143 @@
             type="text"
             id="idjugador"
             placeholder="Introduce tu ID"
+            autocomplete="off"
         >
 
-        <label for="cantidad">
-            Cantidad
-        </label>
+        <label class="etiqueta">Catálogo de productos</label>
 
-        <select id="cantidad">
-            <option>100 Bonds</option>
-            <option>310 Bonds</option>
-            <option>520 Bonds</option>
-            <option>1060 Bonds</option>
-            <option>2180 Bonds</option>
-        </select>
+        <div id="estadoCatalogo" class="estado">
+            Cargando catálogo de Arena Breakout...
+        </div>
+
+        <div id="catalogo" class="catalogo"></div>
 
         <button
-            class="continuar"
             id="botonContinuar"
+            class="boton continuar"
             type="button"
-            onclick="continuarRecarga()"
+            disabled
         >
-            Continuar ⚡
+            Compras temporalmente desactivadas
         </button>
 
         <div class="separador-ofertas">
-
             <button
-                class="boton-ofertas"
+                class="boton boton-ofertas"
                 type="button"
                 onclick="abrirOfertas()"
             >
-                🎁 Ofertas Especiales
+                🎁 Ofertas especiales
             </button>
-
         </div>
 
-    </div>
-
+        <p class="nota">
+            Catálogo informativo. Las compras estarán disponibles
+            cuando se configuren los precios y se verifique el sistema
+            de pedidos del proveedor.
+        </p>
+    </main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
 
 const SUPABASE_ANON_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
-        {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
-        }
-    );
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
 
+const catalogo = document.getElementById("catalogo");
+const estadoCatalogo = document.getElementById("estadoCatalogo");
+
+let productoSeleccionado = null;
 
 function abrirOfertas() {
-
-    window.location.href =
-        "ofertas-arena.html";
-
+    window.location.href = "ofertas-arena.html";
 }
 
+function mostrarEstado(mensaje, esError = false) {
+    estadoCatalogo.textContent = mensaje;
+    estadoCatalogo.classList.toggle("error", esError);
+}
 
-async function continuarRecarga() {
+async function cargarCatalogo() {
+    mostrarEstado("Cargando productos...");
 
-    const boton =
-        document.getElementById("botonContinuar");
-
-    const idJugador =
-        document
-            .getElementById("idjugador")
-            .value
-            .trim();
-
-    const cantidad =
-        document
-            .getElementById("cantidad")
-            .value;
-
-
-    /* =========================
-       VALIDACIONES
-    ========================= */
-
-    if (idJugador === "") {
-
-        alert(
-            "Escribe tu ID de Arena Breakout."
-        );
-
-        return;
-    }
-
-
-    if (cantidad === "") {
-
-        alert(
-            "Selecciona una cantidad."
-        );
-
-        return;
-    }
-
-
-    /* =========================
-       COMPROBAR SESIÓN
-    ========================= */
-
-    const {
-        data: { session },
-        error: sessionError
-    } = await supabaseClient.auth.getSession();
-
-
-    if (sessionError || !session) {
-
-        alert(
-            "Debes iniciar sesión primero."
-        );
-
-        window.location.href =
-            "login.html";
-
-        return;
-    }
-
-
-    /* =========================
-       DESACTIVAR BOTÓN
-    ========================= */
-
-    boton.disabled = true;
-
-    boton.textContent =
-        "Procesando...";
-
-
-    /* =========================
-       BUSCAR PRODUCTO
-    ========================= */
-
-    const {
-        data: producto,
-        error: productoError
-    } = await supabaseClient
+    const { data, error } = await supabaseClient
         .from("game_products")
         .select(
-            "id, game, product_name, price_gvr, active"
+            "id, game, product_name, game_currency_amount, price_gvr, active, provider, provider_product_id"
         )
-        .eq(
-            "game",
-            "Arena Breakout"
-        )
-        .eq(
-            "product_name",
-            cantidad
-        )
-        .eq(
-            "active",
-            true
-        )
-        .maybeSingle();
-
-
-    if (productoError) {
-
-        alert(
-            "Error buscando producto:\n\n" +
-            productoError.message
-        );
-
-        boton.disabled = false;
-
-        boton.textContent =
-            "Continuar ⚡";
-
-        return;
-    }
-
-
-    if (!producto) {
-
-        alert(
-            "Supabase no encontró este producto."
-        );
-
-        boton.disabled = false;
-
-        boton.textContent =
-            "Continuar ⚡";
-
-        return;
-    }
-
-
-    /* =========================
-       REALIZAR COMPRA
-    ========================= */
-
-    const {
-        data,
-        error
-    } = await supabaseClient.rpc(
-        "purchase_game_product",
-        {
-            p_product_id:
-                producto.id,
-
-            p_player_id:
-                idJugador
-        }
-    );
-
+        .eq("game", "Arena Breakout")
+        .eq("provider", "nextlevel")
+        .not("provider_product_id", "is", null)
+        .order("provider_cost", { ascending: true });
 
     if (error) {
-
-        alert(
-            "No se pudo realizar la compra:\n\n" +
-            error.message
+        console.error("Error cargando catálogo:", error);
+        mostrarEstado(
+            "No se pudo cargar el catálogo. Inténtalo de nuevo más tarde.",
+            true
         );
-
-        boton.disabled = false;
-
-        boton.textContent =
-            "Continuar ⚡";
-
         return;
     }
 
+    catalogo.replaceChildren();
 
-    /* =========================
-       COMPRA EXITOSA
-    ========================= */
+    if (!data || data.length === 0) {
+        mostrarEstado("Todavía no hay productos de proveedor registrados.");
+        return;
+    }
 
-    alert(
-        "¡Compra realizada! ⚡\n\n" +
-        "Arena Breakout\n" +
-        producto.product_name +
-        "\n" +
-        "Precio: " +
-        producto.price_gvr +
-        " GVR\n\n" +
-        "ID del pedido:\n" +
-        data
+    mostrarEstado(
+        "Productos recibidos: " + data.length +
+        ". Las compras todavía no están habilitadas."
     );
 
+    data.forEach(producto => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "producto";
 
-    window.location.href =
-        "cuenta.html";
+        const nombre = document.createElement("div");
+        nombre.className = "producto-nombre";
+        nombre.textContent = producto.product_name;
 
+        const precio = document.createElement("div");
+        precio.className = "producto-precio";
+        precio.textContent =
+            Number(producto.price_gvr) > 0
+                ? Number(producto.price_gvr) + " GVR"
+                : "Precio próximamente";
+
+        const estado = document.createElement("div");
+        estado.className = "producto-estado";
+        estado.textContent = producto.active
+            ? "Disponible"
+            : "Próximamente";
+
+        tarjeta.append(nombre, precio, estado);
+
+        tarjeta.addEventListener("click", () => {
+            document.querySelectorAll(".producto").forEach(elemento => {
+                elemento.classList.remove("seleccionado");
+            });
+
+            tarjeta.classList.add("seleccionado");
+            productoSeleccionado = producto;
+        });
+
+        catalogo.appendChild(tarjeta);
+    });
 }
 
+cargarCatalogo();
 </script>
-
 </body>
-    </html>
+</html>
