@@ -9,10 +9,11 @@ MOBILE LEGENDS
 BLOOD STRIKE
 PUBG MOBILE
 HONOR OF KINGS
+ARENA BREAKOUT
 
 IMPORTANTE:
 - Solo muestra ofertas configuradas.
-- No muestra paquetes normales de UC de PUBG.
+- Consulta el catálogo mediante una función de Supabase.
 - No realiza compras.
 - No crea pedidos.
 - No modifica saldos.
@@ -35,14 +36,6 @@ const URL_CATALOGO =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
 const TIEMPO_LIMITE_CATALOGO = 15000;
-
-/*
-No inicializamos un cliente Supabase aquí porque este motor
-no utiliza supabaseClient para cargar las ofertas.
-
-Así evitamos que una biblioteca Supabase ausente detenga
-todo el archivo antes de consultar el catálogo.
-*/
 
 /* =========================================================
 CONFIGURACIÓN DEL JUEGO
@@ -71,7 +64,8 @@ const JUEGOS_API = {
     "mobile legends": "mobile-legends",
     "blood strike": "blood-strike",
     "pubg mobile": "pubg-mobile",
-    "honor of kings": "honor-of-kings"
+    "honor of kings": "honor-of-kings",
+    "arena breakout": "arena-breakout"
 };
 
 const JUEGO_API =
@@ -288,6 +282,83 @@ const PRODUCTOS_HONOR_OF_KINGS = [
 ];
 
 /* =========================================================
+OFERTAS DE ARENA BREAKOUT
+========================================================= */
+
+const PRODUCTOS_ARENA_BREAKOUT = [
+    {
+        id: "fz-arena_breakout-beginner_select",
+        nombre: "Beginner Select",
+        emoji: "🎯"
+    },
+    {
+        id: "fz-arena_breakout-66_bonds",
+        nombre: "66 Bonds",
+        emoji: "💎"
+    },
+    {
+        id: "fz-arena_breakout-monthly_advanced_battle_pass_activation_pass",
+        nombre: "Monthly Advanced Battle Pass Activation Pass",
+        emoji: "🎟️"
+    },
+    {
+        id: "fz-arena_breakout-bulletproof_case_30d",
+        nombre: "Bulletproof Case (30d)",
+        emoji: "🛡️"
+    },
+    {
+        id: "fz-arena_breakout-bulletproof_case_privileges",
+        nombre: "Bulletproof Case Privileges",
+        emoji: "🔒"
+    },
+    {
+        id: "fz-arena_breakout-monthly_premium_battle_pass_activation_pass",
+        nombre: "Monthly Premium Battle Pass Activation Pass",
+        emoji: "👑"
+    },
+    {
+        id: "fz-arena_breakout-335_bonds",
+        nombre: "335 Bonds",
+        emoji: "💎"
+    },
+    {
+        id: "fz-arena_breakout-composition_case_30d",
+        nombre: "Composition Case (30d)",
+        emoji: "📦"
+    },
+    {
+        id: "fz-arena_breakout-composite_case_privileges",
+        nombre: "Composite Case Privileges",
+        emoji: "🔐"
+    },
+    {
+        id: "fz-arena_breakout-675_bonds",
+        nombre: "675 Bonds",
+        emoji: "💎"
+    },
+    {
+        id: "fz-arena_breakout-quarterly_premium_battle_pass_bundle_activation_pass_bundle",
+        nombre: "Quarterly Premium Battle Pass Bundle Activation Pass Bundle",
+        emoji: "🎁"
+    },
+    {
+        id: "fz-arena_breakout-1690_bonds",
+        nombre: "1690 Bonds",
+        emoji: "💠"
+    },
+    {
+        id: "fz-arena_breakout-3400_bonds",
+        nombre: "3400 Bonds",
+        emoji: "💎"
+    },
+    {
+        id: "fz-arena_breakout-6820_bonds",
+        nombre: "6820 Bonds",
+        emoji: "🔥"
+    }
+];
+
+/* =========================================================
 OBTENER OFERTAS CONFIGURADAS
 ========================================================= */
 
@@ -308,13 +379,16 @@ function obtenerProductosConfigurados() {
         case "honor of kings":
             return PRODUCTOS_HONOR_OF_KINGS;
 
+        case "arena breakout":
+            return PRODUCTOS_ARENA_BREAKOUT;
+
         default:
             return [];
     }
 }
 
 /* =========================================================
-GESTIÓN DE LOS INDICADORES DE CARGA
+GESTIÓN DE INDICADORES DE CARGA
 ========================================================= */
 
 function actualizarEstadoCarga(mensaje, mostrar = true) {
@@ -323,14 +397,6 @@ function actualizarEstadoCarga(mensaje, mostrar = true) {
 
     const estadoCarga =
         document.getElementById("estadoCarga");
-
-    /*
-    PUBG tiene un indicador adicional:
-    "Preparando las ofertas especiales..."
-
-    Lo ocultamos cuando el motor empieza a gestionar
-    directamente la carga del catálogo.
-    */
 
     if (estadoCarga) {
         estadoCarga.style.display = "none";
@@ -345,11 +411,6 @@ function actualizarEstadoCarga(mensaje, mostrar = true) {
 
 /* =========================================================
 CONSULTAR CATÁLOGO NEXT LEVEL
-
-- Límite de 15 segundos.
-- Gestión de errores HTTP.
-- Gestión de respuestas no válidas.
-- No expone la clave privada del proveedor.
 ========================================================= */
 
 async function consultarCatalogoNextLevel() {
@@ -389,7 +450,7 @@ async function consultarCatalogoNextLevel() {
             resultado = JSON.parse(texto);
         } catch {
             console.error(
-                "El catálogo devolvió una respuesta no JSON:",
+                "Respuesta no JSON del catálogo:",
                 texto.slice(0, 500)
             );
 
@@ -412,57 +473,25 @@ async function consultarCatalogoNextLevel() {
             );
         }
 
-        /*
-        La función nextlevel-catalogo devuelve normalmente:
-        {
-            juegoConsultado: "...",
-            totalProductosRecibidos: 0,
-            totalProductosMostrados: 0,
-            productos: [...]
-        }
-
-        También aceptamos otras estructuras habituales.
-        */
-
         if (Array.isArray(resultado)) {
             return resultado;
         }
 
-        if (Array.isArray(resultado.productos)) {
-            return resultado.productos;
-        }
+        const listasPosibles = [
+            resultado.productos,
+            resultado.products,
+            resultado.data,
+            resultado.items,
+            resultado.results,
+            resultado.data?.productos,
+            resultado.data?.products,
+            resultado.data?.items,
+            resultado.data?.results
+        ];
 
-        if (Array.isArray(resultado.products)) {
-            return resultado.products;
-        }
-
-        if (Array.isArray(resultado.data)) {
-            return resultado.data;
-        }
-
-        if (Array.isArray(resultado.items)) {
-            return resultado.items;
-        }
-
-        if (Array.isArray(resultado.results)) {
-            return resultado.results;
-        }
-
-        if (resultado.data && typeof resultado.data === "object") {
-            if (Array.isArray(resultado.data.productos)) {
-                return resultado.data.productos;
-            }
-
-            if (Array.isArray(resultado.data.products)) {
-                return resultado.data.products;
-            }
-
-            if (Array.isArray(resultado.data.items)) {
-                return resultado.data.items;
-            }
-
-            if (Array.isArray(resultado.data.results)) {
-                return resultado.data.results;
+        for (const lista of listasPosibles) {
+            if (Array.isArray(lista)) {
+                return lista;
             }
         }
 
@@ -473,7 +502,7 @@ async function consultarCatalogoNextLevel() {
 
         throw new Error(
             resultado.error ||
-            "No se encontró la lista de productos del catálogo."
+            "No se encontró la lista de productos."
         );
 
     } catch (error) {
@@ -496,7 +525,7 @@ async function consultarCatalogoNextLevel() {
 }
 
 /* =========================================================
-IDENTIFICAR PRODUCTOS DEL PROVEEDOR
+OBTENER IDENTIFICADOR DEL PRODUCTO
 ========================================================= */
 
 function obtenerIdProveedor(producto) {
@@ -526,9 +555,6 @@ CARGAR OFERTAS ESPECIALES
 ========================================================= */
 
 async function cargarOfertas() {
-    const estado =
-        document.getElementById("estadoProductos");
-
     const lista =
         document.getElementById("listaOfertas");
 
@@ -537,11 +563,6 @@ async function cargarOfertas() {
 
     const botonContinuar =
         document.getElementById("continuarBtn");
-
-    /*
-    Ocultar el indicador inicial de PUBG para evitar
-    que permanezca encima de la interfaz.
-    */
 
     const estadoCarga =
         document.getElementById("estadoCarga");
@@ -579,22 +600,6 @@ async function cargarOfertas() {
         const productosProveedor =
             await consultarCatalogoNextLevel();
 
-        if (!Array.isArray(productosProveedor)) {
-            throw new Error(
-                "La respuesta del catálogo no es una lista."
-            );
-        }
-
-        console.log(
-            "Juego consultado:",
-            JUEGO_API
-        );
-
-        console.log(
-            "Cantidad de productos recibidos:",
-            productosProveedor.length
-        );
-
         const productosPorId = {};
 
         productosProveedor.forEach(function(producto) {
@@ -616,28 +621,17 @@ async function cargarOfertas() {
 
                     if (!productoProveedor) {
                         console.warn(
-                            "Oferta no encontrada en el catálogo:",
+                            "Oferta no encontrada:",
                             configuracion.id
                         );
 
                         return null;
                     }
 
-                    /*
-                    No mostrar productos que el proveedor
-                    marque explícitamente como no disponibles.
-                    */
-
-                    const noDisponible =
+                    if (
                         productoProveedor.available === false ||
-                        productoProveedor.available === "false";
-
-                    if (noDisponible) {
-                        console.warn(
-                            "Oferta no disponible:",
-                            configuracion.id
-                        );
-
+                        productoProveedor.available === "false"
+                    ) {
                         return null;
                     }
 
@@ -649,19 +643,16 @@ async function cargarOfertas() {
                 .filter(Boolean);
 
         if (ofertasDisponibles.length === 0) {
-            if (lista) {
-                lista.innerHTML = "";
-                lista.style.display = "none";
-            }
-
             actualizarEstadoCarga(
                 "No hay ofertas especiales disponibles en este momento.",
                 true
             );
 
             console.warn(
-                "No se encontraron ofertas configuradas para:",
-                NOMBRE_JUEGO
+                "Juego:",
+                JUEGO_API,
+                "Productos recibidos:",
+                productosProveedor.length
             );
 
             console.log(
@@ -671,11 +662,6 @@ async function cargarOfertas() {
 
             return;
         }
-
-        /*
-        Crear tarjetas únicamente para las ofertas
-        configuradas para el juego actual.
-        */
 
         ofertasDisponibles.forEach(function(oferta) {
             window.productosOfertas[oferta.id] = oferta;
@@ -694,8 +680,8 @@ async function cargarOfertas() {
             const emoji =
                 document.createElement("span");
 
+            emoji.className = "emoji-oferta";
             emoji.textContent = oferta.emoji;
-            emoji.style.fontSize = "38px";
 
             foto.appendChild(emoji);
 
@@ -705,16 +691,8 @@ async function cargarOfertas() {
             nombre.className = "nombre-oferta";
             nombre.textContent = oferta.nombre;
 
-            const estadoOferta =
-                document.createElement("div");
-
-            estadoOferta.textContent = "Disponible";
-            estadoOferta.style.fontSize = "12px";
-            estadoOferta.style.marginTop = "8px";
-
             boton.appendChild(foto);
             boton.appendChild(nombre);
-            boton.appendChild(estadoOferta);
 
             boton.addEventListener("click", function() {
                 seleccionarOferta(boton, oferta.id);
@@ -728,7 +706,8 @@ async function cargarOfertas() {
         actualizarEstadoCarga("", false);
 
         console.log(
-            "Ofertas especiales mostradas:",
+            "Ofertas mostradas:",
+            NOMBRE_JUEGO,
             ofertasDisponibles.map(function(oferta) {
                 return oferta.nombre;
             })
@@ -736,18 +715,13 @@ async function cargarOfertas() {
 
     } catch (error) {
         console.error(
-            "Error cargando las ofertas de " + NOMBRE_JUEGO + ":",
+            "Error cargando ofertas:",
             error
         );
 
-        if (lista) {
-            lista.innerHTML = "";
-            lista.style.display = "none";
-        }
-
         actualizarEstadoCarga(
             "No pudimos cargar las ofertas. " +
-            (error.message || "Comprueba tu conexión e inténtalo de nuevo."),
+            (error.message || "Comprueba tu conexión."),
             true
         );
     }
@@ -755,9 +729,7 @@ async function cargarOfertas() {
 
 /* =========================================================
 SELECCIONAR OFERTA
-
-LOS PRECIOS AÚN NO ESTÁN CONFIGURADOS.
-LAS COMPRAS PERMANECEN DESHABILITADAS.
+COMPRAS DESACTIVADAS
 ========================================================= */
 
 function seleccionarOferta(boton, idProducto) {
@@ -800,22 +772,16 @@ function seleccionarOferta(boton, idProducto) {
         cajaPrecio.style.display = "block";
     }
 
-    /*
-    No habilitamos la compra mientras no estén configurados
-    los precios y el sistema de pedidos.
-    */
-
     if (continuar) {
         continuar.style.display = "block";
         continuar.disabled = true;
-
         continuar.textContent =
             "Compra temporalmente deshabilitada";
     }
 }
 
 /* =========================================================
-CONFIRMACIÓN DESHABILITADA
+CONFIRMACIÓN DESACTIVADA
 ========================================================= */
 
 function irAConfirmacion() {
@@ -848,7 +814,7 @@ function volverOfertas() {
 }
 
 /* =========================================================
-PEDIDOS DESHABILITADOS TEMPORALMENTE
+PEDIDOS DESACTIVADOS
 ========================================================= */
 
 async function realizarPedido() {
@@ -859,7 +825,7 @@ async function realizarPedido() {
 }
 
 /* =========================================================
-CONFIGURAR INTERFAZ Y CARGAR CATÁLOGO
+INICIALIZAR INTERFAZ
 ========================================================= */
 
 function inicializarMotorOfertas() {
@@ -913,13 +879,20 @@ function inicializarMotorOfertas() {
             "Precios y compras próximamente disponibles.";
     }
 
+    if (!JUEGO_API) {
+        actualizarEstadoCarga(
+            "Este juego todavía no está configurado en el motor.",
+            true
+        );
+        return;
+    }
+
     cargarOfertas();
 }
 
-/*
-Compatible tanto si el archivo se carga antes de que
-termine de construirse el HTML como si se carga después.
-*/
+/* =========================================================
+INICIO SEGURO
+========================================================= */
 
 if (document.readyState === "loading") {
     document.addEventListener(
@@ -929,4 +902,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializarMotorOfertas();
-                                   }
+    }
