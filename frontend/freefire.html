@@ -1,9 +1,11 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Recarga diamantes de Free Fire en Gamers Gold Top-Up."><title>Free Fire | Gamers Gold Top-Up</title>
+    <meta name="description" content="Recarga diamantes de Free Fire en Gamers Gold Top-Up.">
+    <title>Free Fire | Gamers Gold Top-Up</title>
 
 <style>
     * {
@@ -113,6 +115,7 @@
         text-align: center;
         font-size: 13px;
         line-height: 1.5;
+        overflow-wrap: anywhere;
     }
 
     .estado.error {
@@ -138,19 +141,27 @@
         justify-content: space-between;
         gap: 12px;
         min-width: 0;
-        min-height: 110px;
+        min-height: 115px;
         padding: 15px 12px;
         background: #061226;
         color: white;
         border: 1px solid #164b75;
         border-radius: 13px;
         text-align: left;
-        cursor: pointer;
         transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    .producto:hover {
+    button.producto {
+        cursor: pointer;
+    }
+
+    .producto:hover:not(:disabled) {
         border-color: #168cff;
+    }
+
+    .producto:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
     }
 
     .producto.seleccionado {
@@ -165,10 +176,20 @@
         overflow-wrap: anywhere;
     }
 
+    .producto-precio {
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
     .producto-estado {
         color: #45c8ff;
         font-size: 12px;
         font-weight: bold;
+    }
+
+    .producto-no-disponible .producto-estado {
+        color: #ffcf8a;
     }
 
     .separador-ofertas {
@@ -232,71 +253,77 @@
         }
     }
 </style>
+</head>
 
-</head><body>
-<div class="contenedor"><header class="header">
-    <div class="logo">
-        <span class="rayo">⚡</span> Gamers Gold Top-Up
-    </div>
+<body>
+<div class="contenedor">
 
-    <a href="juegos.html" class="volver">← Juegos</a>
-</header>
+    <header class="header">
+        <div class="logo">
+            <span class="rayo">⚡</span> Gamers Gold Top-Up
+        </div>
 
-<main class="card">
-    <div class="icono">🔥</div>
+        <a href="juegos.html" class="volver">← Juegos</a>
+    </header>
 
-    <h1>Free Fire</h1>
+    <main class="card">
+        <div class="icono">🔥</div>
 
-    <p class="descripcion">
-        Selecciona tu paquete de diamantes de Free Fire.
-    </p>
+        <h1>Free Fire</h1>
 
-    <label class="etiqueta" for="idjugador">
-        ID del jugador
-    </label>
+        <p class="descripcion">
+            Selecciona tu paquete de diamantes de Free Fire.
+        </p>
 
-    <input
-        type="text"
-        id="idjugador"
-        placeholder="Introduce tu ID de Free Fire"
-        autocomplete="off"
-    >
+        <label class="etiqueta" for="idjugador">
+            ID del jugador
+        </label>
 
-    <label class="etiqueta">
-        Selecciona una cantidad de diamantes
-    </label>
-
-    <div id="estadoCatalogo" class="estado" aria-live="polite">
-        Conectando con el catálogo...
-    </div>
-
-    <div id="catalogo" class="catalogo"></div>
-
-    <button
-        id="botonContinuar"
-        class="boton continuar"
-        type="button"
-    >
-        Comprobar sesión
-    </button>
-
-    <div class="separador-ofertas">
-        <button
-            class="boton boton-ofertas"
-            type="button"
-            id="botonOfertas"
+        <input
+            type="text"
+            id="idjugador"
+            placeholder="Introduce tu ID de Free Fire"
+            autocomplete="off"
+            maxlength="50"
         >
-            🎁 Ofertas especiales
+
+        <label class="etiqueta">
+            Selecciona una cantidad de diamantes
+        </label>
+
+        <div id="estadoCatalogo" class="estado" aria-live="polite">
+            Conectando con el catálogo...
+        </div>
+
+        <div id="catalogo" class="catalogo"></div>
+
+        <button
+            id="botonContinuar"
+            class="boton continuar"
+            type="button"
+        >
+            RECARGAR
         </button>
-    </div>
 
-    <p class="nota">
-        Modo de prueba: se comprobará la sesión de Supabase.
-        Esta versión no crea pedidos ni descuenta GVR.
-    </p>
-</main>
+        <div class="separador-ofertas">
+            <button
+                class="boton boton-ofertas"
+                type="button"
+                id="botonOfertas"
+            >
+                🎁 Ofertas especiales
+            </button>
+        </div>
 
-</div><script type="module">
+        <p class="nota">
+            Los precios se muestran en GVR. Comprueba tu ID de jugador
+            antes de confirmar la recarga. No vuelvas a crear un pedido
+            si el anterior está pendiente de confirmación.
+        </p>
+    </main>
+</div>
+
+<script type="module">
 "use strict";
 
 import { createClient } from
@@ -312,6 +339,12 @@ const SUPABASE_KEY =
 
 const URL_CATALOGO =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
+
+const URL_CREAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/nextlevel-crear-pedido";
+
+const URL_CONSULTAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
 
 const supabase = createClient(
     SUPABASE_URL,
@@ -333,9 +366,13 @@ const campoJugador = document.getElementById("idjugador");
 
 let productoSeleccionado = null;
 let productosDisponibles = [];
+let productosLocales = [];
 let procesando = false;
+let usuarioActualId = null;
+let pedidoPendienteId = null;
+let accionPendiente = "crear";
 
-/* OFERTAS */
+/* OFERTAS: SE CONSERVA EL DESTINO ACTUAL */
 
 botonOfertas.addEventListener("click", () => {
     window.location.href = "ofertas-free-fire.html";
@@ -349,7 +386,92 @@ function mostrarEstado(mensaje, tipo = "") {
     estadoCatalogo.classList.toggle("correcto", tipo === "correcto");
 }
 
-/* PRODUCTOS */
+function mensajeError(error, alternativo) {
+    return error?.message || alternativo;
+}
+
+function normalizarTexto(valor) {
+    return String(valor ?? "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\s_-]/g, "");
+}
+
+function clavePedidoPendiente(userId) {
+    return "ggtopup_freefire_pedido_" + userId;
+}
+
+function guardarPedidoPendiente() {
+    if (!usuarioActualId || !pedidoPendienteId) return;
+
+    localStorage.setItem(
+        clavePedidoPendiente(usuarioActualId),
+        JSON.stringify({
+            orderId: pedidoPendienteId,
+            accion: accionPendiente
+        })
+    );
+}
+
+function borrarPedidoPendiente() {
+    if (usuarioActualId) {
+        localStorage.removeItem(clavePedidoPendiente(usuarioActualId));
+    }
+
+    pedidoPendienteId = null;
+    accionPendiente = "crear";
+}
+
+function recuperarPedidoPendiente(userId) {
+    try {
+        const guardado = localStorage.getItem(clavePedidoPendiente(userId));
+
+        if (!guardado) {
+            pedidoPendienteId = null;
+            accionPendiente = "crear";
+            return;
+        }
+
+        const datos = JSON.parse(guardado);
+
+        if (
+            typeof datos.orderId !== "string" ||
+            !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(datos.orderId)
+        ) {
+            localStorage.removeItem(clavePedidoPendiente(userId));
+            pedidoPendienteId = null;
+            accionPendiente = "crear";
+            return;
+        }
+
+        pedidoPendienteId = datos.orderId;
+        accionPendiente = datos.accion === "consultar"
+            ? "consultar"
+            : "enviar";
+
+    } catch (error) {
+        console.error("No se pudo recuperar el pedido guardado:", error);
+        pedidoPendienteId = null;
+        accionPendiente = "crear";
+    }
+}
+
+function actualizarBoton() {
+    if (procesando) return;
+
+    if (pedidoPendienteId) {
+        botonContinuar.textContent =
+            accionPendiente === "consultar"
+                ? "CONSULTAR PEDIDO"
+                : "REINTENTAR ENVÍO";
+    } else {
+        botonContinuar.textContent = "RECARGAR";
+    }
+}
+
+/* CATÁLOGO DEL PROVEEDOR */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) return respuesta;
@@ -411,7 +533,118 @@ function esPaqueteDiamantes(producto) {
     return esDiamantes && !esMembresiaOPase;
 }
 
-/* CATÁLOGO */
+/* PRODUCTOS LOCALES Y PRECIOS GVR */
+
+async function cargarProductosLocales() {
+    const { data, error } = await supabase
+        .from("game_products")
+        .select(
+            "id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region"
+        )
+        .eq("provider", "nextlevel");
+
+    if (error) {
+        console.error("Error consultando productos locales:", error.message);
+        throw new Error(
+            "No se pudieron verificar los productos y sus precios GVR."
+        );
+    }
+
+    productosLocales = (data || []).filter(producto =>
+        normalizarTexto(producto.game) === "freefire"
+    );
+}
+
+function buscarProductoLocal(productoProveedor) {
+    const providerId = obtenerProductId(productoProveedor);
+
+    return productosLocales.find(producto =>
+        String(producto.provider_product_id || "").trim() === providerId
+    ) || null;
+}
+
+function productoComprable(productoLocal) {
+    if (!productoLocal) return false;
+
+    const precio = Number(productoLocal.price_gvr);
+
+    return productoLocal.active === true &&
+        Number.isSafeInteger(precio) &&
+        precio > 0;
+}
+
+function mostrarPrecio(precio) {
+    return Number(precio).toLocaleString("es-ES") + " GVR";
+}
+
+/* RENDERIZAR CATÁLOGO SIN CAMBIAR EL FILTRO EXISTENTE */
+
+function renderizarCatalogo() {
+    catalogo.replaceChildren();
+    productoSeleccionado = null;
+
+    productosDisponibles.forEach(producto => {
+        const local = buscarProductoLocal(producto);
+        const comprable = productoComprable(local);
+
+        const tarjeta = document.createElement("button");
+        tarjeta.type = "button";
+        tarjeta.className = "producto";
+
+        if (!comprable) {
+            tarjeta.classList.add("producto-no-disponible");
+            tarjeta.disabled = true;
+        }
+
+        const nombre = document.createElement("div");
+        nombre.className = "producto-nombre";
+        nombre.textContent = obtenerNombre(producto);
+
+        const precio = document.createElement("div");
+        precio.className = "producto-precio";
+
+        const estado = document.createElement("div");
+        estado.className = "producto-estado";
+
+        if (comprable) {
+            precio.textContent = mostrarPrecio(Number(local.price_gvr));
+            estado.textContent = "Seleccionar paquete";
+        } else {
+            precio.textContent = "Precio pendiente";
+            estado.textContent = "Temporalmente no disponible";
+        }
+
+        tarjeta.append(nombre, precio, estado);
+
+        if (comprable) {
+            tarjeta.addEventListener("click", () => {
+                if (procesando || pedidoPendienteId) return;
+
+                document.querySelectorAll(".producto").forEach(elemento => {
+                    elemento.classList.remove("seleccionado");
+                });
+
+                tarjeta.classList.add("seleccionado");
+
+                productoSeleccionado = {
+                    proveedor: producto,
+                    local: local
+                };
+
+                estado.textContent = "Paquete seleccionado";
+                mostrarEstado(
+                    obtenerNombre(producto) + " seleccionado · " +
+                    mostrarPrecio(Number(local.price_gvr)),
+                    "correcto"
+                );
+            });
+        }
+
+        catalogo.appendChild(tarjeta);
+    });
+}
+
+/* CARGAR CATÁLOGO */
 
 async function cargarCatalogo() {
     productoSeleccionado = null;
@@ -421,9 +654,8 @@ async function cargarCatalogo() {
     mostrarEstado("Conectando con el catálogo...");
 
     try {
-        const respuesta = await fetch(
-            URL_CATALOGO + "?game=free-fire",
-            {
+        const [respuestaCatalogo] = await Promise.all([
+            fetch(URL_CATALOGO + "?game=free-fire", {
                 method: "GET",
                 headers: {
                     apikey: SUPABASE_KEY,
@@ -431,22 +663,23 @@ async function cargarCatalogo() {
                     Accept: "application/json"
                 },
                 cache: "no-store"
-            }
-        );
+            }),
+            cargarProductosLocales()
+        ]);
 
         let resultado;
 
         try {
-            resultado = await respuesta.json();
+            resultado = await respuestaCatalogo.json();
         } catch {
             throw new Error("El catálogo devolvió una respuesta no válida.");
         }
 
-        if (!respuesta.ok) {
+        if (!respuestaCatalogo.ok) {
             throw new Error(
                 resultado.error ||
                 resultado.message ||
-                "Error HTTP " + respuesta.status
+                "Error HTTP " + respuestaCatalogo.status
             );
         }
 
@@ -472,41 +705,15 @@ async function cargarCatalogo() {
             return;
         }
 
-        productosDisponibles.forEach(producto => {
-            const tarjeta = document.createElement("button");
-            tarjeta.type = "button";
-            tarjeta.className = "producto";
+        renderizarCatalogo();
 
-            const nombre = document.createElement("div");
-            nombre.className = "producto-nombre";
-            nombre.textContent = obtenerNombre(producto);
-
-            const estado = document.createElement("div");
-            estado.className = "producto-estado";
-            estado.textContent = "Seleccionar paquete";
-
-            tarjeta.append(nombre, estado);
-
-            tarjeta.addEventListener("click", () => {
-                document.querySelectorAll(".producto").forEach(elemento => {
-                    elemento.classList.remove("seleccionado");
-                });
-
-                tarjeta.classList.add("seleccionado");
-                productoSeleccionado = producto;
-                estado.textContent = "Paquete seleccionado";
-
-                console.log(
-                    "Producto seleccionado:",
-                    obtenerProductId(producto)
-                );
-            });
-
-            catalogo.appendChild(tarjeta);
-        });
+        const comprables = productosDisponibles.filter(producto =>
+            productoComprable(buscarProductoLocal(producto))
+        ).length;
 
         mostrarEstado(
-            productosDisponibles.length + " paquetes disponibles."
+            productosDisponibles.length + " paquetes del catálogo encontrados. " +
+            comprables + " disponibles para comprar."
         );
 
     } catch (error) {
@@ -514,31 +721,276 @@ async function cargarCatalogo() {
         catalogo.replaceChildren();
 
         mostrarEstado(
-            "No se pudo cargar el catálogo. " + error.message,
+            mensajeError(error, "No se pudo cargar el catálogo."),
             "error"
         );
     }
 }
 
-/* COMPROBAR SESIÓN SIN COMPRAR */
+/* PETICIONES AUTENTICADAS A LAS FUNCIONES EDGE */
+
+async function llamarFuncion(url, accessToken, body) {
+    const respuesta = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            apikey: SUPABASE_KEY,
+            Authorization: "Bearer " + accessToken
+        },
+        body: JSON.stringify(body)
+    });
+
+    let datos;
+
+    try {
+        datos = await respuesta.json();
+    } catch {
+        datos = {};
+    }
+
+    if (!respuesta.ok) {
+        const error = new Error(
+            datos.error ||
+            datos.message ||
+            "La función devolvió HTTP " + respuesta.status
+        );
+
+        error.status = respuesta.status;
+        error.data = datos;
+
+        throw error;
+    }
+
+    return datos;
+}
+
+/* CONSULTAR EL PEDIDO EXISTENTE */
+
+async function consultarPedido(accessToken) {
+    if (!pedidoPendienteId) {
+        throw new Error("No hay ningún pedido guardado para consultar.");
+    }
+
+    const datos = await llamarFuncion(
+        URL_CONSULTAR_PEDIDO,
+        accessToken,
+        { game_order_id: pedidoPendienteId }
+    );
+
+    const estadoLocal = String(datos.status || "").toLowerCase();
+    const estadoProveedor = String(datos.provider_status || "").toUpperCase();
+
+    if (estadoLocal === "completed" || estadoLocal === "refunded") {
+        const mensaje = estadoLocal === "completed"
+            ? "¡Recarga completada por el proveedor!"
+            : "El pedido figura como reembolsado.";
+
+        borrarPedidoPendiente();
+        actualizarBoton();
+        mostrarEstado(mensaje, "correcto");
+
+        alert(
+            mensaje + "\n\n" +
+            "Pedido: " + (datos.game_order_id || "consultado")
+        );
+
+        return;
+    }
+
+    if (estadoProveedor === "FAILED") {
+        accionPendiente = "consultar";
+        guardarPedidoPendiente();
+        actualizarBoton();
+
+        mostrarEstado(
+            "El proveedor informa FAILED. No vuelvas a comprar el mismo paquete. " +
+            "Hay que verificar el pedido y el reembolso.",
+            "error"
+        );
+
+        return;
+    }
+
+    accionPendiente = "consultar";
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    mostrarEstado(
+        datos.message ||
+        "El pedido sigue pendiente. Puedes consultar su estado nuevamente."
+    );
+}
+
+/* ENVIAR EL PEDIDO EXISTENTE A NEXT LEVEL */
+
+async function enviarPedido(accessToken) {
+    if (!pedidoPendienteId) {
+        throw new Error("No hay ningún pedido guardado para enviar.");
+    }
+
+    try {
+        const datos = await llamarFuncion(
+            URL_CREAR_PEDIDO,
+            accessToken,
+            { game_order_id: pedidoPendienteId }
+        );
+
+        accionPendiente = "consultar";
+        guardarPedidoPendiente();
+        actualizarBoton();
+
+        mostrarEstado(
+            datos.message ||
+            "El pedido fue procesado por la función de Next Level. " +
+            "Consulta su estado para confirmar el resultado.",
+            "correcto"
+        );
+
+        alert(
+            "Solicitud procesada.\n\n" +
+            "Pedido: " + pedidoPendienteId + "\n\n" +
+            "Consulta el estado antes de iniciar otra compra."
+        );
+
+    } catch (error) {
+        console.error("Error enviando pedido a Next Level:", error);
+
+        /*
+         * Se conserva el mismo ID. Nunca se crea otra compra local
+         * automáticamente después de un error de envío.
+         */
+        accionPendiente = "enviar";
+        guardarPedidoPendiente();
+        actualizarBoton();
+
+        mostrarEstado(
+            "No se pudo confirmar el envío. Tu pedido local se conserva. " +
+            "Usa REINTENTAR ENVÍO para continuar con el mismo pedido. " +
+            mensajeError(error, ""),
+            "error"
+        );
+    }
+}
+
+/* CREAR COMPRA LOCAL Y ENVIAR EL MISMO PEDIDO */
+
+async function crearCompra(accessToken, playerId) {
+    if (!productoSeleccionado) {
+        throw new Error("Selecciona primero un paquete disponible.");
+    }
+
+    const local = productoSeleccionado.local;
+
+    /*
+     * Comprobación final antes de llamar a la RPC que descuenta GVR.
+     */
+    if (
+        !local ||
+        local.active !== true ||
+        !Number.isSafeInteger(Number(local.price_gvr)) ||
+        Number(local.price_gvr) <= 0 ||
+        local.provider !== "nextlevel" ||
+        !local.provider_product_id
+    ) {
+        throw new Error(
+            "El producto no está correctamente configurado para la compra."
+        );
+    }
+
+    const { data: productoActual, error: errorProducto } = await supabase
+        .from("game_products")
+        .select("id,game,price_gvr,active,provider,provider_product_id")
+        .eq("id", local.id)
+        .eq("provider", "nextlevel")
+        .eq("active", true)
+        .maybeSingle();
+
+    if (errorProducto) {
+        throw new Error("No se pudo verificar el producto antes de comprar.");
+    }
+
+    if (
+        !productoActual ||
+        normalizarTexto(productoActual.game) !== "freefire" ||
+        String(productoActual.provider_product_id || "").trim() !==
+            obtenerProductId(productoSeleccionado.proveedor) ||
+        !Number.isSafeInteger(Number(productoActual.price_gvr)) ||
+        Number(productoActual.price_gvr) <= 0
+    ) {
+        throw new Error(
+            "El producto o su precio cambiaron. Actualiza el catálogo antes de comprar."
+        );
+    }
+
+    const precioConfirmado = Number(productoActual.price_gvr);
+
+    const confirmar = confirm(
+        "Confirma tu recarga de Free Fire:\n\n" +
+        "Paquete: " + obtenerNombre(productoSeleccionado.proveedor) + "\n" +
+        "ID de jugador: " + playerId + "\n" +
+        "Precio: " + mostrarPrecio(precioConfirmado) + "\n\n" +
+        "¿Deseas continuar?"
+    );
+
+    if (!confirmar) return;
+
+    mostrarEstado("Creando pedido. No cierres esta página...");
+
+    /*
+     * Esta RPC descuenta GVR y crea el pedido local.
+     * Si devuelve un error, no se intenta crear automáticamente otro pedido.
+     */
+    const { data: orderId, error: errorCompra } = await supabase.rpc(
+        "purchase_game_product",
+        {
+            p_product_id: productoActual.id,
+            p_player_id: playerId
+        }
+    );
+
+    if (errorCompra) {
+        console.error("Error creando compra local:", errorCompra.message);
+
+        throw new Error(
+            errorCompra.message ||
+            "No se pudo crear la compra. Comprueba tu saldo y tu sesión."
+        );
+    }
+
+    if (
+        typeof orderId !== "string" ||
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(orderId)
+    ) {
+        /*
+         * No se vuelve a ejecutar la RPC: el resultado no se puede
+         * identificar con seguridad desde el navegador.
+         */
+        throw new Error(
+            "La compra pudo haberse registrado, pero no recibimos un ID válido. " +
+            "No vuelvas a pulsar RECARGAR. Revisa el pedido antes de intentarlo otra vez."
+        );
+    }
+
+    /*
+     * Guardar el ID antes de llamar al proveedor. Si la conexión falla,
+     * se puede continuar usando este mismo pedido.
+     */
+    pedidoPendienteId = orderId;
+    accionPendiente = "enviar";
+    guardarPedidoPendiente();
+
+    actualizarBoton();
+
+    await enviarPedido(accessToken);
+}
+
+/* BOTÓN PRINCIPAL */
 
 botonContinuar.addEventListener("click", async () => {
     if (procesando) return;
 
-    if (!productoSeleccionado) {
-        alert("Selecciona primero un paquete de diamantes.");
-        return;
-    }
-
-    if (!campoJugador.value.trim()) {
-        alert("Introduce tu ID de Free Fire.");
-        campoJugador.focus();
-        return;
-    }
-
     procesando = true;
     botonContinuar.disabled = true;
-    botonContinuar.textContent = "Comprobando sesión...";
 
     try {
         const {
@@ -547,12 +999,11 @@ botonContinuar.addEventListener("click", async () => {
         } = await supabase.auth.getSession();
 
         if (sessionError) {
-            throw new Error("No se pudo consultar la sesión.");
+            throw new Error("No se pudo comprobar la sesión.");
         }
 
         if (!session?.access_token) {
-            alert("Debes iniciar sesión para continuar.");
-            return;
+            throw new Error("Debes iniciar sesión para continuar.");
         }
 
         const {
@@ -561,33 +1012,85 @@ botonContinuar.addEventListener("click", async () => {
         } = await supabase.auth.getUser();
 
         if (userError || !user) {
-            alert("La sesión no es válida o ha caducado. Inicia sesión nuevamente.");
+            throw new Error(
+                "Tu sesión no es válida o ha caducado. Inicia sesión nuevamente."
+            );
+        }
+
+        usuarioActualId = user.id;
+
+        /*
+         * Recuperar primero un pedido anterior. Nunca se crea una compra
+         * nueva mientras exista un pedido guardado sin resolver.
+         */
+        recuperarPedidoPendiente(user.id);
+
+        if (pedidoPendienteId) {
+            if (accionPendiente === "consultar") {
+                await consultarPedido(session.access_token);
+            } else {
+                await enviarPedido(session.access_token);
+            }
+
             return;
         }
 
-        console.log("Sesión válida:", user.id);
+        const playerId = campoJugador.value.trim();
 
-        alert(
-            "¡Sesión válida, bro!\n\n" +
-            "Producto: " + obtenerNombre(productoSeleccionado) + "\n" +
-            "ID de jugador: " + campoJugador.value.trim() + "\n\n" +
-            "La prueba terminó correctamente. No se creó ningún pedido " +
-            "ni se descontó GVR."
-        );
+        if (!playerId) {
+            throw new Error("Introduce tu ID de Free Fire.");
+        }
+
+        if (playerId.length > 50) {
+            throw new Error("El ID del jugador es demasiado largo.");
+        }
+
+        if (!productoSeleccionado) {
+            throw new Error("Selecciona primero un paquete disponible.");
+        }
+
+        await crearCompra(session.access_token, playerId);
 
     } catch (error) {
-        console.error("Error comprobando sesión:", error);
-        alert(error.message || "No se pudo comprobar la sesión.");
+        console.error("Error en la compra de Free Fire:", error);
+
+        mostrarEstado(
+            mensajeError(error, "No se pudo completar la operación."),
+            "error"
+        );
+
+        alert(
+            mensajeError(error, "No se pudo completar la operación.")
+        );
 
     } finally {
         procesando = false;
         botonContinuar.disabled = false;
-        botonContinuar.textContent = "Comprobar sesión";
+        actualizarBoton();
     }
 });
 
-/* INICIO */
+/* RESTAURAR ESTADO AL RECARGAR LA PÁGINA */
 
-cargarCatalogo();
-</script></body>
+async function iniciar() {
+    try {
+        const {
+            data: { session }
+        } = await supabase.auth.getSession();
+
+        if (session?.user?.id) {
+            usuarioActualId = session.user.id;
+            recuperarPedidoPendiente(usuarioActualId);
+            actualizarBoton();
+        }
+    } catch (error) {
+        console.error("No se pudo recuperar la sesión:", error);
+    }
+
+    await cargarCatalogo();
+}
+
+iniciar();
+</script>
+</body>
 </html>
