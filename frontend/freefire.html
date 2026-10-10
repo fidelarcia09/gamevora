@@ -279,9 +279,9 @@
 
         <div class="separador-ofertas">
             <button
+                id="botonOfertas"
                 class="boton boton-ofertas"
                 type="button"
-                onclick="abrirOfertas()"
             >
                 🎁 Ofertas especiales
             </button>
@@ -314,15 +314,18 @@ const supabase = window.supabase.createClient(
 const catalogo = document.getElementById("catalogo");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
 const botonContinuar = document.getElementById("botonContinuar");
+const botonOfertas = document.getElementById("botonOfertas");
 const campoJugador = document.getElementById("idjugador");
 
-let productosDisponibles = [];
 let productoSeleccionado = null;
 let procesandoCompra = false;
 
-function abrirOfertas() {
-    window.location.href = "ofertas-free-fire.html";
-}
+botonOfertas.addEventListener("click", function () {
+    window.location.href = new URL(
+        "ofertas-free-fire.html",
+        window.location.href
+    ).href;
+});
 
 function mostrarEstado(mensaje, esError = false) {
     estadoCatalogo.textContent = mensaje;
@@ -331,28 +334,65 @@ function mostrarEstado(mensaje, esError = false) {
 
 function obtenerProductId(producto) {
     return String(
-        producto.productId ||
-        producto.product_id ||
-        producto.id ||
+        producto.productId ??
+        producto.product_id ??
+        producto.provider_product_id ??
+        producto.id ??
         ""
     ).trim();
 }
 
 function obtenerNombre(producto) {
     return String(
-        producto.name ||
-        producto.productName ||
-        producto.product_name ||
-        producto.title ||
-        obtenerProductId(producto) ||
+        producto.name ??
+        producto.productName ??
+        producto.product_name ??
+        producto.title ??
+        obtenerProductId(producto) ??
         "Paquete de Free Fire"
     ).trim();
 }
 
+function obtenerListaProductos(resultado) {
+    if (Array.isArray(resultado)) return resultado;
+    if (Array.isArray(resultado.products)) return resultado.products;
+    if (Array.isArray(resultado.productos)) return resultado.productos;
+    if (Array.isArray(resultado.data)) return resultado.data;
+    if (Array.isArray(resultado.data?.products)) return resultado.data.products;
+    if (Array.isArray(resultado.data?.productos)) return resultado.data.productos;
+    if (Array.isArray(resultado.result?.products)) return resultado.result.products;
+
+    return [];
+}
+
+function esDisponible(producto) {
+    const valor = producto.available ?? producto.isAvailable ?? producto.is_available;
+
+    if (valor === false || valor === 0 || valor === "false") {
+        return false;
+    }
+
+    return true;
+}
+
 function esOfertaLATAM(producto) {
-    return String(producto.region || "")
-        .trim()
-        .toUpperCase() === "LATAM & USA";
+    const region = String(
+        producto.region ??
+        producto.provider_region ??
+        producto.server ??
+        ""
+    ).trim().toLowerCase();
+
+    // Algunos catálogos entregan la región dentro del ID.
+    const id = obtenerProductId(producto).toLowerCase();
+
+    return (
+        region === "" ||
+        region === "latam & usa" ||
+        region === "latam" ||
+        region === "usa" ||
+        id.includes("latam")
+    );
 }
 
 function esPaqueteDiamantes(producto) {
@@ -360,8 +400,10 @@ function esPaqueteDiamantes(producto) {
     const nombre = obtenerNombre(producto).toLowerCase();
 
     const esDiamantes =
-        id.includes("_diamonds") ||
-        /\bdiamonds?\b|\bdiamantes\b/.test(nombre);
+        id.includes("diamonds") ||
+        id.includes("diamond") ||
+        /\bdiamantes?\b/.test(nombre) ||
+        /\bdiamonds?\b/.test(nombre);
 
     const esMembresiaOPase =
         id.includes("membership") ||
@@ -375,22 +417,19 @@ function esPaqueteDiamantes(producto) {
 }
 
 function actualizarBoton() {
-    const jugadorValido = campoJugador.value.trim().length > 0;
     const producto = productoSeleccionado?.local;
 
-    botonContinuar.disabled =
-        procesandoCompra ||
-        !producto ||
-        producto.active !== true ||
-        !Number.isInteger(Number(producto.price_gvr)) ||
-        Number(producto.price_gvr) <= 0 ||
-        !jugadorValido;
+    const habilitado =
+        !procesandoCompra &&
+        Boolean(campoJugador.value.trim()) &&
+        Boolean(producto) &&
+        producto.active === true &&
+        Number.isInteger(Number(producto.price_gvr)) &&
+        Number(producto.price_gvr) > 0;
 
-    botonContinuar.style.cursor =
-        botonContinuar.disabled ? "not-allowed" : "pointer";
-
-    botonContinuar.style.opacity =
-        botonContinuar.disabled ? "0.55" : "1";
+    botonContinuar.disabled = !habilitado;
+    botonContinuar.style.cursor = habilitado ? "pointer" : "not-allowed";
+    botonContinuar.style.opacity = habilitado ? "1" : "0.55";
 
     if (procesandoCompra) {
         botonContinuar.textContent = "Procesando pedido...";
@@ -405,16 +444,13 @@ function actualizarBoton() {
 
 async function cargarCatalogo() {
     productoSeleccionado = null;
-    productosDisponibles = [];
     catalogo.replaceChildren();
     actualizarBoton();
-
     mostrarEstado("Conectando con el catálogo...");
 
     try {
         const respuesta = await fetch(
-            SUPABASE_URL +
-            "/functions/v1/nextlevel-catalogo?game=free-fire",
+            SUPABASE_URL + "/functions/v1/nextlevel-catalogo?game=free-fire",
             {
                 method: "GET",
                 headers: {
@@ -426,7 +462,16 @@ async function cargarCatalogo() {
             }
         );
 
-        const resultado = await respuesta.json();
+        const texto = await respuesta.text();
+        let resultado;
+
+        try {
+            resultado = JSON.parse(texto);
+        } catch {
+            throw new Error(
+                "El catálogo devolvió una respuesta que no es JSON."
+            );
+        }
 
         if (!respuesta.ok) {
             throw new Error(
@@ -436,44 +481,37 @@ async function cargarCatalogo() {
             );
         }
 
-        let productos = [];
+        const productos = obtenerListaProductos(resultado);
 
-        if (Array.isArray(resultado)) {
-            productos = resultado;
-        } else if (Array.isArray(resultado.products)) {
-            productos = resultado.products;
-        } else if (Array.isArray(resultado.productos)) {
-            productos = resultado.productos;
-        } else if (Array.isArray(resultado.data)) {
-            productos = resultado.data;
-        } else if (Array.isArray(resultado.data?.products)) {
-            productos = resultado.data.products;
-        }
-
-        productosDisponibles = productos.filter(producto =>
-            producto &&
-            producto.available === true &&
-            esOfertaLATAM(producto) &&
-            obtenerProductId(producto) &&
-            esPaqueteDiamantes(producto)
-        );
-
-        if (!productosDisponibles.length) {
-            mostrarEstado(
-                "No hay paquetes disponibles para LATAM & USA.",
-                true
+        if (!productos.length) {
+            throw new Error(
+                "La función respondió, pero no se encontró la lista de productos."
             );
-            return;
         }
 
-        const idsProveedor = productosDisponibles.map(
-            obtenerProductId
+        // Primero se muestran los paquetes del proveedor.
+        // El filtro por región es flexible para aceptar diferentes formatos.
+        const productosDiamantes = productos.filter(producto =>
+            producto &&
+            esDisponible(producto) &&
+            obtenerProductId(producto) &&
+            esPaqueteDiamantes(producto) &&
+            esOfertaLATAM(producto)
         );
+
+        if (!productosDiamantes.length) {
+            throw new Error(
+                "El catálogo respondió, pero no se encontraron paquetes de diamantes compatibles. Revisa la respuesta de nextlevel-catalogo."
+            );
+        }
+
+        // Consultar los registros locales para mostrar precios GVR.
+        const idsProveedor = productosDiamantes.map(obtenerProductId);
 
         const { data: registros, error } = await supabase
             .from("game_products")
             .select(
-                "id, product_name, price_gvr, active, provider_product_id"
+                "id, game, product_name, price_gvr, active, provider, provider_product_id"
             )
             .eq("game", "Free Fire")
             .eq("provider", "nextlevel")
@@ -481,7 +519,8 @@ async function cargarCatalogo() {
 
         if (error) {
             throw new Error(
-                "No se pudieron consultar los productos de venta."
+                "Se cargaron los productos, pero no se pudieron consultar los precios locales: " +
+                error.message
             );
         }
 
@@ -492,7 +531,9 @@ async function cargarCatalogo() {
             ])
         );
 
-        productosDisponibles.forEach(producto => {
+        let mostrados = 0;
+
+        productosDiamantes.forEach(producto => {
             const idProveedor = obtenerProductId(producto);
             const local = mapa.get(idProveedor) || null;
 
@@ -502,9 +543,7 @@ async function cargarCatalogo() {
 
             const nombre = document.createElement("div");
             nombre.className = "producto-nombre";
-            nombre.textContent = local
-                ? local.product_name
-                : obtenerNombre(producto);
+            nombre.textContent = local?.product_name || obtenerNombre(producto);
 
             const estado = document.createElement("div");
             estado.className = "producto-estado";
@@ -522,10 +561,9 @@ async function cargarCatalogo() {
             tarjeta.append(nombre, estado);
 
             tarjeta.addEventListener("click", () => {
-                document.querySelectorAll(".producto")
-                    .forEach(elemento =>
-                        elemento.classList.remove("seleccionado")
-                    );
+                document.querySelectorAll(".producto").forEach(elemento => {
+                    elemento.classList.remove("seleccionado");
+                });
 
                 tarjeta.classList.add("seleccionado");
 
@@ -536,8 +574,7 @@ async function cargarCatalogo() {
 
                 mostrarEstado(
                     precioValido
-                        ? "Paquete seleccionado: " +
-                          local.product_name + "."
+                        ? "Paquete seleccionado: " + local.product_name + "."
                         : "Este paquete todavía no está habilitado para la venta."
                 );
 
@@ -545,16 +582,15 @@ async function cargarCatalogo() {
             });
 
             catalogo.appendChild(tarjeta);
+            mostrados++;
         });
 
         mostrarEstado(
-            productosDisponibles.length +
-            " paquetes de diamantes disponibles."
+            mostrados + " paquetes de diamantes encontrados."
         );
 
     } catch (error) {
-        console.error("Error cargando catálogo:", error);
-
+        console.error("Error cargando catálogo de Free Fire:", error);
         catalogo.replaceChildren();
 
         mostrarEstado(
@@ -569,16 +605,17 @@ async function comprar() {
 
     const jugador = campoJugador.value.trim();
     const seleccionado = productoSeleccionado;
+    const local = seleccionado?.local;
 
     if (
         !jugador ||
-        !seleccionado?.local ||
-        seleccionado.local.active !== true ||
-        !Number.isInteger(Number(seleccionado.local.price_gvr)) ||
-        Number(seleccionado.local.price_gvr) <= 0
+        !local ||
+        local.active !== true ||
+        !Number.isInteger(Number(local.price_gvr)) ||
+        Number(local.price_gvr) <= 0
     ) {
         mostrarEstado(
-            "El producto no está habilitado para la venta.",
+            "Este producto no está habilitado para la venta.",
             true
         );
         return;
@@ -596,29 +633,18 @@ async function comprar() {
         if (sessionError) throw sessionError;
 
         if (!sessionData.session) {
-            mostrarEstado(
-                "Inicia sesión antes de comprar.",
-                true
-            );
+            mostrarEstado("Inicia sesión antes de comprar.", true);
             return;
         }
 
-        /*
-         * Crear el pedido local.
-         * No repetir automáticamente esta llamada ante un error
-         * de red, porque el pedido podría haberse creado.
-         */
-
         const { data: pedido, error: compraError } =
             await supabase.rpc("purchase_game_product", {
-                p_product_id: seleccionado.local.id,
+                p_product_id: local.id,
                 p_player_id: jugador
             });
 
         if (compraError) {
-            throw new Error(
-                compraError.message || "No se pudo crear el pedido."
-            );
+            throw new Error(compraError.message || "No se pudo crear el pedido.");
         }
 
         gameOrderId =
@@ -628,7 +654,7 @@ async function comprar() {
 
         if (!gameOrderId) {
             mostrarEstado(
-                "No se recibió el ID del pedido. Comprueba tu historial antes de intentarlo otra vez.",
+                "No se recibió el ID del pedido. Comprueba el historial antes de intentarlo otra vez.",
                 true
             );
             return;
@@ -637,38 +663,21 @@ async function comprar() {
         mostrarEstado("Pedido creado. Enviando a Next Level...");
 
         const { data: envio, error: envioError } =
-            await supabase.functions.invoke(
-                "nextlevel-crear-pedido",
-                {
-                    body: {
-                        game_order_id: gameOrderId
-                    }
+            await supabase.functions.invoke("nextlevel-crear-pedido", {
+                body: {
+                    game_order_id: gameOrderId
                 }
-            );
+            });
 
-        if (envioError || !envio) {
+        if (envioError || !envio || envio.error) {
             mostrarEstado(
                 "No se pudo confirmar el envío del pedido " +
                 gameOrderId +
-                ". No vuelvas a comprar: consulta primero su estado.",
+                ". No repitas la compra hasta comprobar su estado.",
                 true
             );
             return;
         }
-
-        if (envio.error) {
-            mostrarEstado(
-                "Pedido " + gameOrderId + ": " +
-                envio.error +
-                " Comprueba el estado antes de repetir la compra.",
-                true
-            );
-            return;
-        }
-
-        mostrarEstado(
-            "Pedido enviado. Consultando su estado..."
-        );
 
         await consultarEstado(gameOrderId);
 
@@ -678,7 +687,7 @@ async function comprar() {
         mostrarEstado(
             gameOrderId
                 ? "El pedido " + gameOrderId +
-                  " podría haberse creado. No repitas la compra hasta comprobar su estado."
+                  " podría haberse creado. Comprueba su estado antes de volver a comprar."
                 : error.message || "No se pudo completar la solicitud.",
             true
         );
@@ -708,16 +717,13 @@ async function consultarEstado(gameOrderId) {
 
         if (data.error) {
             mostrarEstado(
-                "Pedido enviado. Estado pendiente de verificación: " +
-                data.error
+                "Pedido enviado. Estado pendiente de verificación: " + data.error
             );
             return;
         }
 
         const estado = String(
-            data.provider_status ||
-            data.status ||
-            "PROCESSING"
+            data.provider_status || data.status || "PROCESSING"
         ).toUpperCase();
 
         const mensajes = {
@@ -735,7 +741,6 @@ async function consultarEstado(gameOrderId) {
 
     } catch (error) {
         console.error("Error consultando estado:", error);
-
         mostrarEstado(
             "El pedido fue enviado. No se pudo consultar el estado en este momento."
         );
