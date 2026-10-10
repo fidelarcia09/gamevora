@@ -1,306 +1,308 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Recarga diamantes de Free Fire en Gamers Gold Top-Up.">
+    <meta name="description" content="Recarga diamantes de Free Fire en Gamers Gold Top-Up."><title>Free Fire | Gamers Gold Top-Up</title>
 
-    <title>Free Fire | Gamers Gold Top-Up</title>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+    body {
+        background: #050b18;
+        color: white;
+        min-height: 100vh;
+        padding: 20px;
+    }
 
+    .contenedor {
+        max-width: 650px;
+        margin: auto;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+
+    .logo {
+        font-size: 21px;
+        font-weight: 900;
+    }
+
+    .rayo {
+        color: #00b7ff;
+        text-shadow: 0 0 12px #008cff;
+    }
+
+    .volver {
+        color: #28a9ff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .card {
+        background: #091a35;
+        border: 1px solid #15518c;
+        border-radius: 20px;
+        padding: 25px 20px;
+        box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+    }
+
+    .icono {
+        text-align: center;
+        font-size: 52px;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 27px;
+        margin-bottom: 10px;
+    }
+
+    .descripcion {
+        text-align: center;
+        color: #8fa5bd;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 22px;
+    }
+
+    .etiqueta {
+        display: block;
+        margin: 18px 0 10px;
+        color: #b8c9dc;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 13px;
+        background: #061226;
+        color: white;
+        border: 1px solid #204c78;
+        border-radius: 10px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #159dff;
+        box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+    }
+
+    .estado {
+        padding: 13px;
+        margin: 18px 0;
+        border: 1px solid #204c78;
+        border-radius: 10px;
+        background: #061226;
+        color: #a9c4df;
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .estado.error {
+        color: #ffaaaa;
+        border-color: #843d4b;
+    }
+
+    .estado.correcto {
+        color: #8fffc0;
+        border-color: #267b55;
+    }
+
+    .catalogo {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .producto {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 12px;
+        min-width: 0;
+        min-height: 110px;
+        padding: 15px 12px;
+        background: #061226;
+        color: white;
+        border: 1px solid #164b75;
+        border-radius: 13px;
+        text-align: left;
+        cursor: pointer;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .producto:hover {
+        border-color: #168cff;
+    }
+
+    .producto.seleccionado {
+        border-color: #00baff;
+        box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+    }
+
+    .producto-nombre {
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+    .producto-estado {
+        color: #45c8ff;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .separador-ofertas {
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px solid #164b8f;
+    }
+
+    .boton {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .continuar {
+        margin-top: 18px;
+        background: linear-gradient(90deg, #087cff, #00baff);
+        color: white;
+        cursor: pointer;
+        opacity: 1;
+    }
+
+    .continuar:disabled {
+        cursor: wait;
+        opacity: 0.55;
+    }
+
+    .boton-ofertas {
+        background: #07152b;
+        color: #28a9ff;
+        border: 1px solid #168cff;
+        cursor: pointer;
+    }
+
+    .nota {
+        margin-top: 20px;
+        text-align: center;
+        color: #8299b4;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 380px) {
         body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .contenedor {
-            max-width: 650px;
-            margin: auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .logo {
-            font-size: 21px;
-            font-weight: 900;
-        }
-
-        .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
-        }
-
-        .volver {
-            color: #28a9ff;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            white-space: nowrap;
+            padding: 12px;
         }
 
         .card {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-        }
-
-        .icono {
-            text-align: center;
-            font-size: 52px;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 27px;
-            margin-bottom: 10px;
-        }
-
-        .descripcion {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 22px;
-        }
-
-        .etiqueta {
-            display: block;
-            margin: 18px 0 10px;
-            color: #b8c9dc;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
-
-        .estado {
-            padding: 13px;
-            margin: 18px 0;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            background: #061226;
-            color: #a9c4df;
-            text-align: center;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .estado.error {
-            color: #ffaaaa;
-            border-color: #843d4b;
+            padding: 22px 14px;
         }
 
         .catalogo {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-            margin-top: 12px;
+            grid-template-columns: 1fr;
         }
 
-        .producto {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 12px;
-            min-width: 0;
-            min-height: 110px;
-            padding: 15px 12px;
-            background: #061226;
-            color: white;
-            border: 1px solid #164b75;
-            border-radius: 13px;
-            text-align: left;
-            cursor: pointer;
-            transition: border-color 0.2s, box-shadow 0.2s;
+        .logo {
+            font-size: 17px;
         }
+    }
+</style>
 
-        .producto:hover {
-            border-color: #168cff;
-        }
+</head><body>
+<div class="contenedor"><header class="header">
+    <div class="logo">
+        <span class="rayo">⚡</span> Gamers Gold Top-Up
+    </div>
 
-        .producto.seleccionado {
-            border-color: #00baff;
-            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
-        }
+    <a href="juegos.html" class="volver">← Juegos</a>
+</header>
 
-        .producto-nombre {
-            font-size: 14px;
-            font-weight: bold;
-            line-height: 1.45;
-            overflow-wrap: anywhere;
-        }
+<main class="card">
+    <div class="icono">🔥</div>
 
-        .producto-estado {
-            color: #45c8ff;
-            font-size: 12px;
-            font-weight: bold;
-        }
+    <h1>Free Fire</h1>
 
-        .separador-ofertas {
-            margin-top: 22px;
-            padding-top: 18px;
-            border-top: 1px solid #164b8f;
-        }
+    <p class="descripcion">
+        Selecciona tu paquete de diamantes de Free Fire.
+    </p>
 
-        .boton {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
-        }
+    <label class="etiqueta" for="idjugador">
+        ID del jugador
+    </label>
 
-        .continuar {
-            margin-top: 18px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            cursor: not-allowed;
-            opacity: 0.55;
-        }
+    <input
+        type="text"
+        id="idjugador"
+        placeholder="Introduce tu ID de Free Fire"
+        autocomplete="off"
+    >
 
-        .boton-ofertas {
-            background: #07152b;
-            color: #28a9ff;
-            border: 1px solid #168cff;
-            cursor: pointer;
-        }
+    <label class="etiqueta">
+        Selecciona una cantidad de diamantes
+    </label>
 
-        .nota {
-            margin-top: 20px;
-            text-align: center;
-            color: #8299b4;
-            font-size: 11px;
-            line-height: 1.6;
-        }
+    <div id="estadoCatalogo" class="estado" aria-live="polite">
+        Conectando con el catálogo...
+    </div>
 
-        @media (max-width: 380px) {
-            body {
-                padding: 12px;
-            }
+    <div id="catalogo" class="catalogo"></div>
 
-            .card {
-                padding: 22px 14px;
-            }
+    <button
+        id="botonContinuar"
+        class="boton continuar"
+        type="button"
+    >
+        Comprobar sesión
+    </button>
 
-            .catalogo {
-                grid-template-columns: 1fr;
-            }
-
-            .logo {
-                font-size: 17px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-<div class="contenedor">
-
-    <header class="header">
-        <div class="logo">
-            <span class="rayo">⚡</span> Gamers Gold Top-Up
-        </div>
-
-        <a href="juegos.html" class="volver">← Juegos</a>
-    </header>
-
-    <main class="card">
-        <div class="icono">🔥</div>
-
-        <h1>Free Fire</h1>
-
-        <p class="descripcion">
-            Selecciona tu paquete de diamantes de Free Fire.
-        </p>
-
-        <label class="etiqueta" for="idjugador">
-            ID del jugador
-        </label>
-
-        <input
-            type="text"
-            id="idjugador"
-            placeholder="Introduce tu ID de Free Fire"
-            autocomplete="off"
-        >
-
-        <label class="etiqueta">
-            Selecciona una cantidad de diamantes
-        </label>
-
-        <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo...
-        </div>
-
-        <div id="catalogo" class="catalogo"></div>
-
+    <div class="separador-ofertas">
         <button
-            id="botonContinuar"
-            class="boton continuar"
+            class="boton boton-ofertas"
             type="button"
-            disabled
+            id="botonOfertas"
         >
-            Compras temporalmente desactivadas
+            🎁 Ofertas especiales
         </button>
+    </div>
 
-        <div class="separador-ofertas">
-            <button
-                class="boton boton-ofertas"
-                type="button"
-                onclick="abrirOfertas()"
-            >
-                🎁 Ofertas especiales
-            </button>
-        </div>
+    <p class="nota">
+        Modo de prueba: se comprobará la sesión de Supabase.
+        Esta versión no crea pedidos ni descuenta GVR.
+    </p>
+</main>
 
-        <p class="nota">
-            Consulta los paquetes de diamantes disponibles.
-            Las compras se habilitarán cuando se configuren
-            los precios de venta y el sistema de pedidos.
-        </p>
-    </main>
-</div>
-
-<script>
+</div><script type="module">
 "use strict";
 
-/* =====================================================
-   CONFIGURACIÓN
-===================================================== */
+import { createClient } from
+    "https://esm.sh/@supabase/supabase-js@2";
+
+/* CONFIGURACIÓN */
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -311,67 +313,58 @@ const SUPABASE_KEY =
 const URL_CATALOGO =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
+const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
+);
+
 const catalogo = document.getElementById("catalogo");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
+const botonContinuar = document.getElementById("botonContinuar");
+const botonOfertas = document.getElementById("botonOfertas");
+const campoJugador = document.getElementById("idjugador");
 
 let productoSeleccionado = null;
 let productosDisponibles = [];
+let procesando = false;
 
-/* =====================================================
-   OFERTAS ESPECIALES
-===================================================== */
+/* OFERTAS */
 
-function abrirOfertas() {
+botonOfertas.addEventListener("click", () => {
     window.location.href = "ofertas-free-fire.html";
-}
+});
 
-/* =====================================================
-   ESTADO
-===================================================== */
+/* MENSAJES */
 
-function mostrarEstado(mensaje, esError = false) {
+function mostrarEstado(mensaje, tipo = "") {
     estadoCatalogo.textContent = mensaje;
-    estadoCatalogo.classList.toggle("error", esError);
+    estadoCatalogo.classList.toggle("error", tipo === "error");
+    estadoCatalogo.classList.toggle("correcto", tipo === "correcto");
 }
 
-/* =====================================================
-   EXTRAER PRODUCTOS
-===================================================== */
+/* PRODUCTOS */
 
 function extraerProductos(respuesta) {
-    if (Array.isArray(respuesta)) {
-        return respuesta;
-    }
+    if (Array.isArray(respuesta)) return respuesta;
+    if (!respuesta || typeof respuesta !== "object") return [];
 
-    if (!respuesta || typeof respuesta !== "object") {
-        return [];
-    }
+    if (Array.isArray(respuesta.productos)) return respuesta.productos;
+    if (Array.isArray(respuesta.products)) return respuesta.products;
+    if (Array.isArray(respuesta.data)) return respuesta.data;
 
-    if (Array.isArray(respuesta.productos)) {
-        return respuesta.productos;
-    }
-
-    if (Array.isArray(respuesta.products)) {
-        return respuesta.products;
-    }
-
-    if (Array.isArray(respuesta.data)) {
-        return respuesta.data;
-    }
-
-    if (
-        respuesta.data &&
-        Array.isArray(respuesta.data.products)
-    ) {
+    if (Array.isArray(respuesta.data?.products)) {
         return respuesta.data.products;
     }
 
     return [];
 }
-
-/* =====================================================
-   IDENTIFICAR PRODUCTOS
-===================================================== */
 
 function obtenerProductId(producto) {
     return String(
@@ -393,19 +386,11 @@ function obtenerNombre(producto) {
     ).trim();
 }
 
-/* =====================================================
-   FILTRAR REGIÓN LATAM & USA
-===================================================== */
-
 function esOfertaLATAM(producto) {
     return String(producto.region || "")
         .trim()
         .toUpperCase() === "LATAM & USA";
 }
-
-/* =====================================================
-   IDENTIFICAR PAQUETES DE DIAMANTES
-===================================================== */
 
 function esPaqueteDiamantes(producto) {
     const id = obtenerProductId(producto).toLowerCase();
@@ -426,14 +411,11 @@ function esPaqueteDiamantes(producto) {
     return esDiamantes && !esMembresiaOPase;
 }
 
-/* =====================================================
-   CARGAR CATÁLOGO DE NEXT LEVEL
-===================================================== */
+/* CATÁLOGO */
 
 async function cargarCatalogo() {
     productoSeleccionado = null;
     productosDisponibles = [];
-
     catalogo.replaceChildren();
 
     mostrarEstado("Conectando con el catálogo...");
@@ -444,9 +426,9 @@ async function cargarCatalogo() {
             {
                 method: "GET",
                 headers: {
-                    "apikey": SUPABASE_KEY,
-                    "Authorization": "Bearer " + SUPABASE_KEY,
-                    "Accept": "application/json"
+                    apikey: SUPABASE_KEY,
+                    Authorization: "Bearer " + SUPABASE_KEY,
+                    Accept: "application/json"
                 },
                 cache: "no-store"
             }
@@ -457,12 +439,8 @@ async function cargarCatalogo() {
         try {
             resultado = await respuesta.json();
         } catch {
-            throw new Error(
-                "El catálogo devolvió una respuesta no válida."
-            );
+            throw new Error("El catálogo devolvió una respuesta no válida.");
         }
-
-        console.log("CATÁLOGO FREE FIRE:", resultado);
 
         if (!respuesta.ok) {
             throw new Error(
@@ -474,16 +452,9 @@ async function cargarCatalogo() {
 
         const productos = extraerProductos(resultado);
 
-        if (productos.length === 0) {
-            throw new Error(
-                "Next Level no devolvió productos para Free Fire."
-            );
+        if (!productos.length) {
+            throw new Error("Next Level no devolvió productos.");
         }
-
-        /*
-         * Mostrar únicamente paquetes disponibles
-         * de diamantes de LATAM & USA.
-         */
 
         productosDisponibles = productos.filter(producto =>
             producto &&
@@ -493,17 +464,16 @@ async function cargarCatalogo() {
             esPaqueteDiamantes(producto)
         );
 
-        if (productosDisponibles.length === 0) {
+        if (!productosDisponibles.length) {
             mostrarEstado(
-                "No se encontraron paquetes de diamantes disponibles para LATAM & USA.",
-                true
+                "No se encontraron paquetes disponibles para LATAM & USA.",
+                "error"
             );
             return;
         }
 
         productosDisponibles.forEach(producto => {
             const tarjeta = document.createElement("button");
-
             tarjeta.type = "button";
             tarjeta.className = "producto";
 
@@ -524,10 +494,11 @@ async function cargarCatalogo() {
 
                 tarjeta.classList.add("seleccionado");
                 productoSeleccionado = producto;
+                estado.textContent = "Paquete seleccionado";
 
                 console.log(
-                    "PRODUCTO SELECCIONADO:",
-                    obtenerProductId(productoSeleccionado)
+                    "Producto seleccionado:",
+                    obtenerProductId(producto)
                 );
             });
 
@@ -535,36 +506,88 @@ async function cargarCatalogo() {
         });
 
         mostrarEstado(
-            productosDisponibles.length +
-            " paquetes de diamantes disponibles."
-        );
-
-        console.log(
-            "PAQUETES MOSTRADOS:",
-            productosDisponibles.map(producto => ({
-                id: obtenerProductId(producto),
-                nombre: obtenerNombre(producto)
-            }))
+            productosDisponibles.length + " paquetes disponibles."
         );
 
     } catch (error) {
-        console.error("ERROR CARGANDO FREE FIRE:", error);
-
+        console.error("Error cargando Free Fire:", error);
         catalogo.replaceChildren();
 
         mostrarEstado(
             "No se pudo cargar el catálogo. " + error.message,
-            true
+            "error"
         );
     }
 }
 
-/* =====================================================
-   INICIALIZAR
-===================================================== */
+/* COMPROBAR SESIÓN SIN COMPRAR */
+
+botonContinuar.addEventListener("click", async () => {
+    if (procesando) return;
+
+    if (!productoSeleccionado) {
+        alert("Selecciona primero un paquete de diamantes.");
+        return;
+    }
+
+    if (!campoJugador.value.trim()) {
+        alert("Introduce tu ID de Free Fire.");
+        campoJugador.focus();
+        return;
+    }
+
+    procesando = true;
+    botonContinuar.disabled = true;
+    botonContinuar.textContent = "Comprobando sesión...";
+
+    try {
+        const {
+            data: { session },
+            error: sessionError
+        } = await supabase.auth.getSession();
+
+        if (sessionError) {
+            throw new Error("No se pudo consultar la sesión.");
+        }
+
+        if (!session?.access_token) {
+            alert("Debes iniciar sesión para continuar.");
+            return;
+        }
+
+        const {
+            data: { user },
+            error: userError
+        } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+            alert("La sesión no es válida o ha caducado. Inicia sesión nuevamente.");
+            return;
+        }
+
+        console.log("Sesión válida:", user.id);
+
+        alert(
+            "¡Sesión válida, bro!\n\n" +
+            "Producto: " + obtenerNombre(productoSeleccionado) + "\n" +
+            "ID de jugador: " + campoJugador.value.trim() + "\n\n" +
+            "La prueba terminó correctamente. No se creó ningún pedido " +
+            "ni se descontó GVR."
+        );
+
+    } catch (error) {
+        console.error("Error comprobando sesión:", error);
+        alert(error.message || "No se pudo comprobar la sesión.");
+
+    } finally {
+        procesando = false;
+        botonContinuar.disabled = false;
+        botonContinuar.textContent = "Comprobar sesión";
+    }
+});
+
+/* INICIO */
 
 cargarCatalogo();
-</script>
-
-</body>
+</script></body>
 </html>
