@@ -1,320 +1,329 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
     <meta name="description" content="Recarga diamantes de Free Fire en Gamers Gold Top-Up.">
-    <title>Free Fire | Gamers Gold Top-Up</title><style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
+    <title>Free Fire | Gamers Gold Top-Up</title>
 
-    body {
-        background: #050b18;
-        color: white;
-        min-height: 100vh;
-        padding: 20px;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-    .contenedor {
-        max-width: 650px;
-        margin: auto;
-    }
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 25px;
-    }
-
-    .logo {
-        font-size: 21px;
-        font-weight: 900;
-    }
-
-    .rayo {
-        color: #00b7ff;
-        text-shadow: 0 0 12px #008cff;
-    }
-
-    .volver {
-        color: #28a9ff;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
-        white-space: nowrap;
-    }
-
-    .card {
-        background: #091a35;
-        border: 1px solid #15518c;
-        border-radius: 20px;
-        padding: 25px 20px;
-        box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-    }
-
-    .icono {
-        text-align: center;
-        font-size: 52px;
-        margin-bottom: 10px;
-    }
-
-    h1 {
-        text-align: center;
-        font-size: 27px;
-        margin-bottom: 10px;
-    }
-
-    .descripcion {
-        text-align: center;
-        color: #8fa5bd;
-        font-size: 14px;
-        line-height: 1.6;
-        margin-bottom: 22px;
-    }
-
-    .etiqueta {
-        display: block;
-        margin: 18px 0 10px;
-        color: #b8c9dc;
-        font-size: 13px;
-        font-weight: bold;
-    }
-
-    input {
-        width: 100%;
-        padding: 13px;
-        background: #061226;
-        color: white;
-        border: 1px solid #204c78;
-        border-radius: 10px;
-        font-size: 15px;
-        outline: none;
-    }
-
-    input:focus {
-        border-color: #159dff;
-        box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-    }
-
-    .estado {
-        padding: 13px;
-        margin: 18px 0;
-        border: 1px solid #204c78;
-        border-radius: 10px;
-        background: #061226;
-        color: #a9c4df;
-        text-align: center;
-        font-size: 13px;
-        line-height: 1.5;
-        overflow-wrap: anywhere;
-    }
-
-    .estado.error {
-        color: #ffaaaa;
-        border-color: #843d4b;
-    }
-
-    .estado.correcto {
-        color: #8fffc0;
-        border-color: #267b55;
-    }
-
-    .catalogo {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 12px;
-    }
-
-    .producto {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 12px;
-        min-width: 0;
-        min-height: 115px;
-        padding: 15px 12px;
-        background: #061226;
-        color: white;
-        border: 1px solid #164b75;
-        border-radius: 13px;
-        text-align: left;
-        transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    button.producto {
-        cursor: pointer;
-    }
-
-    .producto:hover:not(:disabled) {
-        border-color: #168cff;
-    }
-
-    .producto:disabled {
-        cursor: not-allowed;
-        opacity: 0.7;
-    }
-
-    .producto.seleccionado {
-        border-color: #00baff;
-        box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
-    }
-
-    .producto-nombre {
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 1.45;
-        overflow-wrap: anywhere;
-    }
-
-    .producto-precio {
-        color: #ffffff;
-        font-size: 15px;
-        font-weight: bold;
-    }
-
-    .producto-estado {
-        color: #45c8ff;
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    .producto-no-disponible .producto-estado {
-        color: #ffcf8a;
-    }
-
-    .separador-ofertas {
-        margin-top: 22px;
-        padding-top: 18px;
-        border-top: 1px solid #164b8f;
-    }
-
-    .boton {
-        width: 100%;
-        padding: 14px;
-        border: none;
-        border-radius: 10px;
-        font-size: 15px;
-        font-weight: bold;
-    }
-
-    .continuar {
-        margin-top: 18px;
-        background: linear-gradient(90deg, #087cff, #00baff);
-        color: white;
-        cursor: pointer;
-        opacity: 1;
-    }
-
-    .continuar:disabled {
-        cursor: wait;
-        opacity: 0.55;
-    }
-
-    .boton-ofertas {
-        background: #07152b;
-        color: #28a9ff;
-        border: 1px solid #168cff;
-        cursor: pointer;
-    }
-
-    .nota {
-        margin-top: 20px;
-        text-align: center;
-        color: #8299b4;
-        font-size: 11px;
-        line-height: 1.6;
-    }
-
-    @media (max-width: 380px) {
         body {
-            padding: 12px;
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        .card {
-            padding: 22px 14px;
+        .contenedor {
+            max-width: 650px;
+            margin: auto;
         }
 
-        .catalogo {
-            grid-template-columns: 1fr;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .logo {
-            font-size: 17px;
+            font-size: 21px;
+            font-weight: 900;
         }
-    }
-</style></head><body>
-<div class="contenedor"><header class="header">
-    <div class="logo">
-        <span class="rayo">⚡</span> Gamers Gold Top-Up
-    </div>
 
-    <a href="juegos.html" class="volver">← Juegos</a>
-</header>
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
 
-<main class="card">
-    <div class="icono">🔥</div>
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
 
-    <h1>Free Fire</h1>
+        .card {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        }
 
-    <p class="descripcion">
-        Selecciona tu paquete de diamantes de Free Fire.
-    </p>
+        .icono {
+            text-align: center;
+            font-size: 52px;
+            margin-bottom: 10px;
+        }
 
-    <label class="etiqueta" for="idjugador">
-        ID del jugador
-    </label>
+        h1 {
+            text-align: center;
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
 
-    <input
-        type="text"
-        id="idjugador"
-        placeholder="Introduce tu ID de Free Fire"
-        autocomplete="off"
-        maxlength="50"
-    >
+        .descripcion {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
 
-    <label class="etiqueta">
-        Selecciona una cantidad de diamantes
-    </label>
+        .etiqueta {
+            display: block;
+            margin: 18px 0 10px;
+            color: #b8c9dc;
+            font-size: 13px;
+            font-weight: bold;
+        }
 
-    <div id="estadoCatalogo" class="estado" aria-live="polite">
-        Conectando con el catálogo...
-    </div>
+        input {
+            width: 100%;
+            padding: 13px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
 
-    <div id="catalogo" class="catalogo"></div>
+        input:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
 
-    <button
-        id="botonContinuar"
-        class="boton continuar"
-        type="button"
-    >
-        RECARGAR
-    </button>
+        .estado {
+            padding: 13px;
+            margin: 18px 0;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            background: #061226;
+            color: #a9c4df;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
 
-    <div class="separador-ofertas">
-        <button
-            class="boton boton-ofertas"
-            type="button"
-            id="botonOfertas"
+        .estado.error {
+            color: #ffaaaa;
+            border-color: #843d4b;
+        }
+
+        .estado.correcto {
+            color: #8fffc0;
+            border-color: #267b55;
+        }
+
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .producto {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+            min-height: 115px;
+            padding: 15px 12px;
+            background: #061226;
+            color: white;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            text-align: left;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        button.producto {
+            cursor: pointer;
+        }
+
+        .producto:hover:not(:disabled) {
+            border-color: #168cff;
+        }
+
+        .producto:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .producto.seleccionado {
+            border-color: #00baff;
+            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+        }
+
+        .producto-nombre {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .producto-precio {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .producto-estado {
+            color: #45c8ff;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .producto-no-disponible .producto-estado {
+            color: #ffcf8a;
+        }
+
+        .separador-ofertas {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #164b8f;
+        }
+
+        .boton {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .continuar {
+            margin-top: 18px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .continuar:disabled {
+            cursor: wait;
+            opacity: 0.55;
+        }
+
+        .boton-ofertas {
+            background: #07152b;
+            color: #28a9ff;
+            border: 1px solid #168cff;
+            cursor: pointer;
+        }
+
+        .nota {
+            margin-top: 20px;
+            text-align: center;
+            color: #8299b4;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 22px 14px;
+            }
+
+            .catalogo {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="contenedor">
+
+    <header class="header">
+        <div class="logo">
+            <span class="rayo">⚡</span> Gamers Gold Top-Up
+        </div>
+
+        <a href="juegos.html" class="volver">← Juegos</a>
+    </header>
+
+    <main class="card">
+        <div class="icono">🔥</div>
+
+        <h1>Free Fire</h1>
+
+        <p class="descripcion">
+            Selecciona tu paquete de diamantes de Free Fire.
+        </p>
+
+        <label class="etiqueta" for="idjugador">
+            ID del jugador
+        </label>
+
+        <input
+            type="text"
+            id="idjugador"
+            placeholder="Introduce tu ID de Free Fire"
+            autocomplete="off"
+            maxlength="50"
         >
-            🎁 Ofertas especiales
+
+        <label class="etiqueta">
+            Selecciona una cantidad de diamantes
+        </label>
+
+        <div id="estadoCatalogo" class="estado" aria-live="polite">
+            Conectando con el catálogo...
+        </div>
+
+        <div id="catalogo" class="catalogo"></div>
+
+        <button
+            id="botonContinuar"
+            class="boton continuar"
+            type="button"
+        >
+            RECARGAR
         </button>
-    </div>
 
-    <p class="nota">
-        Los precios se muestran en GVR. Comprueba tu ID de jugador
-        antes de confirmar la recarga. No vuelvas a crear un pedido
-        si el anterior está pendiente de confirmación.
-    </p>
-</main>
+        <div class="separador-ofertas">
+            <button
+                class="boton boton-ofertas"
+                type="button"
+                id="botonOfertas"
+            >
+                🎁 Ofertas especiales
+            </button>
+        </div>
 
-</div><script type="module">
+        <p class="nota">
+            Los precios se muestran en GVR. Comprueba tu ID de jugador
+            antes de confirmar la recarga. No vuelvas a crear un pedido
+            si el anterior está pendiente de confirmación.
+        </p>
+    </main>
+</div>
+
+<script type="module">
 "use strict";
 
 import { createClient } from
@@ -361,13 +370,9 @@ let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
 
-/* OFERTAS */
-
 botonOfertas.addEventListener("click", () => {
     window.location.href = "ofertas-free-fire.html";
 });
-
-/* MENSAJES */
 
 function mostrarEstado(mensaje, tipo = "") {
     estadoCatalogo.textContent = mensaje;
@@ -448,9 +453,54 @@ function recuperarPedidoPendiente(userId) {
 }
 
 /*
- * CAMBIO: nunca mostramos REINTENTAR ENVÍO ni CONSULTAR PEDIDO.
- * El texto del botón permanece como RECARGAR.
+ * Verifica el ID guardado en el navegador.
+ * Solo elimina la referencia local si la consulta terminó
+ * correctamente y Supabase confirma que el pedido no existe
+ * para el usuario autenticado.
  */
+async function verificarPedidoGuardado(userId) {
+    if (!pedidoPendienteId) return false;
+
+    const idVerificado = pedidoPendienteId;
+
+    const { data, error } = await supabase
+        .from("game_orders")
+        .select("id")
+        .eq("id", idVerificado)
+        .eq("user_id", userId)
+        .maybeSingle();
+
+    if (error) {
+        console.error(
+            "Error verificando pedido guardado:",
+            error.message
+        );
+
+        throw new Error(
+            "No se pudo verificar el pedido anterior. " +
+            "No iniciaremos otra compra hasta resolverlo."
+        );
+    }
+
+    if (!data) {
+        console.log(
+            "La consulta no encontró el pedido guardado."
+        );
+
+        /*
+         * Solo borrar la referencia que acabamos de verificar,
+         * sin tocar otras claves ni la sesión del usuario.
+         */
+        if (pedidoPendienteId === idVerificado) {
+            borrarPedidoPendiente();
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
 function actualizarBoton() {
     if (procesando) return;
     botonContinuar.textContent = "RECARGAR";
@@ -518,8 +568,6 @@ function esPaqueteDiamantes(producto) {
     return esDiamantes && !esMembresiaOPase;
 }
 
-/* PRODUCTOS LOCALES */
-
 async function cargarProductosLocales() {
     const { data, error } = await supabase
         .from("game_products")
@@ -530,6 +578,7 @@ async function cargarProductosLocales() {
 
     if (error) {
         console.error("Error consultando productos:", error.message);
+
         throw new Error(
             "No se pudieron verificar los productos y sus precios GVR."
         );
@@ -561,8 +610,6 @@ function productoComprable(productoLocal) {
 function mostrarPrecio(precio) {
     return Number(precio).toLocaleString("es-ES") + " GVR";
 }
-
-/* MOSTRAR CATÁLOGO */
 
 function renderizarCatalogo() {
     catalogo.replaceChildren();
@@ -630,8 +677,6 @@ function renderizarCatalogo() {
     });
 }
 
-/* CARGAR CATÁLOGO */
-
 async function cargarCatalogo() {
     productoSeleccionado = null;
     productosDisponibles = [];
@@ -698,7 +743,8 @@ async function cargarCatalogo() {
         ).length;
 
         mostrarEstado(
-            productosDisponibles.length + " paquetes del catálogo encontrados. " +
+            productosDisponibles.length +
+            " paquetes del catálogo encontrados. " +
             comprables + " disponibles para comprar."
         );
 
@@ -713,7 +759,7 @@ async function cargarCatalogo() {
     }
 }
 
-/* LLAMADAS A FUNCIONES EDGE */
+/* FUNCIONES EDGE */
 
 async function llamarFuncion(url, accessToken, body) {
     const respuesta = await fetch(url, {
@@ -803,7 +849,7 @@ async function consultarPedido(accessToken) {
 
     mostrarEstado(
         datos.message ||
-        "El pedido sigue pendiente. Hay que verificar su estado antes de comprar otra vez."
+        "El pedido sigue pendiente. Verifica su estado antes de comprar otra vez."
     );
 }
 
@@ -814,43 +860,27 @@ async function enviarPedido(accessToken) {
         throw new Error("No hay ningún pedido guardado para enviar.");
     }
 
-    try {
-        const datos = await llamarFuncion(
-            URL_CREAR_PEDIDO,
-            accessToken,
-            { game_order_id: pedidoPendienteId }
-        );
+    const datos = await llamarFuncion(
+        URL_CREAR_PEDIDO,
+        accessToken,
+        { game_order_id: pedidoPendienteId }
+    );
 
-        accionPendiente = "consultar";
-        guardarPedidoPendiente();
-        actualizarBoton();
+    accionPendiente = "consultar";
+    guardarPedidoPendiente();
+    actualizarBoton();
 
-        mostrarEstado(
-            datos.message ||
-            "El pedido fue enviado a la función de Next Level. Consulta su estado para confirmar el resultado.",
-            "correcto"
-        );
+    mostrarEstado(
+        datos.message ||
+        "Solicitud enviada. Consulta el estado antes de iniciar otra compra.",
+        "correcto"
+    );
 
-        alert(
-            "Solicitud procesada.\n\n" +
-            "Pedido: " + pedidoPendienteId + "\n\n" +
-            "Consulta su estado antes de iniciar otra compra."
-        );
-
-    } catch (error) {
-        console.error("Error enviando pedido a Next Level:", error);
-
-        accionPendiente = "enviar";
-        guardarPedidoPendiente();
-        actualizarBoton();
-
-        mostrarEstado(
-            "No se pudo confirmar el envío. El pedido local se conserva. " +
-            "No crees otra compra hasta verificar su estado. " +
-            mensajeError(error, ""),
-            "error"
-        );
-    }
+    alert(
+        "Solicitud procesada.\n\n" +
+        "Pedido local: " + pedidoPendienteId + "\n\n" +
+        "Verifica el estado antes de iniciar otra compra."
+    );
 }
 
 /* CREAR COMPRA LOCAL */
@@ -907,7 +937,7 @@ async function crearCompra(accessToken, playerId) {
         "Paquete: " + obtenerNombre(productoSeleccionado.proveedor) + "\n" +
         "ID de jugador: " + playerId + "\n" +
         "Precio: " + mostrarPrecio(precioConfirmado) + "\n\n" +
-        "¿Deseas continuar?"
+        "Next Level puede descontar saldo NXC real. ¿Deseas continuar?"
     );
 
     if (!confirmar) return;
@@ -936,8 +966,7 @@ async function crearCompra(accessToken, playerId) {
         !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(orderId)
     ) {
         throw new Error(
-            "La compra pudo haberse registrado, pero no recibimos un ID válido. " +
-            "No vuelvas a pulsar RECARGAR hasta revisar el pedido."
+            "No recibimos un ID de pedido válido. Revisa game_orders antes de volver a intentarlo."
         );
     }
 
@@ -984,16 +1013,19 @@ botonContinuar.addEventListener("click", async () => {
         }
 
         usuarioActualId = user.id;
+
         recuperarPedidoPendiente(user.id);
 
         /*
-         * Protección: no creamos otro pedido mientras haya uno guardado.
-         * No mostramos ningún botón de reenvío.
+         * Verifica el pedido anterior antes de decidir si puede
+         * comenzar una compra nueva.
          */
+        await verificarPedidoGuardado(user.id);
+
         if (pedidoPendienteId) {
             mostrarEstado(
-                "Tienes un pedido anterior que debe verificarse antes de realizar otra compra. " +
-                "No se ha creado un pedido nuevo."
+                "Ya existe un pedido anterior. No crearemos otro. " +
+                "Hay que verificar su estado antes de continuar."
             );
 
             return;
@@ -1055,5 +1087,6 @@ async function iniciar() {
 }
 
 iniciar();
-</script></body>
+</script>
+</body>
 </html>
