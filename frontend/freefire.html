@@ -370,6 +370,7 @@ let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
 
+/* Este botón y su destino se conservan sin cambios. */
 botonOfertas.addEventListener("click", () => {
     window.location.href = "ofertas-free-fire.html";
 });
@@ -434,10 +435,11 @@ function recuperarPedidoPendiente(userId) {
             typeof datos.orderId !== "string" ||
             !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(datos.orderId)
         ) {
-            localStorage.removeItem(clavePedidoPendiente(userId));
-            pedidoPendienteId = null;
-            accionPendiente = "crear";
-            return;
+            /*
+             * Una referencia dañada no debe convertirse
+             * en permiso para crear otra compra automáticamente.
+             */
+            throw new Error("La referencia del pedido guardado no es válida.");
         }
 
         pedidoPendienteId = datos.orderId;
@@ -447,16 +449,20 @@ function recuperarPedidoPendiente(userId) {
 
     } catch (error) {
         console.error("Error recuperando pedido guardado:", error);
+
+        /*
+         * Conservamos la referencia guardada si existe.
+         * No iniciamos una compra nueva automáticamente.
+         */
         pedidoPendienteId = null;
         accionPendiente = "crear";
     }
 }
 
 /*
- * Verifica el ID guardado en el navegador.
- * Solo elimina la referencia local si la consulta terminó
- * correctamente y Supabase confirma que el pedido no existe
- * para el usuario autenticado.
+ * Verifica el pedido guardado en Supabase.
+ * Si la consulta falla o no encuentra el registro,
+ * no elimina la referencia ni permite crear otra compra.
  */
 async function verificarPedidoGuardado(userId) {
     if (!pedidoPendienteId) return false;
@@ -465,7 +471,9 @@ async function verificarPedidoGuardado(userId) {
 
     const { data, error } = await supabase
         .from("game_orders")
-        .select("id")
+        .select(
+            "id,status,provider_order_id,provider_client_reference,provider_submitted_at"
+        )
         .eq("id", idVerificado)
         .eq("user_id", userId)
         .maybeSingle();
@@ -483,14 +491,19 @@ async function verificarPedidoGuardado(userId) {
     }
 
     if (!data) {
-        console.log(
-            "La consulta no encontró el pedido guardado."
+        throw new Error(
+            "No pudimos confirmar el pedido anterior en la base de datos. " +
+            "Conservamos su referencia por seguridad. " +
+            "No hagas otra recarga hasta aclarar su estado."
         );
+    }
 
-        /*
-         * Solo borrar la referencia que acabamos de verificar,
-         * sin tocar otras claves ni la sesión del usuario.
-         */
+    const estadoLocal = String(data.status || "").toLowerCase();
+
+    if (
+        estadoLocal === "completed" ||
+        estadoLocal === "refunded"
+    ) {
         if (pedidoPendienteId === idVerificado) {
             borrarPedidoPendiente();
         }
@@ -498,15 +511,42 @@ async function verificarPedidoGuardado(userId) {
         return false;
     }
 
+    /*
+     * Si ya hay datos que indican que el pedido pudo enviarse,
+     * consultamos el estado. No lo volvemos a enviar a ciegas.
+     */
+    if (
+        data.provider_order_id ||
+        data.provider_client_reference ||
+        data.provider_submitted_at
+    ) {
+        accionPendiente = "consultar";
+    } else if (estadoLocal === "pending") {
+        accionPendiente = "enviar";
+    } else {
+        accionPendiente = "consultar";
+    }
+
+    guardarPedidoPendiente();
+    actualizarBoton();
+
     return true;
 }
 
 function actualizarBoton() {
     if (procesando) return;
-    botonContinuar.textContent = "RECARGAR";
+
+    if (pedidoPendienteId) {
+        botonContinuar.textContent =
+            accionPendiente === "enviar"
+                ? "RECUPERAR PEDIDO"
+                : "CONSULTAR PEDIDO";
+    } else {
+        botonContinuar.textContent = "RECARGAR";
+    }
 }
 
-/* CATÁLOGO */
+/* CATÁLOGO: se conserva la lógica original. */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) return respuesta;
@@ -860,6 +900,14 @@ async function enviarPedido(accessToken) {
         throw new Error("No hay ningún pedido guardado para enviar.");
     }
 
+    /*
+     * Marcamos la acción como consulta antes de llamar al servidor.
+     * Si la respuesta se pierde, primero se verifica el registro.
+     */
+    accionPendiente = "consultar";
+    guardarPedidoPendiente();
+    actualizarBoton();
+
     const datos = await llamarFuncion(
         URL_CREAR_PEDIDO,
         accessToken,
@@ -872,7 +920,7 @@ async function enviarPedido(accessToken) {
 
     mostrarEstado(
         datos.message ||
-        "Solicitud enviada. Consulta el estado antes de iniciar otra compra.",
+        "Solicitud procesada. Consulta el estado antes de comprar otra vez.",
         "correcto"
     );
 
@@ -973,7 +1021,6 @@ async function crearCompra(accessToken, playerId) {
     pedidoPendienteId = orderId;
     accionPendiente = "enviar";
     guardarPedidoPendiente();
-
     actualizarBoton();
 
     await enviarPedido(accessToken);
@@ -1017,16 +1064,24 @@ botonContinuar.addEventListener("click", async () => {
         recuperarPedidoPendiente(user.id);
 
         /*
-         * Verifica el pedido anterior antes de decidir si puede
-         * comenzar una compra nueva.
+         * Se verifica primero el pedido anterior.
+         * Nunca se inicia otra compra mientras exista uno sin resolver.
          */
         await verificarPedidoGuardado(user.id);
 
         if (pedidoPendienteId) {
-            mostrarEstado(
-                "Ya existe un pedido anterior. No crearemos otro. " +
-                "Hay que verificar su estado antes de continuar."
-            );
+            if (accionPendiente === "enviar") {
+                mostrarEstado(
+                    "Retomando el pedido pendiente existente. " +
+                    "No se creará otro pedido..."
+                );
+
+                await enviarPedido(session.access_token);
+            } else {
+                mostrarEstado("Consultando el estado del pedido anterior...");
+
+                await consultarPedido(session.access_token);
+            }
 
             return;
         }
@@ -1089,4 +1144,4 @@ async function iniciar() {
 iniciar();
 </script>
 </body>
-</html>
+    </html>
