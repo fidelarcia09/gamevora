@@ -170,9 +170,15 @@
         }
 
         .estado-cancelado,
-        .estado-error {
+        .estado-error,
+        .estado-reembolsado {
             background: rgba(255, 50, 50, 0.12);
             color: #ff5555;
+        }
+
+        .estado-desconocido {
+            background: rgba(150, 150, 150, 0.15);
+            color: #cccccc;
         }
 
         .datos {
@@ -253,7 +259,6 @@
 
 <header>
     <div class="header-contenido">
-
         <div class="logo">
             Gamers Gold Top-Up
         </div>
@@ -261,7 +266,6 @@
         <a href="cuenta.html" class="volver">
             ← Mi cuenta
         </a>
-
     </div>
 </header>
 
@@ -323,16 +327,15 @@
     </div>
 
     <section id="listaVentas" class="ventas">
-
         <div class="vacio">
             Cargando ventas...
         </div>
-
     </section>
 
 </main>
 
 <script>
+"use strict";
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -349,9 +352,7 @@ const supabaseClient =
         SUPABASE_ANON_KEY
     );
 
-
 let todasLasVentas = [];
-
 let filtroActual = "todas";
 
 
@@ -360,14 +361,10 @@ let filtroActual = "todas";
 // ================================
 
 function mostrarError(mensaje) {
-
-    const errorBox =
-        document.getElementById("error");
+    const errorBox = document.getElementById("error");
 
     errorBox.textContent = mensaje;
-
     errorBox.style.display = "block";
-
 }
 
 
@@ -376,27 +373,19 @@ function mostrarError(mensaje) {
 // ================================
 
 function convertirBase64UrlAUint8Array(base64UrlData) {
-
     const padding =
-        "=".repeat(
-            (4 - base64UrlData.length % 4) % 4
-        );
+        "=".repeat((4 - base64UrlData.length % 4) % 4);
 
-    const base64 =
-        (
-            base64UrlData +
-            padding
-        )
+    const base64 = (
+        base64UrlData + padding
+    )
         .replace(/-/g, "+")
         .replace(/_/g, "/");
 
-    const rawData =
-        window.atob(base64);
+    const rawData = window.atob(base64);
 
     return Uint8Array.from(
-        [...rawData].map(
-            char => char.charCodeAt(0)
-        )
+        [...rawData].map(char => char.charCodeAt(0))
     );
 }
 
@@ -406,109 +395,65 @@ function convertirBase64UrlAUint8Array(base64UrlData) {
 // ================================
 
 async function registrarNotificacionesPush() {
-
     try {
-
         if (!("serviceWorker" in navigator)) {
-
-            console.log(
-                "Service Worker no disponible"
-            );
-
+            console.log("Service Worker no disponible");
             return;
         }
-
 
         if (!("PushManager" in window)) {
-
-            console.log(
-                "Push Notifications no disponibles"
-            );
-
+            console.log("Push Notifications no disponibles");
             return;
         }
-
 
         const registro =
             await navigator.serviceWorker.register(
                 "service-worker.js"
             );
 
-
         console.log(
             "Service Worker registrado:",
             registro.scope
         );
 
-
         const permiso =
             await Notification.requestPermission();
 
-
         if (permiso !== "granted") {
-
             console.log(
                 "Permiso de notificaciones no concedido"
             );
-
             return;
         }
-
-
-        console.log(
-            "Permiso de notificaciones concedido"
-        );
-
 
         let suscripcion =
             await registro.pushManager.getSubscription();
 
-
-        // Si no existe, crearla
         if (!suscripcion) {
-
             suscripcion =
                 await registro.pushManager.subscribe({
-
                     userVisibleOnly: true,
-
                     applicationServerKey:
                         convertirBase64UrlAUint8Array(
                             VAPID_PUBLIC_KEY
                         )
-
                 });
-
         }
-
-
-        console.log(
-            "Suscripción Push:",
-            suscripcion
-        );
-
 
         const {
             data: { user },
             error: userError
-        } =
-            await supabaseClient.auth.getUser();
-
+        } = await supabaseClient.auth.getUser();
 
         if (userError || !user) {
-
             console.error(
                 "No se pudo obtener el usuario:",
                 userError
             );
-
             return;
         }
 
-
-        const datosSuscripcion =
-            suscripcion.toJSON();
-
+        const datosSuscripcion = suscripcion.toJSON();
 
         if (
             !datosSuscripcion.endpoint ||
@@ -516,50 +461,36 @@ async function registrarNotificacionesPush() {
             !datosSuscripcion.keys.p256dh ||
             !datosSuscripcion.keys.auth
         ) {
-
             throw new Error(
                 "La suscripción Push no contiene los datos necesarios."
             );
-
         }
 
-
-        const {
-            error: guardarError
-        } =
+        const { error: guardarError } =
             await supabaseClient
                 .from("admin_push_subscriptions")
                 .upsert(
                     {
                         user_id: user.id,
-                        endpoint:
-                            datosSuscripcion.endpoint,
-                        p256dh:
-                            datosSuscripcion.keys.p256dh,
-                        auth:
-                            datosSuscripcion.keys.auth,
-                        updated_at:
-                            new Date().toISOString()
+                        endpoint: datosSuscripcion.endpoint,
+                        p256dh: datosSuscripcion.keys.p256dh,
+                        auth: datosSuscripcion.keys.auth,
+                        updated_at: new Date().toISOString()
                     },
                     {
                         onConflict: "endpoint"
                     }
                 );
 
-
         if (guardarError) {
-
             throw guardarError;
-
         }
 
-
         console.log(
-            "✅ Dispositivo administrador registrado para Push."
+            "Dispositivo administrador registrado para Push."
         );
 
     } catch (error) {
-
         console.error(
             "Error configurando notificaciones:",
             error
@@ -569,9 +500,7 @@ async function registrarNotificacionesPush() {
             "No se pudo configurar el dispositivo para notificaciones Push.\n\n" +
             error.message
         );
-
     }
-
 }
 
 
@@ -580,77 +509,80 @@ async function registrarNotificacionesPush() {
 // ================================
 
 async function comprobarAdministrador() {
-
     const {
         data: { user },
         error: authError
-    } =
-        await supabaseClient.auth.getUser();
-
+    } = await supabaseClient.auth.getUser();
 
     if (authError) {
-
         mostrarError(
             "ERROR DE AUTENTICACIÓN:\n" +
             authError.message
         );
-
         return false;
     }
-
 
     if (!user) {
-
         window.location.href = "index.html";
-
         return false;
     }
 
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient.rpc(
-            "is_support_admin"
-        );
-
+    const { data, error } =
+        await supabaseClient.rpc("is_support_admin");
 
     if (error) {
-
         mostrarError(
             "ERROR AL COMPROBAR ADMIN:\n\n" +
-            "Mensaje: " +
-            error.message +
-            "\n" +
-            "Código: " +
-            error.code +
-            "\n" +
-            "Detalles: " +
-            error.details +
-            "\n" +
-            "Ayuda: " +
-            error.hint
+            "Mensaje: " + error.message +
+            "\nCódigo: " + error.code +
+            "\nDetalles: " + error.details +
+            "\nAyuda: " + error.hint
         );
 
-        console.error(
-            "Error is_support_admin:",
-            error
-        );
-
+        console.error("Error is_support_admin:", error);
         return false;
     }
-
 
     if (data !== true) {
-
         window.location.href = "cuenta.html";
-
         return false;
     }
 
-
     return true;
+}
+
+
+// ================================
+// NORMALIZAR ESTADOS
+// ================================
+
+function normalizarEstadoVenta(estado) {
+    const valor = String(estado || "")
+        .trim()
+        .toLowerCase();
+
+    const equivalencias = {
+        "pending": "pendiente",
+        "pendiente": "pendiente",
+
+        "processing": "procesando",
+        "procesando": "procesando",
+
+        "completed": "completado",
+        "completado": "completado",
+
+        "failed": "error",
+        "error": "error",
+
+        "cancelled": "cancelado",
+        "canceled": "cancelado",
+        "cancelado": "cancelado",
+
+        "refunded": "reembolsado",
+        "reembolsado": "reembolsado"
+    };
+
+    return equivalencias[valor] || valor || "desconocido";
 }
 
 
@@ -659,80 +591,102 @@ async function comprobarAdministrador() {
 // ================================
 
 async function cargarVentas() {
-
     const lista =
-        document.getElementById(
-            "listaVentas"
-        );
-
+        document.getElementById("listaVentas");
 
     lista.innerHTML = `
-        <div class="vacio">
-            Cargando ventas...
-        </div>
+        <div class="vacio">Cargando ventas...</div>
     `;
 
+    document.getElementById("error").style.display = "none";
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
+    try {
+        // Conservamos la consulta original a ventas.
+        const {
+            data: ventas,
+            error: errorVentas
+        } = await supabaseClient
             .from("ventas")
             .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
+            .order("created_at", {
+                ascending: false
+            });
+
+        if (errorVentas) {
+            throw new Error(
+                "No se pudieron cargar las ventas: " +
+                errorVentas.message
             );
+        }
 
+        const resultadoVentas = ventas || [];
 
-    if (error) {
+        // Buscar los pedidos relacionados por game_order_id.
+        const idsPedidos = [
+            ...new Set(
+                resultadoVentas
+                    .map(venta => venta.game_order_id)
+                    .filter(Boolean)
+            )
+        ];
+
+        const pedidosPorId = {};
+
+        if (idsPedidos.length > 0) {
+            const {
+                data: pedidos,
+                error: errorPedidos
+            } = await supabaseClient
+                .from("game_orders")
+                .select("id, status")
+                .in("id", idsPedidos);
+
+            if (errorPedidos) {
+                throw new Error(
+                    "No se pudieron consultar los estados de los pedidos: " +
+                    errorPedidos.message
+                );
+            }
+
+            for (const pedido of pedidos || []) {
+                pedidosPorId[pedido.id] = pedido.status;
+            }
+        }
+
+        // Para ventas vinculadas, usar el estado real del pedido.
+        // Para las demás, conservar el estado de la venta.
+        todasLasVentas = resultadoVentas.map(venta => {
+            const estadoPedido = venta.game_order_id
+                ? pedidosPorId[venta.game_order_id]
+                : null;
+
+            return {
+                ...venta,
+                estado: normalizarEstadoVenta(
+                    estadoPedido || venta.estado
+                )
+            };
+        });
+
+        actualizarEstadisticas();
+        mostrarVentas();
+
+    } catch (error) {
+        console.error("Error cargando ventas:", error);
 
         mostrarError(
-            "ERROR SUPABASE AL CARGAR VENTAS:\n\n" +
-
-            "Mensaje: " +
-            error.message +
-
-            "\n\nCódigo: " +
-            error.code +
-
-            "\n\nDetalles: " +
-            error.details +
-
-            "\n\nAyuda: " +
-            error.hint
+            "ERROR AL CARGAR EL PANEL DE VENTAS:\n\n" +
+            error.message
         );
-
-
-        console.error(
-            "Error completo de Supabase:",
-            error
-        );
-
 
         lista.innerHTML = `
             <div class="vacio">
-                No se pudieron cargar las ventas.
+                No se pudieron cargar correctamente las ventas.
                 <br><br>
                 Revisa el mensaje de error de arriba.
             </div>
         `;
-
-        return;
     }
-
-
-    todasLasVentas =
-        data || [];
-
-
-    actualizarEstadisticas();
-
-    mostrarVentas();
-
 }
 
 
@@ -741,56 +695,26 @@ async function cargarVentas() {
 // ================================
 
 function actualizarEstadisticas() {
+    const total = todasLasVentas.length;
 
-    const total =
-        todasLasVentas.length;
+    const pendientes = todasLasVentas.filter(
+        venta => venta.estado === "pendiente"
+    ).length;
 
+    const completadas = todasLasVentas.filter(
+        venta => venta.estado === "completado"
+    ).length;
 
-    const pendientes =
-        todasLasVentas.filter(
-            venta =>
-                venta.estado === "pendiente"
-        ).length;
+    const gvrVendidos = todasLasVentas.reduce(
+        (acumulado, venta) =>
+            acumulado + (Number(venta.gvr_comprado) || 0),
+        0
+    );
 
-
-    const completadas =
-        todasLasVentas.filter(
-            venta =>
-                venta.estado === "completado"
-        ).length;
-
-
-    const gvrVendidos =
-        todasLasVentas.reduce(
-            (total, venta) =>
-                total +
-                (Number(
-                    venta.gvr_comprado
-                ) || 0),
-            0
-        );
-
-
-    document.getElementById(
-        "totalVentas"
-    ).textContent = total;
-
-
-    document.getElementById(
-        "ventasPendientes"
-    ).textContent = pendientes;
-
-
-    document.getElementById(
-        "ventasCompletadas"
-    ).textContent = completadas;
-
-
-    document.getElementById(
-        "gvrVendidos"
-    ).textContent =
-        gvrVendidos;
-
+    document.getElementById("totalVentas").textContent = total;
+    document.getElementById("ventasPendientes").textContent = pendientes;
+    document.getElementById("ventasCompletadas").textContent = completadas;
+    document.getElementById("gvrVendidos").textContent = gvrVendidos;
 }
 
 
@@ -799,39 +723,16 @@ function actualizarEstadisticas() {
 // ================================
 
 function escaparHTML(valor) {
-
-    if (
-        valor === null ||
-        valor === undefined
-    ) {
-
+    if (valor === null || valor === undefined) {
         return "—";
-
     }
 
-
     return String(valor)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
@@ -840,83 +741,46 @@ function escaparHTML(valor) {
 // ================================
 
 function mostrarVentas() {
+    const lista = document.getElementById("listaVentas");
 
-    const lista =
-        document.getElementById(
-            "listaVentas"
-        );
-
-
-    let ventasFiltradas =
-        [...todasLasVentas];
-
+    let ventasFiltradas = [...todasLasVentas];
 
     if (filtroActual === "gvr") {
-
-        ventasFiltradas =
-            ventasFiltradas.filter(
-                venta =>
-                    venta.tipo === "gvr"
-            );
-
+        ventasFiltradas = ventasFiltradas.filter(
+            venta => venta.tipo === "gvr"
+        );
     }
-
 
     if (filtroActual === "recarga") {
-
-        ventasFiltradas =
-            ventasFiltradas.filter(
-                venta =>
-                    venta.tipo === "recarga"
-            );
-
+        ventasFiltradas = ventasFiltradas.filter(
+            venta => venta.tipo === "recarga"
+        );
     }
-
 
     if (filtroActual === "pendiente") {
-
-        ventasFiltradas =
-            ventasFiltradas.filter(
-                venta =>
-                    venta.estado === "pendiente"
-            );
-
+        ventasFiltradas = ventasFiltradas.filter(
+            venta => venta.estado === "pendiente"
+        );
     }
-
 
     if (filtroActual === "completado") {
-
-        ventasFiltradas =
-            ventasFiltradas.filter(
-                venta =>
-                    venta.estado === "completado"
-            );
-
+        ventasFiltradas = ventasFiltradas.filter(
+            venta => venta.estado === "completado"
+        );
     }
 
-
     if (ventasFiltradas.length === 0) {
-
         lista.innerHTML = `
             <div class="vacio">
                 No hay ventas para mostrar.
             </div>
         `;
-
         return;
     }
 
-
-    lista.innerHTML =
-        ventasFiltradas
-            .map(
-                venta =>
-                    crearVentaHTML(
-                        venta
-                    )
-            )
-            .join("");
-
+    lista.innerHTML = ventasFiltradas
+        .map(venta => crearVentaHTML(venta))
+        .join("");
 }
 
 
@@ -925,224 +789,168 @@ function mostrarVentas() {
 // ================================
 
 function crearVentaHTML(venta) {
-
     const tipoTexto =
         venta.tipo === "gvr"
             ? "💎 Compra de GVR"
             : "🎮 Recarga de juego";
 
+    const estado = normalizarEstadoVenta(venta.estado);
 
-    const claseEstado =
-        "estado-" +
-        escaparHTML(
-            venta.estado
-        );
+    const estadosConocidos = [
+        "pendiente",
+        "procesando",
+        "completado",
+        "cancelado",
+        "error",
+        "reembolsado"
+    ];
 
+    const claseEstado = estadosConocidos.includes(estado)
+        ? "estado-" + estado
+        : "estado-desconocido";
+
+    const etiquetasEstado = {
+        "pendiente": "Pendiente",
+        "procesando": "Procesando",
+        "completado": "Completado",
+        "cancelado": "Cancelado",
+        "error": "Error",
+        "reembolsado": "Reembolsado",
+        "desconocido": "Desconocido"
+    };
+
+    const textoEstado =
+        etiquetasEstado[estado] || estado;
 
     let fecha = "—";
 
-
     if (venta.created_at) {
-
-        fecha =
-            new Date(
-                venta.created_at
-            ).toLocaleString(
-                "es-ES",
-                {
-                    dateStyle: "medium",
-                    timeStyle: "short"
-                }
-            );
-
+        fecha = new Date(
+            venta.created_at
+        ).toLocaleString("es-ES", {
+            dateStyle: "medium",
+            timeStyle: "short"
+        });
     }
-
 
     return `
         <article class="venta">
 
             <div class="venta-cabecera">
-
                 <div class="tipo">
                     ${tipoTexto}
                 </div>
 
                 <div class="estado ${claseEstado}">
-                    ${escaparHTML(
-                        venta.estado
-                    )}
+                    ${escaparHTML(textoEstado)}
                 </div>
-
             </div>
 
             <div class="datos">
 
                 <div class="dato">
                     <small>Usuario</small>
-                    <div>
-                        ${escaparHTML(
-                            venta.nombre_usuario
-                        )}
-                    </div>
+                    <div>${escaparHTML(venta.nombre_usuario)}</div>
                 </div>
 
                 <div class="dato">
                     <small>Correo</small>
-                    <div>
-                        ${escaparHTML(
-                            venta.correo_usuario
-                        )}
-                    </div>
+                    <div>${escaparHTML(venta.correo_usuario)}</div>
                 </div>
 
                 <div class="dato">
                     <small>ID de usuario</small>
-                    <div>
-                        ${escaparHTML(
-                            venta.usuario_id
-                        )}
-                    </div>
+                    <div>${escaparHTML(venta.usuario_id)}</div>
                 </div>
 
                 ${
                     venta.juego
-                    ?
-                    `
+                    ? `
                     <div class="dato">
                         <small>Juego</small>
-                        <div>
-                            ${escaparHTML(
-                                venta.juego
-                            )}
-                        </div>
+                        <div>${escaparHTML(venta.juego)}</div>
                     </div>
                     `
-                    :
-                    ""
+                    : ""
                 }
 
                 ${
                     venta.id_jugador
-                    ?
-                    `
+                    ? `
                     <div class="dato">
                         <small>ID del jugador</small>
-                        <div>
-                            ${escaparHTML(
-                                venta.id_jugador
-                            )}
-                        </div>
+                        <div>${escaparHTML(venta.id_jugador)}</div>
                     </div>
                     `
-                    :
-                    ""
+                    : ""
                 }
 
                 ${
                     venta.producto
-                    ?
-                    `
+                    ? `
                     <div class="dato">
                         <small>Producto</small>
-                        <div>
-                            ${escaparHTML(
-                                venta.producto
-                            )}
-                        </div>
+                        <div>${escaparHTML(venta.producto)}</div>
                     </div>
                     `
-                    :
-                    ""
+                    : ""
                 }
 
                 ${
                     venta.cantidad !== null &&
                     venta.cantidad !== undefined
-                    ?
-                    `
+                    ? `
                     <div class="dato">
                         <small>Cantidad</small>
-                        <div>
-                            ${escaparHTML(
-                                venta.cantidad
-                            )}
-                        </div>
+                        <div>${escaparHTML(venta.cantidad)}</div>
                     </div>
                     `
-                    :
-                    ""
+                    : ""
                 }
 
                 ${
                     venta.gvr_comprado
-                    ?
-                    `
+                    ? `
                     <div class="dato">
                         <small>GVR comprado</small>
-                        <div>
-                            💎 ${escaparHTML(
-                                venta.gvr_comprado
-                            )} GVR
-                        </div>
+                        <div>💎 ${escaparHTML(venta.gvr_comprado)} GVR</div>
                     </div>
                     `
-                    :
-                    ""
+                    : ""
                 }
 
                 <div class="dato">
                     <small>Precio</small>
                     <div>
-                        ${escaparHTML(
-                            venta.precio
-                        )}
-                        ${escaparHTML(
-                            venta.moneda
-                        )}
+                        ${escaparHTML(venta.precio)}
+                        ${escaparHTML(venta.moneda)}
                     </div>
                 </div>
 
                 <div class="dato">
                     <small>Método de pago</small>
-                    <div>
-                        ${escaparHTML(
-                            venta.metodo_pago
-                        )}
-                    </div>
+                    <div>${escaparHTML(venta.metodo_pago)}</div>
                 </div>
 
                 <div class="dato">
                     <small>Proveedor</small>
-                    <div>
-                        ${escaparHTML(
-                            venta.proveedor
-                        )}
-                    </div>
+                    <div>${escaparHTML(venta.proveedor)}</div>
                 </div>
 
                 <div class="dato">
                     <small>ID orden proveedor</small>
-                    <div>
-                        ${escaparHTML(
-                            venta.id_orden_proveedor
-                        )}
-                    </div>
+                    <div>${escaparHTML(venta.id_orden_proveedor)}</div>
                 </div>
 
                 <div class="dato">
                     <small>Fecha</small>
-                    <div>
-                        ${escaparHTML(
-                            fecha
-                        )}
-                    </div>
+                    <div>${escaparHTML(fecha)}</div>
                 </div>
 
             </div>
 
         </article>
     `;
-
 }
 
 
@@ -1150,43 +958,18 @@ function crearVentaHTML(venta) {
 // FILTROS
 // ================================
 
-document
-    .querySelectorAll(".filtro")
-    .forEach(
-        boton => {
+document.querySelectorAll(".filtro").forEach(boton => {
+    boton.addEventListener("click", () => {
+        document.querySelectorAll(".filtro").forEach(
+            b => b.classList.remove("activo")
+        );
 
-            boton.addEventListener(
-                "click",
-                () => {
+        boton.classList.add("activo");
+        filtroActual = boton.dataset.filtro;
 
-                    document
-                        .querySelectorAll(
-                            ".filtro"
-                        )
-                        .forEach(
-                            b =>
-                                b.classList.remove(
-                                    "activo"
-                                )
-                        );
-
-
-                    boton.classList.add(
-                        "activo"
-                    );
-
-
-                    filtroActual =
-                        boton.dataset.filtro;
-
-
-                    mostrarVentas();
-
-                }
-            );
-
-        }
-    );
+        mostrarVentas();
+    });
+});
 
 
 // ================================
@@ -1194,28 +977,20 @@ document
 // ================================
 
 async function iniciar() {
-
-    const esAdmin =
-        await comprobarAdministrador();
-
+    const esAdmin = await comprobarAdministrador();
 
     if (!esAdmin) {
-
         return;
-
     }
-
 
     await cargarVentas();
 
     await registrarNotificacionesPush();
-
 }
-
 
 iniciar();
 
 </script>
 
 </body>
-</html>
+    </html>
