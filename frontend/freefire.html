@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
     <meta name="description" content="Recarga diamantes de Free Fire en Gamers Gold Top-Up.">
-    <title>Free Fire | Gamers Gold Top-Up</title>
-
-<style>
+    <title>Free Fire | Gamers Gold Top-Up</title><style>
     * {
         box-sizing: border-box;
         margin: 0;
@@ -252,84 +249,76 @@
             font-size: 17px;
         }
     }
-</style>
-</head>
+</style></head><body>
+<div class="contenedor"><header class="header">
+    <div class="logo">
+        <span class="rayo">⚡</span> Gamers Gold Top-Up
+    </div>
 
-<body>
-<div class="contenedor">
+    <a href="juegos.html" class="volver">← Juegos</a>
+</header>
 
-    <header class="header">
-        <div class="logo">
-            <span class="rayo">⚡</span> Gamers Gold Top-Up
-        </div>
+<main class="card">
+    <div class="icono">🔥</div>
 
-        <a href="juegos.html" class="volver">← Juegos</a>
-    </header>
+    <h1>Free Fire</h1>
 
-    <main class="card">
-        <div class="icono">🔥</div>
+    <p class="descripcion">
+        Selecciona tu paquete de diamantes de Free Fire.
+    </p>
 
-        <h1>Free Fire</h1>
+    <label class="etiqueta" for="idjugador">
+        ID del jugador
+    </label>
 
-        <p class="descripcion">
-            Selecciona tu paquete de diamantes de Free Fire.
-        </p>
+    <input
+        type="text"
+        id="idjugador"
+        placeholder="Introduce tu ID de Free Fire"
+        autocomplete="off"
+        maxlength="50"
+    >
 
-        <label class="etiqueta" for="idjugador">
-            ID del jugador
-        </label>
+    <label class="etiqueta">
+        Selecciona una cantidad de diamantes
+    </label>
 
-        <input
-            type="text"
-            id="idjugador"
-            placeholder="Introduce tu ID de Free Fire"
-            autocomplete="off"
-            maxlength="50"
-        >
+    <div id="estadoCatalogo" class="estado" aria-live="polite">
+        Conectando con el catálogo...
+    </div>
 
-        <label class="etiqueta">
-            Selecciona una cantidad de diamantes
-        </label>
+    <div id="catalogo" class="catalogo"></div>
 
-        <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo...
-        </div>
+    <button
+        id="botonContinuar"
+        class="boton continuar"
+        type="button"
+    >
+        RECARGAR
+    </button>
 
-        <div id="catalogo" class="catalogo"></div>
-
+    <div class="separador-ofertas">
         <button
-            id="botonContinuar"
-            class="boton continuar"
+            class="boton boton-ofertas"
             type="button"
+            id="botonOfertas"
         >
-            RECARGAR
+            🎁 Ofertas especiales
         </button>
+    </div>
 
-        <div class="separador-ofertas">
-            <button
-                class="boton boton-ofertas"
-                type="button"
-                id="botonOfertas"
-            >
-                🎁 Ofertas especiales
-            </button>
-        </div>
+    <p class="nota">
+        Los precios se muestran en GVR. Comprueba tu ID de jugador
+        antes de confirmar la recarga. No vuelvas a crear un pedido
+        si el anterior está pendiente de confirmación.
+    </p>
+</main>
 
-        <p class="nota">
-            Los precios se muestran en GVR. Comprueba tu ID de jugador
-            antes de confirmar la recarga. No vuelvas a crear un pedido
-            si el anterior está pendiente de confirmación.
-        </p>
-    </main>
-</div>
-
-<script type="module">
+</div><script type="module">
 "use strict";
 
 import { createClient } from
     "https://esm.sh/@supabase/supabase-js@2";
-
-/* CONFIGURACIÓN */
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -372,7 +361,7 @@ let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
 
-/* OFERTAS: SE CONSERVA EL DESTINO ACTUAL */
+/* OFERTAS */
 
 botonOfertas.addEventListener("click", () => {
     window.location.href = "ofertas-free-fire.html";
@@ -452,26 +441,22 @@ function recuperarPedidoPendiente(userId) {
             : "enviar";
 
     } catch (error) {
-        console.error("No se pudo recuperar el pedido guardado:", error);
+        console.error("Error recuperando pedido guardado:", error);
         pedidoPendienteId = null;
         accionPendiente = "crear";
     }
 }
 
+/*
+ * CAMBIO: nunca mostramos REINTENTAR ENVÍO ni CONSULTAR PEDIDO.
+ * El texto del botón permanece como RECARGAR.
+ */
 function actualizarBoton() {
     if (procesando) return;
-
-    if (pedidoPendienteId) {
-        botonContinuar.textContent =
-            accionPendiente === "consultar"
-                ? "CONSULTAR PEDIDO"
-                : "REINTENTAR ENVÍO";
-    } else {
-        botonContinuar.textContent = "RECARGAR";
-    }
+    botonContinuar.textContent = "RECARGAR";
 }
 
-/* CATÁLOGO DEL PROVEEDOR */
+/* CATÁLOGO */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) return respuesta;
@@ -533,7 +518,7 @@ function esPaqueteDiamantes(producto) {
     return esDiamantes && !esMembresiaOPase;
 }
 
-/* PRODUCTOS LOCALES Y PRECIOS GVR */
+/* PRODUCTOS LOCALES */
 
 async function cargarProductosLocales() {
     const { data, error } = await supabase
@@ -544,7 +529,7 @@ async function cargarProductosLocales() {
         .eq("provider", "nextlevel");
 
     if (error) {
-        console.error("Error consultando productos locales:", error.message);
+        console.error("Error consultando productos:", error.message);
         throw new Error(
             "No se pudieron verificar los productos y sus precios GVR."
         );
@@ -577,7 +562,7 @@ function mostrarPrecio(precio) {
     return Number(precio).toLocaleString("es-ES") + " GVR";
 }
 
-/* RENDERIZAR CATÁLOGO SIN CAMBIAR EL FILTRO EXISTENTE */
+/* MOSTRAR CATÁLOGO */
 
 function renderizarCatalogo() {
     catalogo.replaceChildren();
@@ -632,6 +617,7 @@ function renderizarCatalogo() {
                 };
 
                 estado.textContent = "Paquete seleccionado";
+
                 mostrarEstado(
                     obtenerNombre(producto) + " seleccionado · " +
                     mostrarPrecio(Number(local.price_gvr)),
@@ -727,7 +713,7 @@ async function cargarCatalogo() {
     }
 }
 
-/* PETICIONES AUTENTICADAS A LAS FUNCIONES EDGE */
+/* LLAMADAS A FUNCIONES EDGE */
 
 async function llamarFuncion(url, accessToken, body) {
     const respuesta = await fetch(url, {
@@ -764,7 +750,7 @@ async function llamarFuncion(url, accessToken, body) {
     return datos;
 }
 
-/* CONSULTAR EL PEDIDO EXISTENTE */
+/* CONSULTAR PEDIDO */
 
 async function consultarPedido(accessToken) {
     if (!pedidoPendienteId) {
@@ -817,11 +803,11 @@ async function consultarPedido(accessToken) {
 
     mostrarEstado(
         datos.message ||
-        "El pedido sigue pendiente. Puedes consultar su estado nuevamente."
+        "El pedido sigue pendiente. Hay que verificar su estado antes de comprar otra vez."
     );
 }
 
-/* ENVIAR EL PEDIDO EXISTENTE A NEXT LEVEL */
+/* ENVIAR PEDIDO EXISTENTE */
 
 async function enviarPedido(accessToken) {
     if (!pedidoPendienteId) {
@@ -841,38 +827,33 @@ async function enviarPedido(accessToken) {
 
         mostrarEstado(
             datos.message ||
-            "El pedido fue procesado por la función de Next Level. " +
-            "Consulta su estado para confirmar el resultado.",
+            "El pedido fue enviado a la función de Next Level. Consulta su estado para confirmar el resultado.",
             "correcto"
         );
 
         alert(
             "Solicitud procesada.\n\n" +
             "Pedido: " + pedidoPendienteId + "\n\n" +
-            "Consulta el estado antes de iniciar otra compra."
+            "Consulta su estado antes de iniciar otra compra."
         );
 
     } catch (error) {
         console.error("Error enviando pedido a Next Level:", error);
 
-        /*
-         * Se conserva el mismo ID. Nunca se crea otra compra local
-         * automáticamente después de un error de envío.
-         */
         accionPendiente = "enviar";
         guardarPedidoPendiente();
         actualizarBoton();
 
         mostrarEstado(
-            "No se pudo confirmar el envío. Tu pedido local se conserva. " +
-            "Usa REINTENTAR ENVÍO para continuar con el mismo pedido. " +
+            "No se pudo confirmar el envío. El pedido local se conserva. " +
+            "No crees otra compra hasta verificar su estado. " +
             mensajeError(error, ""),
             "error"
         );
     }
 }
 
-/* CREAR COMPRA LOCAL Y ENVIAR EL MISMO PEDIDO */
+/* CREAR COMPRA LOCAL */
 
 async function crearCompra(accessToken, playerId) {
     if (!productoSeleccionado) {
@@ -881,9 +862,6 @@ async function crearCompra(accessToken, playerId) {
 
     const local = productoSeleccionado.local;
 
-    /*
-     * Comprobación final antes de llamar a la RPC que descuenta GVR.
-     */
     if (
         !local ||
         local.active !== true ||
@@ -936,10 +914,6 @@ async function crearCompra(accessToken, playerId) {
 
     mostrarEstado("Creando pedido. No cierres esta página...");
 
-    /*
-     * Esta RPC descuenta GVR y crea el pedido local.
-     * Si devuelve un error, no se intenta crear automáticamente otro pedido.
-     */
     const { data: orderId, error: errorCompra } = await supabase.rpc(
         "purchase_game_product",
         {
@@ -961,20 +935,12 @@ async function crearCompra(accessToken, playerId) {
         typeof orderId !== "string" ||
         !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(orderId)
     ) {
-        /*
-         * No se vuelve a ejecutar la RPC: el resultado no se puede
-         * identificar con seguridad desde el navegador.
-         */
         throw new Error(
             "La compra pudo haberse registrado, pero no recibimos un ID válido. " +
-            "No vuelvas a pulsar RECARGAR. Revisa el pedido antes de intentarlo otra vez."
+            "No vuelvas a pulsar RECARGAR hasta revisar el pedido."
         );
     }
 
-    /*
-     * Guardar el ID antes de llamar al proveedor. Si la conexión falla,
-     * se puede continuar usando este mismo pedido.
-     */
     pedidoPendienteId = orderId;
     accionPendiente = "enviar";
     guardarPedidoPendiente();
@@ -1018,19 +984,17 @@ botonContinuar.addEventListener("click", async () => {
         }
 
         usuarioActualId = user.id;
-
-        /*
-         * Recuperar primero un pedido anterior. Nunca se crea una compra
-         * nueva mientras exista un pedido guardado sin resolver.
-         */
         recuperarPedidoPendiente(user.id);
 
+        /*
+         * Protección: no creamos otro pedido mientras haya uno guardado.
+         * No mostramos ningún botón de reenvío.
+         */
         if (pedidoPendienteId) {
-            if (accionPendiente === "consultar") {
-                await consultarPedido(session.access_token);
-            } else {
-                await enviarPedido(session.access_token);
-            }
+            mostrarEstado(
+                "Tienes un pedido anterior que debe verificarse antes de realizar otra compra. " +
+                "No se ha creado un pedido nuevo."
+            );
 
             return;
         }
@@ -1070,7 +1034,7 @@ botonContinuar.addEventListener("click", async () => {
     }
 });
 
-/* RESTAURAR ESTADO AL RECARGAR LA PÁGINA */
+/* INICIO */
 
 async function iniciar() {
     try {
@@ -1091,6 +1055,5 @@ async function iniciar() {
 }
 
 iniciar();
-</script>
-</body>
+</script></body>
 </html>
