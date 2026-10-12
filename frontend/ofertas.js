@@ -1,7 +1,6 @@
 /* =========================================================
    GAMERS GOLD TOP-UP — MOTOR DE OFERTAS Y PEDIDOS
-   Las compras quedan habilitadas únicamente para Free Fire.
-   Los demás juegos conservan sus catálogos sin activar ventas.
+   Free Fire y Blood Strike habilitados según configuración.
    ========================================================= */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -73,8 +72,20 @@ const JUEGOS_API = {
 const JUEGO_API =
     JUEGOS_API[JUEGO_NORMALIZADO] || null;
 
+/*
+ * Free Fire mantiene su configuración anterior.
+ * Blood Strike solo habilita ventas cuando la página
+ * declara habilitarCompras: true.
+ */
 const ES_FREE_FIRE =
     JUEGO_NORMALIZADO === "freefire";
+
+const ES_VENTAS_HABILITADAS =
+    ES_FREE_FIRE ||
+    (
+        JUEGO_NORMALIZADO === "bloodstrike" &&
+        CONFIG?.habilitarCompras === true
+    );
 
 let productosLocales = [];
 let productosProveedor = [];
@@ -164,11 +175,6 @@ function ocultarEstadoPedido() {
     estado.classList.remove("error");
 }
 
-/*
- * Evita mostrar mensajes técnicos al cliente.
- * Los detalles completos permanecen en la consola
- * para poder diagnosticar problemas.
- */
 function mensajeErrorCatalogo(error) {
     console.error(
         "[Gamers Gold] Error al cargar el catálogo:",
@@ -192,7 +198,6 @@ function mensajeErrorPedido(error) {
         "Debes iniciar sesión para comprar.",
         "No se pudo comprobar la sesión.",
         "Tu sesión no es válida o ha caducado. Inicia sesión nuevamente.",
-        "Escribe tu ID de jugador de Free Fire.",
         "El ID de jugador es demasiado largo.",
         "No recibimos un ID de pedido válido. Revisa el pedido antes de volver a intentarlo.",
         "No pudimos verificar tu pedido anterior. Conservamos su referencia para evitar duplicarlo. Intenta consultar su estado nuevamente.",
@@ -259,7 +264,7 @@ function obtenerNombreProveedor(producto) {
         producto?.product_name ??
         producto?.title ??
         obtenerIdProveedor(producto) ??
-        "Oferta Free Fire"
+        `Oferta de ${NOMBRE_JUEGO || "juego"}`
     ).trim();
 }
 
@@ -274,10 +279,11 @@ function obtenerPrecioLocal(producto) {
 
 /* =========================================================
    GUARDADO Y RECUPERACIÓN DEL PEDIDO
+   Clave independiente por juego y usuario.
    ========================================================= */
 
 function clavePedidoPendiente(userId) {
-    return `ggtopup_ofertas_freefire_pedido_${userId}`;
+    return `ggtopup_ofertas_${JUEGO_NORMALIZADO}_pedido_${userId}`;
 }
 
 function guardarPedidoPendiente() {
@@ -489,7 +495,7 @@ function crearTarjetaOferta(oferta, proveedor) {
     const local = buscarProductoLocal(proveedor);
 
     const comprable =
-        ES_FREE_FIRE &&
+        ES_VENTAS_HABILITADAS &&
         productoComprable(local);
 
     const tarjeta = document.createElement("button");
@@ -548,9 +554,9 @@ function crearTarjetaOferta(oferta, proveedor) {
             "padding:9px;font-size:12px;color:#8fa5bd;" +
             "background:#061226;width:100%;";
 
-        estado.textContent = ES_FREE_FIRE
-            ? "Precio pendiente o producto inactivo"
-            : "Ventas de este juego aún no habilitadas";
+        estado.textContent = !ES_VENTAS_HABILITADAS
+            ? "Ventas de este juego aún no habilitadas"
+            : "Precio pendiente o producto inactivo";
 
         tarjeta.appendChild(estado);
     }
@@ -613,6 +619,11 @@ async function cargarOfertas() {
         let cantidad = 0;
 
         configuradas.forEach(oferta => {
+            /*
+             * La página debe incluir oferta.id.
+             * Sin ese identificador no se puede relacionar
+             * la oferta con el producto del proveedor.
+             */
             const productoProveedor =
                 productosPorId[oferta.id];
 
@@ -660,13 +671,12 @@ async function cargarOfertas() {
 
         actualizarEstadoCarga("", false);
 
-        if (!ES_FREE_FIRE) {
-            const nota = el("notaOfertas");
+        const nota = el("notaOfertas");
 
-            if (nota) {
-                nota.textContent =
-                    "Las ventas de este juego aún no están habilitadas.";
-            }
+        if (nota) {
+            nota.textContent = ES_VENTAS_HABILITADAS
+                ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
+                : "Las ventas de este juego aún no están habilitadas.";
         }
 
     } catch (error) {
@@ -689,6 +699,14 @@ function seleccionarOferta(
             "Tienes un pedido anterior por verificar. " +
             "Consulta su estado antes de iniciar otra compra.",
             "error"
+        );
+
+        return;
+    }
+
+    if (!ES_VENTAS_HABILITADAS) {
+        alert(
+            "Las ventas de este juego aún no están habilitadas."
         );
 
         return;
@@ -765,7 +783,7 @@ function cambiarPantalla(idMostrar) {
 }
 
 function irAConfirmacion() {
-    if (!ES_FREE_FIRE) {
+    if (!ES_VENTAS_HABILITADAS) {
         alert(
             "Las ventas de este juego aún no están habilitadas."
         );
@@ -945,7 +963,6 @@ async function consultarPedido(accessToken) {
         return;
     }
 
-    // Si sigue pendiente, consultar siempre antes de reenviar.
     accionPendiente = "consultar";
     guardarPedidoPendiente();
 
@@ -978,11 +995,8 @@ async function enviarPedido(accessToken) {
     }
 
     /*
-     * Guardamos primero la acción "consultar".
-     *
-     * Si la solicitud llega al sistema de recargas pero
-     * la respuesta se pierde, la siguiente ejecución
-     * consultará el pedido en lugar de reenviarlo automáticamente.
+     * Guardamos "consultar" antes del envío.
+     * Si se pierde la respuesta, no repetimos la compra a ciegas.
      */
 
     accionPendiente = "consultar";
@@ -996,7 +1010,6 @@ async function enviarPedido(accessToken) {
         }
     );
 
-    // La referencia continúa guardada para consultar el resultado.
     accionPendiente = "consultar";
     guardarPedidoPendiente();
 
@@ -1046,16 +1059,6 @@ async function verificarPedidoGuardado(userId) {
     }
 
     const id = pedidoPendienteId;
-
-    /*
-     * Conservamos la acción anterior.
-     *
-     * Si antes de un error de red ya habíamos guardado
-     * "consultar", no debemos cambiarla a "enviar"
-     * solamente porque la base de datos todavía no muestra
-     * los datos del pedido.
-     */
-
     const accionAnterior = accionPendiente;
 
     const { data, error } = await supabase
@@ -1073,7 +1076,6 @@ async function verificarPedidoGuardado(userId) {
             error
         );
 
-        // Fallo seguro: no reenviar si no se pudo verificar.
         accionPendiente = "consultar";
         guardarPedidoPendiente();
 
@@ -1117,17 +1119,9 @@ async function verificarPedidoGuardado(userId) {
         accionPendiente = "consultar";
 
     } else if (accionAnterior === "consultar") {
-        /*
-         * Ya se había iniciado un envío o se perdió
-         * una respuesta. No se debe reenviar a ciegas.
-         */
         accionPendiente = "consultar";
 
     } else if (status === "pending") {
-        /*
-         * Solo conservamos "enviar" si la acción guardada
-         * ya era enviar y no hay indicios de un envío anterior.
-         */
         accionPendiente = "enviar";
 
     } else {
@@ -1168,7 +1162,9 @@ async function crearCompra(
         );
     }
 
-    // Verificamos nuevamente el producto antes de crear el pedido.
+    /*
+     * Verificar el producto nuevamente en Supabase.
+     */
     const {
         data: actual,
         error
@@ -1195,7 +1191,7 @@ async function crearCompra(
 
     if (
         !actual ||
-        normalizarTexto(actual.game) !== "freefire" ||
+        normalizarTexto(actual.game) !== JUEGO_NORMALIZADO ||
         String(actual.provider_product_id || "").trim() !==
             obtenerIdProveedor(productoSeleccionado.proveedor) ||
         obtenerPrecioLocal(actual) === null
@@ -1209,7 +1205,7 @@ async function crearCompra(
         Number(actual.price_gvr);
 
     const confirmado = confirm(
-        "Confirma tu oferta de Free Fire:\n\n" +
+        `Confirma tu oferta de ${NOMBRE_JUEGO}:\n\n` +
         "Oferta: " + productoSeleccionado.oferta.nombre + "\n" +
         "ID de jugador: " + playerId + "\n" +
         "Precio: " + mostrarPrecio(precioConfirmado) + "\n\n" +
@@ -1274,7 +1270,7 @@ async function manejarConfirmacion() {
         return;
     }
 
-    if (!ES_FREE_FIRE) {
+    if (!ES_VENTAS_HABILITADAS) {
         alert(
             "Las ventas de este juego aún no están habilitadas."
         );
@@ -1329,12 +1325,6 @@ async function manejarConfirmacion() {
             Boolean(pedidoPendienteId);
 
         if (habiaPedidoPendiente) {
-            /*
-             * Primero verificamos el pedido existente.
-             * Nunca creamos uno nuevo mientras el anterior
-             * siga sin resolverse.
-             */
-
             await verificarPedidoGuardado(user.id);
 
             if (!pedidoPendienteId) {
@@ -1370,7 +1360,7 @@ async function manejarConfirmacion() {
 
         if (!playerId) {
             throw new Error(
-                "Escribe tu ID de jugador de Free Fire."
+                `Escribe tu ID de jugador de ${NOMBRE_JUEGO}.`
             );
         }
 
@@ -1404,7 +1394,7 @@ async function manejarConfirmacion() {
         procesandoCompra = false;
 
         if (boton) {
-            boton.disabled = false;
+            boton.disabled = !ES_VENTAS_HABILITADAS;
 
             boton.textContent = pedidoPendienteId
                 ? (
@@ -1412,7 +1402,11 @@ async function manejarConfirmacion() {
                         ? "RECUPERAR PEDIDO"
                         : "CONSULTAR PEDIDO"
                 )
-                : "Confirmar y recargar ⚡";
+                : (
+                    ES_VENTAS_HABILITADAS
+                        ? "Confirmar y recargar ⚡"
+                        : "Ventas no habilitadas"
+                );
         }
     }
 }
@@ -1451,7 +1445,7 @@ function inicializar() {
     const nota = el("notaOfertas");
 
     if (nota) {
-        nota.textContent = ES_FREE_FIRE
+        nota.textContent = ES_VENTAS_HABILITADAS
             ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
             : "Las ventas de este juego aún no están habilitadas.";
     }
@@ -1459,9 +1453,9 @@ function inicializar() {
     const confirmar = el("confirmarBtn");
 
     if (confirmar) {
-        confirmar.disabled = !ES_FREE_FIRE;
+        confirmar.disabled = !ES_VENTAS_HABILITADAS;
 
-        confirmar.textContent = ES_FREE_FIRE
+        confirmar.textContent = ES_VENTAS_HABILITADAS
             ? "Confirmar y recargar ⚡"
             : "Ventas no habilitadas";
 
@@ -1499,7 +1493,7 @@ function inicializar() {
         return;
     }
 
-    if (!ES_FREE_FIRE && el("confirmarBtn")) {
+    if (!ES_VENTAS_HABILITADAS && el("confirmarBtn")) {
         el("confirmarBtn").disabled = true;
     }
 
@@ -1517,4 +1511,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-}
+       }
