@@ -164,6 +164,58 @@ function ocultarEstadoPedido() {
     estado.classList.remove("error");
 }
 
+/*
+ * Evita mostrar mensajes técnicos al cliente.
+ * Los detalles completos permanecen en la consola
+ * para poder diagnosticar problemas.
+ */
+function mensajeErrorCatalogo(error) {
+    console.error(
+        "[Gamers Gold] Error al cargar el catálogo:",
+        error
+    );
+
+    return "No pudimos cargar las ofertas. Inténtalo de nuevo más tarde.";
+}
+
+function mensajeErrorPedido(error) {
+    const mensaje = String(error?.message || "").trim();
+
+    const mensajesPermitidos = [
+        "No hay un pedido guardado para consultar.",
+        "No hay pedido pendiente para enviar.",
+        "Selecciona primero una oferta.",
+        "Esta oferta no está correctamente configurada para la compra.",
+        "No se pudo verificar el producto antes de comprar.",
+        "El producto o su precio cambió. Actualiza la página antes de comprar.",
+        "Selecciona una oferta activa con precio configurado.",
+        "Debes iniciar sesión para comprar.",
+        "No se pudo comprobar la sesión.",
+        "Tu sesión no es válida o ha caducado. Inicia sesión nuevamente.",
+        "Escribe tu ID de jugador de Free Fire.",
+        "El ID de jugador es demasiado largo.",
+        "No recibimos un ID de pedido válido. Revisa el pedido antes de volver a intentarlo.",
+        "No pudimos verificar tu pedido anterior. Conservamos su referencia para evitar duplicarlo. Intenta consultar su estado nuevamente.",
+        "No encontramos el pedido en el registro. Conservamos su referencia por seguridad. No hagas otra compra hasta aclarar su estado.",
+        "La referencia guardada del pedido no es válida. No iniciaremos otra compra automáticamente.",
+        "La información guardada del pedido no es válida. No iniciaremos otra compra automáticamente.",
+        "No pudimos recuperar la referencia del pedido. No iniciaremos otra compra automáticamente."
+    ];
+
+    if (mensajesPermitidos.includes(mensaje)) {
+        return mensaje;
+    }
+
+    if (
+        mensaje.startsWith("Escribe tu ID de jugador") ||
+        mensaje.startsWith("El ID de jugador")
+    ) {
+        return mensaje;
+    }
+
+    return "No pudimos procesar la solicitud. Consulta el estado de tu pedido antes de volver a intentarlo.";
+}
+
 function extraerProductos(resultado) {
     if (Array.isArray(resultado)) {
         return resultado;
@@ -318,7 +370,7 @@ function recuperarPedidoPendiente(userId) {
 
 
 /* =========================================================
-   CATÁLOGO NEXT LEVEL
+   CONSULTA DEL CATÁLOGO
    ========================================================= */
 
 async function consultarCatalogoNextLevel() {
@@ -358,7 +410,7 @@ async function consultarCatalogoNextLevel() {
             resultado = JSON.parse(texto);
         } catch {
             throw new Error(
-                "El catálogo devolvió una respuesta no válida."
+                "Respuesta no válida al cargar el catálogo."
             );
         }
 
@@ -375,7 +427,7 @@ async function consultarCatalogoNextLevel() {
     } catch (error) {
         if (error.name === "AbortError") {
             throw new Error(
-                "El catálogo tardó demasiado en responder."
+                "La consulta del catálogo agotó el tiempo de espera."
             );
         }
 
@@ -532,7 +584,7 @@ async function cargarOfertas() {
     productosMostrados = Object.create(null);
 
     actualizarEstadoCarga(
-        "Conectando con el catálogo...",
+        "Cargando ofertas disponibles...",
         true
     );
 
@@ -566,7 +618,7 @@ async function cargarOfertas() {
 
             if (!productoProveedor) {
                 console.warn(
-                    "[Gamers Gold] Oferta no encontrada en catálogo:",
+                    "[Gamers Gold] Oferta no encontrada en el catálogo:",
                     oferta.id
                 );
 
@@ -597,7 +649,7 @@ async function cargarOfertas() {
 
         if (!cantidad) {
             actualizarEstadoCarga(
-                "No hay ofertas configuradas disponibles en el catálogo de Next Level.",
+                "No hay ofertas disponibles en este momento.",
                 true
             );
 
@@ -618,15 +670,8 @@ async function cargarOfertas() {
         }
 
     } catch (error) {
-        console.error(
-            "Error cargando ofertas:",
-            error
-        );
-
         actualizarEstadoCarga(
-            `No pudimos cargar las ofertas. ${
-                error.message || "Comprueba tu conexión."
-            }`,
+            mensajeErrorCatalogo(error),
             true,
             "error"
         );
@@ -775,7 +820,7 @@ function volverOfertas() {
 
 
 /* =========================================================
-   LLAMADAS A LAS EDGE FUNCTIONS
+   LLAMADAS AL SISTEMA DE PEDIDOS
    ========================================================= */
 
 async function llamarFuncion(
@@ -813,15 +858,19 @@ async function llamarFuncion(
             datos = JSON.parse(texto);
         } catch {
             throw new Error(
-                "El servidor de pedidos devolvió una respuesta no válida."
+                "El sistema devolvió una respuesta no válida."
             );
         }
 
         if (!respuesta.ok) {
+            console.error(
+                "[Gamers Gold] Error del sistema de pedidos:",
+                respuesta.status,
+                datos
+            );
+
             throw new Error(
-                datos.error ||
-                datos.message ||
-                `Error HTTP ${respuesta.status}`
+                "No pudimos procesar la solicitud. Consulta el estado de tu pedido antes de volver a intentarlo."
             );
         }
 
@@ -830,7 +879,7 @@ async function llamarFuncion(
     } catch (error) {
         if (error.name === "AbortError") {
             throw new Error(
-                "El servidor tardó demasiado. Verifica el pedido antes de intentarlo otra vez."
+                "La solicitud tardó demasiado. Verifica el estado del pedido antes de intentarlo otra vez."
             );
         }
 
@@ -874,7 +923,7 @@ async function consultarPedido(accessToken) {
 
         mostrarResultado(
             "¡Recarga completada!",
-            "El proveedor confirmó la recarga correctamente.",
+            "Tu recarga se completó correctamente.",
             id
         );
 
@@ -902,22 +951,23 @@ async function consultarPedido(accessToken) {
 
     if (proveedor === "FAILED") {
         mostrarEstadoPedido(
-            "El proveedor informa FAILED. No vuelvas a comprar todavía; " +
-            "verifica el pedido y el posible reembolso.",
+            "No se ha podido confirmar la recarga. " +
+            "No realices otra compra todavía. " +
+            "Verifica el estado del pedido antes de continuar.",
             "error"
         );
 
     } else {
         mostrarEstadoPedido(
-            datos.message ||
-            "El pedido sigue en proceso. Consulta nuevamente en unos segundos."
+            "Tu pedido sigue en proceso. " +
+            "Vuelve a consultar su estado dentro de unos segundos."
         );
     }
 }
 
 
 /* =========================================================
-   ENVIAR PEDIDO A NEXT LEVEL
+   ENVIAR PEDIDO
    ========================================================= */
 
 async function enviarPedido(accessToken) {
@@ -928,12 +978,11 @@ async function enviarPedido(accessToken) {
     }
 
     /*
-     * IMPORTANTE:
      * Guardamos primero la acción "consultar".
      *
-     * Si la solicitud llega a Next Level pero la respuesta
-     * se pierde, la siguiente ejecución consultará el pedido
-     * en lugar de reenviarlo automáticamente.
+     * Si la solicitud llega al sistema de recargas pero
+     * la respuesta se pierde, la siguiente ejecución
+     * consultará el pedido en lugar de reenviarlo automáticamente.
      */
 
     accionPendiente = "consultar";
@@ -953,8 +1002,7 @@ async function enviarPedido(accessToken) {
 
     mostrarResultado(
         "Pedido enviado",
-        datos.message ||
-        "Next Level recibió la solicitud. Puedes consultar el estado desde esta página.",
+        "Tu solicitud fue recibida. Puedes consultar el estado desde esta página.",
         pedidoPendienteId
     );
 }
@@ -1005,7 +1053,7 @@ async function verificarPedidoGuardado(userId) {
      * Si antes de un error de red ya habíamos guardado
      * "consultar", no debemos cambiarla a "enviar"
      * solamente porque la base de datos todavía no muestra
-     * los datos del proveedor.
+     * los datos del pedido.
      */
 
     const accionAnterior = accionPendiente;
@@ -1135,6 +1183,11 @@ async function crearCompra(
         .maybeSingle();
 
     if (error) {
+        console.error(
+            "[Gamers Gold] Error verificando el producto:",
+            error
+        );
+
         throw new Error(
             "No se pudo verificar el producto antes de comprar."
         );
@@ -1168,7 +1221,7 @@ async function crearCompra(
     }
 
     mostrarEstadoPedido(
-        "Creando pedido local. No cierres esta página..."
+        "Creando tu pedido. No cierres esta página..."
     );
 
     const {
@@ -1183,9 +1236,13 @@ async function crearCompra(
     );
 
     if (errorCompra) {
+        console.error(
+            "[Gamers Gold] Error creando el pedido:",
+            errorCompra
+        );
+
         throw new Error(
-            errorCompra.message ||
-            "No se pudo crear el pedido local. Comprueba tu sesión y saldo."
+            "No se pudo crear el pedido. Comprueba tu sesión y saldo."
         );
     }
 
@@ -1195,7 +1252,7 @@ async function crearCompra(
     ) {
         throw new Error(
             "No recibimos un ID de pedido válido. " +
-            "Revisa game_orders antes de volver a intentarlo."
+            "Revisa el estado del pedido antes de volver a intentarlo."
         );
     }
 
@@ -1334,16 +1391,14 @@ async function manejarConfirmacion() {
             error
         );
 
+        const mensaje = mensajeErrorPedido(error);
+
         mostrarEstadoPedido(
-            error.message ||
-            "No se pudo procesar el pedido.",
+            mensaje,
             "error"
         );
 
-        alert(
-            error.message ||
-            "No se pudo procesar el pedido."
-        );
+        alert(mensaje);
 
     } finally {
         procesandoCompra = false;
