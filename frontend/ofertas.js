@@ -85,6 +85,9 @@ const ES_HONOR_OF_KINGS =
 const ES_GENSHIN =
     JUEGO_NORMALIZADO === "genshinimpact";
 
+const ES_ARENA_BREAKOUT =
+    JUEGO_NORMALIZADO === "arenabreakout";
+
 const ES_VENTAS_HABILITADAS =
     ES_FREE_FIRE ||
     (
@@ -97,6 +100,10 @@ const ES_VENTAS_HABILITADAS =
     ) ||
     (
         ES_GENSHIN &&
+        CONFIG?.habilitarCompras === true
+    ) ||
+    (
+        ES_ARENA_BREAKOUT &&
         CONFIG?.habilitarCompras === true
     );
 
@@ -305,9 +312,12 @@ function guardarPedidoPendiente() {
                 orderId: pedidoPendienteId,
                 accion: accionPendiente,
 
-                ...(ES_GENSHIN && zonaJugadorActual
-                    ? { zoneId: zonaJugadorActual }
-                    : {})
+                ...(
+                    (ES_GENSHIN || ES_ARENA_BREAKOUT) &&
+                    zonaJugadorActual
+                        ? { zoneId: zonaJugadorActual }
+                        : {}
+                )
             })
         );
     } catch (error) {
@@ -387,7 +397,8 @@ function recuperarPedidoPendiente(userId) {
             : "enviar";
 
     zonaJugadorActual =
-        ES_GENSHIN && typeof datos.zoneId === "string"
+        (ES_GENSHIN || ES_ARENA_BREAKOUT) &&
+        typeof datos.zoneId === "string"
             ? datos.zoneId
             : "";
 }
@@ -508,7 +519,7 @@ function productoComprable(local) {
 
 
 /* =========================================================
-   NUEVO: ENCONTRAR OFERTAS POR ID O POR NOMBRE
+   ENCONTRAR OFERTAS POR ID O POR NOMBRE
    ========================================================= */
 
 function buscarProductoProveedorParaOferta(oferta) {
@@ -516,10 +527,6 @@ function buscarProductoProveedorParaOferta(oferta) {
         return null;
     }
 
-    /*
-     * PRIMER INTENTO:
-     * Si la configuración tiene ID, buscar por ID.
-     */
     const idConfigurado = String(
         oferta.id ??
         oferta.provider_product_id ??
@@ -531,11 +538,6 @@ function buscarProductoProveedorParaOferta(oferta) {
         return productosPorId[idConfigurado];
     }
 
-    /*
-     * SEGUNDO INTENTO:
-     * Muchas páginas configuran las ofertas con nombre y emoji,
-     * pero sin ID. Buscamos por nombre en el catálogo.
-     */
     const nombreOferta = normalizarTexto(
         oferta.nombre ??
         oferta.name ??
@@ -548,9 +550,6 @@ function buscarProductoProveedorParaOferta(oferta) {
         return null;
     }
 
-    /*
-     * Comparar con los nombres devueltos por Next Level.
-     */
     const coincidenciaProveedor = productosProveedor.find(
         producto => {
             const nombresProveedor = [
@@ -571,11 +570,6 @@ function buscarProductoProveedorParaOferta(oferta) {
         return coincidenciaProveedor;
     }
 
-    /*
-     * TERCER INTENTO:
-     * Si el nombre no coincide con el proveedor directamente,
-     * buscar el producto local y enlazarlo mediante su ID.
-     */
     const coincidenciaLocal = productosLocales.find(
         producto =>
             normalizarTexto(producto.product_name) === nombreOferta
@@ -591,10 +585,6 @@ function buscarProductoProveedorParaOferta(oferta) {
         }
     }
 
-    /*
-     * No se inventa una coincidencia si no se encuentra
-     * un producto real del catálogo.
-     */
     return null;
 }
 
@@ -723,11 +713,6 @@ async function cargarOfertas() {
         let cantidad = 0;
 
         configuradas.forEach(oferta => {
-            /*
-             * CAMBIO PRINCIPAL:
-             * Ya no descartamos la oferta por no tener ID.
-             * Ahora buscamos primero por ID y luego por nombre.
-             */
             const productoProveedor =
                 buscarProductoProveedorParaOferta(oferta);
 
@@ -764,9 +749,6 @@ async function cargarOfertas() {
                 return;
             }
 
-            /*
-             * Evitar que una misma oferta aparezca duplicada.
-             */
             if (productosMostrados[id]) {
                 return;
             }
@@ -954,7 +936,10 @@ function irAConfirmacion() {
         el("idJugador").value = "";
     }
 
-    if (ES_GENSHIN && el("zonaJugador")) {
+    if (
+        (ES_GENSHIN || ES_ARENA_BREAKOUT) &&
+        el("zonaJugador")
+    ) {
         el("zonaJugador").value = "";
     }
 
@@ -1151,7 +1136,10 @@ async function enviarPedido(accessToken) {
         game_order_id: pedidoPendienteId
     };
 
-    if (ES_GENSHIN && zonaJugadorActual) {
+    if (
+        (ES_GENSHIN || ES_ARENA_BREAKOUT) &&
+        zonaJugadorActual
+    ) {
         cuerpoPedido.zone_id = zonaJugadorActual;
     }
 
@@ -1283,7 +1271,10 @@ async function crearCompra(
         );
     }
 
-    if (ES_GENSHIN && !zoneId) {
+    if (
+        (ES_GENSHIN || ES_ARENA_BREAKOUT) &&
+        !zoneId
+    ) {
         throw new Error("Selecciona el servidor de tu cuenta.");
     }
 
@@ -1332,8 +1323,8 @@ async function crearCompra(
         `Oferta: ${nombreOferta}\n` +
         `ID de jugador: ${playerId}\n` +
         (
-            ES_GENSHIN
-                ? `Servidor: ${zoneId}\n`
+            (ES_GENSHIN || ES_ARENA_BREAKOUT)
+                ? `Servidor/Zona: ${zoneId}\n`
                 : ""
         ) +
         `Precio: ${mostrarPrecio(precioConfirmado)}\n\n` +
@@ -1353,7 +1344,7 @@ async function crearCompra(
         p_player_id: playerId
     };
 
-    if (ES_GENSHIN) {
+    if (ES_GENSHIN || ES_ARENA_BREAKOUT) {
         argumentosCompra.p_zone_id = zoneId;
     }
 
@@ -1387,7 +1378,10 @@ async function crearCompra(
     pedidoPendienteId = orderId;
     accionPendiente = "enviar";
 
-    zonaJugadorActual = ES_GENSHIN ? zoneId : "";
+    zonaJugadorActual =
+        (ES_GENSHIN || ES_ARENA_BREAKOUT)
+            ? zoneId
+            : "";
 
     guardarPedidoPendiente();
 
@@ -1485,19 +1479,26 @@ async function manejarConfirmacion() {
 
         let zoneId = "";
 
-        if (ES_GENSHIN) {
+        if (ES_GENSHIN || ES_ARENA_BREAKOUT) {
             zoneId = String(
                 el("zonaJugador")?.value || ""
             ).trim();
 
-            const zonasPermitidas = [
-                "America",
-                "Europe",
-                "Asia",
-                "TW_HK_MO"
-            ];
+            if (!zoneId) {
+                throw new Error(
+                    "Selecciona el servidor de tu cuenta."
+                );
+            }
 
-            if (!zonasPermitidas.includes(zoneId)) {
+            if (
+                ES_GENSHIN &&
+                ![
+                    "America",
+                    "Europe",
+                    "Asia",
+                    "TW_HK_MO"
+                ].includes(zoneId)
+            ) {
                 throw new Error(
                     "Selecciona el servidor de tu cuenta."
                 );
@@ -1656,4 +1657,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-       }
+}
