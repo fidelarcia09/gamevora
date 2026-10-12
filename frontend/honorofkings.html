@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Consulta los paquetes de Tokens de Honor of Kings en Gamers Gold Top-Up.">
-
+    <meta name="description" content="Recarga Tokens de Honor of Kings en Gamers Gold Top-Up.">
     <title>Honor of Kings | Gamers Gold Top-Up</title>
 
     <style>
@@ -59,7 +58,7 @@
             border: 1px solid #15518c;
             border-radius: 20px;
             padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+            box-shadow: 0 0 30px rgba(0, 140, 255, .15);
         }
 
         .icono {
@@ -104,7 +103,7 @@
 
         input:focus {
             border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+            box-shadow: 0 0 8px rgba(0, 157, 255, .2);
         }
 
         .ayuda {
@@ -132,6 +131,11 @@
             border-color: #843d4b;
         }
 
+        .estado.exito {
+            color: #9bffd0;
+            border-color: #237c61;
+        }
+
         .catalogo {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -153,7 +157,7 @@
             border-radius: 13px;
             text-align: left;
             cursor: pointer;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color .2s, box-shadow .2s;
         }
 
         .producto:hover {
@@ -162,7 +166,12 @@
 
         .producto.seleccionado {
             border-color: #00baff;
-            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+            box-shadow: 0 0 12px rgba(0, 186, 255, .2);
+        }
+
+        .producto:disabled {
+            opacity: .7;
+            cursor: wait;
         }
 
         .producto-nombre {
@@ -172,10 +181,15 @@
             overflow-wrap: anywhere;
         }
 
-        .producto-estado {
+        .producto-precio {
             color: #45c8ff;
-            font-size: 12px;
+            font-size: 17px;
             font-weight: bold;
+        }
+
+        .producto-estado {
+            color: #91abc5;
+            font-size: 12px;
         }
 
         .mensaje-vacio {
@@ -187,12 +201,6 @@
             color: #8299b4;
             font-size: 13px;
             line-height: 1.6;
-        }
-
-        .separador-ofertas {
-            margin-top: 22px;
-            padding-top: 18px;
-            border-top: 1px solid #164b8f;
         }
 
         .boton {
@@ -208,8 +216,13 @@
             margin-top: 18px;
             background: linear-gradient(90deg, #087cff, #00baff);
             color: white;
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .continuar:disabled {
             cursor: not-allowed;
-            opacity: 0.55;
+            opacity: .45;
         }
 
         .boton-ofertas {
@@ -222,6 +235,12 @@
         .boton-ofertas:hover {
             background: #0a2345;
             border-color: #38a8ff;
+        }
+
+        .separador-ofertas {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #164b8f;
         }
 
         .nota {
@@ -271,12 +290,10 @@
         <h1>Honor of Kings</h1>
 
         <p class="descripcion">
-            Selecciona el paquete de Tokens que deseas consultar.
+            Selecciona tu paquete de Tokens y realiza tu recarga.
         </p>
 
-        <label class="etiqueta" for="idJugador">
-            ID del jugador
-        </label>
+        <label class="etiqueta" for="idJugador">ID del jugador</label>
 
         <input
             type="text"
@@ -287,395 +304,562 @@
         >
 
         <p class="ayuda">
-            Comprueba tu ID antes de realizar una recarga.
+            Comprueba que el ID sea correcto antes de continuar.
         </p>
 
-        <label class="etiqueta">
-            Selecciona un paquete de Tokens
-        </label>
+        <label class="etiqueta">Selecciona tu paquete</label>
 
         <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo de Next Level...
+            Cargando paquetes...
         </div>
 
-        <div
-            id="catalogo"
-            class="catalogo"
-            aria-label="Paquetes de Tokens"
-        ></div>
+        <div id="catalogo" class="catalogo" aria-label="Paquetes de Tokens"></div>
 
-        <button
-            id="botonContinuar"
-            class="boton continuar"
-            type="button"
-            disabled
-        >
-            Compras temporalmente desactivadas
+        <button id="botonContinuar" class="boton continuar" type="button" disabled>
+            Selecciona un paquete
+        </button>
+
+        <div id="estadoPedido" class="estado" aria-live="polite" hidden></div>
+
+        <button id="botonConsultar" class="boton boton-ofertas" type="button" hidden>
+            Consultar estado del pedido
         </button>
 
         <div class="separador-ofertas">
             <button
+                id="botonOfertas"
                 class="boton boton-ofertas"
                 type="button"
-                onclick="abrirOfertas()"
             >
                 🎁 Ofertas especiales
             </button>
         </div>
 
         <p class="nota">
-            Los paquetes se consultan desde Next Level.
-            Las compras se habilitarán cuando se configuren
-            los precios y se complete la integración del sistema de pedidos.
+            Comprueba cuidadosamente tu ID antes de confirmar la recarga.
         </p>
 
     </main>
-
 </div>
 
-<script>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
 "use strict";
 
-/* =====================================================
-   CONFIGURACIÓN
-===================================================== */
+const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const SUPABASE_URL =
-    "https://gsuhzcavghsiolmipnzi.supabase.co";
+const URL_CREAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/nextlevel-crear-pedido";
 
-const SUPABASE_KEY =
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+const URL_CONSULTAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
 
-const URL_CATALOGO =
-    SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const catalogo = document.getElementById("catalogo");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
+const idJugador = document.getElementById("idJugador");
+const botonContinuar = document.getElementById("botonContinuar");
+const estadoPedido = document.getElementById("estadoPedido");
+const botonConsultar = document.getElementById("botonConsultar");
 
 let productosDisponibles = [];
 let productoSeleccionado = null;
+let procesando = false;
+let pedidoPendienteId = null;
 
-/* =====================================================
-   NAVEGACIÓN
-===================================================== */
+const CLAVE_PEDIDO =
+    "ggt_honor_of_kings_pedido_pendiente";
 
-function abrirOfertas() {
-    window.location.href = "ofertas-honor.html";
-}
-
-/* =====================================================
-   MENSAJES
-===================================================== */
-
-function mostrarEstado(mensaje, esError = false) {
+function mostrarEstadoCatalogo(mensaje, error = false) {
     estadoCatalogo.textContent = mensaje;
-    estadoCatalogo.classList.toggle("error", esError);
+    estadoCatalogo.classList.toggle("error", error);
 }
 
-/* =====================================================
-   EXTRAER PRODUCTOS
-===================================================== */
-
-function extraerProductos(respuesta) {
-    if (Array.isArray(respuesta)) {
-        return respuesta;
-    }
-
-    if (!respuesta || typeof respuesta !== "object") {
-        return [];
-    }
-
-    if (Array.isArray(respuesta.productos)) {
-        return respuesta.productos;
-    }
-
-    if (Array.isArray(respuesta.products)) {
-        return respuesta.products;
-    }
-
-    if (Array.isArray(respuesta.data)) {
-        return respuesta.data;
-    }
-
-    if (Array.isArray(respuesta.data?.products)) {
-        return respuesta.data.products;
-    }
-
-    if (Array.isArray(respuesta.data?.productos)) {
-        return respuesta.data.productos;
-    }
-
-    return [];
+function mostrarEstadoPedido(mensaje, tipo = "") {
+    estadoPedido.hidden = false;
+    estadoPedido.textContent = mensaje;
+    estadoPedido.classList.toggle("error", tipo === "error");
+    estadoPedido.classList.toggle("exito", tipo === "exito");
 }
 
-/* =====================================================
-   DATOS DE PRODUCTOS
-===================================================== */
-
-function obtenerProductId(producto) {
-    return String(
-        producto.productId ||
-        producto.product_id ||
-        producto.provider_product_id ||
-        producto.id ||
-        ""
-    ).trim();
+function normalizarTexto(texto) {
+    return String(texto || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[\s_-]+/g, "");
 }
-
-function obtenerNombre(producto) {
-    return String(
-        producto.name ||
-        producto.productName ||
-        producto.product_name ||
-        producto.title ||
-        producto.nombre ||
-        obtenerProductId(producto)
-    ).trim();
-}
-
-/* =====================================================
-   IDENTIFICAR PAQUETES DE TOKENS
-===================================================== */
 
 function esPaqueteTokens(producto) {
-    const id = obtenerProductId(producto).toLowerCase();
-    const nombre = obtenerNombre(producto).toLowerCase();
+    const id = String(producto.provider_product_id || "").toLowerCase();
+    const nombre = String(producto.product_name || "").trim();
 
-    const idCorrecto =
-        /^fz-honor_of_kings-\d+_tokens$/.test(id);
-
-    const nombreCorrecto =
-        /^\d[\d,.\s]*\s*tokens?$/.test(nombre);
-
-    return idCorrecto || nombreCorrecto;
+    return (
+        /^fz-honor_of_kings-\d+_tokens$/.test(id) ||
+        /^\d[\d,.\s]*\s*tokens?$/i.test(nombre)
+    );
 }
 
-/* =====================================================
-   CARGAR CATÁLOGO
-===================================================== */
+function formatoPrecio(precio) {
+    const valor = Number(precio);
+
+    if (!Number.isFinite(valor)) {
+        return "Precio no disponible";
+    }
+
+    return valor.toLocaleString("es-ES", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }) + " GVR";
+}
+
+function actualizarBoton() {
+    const idValido = idJugador.value.trim().length > 0;
+    const productoValido = Boolean(productoSeleccionado);
+
+    botonContinuar.disabled =
+        procesando ||
+        !idValido ||
+        !productoValido ||
+        Boolean(pedidoPendienteId);
+
+    if (procesando) {
+        botonContinuar.textContent = "Procesando recarga...";
+    } else if (pedidoPendienteId) {
+        botonContinuar.textContent = "Pedido pendiente de consulta";
+    } else if (!productoValido) {
+        botonContinuar.textContent = "Selecciona un paquete";
+    } else if (!idValido) {
+        botonContinuar.textContent = "Introduce tu ID de jugador";
+    } else {
+        botonContinuar.textContent =
+            "Recargar por " + formatoPrecio(productoSeleccionado.price_gvr);
+    }
+}
+
+function obtenerIdPedido(data) {
+    if (typeof data === "string") {
+        return data;
+    }
+
+    if (Array.isArray(data) && data.length) {
+        return obtenerIdPedido(data[0]);
+    }
+
+    if (data && typeof data === "object") {
+        return (
+            data.game_order_id ||
+            data.order_id ||
+            data.orderId ||
+            data.id ||
+            data.purchase_game_product ||
+            null
+        );
+    }
+
+    return null;
+}
+
+function obtenerMensajeError(error, fallback) {
+    const texto = String(
+        error?.message ||
+        error?.details ||
+        error?.hint ||
+        ""
+    );
+
+    // Evita mostrar al cliente detalles internos del sistema.
+    if (/nextlevel|provider|supabase|postgres|function|jwt|bearer/i.test(texto)) {
+        return fallback;
+    }
+
+    return texto || fallback;
+}
 
 async function cargarCatalogo() {
-    productosDisponibles = [];
-    productoSeleccionado = null;
-
+    mostrarEstadoCatalogo("Cargando paquetes...");
     catalogo.replaceChildren();
 
-    mostrarEstado("Conectando con el catálogo de Next Level...");
+    const { data, error } = await supabase
+        .from("game_products")
+        .select("id, game, product_name, price_gvr, active, provider, provider_product_id")
+        .eq("game", "Honor of Kings")
+        .eq("provider", "nextlevel")
+        .eq("active", true)
+        .gt("price_gvr", 0);
 
-    try {
-        const respuestaHTTP = await fetch(
-            URL_CATALOGO + "?game=honor-of-kings",
-            {
-                method: "GET",
-                headers: {
-                    "apikey": SUPABASE_KEY,
-                    "Authorization": "Bearer " + SUPABASE_KEY,
-                    "Accept": "application/json"
-                },
-                cache: "no-store"
-            }
+    if (error) {
+        console.error("Error al cargar productos:", error);
+        mostrarEstadoCatalogo(
+            "No pudimos cargar los paquetes. Intenta recargar la página.",
+            true
         );
+        return;
+    }
 
-        let respuesta;
-
-        try {
-            respuesta = await respuestaHTTP.json();
-        } catch {
-            throw new Error(
-                "El catálogo devolvió una respuesta no válida."
-            );
-        }
-
-        console.log("CATÁLOGO HONOR OF KINGS:", respuesta);
-
-        if (!respuestaHTTP.ok) {
-            throw new Error(
-                respuesta.message ||
-                respuesta.error ||
-                "Error HTTP " + respuestaHTTP.status
-            );
-        }
-
-        if (respuesta?.success === false) {
-            throw new Error(
-                respuesta.message ||
-                respuesta.error ||
-                "No se pudo cargar el catálogo."
-            );
-        }
-
-        const productos = extraerProductos(respuesta);
-
-        if (productos.length === 0) {
-            throw new Error(
-                "Next Level no devolvió productos para Honor of Kings."
-            );
-        }
-
-        const mapa = new Map();
-
-        productos.forEach(producto => {
-            if (
-                !producto ||
-                producto.available !== true ||
-                !obtenerProductId(producto) ||
-                !esPaqueteTokens(producto)
-            ) {
-                return;
-            }
-
-            const id = obtenerProductId(producto);
-
-            if (!mapa.has(id)) {
-                mapa.set(id, producto);
-            }
-        });
-
-        productosDisponibles = Array.from(mapa.values());
-
-        productosDisponibles.sort((a, b) => {
-            const nombreA = obtenerNombre(a);
-            const nombreB = obtenerNombre(b);
-
+    productosDisponibles = (data || [])
+        .filter(producto =>
+            producto.provider_product_id &&
+            esPaqueteTokens(producto) &&
+            Number.isFinite(Number(producto.price_gvr)) &&
+            Number(producto.price_gvr) > 0
+        )
+        .sort((a, b) => {
             const cantidadA =
-                parseInt(nombreA.replace(/[^\d]/g, ""), 10) || 0;
-
+                parseInt(a.product_name.replace(/[^\d]/g, ""), 10) || 0;
             const cantidadB =
-                parseInt(nombreB.replace(/[^\d]/g, ""), 10) || 0;
+                parseInt(b.product_name.replace(/[^\d]/g, ""), 10) || 0;
 
             return cantidadA - cantidadB;
         });
 
-        console.log(
-            "PAQUETES HONOR OF KINGS:",
-            productosDisponibles.map(producto => ({
-                id: obtenerProductId(producto),
-                nombre: obtenerNombre(producto)
-            }))
-        );
-
-        if (productosDisponibles.length === 0) {
-            mostrarEstado(
-                "No encontramos paquetes de Tokens disponibles con los identificadores esperados.",
-                true
-            );
-
-            catalogo.innerHTML = `
-                <div class="mensaje-vacio">
-                    No pudimos identificar los paquetes disponibles.
-                    Necesitamos revisar los identificadores reales
-                    del catálogo antes de ajustar el filtro.
-                </div>
-            `;
-
-            return;
-        }
-
-        mostrarProductos(productosDisponibles);
-
-        mostrarEstado(
-            productosDisponibles.length +
-            " paquetes de Tokens encontrados. " +
-            "Las compras todavía no están habilitadas."
-        );
-
-    } catch (error) {
-        console.error("ERROR HONOR OF KINGS:", error);
-
-        productosDisponibles = [];
-        productoSeleccionado = null;
-
+    if (!productosDisponibles.length) {
+        mostrarEstadoCatalogo("No hay paquetes disponibles en este momento.");
         catalogo.innerHTML = `
             <div class="mensaje-vacio">
-                No se pudo cargar el catálogo.
-                Intenta recargar la página.
+                No hay paquetes disponibles para seleccionar.
             </div>
         `;
-
-        mostrarEstado(
-            "No se pudo conectar con el catálogo de Next Level. " +
-            error.message,
-            true
-        );
+        return;
     }
+
+    mostrarProductos();
+
+    mostrarEstadoCatalogo(
+        productosDisponibles.length + " paquetes disponibles."
+    );
 }
 
-/* =====================================================
-   MOSTRAR PAQUETES
-===================================================== */
-
-function mostrarProductos(productos) {
+function mostrarProductos() {
     catalogo.replaceChildren();
 
-    productos.forEach(producto => {
-        const tarjeta = document.createElement("button");
-
-        tarjeta.type = "button";
-        tarjeta.className = "producto";
-
-        tarjeta.setAttribute("aria-pressed", "false");
+    productosDisponibles.forEach(producto => {
+        const boton = document.createElement("button");
+        boton.type = "button";
+        boton.className = "producto";
+        boton.setAttribute("aria-pressed", "false");
 
         const nombre = document.createElement("div");
         nombre.className = "producto-nombre";
-        nombre.textContent = obtenerNombre(producto);
+        nombre.textContent = producto.product_name;
+
+        const precio = document.createElement("div");
+        precio.className = "producto-precio";
+        precio.textContent = formatoPrecio(producto.price_gvr);
 
         const estado = document.createElement("div");
         estado.className = "producto-estado";
         estado.textContent = "Seleccionar paquete";
 
-        tarjeta.append(nombre, estado);
+        boton.append(nombre, precio, estado);
 
-        tarjeta.addEventListener("click", () => {
-            seleccionarProducto(producto, tarjeta);
+        boton.addEventListener("click", () => {
+            if (procesando || pedidoPendienteId) return;
+
+            productoSeleccionado = producto;
+
+            document.querySelectorAll(".producto").forEach(elemento => {
+                elemento.classList.remove("seleccionado");
+                elemento.setAttribute("aria-pressed", "false");
+
+                const etiqueta = elemento.querySelector(".producto-estado");
+                if (etiqueta) etiqueta.textContent = "Seleccionar paquete";
+            });
+
+            boton.classList.add("seleccionado");
+            boton.setAttribute("aria-pressed", "true");
+            estado.textContent = "✓ Seleccionado";
+
+            actualizarBoton();
         });
 
-        catalogo.appendChild(tarjeta);
+        catalogo.appendChild(boton);
     });
 }
 
-/* =====================================================
-   SELECCIONAR PAQUETE
-===================================================== */
+async function enviarPedido() {
+    const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
 
-function seleccionarProducto(producto, tarjeta) {
-    productoSeleccionado = producto;
-
-    document.querySelectorAll(".producto").forEach(elemento => {
-        elemento.classList.remove("seleccionado");
-        elemento.setAttribute("aria-pressed", "false");
-
-        const texto = elemento.querySelector(".producto-estado");
-
-        if (texto) {
-            texto.textContent = "Seleccionar paquete";
-        }
-    });
-
-    tarjeta.classList.add("seleccionado");
-    tarjeta.setAttribute("aria-pressed", "true");
-
-    const texto = tarjeta.querySelector(".producto-estado");
-
-    if (texto) {
-        texto.textContent = "✓ Paquete seleccionado";
+    if (sessionError || !sessionData?.session) {
+        mostrarEstadoPedido(
+            "Inicia sesión para realizar una recarga.",
+            "error"
+        );
+        return;
     }
 
-    /*
-     * Selección visual solamente.
-     * No se realizan compras ni se crean pedidos.
-     */
+    const accessToken = sessionData.session.access_token;
 
-    console.log(
-        "PAQUETE SELECCIONADO:",
-        obtenerProductId(producto),
-        obtenerNombre(producto)
+    const respuesta = await fetch(URL_CREAR_PEDIDO, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + accessToken
+        },
+        body: JSON.stringify({
+            game_order_id: pedidoPendienteId
+        })
+    });
+
+    let resultado;
+
+    try {
+        resultado = await respuesta.json();
+    } catch {
+        throw new Error("No pudimos confirmar el estado del pedido.");
+    }
+
+    if (!respuesta.ok || resultado?.success === false || resultado?.error) {
+        throw new Error(
+            obtenerMensajeError(
+                { message: resultado?.message || resultado?.error },
+                "No pudimos enviar la recarga. Consulta el estado antes de volver a intentarlo."
+            )
+        );
+    }
+
+    mostrarEstadoPedido(
+        resultado?.message ||
+        "Tu pedido fue enviado. Estamos comprobando su estado."
     );
+
+    botonConsultar.hidden = false;
 }
 
-/* =====================================================
-   INICIALIZAR
-===================================================== */
+async function crearCompra() {
+    if (procesando || pedidoPendienteId) return;
 
+    const playerId = idJugador.value.trim();
+
+    if (!playerId) {
+        mostrarEstadoPedido("Introduce tu ID de jugador.", "error");
+        idJugador.focus();
+        return;
+    }
+
+    if (!productoSeleccionado) {
+        mostrarEstadoPedido("Selecciona primero un paquete.", "error");
+        return;
+    }
+
+    procesando = true;
+    actualizarBoton();
+
+    botonConsultar.hidden = true;
+    estadoPedido.hidden = true;
+
+    try {
+        const { data: sessionData, error: sessionError } =
+            await supabase.auth.getSession();
+
+        if (sessionError || !sessionData?.session) {
+            throw new Error("Inicia sesión para realizar una recarga.");
+        }
+
+        // Revalidar el producto y su precio directamente en la base de datos.
+        const { data: productoActual, error: productoError } = await supabase
+            .from("game_products")
+            .select("id, game, product_name, price_gvr, active, provider, provider_product_id")
+            .eq("id", productoSeleccionado.id)
+            .eq("game", "Honor of Kings")
+            .eq("provider", "nextlevel")
+            .eq("active", true)
+            .maybeSingle();
+
+        if (productoError || !productoActual) {
+            throw new Error(
+                "Este paquete ya no está disponible. Actualiza la página."
+            );
+        }
+
+        if (
+            !productoActual.provider_product_id ||
+            !Number.isFinite(Number(productoActual.price_gvr)) ||
+            Number(productoActual.price_gvr) <= 0
+        ) {
+            throw new Error("El precio del paquete no es válido.");
+        }
+
+        mostrarEstadoPedido("Creando tu pedido...");
+
+        const { data: rpcData, error: rpcError } = await supabase.rpc(
+            "purchase_game_product",
+            {
+                p_product_id: productoActual.id,
+                p_player_id: playerId
+            }
+        );
+
+        if (rpcError) {
+            throw new Error(
+                obtenerMensajeError(
+                    rpcError,
+                    "No pudimos crear el pedido. Comprueba tu saldo e inténtalo de nuevo."
+                )
+            );
+        }
+
+        const orderId = obtenerIdPedido(rpcData);
+
+        if (!orderId || typeof orderId !== "string") {
+            console.error("Respuesta de compra inesperada:", rpcData);
+            throw new Error(
+                "No pudimos confirmar el número del pedido. Comprueba tu historial antes de volver a intentarlo."
+            );
+        }
+
+        pedidoPendienteId = orderId;
+        localStorage.setItem(CLAVE_PEDIDO, orderId);
+
+        mostrarEstadoPedido("Pedido creado. Enviando la recarga...");
+
+        await enviarPedido();
+
+    } catch (error) {
+        console.error("Error al crear la compra:", error);
+
+        mostrarEstadoPedido(
+            obtenerMensajeError(
+                error,
+                "No pudimos completar la solicitud. Comprueba el estado del pedido antes de intentarlo otra vez."
+            ),
+            "error"
+        );
+
+        // Si el pedido ya se creó en la base de datos, conservamos su ID
+        // para no crear otro accidentalmente.
+        if (pedidoPendienteId) {
+            botonConsultar.hidden = false;
+        }
+    } finally {
+        procesando = false;
+        actualizarBoton();
+    }
+}
+
+async function consultarPedido() {
+    if (!pedidoPendienteId || procesando) return;
+
+    procesando = true;
+    actualizarBoton();
+
+    try {
+        const { data: sessionData, error: sessionError } =
+            await supabase.auth.getSession();
+
+        if (sessionError || !sessionData?.session) {
+            throw new Error("Inicia sesión para consultar tu pedido.");
+        }
+
+        const respuesta = await fetch(URL_CONSULTAR_PEDIDO, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": SUPABASE_KEY,
+                "Authorization": "Bearer " + sessionData.session.access_token
+            },
+            body: JSON.stringify({
+                game_order_id: pedidoPendienteId
+            })
+        });
+
+        let resultado;
+
+        try {
+            resultado = await respuesta.json();
+        } catch {
+            throw new Error("No pudimos consultar el pedido.");
+        }
+
+        if (!respuesta.ok || resultado?.success === false) {
+            throw new Error(
+                obtenerMensajeError(
+                    { message: resultado?.message || resultado?.error },
+                    "No pudimos consultar el pedido. Inténtalo de nuevo."
+                )
+            );
+        }
+
+        const estado = String(
+            resultado?.status ||
+            resultado?.provider_status ||
+            resultado?.order?.status ||
+            resultado?.data?.status ||
+            ""
+        ).toUpperCase();
+
+        const mensaje =
+            resultado?.message ||
+            resultado?.order?.message ||
+            resultado?.data?.message;
+
+        if (["COMPLETED", "COMPLETADO", "SUCCESS", "SUCCEEDED"].includes(estado)) {
+            mostrarEstadoPedido(
+                mensaje || "¡Recarga completada! Comprueba tu cuenta del juego.",
+                "exito"
+            );
+
+            pedidoPendienteId = null;
+            localStorage.removeItem(CLAVE_PEDIDO);
+            botonConsultar.hidden = true;
+
+        } else if (["FAILED", "REFUNDED", "REFUND", "REJECTED"].includes(estado)) {
+            mostrarEstadoPedido(
+                mensaje || "El pedido no se completó. Si corresponde, se procesará el reembolso.",
+                "error"
+            );
+
+            // Conservamos la referencia para impedir duplicados.
+            // No se permite crear una segunda compra automáticamente.
+            botonConsultar.hidden = false;
+
+        } else {
+            mostrarEstadoPedido(
+                mensaje || "Tu pedido sigue en proceso. Puedes consultar su estado nuevamente."
+            );
+        }
+
+    } catch (error) {
+        console.error("Error al consultar pedido:", error);
+
+        mostrarEstadoPedido(
+            obtenerMensajeError(
+                error,
+                "No pudimos consultar el pedido. Inténtalo de nuevo."
+            ),
+            "error"
+        );
+    } finally {
+        procesando = false;
+        actualizarBoton();
+    }
+}
+
+idJugador.addEventListener("input", actualizarBoton);
+botonContinuar.addEventListener("click", crearCompra);
+botonConsultar.addEventListener("click", consultarPedido);
+
+document.getElementById("botonOfertas").addEventListener("click", () => {
+    window.location.href = "ofertas-honor.html";
+});
+
+// Recuperar una referencia pendiente para evitar pedidos duplicados.
+const pedidoGuardado = localStorage.getItem(CLAVE_PEDIDO);
+
+if (pedidoGuardado) {
+    pedidoPendienteId = pedidoGuardado;
+    mostrarEstadoPedido(
+        "Tienes un pedido anterior pendiente de consultar."
+    );
+    botonConsultar.hidden = false;
+}
+
+actualizarBoton();
 cargarCatalogo();
 </script>
 
