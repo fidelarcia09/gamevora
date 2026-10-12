@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Wallet | Gamers Gold Top-Up</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background: #050b18;
+        color: white;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .contenedor {
+        max-width: 500px;
+        margin: auto;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: 900;
+    }
+
+    .rayo {
+        color: #00b7ff;
+        text-shadow: 0 0 12px #008cff;
+    }
+
+    .volver {
+        color: #28a9ff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .card {
+        background: #091a35;
+        border: 1px solid #15518c;
+        border-radius: 20px;
+        padding: 25px 22px;
+        box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        margin-bottom: 8px;
+    }
+
+    .subtitulo {
+        text-align: center;
+        color: #8195ad;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-bottom: 25px;
+    }
+
+    .saldo {
+        margin-bottom: 18px;
+        padding: 24px 15px;
+        border-radius: 15px;
+        text-align: center;
+        background: linear-gradient(135deg, #08244a, #063467);
+        border: 1px solid #168cff;
+        box-shadow: 0 0 20px rgba(0, 140, 255, 0.15);
+    }
+
+    .saldo-titulo {
+        color: #9bcfff;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .saldo-valor {
+        font-size: 28px;
+        font-weight: 900;
+        color: white;
+        overflow-wrap: anywhere;
+    }
+
+    .boton {
+        display: block;
+        width: 100%;
+        padding: 13px;
+        margin-top: 10px;
+        border-radius: 10px;
+        text-align: center;
+        text-decoration: none;
+        background: linear-gradient(90deg, #087cff, #00baff);
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+    }
+
+    .boton-secundario {
+        background: #0b203b;
+        border: 1px solid #20527e;
+    }
+
+    .estado {
+        text-align: center;
+        color: #8195ad;
+        font-size: 12px;
+        line-height: 1.5;
+        margin-top: 15px;
+    }
+
+    @media (max-width: 400px) {
+        .header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+</style>
+
+</head><body><div class="contenedor"><div class="header">
+
+    <div class="logo">
+        <span class="rayo">⚡</span> GAMERS GOLD
+    </div>
+
+    <a href="cuenta.html" class="volver">
+        Mi cuenta
+    </a>
+
+</div>
+
+<div class="card">
+
+    <h1>Mi Wallet</h1>
+
+    <p class="subtitulo">
+        Consulta tu saldo y administra tus GVR.
+    </p>
+
+    <div class="saldo">
+
+        <div class="saldo-titulo">
+            Saldo disponible
+        </div>
+
+        <div class="saldo-valor" id="saldoGVR">
+            Cargando...
+        </div>
+
+    </div>
+
+    <a href="recargar-gvr.html" class="boton">
+        Recargar GVR
+    </a>
+
+    <a href="movimientos.html" class="boton boton-secundario">
+        Ver movimientos
+    </a>
+
+    <p class="estado" id="estadoWallet"></p>
+
+</div>
+
+</div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+async function cargarWallet() {
+    const saldoElemento =
+        document.getElementById("saldoGVR");
+
+    const estadoElemento =
+        document.getElementById("estadoWallet");
+
+    const { data, error } =
+        await supabaseClient.auth.getUser();
+
+    if (error || !data.user) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    const usuario = data.user;
+
+    const { data: wallet, error: walletError } =
+        await supabaseClient
+            .from("wallets")
+            .select("balance")
+            .eq("user_id", usuario.id)
+            .maybeSingle();
+
+    if (walletError) {
+        console.error(
+            "Error cargando wallet:",
+            walletError
+        );
+
+        saldoElemento.textContent = "No disponible";
+
+        estadoElemento.textContent =
+            "No se pudo consultar el saldo. Inténtalo nuevamente.";
+
+        return;
+    }
+
+    if (!wallet) {
+        saldoElemento.textContent = "0 GVR";
+
+        estadoElemento.textContent =
+            "No se encontró una wallet para esta cuenta.";
+
+        return;
+    }
+
+    const saldo = Number(wallet.balance);
+
+    if (!Number.isFinite(saldo)) {
+        saldoElemento.textContent = "No disponible";
+
+        estadoElemento.textContent =
+            "No se pudo interpretar el saldo de la wallet.";
+
+        return;
+    }
+
+    saldoElemento.textContent =
+        `⚡ ${saldo.toLocaleString("es-ES", {
+            maximumFractionDigits: 2
+        })} GVR`;
+
+    estadoElemento.textContent = "";
+}
+
+cargarWallet();
+</script></body>
+</html>
