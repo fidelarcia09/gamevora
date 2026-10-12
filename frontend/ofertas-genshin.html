@@ -7,7 +7,6 @@
     <title>Ofertas Especiales | Genshin Impact</title>
 
     <style>
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -25,6 +24,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
             padding: 18px;
             border-bottom: 1px solid #12385f;
             background: #071225;
@@ -47,6 +47,7 @@
             padding: 9px 13px;
             border-radius: 9px;
             font-size: 13px;
+            white-space: nowrap;
         }
 
         .contenedor {
@@ -80,6 +81,7 @@
             text-align: center;
             color: #8fa5bd;
             font-size: 13px;
+            line-height: 1.5;
             margin-bottom: 22px;
         }
 
@@ -99,7 +101,7 @@
 
         .boton-oferta {
             width: 100%;
-            height: 150px;
+            min-height: 150px;
             padding: 0;
             border: 1px solid #204c78;
             border-radius: 14px;
@@ -111,17 +113,24 @@
             flex-direction: column;
             transition: 0.2s;
             box-shadow: 0 0 12px rgba(0, 140, 255, 0.08);
+            text-align: left;
         }
 
-        .boton-oferta:hover {
+        .boton-oferta:hover:not(:disabled) {
             border-color: #159dff;
             background: #0a1d38;
             box-shadow: 0 0 18px rgba(0, 157, 255, 0.22);
             transform: translateY(-2px);
         }
 
+        .boton-oferta:disabled {
+            cursor: not-allowed;
+            opacity: 0.75;
+        }
+
         .foto-oferta {
             width: 100%;
+            min-height: 92px;
             flex: 1;
             background: #07172d;
             display: flex;
@@ -130,9 +139,8 @@
             overflow: hidden;
         }
 
-        .foto-oferta span {
-            color: #315779;
-            font-size: 13px;
+        .emoji-oferta {
+            font-size: 38px;
         }
 
         .nombre-oferta {
@@ -149,13 +157,6 @@
             font-weight: bold;
             text-align: left;
             border-top: 1px solid #204c78;
-        }
-
-        .precio-boton {
-            color: #00baff;
-            white-space: nowrap;
-            font-size: 14px;
-            font-weight: 900;
         }
 
         .boton-oferta.seleccionado {
@@ -265,6 +266,7 @@
             color: white;
             font-weight: bold;
             text-align: right;
+            overflow-wrap: anywhere;
         }
 
         .campo-id {
@@ -278,7 +280,8 @@
             margin-bottom: 7px;
         }
 
-        .campo-id input {
+        .campo-id input,
+        .campo-id select {
             width: 100%;
             padding: 13px;
             background: #061226;
@@ -289,9 +292,41 @@
             font-size: 15px;
         }
 
-        .campo-id input:focus {
+        .campo-id input:focus,
+        .campo-id select:focus {
             border-color: #159dff;
             box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
+
+        .campo-id select option {
+            background: #061226;
+            color: white;
+        }
+
+        .estado {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            color: #8fa5bd;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .estado.error {
+            border-color: #a83b52;
+            color: #ff9aaa;
+        }
+
+        .nota {
+            margin-top: 15px;
+            color: #8fa5bd;
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: center;
         }
 
         .exito {
@@ -324,15 +359,37 @@
             color: #00baff;
             font-size: 13px;
             font-weight: bold;
+            overflow-wrap: anywhere;
         }
 
+        @media (max-width: 380px) {
+            header {
+                padding: 14px 12px;
+            }
+
+            .logo {
+                font-size: 16px;
+            }
+
+            .volver {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .ofertas {
+                padding: 22px 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
 <header>
-
     <div class="logo">
         <span class="rayo">⚡</span>
         Gamers Gold Top-Up
@@ -341,87 +398,52 @@
     <a href="genshinimpact.html" class="volver">
         ← Volver
     </a>
-
 </header>
-
 
 <main class="contenedor">
 
-
-    <!-- ==============================
-         OFERTAS
-         ============================== -->
+    <!-- OFERTAS -->
 
     <section
         id="pantallaOfertas"
         class="ofertas pantalla activa"
     >
+        <div class="icono">🎁</div>
 
-        <div class="icono">
-            🎁
-        </div>
+        <h1>Ofertas Especiales</h1>
 
-        <h1>
-            Ofertas Especiales
-        </h1>
-
-        <p class="descripcion">
+        <p
+            id="descripcionOfertas"
+            class="descripcion"
+        >
             Elige una oferta especial de Genshin Impact.
         </p>
 
+        <div
+            id="estadoProductos"
+            class="estado"
+            role="status"
+            aria-live="polite"
+        ></div>
 
-        <div class="lista-ofertas">
-
-            <button
-                class="boton-oferta"
-                type="button"
-                onclick="seleccionarOferta(
-                    this,
-                    'Blessing of the Welkin Moon',
-                    100
-                )"
-            >
-
-                <div class="foto-oferta">
-                    <span>🌙</span>
-                </div>
-
-                <div class="nombre-oferta">
-
-                    <span>
-                        Blessing of the Welkin Moon
-                    </span>
-
-                    <span class="precio-boton">
-                        100 GVR
-                    </span>
-
-                </div>
-
-            </button>
-
-        </div>
-
+        <div
+            id="listaOfertas"
+            class="lista-ofertas"
+        ></div>
 
         <div
             id="precioSeleccionado"
             class="precio-oferta"
             style="display:none;"
         >
-
             <div class="precio-titulo">
                 Precio de la oferta
             </div>
 
-            <div
-                id="precio"
-                class="precio"
-            >
+            <div id="precio" class="precio">
                 0 GVR
             </div>
-
         </div>
-
 
         <button
             id="continuarBtn"
@@ -430,102 +452,92 @@
             onclick="irAConfirmacion()"
             style="display:none;"
         >
-            Continuar ⚡
+            Continuar
         </button>
 
+        <p id="notaOfertas" class="nota">
+            Los precios se muestran en GVR.
+        </p>
     </section>
 
 
-    <!-- ==============================
-         CONFIRMACIÓN
-         ============================== -->
+    <!-- CONFIRMACIÓN -->
 
     <section
         id="pantallaConfirmacion"
         class="ofertas pantalla"
     >
+        <div class="icono">💳</div>
 
-        <div class="icono">
-            💳
-        </div>
-
-        <h1>
-            Confirmar pago
-        </h1>
+        <h1>Confirmar pedido</h1>
 
         <p class="descripcion">
             Revisa los datos antes de continuar.
         </p>
 
-
         <div class="resumen">
 
             <div class="fila">
-
-                <span>
-                    Oferta
-                </span>
-
-                <span id="confirmarOferta">
-                    -
-                </span>
-
+                <span>Oferta</span>
+                <span id="confirmarOferta">-</span>
             </div>
 
-
             <div class="fila">
-
-                <span>
-                    Juego
-                </span>
-
-                <span>
+                <span>Juego</span>
+                <span id="juegoConfirmacion">
                     Genshin Impact
                 </span>
-
             </div>
 
-
             <div class="fila">
-
-                <span>
-                    Precio
-                </span>
-
-                <span id="confirmarPrecio">
-                    0 GVR
-                </span>
-
+                <span>Precio</span>
+                <span id="confirmarPrecio">0 GVR</span>
             </div>
 
         </div>
 
-
         <div class="campo-id">
-
             <label for="idJugador">
-                ID del jugador de Genshin Impact
+                UID de Genshin Impact
             </label>
 
             <input
                 type="text"
                 id="idJugador"
-                placeholder="Escribe tu ID de Genshin Impact"
+                placeholder="Escribe tu UID"
                 autocomplete="off"
+                maxlength="80"
             >
-
         </div>
 
+        <div class="campo-id">
+            <label for="zonaJugador">
+                Servidor de tu cuenta
+            </label>
+
+            <select id="zonaJugador">
+                <option value="">Selecciona tu servidor</option>
+                <option value="America">America</option>
+                <option value="Europe">Europe</option>
+                <option value="Asia">Asia</option>
+                <option value="TW_HK_MO">TW / HK / MO</option>
+            </select>
+        </div>
+
+        <div
+            id="estadoPedido"
+            class="estado"
+            role="status"
+            aria-live="polite"
+        ></div>
 
         <button
             id="confirmarBtn"
             class="boton-principal"
             type="button"
-            onclick="realizarPedido()"
         >
-            Confirmar compra ⚡
+            Confirmar y recargar
         </button>
-
 
         <button
             class="boton-secundario"
@@ -534,55 +546,48 @@
         >
             ← Cambiar oferta
         </button>
-
     </section>
 
 
-    <!-- ==============================
-         ÉXITO
-         ============================== -->
+    <!-- RESULTADO DEL PEDIDO -->
 
     <section
         id="pantallaExito"
         class="ofertas pantalla"
     >
-
         <div class="exito">
 
-            <div class="icono-exito">
-                ✅
-            </div>
+            <div class="icono-exito">✅</div>
 
-            <h2>
-                ¡Pedido realizado!
+            <h2 id="tituloEstadoPedido">
+                Pedido registrado
             </h2>
 
-            <p>
-                Tu solicitud de compra fue registrada correctamente.
+            <p id="mensajeEstadoPedido">
+                Consulta el estado de tu pedido.
             </p>
 
-
-            <div class="pedido-id">
-
-                ID del pedido:
-
-                <br>
-
-                <span id="pedidoId">
-                    -
-                </span>
-
-            </div>
-
+            <div
+                id="pedidoIdVisible"
+                class="pedido-id"
+                style="display:none;"
+            ></div>
 
             <button
+                id="consultarPedidoBtn"
                 class="boton-principal"
+                type="button"
+            >
+                Consultar estado del pedido
+            </button>
+
+            <button
+                class="boton-secundario"
                 type="button"
                 onclick="window.location.href='cuenta.html'"
             >
-                Ir a mi cuenta ⚡
+                Ir a mi cuenta
             </button>
-
 
             <button
                 class="boton-secundario"
@@ -593,360 +598,30 @@
             </button>
 
         </div>
-
     </section>
 
 </main>
 
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
+<!-- Configuración específica de Genshin Impact -->
 <script>
+window.CONFIG_OFERTAS = {
+    juego: "Genshin Impact",
+    paginaVolver: "genshinimpact.html",
+    textoId: "UID de Genshin Impact",
+    placeholderId: "Escribe tu UID",
+    habilitarCompras: true,
 
-const SUPABASE_URL =
-    "https://gsuhzcavghsiolmipnzi.supabase.co";
-
-const SUPABASE_ANON_KEY =
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
+    ofertas: [
         {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
+            id: "fz-genshin_impact_global-blessing_of_the_welkin_moon",
+            nombre: "Blessing of the Welkin Moon",
+            emoji: "🌙"
         }
-    );
-
-
-let ofertaSeleccionada = "";
-
-let precioSeleccionado = 0;
-
-
-function seleccionarOferta(
-    boton,
-    nombre,
-    precio
-) {
-
-    document
-        .querySelectorAll(".boton-oferta")
-        .forEach(boton => {
-
-            boton.classList.remove(
-                "seleccionado"
-            );
-
-        });
-
-
-    boton.classList.add(
-        "seleccionado"
-    );
-
-
-    ofertaSeleccionada = nombre;
-
-    precioSeleccionado = precio;
-
-
-    document.getElementById(
-        "precio"
-    ).textContent =
-        precio + " GVR";
-
-
-    document.getElementById(
-        "precioSeleccionado"
-    ).style.display =
-        "block";
-
-
-    document.getElementById(
-        "continuarBtn"
-    ).style.display =
-        "block";
-}
-
-
-function irAConfirmacion() {
-
-    if (!ofertaSeleccionada) {
-
-        alert(
-            "Selecciona una oferta."
-        );
-
-        return;
-    }
-
-
-    document.getElementById(
-        "confirmarOferta"
-    ).textContent =
-        ofertaSeleccionada;
-
-
-    document.getElementById(
-        "confirmarPrecio"
-    ).textContent =
-        precioSeleccionado + " GVR";
-
-
-    document.getElementById(
-        "pantallaOfertas"
-    ).classList.remove(
-        "activa"
-    );
-
-
-    document.getElementById(
-        "pantallaConfirmacion"
-    ).classList.add(
-        "activa"
-    );
-
-}
-
-
-function volverOfertas() {
-
-    document.getElementById(
-        "pantallaConfirmacion"
-    ).classList.remove(
-        "activa"
-    );
-
-
-    document.getElementById(
-        "pantallaOfertas"
-    ).classList.add(
-        "activa"
-    );
-
-}
-
-
-async function realizarPedido() {
-
-    const boton =
-        document.getElementById(
-            "confirmarBtn"
-        );
-
-
-    const idJugador =
-        document
-            .getElementById(
-                "idJugador"
-            )
-            .value
-            .trim();
-
-
-    if (!idJugador) {
-
-        alert(
-            "Escribe el ID de tu jugador."
-        );
-
-        return;
-    }
-
-
-    if (!ofertaSeleccionada) {
-
-        alert(
-            "Selecciona una oferta."
-        );
-
-        return;
-    }
-
-
-    boton.disabled = true;
-
-    boton.textContent =
-        "Procesando compra...";
-
-
-    try {
-
-        const {
-            data: {
-                session
-            }
-        } =
-            await supabaseClient
-                .auth
-                .getSession();
-
-
-        if (!session) {
-
-            alert(
-                "Debes iniciar sesión primero."
-            );
-
-            window.location.href =
-                "login.html";
-
-            return;
-        }
-
-
-        const {
-            data: producto,
-            error: productoError
-        } =
-            await supabaseClient
-                .from("game_products")
-                .select(
-                    "id, game, product_name, game_currency_amount, price_gvr, active"
-                )
-                .eq(
-                    "game",
-                    "Genshin Impact"
-                )
-                .eq(
-                    "product_name",
-                    ofertaSeleccionada
-                )
-                .eq(
-                    "active",
-                    true
-                )
-                .maybeSingle();
-
-
-        if (productoError) {
-
-            console.error(
-                "ERROR BUSCANDO PRODUCTO GENSHIN:",
-                productoError
-            );
-
-            alert(
-                "No se pudo comprobar el producto."
-            );
-
-            return;
-        }
-
-
-        if (!producto) {
-
-            alert(
-                "Producto no disponible."
-            );
-
-            return;
-        }
-
-
-        const {
-            data: pedido,
-            error: compraError
-        } =
-            await supabaseClient.rpc(
-                "purchase_game_product",
-                {
-                    p_product_id:
-                        producto.id,
-
-                    p_player_id:
-                        idJugador
-                }
-            );
-
-
-        if (compraError) {
-
-            console.error(
-                "ERROR COMPRA GENSHIN:",
-                compraError
-            );
-
-
-            const mensajeError =
-                compraError.message || "";
-
-
-            if (
-                mensajeError
-                    .toLowerCase()
-                    .includes(
-                        "saldo gvr insuficiente"
-                    )
-            ) {
-
-                alert(
-                    "Saldo GVR insuficiente."
-                );
-
-            } else {
-
-                alert(
-                    mensajeError ||
-                    "No se pudo realizar la compra."
-                );
-            }
-
-            return;
-        }
-
-
-        document.getElementById(
-            "pedidoId"
-        ).textContent =
-            pedido;
-
-
-        document.getElementById(
-            "pantallaConfirmacion"
-        ).classList.remove(
-            "activa"
-        );
-
-
-        document.getElementById(
-            "pantallaExito"
-        ).classList.add(
-            "activa"
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "ERROR GENERAL GENSHIN:",
-            error
-        );
-
-
-        alert(
-            error.message ||
-            "Ocurrió un error al realizar la compra."
-        );
-
-
-    } finally {
-
-        boton.disabled = false;
-
-        boton.textContent =
-            "Confirmar compra ⚡";
-    }
-}
-
+    ]
+};
 </script>
 
+<script type="module" src="ofertas.js"></script>
+
 </body>
-  </html>
+    </html>
