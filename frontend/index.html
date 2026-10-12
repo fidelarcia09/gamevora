@@ -1376,6 +1376,36 @@ gamevoraDots.forEach(
 );
 
 </script>
+<!-- NAVEGACIÓN INFERIOR GAMERS GOLD --><script>
+(async function () {
+    try {
+        const respuesta = await fetch("nav-inferior.html");
 
+        if (!respuesta.ok) {
+            throw new Error("No se pudo cargar nav-inferior.html");
+        }
+
+        const contenido = await respuesta.text();
+        const documento = new DOMParser().parseFromString(
+            contenido,
+            "text/html"
+        );
+
+        // Cargar los estilos de la navegación.
+        documento.querySelectorAll("style").forEach(function (estilo) {
+            document.head.appendChild(estilo.cloneNode(true));
+        });
+
+        // Ejecutar el JavaScript de la navegación.
+        documento.querySelectorAll("script").forEach(function (original) {
+            const nuevo = document.createElement("script");
+            nuevo.textContent = original.textContent;
+            document.body.appendChild(nuevo);
+        });
+    } catch (error) {
+        console.error("Error al cargar la navegación:", error);
+    }
+})();
+</script>
 </body>
 </html>
