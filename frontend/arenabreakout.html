@@ -1,301 +1,294 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Recarga Bonds de Arena Breakout en Gamers Gold Top-Up.">
+    <meta name="description" content="Recarga Bonds de Arena Breakout en Gamers Gold Top-Up."><title>Arena Breakout | Gamers Gold Top-Up</title>
 
-    <title>Arena Breakout | Gamers Gold Top-Up</title>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+    body {
+        background: #050b18;
+        color: white;
+        min-height: 100vh;
+        padding: 20px;
+    }
 
+    .contenedor {
+        max-width: 650px;
+        margin: auto;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+
+    .logo {
+        font-size: 21px;
+        font-weight: 900;
+    }
+
+    .rayo {
+        color: #00b7ff;
+        text-shadow: 0 0 12px #008cff;
+    }
+
+    .volver {
+        color: #28a9ff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .card {
+        background: #091a35;
+        border: 1px solid #15518c;
+        border-radius: 20px;
+        padding: 25px 20px;
+        box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+    }
+
+    .icono {
+        text-align: center;
+        font-size: 52px;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 27px;
+        margin-bottom: 10px;
+    }
+
+    .descripcion {
+        text-align: center;
+        color: #8fa5bd;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 22px;
+    }
+
+    .etiqueta {
+        display: block;
+        margin: 18px 0 10px;
+        color: #b8c9dc;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 13px;
+        background: #061226;
+        color: white;
+        border: 1px solid #204c78;
+        border-radius: 10px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #159dff;
+        box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+    }
+
+    .estado {
+        padding: 13px;
+        margin: 18px 0;
+        border: 1px solid #204c78;
+        border-radius: 10px;
+        background: #061226;
+        color: #a9c4df;
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .estado.error {
+        color: #ffaaaa;
+        border-color: #843d4b;
+    }
+
+    .catalogo {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .producto {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 12px;
+        min-width: 0;
+        min-height: 110px;
+        padding: 15px 12px;
+        background: #061226;
+        color: white;
+        border: 1px solid #164b75;
+        border-radius: 13px;
+        text-align: left;
+        cursor: pointer;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .producto:hover {
+        border-color: #168cff;
+    }
+
+    .producto.seleccionado {
+        border-color: #00baff;
+        box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+    }
+
+    .producto-nombre {
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+    .producto-estado {
+        color: #45c8ff;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .separador-ofertas {
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px solid #164b8f;
+    }
+
+    .boton {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .continuar {
+        margin-top: 18px;
+        background: linear-gradient(90deg, #087cff, #00baff);
+        color: white;
+        cursor: not-allowed;
+        opacity: 0.55;
+    }
+
+    .boton-ofertas {
+        background: #07152b;
+        color: #28a9ff;
+        border: 1px solid #168cff;
+        cursor: pointer;
+    }
+
+    .nota {
+        margin-top: 20px;
+        text-align: center;
+        color: #8299b4;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 380px) {
         body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .contenedor {
-            max-width: 650px;
-            margin: auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .logo {
-            font-size: 21px;
-            font-weight: 900;
-        }
-
-        .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
-        }
-
-        .volver {
-            color: #28a9ff;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            white-space: nowrap;
+            padding: 12px;
         }
 
         .card {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-        }
-
-        .icono {
-            text-align: center;
-            font-size: 52px;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 27px;
-            margin-bottom: 10px;
-        }
-
-        .descripcion {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 22px;
-        }
-
-        .etiqueta {
-            display: block;
-            margin: 18px 0 10px;
-            color: #b8c9dc;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
-
-        .estado {
-            padding: 13px;
-            margin: 18px 0;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            background: #061226;
-            color: #a9c4df;
-            text-align: center;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .estado.error {
-            color: #ffaaaa;
-            border-color: #843d4b;
+            padding: 22px 14px;
         }
 
         .catalogo {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-            margin-top: 12px;
+            grid-template-columns: 1fr;
         }
 
-        .producto {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 12px;
-            min-width: 0;
-            min-height: 110px;
-            padding: 15px 12px;
-            background: #061226;
-            color: white;
-            border: 1px solid #164b75;
-            border-radius: 13px;
-            text-align: left;
-            cursor: pointer;
-            transition: border-color 0.2s, box-shadow 0.2s;
+        .logo {
+            font-size: 17px;
         }
+    }
+</style>
 
-        .producto:hover {
-            border-color: #168cff;
-        }
+</head><body>
+<div class="contenedor"><header class="header">
+    <div class="logo">
+        <span class="rayo">⚡</span> Gamers Gold Top-Up
+    </div>
 
-        .producto.seleccionado {
-            border-color: #00baff;
-            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
-        }
+    <a href="juegos.html" class="volver">← Juegos</a>
+</header>
 
-        .producto-nombre {
-            font-size: 14px;
-            font-weight: bold;
-            line-height: 1.45;
-            overflow-wrap: anywhere;
-        }
+<main class="card">
+    <div class="icono">🎯</div>
 
-        .producto-estado {
-            color: #45c8ff;
-            font-size: 12px;
-            font-weight: bold;
-        }
+    <h1>Arena Breakout</h1>
 
-        .separador-ofertas {
-            margin-top: 22px;
-            padding-top: 18px;
-            border-top: 1px solid #164b8f;
-        }
+    <p class="descripcion">
+        Selecciona tu paquete de Bonds de Arena Breakout.
+    </p>
 
-        .boton {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
-        }
+    <label class="etiqueta" for="idjugador">
+        ID del jugador
+    </label>
 
-        .continuar {
-            margin-top: 18px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            cursor: not-allowed;
-            opacity: 0.55;
-        }
+    <input
+        type="text"
+        id="idjugador"
+        placeholder="Introduce tu ID"
+        autocomplete="off"
+    >
 
-        .boton-ofertas {
-            background: #07152b;
-            color: #28a9ff;
-            border: 1px solid #168cff;
-            cursor: pointer;
-        }
+    <label class="etiqueta">
+        Selecciona una cantidad de Bonds
+    </label>
 
-        .nota {
-            margin-top: 20px;
-            text-align: center;
-            color: #8299b4;
-            font-size: 11px;
-            line-height: 1.6;
-        }
+    <div id="estadoCatalogo" class="estado" aria-live="polite">
+        Cargando paquetes de Arena Breakout...
+    </div>
 
-        @media (max-width: 380px) {
-            body {
-                padding: 12px;
-            }
+    <div id="catalogo" class="catalogo"></div>
 
-            .card {
-                padding: 22px 14px;
-            }
+    <button
+        id="botonContinuar"
+        class="boton continuar"
+        type="button"
+        disabled
+    >
+        Compras temporalmente desactivadas
+    </button>
 
-            .catalogo {
-                grid-template-columns: 1fr;
-            }
-
-            .logo {
-                font-size: 17px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-<div class="contenedor">
-
-    <header class="header">
-        <div class="logo">
-            <span class="rayo">⚡</span> Gamers Gold Top-Up
-        </div>
-
-        <a href="juegos.html" class="volver">← Juegos</a>
-    </header>
-
-    <main class="card">
-        <div class="icono">🎯</div>
-
-        <h1>Arena Breakout</h1>
-
-        <p class="descripcion">
-            Selecciona tu paquete de Bonds de Arena Breakout.
-        </p>
-
-        <label class="etiqueta" for="idjugador">
-            ID del jugador
-        </label>
-
-        <input
-            type="text"
-            id="idjugador"
-            placeholder="Introduce tu ID"
-            autocomplete="off"
-        >
-
-        <label class="etiqueta">
-            Selecciona una cantidad de Bonds
-        </label>
-
-        <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo...
-        </div>
-
-        <div id="catalogo" class="catalogo"></div>
-
+    <div class="separador-ofertas">
         <button
-            id="botonContinuar"
-            class="boton continuar"
+            class="boton boton-ofertas"
             type="button"
-            disabled
+            onclick="abrirOfertas()"
         >
-            Compras temporalmente desactivadas
+            🎁 Ofertas especiales
         </button>
+    </div>
 
-        <div class="separador-ofertas">
-            <button
-                class="boton boton-ofertas"
-                type="button"
-                onclick="abrirOfertas()"
-            >
-                🎁 Ofertas especiales
-            </button>
-        </div>
+    <p class="nota">
+        Consulta los paquetes disponibles de Arena Breakout.
+        Las compras se habilitarán cuando se configuren
+        los precios de venta y el sistema de pedidos.
+    </p>
+</main>
 
-        <p class="nota">
-            Consulta los paquetes disponibles de Arena Breakout.
-            Las compras se habilitarán cuando se configuren
-            los precios de venta y el sistema de pedidos.
-        </p>
-    </main>
-</div>
-
-<script>
+</div><script>
 "use strict";
 
 /* =====================================================
@@ -416,7 +409,7 @@ async function cargarCatalogo() {
 
     catalogo.replaceChildren();
 
-    mostrarEstado("Conectando con el catálogo...");
+    mostrarEstado("Cargando paquetes de Arena Breakout...");
 
     try {
         const respuesta = await fetch(
@@ -459,7 +452,7 @@ async function cargarCatalogo() {
 
         if (productos.length === 0) {
             throw new Error(
-                "Next Level no devolvió productos para Arena Breakout."
+                "No se encontraron paquetes disponibles en este momento."
             );
         }
 
@@ -556,7 +549,7 @@ async function cargarCatalogo() {
         catalogo.replaceChildren();
 
         mostrarEstado(
-            "No se pudo cargar el catálogo. " + error.message,
+            "No se pudo cargar el catálogo de Next Level. " + error.message,
             true
         );
     }
@@ -567,7 +560,5 @@ async function cargarCatalogo() {
 ===================================================== */
 
 cargarCatalogo();
-</script>
-
-</body>
+</script></body>
 </html>
