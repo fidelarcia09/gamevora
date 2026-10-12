@@ -694,37 +694,22 @@
         }
     }
 
-</style>
-
-<link rel="manifest" href="frontend/manifest.json">
-<meta name="theme-color" content="#050b18">
-
-</head><body><!-- SPLASH GAMERS GOLD --><div id="splash-screen"><img
-    src="./frontend/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
-    alt="Gamers Gold Top-Up"
-    loading="eager"
->
-
+</style><link rel="manifest" href="frontend/manifest.json">
+<meta name="theme-color" content="#050b18"></head><body><!-- SPLASH GAMERS GOLD --><div id="splash-screen">
+    <img
+        src="./frontend/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
+        alt="Gamers Gold Top-Up"
+        loading="eager"
+    >
 </div><header><div class="logo">
-
     <span class="logo-g">G</span>
 
     <span class="logo-resto">
         AMERS GOLD TOP-UP
     </span>
-
 </div>
 
 <div class="navegacion">
-
-    <a
-        href="frontend/soporte.html"
-        class="boton-navegacion"
-    >
-        Soporte
-    </a>
-
-    <span class="separador">|</span>
 
     <div
         id="botonesCuenta"
@@ -858,23 +843,17 @@
 <div class="offer">
 
     <div class="offer-info">
-
         <h3>🔥 Free Fire</h3>
-
         <p>310 Diamantes</p>
-
     </div>
 
     <div class="price">
-
         <strong>10 GVR</strong>
-
         <br>
 
         <button class="buy" type="button">
             Comprar
         </button>
-
     </div>
 
 </div>
@@ -882,23 +861,17 @@
 <div class="offer">
 
     <div class="offer-info">
-
         <h3>🔫 Call of Duty Mobile</h3>
-
         <p>420 CP</p>
-
     </div>
 
     <div class="price">
-
         <strong>15 GVR</strong>
-
         <br>
 
         <button class="buy" type="button">
             Comprar
         </button>
-
     </div>
 
 </div>
@@ -1044,7 +1017,9 @@ gamevoraDots.forEach((dot, index) => {
 
     try {
 
-        const respuesta = await fetch("frontend/nav-inferior.html?v=20261012-v3")
+        const respuesta = await fetch(
+            "frontend/nav-inferior.html?v=20261012-v3"
+        );
 
         if (!respuesta.ok) {
             throw new Error("No se pudo cargar nav-inferior.html");
@@ -1079,4 +1054,4 @@ gamevoraDots.forEach((dot, index) => {
 
 })();
 </script></body>
-                </html>
+    </html>
