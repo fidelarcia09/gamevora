@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Descubre las ofertas especiales de Honor of Kings en Gamers Gold Top-Up.">
+    <meta name="description" content="Ofertas especiales de Honor of Kings en Gamers Gold Top-Up.">
 
     <title>Ofertas Especiales | Honor of Kings</title>
 
@@ -34,8 +34,7 @@
             color: white;
         }
 
-        button,
-        input {
+        button, input {
             font: inherit;
         }
 
@@ -46,16 +45,16 @@
             gap: 12px;
             padding: 17px 18px;
             border-bottom: 1px solid #12385f;
-            background: rgba(7, 18, 37, 0.96);
+            background: rgba(7, 18, 37, .96);
         }
 
         .logo {
             font-size: clamp(14px, 3.8vw, 20px);
             font-weight: 900;
-            letter-spacing: -0.4px;
+            letter-spacing: -.4px;
         }
 
-        .logo .rayo {
+        .rayo {
             color: var(--cian);
             text-shadow: 0 0 12px #008cff;
         }
@@ -68,7 +67,6 @@
             padding: 10px 12px;
             border-radius: 9px;
             font-size: 12px;
-            transition: 0.2s;
         }
 
         .volver:hover {
@@ -78,7 +76,7 @@
 
         .contenedor {
             width: 100%;
-            max-width: 540px;
+            max-width: 650px;
             margin: auto;
             padding: 25px 16px 35px;
         }
@@ -90,7 +88,7 @@
             border: 1px solid #15518c;
             border-radius: 20px;
             padding: 25px 19px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.12);
+            box-shadow: 0 0 30px rgba(0, 140, 255, .12);
         }
 
         .ofertas::before {
@@ -102,7 +100,6 @@
             left: 15%;
             right: 15%;
             background: linear-gradient(90deg, transparent, var(--cian), transparent);
-            opacity: 0.8;
         }
 
         .icono {
@@ -131,8 +128,8 @@
             margin: 0 auto 17px;
             padding: 7px 12px;
             color: var(--cian);
-            background: rgba(0, 186, 255, 0.08);
-            border: 1px solid rgba(0, 186, 255, 0.25);
+            background: rgba(0, 186, 255, .08);
+            border: 1px solid rgba(0, 186, 255, .25);
             border-radius: 30px;
             font-size: 10px;
             font-weight: bold;
@@ -146,19 +143,12 @@
 
         .pantalla.activa {
             display: block;
-            animation: aparecer 0.25s ease;
+            animation: aparecer .25s ease;
         }
 
         @keyframes aparecer {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .lista-ofertas {
@@ -180,16 +170,18 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: border-color 0.2s, background 0.2s, transform 0.2s;
-            box-shadow: 0 0 12px rgba(0, 140, 255, 0.06);
+            transition: border-color .2s, background .2s, transform .2s;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .boton-oferta:hover {
+        .boton-oferta:hover:not(:disabled) {
             border-color: #159dff;
             background: #0a1d38;
             transform: translateY(-2px);
-            box-shadow: 0 0 18px rgba(0, 157, 255, 0.18);
+        }
+
+        .boton-oferta:disabled {
+            cursor: not-allowed;
         }
 
         .boton-oferta:focus-visible,
@@ -204,23 +196,17 @@
             min-height: 95px;
             flex: 1;
             background:
-                radial-gradient(ellipse at center, rgba(0, 140, 255, 0.13), transparent 70%),
+                radial-gradient(ellipse at center, rgba(0, 140, 255, .13), transparent 70%),
                 #07172d;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            overflow: hidden;
-        }
-
-        .foto-oferta span {
-            color: #b4d9f7;
-            font-size: 14px;
         }
 
         .emoji-oferta {
-            font-size: 31px !important;
-            filter: drop-shadow(0 0 9px rgba(0, 186, 255, 0.2));
+            font-size: 31px;
+            filter: drop-shadow(0 0 9px rgba(0, 186, 255, .2));
         }
 
         .nombre-oferta {
@@ -241,11 +227,7 @@
         .boton-oferta.seleccionado {
             border-color: var(--cian);
             background: linear-gradient(180deg, #09244a, #0b315c);
-            box-shadow: 0 0 10px rgba(0, 186, 255, 0.2);
-        }
-
-        .boton-oferta.seleccionado .foto-oferta {
-            background: #09213f;
+            box-shadow: 0 0 10px rgba(0, 186, 255, .2);
         }
 
         .boton-oferta.seleccionado .nombre-oferta {
@@ -296,7 +278,7 @@
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
+            transition: .2s;
         }
 
         .boton-principal {
@@ -304,7 +286,6 @@
             border: none;
             background: linear-gradient(90deg, #087cff, #00baff);
             color: white;
-            box-shadow: 0 4px 15px rgba(0, 140, 255, 0.15);
         }
 
         .boton-principal:hover:not(:disabled) {
@@ -312,7 +293,7 @@
         }
 
         .boton-principal:disabled {
-            opacity: 0.6;
+            opacity: .6;
             cursor: not-allowed;
         }
 
@@ -321,10 +302,6 @@
             border: 1px solid #168cff;
             background: var(--panel-oscuro);
             color: white;
-        }
-
-        .boton-secundario:hover {
-            background: #0b2545;
         }
 
         .resumen {
@@ -383,7 +360,7 @@
 
         .campo-id input:focus {
             border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+            box-shadow: 0 0 8px rgba(0, 157, 255, .2);
         }
 
         .exito {
@@ -428,34 +405,17 @@
         }
 
         @media (max-width: 360px) {
-            header {
-                padding: 14px 10px;
-            }
-
-            .logo {
-                font-size: 13px;
-            }
-
-            .volver {
-                padding: 8px;
-                font-size: 11px;
-            }
-
-            .contenedor {
-                padding: 18px 10px;
-            }
-
-            .ofertas {
-                padding: 22px 14px;
-            }
+            header { padding: 14px 10px; }
+            .logo { font-size: 13px; }
+            .volver { padding: 8px; font-size: 11px; }
+            .contenedor { padding: 18px 10px; }
+            .ofertas { padding: 22px 14px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
             }
         }
     </style>
@@ -474,11 +434,8 @@
 
 <main class="contenedor">
 
-    <!-- OFERTAS ESPECIALES -->
     <section id="pantallaOfertas" class="ofertas pantalla activa">
-
         <div class="icono">🎁</div>
-
         <h1>Ofertas Especiales</h1>
 
         <p id="descripcionOfertas" class="descripcion">
@@ -489,31 +446,15 @@
             HONOR OF KINGS · OFERTAS ESPECIALES
         </div>
 
-        <div
-            id="estadoProductos"
-            class="estado"
-            role="status"
-            aria-live="polite"
-        >
+        <div id="estadoProductos" class="estado" role="status" aria-live="polite">
             Conectando con el catálogo...
         </div>
 
-        <div
-            id="listaOfertas"
-            class="lista-ofertas"
-            style="display:none;"
-        ></div>
+        <div id="listaOfertas" class="lista-ofertas" style="display:none;"></div>
 
-        <div
-            id="precioSeleccionado"
-            class="precio-oferta"
-            style="display:none;"
-        >
+        <div id="precioSeleccionado" class="precio-oferta" style="display:none;">
             <div class="precio-titulo">Precio de la oferta</div>
-
-            <div id="precio" class="precio">
-                Pendiente
-            </div>
+            <div id="precio" class="precio">Pendiente</div>
         </div>
 
         <button
@@ -524,28 +465,23 @@
             style="display:none;"
             disabled
         >
-            Compras próximamente
+            Continuar ⚡
         </button>
 
         <div id="notaOfertas" class="nota">
-            Los precios y las compras todavía no están habilitados.
+            Cargando precios...
         </div>
-
     </section>
 
-    <!-- CONFIRMACIÓN INFORMATIVA: NO REGISTRA COMPRAS -->
     <section id="pantallaConfirmacion" class="ofertas pantalla">
-
         <div class="icono">💳</div>
-
-        <h1>Confirmar pago</h1>
+        <h1>Confirmar pedido</h1>
 
         <p class="descripcion">
-            Esta función estará disponible cuando terminemos de configurar los precios.
+            Comprueba la oferta y el ID del jugador antes de confirmar.
         </p>
 
         <div class="resumen">
-
             <div class="fila">
                 <span>Oferta</span>
                 <span id="confirmarOferta">-</span>
@@ -560,64 +496,66 @@
                 <span>Precio</span>
                 <span id="confirmarPrecio">Pendiente</span>
             </div>
-
         </div>
 
         <div class="campo-id">
-            <label for="idJugador">
-                ID del jugador de Honor of Kings
-            </label>
+            <label for="idJugador">ID del jugador de Honor of Kings</label>
 
             <input
                 type="text"
                 id="idJugador"
                 placeholder="Escribe tu ID de Honor of Kings"
                 autocomplete="off"
+                maxlength="80"
+                required
             >
         </div>
 
-        <button
-            id="confirmarBtn"
-            class="boton-principal"
-            type="button"
-            disabled
-        >
-            Compras desactivadas temporalmente
+        <div
+            id="estadoPedido"
+            class="estado"
+            role="status"
+            aria-live="polite"
+            style="display:none;"
+        ></div>
+
+        <button id="confirmarBtn" class="boton-principal" type="button">
+            Confirmar y recargar ⚡
         </button>
 
-        <button
-            class="boton-secundario"
-            type="button"
-            onclick="volverOfertas()"
-        >
+        <button class="boton-secundario" type="button" onclick="volverOfertas()">
             ← Cambiar oferta
         </button>
-
     </section>
 
-    <!-- ESTADO INFORMATIVO: NO SE CREAN PEDIDOS -->
     <section id="pantallaExito" class="ofertas pantalla">
-
         <div class="exito">
-
             <div class="icono-exito">ℹ️</div>
 
-            <h2>Compras en preparación</h2>
+            <h2 id="tituloEstadoPedido">Estado del pedido</h2>
 
-            <p>
-                Estamos preparando esta función. Por ahora no se registran pedidos desde esta página.
+            <p id="mensajeEstadoPedido">
+                Estamos verificando el estado de tu pedido.
             </p>
 
+            <div id="pedidoIdVisible" class="pedido-id" style="display:none;"></div>
+
             <button
+                id="consultarPedidoBtn"
                 class="boton-principal"
+                type="button"
+            >
+                Consultar estado del pedido
+            </button>
+
+            <button
+                class="boton-secundario"
                 type="button"
                 onclick="window.location.href='honorofkings.html'"
             >
                 Volver a Honor of Kings ⚡
             </button>
-
         </div>
-
     </section>
 
 </main>
@@ -629,20 +567,30 @@ window.CONFIG_OFERTAS = {
     textoId: "ID del jugador de Honor of Kings",
     placeholderId: "Escribe tu ID de Honor of Kings",
 
+    /*
+     * Esta página habilita Honor of Kings solamente.
+     * Los demás juegos conservan su configuración actual.
+     */
+    habilitarCompras: true,
+
     ofertas: [
         {
+            id: "fz-honor_of_kings-standard_purchase_rebate_pack",
             nombre: "Standard Purchase Rebate Pack",
             emoji: "🎁"
         },
         {
+            id: "fz-honor_of_kings-weekly_card",
             nombre: "Weekly Card",
             emoji: "📅"
         },
         {
+            id: "fz-honor_of_kings-premium_purchase_rebate_pack",
             nombre: "Premium Purchase Rebate Pack",
             emoji: "👑"
         },
         {
+            id: "fz-honor_of_kings-weekly_card_plus",
             nombre: "Weekly Card Plus",
             emoji: "⭐"
         }
@@ -650,56 +598,8 @@ window.CONFIG_OFERTAS = {
 };
 </script>
 
-<script src="ofertas.js?v=20261009honor1"></script>
-
-<script>
-/*
- * Mantener la pantalla de confirmación únicamente informativa.
- * No se llama a purchase_game_product ni se crean pedidos.
- */
-function irAConfirmacion() {
-    const oferta = window.productosOfertas || {};
-    const seleccionada = Object.values(oferta).find(
-        producto => producto.nombre ===
-            document.getElementById("confirmarOferta").textContent
-    );
-
-    if (!seleccionada && !window.ofertaActualSeleccionada) {
-        alert("Selecciona una oferta primero.");
-        return;
-    }
-
-    const actual =
-        window.ofertaActualSeleccionada ||
-        seleccionada;
-
-    if (!actual) {
-        alert("Selecciona una oferta primero.");
-        return;
-    }
-
-    document.getElementById("confirmarOferta").textContent =
-        actual.nombre;
-
-    document.getElementById("juegoConfirmacion").textContent =
-        "Honor of Kings";
-
-    document.getElementById("confirmarPrecio").textContent =
-        "Pendiente";
-
-    document.getElementById("pantallaOfertas").classList.remove("activa");
-
-    document.getElementById("pantallaConfirmacion").classList.add("activa");
-
-    window.scrollTo(0, 0);
-}
-
-function volverOfertas() {
-    document.getElementById("pantallaConfirmacion").classList.remove("activa");
-    document.getElementById("pantallaOfertas").classList.add("activa");
-    window.scrollTo(0, 0);
-}
-</script>
+<!-- IMPORTANTE: ofertas.js contiene import, por eso debe ser type="module". -->
+<script type="module" src="ofertas.js?v=20261012honor2"></script>
 
 </body>
-            </html>
+    </html>
