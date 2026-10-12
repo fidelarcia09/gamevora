@@ -301,7 +301,7 @@
         </label>
 
         <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo de Next Level...
+            Cargando paquetes de PUBG Mobile...
         </div>
 
         <div id="catalogo" class="catalogo"></div>
@@ -520,7 +520,7 @@ async function cargarCatalogo() {
 
     catalogo.replaceChildren();
 
-    mostrarEstado("Conectando con el catálogo de Next Level...");
+    mostrarEstado("Cargando paquetes de PUBG Mobile...");
 
     try {
         const respuestaHTTP = await fetch(
@@ -568,7 +568,7 @@ async function cargarCatalogo() {
 
         if (productos.length === 0) {
             throw new Error(
-                "Next Level no devolvió productos para PUBG Mobile."
+                "No se encontraron paquetes disponibles en este momento."
             );
         }
 
@@ -706,4 +706,4 @@ cargarCatalogo();
 </script>
 
 </body>
-            </html>
+</html>
