@@ -58,7 +58,6 @@
 
 .gg-bottom-nav .gg-nav-item {
     position: relative;
-
     min-width: 0;
 
     display: flex;
@@ -242,9 +241,7 @@ body.gg-nav-enabled {
         animation: none !important;
     }
 }
-</style>
-
-<script>
+</style><script>
 (function () {
     "use strict";
 
@@ -253,17 +250,17 @@ body.gg-nav-enabled {
     }
 
     const currentPath = window.location.pathname;
-    const currentHash = window.location.hash;
 
     const inFrontend = /\/frontend\//i.test(currentPath);
     const isAccountPage = /\/cuenta\.html$/i.test(currentPath);
     const isOrdersPage = /\/pedidos\.html$/i.test(currentPath);
+    const isWalletPage = /\/wallet\.html$/i.test(currentPath);
 
     let activeSection = "inicio";
 
     if (isOrdersPage) {
         activeSection = "pedidos";
-    } else if (isAccountPage && currentHash === "#saldoGVR") {
+    } else if (isWalletPage) {
         activeSection = "wallet";
     } else if (isAccountPage) {
         activeSection = "perfil";
@@ -322,12 +319,12 @@ body.gg-nav-enabled {
         {
             id: "wallet",
             label: "Wallet",
-            href: pagePrefix + "cuenta.html#saldoGVR"
+            href: pagePrefix + "wallet.html"
         },
         {
             id: "perfil",
             label: "Perfil",
-            href: pagePrefix + "cuenta.html#perfilUsuario"
+            href: pagePrefix + "cuenta.html"
         }
     ];
 
@@ -367,10 +364,8 @@ body.gg-nav-enabled {
         document.body.appendChild(nav);
         document.body.classList.add("gg-nav-enabled");
 
-        /* Mostrar la barra al comenzar */
         nav.classList.remove("gg-nav-hidden");
 
-        /* Ocultar al bajar y mostrar al subir */
         let lastScrollY = Math.max(
             0,
             window.scrollY || window.pageYOffset || 0
@@ -388,14 +383,11 @@ body.gg-nav-enabled {
 
             const difference = currentY - lastScrollY;
 
-            /* Cerca del inicio, la barra siempre permanece visible */
             if (currentY <= topLimit) {
                 nav.classList.remove("gg-nav-hidden");
             } else if (difference > threshold) {
-                /* Desplazamiento hacia abajo */
                 nav.classList.add("gg-nav-hidden");
             } else if (difference < -threshold) {
-                /* Desplazamiento hacia arriba */
                 nav.classList.remove("gg-nav-hidden");
             }
 
@@ -421,4 +413,4 @@ body.gg-nav-enabled {
         insertNavigation();
     }
 })();
-           </script>
+</script>
