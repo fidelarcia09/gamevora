@@ -120,6 +120,11 @@
         border-color: #843d4b;
     }
 
+    .estado.correcto {
+        color: #8ef0bd;
+        border-color: #267d61;
+    }
+
     .catalogo {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -153,6 +158,11 @@
         box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
     }
 
+    .producto:disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
+    }
+
     .producto-nombre {
         font-size: 14px;
         font-weight: bold;
@@ -160,10 +170,25 @@
         overflow-wrap: anywhere;
     }
 
+    .producto-precio {
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
     .producto-estado {
         color: #45c8ff;
         font-size: 12px;
         font-weight: bold;
+    }
+
+    .producto-no-disponible .producto-precio {
+        color: #8299b4;
+        font-size: 13px;
+    }
+
+    .producto-no-disponible .producto-estado {
+        color: #ffaaaa;
     }
 
     .separador-ofertas {
@@ -185,6 +210,11 @@
         margin-top: 18px;
         background: linear-gradient(90deg, #087cff, #00baff);
         color: white;
+        cursor: pointer;
+        opacity: 1;
+    }
+
+    .continuar:disabled {
         cursor: not-allowed;
         opacity: 0.55;
     }
@@ -233,6 +263,7 @@
 </header>
 
 <main class="card">
+
     <div class="icono">🎯</div>
 
     <h1>Arena Breakout</h1>
@@ -250,6 +281,7 @@
         id="idjugador"
         placeholder="Introduce tu ID"
         autocomplete="off"
+        maxlength="100"
     >
 
     <label class="etiqueta">
@@ -257,7 +289,7 @@
     </label>
 
     <div id="estadoCatalogo" class="estado" aria-live="polite">
-        Cargando paquetes de Arena Breakout...
+        Cargando paquetes disponibles...
     </div>
 
     <div id="catalogo" class="catalogo"></div>
@@ -268,28 +300,31 @@
         type="button"
         disabled
     >
-        Compras temporalmente desactivadas
+        RECARGAR
     </button>
 
     <div class="separador-ofertas">
         <button
+            id="botonOfertas"
             class="boton boton-ofertas"
             type="button"
-            onclick="abrirOfertas()"
         >
             🎁 Ofertas especiales
         </button>
     </div>
 
     <p class="nota">
-        Consulta los paquetes disponibles de Arena Breakout.
-        Las compras se habilitarán cuando se configuren
-        los precios de venta y el sistema de pedidos.
+        Los precios se muestran en GVR. Comprueba tu ID
+        antes de confirmar la recarga.
     </p>
+
 </main>
 
-</div><script>
+</div><script type="module">
 "use strict";
+
+import { createClient } from
+    "https://esm.sh/@supabase/supabase-js@2";
 
 /* =====================================================
    CONFIGURACIÓN
@@ -304,16 +339,49 @@ const SUPABASE_KEY =
 const URL_CATALOGO =
     SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
 
+const URL_CREAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/nextlevel-crear-pedido";
+
+const URL_CONSULTAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
+
+const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
+);
+
+/* =====================================================
+   ELEMENTOS
+===================================================== */
+
 const catalogo = document.getElementById("catalogo");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
+const botonContinuar = document.getElementById("botonContinuar");
+const botonOfertas = document.getElementById("botonOfertas");
+const campoJugador = document.getElementById("idjugador");
+
+/* =====================================================
+   VARIABLES
+===================================================== */
 
 let productoSeleccionado = null;
 let productosDisponibles = [];
+let productosLocales = [];
+let procesando = false;
+let usuarioActualId = null;
+let pedidoPendienteId = null;
+let accionPendiente = "crear";
 
-/*
-    Únicamente mostramos estos seis productos
-    de Bonds proporcionados por Next Level.
-*/
+/* =====================================================
+   PRODUCTOS PERMITIDOS
+===================================================== */
 
 const BONDS_PERMITIDOS = [
     "fz-arena_breakout-66_bonds",
@@ -328,21 +396,254 @@ const BONDS_PERMITIDOS = [
    NAVEGACIÓN
 ===================================================== */
 
-function abrirOfertas() {
+botonOfertas.addEventListener("click", () => {
     window.location.href = "ofertas-arena.html";
-}
+});
 
 /* =====================================================
-   ESTADO DEL CATÁLOGO
+   MENSAJES
 ===================================================== */
 
-function mostrarEstado(mensaje, esError = false) {
+function mostrarEstado(mensaje, tipo = "") {
     estadoCatalogo.textContent = mensaje;
-    estadoCatalogo.classList.toggle("error", esError);
+
+    estadoCatalogo.classList.toggle(
+        "error",
+        tipo === "error"
+    );
+
+    estadoCatalogo.classList.toggle(
+        "correcto",
+        tipo === "correcto"
+    );
+}
+
+function normalizarTexto(valor) {
+    return String(valor ?? "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\s_-]/g, "");
+}
+
+/*
+ * No exponemos mensajes internos del sistema de pedidos
+ * directamente en la página.
+ */
+function mensajeAmigable(error) {
+    const mensaje = String(error?.message || "").toLowerCase();
+
+    if (
+        mensaje.includes("iniciar sesión") ||
+        mensaje.includes("sesión") ||
+        mensaje.includes("token")
+    ) {
+        return "Tu sesión no está activa. Inicia sesión e inténtalo de nuevo.";
+    }
+
+    if (
+        mensaje.includes("saldo gvr insuficiente") ||
+        mensaje.includes("saldo insuficiente")
+    ) {
+        return "No tienes suficiente saldo GVR para esta recarga.";
+    }
+
+    if (
+        mensaje.includes("producto no disponible") ||
+        mensaje.includes("producto inválido")
+    ) {
+        return "Este paquete ya no está disponible. Actualiza la página.";
+    }
+
+    if (
+        mensaje.includes("reconciliación") ||
+        mensaje.includes("resultado incierto") ||
+        mensaje.includes("no se repetirá") ||
+        mensaje.includes("no repitas")
+    ) {
+        return "No pudimos confirmar el estado de tu pedido. No realices otra compra todavía; vuelve a consultar el pedido.";
+    }
+
+    return "No se pudo completar la operación. Comprueba tu sesión y vuelve a consultar el pedido antes de intentarlo otra vez.";
 }
 
 /* =====================================================
-   EXTRAER PRODUCTOS
+   PRECIOS CON DECIMALES
+===================================================== */
+
+function precioValido(valor) {
+    const precio = Number(valor);
+
+    return Number.isFinite(precio) && precio > 0;
+}
+
+function mostrarPrecio(valor) {
+    return Number(valor).toLocaleString("es-ES", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }) + " GVR";
+}
+
+/* =====================================================
+   PEDIDO PENDIENTE
+===================================================== */
+
+function clavePedidoPendiente(userId) {
+    return "ggtopup_arenabreakout_pedido_" + userId;
+}
+
+function guardarPedidoPendiente() {
+    if (!usuarioActualId || !pedidoPendienteId) {
+        return;
+    }
+
+    localStorage.setItem(
+        clavePedidoPendiente(usuarioActualId),
+        JSON.stringify({
+            orderId: pedidoPendienteId,
+            accion: accionPendiente
+        })
+    );
+}
+
+function borrarPedidoPendiente() {
+    if (usuarioActualId) {
+        localStorage.removeItem(
+            clavePedidoPendiente(usuarioActualId)
+        );
+    }
+
+    pedidoPendienteId = null;
+    accionPendiente = "crear";
+}
+
+function recuperarPedidoPendiente(userId) {
+    const clave = clavePedidoPendiente(userId);
+    const guardado = localStorage.getItem(clave);
+
+    if (!guardado) {
+        pedidoPendienteId = null;
+        accionPendiente = "crear";
+        return;
+    }
+
+    try {
+        const datos = JSON.parse(guardado);
+
+        if (
+            typeof datos.orderId !== "string" ||
+            !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(datos.orderId)
+        ) {
+            throw new Error("Referencia inválida.");
+        }
+
+        pedidoPendienteId = datos.orderId;
+
+        accionPendiente =
+            datos.accion === "consultar"
+                ? "consultar"
+                : "enviar";
+
+    } catch (error) {
+        console.error(
+            "No se pudo recuperar la referencia del pedido."
+        );
+
+        /*
+         * No se borra automáticamente una referencia dañada.
+         * Se bloquean nuevas compras para evitar duplicados.
+         */
+        pedidoPendienteId = null;
+        accionPendiente = "crear";
+
+        throw new Error(
+            "Existe una referencia de pedido que no se pudo leer. Comprueba tu historial antes de realizar otra compra."
+        );
+    }
+}
+
+async function verificarPedidoGuardado(userId) {
+    if (!pedidoPendienteId) {
+        return false;
+    }
+
+    const idVerificado = pedidoPendienteId;
+
+    const { data, error } = await supabase
+        .from("game_orders")
+        .select(
+            "id,status,provider_order_id,provider_client_reference,provider_submitted_at"
+        )
+        .eq("id", idVerificado)
+        .eq("user_id", userId)
+        .maybeSingle();
+
+    if (error) {
+        throw new Error(
+            "No se pudo comprobar el pedido anterior. Inténtalo de nuevo más tarde."
+        );
+    }
+
+    if (!data) {
+        throw new Error(
+            "No pudimos verificar el pedido anterior. No realices otra compra hasta aclarar su estado."
+        );
+    }
+
+    const estadoLocal = String(
+        data.status || ""
+    ).toLowerCase();
+
+    if (
+        estadoLocal === "completed" ||
+        estadoLocal === "refunded"
+    ) {
+        borrarPedidoPendiente();
+        return false;
+    }
+
+    if (
+        data.provider_order_id ||
+        data.provider_client_reference ||
+        data.provider_submitted_at
+    ) {
+        accionPendiente = "consultar";
+    } else if (estadoLocal === "pending") {
+        accionPendiente = "enviar";
+    } else {
+        accionPendiente = "consultar";
+    }
+
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    return true;
+}
+
+function actualizarBoton() {
+    if (procesando) {
+        return;
+    }
+
+    if (pedidoPendienteId) {
+        botonContinuar.textContent =
+            accionPendiente === "enviar"
+                ? "RECUPERAR PEDIDO"
+                : "CONSULTAR PEDIDO";
+
+        botonContinuar.disabled = false;
+        return;
+    }
+
+    botonContinuar.textContent = "RECARGAR";
+
+    botonContinuar.disabled =
+        !productoSeleccionado;
+}
+
+/* =====================================================
+   EXTRAER PRODUCTOS DEL CATÁLOGO
 ===================================================== */
 
 function extraerProductos(respuesta) {
@@ -366,19 +667,12 @@ function extraerProductos(respuesta) {
         return respuesta.data;
     }
 
-    if (
-        respuesta.data &&
-        Array.isArray(respuesta.data.products)
-    ) {
+    if (Array.isArray(respuesta.data?.products)) {
         return respuesta.data.products;
     }
 
     return [];
 }
-
-/* =====================================================
-   IDENTIFICAR PRODUCTOS
-===================================================== */
 
 function obtenerProductId(producto) {
     return String(
@@ -395,23 +689,143 @@ function obtenerNombre(producto) {
         producto.productName ||
         producto.product_name ||
         producto.title ||
-        obtenerProductId(producto)
+        obtenerProductId(producto) ||
+        "Paquete de Bonds"
     ).trim();
 }
 
 /* =====================================================
-   CARGAR CATÁLOGO DE NEXT LEVEL
+   PRODUCTOS LOCALES Y PRECIOS
+===================================================== */
+
+async function cargarProductosLocales() {
+    const { data, error } = await supabase
+        .from("game_products")
+        .select(
+            "id,game,product_name,game_currency_amount,price_gvr,active,provider,provider_product_id"
+        )
+        .eq("provider", "nextlevel");
+
+    if (error) {
+        console.error(
+            "Error consultando los productos locales:",
+            error.message
+        );
+
+        throw new Error(
+            "No se pudieron cargar los precios. Inténtalo de nuevo."
+        );
+    }
+
+    productosLocales = (data || []).filter(producto =>
+        normalizarTexto(producto.game) === "arenabreakout"
+    );
+}
+
+function buscarProductoLocal(productoCatalogo) {
+    const id = obtenerProductId(productoCatalogo);
+
+    return productosLocales.find(producto =>
+        String(producto.provider_product_id || "").trim() === id
+    ) || null;
+}
+
+function productoComprable(productoLocal) {
+    if (!productoLocal) {
+        return false;
+    }
+
+    return (
+        productoLocal.active === true &&
+        precioValido(productoLocal.price_gvr) &&
+        productoLocal.provider === "nextlevel" &&
+        Boolean(
+            String(productoLocal.provider_product_id || "").trim()
+        )
+    );
+}
+
+/* =====================================================
+   DIBUJAR TARJETAS
+===================================================== */
+
+function renderizarCatalogo() {
+    catalogo.replaceChildren();
+    productoSeleccionado = null;
+
+    productosDisponibles.forEach(producto => {
+        const local = buscarProductoLocal(producto);
+        const comprable = productoComprable(local);
+
+        const tarjeta = document.createElement("button");
+
+        tarjeta.type = "button";
+        tarjeta.className = "producto";
+
+        if (!comprable) {
+            tarjeta.classList.add("producto-no-disponible");
+            tarjeta.disabled = true;
+        }
+
+        const nombre = document.createElement("div");
+        nombre.className = "producto-nombre";
+        nombre.textContent = obtenerNombre(producto);
+
+        const precio = document.createElement("div");
+        precio.className = "producto-precio";
+
+        const estado = document.createElement("div");
+        estado.className = "producto-estado";
+
+        if (comprable) {
+            precio.textContent = mostrarPrecio(local.price_gvr);
+            estado.textContent = "Seleccionar paquete";
+        } else {
+            precio.textContent = "No disponible";
+            estado.textContent = "Temporalmente no disponible";
+        }
+
+        tarjeta.append(nombre, precio, estado);
+
+        tarjeta.addEventListener("click", () => {
+            if (!comprable || procesando || pedidoPendienteId) {
+                return;
+            }
+
+            document.querySelectorAll(".producto").forEach(elemento => {
+                elemento.classList.remove("seleccionado");
+            });
+
+            tarjeta.classList.add("seleccionado");
+
+            productoSeleccionado = {
+                catalogo: producto,
+                local: local
+            };
+
+            actualizarBoton();
+        });
+
+        catalogo.appendChild(tarjeta);
+    });
+
+    actualizarBoton();
+}
+
+/* =====================================================
+   CARGAR CATÁLOGO
 ===================================================== */
 
 async function cargarCatalogo() {
-    productoSeleccionado = null;
-    productosDisponibles = [];
-
     catalogo.replaceChildren();
+    productoSeleccionado = null;
+    actualizarBoton();
 
-    mostrarEstado("Cargando paquetes de Arena Breakout...");
+    mostrarEstado("Cargando paquetes disponibles...");
 
     try {
+        await cargarProductosLocales();
+
         const respuesta = await fetch(
             URL_CATALOGO + "?game=arena-breakout",
             {
@@ -430,42 +844,18 @@ async function cargarCatalogo() {
         try {
             resultado = await respuesta.json();
         } catch {
-            throw new Error(
-                "El catálogo devolvió una respuesta no válida."
-            );
+            throw new Error("No se pudo cargar el catálogo.");
         }
 
-        console.log(
-            "CATÁLOGO ARENA BREAKOUT:",
-            resultado
-        );
-
         if (!respuesta.ok) {
-            throw new Error(
-                resultado.error ||
-                resultado.message ||
-                "Error HTTP " + respuesta.status
-            );
+            throw new Error("No se pudo cargar el catálogo.");
         }
 
         const productos = extraerProductos(resultado);
-
-        if (productos.length === 0) {
-            throw new Error(
-                "No se encontraron paquetes disponibles en este momento."
-            );
-        }
-
-        /*
-            Filtrar los seis Bonds permitidos.
-            No usamos los precios del proveedor para
-            mostrar precios de venta al cliente.
-        */
-
         const mapaProductos = new Map();
 
         productos.forEach(producto => {
-            if (!producto || producto.available !== true) {
+            if (!producto) {
                 return;
             }
 
@@ -475,90 +865,449 @@ async function cargarCatalogo() {
                 return;
             }
 
+            if (producto.available !== true) {
+                return;
+            }
+
             mapaProductos.set(id, producto);
         });
-
-        /*
-            Mantener siempre el mismo orden.
-        */
 
         productosDisponibles = BONDS_PERMITIDOS
             .filter(id => mapaProductos.has(id))
             .map(id => mapaProductos.get(id));
 
-        console.log(
-            "BONDS DISPONIBLES:",
-            productosDisponibles.map(producto => ({
-                id: obtenerProductId(producto),
-                nombre: obtenerNombre(producto)
-            }))
-        );
-
         if (productosDisponibles.length === 0) {
             mostrarEstado(
-                "No se encontraron Bonds disponibles en Next Level.",
-                true
+                "No hay paquetes disponibles en este momento.",
+                "error"
             );
             return;
         }
 
-        productosDisponibles.forEach(producto => {
-            const tarjeta = document.createElement("button");
+        renderizarCatalogo();
 
-            tarjeta.type = "button";
-            tarjeta.className = "producto";
+        const disponiblesParaCompra =
+            productosDisponibles.filter(producto =>
+                productoComprable(
+                    buscarProductoLocal(producto)
+                )
+            ).length;
 
-            const nombre = document.createElement("div");
-            nombre.className = "producto-nombre";
-            nombre.textContent = obtenerNombre(producto);
-
-            const estado = document.createElement("div");
-            estado.className = "producto-estado";
-            estado.textContent = "Seleccionar paquete";
-
-            tarjeta.append(nombre, estado);
-
-            tarjeta.addEventListener("click", () => {
-                document.querySelectorAll(".producto").forEach(elemento => {
-                    elemento.classList.remove("seleccionado");
-                });
-
-                tarjeta.classList.add("seleccionado");
-                productoSeleccionado = producto;
-
-                console.log(
-                    "PRODUCTO SELECCIONADO:",
-                    obtenerProductId(productoSeleccionado)
-                );
-            });
-
-            catalogo.appendChild(tarjeta);
-        });
+        if (disponiblesParaCompra === 0) {
+            mostrarEstado(
+                "Los paquetes no están disponibles para comprar en este momento.",
+                "error"
+            );
+            return;
+        }
 
         mostrarEstado(
             productosDisponibles.length +
-            " paquetes de Bonds disponibles."
+            " paquetes disponibles."
         );
 
     } catch (error) {
         console.error(
-            "ERROR CARGANDO ARENA BREAKOUT:",
+            "Error cargando el catálogo:",
             error
         );
 
         catalogo.replaceChildren();
 
         mostrarEstado(
-            "No se pudo cargar el catálogo de Next Level. " + error.message,
-            true
+            "No se pudieron cargar los paquetes. Inténtalo de nuevo.",
+            "error"
         );
     }
 }
 
 /* =====================================================
-   INICIALIZAR
+   LLAMAR FUNCIONES DE PEDIDOS
 ===================================================== */
 
-cargarCatalogo();
+async function llamarFuncion(url, accessToken, body) {
+    const respuesta = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + accessToken
+        },
+        body: JSON.stringify(body)
+    });
+
+    let datos;
+
+    try {
+        datos = await respuesta.json();
+    } catch {
+        datos = {};
+    }
+
+    if (!respuesta.ok) {
+        const error = new Error(
+            datos.error ||
+            datos.message ||
+            "No se pudo procesar el pedido."
+        );
+
+        error.status = respuesta.status;
+        error.data = datos;
+
+        throw error;
+    }
+
+    return datos;
+}
+
+/* =====================================================
+   CONSULTAR PEDIDO PENDIENTE
+===================================================== */
+
+async function consultarPedido(accessToken) {
+    if (!pedidoPendienteId) {
+        throw new Error("No hay ningún pedido para consultar.");
+    }
+
+    const datos = await llamarFuncion(
+        URL_CONSULTAR_PEDIDO,
+        accessToken,
+        {
+            game_order_id: pedidoPendienteId
+        }
+    );
+
+    const estadoLocal = String(
+        datos.status || ""
+    ).toLowerCase();
+
+    if (
+        estadoLocal === "completed" ||
+        estadoLocal === "refunded"
+    ) {
+        const mensaje = estadoLocal === "completed"
+            ? "¡Tu recarga se ha completado!"
+            : "El pedido ha sido reembolsado.";
+
+        borrarPedidoPendiente();
+        actualizarBoton();
+
+        mostrarEstado(mensaje, "correcto");
+
+        alert(
+            mensaje +
+            "\n\nPedido: " +
+            (datos.game_order_id || "consultado")
+        );
+
+        return;
+    }
+
+    accionPendiente = "consultar";
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    mostrarEstado(
+        "El pedido sigue pendiente. Consulta su estado antes de realizar otra compra."
+    );
+}
+
+/* =====================================================
+   ENVIAR PEDIDO YA CREADO
+===================================================== */
+
+async function enviarPedido(accessToken) {
+    if (!pedidoPendienteId) {
+        throw new Error("No hay ningún pedido guardado para enviar.");
+    }
+
+    /*
+     * Primero guardamos la acción de consulta.
+     * Si la respuesta se pierde, no se crea otra compra
+     * automáticamente.
+     */
+    accionPendiente = "consultar";
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    const datos = await llamarFuncion(
+        URL_CREAR_PEDIDO,
+        accessToken,
+        {
+            game_order_id: pedidoPendienteId
+        }
+    );
+
+    accionPendiente = "consultar";
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    mostrarEstado(
+        datos.success
+            ? "Tu pedido fue registrado. Puedes consultar su estado."
+            : "La solicitud fue procesada. Comprueba el estado del pedido.",
+        "correcto"
+    );
+
+    alert(
+        "Tu pedido ha sido procesado.\n\n" +
+        "Número de pedido: " +
+        pedidoPendienteId +
+        "\n\nConsulta su estado antes de realizar otra compra."
+    );
+}
+
+/* =====================================================
+   CREAR COMPRA
+===================================================== */
+
+async function crearCompra(accessToken, playerId) {
+    if (!productoSeleccionado) {
+        throw new Error("Selecciona primero un paquete.");
+    }
+
+    const local = productoSeleccionado.local;
+    const idCatalogo = obtenerProductId(
+        productoSeleccionado.catalogo
+    );
+
+    if (
+        !local ||
+        local.active !== true ||
+        !precioValido(local.price_gvr) ||
+        local.provider !== "nextlevel" ||
+        String(local.provider_product_id || "").trim() !== idCatalogo
+    ) {
+        throw new Error(
+            "El paquete seleccionado ya no está disponible. Actualiza la página."
+        );
+    }
+
+    /*
+     * Verificar nuevamente el precio y el producto en la base
+     * de datos antes de descontar el saldo.
+     */
+    const { data: productoActual, error: errorProducto } =
+        await supabase
+            .from("game_products")
+            .select(
+                "id,game,product_name,price_gvr,active,provider,provider_product_id"
+            )
+            .eq("id", local.id)
+            .eq("active", true)
+            .eq("provider", "nextlevel")
+            .maybeSingle();
+
+    if (errorProducto || !productoActual) {
+        throw new Error(
+            "No se pudo verificar el paquete. Actualiza la página."
+        );
+    }
+
+    if (
+        normalizarTexto(productoActual.game) !== "arenabreakout" ||
+        !precioValido(productoActual.price_gvr) ||
+        String(productoActual.provider_product_id || "").trim() !== idCatalogo
+    ) {
+        throw new Error(
+            "El paquete o su precio han cambiado. Actualiza la página."
+        );
+    }
+
+    const precioConfirmado = Number(
+        productoActual.price_gvr
+    );
+
+    const confirmar = confirm(
+        "Confirma tu recarga de Arena Breakout:\n\n" +
+        "Paquete: " +
+        obtenerNombre(productoSeleccionado.catalogo) +
+        "\n" +
+        "ID de jugador: " +
+        playerId +
+        "\n" +
+        "Precio: " +
+        mostrarPrecio(precioConfirmado) +
+        "\n\n" +
+        "¿Deseas continuar?"
+    );
+
+    if (!confirmar) {
+        return;
+    }
+
+    mostrarEstado("Creando tu pedido. No cierres esta página...");
+
+    /*
+     * La función RPC existente admite precios decimales
+     * almacenados en price_gvr y descuenta el precio real
+     * configurado para el producto.
+     */
+    const { data: orderId, error: errorCompra } =
+        await supabase.rpc(
+            "purchase_game_product",
+            {
+                p_product_id: productoActual.id,
+                p_player_id: playerId
+            }
+        );
+
+    if (errorCompra) {
+        console.error(
+            "Error creando la compra:",
+            errorCompra.message
+        );
+
+        throw new Error(errorCompra.message || "No se pudo crear el pedido.");
+    }
+
+    if (
+        typeof orderId !== "string" ||
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(orderId)
+    ) {
+        throw new Error(
+            "No se pudo confirmar el número del pedido. Comprueba tu historial antes de volver a comprar."
+        );
+    }
+
+    pedidoPendienteId = orderId;
+    accionPendiente = "enviar";
+
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    await enviarPedido(accessToken);
+}
+
+/* =====================================================
+   BOTÓN PRINCIPAL
+===================================================== */
+
+botonContinuar.addEventListener("click", async () => {
+    if (procesando) {
+        return;
+    }
+
+    procesando = true;
+    botonContinuar.disabled = true;
+
+    try {
+        const {
+            data: { session },
+            error: sessionError
+        } = await supabase.auth.getSession();
+
+        if (sessionError) {
+            throw new Error("No se pudo comprobar tu sesión.");
+        }
+
+        if (!session?.access_token) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const {
+            data: { user },
+            error: userError
+        } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        usuarioActualId = user.id;
+
+        recuperarPedidoPendiente(user.id);
+
+        /*
+         * Resolver primero cualquier pedido anterior.
+         * No se inicia una segunda compra mientras exista
+         * un pedido pendiente de resolver.
+         */
+        await verificarPedidoGuardado(user.id);
+
+        if (pedidoPendienteId) {
+            if (accionPendiente === "enviar") {
+                mostrarEstado("Retomando el pedido pendiente...");
+
+                await enviarPedido(session.access_token);
+            } else {
+                mostrarEstado("Consultando el pedido anterior...");
+
+                await consultarPedido(session.access_token);
+            }
+
+            return;
+        }
+
+        const playerId = campoJugador.value.trim();
+
+        if (!playerId) {
+            throw new Error("Introduce tu ID de jugador.");
+        }
+
+        if (playerId.length > 100) {
+            throw new Error("El ID del jugador es demasiado largo.");
+        }
+
+        if (!productoSeleccionado) {
+            throw new Error("Selecciona primero un paquete disponible.");
+        }
+
+        await crearCompra(
+            session.access_token,
+            playerId
+        );
+
+    } catch (error) {
+        console.error(
+            "Error procesando el pedido:",
+            error
+        );
+
+        const mensaje = mensajeAmigable(error);
+
+        mostrarEstado(mensaje, "error");
+
+        alert(mensaje);
+
+    } finally {
+        procesando = false;
+        actualizarBoton();
+    }
+});
+
+/* =====================================================
+   INICIALIZACIÓN
+===================================================== */
+
+async function iniciar() {
+    try {
+        const {
+            data: { session }
+        } = await supabase.auth.getSession();
+
+        if (session?.user?.id) {
+            usuarioActualId = session.user.id;
+
+            recuperarPedidoPendiente(
+                usuarioActualId
+            );
+
+            actualizarBoton();
+        }
+
+    } catch (error) {
+        console.error(
+            "No se pudo recuperar el pedido pendiente."
+        );
+    }
+
+    await cargarCatalogo();
+}
+
+iniciar();
+
 </script></body>
-</html>
+    </html>
