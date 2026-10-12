@@ -264,7 +264,7 @@
         </label>
 
         <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo...
+            Cargando paquetes de Blood Strike...
         </div>
 
         <div id="catalogo" class="catalogo"></div>
@@ -430,7 +430,7 @@ async function cargarCatalogo() {
 
     catalogo.replaceChildren();
 
-    mostrarEstado("Conectando con el catálogo...");
+    mostrarEstado("Cargando paquetes de Blood Strike...");
 
     try {
         const respuesta = await fetch(
@@ -473,7 +473,7 @@ async function cargarCatalogo() {
 
         if (productos.length === 0) {
             throw new Error(
-                "Next Level no devolvió productos para Blood Strike."
+                "No se encontraron paquetes disponibles en este momento."
             );
         }
 
@@ -556,7 +556,8 @@ async function cargarCatalogo() {
         catalogo.replaceChildren();
 
         mostrarEstado(
-            "No se pudo cargar el catálogo. " + error.message,
+            "No se pudo cargar el catálogo de Next Level. " +
+            error.message,
             true
         );
     }
