@@ -1,7 +1,7 @@
 <style>
 /* ==========================================
    GAMERS GOLD TOP-UP
-   NAVEGACIÓN PREMIUM
+   NAVEGACIÓN PREMIUM ANIMADA
 ========================================== */
 
 .gg-bottom-nav,
@@ -14,7 +14,6 @@
     left: 12px;
     right: 12px;
     bottom: max(12px, env(safe-area-inset-bottom));
-
     z-index: 99990;
 
     display: grid;
@@ -24,7 +23,6 @@
     padding: 9px 7px;
 
     background: rgba(5, 13, 29, 0.97);
-
     border: 1px solid rgba(0, 174, 255, 0.30);
     border-radius: 20px;
 
@@ -36,9 +34,27 @@
     -webkit-backdrop-filter: blur(20px);
 
     font-family: Arial, Helvetica, sans-serif;
+
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+
+    transition:
+        transform 0.32s ease,
+        opacity 0.25s ease,
+        visibility 0.32s ease;
 }
 
-/* ELEMENTOS DE NAVEGACIÓN */
+/* OCULTAR AL BAJAR */
+
+.gg-bottom-nav.gg-nav-hidden {
+    transform: translateY(calc(100% + 35px));
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* ELEMENTOS */
 
 .gg-bottom-nav .gg-nav-item {
     position: relative;
@@ -49,7 +65,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     gap: 6px;
 
     padding: 9px 2px;
@@ -68,10 +83,10 @@
     line-height: 1.2;
 
     transition:
-        color 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
+        color 0.22s ease,
+        background 0.22s ease,
+        border-color 0.22s ease,
+        transform 0.22s ease;
 }
 
 /* ICONOS SVG */
@@ -83,7 +98,6 @@
 
     width: 23px;
     height: 23px;
-
     color: currentColor;
 }
 
@@ -98,9 +112,13 @@
     stroke-width: 1.7;
     stroke-linecap: round;
     stroke-linejoin: round;
+
+    transition:
+        transform 0.25s ease,
+        filter 0.25s ease;
 }
 
-/* ELEMENTO ACTIVO */
+/* BOTÓN ACTIVO */
 
 .gg-bottom-nav .gg-nav-item.gg-active {
     color: #35d5ff;
@@ -116,11 +134,7 @@
     text-shadow: 0 0 12px rgba(0, 190, 255, 0.18);
 }
 
-.gg-bottom-nav .gg-nav-item.gg-active .gg-nav-icon {
-    filter: drop-shadow(0 0 5px rgba(0, 190, 255, 0.35));
-}
-
-/* INDICADOR SUPERIOR */
+/* INDICADOR LUMINOSO */
 
 .gg-bottom-nav .gg-nav-item.gg-active::before {
     content: "";
@@ -138,12 +152,50 @@
     border-radius: 10px;
 
     box-shadow: 0 0 10px rgba(0, 190, 255, 0.75);
+
+    animation: gg-indicator-glow 2s ease-in-out infinite;
+}
+
+/* ANIMACIÓN DEL ICONO ACTIVO */
+
+.gg-bottom-nav .gg-nav-item.gg-active .gg-nav-icon svg {
+    animation: gg-icon-enter 0.35s ease-out both;
+
+    filter: drop-shadow(
+        0 0 5px rgba(0, 190, 255, 0.35)
+    );
+}
+
+/* ANIMACIÓN DEL INDICADOR */
+
+@keyframes gg-indicator-glow {
+    0%, 100% {
+        box-shadow: 0 0 6px rgba(0, 190, 255, 0.45);
+    }
+
+    50% {
+        box-shadow: 0 0 13px rgba(0, 190, 255, 0.9);
+    }
+}
+
+/* ENTRADA SUAVE DEL ICONO */
+
+@keyframes gg-icon-enter {
+    from {
+        opacity: 0.65;
+        transform: translateY(3px) scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* INTERACCIÓN */
 
 .gg-bottom-nav .gg-nav-item:active {
-    transform: scale(0.96);
+    transform: scale(0.95);
 }
 
 @media (hover: hover) {
@@ -151,24 +203,26 @@
         color: #35d5ff;
         background-color: rgba(0, 174, 255, 0.07);
     }
+
+    .gg-bottom-nav .gg-nav-item:hover .gg-nav-icon svg {
+        transform: translateY(-2px);
+    }
 }
 
-/* ESPACIO INFERIOR PARA NO TAPAR EL CONTENIDO */
+/* ESPACIO PARA QUE LA BARRA NO TAPE EL CONTENIDO */
 
 body.gg-nav-enabled {
     padding-bottom: calc(105px + env(safe-area-inset-bottom)) !important;
 }
 
-/* PANTALLAS GRANDES */
+/* ORDENADOR */
 
 @media (min-width: 760px) {
     .gg-bottom-nav {
         left: auto;
         right: 24px;
         bottom: 22px;
-
         width: 370px;
-
         padding: 10px;
     }
 
@@ -178,11 +232,14 @@ body.gg-nav-enabled {
     }
 }
 
-/* RESPETAR MOVIMIENTO REDUCIDO */
+/* ACCESIBILIDAD */
 
 @media (prefers-reduced-motion: reduce) {
-    .gg-bottom-nav .gg-nav-item {
-        transition: none;
+    .gg-bottom-nav,
+    .gg-bottom-nav .gg-nav-item,
+    .gg-bottom-nav .gg-nav-icon svg {
+        transition: none !important;
+        animation: none !important;
     }
 }
 </style>
@@ -191,7 +248,6 @@ body.gg-nav-enabled {
 (function () {
     "use strict";
 
-    /* Evitar duplicados */
     if (document.querySelector(".gg-bottom-nav")) {
         return;
     }
@@ -200,7 +256,6 @@ body.gg-nav-enabled {
     const currentHash = window.location.hash;
 
     const inFrontend = /\/frontend\//i.test(currentPath);
-
     const isAccountPage = /\/cuenta\.html$/i.test(currentPath);
     const isOrdersPage = /\/pedidos\.html$/i.test(currentPath);
 
@@ -214,13 +269,8 @@ body.gg-nav-enabled {
         activeSection = "perfil";
     }
 
-    const homeHref = inFrontend
-        ? "../index.html"
-        : "index.html";
-
-    const pagePrefix = inFrontend
-        ? ""
-        : "frontend/";
+    const homeHref = inFrontend ? "../index.html" : "index.html";
+    const pagePrefix = inFrontend ? "" : "frontend/";
 
     const icons = {
         inicio: `
@@ -298,31 +348,67 @@ body.gg-nav-enabled {
         }
 
         const icon = document.createElement("span");
-
         icon.className = "gg-nav-icon";
         icon.innerHTML = icons[item.id];
 
         const label = document.createElement("span");
-
         label.textContent = item.label;
 
         link.appendChild(icon);
         link.appendChild(label);
-
         nav.appendChild(link);
     });
 
     function insertNavigation() {
-        if (!document.body) {
-            return;
-        }
-
-        if (document.querySelector(".gg-bottom-nav")) {
+        if (!document.body || document.querySelector(".gg-bottom-nav")) {
             return;
         }
 
         document.body.appendChild(nav);
         document.body.classList.add("gg-nav-enabled");
+
+        /* Mostrar la barra al comenzar */
+        nav.classList.remove("gg-nav-hidden");
+
+        /* Ocultar al bajar y mostrar al subir */
+        let lastScrollY = Math.max(
+            0,
+            window.scrollY || window.pageYOffset || 0
+        );
+
+        let ticking = false;
+        const threshold = 8;
+        const topLimit = 60;
+
+        function handleScroll() {
+            const currentY = Math.max(
+                0,
+                window.scrollY || window.pageYOffset || 0
+            );
+
+            const difference = currentY - lastScrollY;
+
+            /* Cerca del inicio, la barra siempre permanece visible */
+            if (currentY <= topLimit) {
+                nav.classList.remove("gg-nav-hidden");
+            } else if (difference > threshold) {
+                /* Desplazamiento hacia abajo */
+                nav.classList.add("gg-nav-hidden");
+            } else if (difference < -threshold) {
+                /* Desplazamiento hacia arriba */
+                nav.classList.remove("gg-nav-hidden");
+            }
+
+            lastScrollY = currentY;
+            ticking = false;
+        }
+
+        window.addEventListener("scroll", function () {
+            if (!ticking) {
+                window.requestAnimationFrame(handleScroll);
+                ticking = true;
+            }
+        }, { passive: true });
     }
 
     if (document.readyState === "loading") {
@@ -335,4 +421,4 @@ body.gg-nav-enabled {
         insertNavigation();
     }
 })();
-</script>
+           </script>
