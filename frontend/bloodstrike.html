@@ -3,9 +3,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Recargas de BC de Blood Strike en Gamers Gold Top-Up."><title>Blood Strike | Gamers Gold Top-Up</title>
-
-<style>
+    <meta name="description" content="Recargas de BC de Blood Strike en Gamers Gold Top-Up.">
+    <title>Blood Strike | Gamers Gold Top-Up</title><style>
     * {
         box-sizing: border-box;
         margin: 0;
@@ -255,18 +254,14 @@
 </style>
 
 </head><body>
-<div class="contenedor"><header class="header">
-    <div class="logo">
-        <span class="rayo">⚡</span> Gamers Gold Top-Up
-    </div>
-
-    <a href="juegos.html" class="volver">← Juegos</a>
-</header>
-
-<main class="card">
-
+<div class="contenedor">
+    <header class="header">
+        <div class="logo">
+            <span class="rayo">⚡</span> Gamers Gold Top-Up
+        </div>
+        <a href="juegos.html" class="volver">← Juegos</a>
+    </header><main class="card">
     <div class="icono">🔥</div>
-
     <h1>Blood Strike</h1>
 
     <p class="descripcion">
@@ -320,7 +315,6 @@
         Si tienes un pedido pendiente, consulta su estado antes
         de iniciar otra compra.
     </p>
-
 </main>
 
 </div><script type="module">
@@ -329,9 +323,7 @@
 import { createClient } from
     "https://esm.sh/@supabase/supabase-js@2";
 
-/* =====================================================
-   CONFIGURACIÓN
-===================================================== */
+/* CONFIGURACIÓN */
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -374,17 +366,13 @@ let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
 
-/* =====================================================
-   NAVEGACIÓN
-===================================================== */
+/* NAVEGACIÓN */
 
 botonOfertas.addEventListener("click", () => {
     window.location.href = "ofertas-bloodstrike.html";
 });
 
-/* =====================================================
-   MENSAJES
-===================================================== */
+/* MENSAJES */
 
 function mostrarEstado(mensaje, tipo = "") {
     estadoCatalogo.textContent = mensaje;
@@ -405,9 +393,41 @@ function normalizarTexto(valor) {
         .replace(/[\s_-]/g, "");
 }
 
-/* =====================================================
-   PROTECCIÓN DE PEDIDOS PENDIENTES
-===================================================== */
+/* BOTÓN: VALIDACIÓN Y ESTADO */
+
+function actualizarBoton() {
+    if (procesando) {
+        botonContinuar.disabled = true;
+        return;
+    }
+
+    if (pedidoPendienteId) {
+        botonContinuar.textContent =
+            accionPendiente === "enviar"
+                ? "RECUPERAR PEDIDO"
+                : "CONSULTAR PEDIDO";
+
+        botonContinuar.disabled = false;
+        return;
+    }
+
+    botonContinuar.textContent = "RECARGAR";
+
+    const jugadorValido =
+        campoJugador.value.trim().length > 0 &&
+        campoJugador.value.trim().length <= 50;
+
+    const productoValido =
+        productoSeleccionado !== null &&
+        productoComprable(productoSeleccionado.local);
+
+    botonContinuar.disabled =
+        !(jugadorValido && productoValido);
+}
+
+campoJugador.addEventListener("input", actualizarBoton);
+
+/* PEDIDOS PENDIENTES */
 
 function clavePedidoPendiente(userId) {
     return "ggtopup_bloodstrike_pedido_" + userId;
@@ -437,46 +457,45 @@ function borrarPedidoPendiente() {
 }
 
 function recuperarPedidoPendiente(userId) {
+    const guardado = localStorage.getItem(
+        clavePedidoPendiente(userId)
+    );
+
+    if (!guardado) {
+        pedidoPendienteId = null;
+        accionPendiente = "crear";
+        return;
+    }
+
     try {
-        const guardado = localStorage.getItem(
-            clavePedidoPendiente(userId)
-        );
-
-        if (!guardado) {
-            pedidoPendienteId = null;
-            accionPendiente = "crear";
-            return;
-        }
-
         const datos = JSON.parse(guardado);
 
-        if (
-            typeof datos.orderId !== "string" ||
-            !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(datos.orderId)
-        ) {
-            throw new Error(
-                "La referencia del pedido guardado no es válida."
-            );
+        const uuidValido =
+            typeof datos.orderId === "string" &&
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(datos.orderId);
+
+        if (!uuidValido) {
+            throw new Error("La referencia guardada no es válida.");
         }
 
         pedidoPendienteId = datos.orderId;
-
-        accionPendiente = datos.accion === "consultar"
-            ? "consultar"
-            : "enviar";
+        accionPendiente =
+            datos.accion === "consultar" ? "consultar" : "enviar";
 
     } catch (error) {
-        console.error(
-            "Error recuperando pedido guardado:",
-            error
-        );
+        console.error("Referencia de pedido inválida:", error);
 
         /*
-         * No borramos una referencia dudosa ni permitimos
-         * que se cree otra compra automáticamente.
+         * No permitimos una nueva compra si hay una referencia
+         * guardada dañada que necesita revisión.
          */
         pedidoPendienteId = null;
         accionPendiente = "crear";
+
+        throw new Error(
+            "La referencia del pedido guardado no es válida. " +
+            "Revisa el pedido anterior antes de comprar otra vez."
+        );
     }
 }
 
@@ -495,11 +514,6 @@ async function verificarPedidoGuardado(userId) {
         .maybeSingle();
 
     if (error) {
-        console.error(
-            "Error verificando pedido guardado:",
-            error.message
-        );
-
         throw new Error(
             "No se pudo verificar el pedido anterior. " +
             "No iniciaremos otra compra hasta resolverlo."
@@ -509,7 +523,6 @@ async function verificarPedidoGuardado(userId) {
     if (!data) {
         throw new Error(
             "No pudimos confirmar el pedido anterior. " +
-            "Conservamos su referencia por seguridad. " +
             "No hagas otra recarga hasta aclarar su estado."
         );
     }
@@ -520,10 +533,7 @@ async function verificarPedidoGuardado(userId) {
         estadoLocal === "completed" ||
         estadoLocal === "refunded"
     ) {
-        if (pedidoPendienteId === idVerificado) {
-            borrarPedidoPendiente();
-        }
-
+        borrarPedidoPendiente();
         return false;
     }
 
@@ -545,42 +555,15 @@ async function verificarPedidoGuardado(userId) {
     return true;
 }
 
-function actualizarBoton() {
-    if (procesando) return;
-
-    if (pedidoPendienteId) {
-        botonContinuar.textContent =
-            accionPendiente === "enviar"
-                ? "RECUPERAR PEDIDO"
-                : "CONSULTAR PEDIDO";
-    } else {
-        botonContinuar.textContent = "RECARGAR";
-    }
-}
-
-/* =====================================================
-   CATÁLOGO DEL PROVEEDOR
-===================================================== */
+/* CATÁLOGO NEXT LEVEL */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) return respuesta;
+    if (!respuesta || typeof respuesta !== "object") return [];
 
-    if (!respuesta || typeof respuesta !== "object") {
-        return [];
-    }
-
-    if (Array.isArray(respuesta.productos)) {
-        return respuesta.productos;
-    }
-
-    if (Array.isArray(respuesta.products)) {
-        return respuesta.products;
-    }
-
-    if (Array.isArray(respuesta.data)) {
-        return respuesta.data;
-    }
-
+    if (Array.isArray(respuesta.productos)) return respuesta.productos;
+    if (Array.isArray(respuesta.products)) return respuesta.products;
+    if (Array.isArray(respuesta.data)) return respuesta.data;
     if (Array.isArray(respuesta.data?.products)) {
         return respuesta.data.products;
     }
@@ -627,9 +610,7 @@ function esPaqueteBC(producto) {
     return esBC && !esOfertaEspecial;
 }
 
-/* =====================================================
-   PRODUCTOS Y PRECIOS GVR EN SUPABASE
-===================================================== */
+/* PRODUCTOS LOCALES Y PRECIOS */
 
 async function cargarProductosLocales() {
     const { data, error } = await supabase
@@ -640,11 +621,6 @@ async function cargarProductosLocales() {
         .eq("provider", "nextlevel");
 
     if (error) {
-        console.error(
-            "Error consultando productos:",
-            error.message
-        );
-
         throw new Error(
             "No se pudieron verificar los productos y sus precios GVR."
         );
@@ -662,12 +638,6 @@ function buscarProductoLocal(productoProveedor) {
         String(producto.provider_product_id || "").trim() === providerId
     ) || null;
 }
-
-/*
- * Se permiten precios decimales.
- * Solo se consideran comprables los productos activos,
- * vinculados al proveedor y con un precio positivo válido.
- */
 
 function productoComprable(productoLocal) {
     if (!productoLocal) return false;
@@ -688,9 +658,7 @@ function mostrarPrecio(precio) {
     }) + " GVR";
 }
 
-/* =====================================================
-   DIBUJAR PRODUCTOS
-===================================================== */
+/* DIBUJAR CATÁLOGO */
 
 function renderizarCatalogo() {
     catalogo.replaceChildren();
@@ -701,7 +669,6 @@ function renderizarCatalogo() {
         const comprable = productoComprable(local);
 
         const tarjeta = document.createElement("button");
-
         tarjeta.type = "button";
         tarjeta.className = "producto";
 
@@ -721,10 +688,7 @@ function renderizarCatalogo() {
         estado.className = "producto-estado";
 
         if (comprable) {
-            precio.textContent = mostrarPrecio(
-                Number(local.price_gvr)
-            );
-
+            precio.textContent = mostrarPrecio(Number(local.price_gvr));
             estado.textContent = "Seleccionar paquete";
         } else {
             precio.textContent = "Precio pendiente";
@@ -755,39 +719,40 @@ function renderizarCatalogo() {
                     mostrarPrecio(Number(local.price_gvr)),
                     "correcto"
                 );
+
+                /* CORRECCIÓN: recalcular el botón al seleccionar */
+                actualizarBoton();
             });
         }
 
         catalogo.appendChild(tarjeta);
     });
+
+    /* Después de dibujar, revisar el estado del botón */
+    actualizarBoton();
 }
 
-/* =====================================================
-   CARGAR CATÁLOGO
-===================================================== */
+/* CARGAR CATÁLOGO */
 
 async function cargarCatalogo() {
     productoSeleccionado = null;
     productosDisponibles = [];
-
     catalogo.replaceChildren();
+    actualizarBoton();
 
     mostrarEstado("Cargando paquetes de BC disponibles...");
 
     try {
         const [respuestaCatalogo] = await Promise.all([
-            fetch(
-                URL_CATALOGO + "?game=blood-strike",
-                {
-                    method: "GET",
-                    headers: {
-                        "apikey": SUPABASE_KEY,
-                        "Authorization": "Bearer " + SUPABASE_KEY,
-                        "Accept": "application/json"
-                    },
-                    cache: "no-store"
-                }
-            ),
+            fetch(URL_CATALOGO + "?game=blood-strike", {
+                method: "GET",
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": "Bearer " + SUPABASE_KEY,
+                    "Accept": "application/json"
+                },
+                cache: "no-store"
+            }),
             cargarProductosLocales()
         ]);
 
@@ -796,9 +761,7 @@ async function cargarCatalogo() {
         try {
             resultado = await respuestaCatalogo.json();
         } catch {
-            throw new Error(
-                "El catálogo devolvió una respuesta no válida."
-            );
+            throw new Error("El catálogo devolvió una respuesta no válida.");
         }
 
         if (!respuestaCatalogo.ok) {
@@ -812,9 +775,7 @@ async function cargarCatalogo() {
         const productos = extraerProductos(resultado);
 
         if (!productos.length) {
-            throw new Error(
-                "No se recibieron productos del catálogo."
-            );
+            throw new Error("No se recibieron productos del catálogo.");
         }
 
         productosDisponibles = productos.filter(producto =>
@@ -829,6 +790,7 @@ async function cargarCatalogo() {
                 "No se encontraron paquetes normales de BC disponibles.",
                 "error"
             );
+            actualizarBoton();
             return;
         }
 
@@ -846,26 +808,19 @@ async function cargarCatalogo() {
         );
 
     } catch (error) {
-        console.error(
-            "Error cargando Blood Strike:",
-            error
-        );
-
+        console.error("Error cargando Blood Strike:", error);
         catalogo.replaceChildren();
 
         mostrarEstado(
-            mensajeError(
-                error,
-                "No se pudo cargar el catálogo."
-            ),
+            mensajeError(error, "No se pudo cargar el catálogo."),
             "error"
         );
+
+        actualizarBoton();
     }
 }
 
-/* =====================================================
-   LLAMADAS A LAS FUNCIONES DE PEDIDOS
-===================================================== */
+/* LLAMADAS A EDGE FUNCTIONS */
 
 async function llamarFuncion(url, accessToken, body) {
     const respuesta = await fetch(url, {
@@ -887,64 +842,43 @@ async function llamarFuncion(url, accessToken, body) {
     }
 
     if (!respuesta.ok) {
-        const error = new Error(
+        throw new Error(
             datos.error ||
             datos.message ||
             "La función devolvió HTTP " + respuesta.status
         );
-
-        error.status = respuesta.status;
-        error.data = datos;
-
-        throw error;
     }
 
     return datos;
 }
 
-/* =====================================================
-   CONSULTAR PEDIDO PENDIENTE
-===================================================== */
+/* CONSULTAR PEDIDO */
 
 async function consultarPedido(accessToken) {
     if (!pedidoPendienteId) {
-        throw new Error(
-            "No hay ningún pedido guardado para consultar."
-        );
+        throw new Error("No hay ningún pedido guardado para consultar.");
     }
 
     const datos = await llamarFuncion(
         URL_CONSULTAR_PEDIDO,
         accessToken,
-        {
-            game_order_id: pedidoPendienteId
-        }
+        { game_order_id: pedidoPendienteId }
     );
 
-    const estadoLocal = String(
-        datos.status || ""
-    ).toLowerCase();
+    const estadoLocal = String(datos.status || "").toLowerCase();
+    const estadoProveedor = String(datos.provider_status || "").toUpperCase();
 
-    const estadoProveedor = String(
-        datos.provider_status || ""
-    ).toUpperCase();
-
-    if (
-        estadoLocal === "completed" ||
-        estadoLocal === "refunded"
-    ) {
+    if (estadoLocal === "completed" || estadoLocal === "refunded") {
         const mensaje = estadoLocal === "completed"
             ? "¡Recarga completada!"
             : "El pedido figura como reembolsado.";
 
         borrarPedidoPendiente();
         actualizarBoton();
-
         mostrarEstado(mensaje, "correcto");
 
         alert(
-            mensaje + "\n\n" +
-            "Pedido: " +
+            mensaje + "\n\nPedido: " +
             (datos.game_order_id || "consultado")
         );
 
@@ -953,7 +887,6 @@ async function consultarPedido(accessToken) {
 
     if (estadoProveedor === "FAILED") {
         accionPendiente = "consultar";
-
         guardarPedidoPendiente();
         actualizarBoton();
 
@@ -967,7 +900,6 @@ async function consultarPedido(accessToken) {
     }
 
     accionPendiente = "consultar";
-
     guardarPedidoPendiente();
     actualizarBoton();
 
@@ -977,38 +909,28 @@ async function consultarPedido(accessToken) {
     );
 }
 
-/* =====================================================
-   ENVIAR PEDIDO EXISTENTE
-===================================================== */
+/* ENVIAR PEDIDO EXISTENTE */
 
 async function enviarPedido(accessToken) {
     if (!pedidoPendienteId) {
-        throw new Error(
-            "No hay ningún pedido guardado para enviar."
-        );
+        throw new Error("No hay ningún pedido guardado para enviar.");
     }
 
     /*
-     * Guardamos primero la acción de consulta.
-     * Si se pierde la respuesta del servidor, no creamos
-     * otro pedido automáticamente.
+     * Si la respuesta se pierde, el sistema conserva la referencia
+     * del pedido y no crea automáticamente una compra nueva.
      */
-
     accionPendiente = "consultar";
-
     guardarPedidoPendiente();
     actualizarBoton();
 
     const datos = await llamarFuncion(
         URL_CREAR_PEDIDO,
         accessToken,
-        {
-            game_order_id: pedidoPendienteId
-        }
+        { game_order_id: pedidoPendienteId }
     );
 
     accionPendiente = "consultar";
-
     guardarPedidoPendiente();
     actualizarBoton();
 
@@ -1025,27 +947,16 @@ async function enviarPedido(accessToken) {
     );
 }
 
-/* =====================================================
-   CREAR COMPRA LOCAL
-===================================================== */
+/* CREAR COMPRA */
 
 async function crearCompra(accessToken, playerId) {
     if (!productoSeleccionado) {
-        throw new Error(
-            "Selecciona primero un paquete disponible."
-        );
+        throw new Error("Selecciona primero un paquete disponible.");
     }
 
     const local = productoSeleccionado.local;
 
-    if (
-        !local ||
-        local.active !== true ||
-        !Number.isFinite(Number(local.price_gvr)) ||
-        Number(local.price_gvr) <= 0 ||
-        local.provider !== "nextlevel" ||
-        !local.provider_product_id
-    ) {
+    if (!productoComprable(local)) {
         throw new Error(
             "El producto no está correctamente configurado para la compra."
         );
@@ -1054,9 +965,7 @@ async function crearCompra(accessToken, playerId) {
     const { data: productoActual, error: errorProducto } =
         await supabase
             .from("game_products")
-            .select(
-                "id,game,price_gvr,active,provider,provider_product_id"
-            )
+            .select("id,game,price_gvr,active,provider,provider_product_id")
             .eq("id", local.id)
             .eq("provider", "nextlevel")
             .eq("active", true)
@@ -1085,8 +994,7 @@ async function crearCompra(accessToken, playerId) {
 
     const confirmar = confirm(
         "Confirma tu recarga de Blood Strike:\n\n" +
-        "Paquete: " +
-        obtenerNombre(productoSeleccionado.proveedor) + "\n" +
+        "Paquete: " + obtenerNombre(productoSeleccionado.proveedor) + "\n" +
         "ID de jugador: " + playerId + "\n" +
         "Precio: " + mostrarPrecio(precioConfirmado) + "\n\n" +
         "¿Deseas continuar con la recarga?"
@@ -1094,25 +1002,15 @@ async function crearCompra(accessToken, playerId) {
 
     if (!confirmar) return;
 
-    mostrarEstado(
-        "Creando pedido. No cierres esta página..."
-    );
+    mostrarEstado("Creando pedido. No cierres esta página...");
 
     const { data: orderId, error: errorCompra } =
-        await supabase.rpc(
-            "purchase_game_product",
-            {
-                p_product_id: productoActual.id,
-                p_player_id: playerId
-            }
-        );
+        await supabase.rpc("purchase_game_product", {
+            p_product_id: productoActual.id,
+            p_player_id: playerId
+        });
 
     if (errorCompra) {
-        console.error(
-            "Error creando compra local:",
-            errorCompra.message
-        );
-
         throw new Error(
             errorCompra.message ||
             "No se pudo crear la compra. Comprueba tu saldo y tu sesión."
@@ -1124,8 +1022,7 @@ async function crearCompra(accessToken, playerId) {
         !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(orderId)
     ) {
         throw new Error(
-            "No recibimos un ID de pedido válido. " +
-            "Revisa tus pedidos antes de volver a intentarlo."
+            "No recibimos un ID de pedido válido. Revisa tus pedidos antes de volver a intentarlo."
         );
     }
 
@@ -1138,15 +1035,13 @@ async function crearCompra(accessToken, playerId) {
     await enviarPedido(accessToken);
 }
 
-/* =====================================================
-   BOTÓN PRINCIPAL
-===================================================== */
+/* BOTÓN PRINCIPAL */
 
 botonContinuar.addEventListener("click", async () => {
     if (procesando) return;
 
     procesando = true;
-    botonContinuar.disabled = true;
+    actualizarBoton();
 
     try {
         const {
@@ -1155,15 +1050,11 @@ botonContinuar.addEventListener("click", async () => {
         } = await supabase.auth.getSession();
 
         if (sessionError) {
-            throw new Error(
-                "No se pudo comprobar la sesión."
-            );
+            throw new Error("No se pudo comprobar la sesión.");
         }
 
         if (!session?.access_token) {
-            throw new Error(
-                "Debes iniciar sesión para continuar."
-            );
+            throw new Error("Debes iniciar sesión para continuar.");
         }
 
         const {
@@ -1181,27 +1072,14 @@ botonContinuar.addEventListener("click", async () => {
 
         recuperarPedidoPendiente(user.id);
 
-        /*
-         * Primero comprobamos cualquier pedido pendiente.
-         * No iniciamos otra compra mientras haya uno sin resolver.
-         */
-
         await verificarPedidoGuardado(user.id);
 
         if (pedidoPendienteId) {
             if (accionPendiente === "enviar") {
-                mostrarEstado(
-                    "Retomando el pedido pendiente. " +
-                    "No se creará otro pedido..."
-                );
-
+                mostrarEstado("Retomando el pedido pendiente...");
                 await enviarPedido(session.access_token);
-
             } else {
-                mostrarEstado(
-                    "Consultando el estado del pedido anterior..."
-                );
-
+                mostrarEstado("Consultando el estado del pedido anterior...");
                 await consultarPedido(session.access_token);
             }
 
@@ -1211,59 +1089,38 @@ botonContinuar.addEventListener("click", async () => {
         const playerId = campoJugador.value.trim();
 
         if (!playerId) {
-            throw new Error(
-                "Introduce tu ID de Blood Strike."
-            );
+            throw new Error("Introduce tu ID de Blood Strike.");
         }
 
         if (playerId.length > 50) {
-            throw new Error(
-                "El ID del jugador es demasiado largo."
-            );
+            throw new Error("El ID del jugador es demasiado largo.");
         }
 
         if (!productoSeleccionado) {
-            throw new Error(
-                "Selecciona primero un paquete disponible."
-            );
+            throw new Error("Selecciona primero un paquete disponible.");
         }
 
-        await crearCompra(
-            session.access_token,
-            playerId
-        );
+        await crearCompra(session.access_token, playerId);
 
     } catch (error) {
-        console.error(
-            "Error en la compra de Blood Strike:",
-            error
-        );
+        console.error("Error en la compra de Blood Strike:", error);
 
         mostrarEstado(
-            mensajeError(
-                error,
-                "No se pudo completar la operación."
-            ),
+            mensajeError(error, "No se pudo completar la operación."),
             "error"
         );
 
         alert(
-            mensajeError(
-                error,
-                "No se pudo completar la operación."
-            )
+            mensajeError(error, "No se pudo completar la operación.")
         );
 
     } finally {
         procesando = false;
-        botonContinuar.disabled = false;
         actualizarBoton();
     }
 });
 
-/* =====================================================
-   INICIO
-===================================================== */
+/* INICIO */
 
 async function iniciar() {
     try {
@@ -1273,22 +1130,19 @@ async function iniciar() {
 
         if (session?.user?.id) {
             usuarioActualId = session.user.id;
-
             recuperarPedidoPendiente(usuarioActualId);
-            actualizarBoton();
         }
 
     } catch (error) {
-        console.error(
-            "No se pudo recuperar la sesión:",
-            error
-        );
+        console.error("No se pudo recuperar la sesión:", error);
+        mostrarEstado(error.message, "error");
     }
 
+    actualizarBoton();
     await cargarCatalogo();
 }
 
 iniciar();
 
 </script></body>
-    </html>
+</html>
