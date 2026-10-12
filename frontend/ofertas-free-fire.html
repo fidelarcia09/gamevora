@@ -481,7 +481,7 @@
         <div class="etiqueta">FREE FIRE · OFERTAS ESPECIALES</div>
 
         <div id="estadoProductos" class="estado" role="status" aria-live="polite">
-            Conectando con el catálogo...
+            Cargando ofertas disponibles...
         </div>
 
         <div id="listaOfertas" class="lista-ofertas" style="display:none;"></div>
@@ -624,9 +624,27 @@ window.CONFIG_OFERTAS = {
 };
 </script>
 
+<script>
+/* Mantiene una sola oferta seleccionada sin modificar el sistema de pedidos. */
+document.getElementById("listaOfertas").addEventListener("click", function (event) {
+    const boton = event.target.closest(".boton-oferta");
+
+    if (!boton || boton.disabled) {
+        return;
+    }
+
+    this.querySelectorAll(".boton-oferta").forEach(function (otraOferta) {
+        const seleccionada = otraOferta === boton;
+
+        otraOferta.classList.toggle("seleccionado", seleccionada);
+        otraOferta.setAttribute("aria-pressed", String(seleccionada));
+    });
+});
+</script>
+
 <script
     type="module"
     src="ofertas.js?v=20261011ffventas1"
 ></script>
 </body>
-</html>
+    </html>
