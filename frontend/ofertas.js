@@ -1,961 +1,1288 @@
 /* =========================================================
-GAMERS GOLD TOP-UP
-MOTOR UNIVERSAL DE OFERTAS
-CATÁLOGO NEXT LEVEL
+   GAMERS GOLD TOP-UP — MOTOR DE OFERTAS Y PEDIDOS
+   Las compras quedan habilitadas únicamente para Free Fire.
+   Los demás juegos conservan sus catálogos sin activar ventas.
+   ========================================================= */
 
-JUEGOS:
-FREE FIRE
-MOBILE LEGENDS
-BLOOD STRIKE
-PUBG MOBILE
-HONOR OF KINGS
-ARENA BREAKOUT
-
-IMPORTANTE:
-
-- Cada página debe declarar window.CONFIG_OFERTAS
-  ANTES de cargar este archivo.
-- No se utiliza Free Fire como alternativa silenciosa.
-- Solo muestra ofertas configuradas para el juego actual.
-- Consulta el catálogo mediante una función de Supabase.
-- No realiza compras.
-- No crea pedidos.
-- No modifica saldos.
-  ========================================================= */
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 "use strict";
 
-/* =========================================================
-CONFIGURACIÓN GENERAL
-========================================================= */
-
-const SUPABASE_URL =
-"https://gsuhzcavghsiolmipnzi.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
 const URL_CATALOGO =
-SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
+    `${SUPABASE_URL}/functions/v1/nextlevel-catalogo`;
 
-const TIEMPO_LIMITE_CATALOGO = 15000;
+const URL_CREAR_PEDIDO =
+    `${SUPABASE_URL}/functions/v1/nextlevel-crear-pedido`;
 
-/* =========================================================
-CONFIGURACIÓN DEL JUEGO ACTUAL
+const URL_CONSULTAR_PEDIDO =
+    `${SUPABASE_URL}/functions/v1/nextlevel-consultar-pedido`;
 
-IMPORTANTE:
-No usar Free Fire como valor predeterminado.
-Si una página no declara su configuración, mostrar error.
-========================================================= */
+const TIEMPO_LIMITE = 15000;
 
-const CONFIG_PAGINA =
-window.CONFIG_OFERTAS &&
-typeof window.CONFIG_OFERTAS === "object"
-? window.CONFIG_OFERTAS
-: null;
+const UUID_RE =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-const NOMBRE_JUEGO = String(
-CONFIG_PAGINA?.juego || ""
-).trim();
+const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
+);
+
+const CONFIG =
+    window.CONFIG_OFERTAS &&
+    typeof window.CONFIG_OFERTAS === "object"
+        ? window.CONFIG_OFERTAS
+        : null;
+
+const NOMBRE_JUEGO = String(CONFIG?.juego || "").trim();
 
 const PAGINA_VOLVER =
-CONFIG_PAGINA?.paginaVolver || "index.html";
+    CONFIG?.paginaVolver || "index.html";
 
 const TEXTO_ID =
-CONFIG_PAGINA?.textoId || "ID del jugador";
+    CONFIG?.textoId || "ID del jugador";
 
 const PLACEHOLDER_ID =
-CONFIG_PAGINA?.placeholderId || "Escribe tu ID";
+    CONFIG?.placeholderId || "Escribe tu ID";
 
-/* Normalizar nombres de juegos. */
-
-const JUEGO_NORMALIZADO = NOMBRE_JUEGO
-.normalize("NFD")
-.replace(/[\u0300-\u036f]/g, "")
-.toLowerCase()
-.replace(/[_-]+/g, " ")
-.replace(/\s+/g, " ")
-.trim();
-
-/* Identificadores aceptados por Next Level. */
+const JUEGO_NORMALIZADO = normalizarTexto(NOMBRE_JUEGO);
 
 const JUEGOS_API = {
-"free fire": "free-fire",
-"mobile legends": "mobile-legends",
-"blood strike": "blood-strike",
-"pubg mobile": "pubg-mobile",
-"honor of kings": "honor-of-kings",
-"arena breakout": "arena-breakout"
+    freefire: "free-fire",
+    mobilelegends: "mobile-legends",
+    bloodstrike: "blood-strike",
+    pubgmobile: "pubg-mobile",
+    honorofkings: "honor-of-kings",
+    arenabreakout: "arena-breakout"
 };
 
 const JUEGO_API =
-JUEGOS_API[JUEGO_NORMALIZADO] || null;
+    JUEGOS_API[JUEGO_NORMALIZADO] || null;
 
-/* Diagnóstico. */
+const ES_FREE_FIRE =
+    JUEGO_NORMALIZADO === "freefire";
 
-console.log(
-"[Gamers Gold] URL:",
-window.location.href
-);
+let productosLocales = [];
+let productosProveedor = [];
 
-console.log(
-"[Gamers Gold] Configuración recibida:",
-CONFIG_PAGINA
-);
+let productosPorId = Object.create(null);
+let productosMostrados = Object.create(null);
 
-console.log(
-"[Gamers Gold] Juego:",
-NOMBRE_JUEGO || "(sin configurar)"
-);
-
-console.log(
-"[Gamers Gold] Juego normalizado:",
-JUEGO_NORMALIZADO
-);
-
-console.log(
-"[Gamers Gold] Código de catálogo:",
-JUEGO_API
-);
-
-/* =========================================================
-VARIABLES
-========================================================= */
-
-let ofertaSeleccionada = "";
 let productoSeleccionado = null;
 let precioSeleccionado = 0;
+
 let procesandoCompra = false;
+let usuarioActualId = null;
+let pedidoPendienteId = null;
+let accionPendiente = "crear";
 
-/* =========================================================
-OFERTAS DE FREE FIRE
-========================================================= */
+const el = id => document.getElementById(id);
 
-const PRODUCTOS_FREE_FIRE = [
-{
-id: "fz-free_fire_latam-booyah_pass",
-nombre: "Booyah Pass",
-emoji: "🎟️"
-},
-{
-id: "fz-free_fire_latam-weekly_membership",
-nombre: "Membresía Semanal",
-emoji: "💎"
-},
-{
-id: "fz-free_fire_latam-monthly_membership",
-nombre: "Membresía Mensual",
-emoji: "👑"
-}
-];
-
-/* =========================================================
-OFERTAS DE MOBILE LEGENDS
-========================================================= */
-
-const PRODUCTOS_MOBILE_LEGENDS = [
-{
-id: "fz-mobile_legends_global-weekly_elite_pack",
-nombre: "Weekly Elite Pack",
-emoji: "🎁"
-},
-{
-id: "fz-mobile_legends_global-weekly_pass",
-nombre: "Weekly Pass",
-emoji: "🎟️"
-},
-{
-id: "fz-mobile_legends_global-weekly_diamond_pass",
-nombre: "Weekly Diamond Pass",
-emoji: "💎"
-},
-{
-id: "fz-mobile_legends_global-monthly_elite_pack",
-nombre: "Monthly Elite Pack",
-emoji: "👑"
-},
-{
-id: "fz-mobile_legends_global-twilight_pass",
-nombre: "Twilight Pass",
-emoji: "🌌"
-}
-];
-
-/* =========================================================
-OFERTAS DE BLOOD STRIKE
-========================================================= */
-
-const PRODUCTOS_BLOOD_STRIKE = [
-{
-id: "fz-blood_strike-lucky_bag_week",
-nombre: "Semana de Bolsa de la Suerte",
-emoji: "🎁"
-},
-{
-id: "fz-blood_strike-level_up_pass",
-nombre: "Level Up Pass",
-emoji: "🚀"
-},
-{
-id: "fz-blood_strike-strike_pass_elite",
-nombre: "Strike Pass Elite",
-emoji: "🎟️"
-},
-{
-id: "fz-blood_strike-strike_pass_premium",
-nombre: "Strike Pass Premium",
-emoji: "👑"
-}
-];
-
-/* =========================================================
-OFERTAS DE PUBG MOBILE
-========================================================= */
-
-const PRODUCTOS_PUBG_MOBILE = [
-{
-id: "fz-pubg_mobile_auto-elite_pass_lv1_100",
-nombre: "Elite Pass LV1-100",
-emoji: "🎟️"
-},
-{
-id: "fz-pubg_mobile_auto-elite_pass_lv1_50",
-nombre: "Elite Pass LV1-50",
-emoji: "🎟️"
-},
-{
-id: "fz-pubg_mobile_auto-elite_pass_plus_lv1_100",
-nombre: "Elite Pass Plus LV1-100",
-emoji: "👑"
-},
-{
-id: "fz-pubg_mobile_auto-first_purchase_pack",
-nombre: "First Purchase Pack",
-emoji: "🎁"
-},
-{
-id: "fz-pubg_mobile_auto-mythic_emblem_pack",
-nombre: "Mythic Emblem Pack",
-emoji: "💎"
-},
-{
-id: "fz-pubg_mobile_auto-prime_1_month",
-nombre: "Prime (1 Month)",
-emoji: "⭐"
-},
-{
-id: "fz-pubg_mobile_auto-prime_3_months",
-nombre: "Prime (3 Months)",
-emoji: "⭐"
-},
-{
-id: "fz-pubg_mobile_auto-prime_6_months",
-nombre: "Prime (6 Months)",
-emoji: "⭐"
-},
-{
-id: "fz-pubg_mobile_auto-prime_12_months",
-nombre: "Prime (12 Months)",
-emoji: "⭐"
-},
-{
-id: "fz-pubg_mobile_auto-prime_plus_1_month",
-nombre: "Prime Plus (1 Month)",
-emoji: "👑"
-},
-{
-id: "fz-pubg_mobile_auto-prime_plus_3_months",
-nombre: "Prime Plus (3 Months)",
-emoji: "👑"
-},
-{
-id: "fz-pubg_mobile_auto-prime_plus_6_months",
-nombre: "Prime Plus (6 Months)",
-emoji: "👑"
-},
-{
-id: "fz-pubg_mobile_auto-prime_plus_12_months",
-nombre: "Prime Plus (12 Months)",
-emoji: "👑"
-},
-{
-id: "fz-pubg_mobile_auto-upgradable_firearm_materials_pack",
-nombre: "Upgradable Firearm Materials Pack",
-emoji: "🔥"
-},
-{
-id: "fz-pubg_mobile_auto-weekly_deal_pack_1",
-nombre: "Weekly Deal Pack 1",
-emoji: "🎁"
-},
-{
-id: "fz-pubg_mobile_auto-weekly_deal_pack_2",
-nombre: "Weekly Deal Pack 2",
-emoji: "🎁"
-},
-{
-id: "fz-pubg_mobile_auto-weekly_mythic_emblem_value_pack",
-nombre: "Weekly Mythic Emblem Value Pack",
-emoji: "💎"
-}
-];
-
-/* =========================================================
-OFERTAS DE HONOR OF KINGS
-========================================================= */
-
-const PRODUCTOS_HONOR_OF_KINGS = [
-{
-id: "fz-honor_of_kings-standard_purchase_rebate_pack",
-nombre: "Standard Purchase Rebate Pack",
-emoji: "🎁"
-},
-{
-id: "fz-honor_of_kings-weekly_card",
-nombre: "Weekly Card",
-emoji: "📅"
-},
-{
-id: "fz-honor_of_kings-premium_purchase_rebate_pack",
-nombre: "Premium Purchase Rebate Pack",
-emoji: "👑"
-},
-{
-id: "fz-honor_of_kings-weekly_card_plus",
-nombre: "Weekly Card Plus",
-emoji: "⭐"
-}
-];
-
-/* =========================================================
-OFERTAS ESPECIALES DE ARENA BREAKOUT
-
-Se excluyen todos los paquetes de Bonds.
-========================================================= */
-
-const PRODUCTOS_ARENA_BREAKOUT = [
-{
-id: "fz-arena_breakout-beginner_select",
-nombre: "Beginner Select",
-emoji: "🎯"
-},
-{
-id: "fz-arena_breakout-monthly_advanced_battle_pass_activation_pass",
-nombre: "Monthly Advanced Battle Pass Activation Pass",
-emoji: "🎟️"
-},
-{
-id: "fz-arena_breakout-bulletproof_case_30d",
-nombre: "Bulletproof Case (30d)",
-emoji: "🛡️"
-},
-{
-id: "fz-arena_breakout-bulletproof_case_privileges",
-nombre: "Bulletproof Case Privileges",
-emoji: "🔒"
-},
-{
-id: "fz-arena_breakout-monthly_premium_battle_pass_activation_pass",
-nombre: "Monthly Premium Battle Pass Activation Pass",
-emoji: "👑"
-},
-{
-id: "fz-arena_breakout-composition_case_30d",
-nombre: "Composition Case (30d)",
-emoji: "📦"
-},
-{
-id: "fz-arena_breakout-composite_case_privileges",
-nombre: "Composite Case Privileges",
-emoji: "🔐"
-},
-{
-id: "fz-arena_breakout-quarterly_premium_battle_pass_bundle_activation_pass_bundle",
-nombre: "Quarterly Premium Battle Pass Bundle Activation Pass Bundle",
-emoji: "🎁"
-}
-];
-
-/* =========================================================
-OBTENER OFERTAS CONFIGURADAS PARA EL JUEGO ACTUAL
-========================================================= */
-
-function obtenerProductosConfigurados() {
-switch (JUEGO_NORMALIZADO) {
-case "free fire":
-return PRODUCTOS_FREE_FIRE;
-
-    case "mobile legends":
-        return PRODUCTOS_MOBILE_LEGENDS;
-
-    case "blood strike":
-        return PRODUCTOS_BLOOD_STRIKE;
-
-    case "pubg mobile":
-        return PRODUCTOS_PUBG_MOBILE;
-
-    case "honor of kings":
-        return PRODUCTOS_HONOR_OF_KINGS;
-
-    case "arena breakout":
-        return PRODUCTOS_ARENA_BREAKOUT;
-
-    default:
-        return [];
+function normalizarTexto(valor) {
+    return String(valor ?? "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\s_-]/g, "");
 }
 
+function mostrarPrecio(valor) {
+    const numero = Number(valor);
+
+    if (!Number.isFinite(numero)) {
+        return "Precio pendiente";
+    }
+
+    return new Intl.NumberFormat("es-ES", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    }).format(numero) + " GVR";
 }
 
-/* =========================================================
-ESTADO DE CARGA
-========================================================= */
+function actualizarEstadoCarga(
+    mensaje,
+    mostrar = true,
+    tipo = ""
+) {
+    const estado = el("estadoProductos");
 
-function actualizarEstadoCarga(mensaje, mostrar = true) {
-const estadoProductos =
-document.getElementById("estadoProductos");
+    if (!estado) return;
 
-const estadoCarga =
-    document.getElementById("estadoCarga");
+    estado.textContent = mensaje;
+    estado.style.display = mostrar ? "block" : "none";
 
-if (estadoCarga) {
-    estadoCarga.style.display = "none";
-}
-
-if (estadoProductos) {
-    estadoProductos.textContent = mensaje;
-    estadoProductos.style.display =
-        mostrar ? "block" : "none";
-}
-
-}
-
-/* =========================================================
-CONSULTAR CATÁLOGO NEXT LEVEL
-========================================================= */
-
-async function consultarCatalogoNextLevel() {
-if (!JUEGO_API) {
-throw new Error(
-"Juego no configurado. Revisa window.CONFIG_OFERTAS " +
-"en la página actual."
-);
-}
-
-const controlador = new AbortController();
-
-const temporizador = setTimeout(function() {
-    controlador.abort();
-}, TIEMPO_LIMITE_CATALOGO);
-
-try {
-    const url =
-        URL_CATALOGO +
-        "?game=" +
-        encodeURIComponent(JUEGO_API);
-
-    console.log(
-        "[Gamers Gold] Consultando catálogo:",
-        url
+    estado.classList.toggle(
+        "error",
+        tipo === "error"
     );
+}
 
-    const respuesta = await fetch(url, {
-        method: "GET",
-        headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization": "Bearer " + SUPABASE_KEY,
-            "Accept": "application/json"
-        },
-        signal: controlador.signal
-    });
+function mostrarEstadoPedido(mensaje, tipo = "") {
+    const estado = el("estadoPedido");
 
-    const texto = await respuesta.text();
+    if (!estado) return;
 
-    let resultado;
+    estado.textContent = mensaje;
+    estado.style.display = "block";
 
-    try {
-        resultado = JSON.parse(texto);
-    } catch {
-        console.error(
-            "[Gamers Gold] Respuesta no JSON:",
-            texto.slice(0, 500)
-        );
+    estado.classList.toggle(
+        "error",
+        tipo === "error"
+    );
+}
 
-        throw new Error(
-            "El catálogo devolvió una respuesta no válida."
-        );
-    }
+function ocultarEstadoPedido() {
+    const estado = el("estadoPedido");
 
-    if (!respuesta.ok) {
-        console.error(
-            "[Gamers Gold] Error HTTP:",
-            respuesta.status,
-            resultado
-        );
+    if (!estado) return;
 
-        throw new Error(
-            resultado.error ||
-            resultado.message ||
-            "Error HTTP " + respuesta.status
-        );
-    }
+    estado.style.display = "none";
+    estado.textContent = "";
+    estado.classList.remove("error");
+}
 
+function extraerProductos(resultado) {
     if (Array.isArray(resultado)) {
         return resultado;
     }
 
-    const listasPosibles = [
+    if (!resultado || typeof resultado !== "object") {
+        return [];
+    }
+
+    const listas = [
         resultado.productos,
         resultado.products,
         resultado.data,
         resultado.items,
         resultado.results,
-        resultado.data?.productos,
         resultado.data?.products,
         resultado.data?.items,
         resultado.data?.results
     ];
 
-    for (const lista of listasPosibles) {
-        if (Array.isArray(lista)) {
-            return lista;
-        }
+    return listas.find(Array.isArray) || [];
+}
+
+function obtenerIdProveedor(producto) {
+    const valor =
+        producto?.productId ??
+        producto?.product_id ??
+        producto?.provider_product_id ??
+        producto?.providerProductId ??
+        producto?.id;
+
+    return valor == null
+        ? ""
+        : String(valor).trim();
+}
+
+function obtenerNombreProveedor(producto) {
+    return String(
+        producto?.name ??
+        producto?.productName ??
+        producto?.product_name ??
+        producto?.title ??
+        obtenerIdProveedor(producto) ??
+        "Oferta Free Fire"
+    ).trim();
+}
+
+function obtenerPrecioLocal(producto) {
+    const precio = Number(producto?.price_gvr);
+
+    return Number.isFinite(precio) && precio > 0
+        ? precio
+        : null;
+}
+
+function clavePedidoPendiente(userId) {
+    return `ggtopup_ofertas_freefire_pedido_${userId}`;
+}
+
+function guardarPedidoPendiente() {
+    if (!usuarioActualId || !pedidoPendienteId) {
+        return;
     }
 
-    console.error(
-        "[Gamers Gold] Formato inesperado:",
-        resultado
+    localStorage.setItem(
+        clavePedidoPendiente(usuarioActualId),
+        JSON.stringify({
+            orderId: pedidoPendienteId,
+            accion: accionPendiente
+        })
     );
+}
 
-    throw new Error(
-        resultado.error ||
-        "No se encontró la lista de productos."
-    );
-
-} catch (error) {
-    if (error.name === "AbortError") {
-        throw new Error(
-            "El catálogo tardó más de 15 segundos en responder."
+function borrarPedidoPendiente() {
+    if (usuarioActualId) {
+        localStorage.removeItem(
+            clavePedidoPendiente(usuarioActualId)
         );
     }
 
-    console.error(
-        "[Gamers Gold] Error consultando Next Level:",
-        error
+    pedidoPendienteId = null;
+    accionPendiente = "crear";
+}
+
+function recuperarPedidoPendiente(userId) {
+    const guardado = localStorage.getItem(
+        clavePedidoPendiente(userId)
     );
 
-    throw error;
+    if (!guardado) {
+        pedidoPendienteId = null;
+        accionPendiente = "crear";
+        return;
+    }
 
-} finally {
-    clearTimeout(temporizador);
-}
+    const datos = JSON.parse(guardado);
 
-}
-
-/* =========================================================
-OBTENER IDENTIFICADOR DEL PRODUCTO
-========================================================= */
-
-function obtenerIdProveedor(producto) {
-const posiblesIds = [
-producto?.productId,
-producto?.product_id,
-producto?.provider_product_id,
-producto?.providerProductId,
-producto?.id
-];
-
-for (const valor of posiblesIds) {
     if (
-        valor !== undefined &&
-        valor !== null &&
-        String(valor).trim() !== ""
+        typeof datos.orderId !== "string" ||
+        !UUID_RE.test(datos.orderId)
     ) {
-        return String(valor).trim();
+        throw new Error(
+            "La referencia guardada del pedido no es válida. " +
+            "No iniciaremos otra compra automáticamente."
+        );
+    }
+
+    pedidoPendienteId = datos.orderId;
+
+    accionPendiente =
+        datos.accion === "consultar"
+            ? "consultar"
+            : "enviar";
+}
+
+async function consultarCatalogoNextLevel() {
+    if (!JUEGO_API) {
+        throw new Error(
+            "El juego de esta página no está configurado correctamente."
+        );
+    }
+
+    const controlador = new AbortController();
+
+    const temporizador = setTimeout(
+        () => controlador.abort(),
+        TIEMPO_LIMITE
+    );
+
+    try {
+        const respuesta = await fetch(
+            `${URL_CATALOGO}?game=${encodeURIComponent(JUEGO_API)}`,
+            {
+                method: "GET",
+                headers: {
+                    apikey: SUPABASE_KEY,
+                    Authorization: `Bearer ${SUPABASE_KEY}`,
+                    Accept: "application/json"
+                },
+                signal: controlador.signal,
+                cache: "no-store"
+            }
+        );
+
+        const texto = await respuesta.text();
+
+        let resultado;
+
+        try {
+            resultado = JSON.parse(texto);
+        } catch {
+            throw new Error(
+                "El catálogo devolvió una respuesta no válida."
+            );
+        }
+
+        if (!respuesta.ok) {
+            throw new Error(
+                resultado.error ||
+                resultado.message ||
+                `Error HTTP ${respuesta.status}`
+            );
+        }
+
+        return extraerProductos(resultado);
+
+    } catch (error) {
+        if (error.name === "AbortError") {
+            throw new Error(
+                "El catálogo tardó demasiado en responder."
+            );
+        }
+
+        throw error;
+
+    } finally {
+        clearTimeout(temporizador);
     }
 }
 
-return null;
+async function cargarProductosLocales() {
+    const { data, error } = await supabase
+        .from("game_products")
+        .select(
+            "id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region"
+        )
+        .eq("provider", "nextlevel");
 
+    if (error) {
+        throw new Error(
+            "No se pudieron verificar los productos y sus precios GVR."
+        );
+    }
+
+    productosLocales = (data || []).filter(
+        producto =>
+            normalizarTexto(producto.game) ===
+            JUEGO_NORMALIZADO
+    );
 }
 
-/* =========================================================
-CARGAR OFERTAS ESPECIALES
-========================================================= */
+function buscarProductoLocal(productoProveedor) {
+    const id = obtenerIdProveedor(productoProveedor);
+
+    return productosLocales.find(
+        producto =>
+            String(producto.provider_product_id || "").trim() === id
+    ) || null;
+}
+
+function productoComprable(local) {
+    return Boolean(
+        local &&
+        local.active === true &&
+        local.provider === "nextlevel" &&
+        String(local.provider_product_id || "").trim() &&
+        obtenerPrecioLocal(local) !== null
+    );
+}
+
+function crearTarjetaOferta(oferta, proveedor) {
+    const local = buscarProductoLocal(proveedor);
+
+    const comprable =
+        ES_FREE_FIRE &&
+        productoComprable(local);
+
+    const tarjeta = document.createElement("button");
+
+    tarjeta.type = "button";
+    tarjeta.className = "boton-oferta";
+    tarjeta.disabled = !comprable;
+
+    if (!comprable) {
+        tarjeta.style.opacity = "0.65";
+    }
+
+    const foto = document.createElement("div");
+    foto.className = "foto-oferta";
+
+    const emoji = document.createElement("span");
+    emoji.className = "emoji-oferta";
+    emoji.textContent = oferta.emoji || "🎁";
+
+    const nombre = document.createElement("div");
+    nombre.className = "nombre-oferta";
+
+    nombre.textContent =
+        oferta.nombre ||
+        obtenerNombreProveedor(proveedor);
+
+    foto.appendChild(emoji);
+    tarjeta.append(foto, nombre);
+
+    if (comprable) {
+        const precioEtiqueta = document.createElement("div");
+
+        precioEtiqueta.style.cssText =
+            "padding:9px;font-size:13px;color:#00baff;" +
+            "background:#061226;font-weight:bold;width:100%;";
+
+        precioEtiqueta.textContent =
+            mostrarPrecio(local.price_gvr);
+
+        tarjeta.appendChild(precioEtiqueta);
+
+        tarjeta.addEventListener("click", () => {
+            seleccionarOferta(
+                tarjeta,
+                oferta,
+                proveedor,
+                local
+            );
+        });
+
+    } else {
+        const estado = document.createElement("div");
+
+        estado.style.cssText =
+            "padding:9px;font-size:12px;color:#8fa5bd;" +
+            "background:#061226;width:100%;";
+
+        estado.textContent = ES_FREE_FIRE
+            ? "Precio pendiente o producto inactivo"
+            : "Ventas de este juego aún no habilitadas";
+
+        tarjeta.appendChild(estado);
+    }
+
+    return tarjeta;
+}
 
 async function cargarOfertas() {
-const lista =
-document.getElementById("listaOfertas");
+    const lista = el("listaOfertas");
 
-const cajaPrecio =
-    document.getElementById("precioSeleccionado");
+    if (!lista) return;
 
-const botonContinuar =
-    document.getElementById("continuarBtn");
+    const cajaPrecio = el("precioSeleccionado");
+    const botonContinuar = el("continuarBtn");
 
-if (!lista) {
-    console.error(
-        "[Gamers Gold] No existe #listaOfertas."
-    );
+    if (cajaPrecio) {
+        cajaPrecio.style.display = "none";
+    }
+
+    if (botonContinuar) {
+        botonContinuar.style.display = "none";
+        botonContinuar.disabled = true;
+    }
+
+    lista.replaceChildren();
+    lista.style.display = "none";
+
+    productoSeleccionado = null;
+    precioSeleccionado = 0;
+
+    productosMostrados = Object.create(null);
 
     actualizarEstadoCarga(
-        "No se encontró el espacio para mostrar las ofertas.",
+        "Conectando con el catálogo...",
         true
     );
 
-    return;
-}
+    try {
+        const [proveedor] = await Promise.all([
+            consultarCatalogoNextLevel(),
+            cargarProductosLocales()
+        ]);
 
-if (cajaPrecio) {
-    cajaPrecio.style.display = "none";
-}
+        productosProveedor = proveedor;
+        productosPorId = Object.create(null);
 
-if (botonContinuar) {
-    botonContinuar.style.display = "none";
-    botonContinuar.disabled = true;
-}
+        proveedor.forEach(producto => {
+            const id = obtenerIdProveedor(producto);
 
-lista.replaceChildren();
-lista.style.display = "none";
+            if (id) {
+                productosPorId[id] = producto;
+            }
+        });
 
-ofertaSeleccionada = "";
-productoSeleccionado = null;
-precioSeleccionado = 0;
+        const configuradas =
+            Array.isArray(CONFIG?.ofertas)
+                ? CONFIG.ofertas
+                : [];
 
-window.productosOfertas = {};
+        let cantidad = 0;
 
-actualizarEstadoCarga(
-    "Conectando con el catálogo...",
-    true
-);
+        configuradas.forEach(oferta => {
+            const productoProveedor =
+                productosPorId[oferta.id];
 
-try {
-    const productosProveedor =
-        await consultarCatalogoNextLevel();
+            if (!productoProveedor) {
+                console.warn(
+                    "[Gamers Gold] Oferta no encontrada en catálogo:",
+                    oferta.id
+                );
 
-    const productosPorId = Object.create(null);
+                return;
+            }
 
-    productosProveedor.forEach(function(producto) {
-        const id = obtenerIdProveedor(producto);
+            if (
+                productoProveedor.available === false ||
+                productoProveedor.available === "false"
+            ) {
+                return;
+            }
 
-        if (id) {
-            productosPorId[id] = producto;
-        }
-    });
+            productosMostrados[oferta.id] = {
+                ...oferta,
+                productoProveedor
+            };
 
-    const ofertasConfiguradas =
-        obtenerProductosConfigurados();
-
-    console.log(
-        "[Gamers Gold] Ofertas configuradas para",
-        NOMBRE_JUEGO,
-        ofertasConfiguradas.map(function(item) {
-            return item.id;
-        })
-    );
-
-    const ofertasDisponibles =
-        ofertasConfiguradas
-            .map(function(configuracion) {
-                const productoProveedor =
-                    productosPorId[configuracion.id];
-
-                if (!productoProveedor) {
-                    console.warn(
-                        "[Gamers Gold] Producto no encontrado:",
-                        configuracion.id
-                    );
-
-                    return null;
-                }
-
-                if (
-                    productoProveedor.available === false ||
-                    productoProveedor.available === "false"
-                ) {
-                    return null;
-                }
-
-                return {
-                    ...configuracion,
+            lista.appendChild(
+                crearTarjetaOferta(
+                    oferta,
                     productoProveedor
-                };
-            })
-            .filter(Boolean);
+                )
+            );
 
-    if (ofertasDisponibles.length === 0) {
+            cantidad++;
+        });
+
+        if (!cantidad) {
+            actualizarEstadoCarga(
+                "No hay ofertas configuradas disponibles en el catálogo de Next Level.",
+                true
+            );
+
+            return;
+        }
+
+        lista.style.display = "flex";
+
+        actualizarEstadoCarga("", false);
+
+        if (!ES_FREE_FIRE) {
+            const nota = el("notaOfertas");
+
+            if (nota) {
+                nota.textContent =
+                    "Las ventas de este juego aún no están habilitadas.";
+            }
+        }
+
+    } catch (error) {
+        console.error(
+            "Error cargando ofertas:",
+            error
+        );
+
         actualizarEstadoCarga(
-            "No hay ofertas especiales disponibles en este momento.",
-            true
+            `No pudimos cargar las ofertas. ${
+                error.message || "Comprueba tu conexión."
+            }`,
+            true,
+            "error"
         );
+    }
+}
 
-        console.warn(
-            "[Gamers Gold] Juego consultado:",
-            JUEGO_API,
-            "| Productos recibidos:",
-            productosProveedor.length
-        );
-
-        console.log(
-            "[Gamers Gold] IDs recibidos:",
-            productosProveedor.map(obtenerIdProveedor)
+function seleccionarOferta(
+    tarjeta,
+    oferta,
+    proveedor,
+    local
+) {
+    if (procesandoCompra || pedidoPendienteId) {
+        mostrarEstadoPedido(
+            "Tienes un pedido anterior por verificar. " +
+            "Consulta su estado antes de iniciar otra compra.",
+            "error"
         );
 
         return;
     }
 
-    ofertasDisponibles.forEach(function(oferta) {
-        window.productosOfertas[oferta.id] = oferta;
+    if (!productoComprable(local)) {
+        alert(
+            "Esta oferta no tiene un precio válido o está inactiva."
+        );
 
-        const boton =
-            document.createElement("button");
+        return;
+    }
 
-        boton.type = "button";
-        boton.className = "boton-oferta";
+    document
+        .querySelectorAll(".boton-oferta")
+        .forEach(boton =>
+            boton.classList.remove("seleccionado")
+        );
 
-        const foto =
-            document.createElement("div");
+    tarjeta.classList.add("seleccionado");
 
-        foto.className = "foto-oferta";
+    productoSeleccionado = {
+        oferta,
+        proveedor,
+        local
+    };
 
-        const emoji =
-            document.createElement("span");
+    precioSeleccionado = Number(local.price_gvr);
 
-        emoji.className = "emoji-oferta";
-        emoji.textContent = oferta.emoji;
+    const precio = el("precio");
 
-        foto.appendChild(emoji);
+    if (precio) {
+        precio.textContent =
+            mostrarPrecio(precioSeleccionado);
+    }
 
-        const nombre =
-            document.createElement("div");
+    if (el("precioSeleccionado")) {
+        el("precioSeleccionado").style.display = "block";
+    }
 
-        nombre.className = "nombre-oferta";
-        nombre.textContent = oferta.nombre;
+    const continuar = el("continuarBtn");
 
-        boton.appendChild(foto);
-        boton.appendChild(nombre);
+    if (continuar) {
+        continuar.style.display = "block";
+        continuar.disabled = false;
+        continuar.textContent = "Continuar ⚡";
+    }
 
-        boton.addEventListener("click", function() {
-            seleccionarOferta(boton, oferta.id);
-        });
+    ocultarEstadoPedido();
+}
 
-        lista.appendChild(boton);
+function cambiarPantalla(idMostrar) {
+    [
+        "pantallaOfertas",
+        "pantallaConfirmacion",
+        "pantallaExito"
+    ].forEach(id => {
+        const pantalla = el(id);
+
+        if (pantalla) {
+            pantalla.classList.toggle(
+                "activa",
+                id === idMostrar
+            );
+        }
     });
 
-    lista.style.display = "flex";
-
-    actualizarEstadoCarga("", false);
-
-    console.log(
-        "[Gamers Gold] Ofertas mostradas:",
-        NOMBRE_JUEGO,
-        ofertasDisponibles.map(function(oferta) {
-            return oferta.nombre;
-        })
-    );
-
-} catch (error) {
-    console.error(
-        "[Gamers Gold] Error cargando ofertas:",
-        error
-    );
-
-    actualizarEstadoCarga(
-        "No pudimos cargar las ofertas. " +
-        (error.message || "Comprueba tu conexión."),
-        true
-    );
+    window.scrollTo(0, 0);
 }
-
-}
-
-/* =========================================================
-SELECCIONAR OFERTA
-COMPRAS DESACTIVADAS
-========================================================= */
-
-function seleccionarOferta(boton, idProducto) {
-const oferta =
-window.productosOfertas &&
-window.productosOfertas[idProducto];
-
-if (!oferta) {
-    alert("Esta oferta no está disponible.");
-    return;
-}
-
-document
-    .querySelectorAll(".boton-oferta")
-    .forEach(function(elemento) {
-        elemento.classList.remove("seleccionado");
-    });
-
-boton.classList.add("seleccionado");
-
-productoSeleccionado = oferta;
-ofertaSeleccionada = oferta.nombre;
-precioSeleccionado = 0;
-
-const precio =
-    document.getElementById("precio");
-
-const cajaPrecio =
-    document.getElementById("precioSeleccionado");
-
-const continuar =
-    document.getElementById("continuarBtn");
-
-if (precio) {
-    precio.textContent =
-        "Precio pendiente de configurar";
-}
-
-if (cajaPrecio) {
-    cajaPrecio.style.display = "block";
-}
-
-if (continuar) {
-    continuar.style.display = "block";
-    continuar.disabled = true;
-    continuar.textContent =
-        "Compra temporalmente deshabilitada";
-}
-
-}
-
-/* =========================================================
-CONFIRMACIÓN DESACTIVADA
-========================================================= */
 
 function irAConfirmacion() {
-alert(
-"Las compras estarán disponibles cuando terminemos " +
-"de configurar los precios y conectar los pedidos con Next Level."
-);
-}
+    if (!ES_FREE_FIRE) {
+        alert(
+            "Las ventas de este juego aún no están habilitadas."
+        );
 
-/* =========================================================
-VOLVER A OFERTAS
-========================================================= */
+        return;
+    }
+
+    if (
+        !productoSeleccionado ||
+        !productoComprable(productoSeleccionado.local)
+    ) {
+        alert(
+            "Selecciona una oferta activa con precio configurado."
+        );
+
+        return;
+    }
+
+    el("confirmarOferta").textContent =
+        productoSeleccionado.oferta.nombre;
+
+    el("juegoConfirmacion").textContent =
+        NOMBRE_JUEGO;
+
+    el("confirmarPrecio").textContent =
+        mostrarPrecio(productoSeleccionado.local.price_gvr);
+
+    const input = el("idJugador");
+
+    if (input) {
+        input.value = "";
+    }
+
+    ocultarEstadoPedido();
+
+    const boton = el("confirmarBtn");
+
+    if (boton) {
+        boton.disabled = false;
+        boton.textContent = "Confirmar y recargar ⚡";
+    }
+
+    cambiarPantalla("pantallaConfirmacion");
+}
 
 function volverOfertas() {
-const pantallaConfirmacion =
-document.getElementById("pantallaConfirmacion");
-
-const pantallaOfertas =
-    document.getElementById("pantallaOfertas");
-
-if (pantallaConfirmacion) {
-    pantallaConfirmacion.classList.remove("activa");
+    cambiarPantalla("pantallaOfertas");
+    ocultarEstadoPedido();
 }
 
-if (pantallaOfertas) {
-    pantallaOfertas.classList.add("activa");
-}
+async function llamarFuncion(
+    url,
+    accessToken,
+    body
+) {
+    const controlador = new AbortController();
 
-window.scrollTo(0, 0);
-
-}
-
-/* =========================================================
-PEDIDOS DESACTIVADOS
-========================================================= */
-
-async function realizarPedido() {
-alert(
-"Las compras todavía están deshabilitadas. " +
-"Estamos preparando la conexión de pedidos con Next Level."
-);
-}
-
-/* =========================================================
-INICIALIZAR INTERFAZ
-========================================================= */
-
-function inicializarMotorOfertas() {
-const label =
-document.querySelector('label[for="idJugador"]');
-
-const input =
-    document.getElementById("idJugador");
-
-const juegoConfirmacion =
-    document.getElementById("juegoConfirmacion");
-
-const volverExito =
-    document.getElementById("volverJuegoBtn");
-
-const descripcion =
-    document.getElementById("descripcionOfertas");
-
-const nota =
-    document.getElementById("notaOfertas");
-
-if (label) {
-    label.textContent = TEXTO_ID;
-}
-
-if (input) {
-    input.placeholder = PLACEHOLDER_ID;
-}
-
-if (juegoConfirmacion) {
-    juegoConfirmacion.textContent = NOMBRE_JUEGO;
-}
-
-if (volverExito) {
-    volverExito.textContent =
-        "Volver a " + NOMBRE_JUEGO;
-
-    volverExito.onclick = function() {
-        window.location.href = PAGINA_VOLVER;
-    };
-}
-
-if (descripcion) {
-    descripcion.textContent =
-        "Elige una oferta especial de " +
-        (NOMBRE_JUEGO || "este juego") + ".";
-}
-
-if (nota) {
-    nota.textContent =
-        "Precios y compras próximamente disponibles.";
-}
-
-if (!CONFIG_PAGINA || !NOMBRE_JUEGO || !JUEGO_API) {
-    actualizarEstadoCarga(
-        "No se ha configurado correctamente este juego. " +
-        "Comprueba window.CONFIG_OFERTAS antes de cargar ofertas.js.",
-        true
+    const temporizador = setTimeout(
+        () => controlador.abort(),
+        TIEMPO_LIMITE
     );
 
-    console.error(
-        "[Gamers Gold] Configuración ausente o incorrecta.",
+    try {
+        const respuesta = await fetch(url, {
+            method: "POST",
+
+            headers: {
+                apikey: SUPABASE_KEY,
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            },
+
+            body: JSON.stringify(body),
+            signal: controlador.signal
+        });
+
+        const texto = await respuesta.text();
+
+        let datos;
+
+        try {
+            datos = JSON.parse(texto);
+        } catch {
+            throw new Error(
+                "El servidor de pedidos devolvió una respuesta no válida."
+            );
+        }
+
+        if (!respuesta.ok) {
+            throw new Error(
+                datos.error ||
+                datos.message ||
+                `Error HTTP ${respuesta.status}`
+            );
+        }
+
+        return datos;
+
+    } catch (error) {
+        if (error.name === "AbortError") {
+            throw new Error(
+                "El servidor tardó demasiado. Verifica el pedido antes de intentarlo otra vez."
+            );
+        }
+
+        throw error;
+
+    } finally {
+        clearTimeout(temporizador);
+    }
+}
+
+async function consultarPedido(accessToken) {
+    if (!pedidoPendienteId) {
+        throw new Error(
+            "No hay un pedido guardado para consultar."
+        );
+    }
+
+    const datos = await llamarFuncion(
+        URL_CONSULTAR_PEDIDO,
+        accessToken,
         {
-            configuracion: CONFIG_PAGINA,
-            nombreJuego: NOMBRE_JUEGO,
-            nombreNormalizado: JUEGO_NORMALIZADO,
-            juegosValidos: Object.keys(JUEGOS_API)
+            game_order_id: pedidoPendienteId
         }
     );
 
-    return;
+    const local =
+        String(datos.status || "").toLowerCase();
+
+    const proveedor =
+        String(datos.provider_status || "").toUpperCase();
+
+    if (local === "completed") {
+        const id = pedidoPendienteId;
+
+        borrarPedidoPendiente();
+
+        mostrarResultado(
+            "¡Recarga completada!",
+            "El proveedor confirmó la recarga correctamente.",
+            id
+        );
+
+        return;
+    }
+
+    if (local === "refunded") {
+        const id = pedidoPendienteId;
+
+        borrarPedidoPendiente();
+
+        mostrarResultado(
+            "Pedido reembolsado",
+            "El pedido figura como reembolsado. " +
+            "Verifica tu saldo GVR antes de volver a comprar.",
+            id
+        );
+
+        return;
+    }
+
+    accionPendiente = "consultar";
+    guardarPedidoPendiente();
+
+    if (proveedor === "FAILED") {
+        mostrarEstadoPedido(
+            "El proveedor informa FAILED. No vuelvas a comprar todavía; " +
+            "verifica el pedido y el posible reembolso.",
+            "error"
+        );
+
+    } else {
+        mostrarEstadoPedido(
+            datos.message ||
+            "El pedido sigue en proceso. Consulta nuevamente en unos segundos."
+        );
+    }
 }
 
-cargarOfertas();
+async function enviarPedido(accessToken) {
+    if (!pedidoPendienteId) {
+        throw new Error(
+            "No hay pedido pendiente para enviar."
+        );
+    }
 
+    // Evita repetir el envío automáticamente si se pierde la respuesta.
+    accionPendiente = "consultar";
+    guardarPedidoPendiente();
+
+    const datos = await llamarFuncion(
+        URL_CREAR_PEDIDO,
+        accessToken,
+        {
+            game_order_id: pedidoPendienteId
+        }
+    );
+
+    accionPendiente = "consultar";
+    guardarPedidoPendiente();
+
+    mostrarResultado(
+        "Pedido enviado",
+        datos.message ||
+        "Next Level recibió la solicitud. Puedes consultar el estado desde esta página.",
+        pedidoPendienteId
+    );
 }
 
-/* =========================================================
-INICIO SEGURO
-========================================================= */
+function mostrarResultado(
+    titulo,
+    mensaje,
+    pedidoId
+) {
+    if (el("tituloEstadoPedido")) {
+        el("tituloEstadoPedido").textContent = titulo;
+    }
+
+    if (el("mensajeEstadoPedido")) {
+        el("mensajeEstadoPedido").textContent = mensaje;
+    }
+
+    if (el("pedidoIdVisible")) {
+        el("pedidoIdVisible").textContent =
+            "Pedido: " + pedidoId;
+
+        el("pedidoIdVisible").style.display = "block";
+    }
+
+    cambiarPantalla("pantallaExito");
+}
+
+async function verificarPedidoGuardado(userId) {
+    if (!pedidoPendienteId) {
+        return false;
+    }
+
+    const id = pedidoPendienteId;
+
+    const { data, error } = await supabase
+        .from("game_orders")
+        .select(
+            "id,status,provider_order_id,provider_client_reference,provider_submitted_at"
+        )
+        .eq("id", id)
+        .eq("user_id", userId)
+        .maybeSingle();
+
+    if (error) {
+        throw new Error(
+            "No se pudo verificar el pedido anterior. " +
+            "No iniciaremos otra compra hasta resolverlo."
+        );
+    }
+
+    if (!data) {
+        throw new Error(
+            "No pudimos confirmar el pedido anterior. " +
+            "Conservamos la referencia por seguridad; " +
+            "no hagas otra compra hasta aclararlo."
+        );
+    }
+
+    const status =
+        String(data.status || "").toLowerCase();
+
+    if (
+        status === "completed" ||
+        status === "refunded"
+    ) {
+        borrarPedidoPendiente();
+        return false;
+    }
+
+    if (
+        data.provider_order_id ||
+        data.provider_client_reference ||
+        data.provider_submitted_at
+    ) {
+        accionPendiente = "consultar";
+
+    } else if (status === "pending") {
+        accionPendiente = "enviar";
+
+    } else {
+        accionPendiente = "consultar";
+    }
+
+    guardarPedidoPendiente();
+
+    return true;
+}
+
+async function crearCompra(
+    accessToken,
+    playerId
+) {
+    if (!productoSeleccionado) {
+        throw new Error(
+            "Selecciona primero una oferta."
+        );
+    }
+
+    const local = productoSeleccionado.local;
+
+    if (
+        !local ||
+        local.active !== true ||
+        local.provider !== "nextlevel" ||
+        !local.provider_product_id ||
+        obtenerPrecioLocal(local) === null
+    ) {
+        throw new Error(
+            "Esta oferta no está correctamente configurada para la compra."
+        );
+    }
+
+    // Verificación actualizada del producto antes de cobrar.
+    const {
+        data: actual,
+        error
+    } = await supabase
+        .from("game_products")
+        .select(
+            "id,game,price_gvr,active,provider,provider_product_id"
+        )
+        .eq("id", local.id)
+        .eq("provider", "nextlevel")
+        .eq("active", true)
+        .maybeSingle();
+
+    if (error) {
+        throw new Error(
+            "No se pudo verificar el producto antes de comprar."
+        );
+    }
+
+    if (
+        !actual ||
+        normalizarTexto(actual.game) !== "freefire" ||
+        String(actual.provider_product_id || "").trim() !==
+            obtenerIdProveedor(productoSeleccionado.proveedor) ||
+        obtenerPrecioLocal(actual) === null
+    ) {
+        throw new Error(
+            "El producto o su precio cambió. Actualiza la página antes de comprar."
+        );
+    }
+
+    const precioConfirmado =
+        Number(actual.price_gvr);
+
+    const confirmado = confirm(
+        "Confirma tu oferta de Free Fire:\n\n" +
+        "Oferta: " + productoSeleccionado.oferta.nombre + "\n" +
+        "ID de jugador: " + playerId + "\n" +
+        "Precio: " + mostrarPrecio(precioConfirmado) + "\n\n" +
+        "¿Deseas continuar con el pedido?"
+    );
+
+    if (!confirmado) {
+        return;
+    }
+
+    mostrarEstadoPedido(
+        "Creando pedido local. No cierres esta página..."
+    );
+
+    const {
+        data: orderId,
+        error: errorCompra
+    } = await supabase.rpc(
+        "purchase_game_product",
+        {
+            p_product_id: actual.id,
+            p_player_id: playerId
+        }
+    );
+
+    if (errorCompra) {
+        throw new Error(
+            errorCompra.message ||
+            "No se pudo crear el pedido local. Comprueba tu sesión y saldo."
+        );
+    }
+
+    if (
+        typeof orderId !== "string" ||
+        !UUID_RE.test(orderId)
+    ) {
+        throw new Error(
+            "No recibimos un ID de pedido válido. " +
+            "Revisa game_orders antes de volver a intentarlo."
+        );
+    }
+
+    pedidoPendienteId = orderId;
+    accionPendiente = "enviar";
+
+    guardarPedidoPendiente();
+
+    await enviarPedido(accessToken);
+}
+
+async function manejarConfirmacion() {
+    if (procesandoCompra) {
+        return;
+    }
+
+    if (!ES_FREE_FIRE) {
+        alert(
+            "Las ventas de este juego aún no están habilitadas."
+        );
+
+        return;
+    }
+
+    procesandoCompra = true;
+
+    const boton = el("confirmarBtn");
+
+    if (boton) {
+        boton.disabled = true;
+        boton.textContent = "Procesando...";
+    }
+
+    try {
+        const {
+            data: { session },
+            error: sessionError
+        } = await supabase.auth.getSession();
+
+        if (sessionError) {
+            throw new Error(
+                "No se pudo comprobar la sesión."
+            );
+        }
+
+        if (!session?.access_token) {
+            throw new Error(
+                "Debes iniciar sesión para comprar."
+            );
+        }
+
+        const {
+            data: { user },
+            error: userError
+        } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+            throw new Error(
+                "Tu sesión no es válida o ha caducado. Inicia sesión nuevamente."
+            );
+        }
+
+        usuarioActualId = user.id;
+
+        recuperarPedidoPendiente(user.id);
+
+        const habiaPedidoPendiente =
+            Boolean(pedidoPendienteId);
+
+        await verificarPedidoGuardado(user.id);
+
+        if (
+            habiaPedidoPendiente &&
+            !pedidoPendienteId
+        ) {
+            mostrarEstadoPedido(
+                "El pedido anterior ya se resolvió. Revisa su estado y vuelve a seleccionar la oferta si deseas hacer otra compra."
+            );
+
+            return;
+        }
+
+        if (pedidoPendienteId) {
+            if (accionPendiente === "enviar") {
+                await enviarPedido(session.access_token);
+            } else {
+                await consultarPedido(session.access_token);
+            }
+
+            return;
+        }
+
+        const playerId =
+            String(el("idJugador")?.value || "").trim();
+
+        if (!playerId) {
+            throw new Error(
+                "Escribe tu ID de jugador de Free Fire."
+            );
+        }
+
+        if (playerId.length > 80) {
+            throw new Error(
+                "El ID de jugador es demasiado largo."
+            );
+        }
+
+        await crearCompra(
+            session.access_token,
+            playerId
+        );
+
+    } catch (error) {
+        console.error(
+            "Error procesando oferta:",
+            error
+        );
+
+        mostrarEstadoPedido(
+            error.message || "No se pudo procesar el pedido.",
+            "error"
+        );
+
+        alert(
+            error.message || "No se pudo procesar el pedido."
+        );
+
+    } finally {
+        procesandoCompra = false;
+
+        if (boton) {
+            boton.disabled = false;
+
+            boton.textContent = pedidoPendienteId
+                ? (
+                    accionPendiente === "enviar"
+                        ? "RECUPERAR PEDIDO"
+                        : "CONSULTAR PEDIDO"
+                )
+                : "Confirmar y recargar ⚡";
+        }
+    }
+}
+
+function inicializar() {
+    const label =
+        document.querySelector('label[for="idJugador"]');
+
+    const input = el("idJugador");
+
+    if (label) {
+        label.textContent = TEXTO_ID;
+    }
+
+    if (input) {
+        input.placeholder = PLACEHOLDER_ID;
+    }
+
+    if (el("juegoConfirmacion")) {
+        el("juegoConfirmacion").textContent =
+            NOMBRE_JUEGO;
+    }
+
+    if (el("descripcionOfertas")) {
+        el("descripcionOfertas").textContent =
+            `Elige una oferta especial de ${NOMBRE_JUEGO || "este juego"}.`;
+    }
+
+    const nota = el("notaOfertas");
+
+    if (nota) {
+        nota.textContent = ES_FREE_FIRE
+            ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
+            : "Las ventas de este juego aún no están habilitadas.";
+    }
+
+    const confirmar = el("confirmarBtn");
+
+    if (confirmar) {
+        confirmar.disabled = !ES_FREE_FIRE;
+
+        confirmar.textContent = ES_FREE_FIRE
+            ? "Confirmar y recargar ⚡"
+            : "Ventas no habilitadas";
+
+        confirmar.addEventListener(
+            "click",
+            manejarConfirmacion
+        );
+    }
+
+    if (el("continuarBtn")) {
+        el("continuarBtn").disabled = true;
+    }
+
+    if (el("pantallaExito")) {
+        const btn =
+            el("pantallaExito").querySelector("button");
+
+        if (btn) {
+            btn.textContent =
+                `Volver a ${NOMBRE_JUEGO || "inicio"} ⚡`;
+
+            btn.onclick = () => {
+                window.location.href = PAGINA_VOLVER;
+            };
+        }
+    }
+
+    if (!CONFIG || !NOMBRE_JUEGO || !JUEGO_API) {
+        actualizarEstadoCarga(
+            "Esta página no está configurada correctamente.",
+            true,
+            "error"
+        );
+
+        return;
+    }
+
+    if (!ES_FREE_FIRE && el("confirmarBtn")) {
+        el("confirmarBtn").disabled = true;
+    }
+
+    cargarOfertas();
+}
+
+window.irAConfirmacion = irAConfirmacion;
+window.volverOfertas = volverOfertas;
 
 if (document.readyState === "loading") {
-document.addEventListener(
-"DOMContentLoaded",
-inicializarMotorOfertas,
-{ once: true }
-);
+    document.addEventListener(
+        "DOMContentLoaded",
+        inicializar,
+        { once: true }
+    );
 } else {
-inicializarMotorOfertas();
-    }
+    inicializar();
+      }
