@@ -1,9 +1,8 @@
-<!DOCTYPE html><html lang="es"><head>
+<!DOCTYPE html><html lang="es">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Gamers Gold Top-Up | Recargas Gaming</title>
-
-<style>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamers Gold Top-Up | Recargas Gaming</title><style>
     * {
         box-sizing: border-box;
         margin: 0;
@@ -24,10 +23,7 @@
         min-height: 100vh;
     }
 
-    /* =========================
-       PANTALLA DE INICIO
-    ========================= */
-
+    /* PANTALLA DE INICIO */
     #splash-screen {
         position: fixed;
         inset: 0;
@@ -49,31 +45,22 @@
         max-width: 360px;
         height: auto;
         object-fit: contain;
-
         filter:
             drop-shadow(0 0 8px #00bfff)
             drop-shadow(0 0 20px #008cff)
-            drop-shadow(
-                0 0 40px
-                rgba(0, 140, 255, 0.6)
-            );
-
-        animation:
-            aparecerLogo 1s ease-out;
+            drop-shadow(0 0 40px rgba(0, 140, 255, 0.6));
+        animation: aparecerLogo 1s ease-out;
     }
 
     @keyframes aparecerLogo {
-
         0% {
             opacity: 0;
             transform: scale(0.75);
         }
-
         100% {
             opacity: 1;
             transform: scale(1);
         }
-
     }
 
     .splash-oculto {
@@ -81,31 +68,22 @@
         pointer-events: none !important;
     }
 
-    /* =========================
-       BARRA SUPERIOR
-    ========================= */
-
+    /* BARRA SUPERIOR */
     header {
         width: 100%;
         background: #08152d;
         border-bottom: 1px solid #123b70;
         padding: 14px 18px;
-
         display: flex;
         align-items: center;
         justify-content: space-between;
-
         gap: 10px;
-
         position: sticky;
         top: 0;
         z-index: 10;
     }
 
-    /* =========================
-       LOGO GAMERS GOLD TOP-UP
-    ========================= */
-
+    /* LOGO */
     .logo {
         display: flex;
         align-items: center;
@@ -117,26 +95,18 @@
 
     .logo-g {
         position: relative;
-
         width: 48px;
         height: 48px;
-
         flex-shrink: 0;
-
         display: flex;
         align-items: center;
         justify-content: center;
-
         font-size: 45px;
         font-weight: 900;
         font-style: italic;
-
         line-height: 1;
-
         color: #18c8ff;
-
         transform: skewX(-8deg);
-
         text-shadow:
             0 0 4px #ffffff,
             0 0 8px #00c8ff,
@@ -146,27 +116,13 @@
 
     .logo-g::before {
         content: "";
-
         position: absolute;
-
         width: 30px;
         height: 9px;
-
         right: -2px;
         top: 9px;
-
-        background:
-            linear-gradient(
-                90deg,
-                #5eeaff,
-                #00aaff,
-                #006cff
-            );
-
-        transform:
-            skewX(-25deg)
-            rotate(-4deg);
-
+        background: linear-gradient(90deg, #5eeaff, #00aaff, #006cff);
+        transform: skewX(-25deg) rotate(-4deg);
         clip-path: polygon(
             0 35%,
             100% 0,
@@ -176,7 +132,6 @@
             28% 55%,
             0 55%
         );
-
         filter:
             drop-shadow(0 0 5px #00c8ff)
             drop-shadow(0 0 12px #0077ff);
@@ -184,29 +139,17 @@
 
     .logo-resto {
         margin-left: 2px;
-
         color: #f5f8ff;
-
         font-size: 23px;
-
         font-weight: 900;
-
         font-style: italic;
-
         letter-spacing: -1.4px;
-
         line-height: 1;
-
         white-space: nowrap;
-
-        text-shadow:
-            0 0 3px rgba(255,255,255,.25);
+        text-shadow: 0 0 3px rgba(255,255,255,.25);
     }
 
-    /* =========================
-       NAVEGACIÓN
-    ========================= */
-
+    /* NAVEGACIÓN */
     .navegacion {
         display: flex;
         align-items: center;
@@ -236,67 +179,35 @@
 
     .login {
         display: inline-block;
-
         text-decoration: none;
-
         white-space: nowrap;
-
         border: 1px solid #168cff;
-
         color: white;
-
         background: transparent;
-
         padding: 10px 15px;
-
         border-radius: 10px;
-
         font-weight: bold;
-
         font-size: 14px;
-
         transition: 0.2s;
     }
 
     .login:hover {
         background: #0d7cff;
-
-        box-shadow:
-            0 0 15px
-            rgba(0, 153, 255, 0.25);
+        box-shadow: 0 0 15px rgba(0, 153, 255, 0.25);
     }
 
-    /* =========================
-       HERO
-    ========================= */
-
+    /* HERO */
     .hero {
         width: auto;
         max-width: 100%;
-
         margin: 18px;
-
         padding: 28px 20px;
-
         border-radius: 20px;
-
         background:
-            radial-gradient(
-                circle at 90% 20%,
-                #0b68c9 0%,
-                transparent 35%
-            ),
-            linear-gradient(
-                135deg,
-                #071a38,
-                #061022
-            );
-
+            radial-gradient(circle at 90% 20%, #0b68c9 0%, transparent 35%),
+            linear-gradient(135deg, #071a38, #061022);
         border: 1px solid #145ca3;
-
-        box-shadow:
-            0 0 25px
-            rgba(0, 128, 255, 0.15);
+        box-shadow: 0 0 25px rgba(0, 128, 255, 0.15);
     }
 
     .hero h1 {
@@ -317,37 +228,18 @@
 
     .hero-button {
         display: inline-block;
-
         text-decoration: none;
-
-        background:
-            linear-gradient(
-                90deg,
-                #087cff,
-                #00baff
-            );
-
+        background: linear-gradient(90deg, #087cff, #00baff);
         color: white;
-
         border: none;
-
         padding: 13px 20px;
-
         border-radius: 11px;
-
         font-weight: bold;
-
         font-size: 15px;
-
-        box-shadow:
-            0 0 18px
-            rgba(0, 153, 255, 0.3);
+        box-shadow: 0 0 18px rgba(0, 153, 255, 0.3);
     }
 
-    /* =========================
-       SECCIONES
-    ========================= */
-
+    /* SECCIONES */
     .section {
         width: 100%;
         padding: 10px 18px 25px;
@@ -364,35 +256,18 @@
         font-size: 21px;
     }
 
-    /* =========================
-       OFERTAS
-    ========================= */
-
+    /* OFERTAS */
     .offer {
         width: 100%;
         max-width: 100%;
-
-        background:
-            linear-gradient(
-                135deg,
-                #0b2348,
-                #071426
-            );
-
+        background: linear-gradient(135deg, #0b2348, #071426);
         border: 1px solid #176ab2;
-
         border-radius: 17px;
-
         padding: 18px;
-
         display: flex;
-
         justify-content: space-between;
-
         align-items: center;
-
         gap: 15px;
-
         margin-bottom: 12px;
     }
 
@@ -421,65 +296,40 @@
 
     .buy {
         margin-top: 7px;
-
         background: #087fff;
-
         border: none;
-
         color: white;
-
         padding: 8px 12px;
-
         border-radius: 8px;
-
         font-weight: bold;
     }
 
-    /* =========================
-       CARRUSEL
-    ========================= */
-
+    /* CARRUSEL */
     .gamevora-carrusel {
         width: 100%;
-
         max-width: 650px;
-
         margin: 25px auto 0;
-
         overflow: hidden;
-
         border: 1px solid #176ab2;
-
         border-radius: 16px;
-
         background: #07172f;
-
-        box-shadow:
-            0 0 20px
-            rgba(0, 153, 255, 0.15);
+        box-shadow: 0 0 20px rgba(0, 153, 255, 0.15);
     }
 
     .gamevora-track {
         width: 100%;
         display: flex;
-        transition:
-            transform 0.6s ease;
+        transition: transform 0.6s ease;
     }
 
     .gamevora-slide {
         min-width: 100%;
         max-width: 100%;
-
         padding: 18px 20px;
-
         display: flex;
-
         align-items: center;
-
         justify-content: space-between;
-
         gap: 15px;
-
         text-align: left;
     }
 
@@ -498,13 +348,9 @@
 
     .gamevora-slide-label {
         color: #19bfff;
-
         font-size: 11px;
-
         font-weight: bold;
-
         letter-spacing: 1.5px;
-
         margin-bottom: 6px;
     }
 
@@ -516,23 +362,15 @@
 
     .gamevora-slide p {
         color: #9db2c9;
-
         font-size: 13px;
-
         line-height: 1.4;
-
         overflow-wrap: break-word;
     }
 
     .gamevora-slide-icon {
         font-size: 38px;
         flex-shrink: 0;
-
-        filter:
-            drop-shadow(
-                0 0 10px
-                rgba(0, 183, 255, 0.6)
-            );
+        filter: drop-shadow(0 0 10px rgba(0, 183, 255, 0.6));
     }
 
     .gamevora-dots {
@@ -545,45 +383,27 @@
     .gamevora-dot {
         width: 7px;
         height: 7px;
-
         border: none;
-
         border-radius: 50%;
-
         background: #29415c;
-
         padding: 0;
     }
 
     .gamevora-dot.activo {
         width: 20px;
-
         border-radius: 8px;
-
         background: #00b7ff;
-
-        box-shadow:
-            0 0 8px #008cff;
+        box-shadow: 0 0 8px #008cff;
     }
 
-    /* =========================
-       PIE
-    ========================= */
-
+    /* PIE */
     footer {
         width: 100%;
-
         text-align: center;
-
         padding: 30px 18px;
-
         color: #647890;
-
         font-size: 12px;
-
-        border-top:
-            1px solid #102a49;
-
+        border-top: 1px solid #102a49;
         margin-top: 15px;
     }
 
@@ -591,136 +411,63 @@
         color: #279fff;
     }
 
-    /* =========================
-       UNIVERSO GAMING
-    ========================= */
-
+    /* UNIVERSO GAMING */
     .universo {
         width: 100%;
-
         max-width: 100%;
-
         margin: 35px 0;
-
         padding: 45px 20px;
-
         text-align: center;
-
         position: relative;
-
         overflow: hidden;
-
-        border-top:
-            1px solid
-            rgba(0, 153, 255, 0.25);
-
-        border-bottom:
-            1px solid
-            rgba(0, 153, 255, 0.25);
-
+        border-top: 1px solid rgba(0, 153, 255, 0.25);
+        border-bottom: 1px solid rgba(0, 153, 255, 0.25);
         background:
-            radial-gradient(
-                circle at center,
-                rgba(0, 119, 255, 0.18),
-                transparent 60%
-            ),
-            linear-gradient(
-                180deg,
-                #06142b,
-                #020916
-            );
+            radial-gradient(circle at center, rgba(0, 119, 255, 0.18), transparent 60%),
+            linear-gradient(180deg, #06142b, #020916);
     }
 
     .universo-label {
         font-size: 14px;
-
         letter-spacing: 6px;
-
         color: #19bfff;
-
         font-weight: 700;
-
         margin-bottom: 12px;
-
         text-transform: uppercase;
     }
 
     .universo-titulo {
-        font-size:
-            clamp(
-                42px,
-                11vw,
-                76px
-            );
-
+        font-size: clamp(42px, 11vw, 76px);
         font-weight: 900;
-
         letter-spacing: 2px;
-
         line-height: 1;
-
-        font-family:
-            Arial,
-            Helvetica,
-            sans-serif;
-
-        background:
-            linear-gradient(
-                90deg,
-                #ffffff,
-                #18bfff
-            );
-
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(90deg, #ffffff, #18bfff);
         -webkit-background-clip: text;
-
         -webkit-text-fill-color: transparent;
-
-        text-shadow:
-            0 0 25px
-            rgba(0, 174, 255, 0.25);
+        text-shadow: 0 0 25px rgba(0, 174, 255, 0.25);
     }
 
     .mejor-opcion {
         margin-top: 18px;
-
         font-size: 17px;
-
         letter-spacing: 5px;
-
         font-weight: 700;
-
         color: #ffffff;
-
         text-transform: uppercase;
     }
 
     .linea-azul {
         width: 90px;
-
         height: 3px;
-
         margin: 24px auto 0;
-
         border-radius: 10px;
-
-        background:
-            linear-gradient(
-                90deg,
-                transparent,
-                #00bfff,
-                transparent
-            );
-
-        box-shadow:
-            0 0 12px #00bfff;
+        background: linear-gradient(90deg, transparent, #00bfff, transparent);
+        box-shadow: 0 0 12px #00bfff;
     }
 
-    /* =========================
-       MÓVIL
-    ========================= */
-
+    /* MÓVIL */
     @media (max-width: 600px) {
-
         header {
             padding: 12px 14px;
         }
@@ -767,9 +514,7 @@
         }
 
         .universo {
-            padding:
-                42px 12px
-                45px;
+            padding: 42px 12px 45px;
         }
 
         .universo-label {
@@ -809,7 +554,6 @@
     }
 
     @media (max-width: 400px) {
-
         .logo-resto {
             font-size: 18px;
         }
@@ -849,175 +593,110 @@
         .gamevora-slide-icon {
             font-size: 30px;
         }
-
     }
-
 </style><link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#050b18"></head><body><!-- SPLASH GAMERS GOLD --><div id="splash-screen"><img
-    src="../imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
-    alt="Gamers Gold Top-Up"
-    loading="eager"
->
-
-</div><header><div class="logo">
-
-    <span class="logo-g">G</span>
-
-    <span class="logo-resto">
-        AMERS GOLD TOP-UP
-    </span>
-
-</div>
-
-<div class="navegacion">
-
-    <a
-        href="soporte.html"
-        class="boton-navegacion"
+<meta name="theme-color" content="#050b18">
+</head><body><!-- SPLASH GAMERS GOLD --><div id="splash-screen">
+    <img
+        src="../imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
+        alt="Gamers Gold Top-Up"
+        loading="eager"
     >
-        Soporte
-    </a>
-
-    <span class="separador">|</span>
-
-    <div
-        id="botonesCuenta"
-        class="boton-cuenta"
-    ></div>
-
+</div><header>
+    <div class="logo">
+        <span class="logo-g">G</span>
+        <span class="logo-resto">AMERS GOLD TOP-UP</span>
+    </div><div class="navegacion">
+    <div id="botonesCuenta" class="boton-cuenta"></div>
 </div>
 
-</header><section class="hero"><h1>
-    Tu mundo gaming.<br>
-    <span>Un solo lugar.</span> ⚡
-</h1>
-
-<p>
+</header><section class="hero">
+    <h1>
+        Tu mundo gaming.<br>
+        <span>Un solo lugar.</span> ⚡
+    </h1><p>
     Recargas digitales, ofertas y productos
     para tus juegos favoritos.
 </p>
 
-<a
-    href="juegos.html"
-    class="hero-button"
->
+<a href="juegos.html" class="hero-button">
     Explorar juegos
 </a>
 
-</section><section class="universo"><div class="universo-label">
-    ⚡ EL UNIVERSO GAMING
-</div>
-
-<div class="universo-titulo">
+</section><section class="universo">
+    <div class="universo-label">
+        ⚡ EL UNIVERSO GAMING
+    </div><div class="universo-titulo">
     GAMERS GOLD TOP-UP
 </div>
 
 <div class="gamevora-carrusel">
-
-    <div
-        class="gamevora-track"
-        id="gamevoraTrack"
-    >
+    <div class="gamevora-track" id="gamevoraTrack">
 
         <a
             href="reseñas.html"
             class="gamevora-slide gamevora-slide-link"
         >
-
             <div class="gamevora-slide-text">
-
                 <div class="gamevora-slide-label">
                     GAMERS GOLD TOP-UP COMMUNITY
                 </div>
 
-                <h3>
-                    ⚡ ¿Ya dejaste tu reseña?
-                </h3>
+                <h3>⚡ ¿Ya dejaste tu reseña?</h3>
 
                 <p>
                     Tu opinión ayuda a mejorar
                     Gamers Gold Top-Up.
                 </p>
-
             </div>
 
             <div class="gamevora-slide-icon">⚡</div>
-
         </a>
 
         <div class="gamevora-slide">
-
             <div class="gamevora-slide-text">
-
                 <div class="gamevora-slide-label">
                     NOVEDADES
                 </div>
 
-                <h3>
-                    🚀 Nuevas actualizaciones
-                </h3>
+                <h3>🚀 Nuevas actualizaciones</h3>
 
                 <p>
                     Descubre las novedades
                     que estamos preparando.
                 </p>
-
             </div>
 
             <div class="gamevora-slide-icon">🚀</div>
-
         </div>
 
         <a
             href="informacion-gvr.html"
             class="gamevora-slide gamevora-slide-link"
         >
-
             <div class="gamevora-slide-text">
-
                 <div class="gamevora-slide-label">
                     GVR
                 </div>
 
-                <h3>
-                    ⚡ Información sobre GVR
-                </h3>
+                <h3>⚡ Información sobre GVR</h3>
 
                 <p>
                     Conoce cómo funciona
                     nuestro saldo virtual.
                 </p>
-
             </div>
 
             <div class="gamevora-slide-icon">⚡</div>
-
         </a>
 
     </div>
-
 </div>
 
 <div class="gamevora-dots">
-
-    <button
-        class="gamevora-dot activo"
-        type="button"
-        aria-label="Banner 1"
-    ></button>
-
-    <button
-        class="gamevora-dot"
-        type="button"
-        aria-label="Banner 2"
-    ></button>
-
-    <button
-        class="gamevora-dot"
-        type="button"
-        aria-label="Banner 3"
-    ></button>
-
+    <button class="gamevora-dot activo" type="button" aria-label="Banner 1"></button>
+    <button class="gamevora-dot" type="button" aria-label="Banner 2"></button>
+    <button class="gamevora-dot" type="button" aria-label="Banner 3"></button>
 </div>
 
 <div class="mejor-opcion">
@@ -1026,63 +705,37 @@
 
 <div class="linea-azul"></div>
 
-</section><section class="section"><div class="section-title">
-    <h2>⚡ Recargas destacadas</h2>
-</div>
-
-<div class="offer">
-
+</section><section class="section">
+    <div class="section-title">
+        <h2>⚡ Recargas destacadas</h2>
+    </div><div class="offer">
     <div class="offer-info">
-
         <h3>🔥 Free Fire</h3>
-
         <p>310 Diamantes</p>
-
     </div>
 
     <div class="price">
-
         <strong>10 GVR</strong>
-
         <br>
-
-        <button class="buy" type="button">
-            Comprar
-        </button>
-
+        <button class="buy" type="button">Comprar</button>
     </div>
-
 </div>
 
 <div class="offer">
-
     <div class="offer-info">
-
         <h3>🔫 Call of Duty Mobile</h3>
-
         <p>420 CP</p>
-
     </div>
 
     <div class="price">
-
         <strong>15 GVR</strong>
-
         <br>
-
-        <button class="buy" type="button">
-            Comprar
-        </button>
-
+        <button class="buy" type="button">Comprar</button>
     </div>
-
 </div>
 
-</section><footer><p>
-    <strong>⚡ GAMERS GOLD TOP-UP</strong>
-</p>
-
-<p>
+</section><footer>
+    <p><strong>⚡ GAMERS GOLD TOP-UP</strong></p><p>
     Plataforma de recargas digitales
     para gamers.
 </p>
@@ -1092,86 +745,50 @@
 <p>© 2026 Gamers Gold Top-Up</p>
 
 </footer><!-- SUPABASE --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-
-/* =========================
-   SPLASH
-========================= */
-
-const splash =
-    document.getElementById("splash-screen");
-
-const splashYaVisto =
-    sessionStorage.getItem("gamersGoldSplashVisto");
+/* SPLASH */
+const splash = document.getElementById("splash-screen");
+const splashYaVisto = sessionStorage.getItem("gamersGoldSplashVisto");
 
 if (splash) {
-
     if (splashYaVisto === "true") {
-
         splash.remove();
-
     } else {
-
-        sessionStorage.setItem(
-            "gamersGoldSplashVisto",
-            "true"
-        );
+        sessionStorage.setItem("gamersGoldSplashVisto", "true");
 
         setTimeout(() => {
-
             splash.classList.add("splash-oculto");
 
             setTimeout(() => {
                 splash.remove();
             }, 800);
-
         }, 3700);
-
     }
-
 }
 
-
-/* =========================
-   SUPABASE
-   Se conserva la conexión.
-   Solo se oculta el botón Mi cuenta.
-========================= */
-
-const supabaseClient =
-    window.supabase.createClient(
-        "https://gsuhzcavghsiolmipnzi.supabase.co",
-        "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
-    );
+/* SUPABASE: se conserva la conexión */
+const supabaseClient = window.supabase.createClient(
+    "https://gsuhzcavghsiolmipnzi.supabase.co",
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+);
 
 function actualizarMenu() {
-
-    const botones =
-        document.getElementById("botonesCuenta");
+    const botones = document.getElementById("botonesCuenta");
 
     if (botones) {
         botones.innerHTML = "";
         botones.style.display = "none";
     }
-
 }
 
 actualizarMenu();
 
-
-/* =========================
-   CARRUSEL
-========================= */
-
-const gamevoraTrack =
-    document.getElementById("gamevoraTrack");
-
-const gamevoraDots =
-    document.querySelectorAll(".gamevora-dot");
+/* CARRUSEL */
+const gamevoraTrack = document.getElementById("gamevoraTrack");
+const gamevoraDots = document.querySelectorAll(".gamevora-dot");
 
 let gamevoraActual = 0;
 
 function cambiarBannerGamevora(numero) {
-
     if (!gamevoraTrack) {
         return;
     }
@@ -1182,18 +799,11 @@ function cambiarBannerGamevora(numero) {
         "translateX(-" + (numero * 100) + "%)";
 
     gamevoraDots.forEach((dot, index) => {
-
-        dot.classList.toggle(
-            "activo",
-            index === numero
-        );
-
+        dot.classList.toggle("activo", index === numero);
     });
-
 }
 
 setInterval(() => {
-
     let siguiente = gamevoraActual + 1;
 
     if (siguiente >= 3) {
@@ -1201,23 +811,17 @@ setInterval(() => {
     }
 
     cambiarBannerGamevora(siguiente);
-
 }, 4500);
 
 gamevoraDots.forEach((dot, index) => {
-
     dot.addEventListener("click", () => {
         cambiarBannerGamevora(index);
     });
-
 });
-
 </script><!-- NAVEGACIÓN INFERIOR GAMERS GOLD --><script>
 (async function () {
-
     try {
-
-        const respuesta = await fetch("nav-inferior.html?v=20261012-v3")
+        const respuesta = await fetch("nav-inferior.html?v=20261012-v3");
 
         if (!respuesta.ok) {
             throw new Error("No se pudo cargar nav-inferior.html");
@@ -1235,21 +839,13 @@ gamevoraDots.forEach((dot, index) => {
         });
 
         documento.querySelectorAll("script").forEach(function (original) {
-
             const nuevo = document.createElement("script");
-
             nuevo.textContent = original.textContent;
-
             document.body.appendChild(nuevo);
-
         });
-
     } catch (error) {
-
         console.error("Error al cargar la navegación:", error);
-
     }
-
 })();
 </script></body>
     </html>
