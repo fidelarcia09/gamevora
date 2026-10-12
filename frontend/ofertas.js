@@ -8,8 +8,11 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 "use strict";
 
-const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
-const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
 const URL_CATALOGO =
     `${SUPABASE_URL}/functions/v1/nextlevel-catalogo`;
@@ -43,7 +46,8 @@ const CONFIG =
         ? window.CONFIG_OFERTAS
         : null;
 
-const NOMBRE_JUEGO = String(CONFIG?.juego || "").trim();
+const NOMBRE_JUEGO =
+    String(CONFIG?.juego || "").trim();
 
 const PAGINA_VOLVER =
     CONFIG?.paginaVolver || "index.html";
@@ -54,7 +58,8 @@ const TEXTO_ID =
 const PLACEHOLDER_ID =
     CONFIG?.placeholderId || "Escribe tu ID";
 
-const JUEGO_NORMALIZADO = normalizarTexto(NOMBRE_JUEGO);
+const JUEGO_NORMALIZADO =
+    normalizarTexto(NOMBRE_JUEGO);
 
 const JUEGOS_API = {
     freefire: "free-fire",
@@ -86,6 +91,11 @@ let pedidoPendienteId = null;
 let accionPendiente = "crear";
 
 const el = id => document.getElementById(id);
+
+
+/* =========================================================
+   UTILIDADES
+   ========================================================= */
 
 function normalizarTexto(valor) {
     return String(valor ?? "")
@@ -127,7 +137,10 @@ function actualizarEstadoCarga(
     );
 }
 
-function mostrarEstadoPedido(mensaje, tipo = "") {
+function mostrarEstadoPedido(
+    mensaje,
+    tipo = ""
+) {
     const estado = el("estadoPedido");
 
     if (!estado) return;
@@ -206,6 +219,11 @@ function obtenerPrecioLocal(producto) {
         : null;
 }
 
+
+/* =========================================================
+   GUARDADO Y RECUPERACIÓN DEL PEDIDO
+   ========================================================= */
+
 function clavePedidoPendiente(userId) {
     return `ggtopup_ofertas_freefire_pedido_${userId}`;
 }
@@ -215,20 +233,34 @@ function guardarPedidoPendiente() {
         return;
     }
 
-    localStorage.setItem(
-        clavePedidoPendiente(usuarioActualId),
-        JSON.stringify({
-            orderId: pedidoPendienteId,
-            accion: accionPendiente
-        })
-    );
+    try {
+        localStorage.setItem(
+            clavePedidoPendiente(usuarioActualId),
+            JSON.stringify({
+                orderId: pedidoPendienteId,
+                accion: accionPendiente
+            })
+        );
+    } catch (error) {
+        console.error(
+            "[Gamers Gold] No se pudo guardar el pedido:",
+            error
+        );
+    }
 }
 
 function borrarPedidoPendiente() {
     if (usuarioActualId) {
-        localStorage.removeItem(
-            clavePedidoPendiente(usuarioActualId)
-        );
+        try {
+            localStorage.removeItem(
+                clavePedidoPendiente(usuarioActualId)
+            );
+        } catch (error) {
+            console.error(
+                "[Gamers Gold] No se pudo borrar el pedido guardado:",
+                error
+            );
+        }
     }
 
     pedidoPendienteId = null;
@@ -236,9 +268,18 @@ function borrarPedidoPendiente() {
 }
 
 function recuperarPedidoPendiente(userId) {
-    const guardado = localStorage.getItem(
-        clavePedidoPendiente(userId)
-    );
+    let guardado;
+
+    try {
+        guardado = localStorage.getItem(
+            clavePedidoPendiente(userId)
+        );
+    } catch (error) {
+        throw new Error(
+            "No pudimos recuperar la referencia del pedido. " +
+            "No iniciaremos otra compra automáticamente."
+        );
+    }
 
     if (!guardado) {
         pedidoPendienteId = null;
@@ -246,10 +287,19 @@ function recuperarPedidoPendiente(userId) {
         return;
     }
 
-    const datos = JSON.parse(guardado);
+    let datos;
+
+    try {
+        datos = JSON.parse(guardado);
+    } catch {
+        throw new Error(
+            "La información guardada del pedido no es válida. " +
+            "No iniciaremos otra compra automáticamente."
+        );
+    }
 
     if (
-        typeof datos.orderId !== "string" ||
+        typeof datos?.orderId !== "string" ||
         !UUID_RE.test(datos.orderId)
     ) {
         throw new Error(
@@ -265,6 +315,11 @@ function recuperarPedidoPendiente(userId) {
             ? "consultar"
             : "enviar";
 }
+
+
+/* =========================================================
+   CATÁLOGO NEXT LEVEL
+   ========================================================= */
 
 async function consultarCatalogoNextLevel() {
     if (!JUEGO_API) {
@@ -357,7 +412,9 @@ function buscarProductoLocal(productoProveedor) {
 
     return productosLocales.find(
         producto =>
-            String(producto.provider_product_id || "").trim() === id
+            String(
+                producto.provider_product_id || ""
+            ).trim() === id
     ) || null;
 }
 
@@ -370,6 +427,11 @@ function productoComprable(local) {
         obtenerPrecioLocal(local) !== null
     );
 }
+
+
+/* =========================================================
+   TARJETAS DE OFERTAS
+   ========================================================= */
 
 function crearTarjetaOferta(oferta, proveedor) {
     const local = buscarProductoLocal(proveedor);
@@ -406,7 +468,8 @@ function crearTarjetaOferta(oferta, proveedor) {
     tarjeta.append(foto, nombre);
 
     if (comprable) {
-        const precioEtiqueta = document.createElement("div");
+        const precioEtiqueta =
+            document.createElement("div");
 
         precioEtiqueta.style.cssText =
             "padding:9px;font-size:13px;color:#00baff;" +
@@ -632,6 +695,11 @@ function seleccionarOferta(
     ocultarEstadoPedido();
 }
 
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+
 function cambiarPantalla(idMostrar) {
     [
         "pantallaOfertas",
@@ -678,7 +746,9 @@ function irAConfirmacion() {
         NOMBRE_JUEGO;
 
     el("confirmarPrecio").textContent =
-        mostrarPrecio(productoSeleccionado.local.price_gvr);
+        mostrarPrecio(
+            productoSeleccionado.local.price_gvr
+        );
 
     const input = el("idJugador");
 
@@ -702,6 +772,11 @@ function volverOfertas() {
     cambiarPantalla("pantallaOfertas");
     ocultarEstadoPedido();
 }
+
+
+/* =========================================================
+   LLAMADAS A LAS EDGE FUNCTIONS
+   ========================================================= */
 
 async function llamarFuncion(
     url,
@@ -766,6 +841,11 @@ async function llamarFuncion(
     }
 }
 
+
+/* =========================================================
+   CONSULTAR EL ESTADO DEL PEDIDO
+   ========================================================= */
+
 async function consultarPedido(accessToken) {
     if (!pedidoPendienteId) {
         throw new Error(
@@ -816,6 +896,7 @@ async function consultarPedido(accessToken) {
         return;
     }
 
+    // Si sigue pendiente, consultar siempre antes de reenviar.
     accionPendiente = "consultar";
     guardarPedidoPendiente();
 
@@ -834,6 +915,11 @@ async function consultarPedido(accessToken) {
     }
 }
 
+
+/* =========================================================
+   ENVIAR PEDIDO A NEXT LEVEL
+   ========================================================= */
+
 async function enviarPedido(accessToken) {
     if (!pedidoPendienteId) {
         throw new Error(
@@ -841,7 +927,15 @@ async function enviarPedido(accessToken) {
         );
     }
 
-    // Evita repetir el envío automáticamente si se pierde la respuesta.
+    /*
+     * IMPORTANTE:
+     * Guardamos primero la acción "consultar".
+     *
+     * Si la solicitud llega a Next Level pero la respuesta
+     * se pierde, la siguiente ejecución consultará el pedido
+     * en lugar de reenviarlo automáticamente.
+     */
+
     accionPendiente = "consultar";
     guardarPedidoPendiente();
 
@@ -853,6 +947,7 @@ async function enviarPedido(accessToken) {
         }
     );
 
+    // La referencia continúa guardada para consultar el resultado.
     accionPendiente = "consultar";
     guardarPedidoPendiente();
 
@@ -863,6 +958,11 @@ async function enviarPedido(accessToken) {
         pedidoPendienteId
     );
 }
+
+
+/* =========================================================
+   MOSTRAR RESULTADO
+   ========================================================= */
 
 function mostrarResultado(
     titulo,
@@ -887,12 +987,28 @@ function mostrarResultado(
     cambiarPantalla("pantallaExito");
 }
 
+
+/* =========================================================
+   VERIFICACIÓN SEGURA DEL PEDIDO GUARDADO
+   ========================================================= */
+
 async function verificarPedidoGuardado(userId) {
     if (!pedidoPendienteId) {
         return false;
     }
 
     const id = pedidoPendienteId;
+
+    /*
+     * Conservamos la acción anterior.
+     *
+     * Si antes de un error de red ya habíamos guardado
+     * "consultar", no debemos cambiarla a "enviar"
+     * solamente porque la base de datos todavía no muestra
+     * los datos del proveedor.
+     */
+
+    const accionAnterior = accionPendiente;
 
     const { data, error } = await supabase
         .from("game_orders")
@@ -904,22 +1020,36 @@ async function verificarPedidoGuardado(userId) {
         .maybeSingle();
 
     if (error) {
+        console.error(
+            "[Gamers Gold] Error verificando pedido:",
+            error
+        );
+
+        // Fallo seguro: no reenviar si no se pudo verificar.
+        accionPendiente = "consultar";
+        guardarPedidoPendiente();
+
         throw new Error(
-            "No se pudo verificar el pedido anterior. " +
-            "No iniciaremos otra compra hasta resolverlo."
+            "No pudimos verificar tu pedido anterior. " +
+            "Conservamos su referencia para evitar duplicarlo. " +
+            "Intenta consultar su estado nuevamente."
         );
     }
 
     if (!data) {
+        accionPendiente = "consultar";
+        guardarPedidoPendiente();
+
         throw new Error(
-            "No pudimos confirmar el pedido anterior. " +
-            "Conservamos la referencia por seguridad; " +
-            "no hagas otra compra hasta aclararlo."
+            "No encontramos el pedido en el registro. " +
+            "Conservamos su referencia por seguridad. " +
+            "No hagas otra compra hasta aclarar su estado."
         );
     }
 
-    const status =
-        String(data.status || "").toLowerCase();
+    const status = String(
+        data.status || ""
+    ).toLowerCase();
 
     if (
         status === "completed" ||
@@ -929,14 +1059,27 @@ async function verificarPedidoGuardado(userId) {
         return false;
     }
 
-    if (
+    const tieneDatosProveedor = Boolean(
         data.provider_order_id ||
         data.provider_client_reference ||
         data.provider_submitted_at
-    ) {
+    );
+
+    if (tieneDatosProveedor) {
+        accionPendiente = "consultar";
+
+    } else if (accionAnterior === "consultar") {
+        /*
+         * Ya se había iniciado un envío o se perdió
+         * una respuesta. No se debe reenviar a ciegas.
+         */
         accionPendiente = "consultar";
 
     } else if (status === "pending") {
+        /*
+         * Solo conservamos "enviar" si la acción guardada
+         * ya era enviar y no hay indicios de un envío anterior.
+         */
         accionPendiente = "enviar";
 
     } else {
@@ -947,6 +1090,11 @@ async function verificarPedidoGuardado(userId) {
 
     return true;
 }
+
+
+/* =========================================================
+   CREAR COMPRA LOCAL
+   ========================================================= */
 
 async function crearCompra(
     accessToken,
@@ -972,7 +1120,7 @@ async function crearCompra(
         );
     }
 
-    // Verificación actualizada del producto antes de cobrar.
+    // Verificamos nuevamente el producto antes de crear el pedido.
     const {
         data: actual,
         error
@@ -1059,6 +1207,11 @@ async function crearCompra(
     await enviarPedido(accessToken);
 }
 
+
+/* =========================================================
+   CONFIRMAR O RECUPERAR PEDIDO
+   ========================================================= */
+
 async function manejarConfirmacion() {
     if (procesandoCompra) {
         return;
@@ -1078,7 +1231,7 @@ async function manejarConfirmacion() {
 
     if (boton) {
         boton.disabled = true;
-        boton.textContent = "Procesando...";
+        boton.textContent = "Verificando pedido...";
     }
 
     try {
@@ -1106,7 +1259,8 @@ async function manejarConfirmacion() {
 
         if (userError || !user) {
             throw new Error(
-                "Tu sesión no es válida o ha caducado. Inicia sesión nuevamente."
+                "Tu sesión no es válida o ha caducado. " +
+                "Inicia sesión nuevamente."
             );
         }
 
@@ -1117,31 +1271,45 @@ async function manejarConfirmacion() {
         const habiaPedidoPendiente =
             Boolean(pedidoPendienteId);
 
-        await verificarPedidoGuardado(user.id);
+        if (habiaPedidoPendiente) {
+            /*
+             * Primero verificamos el pedido existente.
+             * Nunca creamos uno nuevo mientras el anterior
+             * siga sin resolverse.
+             */
 
-        if (
-            habiaPedidoPendiente &&
-            !pedidoPendienteId
-        ) {
-            mostrarEstadoPedido(
-                "El pedido anterior ya se resolvió. Revisa su estado y vuelve a seleccionar la oferta si deseas hacer otra compra."
-            );
+            await verificarPedidoGuardado(user.id);
 
-            return;
-        }
+            if (!pedidoPendienteId) {
+                mostrarEstadoPedido(
+                    "El pedido anterior ya terminó. " +
+                    "Revisa su resultado y selecciona nuevamente " +
+                    "la oferta si deseas hacer otra compra."
+                );
 
-        if (pedidoPendienteId) {
-            if (accionPendiente === "enviar") {
-                await enviarPedido(session.access_token);
-            } else {
-                await consultarPedido(session.access_token);
+                return;
             }
 
-            return;
+            if (accionPendiente === "consultar") {
+                await consultarPedido(
+                    session.access_token
+                );
+
+                return;
+            }
+
+            if (accionPendiente === "enviar") {
+                await enviarPedido(
+                    session.access_token
+                );
+
+                return;
+            }
         }
 
-        const playerId =
-            String(el("idJugador")?.value || "").trim();
+        const playerId = String(
+            el("idJugador")?.value || ""
+        ).trim();
 
         if (!playerId) {
             throw new Error(
@@ -1162,17 +1330,19 @@ async function manejarConfirmacion() {
 
     } catch (error) {
         console.error(
-            "Error procesando oferta:",
+            "[Gamers Gold] Error procesando oferta:",
             error
         );
 
         mostrarEstadoPedido(
-            error.message || "No se pudo procesar el pedido.",
+            error.message ||
+            "No se pudo procesar el pedido.",
             "error"
         );
 
         alert(
-            error.message || "No se pudo procesar el pedido."
+            error.message ||
+            "No se pudo procesar el pedido."
         );
 
     } finally {
@@ -1191,6 +1361,11 @@ async function manejarConfirmacion() {
         }
     }
 }
+
+
+/* =========================================================
+   INICIALIZACIÓN
+   ========================================================= */
 
 function inicializar() {
     const label =
@@ -1213,7 +1388,9 @@ function inicializar() {
 
     if (el("descripcionOfertas")) {
         el("descripcionOfertas").textContent =
-            `Elige una oferta especial de ${NOMBRE_JUEGO || "este juego"}.`;
+            `Elige una oferta especial de ${
+                NOMBRE_JUEGO || "este juego"
+            }.`;
     }
 
     const nota = el("notaOfertas");
@@ -1285,4 +1462,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-      }
+}
