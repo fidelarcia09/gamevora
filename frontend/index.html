@@ -40,7 +40,7 @@
     }
 
     #splash-screen img {
-        display: block !important;
+        display: block;
         width: min(75vw, 360px);
         max-width: 360px;
         height: auto;
@@ -57,6 +57,7 @@
             opacity: 0;
             transform: scale(0.75);
         }
+
         100% {
             opacity: 1;
             transform: scale(1);
@@ -146,7 +147,7 @@
         letter-spacing: -1.4px;
         line-height: 1;
         white-space: nowrap;
-        text-shadow: 0 0 3px rgba(255,255,255,.25);
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
     }
 
     /* NAVEGACIÓN */
@@ -157,43 +158,8 @@
         flex-shrink: 0;
     }
 
-    .boton-navegacion {
-        color: #28a9ff;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
-        white-space: nowrap;
-    }
-
-    .boton-navegacion:hover {
-        color: #63caff;
-    }
-
-    .separador {
-        color: white;
-    }
-
     .boton-cuenta {
         display: none;
-    }
-
-    .login {
-        display: inline-block;
-        text-decoration: none;
-        white-space: nowrap;
-        border: 1px solid #168cff;
-        color: white;
-        background: transparent;
-        padding: 10px 15px;
-        border-radius: 10px;
-        font-weight: bold;
-        font-size: 14px;
-        transition: 0.2s;
-    }
-
-    .login:hover {
-        background: #0d7cff;
-        box-shadow: 0 0 15px rgba(0, 153, 255, 0.25);
     }
 
     /* HERO */
@@ -237,71 +203,49 @@
         font-weight: bold;
         font-size: 15px;
         box-shadow: 0 0 18px rgba(0, 153, 255, 0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    /* SECCIONES */
-    .section {
-        width: 100%;
-        padding: 10px 18px 25px;
+    .hero-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 24px rgba(0, 153, 255, 0.45);
     }
 
-    .section-title {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-
-    .section-title h2 {
-        font-size: 21px;
-    }
-
-    /* OFERTAS */
-    .offer {
+    /* UNIVERSO GAMING */
+    .universo {
         width: 100%;
         max-width: 100%;
-        background: linear-gradient(135deg, #0b2348, #071426);
-        border: 1px solid #176ab2;
-        border-radius: 17px;
-        padding: 18px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
+        margin: 35px 0;
+        padding: 45px 20px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border-top: 1px solid rgba(0, 153, 255, 0.25);
+        border-bottom: 1px solid rgba(0, 153, 255, 0.25);
+        background:
+            radial-gradient(circle at center, rgba(0, 119, 255, 0.18), transparent 60%),
+            linear-gradient(180deg, #06142b, #020916);
+    }
+
+    .universo-label {
+        font-size: 14px;
+        letter-spacing: 6px;
+        color: #19bfff;
+        font-weight: 700;
         margin-bottom: 12px;
+        text-transform: uppercase;
     }
 
-    .offer-info {
-        min-width: 0;
-    }
-
-    .offer-info h3 {
-        margin-bottom: 7px;
-    }
-
-    .offer-info p {
-        color: #8fa5bd;
-        font-size: 13px;
-    }
-
-    .price {
-        text-align: right;
-        flex-shrink: 0;
-    }
-
-    .price strong {
-        color: #35b8ff;
-        font-size: 19px;
-    }
-
-    .buy {
-        margin-top: 7px;
-        background: #087fff;
-        border: none;
-        color: white;
-        padding: 8px 12px;
-        border-radius: 8px;
-        font-weight: bold;
+    .universo-titulo {
+        font-size: clamp(42px, 11vw, 76px);
+        font-weight: 900;
+        letter-spacing: 2px;
+        line-height: 1;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(90deg, #ffffff, #18bfff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 25px rgba(0, 174, 255, 0.25);
     }
 
     /* CARRUSEL */
@@ -368,9 +312,12 @@
     }
 
     .gamevora-slide-icon {
-        font-size: 38px;
+        width: 4px;
+        height: 42px;
         flex-shrink: 0;
-        filter: drop-shadow(0 0 10px rgba(0, 183, 255, 0.6));
+        border-radius: 10px;
+        background: linear-gradient(180deg, #00d4ff, #087cff);
+        box-shadow: 0 0 14px rgba(0, 183, 255, 0.45);
     }
 
     .gamevora-dots {
@@ -387,6 +334,7 @@
         border-radius: 50%;
         background: #29415c;
         padding: 0;
+        cursor: pointer;
     }
 
     .gamevora-dot.activo {
@@ -394,58 +342,6 @@
         border-radius: 8px;
         background: #00b7ff;
         box-shadow: 0 0 8px #008cff;
-    }
-
-    /* PIE */
-    footer {
-        width: 100%;
-        text-align: center;
-        padding: 30px 18px;
-        color: #647890;
-        font-size: 12px;
-        border-top: 1px solid #102a49;
-        margin-top: 15px;
-    }
-
-    footer strong {
-        color: #279fff;
-    }
-
-    /* UNIVERSO GAMING */
-    .universo {
-        width: 100%;
-        max-width: 100%;
-        margin: 35px 0;
-        padding: 45px 20px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        border-top: 1px solid rgba(0, 153, 255, 0.25);
-        border-bottom: 1px solid rgba(0, 153, 255, 0.25);
-        background:
-            radial-gradient(circle at center, rgba(0, 119, 255, 0.18), transparent 60%),
-            linear-gradient(180deg, #06142b, #020916);
-    }
-
-    .universo-label {
-        font-size: 14px;
-        letter-spacing: 6px;
-        color: #19bfff;
-        font-weight: 700;
-        margin-bottom: 12px;
-        text-transform: uppercase;
-    }
-
-    .universo-titulo {
-        font-size: clamp(42px, 11vw, 76px);
-        font-weight: 900;
-        letter-spacing: 2px;
-        line-height: 1;
-        font-family: Arial, Helvetica, sans-serif;
-        background: linear-gradient(90deg, #ffffff, #18bfff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 25px rgba(0, 174, 255, 0.25);
     }
 
     .mejor-opcion {
@@ -464,6 +360,132 @@
         border-radius: 10px;
         background: linear-gradient(90deg, transparent, #00bfff, transparent);
         box-shadow: 0 0 12px #00bfff;
+    }
+
+    /* SECCIÓN: POR QUÉ ELEGIRNOS */
+    .ventajas {
+        width: 100%;
+        padding: 35px 18px 45px;
+    }
+
+    .ventajas-encabezado {
+        max-width: 850px;
+        margin: 0 auto 28px;
+        text-align: center;
+    }
+
+    .ventajas-kicker {
+        color: #19bfff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 3px;
+        margin-bottom: 12px;
+    }
+
+    .ventajas-encabezado h2 {
+        color: #f5f8ff;
+        font-size: clamp(25px, 5vw, 34px);
+        line-height: 1.2;
+        margin-bottom: 12px;
+    }
+
+    .ventajas-encabezado p {
+        color: #91a7c2;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .ventajas-grid {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .ventaja-card {
+        position: relative;
+        min-width: 0;
+        min-height: 190px;
+        padding: 22px 18px;
+        overflow: hidden;
+        border: 1px solid #153c68;
+        border-radius: 12px;
+        background:
+            radial-gradient(circle at 100% 0%, rgba(0, 132, 255, 0.12), transparent 48%),
+            linear-gradient(145deg, #0b1c35, #071020 80%);
+        text-align: left;
+        transition:
+            transform 0.25s ease,
+            border-color 0.25s ease,
+            box-shadow 0.25s ease;
+    }
+
+    .ventaja-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 48px;
+        height: 3px;
+        background: linear-gradient(90deg, #00c8ff, #087cff);
+        box-shadow: 0 0 12px rgba(0, 183, 255, 0.4);
+    }
+
+    .ventaja-card:hover {
+        transform: translateY(-4px);
+        border-color: #168cff;
+        box-shadow: 0 12px 28px rgba(0, 100, 220, 0.12);
+    }
+
+    .ventaja-numero {
+        display: block;
+        margin-bottom: 22px;
+        color: #36baff;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 2px;
+    }
+
+    .ventaja-card h3 {
+        color: #f4f8ff;
+        font-size: 15px;
+        line-height: 1.4;
+        margin-bottom: 10px;
+    }
+
+    .ventaja-card p {
+        color: #92a7c0;
+        font-size: 13px;
+        line-height: 1.65;
+    }
+
+    /* PIE DE PÁGINA */
+    footer {
+        width: 100%;
+        text-align: center;
+        padding: 30px 18px;
+        color: #647890;
+        font-size: 12px;
+        line-height: 1.8;
+        border-top: 1px solid #102a49;
+        margin-top: 15px;
+    }
+
+    footer strong {
+        color: #279fff;
+    }
+
+    /* TABLET */
+    @media (max-width: 850px) {
+        .ventajas-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .ventaja-card {
+            min-height: 175px;
+        }
     }
 
     /* MÓVIL */
@@ -485,19 +507,6 @@
         .logo-resto {
             font-size: 20px;
             letter-spacing: -1.2px;
-        }
-
-        .navegacion {
-            gap: 6px;
-        }
-
-        .boton-navegacion {
-            font-size: 13px;
-        }
-
-        .login {
-            padding: 9px 12px;
-            font-size: 13px;
         }
 
         .hero {
@@ -543,13 +552,42 @@
             font-size: 13px;
         }
 
-        .gamevora-slide-icon {
-            font-size: 34px;
-        }
-
         .mejor-opcion {
             font-size: 16px;
             letter-spacing: 4px;
+        }
+
+        .ventajas {
+            padding: 28px 14px 35px;
+        }
+
+        .ventajas-encabezado {
+            margin-bottom: 22px;
+        }
+
+        .ventajas-encabezado p {
+            font-size: 13px;
+        }
+
+        .ventajas-grid {
+            gap: 10px;
+        }
+
+        .ventaja-card {
+            min-height: 180px;
+            padding: 18px 14px;
+        }
+
+        .ventaja-numero {
+            margin-bottom: 18px;
+        }
+
+        .ventaja-card h3 {
+            font-size: 14px;
+        }
+
+        .ventaja-card p {
+            font-size: 12px;
         }
     }
 
@@ -568,15 +606,6 @@
             height: 40px;
         }
 
-        .boton-navegacion {
-            font-size: 12px;
-        }
-
-        .login {
-            padding: 8px 10px;
-            font-size: 12px;
-        }
-
         .hero h1 {
             font-size: 27px;
         }
@@ -590,262 +619,338 @@
             padding: 16px;
         }
 
-        .gamevora-slide-icon {
-            font-size: 30px;
+        .ventajas-grid {
+            gap: 8px;
+        }
+
+        .ventaja-card {
+            min-height: 190px;
+            padding: 16px 12px;
+        }
+
+        .ventaja-card h3 {
+            font-size: 13px;
+        }
+
+        .ventaja-card p {
+            font-size: 11px;
         }
     }
-</style><link rel="manifest" href="manifest.json">
+</style>
+
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#050b18">
-</head><body><!-- SPLASH GAMERS GOLD --><div id="splash-screen">
+
+</head><body><!-- PANTALLA DE INICIO -->
+<div id="splash-screen">
     <img
         src="../imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
         alt="Gamers Gold Top-Up"
         loading="eager"
     >
-</div><header>
+</div>
+
+<!-- ENCABEZADO -->
+<header>
     <div class="logo">
         <span class="logo-g">G</span>
         <span class="logo-resto">AMERS GOLD TOP-UP</span>
-    </div><div class="navegacion">
-    <div id="botonesCuenta" class="boton-cuenta"></div>
-</div>
+    </div>
 
-</header><section class="hero">
+    <div class="navegacion">
+        <div id="botonesCuenta" class="boton-cuenta"></div>
+    </div>
+</header>
+
+<!-- PRESENTACIÓN -->
+<section class="hero">
     <h1>
         Tu mundo gaming.<br>
-        <span>Un solo lugar.</span> ⚡
-    </h1><p>
-    Recargas digitales, ofertas y productos
-    para tus juegos favoritos.
-</p>
+        <span>Un solo lugar.</span>
+    </h1>
 
-<a href="juegos.html" class="hero-button">
-    Explorar juegos
-</a>
+    <p>
+        Recargas digitales, ofertas y productos
+        para tus juegos favoritos.
+    </p>
 
-</section><section class="universo">
+    <a href="juegos.html" class="hero-button">
+        Explorar juegos
+    </a>
+</section>
+
+<!-- UNIVERSO GAMING -->
+<section class="universo">
     <div class="universo-label">
-        ⚡ EL UNIVERSO GAMING
-    </div><div class="universo-titulo">
-    GAMERS GOLD TOP-UP
-</div>
+        EL UNIVERSO GAMING
+    </div>
 
-<div class="gamevora-carrusel">
-    <div class="gamevora-track" id="gamevoraTrack">
+    <div class="universo-titulo">
+        GAMERS GOLD TOP-UP
+    </div>
 
-        <a
-            href="reseñas.html"
-            class="gamevora-slide gamevora-slide-link"
-        >
-            <div class="gamevora-slide-text">
-                <div class="gamevora-slide-label">
-                    GAMERS GOLD TOP-UP COMMUNITY
+    <!-- CARRUSEL -->
+    <div class="gamevora-carrusel">
+        <div class="gamevora-track" id="gamevoraTrack">
+
+            <a
+                href="reseñas.html"
+                class="gamevora-slide gamevora-slide-link"
+            >
+                <div class="gamevora-slide-text">
+                    <div class="gamevora-slide-label">
+                        GAMERS GOLD TOP-UP COMMUNITY
+                    </div>
+
+                    <h3>¿Ya dejaste tu reseña?</h3>
+
+                    <p>
+                        Tu opinión ayuda a mejorar
+                        Gamers Gold Top-Up.
+                    </p>
                 </div>
 
-                <h3>⚡ ¿Ya dejaste tu reseña?</h3>
+                <div class="gamevora-slide-icon"></div>
+            </a>
 
-                <p>
-                    Tu opinión ayuda a mejorar
-                    Gamers Gold Top-Up.
-                </p>
-            </div>
+            <div class="gamevora-slide">
+                <div class="gamevora-slide-text">
+                    <div class="gamevora-slide-label">
+                        NOVEDADES
+                    </div>
 
-            <div class="gamevora-slide-icon">⚡</div>
-        </a>
+                    <h3>Nuevas actualizaciones</h3>
 
-        <div class="gamevora-slide">
-            <div class="gamevora-slide-text">
-                <div class="gamevora-slide-label">
-                    NOVEDADES
+                    <p>
+                        Descubre las novedades
+                        que estamos preparando.
+                    </p>
                 </div>
 
-                <h3>🚀 Nuevas actualizaciones</h3>
-
-                <p>
-                    Descubre las novedades
-                    que estamos preparando.
-                </p>
+                <div class="gamevora-slide-icon"></div>
             </div>
 
-            <div class="gamevora-slide-icon">🚀</div>
+            <a
+                href="informacion-gvr.html"
+                class="gamevora-slide gamevora-slide-link"
+            >
+                <div class="gamevora-slide-text">
+                    <div class="gamevora-slide-label">
+                        GVR
+                    </div>
+
+                    <h3>Información sobre GVR</h3>
+
+                    <p>
+                        Conoce cómo funciona
+                        nuestro saldo virtual.
+                    </p>
+                </div>
+
+                <div class="gamevora-slide-icon"></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="gamevora-dots">
+        <button class="gamevora-dot activo" type="button" aria-label="Banner 1"></button>
+        <button class="gamevora-dot" type="button" aria-label="Banner 2"></button>
+        <button class="gamevora-dot" type="button" aria-label="Banner 3"></button>
+    </div>
+
+    <div class="mejor-opcion">
+        TU MEJOR OPCIÓN
+    </div>
+
+    <div class="linea-azul"></div>
+</section>
+
+<!-- POR QUÉ ELEGIRNOS -->
+<section class="ventajas">
+    <div class="ventajas-encabezado">
+        <div class="ventajas-kicker">
+            GAMERS GOLD TOP-UP
         </div>
 
-        <a
-            href="informacion-gvr.html"
-            class="gamevora-slide gamevora-slide-link"
-        >
-            <div class="gamevora-slide-text">
-                <div class="gamevora-slide-label">
-                    GVR
-                </div>
+        <h2>¿Por qué elegirnos?</h2>
 
-                <h3>⚡ Información sobre GVR</h3>
-
-                <p>
-                    Conoce cómo funciona
-                    nuestro saldo virtual.
-                </p>
-            </div>
-
-            <div class="gamevora-slide-icon">⚡</div>
-        </a>
-
-    </div>
-</div>
-
-<div class="gamevora-dots">
-    <button class="gamevora-dot activo" type="button" aria-label="Banner 1"></button>
-    <button class="gamevora-dot" type="button" aria-label="Banner 2"></button>
-    <button class="gamevora-dot" type="button" aria-label="Banner 3"></button>
-</div>
-
-<div class="mejor-opcion">
-    TU MEJOR OPCIÓN
-</div>
-
-<div class="linea-azul"></div>
-
-</section><section class="section">
-    <div class="section-title">
-        <h2>⚡ Recargas destacadas</h2>
-    </div><div class="offer">
-    <div class="offer-info">
-        <h3>🔥 Free Fire</h3>
-        <p>310 Diamantes</p>
+        <p>
+            Una experiencia de recargas pensada para tu mundo gaming.
+        </p>
     </div>
 
-    <div class="price">
-        <strong>10 GVR</strong>
-        <br>
-        <button class="buy" type="button">Comprar</button>
+    <div class="ventajas-grid">
+
+        <article class="ventaja-card">
+            <span class="ventaja-numero">01</span>
+
+            <h3>ENTREGA RÁPIDA</h3>
+
+            <p>
+                Recargas digitales procesadas de forma ágil.
+            </p>
+        </article>
+
+        <article class="ventaja-card">
+            <span class="ventaja-numero">02</span>
+
+            <h3>PAGO SEGURO</h3>
+
+            <p>
+                Protección de tus datos durante el proceso de compra.
+            </p>
+        </article>
+
+        <article class="ventaja-card">
+            <span class="ventaja-numero">03</span>
+
+            <h3>PRECIOS COMPETITIVOS</h3>
+
+            <p>
+                Opciones para recargar tus juegos favoritos.
+            </p>
+        </article>
+
+        <article class="ventaja-card">
+            <span class="ventaja-numero">04</span>
+
+            <h3>ATENCIÓN AL CLIENTE</h3>
+
+            <p>
+                Estamos aquí para ayudarte con tus consultas.
+            </p>
+        </article>
+
     </div>
-</div>
+</section>
 
-<div class="offer">
-    <div class="offer-info">
-        <h3>🔫 Call of Duty Mobile</h3>
-        <p>420 CP</p>
-    </div>
+<!-- PIE DE PÁGINA -->
+<footer>
+    <p><strong>GAMERS GOLD TOP-UP</strong></p>
 
-    <div class="price">
-        <strong>15 GVR</strong>
-        <br>
-        <button class="buy" type="button">Comprar</button>
-    </div>
-</div>
+    <p>
+        Plataforma de recargas digitales
+        para gamers.
+    </p>
 
-</section><footer>
-    <p><strong>⚡ GAMERS GOLD TOP-UP</strong></p><p>
-    Plataforma de recargas digitales
-    para gamers.
-</p>
+    <br>
 
-<br>
+    <p>© 2026 Gamers Gold Top-Up</p>
+</footer>
 
-<p>© 2026 Gamers Gold Top-Up</p>
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-</footer><!-- SUPABASE --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-/* SPLASH */
-const splash = document.getElementById("splash-screen");
-const splashYaVisto = sessionStorage.getItem("gamersGoldSplashVisto");
+<script>
+    /* PANTALLA DE INICIO */
+    const splash = document.getElementById("splash-screen");
+    const splashYaVisto = sessionStorage.getItem("gamersGoldSplashVisto");
 
-if (splash) {
-    if (splashYaVisto === "true") {
-        splash.remove();
-    } else {
-        sessionStorage.setItem("gamersGoldSplashVisto", "true");
-
-        setTimeout(() => {
-            splash.classList.add("splash-oculto");
+    if (splash) {
+        if (splashYaVisto === "true") {
+            splash.remove();
+        } else {
+            sessionStorage.setItem("gamersGoldSplashVisto", "true");
 
             setTimeout(() => {
-                splash.remove();
-            }, 800);
-        }, 3700);
-    }
-}
+                splash.classList.add("splash-oculto");
 
-/* SUPABASE: se conserva la conexión */
-const supabaseClient = window.supabase.createClient(
-    "https://gsuhzcavghsiolmipnzi.supabase.co",
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
-);
-
-function actualizarMenu() {
-    const botones = document.getElementById("botonesCuenta");
-
-    if (botones) {
-        botones.innerHTML = "";
-        botones.style.display = "none";
-    }
-}
-
-actualizarMenu();
-
-/* CARRUSEL */
-const gamevoraTrack = document.getElementById("gamevoraTrack");
-const gamevoraDots = document.querySelectorAll(".gamevora-dot");
-
-let gamevoraActual = 0;
-
-function cambiarBannerGamevora(numero) {
-    if (!gamevoraTrack) {
-        return;
+                setTimeout(() => {
+                    splash.remove();
+                }, 800);
+            }, 3700);
+        }
     }
 
-    gamevoraActual = numero;
+    /* SUPABASE: SE CONSERVA LA CONEXIÓN */
+    const supabaseClient = window.supabase.createClient(
+        "https://gsuhzcavghsiolmipnzi.supabase.co",
+        "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+    );
 
-    gamevoraTrack.style.transform =
-        "translateX(-" + (numero * 100) + "%)";
+    function actualizarMenu() {
+        const botones = document.getElementById("botonesCuenta");
 
-    gamevoraDots.forEach((dot, index) => {
-        dot.classList.toggle("activo", index === numero);
-    });
-}
-
-setInterval(() => {
-    let siguiente = gamevoraActual + 1;
-
-    if (siguiente >= 3) {
-        siguiente = 0;
+        if (botones) {
+            botones.innerHTML = "";
+            botones.style.display = "none";
+        }
     }
 
-    cambiarBannerGamevora(siguiente);
-}, 4500);
+    actualizarMenu();
 
-gamevoraDots.forEach((dot, index) => {
-    dot.addEventListener("click", () => {
-        cambiarBannerGamevora(index);
-    });
-});
-</script><!-- NAVEGACIÓN INFERIOR GAMERS GOLD --><script>
-(async function () {
-    try {
-        const respuesta = await fetch("nav-inferior.html?v=20261012-v3");
+    /* CARRUSEL */
+    const gamevoraTrack = document.getElementById("gamevoraTrack");
+    const gamevoraDots = document.querySelectorAll(".gamevora-dot");
 
-        if (!respuesta.ok) {
-            throw new Error("No se pudo cargar nav-inferior.html");
+    let gamevoraActual = 0;
+
+    function cambiarBannerGamevora(numero) {
+        if (!gamevoraTrack) {
+            return;
         }
 
-        const contenido = await respuesta.text();
+        gamevoraActual = numero;
 
-        const documento = new DOMParser().parseFromString(
-            contenido,
-            "text/html"
-        );
+        gamevoraTrack.style.transform =
+            "translateX(-" + (numero * 100) + "%)";
 
-        documento.querySelectorAll("style").forEach(function (estilo) {
-            document.head.appendChild(estilo.cloneNode(true));
+        gamevoraDots.forEach((dot, index) => {
+            dot.classList.toggle("activo", index === numero);
         });
-
-        documento.querySelectorAll("script").forEach(function (original) {
-            const nuevo = document.createElement("script");
-            nuevo.textContent = original.textContent;
-            document.body.appendChild(nuevo);
-        });
-    } catch (error) {
-        console.error("Error al cargar la navegación:", error);
     }
-})();
-</script></body>
+
+    setInterval(() => {
+        let siguiente = gamevoraActual + 1;
+
+        if (siguiente >= 3) {
+            siguiente = 0;
+        }
+
+        cambiarBannerGamevora(siguiente);
+    }, 4500);
+
+    gamevoraDots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+            cambiarBannerGamevora(index);
+        });
+    });
+</script>
+
+<!-- NAVEGACIÓN INFERIOR GAMERS GOLD -->
+<script>
+    (async function () {
+        try {
+            const respuesta = await fetch(
+                "nav-inferior.html?v=20261012-v3"
+            );
+
+            if (!respuesta.ok) {
+                throw new Error("No se pudo cargar nav-inferior.html");
+            }
+
+            const contenido = await respuesta.text();
+
+            const documento = new DOMParser().parseFromString(
+                contenido,
+                "text/html"
+            );
+
+            documento.querySelectorAll("style").forEach(function (estilo) {
+                document.head.appendChild(estilo.cloneNode(true));
+            });
+
+            documento.querySelectorAll("script").forEach(function (original) {
+                const nuevo = document.createElement("script");
+                nuevo.textContent = original.textContent;
+                document.body.appendChild(nuevo);
+            });
+        } catch (error) {
+            console.error("Error al cargar la navegación:", error);
+        }
+    })();
+</script>
+
+</body>
     </html>
