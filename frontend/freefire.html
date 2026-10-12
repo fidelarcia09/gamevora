@@ -637,13 +637,17 @@ function buscarProductoLocal(productoProveedor) {
     ) || null;
 }
 
+/*
+ * CORRECCIÓN 1:
+ * Acepta precios decimales positivos, como 0.98 y 14.09 GVR.
+ */
 function productoComprable(productoLocal) {
     if (!productoLocal) return false;
 
     const precio = Number(productoLocal.price_gvr);
 
     return productoLocal.active === true &&
-        Number.isSafeInteger(precio) &&
+        Number.isFinite(precio) &&
         precio > 0;
 }
 
@@ -793,7 +797,7 @@ async function cargarCatalogo() {
         catalogo.replaceChildren();
 
         mostrarEstado(
-            mensajeError(error, "No se pudo los paquetes."),
+            mensajeError(error, "No se pudo cargar los paquetes."),
             "error"
         );
     }
@@ -940,10 +944,15 @@ async function crearCompra(accessToken, playerId) {
 
     const local = productoSeleccionado.local;
 
+    /*
+     * CORRECCIÓN 2:
+     * Se permiten precios decimales positivos.
+     * Se conserva la validación del proveedor y del producto.
+     */
     if (
         !local ||
         local.active !== true ||
-        !Number.isSafeInteger(Number(local.price_gvr)) ||
+        !Number.isFinite(Number(local.price_gvr)) ||
         Number(local.price_gvr) <= 0 ||
         local.provider !== "nextlevel" ||
         !local.provider_product_id
@@ -965,12 +974,17 @@ async function crearCompra(accessToken, playerId) {
         throw new Error("No se pudo verificar el producto antes de comprar.");
     }
 
+    /*
+     * CORRECCIÓN 3:
+     * También acepta precios decimales en la verificación
+     * del precio actual de Supabase antes de crear el pedido.
+     */
     if (
         !productoActual ||
         normalizarTexto(productoActual.game) !== "freefire" ||
         String(productoActual.provider_product_id || "").trim() !==
             obtenerProductId(productoSeleccionado.proveedor) ||
-        !Number.isSafeInteger(Number(productoActual.price_gvr)) ||
+        !Number.isFinite(Number(productoActual.price_gvr)) ||
         Number(productoActual.price_gvr) <= 0
     ) {
         throw new Error(
@@ -1144,4 +1158,4 @@ async function iniciar() {
 iniciar();
 </script>
 </body>
-    </html>
+</html>
