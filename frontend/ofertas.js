@@ -66,7 +66,10 @@ const JUEGOS_API = {
     bloodstrike: "blood-strike",
     pubgmobile: "pubg-mobile",
     honorofkings: "honor-of-kings",
-    arenabreakout: "arena-breakout"
+    arenabreakout: "arena-breakout",
+
+    // Agregado únicamente para Genshin Impact.
+    genshinimpact: "genshin-impact"
 };
 
 const JUEGO_API =
@@ -81,13 +84,13 @@ const ES_BLOOD_STRIKE =
 const ES_HONOR_OF_KINGS =
     JUEGO_NORMALIZADO === "honorofkings";
 
+// Agregado únicamente para Genshin Impact.
+const ES_GENSHIN =
+    JUEGO_NORMALIZADO === "genshinimpact";
+
 /*
- * Honor of Kings se habilita únicamente cuando la página
- * incluye habilitarCompras: true.
- *
- * Free Fire conserva su comportamiento anterior.
- * Blood Strike conserva su propia condición.
- * Los demás juegos no se habilitan por este cambio.
+ * Se conservan las condiciones de ventas anteriores.
+ * Genshin solo se habilita si su configuración lo permite.
  */
 const ES_VENTAS_HABILITADAS =
     ES_FREE_FIRE ||
@@ -97,6 +100,10 @@ const ES_VENTAS_HABILITADAS =
     ) ||
     (
         ES_HONOR_OF_KINGS &&
+        CONFIG?.habilitarCompras === true
+    ) ||
+    (
+        ES_GENSHIN &&
         CONFIG?.habilitarCompras === true
     );
 
@@ -113,6 +120,9 @@ let procesandoCompra = false;
 let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
+
+// Agregado para conservar el servidor de Genshin.
+let zonaJugadorActual = "";
 
 const el = id => document.getElementById(id);
 
@@ -219,7 +229,8 @@ function mensajeErrorPedido(error) {
 
     if (
         mensaje.startsWith("Escribe tu ID de jugador") ||
-        mensaje.startsWith("El ID de jugador")
+        mensaje.startsWith("El ID de jugador") ||
+        mensaje.startsWith("Selecciona el servidor")
     ) {
         return mensaje;
     }
@@ -297,7 +308,12 @@ function guardarPedidoPendiente() {
             clavePedidoPendiente(usuarioActualId),
             JSON.stringify({
                 orderId: pedidoPendienteId,
-                accion: accionPendiente
+                accion: accionPendiente,
+
+                // El servidor solo se guarda si hay uno seleccionado.
+                ...(ES_GENSHIN && zonaJugadorActual
+                    ? { zoneId: zonaJugadorActual }
+                    : {})
             })
         );
     } catch (error) {
@@ -324,6 +340,7 @@ function borrarPedidoPendiente() {
 
     pedidoPendienteId = null;
     accionPendiente = "crear";
+    zonaJugadorActual = "";
 }
 
 function recuperarPedidoPendiente(userId) {
@@ -343,6 +360,7 @@ function recuperarPedidoPendiente(userId) {
     if (!guardado) {
         pedidoPendienteId = null;
         accionPendiente = "crear";
+        zonaJugadorActual = "";
         return;
     }
 
@@ -373,6 +391,12 @@ function recuperarPedidoPendiente(userId) {
         datos.accion === "consultar"
             ? "consultar"
             : "enviar";
+
+    // Recuperar el servidor si el pedido era de Genshin.
+    zonaJugadorActual =
+        ES_GENSHIN && typeof datos.zoneId === "string"
+            ? datos.zoneId
+            : "";
 }
 
 
@@ -661,7 +685,7 @@ async function cargarOfertas() {
         if (el("notaOfertas")) {
             el("notaOfertas").textContent =
                 ES_VENTAS_HABILITADAS
-                    ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
+                    ? "Precios en GVR. Comprueba tu UID y servidor antes de confirmar."
                     : "Las ventas de este juego aún no están habilitadas.";
         }
 
@@ -726,7 +750,7 @@ function seleccionarOferta(
     if (el("continuarBtn")) {
         el("continuarBtn").style.display = "block";
         el("continuarBtn").disabled = false;
-        el("continuarBtn").textContent = "Continuar ⚡";
+        el("continuarBtn").textContent = "Continuar";
     }
 
     ocultarEstadoPedido();
@@ -788,13 +812,18 @@ function irAConfirmacion() {
         el("idJugador").value = "";
     }
 
+    // Limpiar el servidor al iniciar una nueva confirmación.
+    if (ES_GENSHIN && el("zonaJugador")) {
+        el("zonaJugador").value = "";
+    }
+
     ocultarEstadoPedido();
 
     const boton = el("confirmarBtn");
 
     if (boton) {
         boton.disabled = false;
-        boton.textContent = "Confirmar y recargar ⚡";
+        boton.textContent = "Confirmar y recargar";
     }
 
     cambiarPantalla("pantallaConfirmacion");
@@ -982,12 +1011,22 @@ async function enviarPedido(accessToken) {
     accionPendiente = "consultar";
     guardarPedidoPendiente();
 
+    const cuerpoPedido = {
+        game_order_id: pedidoPendienteId
+    };
+
+    /*
+     * Solo Genshin envía zone_id.
+     * Los demás juegos conservan el cuerpo original.
+     */
+    if (ES_GENSHIN && zonaJugadorActual) {
+        cuerpoPedido.zone_id = zonaJugadorActual;
+    }
+
     const datos = await llamarFuncion(
         URL_CREAR_PEDIDO,
         accessToken,
-        {
-            game_order_id: pedidoPendienteId
-        }
+        cuerpoPedido
     );
 
     accionPendiente = "consultar";
@@ -1089,7 +1128,11 @@ async function verificarPedidoGuardado(userId) {
    CREAR PEDIDO LOCAL
    ========================================================= */
 
-async function crearCompra(accessToken, playerId) {
+async function crearCompra(
+    accessToken,
+    playerId,
+    zoneId = ""
+) {
     if (!productoSeleccionado) {
         throw new Error("Selecciona primero una oferta.");
     }
@@ -1106,6 +1149,11 @@ async function crearCompra(accessToken, playerId) {
         throw new Error(
             "Esta oferta no está correctamente configurada para la compra."
         );
+    }
+
+    // Validación específica de Genshin.
+    if (ES_GENSHIN && !zoneId) {
+        throw new Error("Selecciona el servidor de tu cuenta.");
     }
 
     /*
@@ -1150,6 +1198,11 @@ async function crearCompra(accessToken, playerId) {
         `Confirma tu oferta de ${NOMBRE_JUEGO}:\n\n` +
         `Oferta: ${productoSeleccionado.oferta.nombre}\n` +
         `ID de jugador: ${playerId}\n` +
+        (
+            ES_GENSHIN
+                ? `Servidor: ${zoneId}\n`
+                : ""
+        ) +
         `Precio: ${mostrarPrecio(precioConfirmado)}\n\n` +
         "¿Deseas continuar con el pedido?"
     );
@@ -1162,13 +1215,23 @@ async function crearCompra(accessToken, playerId) {
         "Creando tu pedido. No cierres esta página..."
     );
 
+    /*
+     * Se conserva el RPC original para los demás juegos.
+     * Solo Genshin recibe también p_zone_id.
+     */
+    const argumentosCompra = {
+        p_product_id: actual.id,
+        p_player_id: playerId
+    };
+
+    if (ES_GENSHIN) {
+        argumentosCompra.p_zone_id = zoneId;
+    }
+
     const { data: orderId, error: errorCompra } =
         await supabase.rpc(
             "purchase_game_product",
-            {
-                p_product_id: actual.id,
-                p_player_id: playerId
-            }
+            argumentosCompra
         );
 
     if (errorCompra) {
@@ -1198,6 +1261,9 @@ async function crearCompra(accessToken, playerId) {
 
     pedidoPendienteId = orderId;
     accionPendiente = "enviar";
+
+    // Conservar el servidor antes de enviar el pedido.
+    zonaJugadorActual = ES_GENSHIN ? zoneId : "";
 
     guardarPedidoPendiente();
 
@@ -1293,9 +1359,36 @@ async function manejarConfirmacion() {
             throw new Error("El ID de jugador es demasiado largo.");
         }
 
+        /*
+         * Leer el servidor únicamente para Genshin.
+         */
+        let zoneId = "";
+
+        if (ES_GENSHIN) {
+            zoneId = String(
+                el("zonaJugador")?.value || ""
+            ).trim();
+
+            const zonasPermitidas = [
+                "America",
+                "Europe",
+                "Asia",
+                "TW_HK_MO"
+            ];
+
+            if (!zonasPermitidas.includes(zoneId)) {
+                throw new Error(
+                    "Selecciona el servidor de tu cuenta."
+                );
+            }
+
+            zonaJugadorActual = zoneId;
+        }
+
         await crearCompra(
             session.access_token,
-            playerId
+            playerId,
+            zoneId
         );
 
     } catch (error) {
@@ -1323,7 +1416,7 @@ async function manejarConfirmacion() {
                 )
                 : (
                     ES_VENTAS_HABILITADAS
-                        ? "Confirmar y recargar ⚡"
+                        ? "Confirmar y recargar"
                         : "Ventas no habilitadas"
                 );
         }
@@ -1395,7 +1488,7 @@ function inicializar() {
         confirmar.disabled = !ES_VENTAS_HABILITADAS;
 
         confirmar.textContent = ES_VENTAS_HABILITADAS
-            ? "Confirmar y recargar ⚡"
+            ? "Confirmar y recargar"
             : "Ventas no habilitadas";
 
         confirmar.addEventListener(
@@ -1431,8 +1524,8 @@ function inicializar() {
 }
 
 /*
- * La página HTML no debe declarar de nuevo estas funciones:
- * el módulo es el propietario de la navegación.
+ * El módulo controla la navegación.
+ * La página HTML no vuelve a declarar estas funciones.
  */
 window.irAConfirmacion = irAConfirmacion;
 window.volverOfertas = volverOfertas;
@@ -1445,4 +1538,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-   }
+}
