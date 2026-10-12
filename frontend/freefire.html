@@ -292,7 +292,7 @@
         </label>
 
         <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo...
+            Cargando paquetes de Free Fire...
         </div>
 
         <div id="catalogo" class="catalogo"></div>
@@ -722,7 +722,7 @@ async function cargarCatalogo() {
     productosDisponibles = [];
     catalogo.replaceChildren();
 
-    mostrarEstado("Conectando con el catálogo...");
+    mostrarEstado("Cargando paquetes de Free Fire...");
 
     try {
         const [respuestaCatalogo] = await Promise.all([
@@ -757,7 +757,7 @@ async function cargarCatalogo() {
         const productos = extraerProductos(resultado);
 
         if (!productos.length) {
-            throw new Error("Next Level no devolvió productos.");
+            throw new Error("No se encontraron paquetes disponibles en este momento.");
         }
 
         productosDisponibles = productos.filter(producto =>
@@ -784,7 +784,7 @@ async function cargarCatalogo() {
 
         mostrarEstado(
             productosDisponibles.length +
-            " paquetes del catálogo encontrados. " +
+            " paquetes de Free Fire encontrados. " +
             comprables + " disponibles para comprar."
         );
 
@@ -793,7 +793,7 @@ async function cargarCatalogo() {
         catalogo.replaceChildren();
 
         mostrarEstado(
-            mensajeError(error, "No se pudo cargar el catálogo."),
+            mensajeError(error, "No se pudo los paquetes."),
             "error"
         );
     }
@@ -854,8 +854,8 @@ async function consultarPedido(accessToken) {
 
     if (estadoLocal === "completed" || estadoLocal === "refunded") {
         const mensaje = estadoLocal === "completed"
-            ? "¡Recarga completada por el proveedor!"
-            : "El pedido figura como reembolsado.";
+            ? "¡Tu recarga se ha completado correctamente!"
+            : "Tu pedido ha sido reembolsado.";
 
         borrarPedidoPendiente();
         actualizarBoton();
@@ -875,8 +875,8 @@ async function consultarPedido(accessToken) {
         actualizarBoton();
 
         mostrarEstado(
-            "El proveedor informa FAILED. No vuelvas a comprar el mismo paquete. " +
-            "Hay que verificar el pedido y el reembolso.",
+            "No se pudo confirmar el estado de tu recarga. " +
+            "No realices otra compra hasta verificar el pedido.",
             "error"
         );
 
@@ -985,7 +985,7 @@ async function crearCompra(accessToken, playerId) {
         "Paquete: " + obtenerNombre(productoSeleccionado.proveedor) + "\n" +
         "ID de jugador: " + playerId + "\n" +
         "Precio: " + mostrarPrecio(precioConfirmado) + "\n\n" +
-        "Next Level puede descontar saldo NXC real. ¿Deseas continuar?"
+        "¿Deseas confirmar esta recarga?"
     );
 
     if (!confirmar) return;
