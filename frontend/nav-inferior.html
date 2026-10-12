@@ -1,0 +1,195 @@
+<style>
+/* ======================================
+   GAMERS GOLD TOP-UP — NAVEGACIÓN
+====================================== */
+
+.gg-bottom-nav {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    z-index: 99990;
+
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+
+    padding: 8px 5px;
+
+    background: rgba(4, 13, 31, 0.97);
+    border: 1px solid rgba(0, 190, 255, 0.6);
+    border-radius: 18px;
+
+    box-shadow:
+        0 0 20px rgba(0, 140, 255, 0.2),
+        0 8px 28px rgba(0, 0, 0, 0.4);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.gg-bottom-nav a {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    padding: 7px 2px;
+
+    color: #8da9c8;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.2;
+
+    border-radius: 12px;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.gg-bottom-nav .gg-nav-icon {
+    font-size: 21px;
+    line-height: 1;
+}
+
+.gg-bottom-nav a.gg-active {
+    color: #35d7ff;
+    background: rgba(0, 153, 255, 0.15);
+
+    text-shadow: 0 0 10px rgba(0, 190, 255, 0.7);
+}
+
+.gg-bottom-nav a:active {
+    transform: scale(0.95);
+}
+
+/* Espacio para que la barra no tape el contenido */
+body.gg-nav-enabled {
+    padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+}
+
+@media (min-width: 760px) {
+    .gg-bottom-nav {
+        left: auto;
+        right: 22px;
+        bottom: 18px;
+        width: 360px;
+    }
+
+    .gg-bottom-nav a {
+        font-size: 11px;
+    }
+}
+</style>
+
+<script>
+(function () {
+    "use strict";
+
+    /* Evitar que se inserte dos veces */
+    if (document.querySelector(".gg-bottom-nav")) {
+        return;
+    }
+
+    const currentPath = window.location.pathname;
+    const currentHash = window.location.hash;
+
+    const isAccountPage = /\/cuenta\.html$/i.test(currentPath);
+    const isOrdersPage = /\/pedidos\.html$/i.test(currentPath);
+
+    let activeSection = "inicio";
+
+    if (isOrdersPage) {
+        activeSection = "pedidos";
+    } else if (isAccountPage && currentHash === "#saldoGVR") {
+        activeSection = "wallet";
+    } else if (isAccountPage) {
+        activeSection = "perfil";
+    }
+
+    /*
+     * El archivo puede incorporarse desde páginas de la raíz
+     * o desde frontend. Detectamos la carpeta actual.
+     */
+    const inFrontend = /\/frontend\//i.test(currentPath);
+
+    const homeHref = inFrontend ? "../index.html" : "index.html";
+    const pagePrefix = inFrontend ? "" : "frontend/";
+
+    const nav = document.createElement("nav");
+    nav.className = "gg-bottom-nav";
+    nav.setAttribute("aria-label", "Navegación principal");
+
+    const items = [
+        {
+            id: "inicio",
+            icon: "🏠",
+            label: "Inicio",
+            href: homeHref
+        },
+        {
+            id: "pedidos",
+            icon: "📋",
+            label: "Pedidos",
+            href: pagePrefix + "pedidos.html"
+        },
+        {
+            id: "wallet",
+            icon: "👛",
+            label: "Wallet",
+            href: pagePrefix + "cuenta.html#saldoGVR"
+        },
+        {
+            id: "perfil",
+            icon: "👤",
+            label: "Perfil",
+            href: pagePrefix + "cuenta.html#perfilUsuario"
+        }
+    ];
+
+    items.forEach(function (item) {
+        const link = document.createElement("a");
+        link.href = item.href;
+
+        if (item.id === activeSection) {
+            link.classList.add("gg-active");
+            link.setAttribute("aria-current", "page");
+        }
+
+        const icon = document.createElement("span");
+        icon.className = "gg-nav-icon";
+        icon.setAttribute("aria-hidden", "true");
+        icon.textContent = item.icon;
+
+        const label = document.createElement("span");
+        label.textContent = item.label;
+
+        link.appendChild(icon);
+        link.appendChild(label);
+        nav.appendChild(link);
+    });
+
+    function insertNavigation() {
+        if (!document.body || document.querySelector(".gg-bottom-nav")) {
+            return;
+        }
+
+        document.body.appendChild(nav);
+        document.body.classList.add("gg-nav-enabled");
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", insertNavigation, {
+            once: true
+        });
+    } else {
+        insertNavigation();
+    }
+})();
+</script>
