@@ -129,129 +129,134 @@
     }
 </style>
 
-</head><body><div class="contenedor"><div class="header">
-
-    <div class="logo">
-        <span class="rayo">⚡</span> GAMERS GOLD
-    </div>
-
-    <a href="cuenta.html" class="volver">
-        Mi cuenta
-    </a>
-
-</div>
-
-<div class="card">
-
-    <h1>Mi Wallet</h1>
-
-    <p class="subtitulo">
-        Consulta tu saldo y administra tus GVR.
-    </p>
-
-    <div class="saldo">
-
-        <div class="saldo-titulo">
-            Saldo disponible
+</head><body>
+    <div class="contenedor">
+        <div class="header">        <div class="logo">
+            <span class="rayo">⚡</span> GAMERS GOLD
         </div>
 
-        <div class="saldo-valor" id="saldoGVR">
-            Cargando...
-        </div>
+        <a href="../index.html" class="volver">
+            Inicio
+        </a>
 
     </div>
 
-    <a href="recargar-gvr.html" class="boton">
-        Recargar GVR
-    </a>
+    <div class="card">
 
-    <a href="movimientos.html" class="boton boton-secundario">
-        Ver movimientos
-    </a>
+        <h1>Mi Wallet</h1>
 
-    <p class="estado" id="estadoWallet"></p>
+        <p class="subtitulo">
+            Consulta tu saldo y administra tus GVR.
+        </p>
 
+        <div class="saldo">
+
+            <div class="saldo-titulo">
+                Saldo disponible
+            </div>
+
+            <div class="saldo-valor" id="saldoGVR">
+                Cargando...
+            </div>
+
+        </div>
+
+        <a href="recargar-gvr.html" class="boton">
+            Recargar GVR
+        </a>
+
+        <a href="movimientos.html" class="boton boton-secundario">
+            Ver movimientos
+        </a>
+
+        <p class="estado" id="estadoWallet"></p>
+
+    </div>
 </div>
 
-</div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-const SUPABASE_URL =
-    "https://gsuhzcavghsiolmipnzi.supabase.co";
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+<script>
+    const SUPABASE_URL =
+        "https://gsuhzcavghsiolmipnzi.supabase.co";
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
+    const SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-async function cargarWallet() {
-    const saldoElemento =
-        document.getElementById("saldoGVR");
-
-    const estadoElemento =
-        document.getElementById("estadoWallet");
-
-    const { data, error } =
-        await supabaseClient.auth.getUser();
-
-    if (error || !data.user) {
-        window.location.href = "login.html";
-        return;
-    }
-
-    const usuario = data.user;
-
-    const { data: wallet, error: walletError } =
-        await supabaseClient
-            .from("wallets")
-            .select("balance")
-            .eq("user_id", usuario.id)
-            .maybeSingle();
-
-    if (walletError) {
-        console.error(
-            "Error cargando wallet:",
-            walletError
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
         );
 
-        saldoElemento.textContent = "No disponible";
+    async function cargarWallet() {
+        const saldoElemento =
+            document.getElementById("saldoGVR");
 
-        estadoElemento.textContent =
-            "No se pudo consultar el saldo. Inténtalo nuevamente.";
+        const estadoElemento =
+            document.getElementById("estadoWallet");
 
-        return;
+        const { data, error } =
+            await supabaseClient.auth.getUser();
+
+        if (error || !data.user) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const usuario = data.user;
+
+        const { data: wallet, error: walletError } =
+            await supabaseClient
+                .from("wallets")
+                .select("balance")
+                .eq("user_id", usuario.id)
+                .maybeSingle();
+
+        if (walletError) {
+            console.error(
+                "Error cargando wallet:",
+                walletError
+            );
+
+            saldoElemento.textContent = "No disponible";
+
+            estadoElemento.textContent =
+                "No se pudo consultar el saldo. Inténtalo nuevamente.";
+
+            return;
+        }
+
+        if (!wallet) {
+            saldoElemento.textContent = "0 GVR";
+
+            estadoElemento.textContent =
+                "No se encontró una wallet para esta cuenta.";
+
+            return;
+        }
+
+        const saldo = Number(wallet.balance);
+
+        if (!Number.isFinite(saldo)) {
+            saldoElemento.textContent = "No disponible";
+
+            estadoElemento.textContent =
+                "No se pudo interpretar el saldo de la wallet.";
+
+            return;
+        }
+
+        saldoElemento.textContent =
+            `⚡ ${saldo.toLocaleString("es-ES", {
+                maximumFractionDigits: 2
+            })} GVR`;
+
+        estadoElemento.textContent = "";
     }
 
-    if (!wallet) {
-        saldoElemento.textContent = "0 GVR";
+    cargarWallet();
+</script>
 
-        estadoElemento.textContent =
-            "No se encontró una wallet para esta cuenta.";
-
-        return;
-    }
-
-    const saldo = Number(wallet.balance);
-
-    if (!Number.isFinite(saldo)) {
-        saldoElemento.textContent = "No disponible";
-
-        estadoElemento.textContent =
-            "No se pudo interpretar el saldo de la wallet.";
-
-        return;
-    }
-
-    saldoElemento.textContent =
-        `⚡ ${saldo.toLocaleString("es-ES", {
-            maximumFractionDigits: 2
-        })} GVR`;
-
-    estadoElemento.textContent = "";
-}
-
-cargarWallet();
-</script></body>
+</body>
 </html>
