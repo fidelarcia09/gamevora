@@ -3,9 +3,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Descubre las ofertas especiales de Blood Strike en Gamers Gold Top-Up."><title>Ofertas Especiales | Gamers Gold Top-Up</title>
-
-<style>
+    <meta name="description" content="Descubre las ofertas especiales de Blood Strike en Gamers Gold Top-Up.">
+    <title>Ofertas Blood Strike | Gamers Gold Top-Up</title><style>
     :root {
         --fondo: #050b18;
         --panel: #091a35;
@@ -31,8 +30,7 @@
         color: white;
     }
 
-    button,
-    input {
+    button, input {
         font: inherit;
     }
 
@@ -145,14 +143,8 @@
     }
 
     @keyframes aparecer {
-        from {
-            opacity: 0;
-            transform: translateY(5px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .lista-ofertas {
@@ -179,7 +171,7 @@
         -webkit-tap-highlight-color: transparent;
     }
 
-    .boton-oferta:hover {
+    .boton-oferta:hover:not(:disabled) {
         border-color: #159dff;
         background: #0a1d38;
         transform: translateY(-2px);
@@ -422,178 +414,178 @@
     }
 
     @media (max-width: 360px) {
-        header {
-            padding: 14px 10px;
-        }
-
-        .logo {
-            font-size: 13px;
-        }
-
-        .volver {
-            padding: 8px;
-            font-size: 11px;
-        }
-
-        .contenedor {
-            padding: 18px 10px;
-        }
-
-        .ofertas {
-            padding: 22px 14px;
-        }
+        header { padding: 14px 10px; }
+        .logo { font-size: 13px; }
+        .volver { padding: 8px; font-size: 11px; }
+        .contenedor { padding: 18px 10px; }
+        .ofertas { padding: 22px 14px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
+        *, *::before, *::after {
             animation-duration: 0.01ms !important;
             transition-duration: 0.01ms !important;
         }
     }
-</style></head><body><header>
+</style>
+
+</head><body>
+<header>
     <div class="logo">
         <span class="rayo">⚡</span>
         Gamers Gold Top-Up
-    </div><a href="bloodstrike.html" class="volver">← Volver</a>
-
-</header><main class="contenedor"><!-- OFERTAS ESPECIALES --><section id="pantallaOfertas" class="ofertas pantalla activa"><div class="icono">🎁</div>
-
-<h1>Ofertas Especiales</h1>
-
-<p id="descripcionOfertas" class="descripcion">
-    Elige una oferta especial de Blood Strike.
-</p>
-
-<div class="etiqueta">BLOOD STRIKE · OFERTAS ESPECIALES</div>
-
-<div id="estadoProductos" class="estado" role="status" aria-live="polite">
-    Conectando con el catálogo...
-</div>
-
-<div id="listaOfertas" class="lista-ofertas" style="display:none;"></div>
-
-<div id="precioSeleccionado" class="precio-oferta" style="display:none;">
-    <div class="precio-titulo">Precio de la oferta</div>
-    <div id="precio" class="precio">Pendiente</div>
-</div>
-
-<button
-    id="continuarBtn"
-    class="boton-principal"
-    type="button"
-    onclick="irAConfirmacion()"
-    style="display:none;"
-    disabled
->
-    Continuar ⚡
-</button>
-
-<div id="notaOfertas" class="nota">
-    Los precios y las compras todavía no están habilitados.
-</div>
-
-</section><!-- CONFIRMACIÓN: COMPRAS DESHABILITADAS --><section id="pantallaConfirmacion" class="ofertas pantalla"><div class="icono">💳</div>
-
-<h1>Confirmar pago</h1>
-
-<p class="descripcion">
-    Esta función estará disponible cuando terminemos de configurar los precios.
-</p>
-
-<div class="resumen">
-
-    <div class="fila">
-        <span>Oferta</span>
-        <span id="confirmarOferta">-</span>
     </div>
+    <a href="bloodstrike.html" class="volver">← Volver</a>
+</header><main class="contenedor"><!-- PANTALLA DE OFERTAS -->
+<section id="pantallaOfertas" class="ofertas pantalla activa">
+    <div class="icono">🎁</div>
 
-    <div class="fila">
-        <span>Juego</span>
-        <span id="juegoConfirmacion">Blood Strike</span>
-    </div>
+    <h1>Ofertas Especiales</h1>
 
-    <div class="fila">
-        <span>Precio</span>
-        <span id="confirmarPrecio">Pendiente</span>
-    </div>
-
-</div>
-
-<div class="campo-id">
-    <label for="idJugador">ID del jugador de Blood Strike</label>
-
-    <input
-        type="text"
-        id="idJugador"
-        placeholder="Escribe tu ID de Blood Strike"
-        autocomplete="off"
-    >
-</div>
-
-<button
-    id="confirmarBtn"
-    class="boton-principal"
-    type="button"
-    disabled
->
-    Compras desactivadas temporalmente
-</button>
-
-<button
-    class="boton-secundario"
-    type="button"
-    onclick="volverOfertas()"
->
-    ← Cambiar oferta
-</button>
-
-</section><!-- PANTALLA INFORMATIVA --><section id="pantallaExito" class="ofertas pantalla"><div class="exito">
-
-    <div class="icono-exito">ℹ️</div>
-
-    <h2>Compras en preparación</h2>
-
-    <p>
-        Estamos preparando esta función. Por ahora no se registran pedidos desde esta página.
+    <p id="descripcionOfertas" class="descripcion">
+        Elige una oferta especial de Blood Strike.
     </p>
 
+    <div class="etiqueta">BLOOD STRIKE · OFERTAS ESPECIALES</div>
+
+    <div id="estadoProductos" class="estado" role="status" aria-live="polite">
+        Conectando con el catálogo...
+    </div>
+
+    <div id="listaOfertas" class="lista-ofertas" style="display:none;"></div>
+
+    <div id="precioSeleccionado" class="precio-oferta" style="display:none;">
+        <div class="precio-titulo">Precio de la oferta</div>
+        <div id="precio" class="precio">Pendiente</div>
+    </div>
+
     <button
+        id="continuarBtn"
         class="boton-principal"
         type="button"
-        onclick="window.location.href='bloodstrike.html'"
+        onclick="irAConfirmacion()"
+        style="display:none;"
+        disabled
     >
-        Volver a Blood Strike ⚡
+        Continuar ⚡
     </button>
 
-</div>
+    <div id="notaOfertas" class="nota">
+        Precios en GVR. Comprueba tu ID antes de confirmar.
+    </div>
+</section>
 
-</section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+<!-- PANTALLA DE CONFIRMACIÓN -->
+<section id="pantallaConfirmacion" class="ofertas pantalla">
+    <div class="icono">💳</div>
+
+    <h1>Confirmar pedido</h1>
+
+    <p class="descripcion">
+        Revisa la oferta y tu ID de jugador antes de continuar.
+    </p>
+
+    <div class="resumen">
+        <div class="fila">
+            <span>Oferta</span>
+            <span id="confirmarOferta">-</span>
+        </div>
+
+        <div class="fila">
+            <span>Juego</span>
+            <span id="juegoConfirmacion">Blood Strike</span>
+        </div>
+
+        <div class="fila">
+            <span>Precio</span>
+            <span id="confirmarPrecio">Pendiente</span>
+        </div>
+    </div>
+
+    <div class="campo-id">
+        <label for="idJugador">ID del jugador de Blood Strike</label>
+
+        <input
+            type="text"
+            id="idJugador"
+            placeholder="Escribe tu ID de Blood Strike"
+            autocomplete="off"
+            maxlength="80"
+        >
+    </div>
+
+    <div id="estadoPedido" class="estado" role="status" aria-live="polite" style="display:none;"></div>
+
+    <button
+        id="confirmarBtn"
+        class="boton-principal"
+        type="button"
+    >
+        Confirmar y recargar ⚡
+    </button>
+
+    <button
+        class="boton-secundario"
+        type="button"
+        onclick="volverOfertas()"
+    >
+        ← Cambiar oferta
+    </button>
+</section>
+
+<!-- RESULTADO DEL PEDIDO -->
+<section id="pantallaExito" class="ofertas pantalla">
+    <div class="exito">
+        <div class="icono-exito">ℹ️</div>
+
+        <h2 id="tituloEstadoPedido">Estado del pedido</h2>
+
+        <p id="mensajeEstadoPedido">
+            Consulta el estado de tu pedido.
+        </p>
+
+        <div id="pedidoIdVisible" class="pedido-id" style="display:none;"></div>
+
+        <button class="boton-principal" type="button" onclick="window.location.href='bloodstrike.html'">
+            Volver a Blood Strike ⚡
+        </button>
+    </div>
+</section>
+
+</main><script>
 window.CONFIG_OFERTAS = {
     juego: "Blood Strike",
     paginaVolver: "bloodstrike.html",
     textoId: "ID del jugador de Blood Strike",
     placeholderId: "Escribe tu ID de Blood Strike",
 
+    // Activa las ventas en esta página.
+    // Solo dejarlo en true cuando los productos tengan
+    // precio GVR correcto y la función de pedidos esté lista.
+    habilitarCompras: true,
+
     ofertas: [
         {
+            id: "fz-blood_strike-lucky_bag_week",
             nombre: "Semana de Bolsa de la Suerte",
             emoji: "🎁"
         },
         {
+            id: "fz-blood_strike-level_up_pass",
             nombre: "Level Up Pass",
             emoji: "🚀"
         },
         {
+            id: "fz-blood_strike-strike_pass_elite",
             nombre: "Strike Pass Elite",
             emoji: "🎟️"
         },
         {
+            id: "fz-blood_strike-strike_pass_premium",
             nombre: "Strike Pass Premium",
             emoji: "👑"
         }
     ]
 };
-</script><!-- MOTOR UNIVERSAL ACTUALIZADO --><script src="ofertas.js?v=20261009bloodstrike2"></script></body>
-</html>
+</script><script type="module" src="ofertas.js?v=20261011bloodstrike3"></script></body>
+    </html>
