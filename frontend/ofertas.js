@@ -1,6 +1,6 @@
 /* =========================================================
-   GAMERS GOLD TOP-UP — MOTOR DE OFERTAS Y PEDIDOS
-   Free Fire y Blood Strike habilitados según configuración.
+   GAMERS GOLD TOP-UP
+   MOTOR DE OFERTAS Y PEDIDOS
    ========================================================= */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -72,18 +72,31 @@ const JUEGOS_API = {
 const JUEGO_API =
     JUEGOS_API[JUEGO_NORMALIZADO] || null;
 
-/*
- * Free Fire mantiene su configuración anterior.
- * Blood Strike solo habilita ventas cuando la página
- * declara habilitarCompras: true.
- */
 const ES_FREE_FIRE =
     JUEGO_NORMALIZADO === "freefire";
 
+const ES_BLOOD_STRIKE =
+    JUEGO_NORMALIZADO === "bloodstrike";
+
+const ES_HONOR_OF_KINGS =
+    JUEGO_NORMALIZADO === "honorofkings";
+
+/*
+ * Honor of Kings se habilita únicamente cuando la página
+ * incluye habilitarCompras: true.
+ *
+ * Free Fire conserva su comportamiento anterior.
+ * Blood Strike conserva su propia condición.
+ * Los demás juegos no se habilitan por este cambio.
+ */
 const ES_VENTAS_HABILITADAS =
     ES_FREE_FIRE ||
     (
-        JUEGO_NORMALIZADO === "bloodstrike" &&
+        ES_BLOOD_STRIKE &&
+        CONFIG?.habilitarCompras === true
+    ) ||
+    (
+        ES_HONOR_OF_KINGS &&
         CONFIG?.habilitarCompras === true
     );
 
@@ -141,11 +154,7 @@ function actualizarEstadoCarga(
 
     estado.textContent = mensaje;
     estado.style.display = mostrar ? "block" : "none";
-
-    estado.classList.toggle(
-        "error",
-        tipo === "error"
-    );
+    estado.classList.toggle("error", tipo === "error");
 }
 
 function mostrarEstadoPedido(
@@ -158,11 +167,7 @@ function mostrarEstadoPedido(
 
     estado.textContent = mensaje;
     estado.style.display = "block";
-
-    estado.classList.toggle(
-        "error",
-        tipo === "error"
-    );
+    estado.classList.toggle("error", tipo === "error");
 }
 
 function ocultarEstadoPedido() {
@@ -204,7 +209,8 @@ function mensajeErrorPedido(error) {
         "No encontramos el pedido en el registro. Conservamos su referencia por seguridad. No hagas otra compra hasta aclarar su estado.",
         "La referencia guardada del pedido no es válida. No iniciaremos otra compra automáticamente.",
         "La información guardada del pedido no es válida. No iniciaremos otra compra automáticamente.",
-        "No pudimos recuperar la referencia del pedido. No iniciaremos otra compra automáticamente."
+        "No pudimos recuperar la referencia del pedido. No iniciaremos otra compra automáticamente.",
+        "La solicitud tardó demasiado. Verifica el estado del pedido antes de intentarlo otra vez."
     ];
 
     if (mensajesPermitidos.includes(mensaje)) {
@@ -252,9 +258,7 @@ function obtenerIdProveedor(producto) {
         producto?.providerProductId ??
         producto?.id;
 
-    return valor == null
-        ? ""
-        : String(valor).trim();
+    return valor == null ? "" : String(valor).trim();
 }
 
 function obtenerNombreProveedor(producto) {
@@ -278,8 +282,7 @@ function obtenerPrecioLocal(producto) {
 
 
 /* =========================================================
-   GUARDADO Y RECUPERACIÓN DEL PEDIDO
-   Clave independiente por juego y usuario.
+   GUARDADO DEL PEDIDO PENDIENTE
    ========================================================= */
 
 function clavePedidoPendiente(userId) {
@@ -287,9 +290,7 @@ function clavePedidoPendiente(userId) {
 }
 
 function guardarPedidoPendiente() {
-    if (!usuarioActualId || !pedidoPendienteId) {
-        return;
-    }
+    if (!usuarioActualId || !pedidoPendienteId) return;
 
     try {
         localStorage.setItem(
@@ -315,7 +316,7 @@ function borrarPedidoPendiente() {
             );
         } catch (error) {
             console.error(
-                "[Gamers Gold] No se pudo borrar el pedido guardado:",
+                "[Gamers Gold] No se pudo borrar el pedido:",
                 error
             );
         }
@@ -332,7 +333,7 @@ function recuperarPedidoPendiente(userId) {
         guardado = localStorage.getItem(
             clavePedidoPendiente(userId)
         );
-    } catch (error) {
+    } catch {
         throw new Error(
             "No pudimos recuperar la referencia del pedido. " +
             "No iniciaremos otra compra automáticamente."
@@ -376,7 +377,7 @@ function recuperarPedidoPendiente(userId) {
 
 
 /* =========================================================
-   CONSULTA DEL CATÁLOGO
+   CATÁLOGO NEXT LEVEL
    ========================================================= */
 
 async function consultarCatalogoNextLevel() {
@@ -453,6 +454,11 @@ async function cargarProductosLocales() {
         .eq("provider", "nextlevel");
 
     if (error) {
+        console.error(
+            "[Gamers Gold] Error consultando productos locales:",
+            error
+        );
+
         throw new Error(
             "No se pudieron verificar los productos y sus precios GVR."
         );
@@ -460,8 +466,7 @@ async function cargarProductosLocales() {
 
     productosLocales = (data || []).filter(
         producto =>
-            normalizarTexto(producto.game) ===
-            JUEGO_NORMALIZADO
+            normalizarTexto(producto.game) === JUEGO_NORMALIZADO
     );
 }
 
@@ -470,9 +475,7 @@ function buscarProductoLocal(productoProveedor) {
 
     return productosLocales.find(
         producto =>
-            String(
-                producto.provider_product_id || ""
-            ).trim() === id
+            String(producto.provider_product_id || "").trim() === id
     ) || null;
 }
 
@@ -488,7 +491,7 @@ function productoComprable(local) {
 
 
 /* =========================================================
-   TARJETAS DE OFERTAS
+   TARJETAS
    ========================================================= */
 
 function crearTarjetaOferta(oferta, proveedor) {
@@ -504,10 +507,6 @@ function crearTarjetaOferta(oferta, proveedor) {
     tarjeta.className = "boton-oferta";
     tarjeta.disabled = !comprable;
 
-    if (!comprable) {
-        tarjeta.style.opacity = "0.65";
-    }
-
     const foto = document.createElement("div");
     foto.className = "foto-oferta";
 
@@ -517,26 +516,22 @@ function crearTarjetaOferta(oferta, proveedor) {
 
     const nombre = document.createElement("div");
     nombre.className = "nombre-oferta";
-
     nombre.textContent =
-        oferta.nombre ||
-        obtenerNombreProveedor(proveedor);
+        oferta.nombre || obtenerNombreProveedor(proveedor);
 
     foto.appendChild(emoji);
     tarjeta.append(foto, nombre);
 
+    const detalle = document.createElement("div");
+
+    detalle.style.cssText =
+        "padding:9px;font-size:13px;background:#061226;" +
+        "width:100%;text-align:center;";
+
     if (comprable) {
-        const precioEtiqueta =
-            document.createElement("div");
-
-        precioEtiqueta.style.cssText =
-            "padding:9px;font-size:13px;color:#00baff;" +
-            "background:#061226;font-weight:bold;width:100%;";
-
-        precioEtiqueta.textContent =
-            mostrarPrecio(local.price_gvr);
-
-        tarjeta.appendChild(precioEtiqueta);
+        detalle.style.color = "#00baff";
+        detalle.style.fontWeight = "bold";
+        detalle.textContent = mostrarPrecio(local.price_gvr);
 
         tarjeta.addEventListener("click", () => {
             seleccionarOferta(
@@ -546,20 +541,15 @@ function crearTarjetaOferta(oferta, proveedor) {
                 local
             );
         });
-
     } else {
-        const estado = document.createElement("div");
+        detalle.style.color = "#8fa5bd";
 
-        estado.style.cssText =
-            "padding:9px;font-size:12px;color:#8fa5bd;" +
-            "background:#061226;width:100%;";
-
-        estado.textContent = !ES_VENTAS_HABILITADAS
+        detalle.textContent = !ES_VENTAS_HABILITADAS
             ? "Ventas de este juego aún no habilitadas"
             : "Precio pendiente o producto inactivo";
-
-        tarjeta.appendChild(estado);
     }
+
+    tarjeta.appendChild(detalle);
 
     return tarjeta;
 }
@@ -569,16 +559,13 @@ async function cargarOfertas() {
 
     if (!lista) return;
 
-    const cajaPrecio = el("precioSeleccionado");
-    const botonContinuar = el("continuarBtn");
-
-    if (cajaPrecio) {
-        cajaPrecio.style.display = "none";
+    if (el("precioSeleccionado")) {
+        el("precioSeleccionado").style.display = "none";
     }
 
-    if (botonContinuar) {
-        botonContinuar.style.display = "none";
-        botonContinuar.disabled = true;
+    if (el("continuarBtn")) {
+        el("continuarBtn").style.display = "none";
+        el("continuarBtn").disabled = true;
     }
 
     lista.replaceChildren();
@@ -586,7 +573,6 @@ async function cargarOfertas() {
 
     productoSeleccionado = null;
     precioSeleccionado = 0;
-
     productosMostrados = Object.create(null);
 
     actualizarEstadoCarga(
@@ -619,18 +605,23 @@ async function cargarOfertas() {
         let cantidad = 0;
 
         configuradas.forEach(oferta => {
-            /*
-             * La página debe incluir oferta.id.
-             * Sin ese identificador no se puede relacionar
-             * la oferta con el producto del proveedor.
-             */
-            const productoProveedor =
-                productosPorId[oferta.id];
+            const id = String(oferta.id || "").trim();
+
+            if (!id) {
+                console.warn(
+                    "[Gamers Gold] Oferta sin identificador:",
+                    oferta
+                );
+
+                return;
+            }
+
+            const productoProveedor = productosPorId[id];
 
             if (!productoProveedor) {
                 console.warn(
                     "[Gamers Gold] Oferta no encontrada en el catálogo:",
-                    oferta.id
+                    id
                 );
 
                 return;
@@ -643,16 +634,13 @@ async function cargarOfertas() {
                 return;
             }
 
-            productosMostrados[oferta.id] = {
+            productosMostrados[id] = {
                 ...oferta,
                 productoProveedor
             };
 
             lista.appendChild(
-                crearTarjetaOferta(
-                    oferta,
-                    productoProveedor
-                )
+                crearTarjetaOferta(oferta, productoProveedor)
             );
 
             cantidad++;
@@ -668,15 +656,13 @@ async function cargarOfertas() {
         }
 
         lista.style.display = "flex";
-
         actualizarEstadoCarga("", false);
 
-        const nota = el("notaOfertas");
-
-        if (nota) {
-            nota.textContent = ES_VENTAS_HABILITADAS
-                ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
-                : "Las ventas de este juego aún no están habilitadas.";
+        if (el("notaOfertas")) {
+            el("notaOfertas").textContent =
+                ES_VENTAS_HABILITADAS
+                    ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
+                    : "Las ventas de este juego aún no están habilitadas.";
         }
 
     } catch (error) {
@@ -705,26 +691,18 @@ function seleccionarOferta(
     }
 
     if (!ES_VENTAS_HABILITADAS) {
-        alert(
-            "Las ventas de este juego aún no están habilitadas."
-        );
-
+        alert("Las ventas de este juego aún no están habilitadas.");
         return;
     }
 
     if (!productoComprable(local)) {
-        alert(
-            "Esta oferta no tiene un precio válido o está inactiva."
-        );
-
+        alert("Esta oferta no tiene un precio válido o está inactiva.");
         return;
     }
 
-    document
-        .querySelectorAll(".boton-oferta")
-        .forEach(boton =>
-            boton.classList.remove("seleccionado")
-        );
+    document.querySelectorAll(".boton-oferta").forEach(
+        boton => boton.classList.remove("seleccionado")
+    );
 
     tarjeta.classList.add("seleccionado");
 
@@ -736,10 +714,8 @@ function seleccionarOferta(
 
     precioSeleccionado = Number(local.price_gvr);
 
-    const precio = el("precio");
-
-    if (precio) {
-        precio.textContent =
+    if (el("precio")) {
+        el("precio").textContent =
             mostrarPrecio(precioSeleccionado);
     }
 
@@ -747,12 +723,10 @@ function seleccionarOferta(
         el("precioSeleccionado").style.display = "block";
     }
 
-    const continuar = el("continuarBtn");
-
-    if (continuar) {
-        continuar.style.display = "block";
-        continuar.disabled = false;
-        continuar.textContent = "Continuar ⚡";
+    if (el("continuarBtn")) {
+        el("continuarBtn").style.display = "block";
+        el("continuarBtn").disabled = false;
+        el("continuarBtn").textContent = "Continuar ⚡";
     }
 
     ocultarEstadoPedido();
@@ -784,10 +758,7 @@ function cambiarPantalla(idMostrar) {
 
 function irAConfirmacion() {
     if (!ES_VENTAS_HABILITADAS) {
-        alert(
-            "Las ventas de este juego aún no están habilitadas."
-        );
-
+        alert("Las ventas de este juego aún no están habilitadas.");
         return;
     }
 
@@ -795,28 +766,26 @@ function irAConfirmacion() {
         !productoSeleccionado ||
         !productoComprable(productoSeleccionado.local)
     ) {
-        alert(
-            "Selecciona una oferta activa con precio configurado."
-        );
-
+        alert("Selecciona una oferta activa con precio configurado.");
         return;
     }
 
-    el("confirmarOferta").textContent =
-        productoSeleccionado.oferta.nombre;
+    if (el("confirmarOferta")) {
+        el("confirmarOferta").textContent =
+            productoSeleccionado.oferta.nombre;
+    }
 
-    el("juegoConfirmacion").textContent =
-        NOMBRE_JUEGO;
+    if (el("juegoConfirmacion")) {
+        el("juegoConfirmacion").textContent = NOMBRE_JUEGO;
+    }
 
-    el("confirmarPrecio").textContent =
-        mostrarPrecio(
-            productoSeleccionado.local.price_gvr
-        );
+    if (el("confirmarPrecio")) {
+        el("confirmarPrecio").textContent =
+            mostrarPrecio(productoSeleccionado.local.price_gvr);
+    }
 
-    const input = el("idJugador");
-
-    if (input) {
-        input.value = "";
+    if (el("idJugador")) {
+        el("idJugador").value = "";
     }
 
     ocultarEstadoPedido();
@@ -838,14 +807,10 @@ function volverOfertas() {
 
 
 /* =========================================================
-   LLAMADAS AL SISTEMA DE PEDIDOS
+   PETICIONES A LAS EDGE FUNCTIONS
    ========================================================= */
 
-async function llamarFuncion(
-    url,
-    accessToken,
-    body
-) {
+async function llamarFuncion(url, accessToken, body) {
     const controlador = new AbortController();
 
     const temporizador = setTimeout(
@@ -856,14 +821,12 @@ async function llamarFuncion(
     try {
         const respuesta = await fetch(url, {
             method: "POST",
-
             headers: {
                 apikey: SUPABASE_KEY,
                 Authorization: `Bearer ${accessToken}`,
                 "Content-Type": "application/json",
                 Accept: "application/json"
             },
-
             body: JSON.stringify(body),
             signal: controlador.signal
         });
@@ -888,7 +851,8 @@ async function llamarFuncion(
             );
 
             throw new Error(
-                "No pudimos procesar la solicitud. Consulta el estado de tu pedido antes de volver a intentarlo."
+                "No pudimos procesar la solicitud. " +
+                "Consulta el estado de tu pedido antes de volver a intentarlo."
             );
         }
 
@@ -897,7 +861,8 @@ async function llamarFuncion(
     } catch (error) {
         if (error.name === "AbortError") {
             throw new Error(
-                "La solicitud tardó demasiado. Verifica el estado del pedido antes de intentarlo otra vez."
+                "La solicitud tardó demasiado. " +
+                "Verifica el estado del pedido antes de intentarlo otra vez."
             );
         }
 
@@ -910,14 +875,36 @@ async function llamarFuncion(
 
 
 /* =========================================================
-   CONSULTAR EL ESTADO DEL PEDIDO
+   MOSTRAR RESULTADO
+   ========================================================= */
+
+function mostrarResultado(titulo, mensaje, pedidoId) {
+    if (el("tituloEstadoPedido")) {
+        el("tituloEstadoPedido").textContent = titulo;
+    }
+
+    if (el("mensajeEstadoPedido")) {
+        el("mensajeEstadoPedido").textContent = mensaje;
+    }
+
+    if (el("pedidoIdVisible")) {
+        el("pedidoIdVisible").textContent =
+            "Pedido: " + pedidoId;
+
+        el("pedidoIdVisible").style.display = "block";
+    }
+
+    cambiarPantalla("pantallaExito");
+}
+
+
+/* =========================================================
+   CONSULTAR ESTADO DEL PEDIDO
    ========================================================= */
 
 async function consultarPedido(accessToken) {
     if (!pedidoPendienteId) {
-        throw new Error(
-            "No hay un pedido guardado para consultar."
-        );
+        throw new Error("No hay un pedido guardado para consultar.");
     }
 
     const datos = await llamarFuncion(
@@ -966,39 +953,32 @@ async function consultarPedido(accessToken) {
     accionPendiente = "consultar";
     guardarPedidoPendiente();
 
-    if (proveedor === "FAILED") {
-        mostrarEstadoPedido(
-            "No se ha podido confirmar la recarga. " +
-            "No realices otra compra todavía. " +
-            "Verifica el estado del pedido antes de continuar.",
-            "error"
-        );
-
-    } else {
-        mostrarEstadoPedido(
-            "Tu pedido sigue en proceso. " +
-            "Vuelve a consultar su estado dentro de unos segundos."
-        );
-    }
+    mostrarResultado(
+        proveedor === "FAILED"
+            ? "Pedido pendiente de revisión"
+            : "Pedido en proceso",
+        proveedor === "FAILED"
+            ? "No se ha podido confirmar la recarga. No realices otra compra todavía. Verifica el estado antes de continuar."
+            : "Tu pedido sigue en proceso. Puedes volver a consultar su estado dentro de unos segundos.",
+        pedidoPendienteId
+    );
 }
 
 
 /* =========================================================
-   ENVIAR PEDIDO
+   ENVIAR PEDIDO A NEXT LEVEL
    ========================================================= */
 
 async function enviarPedido(accessToken) {
     if (!pedidoPendienteId) {
-        throw new Error(
-            "No hay pedido pendiente para enviar."
-        );
+        throw new Error("No hay pedido pendiente para enviar.");
     }
 
     /*
-     * Guardamos "consultar" antes del envío.
-     * Si se pierde la respuesta, no repetimos la compra a ciegas.
+     * Se conserva la referencia y se pasa a consulta antes
+     * de enviar. Así no se repite una compra a ciegas si
+     * se pierde la respuesta de la Edge Function.
      */
-
     accionPendiente = "consultar";
     guardarPedidoPendiente();
 
@@ -1013,44 +993,23 @@ async function enviarPedido(accessToken) {
     accionPendiente = "consultar";
     guardarPedidoPendiente();
 
+    const idPedido = pedidoPendienteId;
+
     mostrarResultado(
         "Pedido enviado",
-        "Tu solicitud fue recibida. Puedes consultar el estado desde esta página.",
-        pedidoPendienteId
+        "La solicitud fue recibida por el sistema. Consulta el estado para comprobar cuándo se completa la recarga.",
+        idPedido
+    );
+
+    console.info(
+        "[Gamers Gold] Respuesta de creación del pedido:",
+        datos
     );
 }
 
 
 /* =========================================================
-   MOSTRAR RESULTADO
-   ========================================================= */
-
-function mostrarResultado(
-    titulo,
-    mensaje,
-    pedidoId
-) {
-    if (el("tituloEstadoPedido")) {
-        el("tituloEstadoPedido").textContent = titulo;
-    }
-
-    if (el("mensajeEstadoPedido")) {
-        el("mensajeEstadoPedido").textContent = mensaje;
-    }
-
-    if (el("pedidoIdVisible")) {
-        el("pedidoIdVisible").textContent =
-            "Pedido: " + pedidoId;
-
-        el("pedidoIdVisible").style.display = "block";
-    }
-
-    cambiarPantalla("pantallaExito");
-}
-
-
-/* =========================================================
-   VERIFICACIÓN SEGURA DEL PEDIDO GUARDADO
+   VERIFICAR PEDIDO PENDIENTE EN SUPABASE
    ========================================================= */
 
 async function verificarPedidoGuardado(userId) {
@@ -1097,14 +1056,9 @@ async function verificarPedidoGuardado(userId) {
         );
     }
 
-    const status = String(
-        data.status || ""
-    ).toLowerCase();
+    const status = String(data.status || "").toLowerCase();
 
-    if (
-        status === "completed" ||
-        status === "refunded"
-    ) {
+    if (status === "completed" || status === "refunded") {
         borrarPedidoPendiente();
         return false;
     }
@@ -1117,13 +1071,10 @@ async function verificarPedidoGuardado(userId) {
 
     if (tieneDatosProveedor) {
         accionPendiente = "consultar";
-
     } else if (accionAnterior === "consultar") {
         accionPendiente = "consultar";
-
     } else if (status === "pending") {
         accionPendiente = "enviar";
-
     } else {
         accionPendiente = "consultar";
     }
@@ -1135,17 +1086,12 @@ async function verificarPedidoGuardado(userId) {
 
 
 /* =========================================================
-   CREAR COMPRA LOCAL
+   CREAR PEDIDO LOCAL
    ========================================================= */
 
-async function crearCompra(
-    accessToken,
-    playerId
-) {
+async function crearCompra(accessToken, playerId) {
     if (!productoSeleccionado) {
-        throw new Error(
-            "Selecciona primero una oferta."
-        );
+        throw new Error("Selecciona primero una oferta.");
     }
 
     const local = productoSeleccionado.local;
@@ -1163,12 +1109,9 @@ async function crearCompra(
     }
 
     /*
-     * Verificar el producto nuevamente en Supabase.
+     * Revalidar el producto en Supabase antes de cobrar.
      */
-    const {
-        data: actual,
-        error
-    } = await supabase
+    const { data: actual, error } = await supabase
         .from("game_products")
         .select(
             "id,game,price_gvr,active,provider,provider_product_id"
@@ -1201,14 +1144,13 @@ async function crearCompra(
         );
     }
 
-    const precioConfirmado =
-        Number(actual.price_gvr);
+    const precioConfirmado = Number(actual.price_gvr);
 
-    const confirmado = confirm(
+    const confirmado = window.confirm(
         `Confirma tu oferta de ${NOMBRE_JUEGO}:\n\n` +
-        "Oferta: " + productoSeleccionado.oferta.nombre + "\n" +
-        "ID de jugador: " + playerId + "\n" +
-        "Precio: " + mostrarPrecio(precioConfirmado) + "\n\n" +
+        `Oferta: ${productoSeleccionado.oferta.nombre}\n` +
+        `ID de jugador: ${playerId}\n` +
+        `Precio: ${mostrarPrecio(precioConfirmado)}\n\n` +
         "¿Deseas continuar con el pedido?"
     );
 
@@ -1220,16 +1162,14 @@ async function crearCompra(
         "Creando tu pedido. No cierres esta página..."
     );
 
-    const {
-        data: orderId,
-        error: errorCompra
-    } = await supabase.rpc(
-        "purchase_game_product",
-        {
-            p_product_id: actual.id,
-            p_player_id: playerId
-        }
-    );
+    const { data: orderId, error: errorCompra } =
+        await supabase.rpc(
+            "purchase_game_product",
+            {
+                p_product_id: actual.id,
+                p_player_id: playerId
+            }
+        );
 
     if (errorCompra) {
         console.error(
@@ -1246,6 +1186,10 @@ async function crearCompra(
         typeof orderId !== "string" ||
         !UUID_RE.test(orderId)
     ) {
+        /*
+         * Si el RPC devolviera una forma inesperada, no se
+         * inicia una segunda compra automáticamente.
+         */
         throw new Error(
             "No recibimos un ID de pedido válido. " +
             "Revisa el estado del pedido antes de volver a intentarlo."
@@ -1266,15 +1210,10 @@ async function crearCompra(
    ========================================================= */
 
 async function manejarConfirmacion() {
-    if (procesandoCompra) {
-        return;
-    }
+    if (procesandoCompra) return;
 
     if (!ES_VENTAS_HABILITADAS) {
-        alert(
-            "Las ventas de este juego aún no están habilitadas."
-        );
-
+        alert("Las ventas de este juego aún no están habilitadas.");
         return;
     }
 
@@ -1294,15 +1233,11 @@ async function manejarConfirmacion() {
         } = await supabase.auth.getSession();
 
         if (sessionError) {
-            throw new Error(
-                "No se pudo comprobar la sesión."
-            );
+            throw new Error("No se pudo comprobar la sesión.");
         }
 
         if (!session?.access_token) {
-            throw new Error(
-                "Debes iniciar sesión para comprar."
-            );
+            throw new Error("Debes iniciar sesión para comprar.");
         }
 
         const {
@@ -1312,8 +1247,7 @@ async function manejarConfirmacion() {
 
         if (userError || !user) {
             throw new Error(
-                "Tu sesión no es válida o ha caducado. " +
-                "Inicia sesión nuevamente."
+                "Tu sesión no es válida o ha caducado. Inicia sesión nuevamente."
             );
         }
 
@@ -1321,35 +1255,26 @@ async function manejarConfirmacion() {
 
         recuperarPedidoPendiente(user.id);
 
-        const habiaPedidoPendiente =
-            Boolean(pedidoPendienteId);
-
-        if (habiaPedidoPendiente) {
+        if (pedidoPendienteId) {
             await verificarPedidoGuardado(user.id);
 
             if (!pedidoPendienteId) {
-                mostrarEstadoPedido(
-                    "El pedido anterior ya terminó. " +
-                    "Revisa su resultado y selecciona nuevamente " +
-                    "la oferta si deseas hacer otra compra."
+                mostrarResultado(
+                    "Pedido anterior finalizado",
+                    "El pedido anterior ya terminó. Comprueba su resultado antes de iniciar otra compra.",
+                    "Finalizado"
                 );
 
                 return;
             }
 
             if (accionPendiente === "consultar") {
-                await consultarPedido(
-                    session.access_token
-                );
-
+                await consultarPedido(session.access_token);
                 return;
             }
 
             if (accionPendiente === "enviar") {
-                await enviarPedido(
-                    session.access_token
-                );
-
+                await enviarPedido(session.access_token);
                 return;
             }
         }
@@ -1365,9 +1290,7 @@ async function manejarConfirmacion() {
         }
 
         if (playerId.length > 80) {
-            throw new Error(
-                "El ID de jugador es demasiado largo."
-            );
+            throw new Error("El ID de jugador es demasiado largo.");
         }
 
         await crearCompra(
@@ -1383,11 +1306,7 @@ async function manejarConfirmacion() {
 
         const mensaje = mensajeErrorPedido(error);
 
-        mostrarEstadoPedido(
-            mensaje,
-            "error"
-        );
-
+        mostrarEstadoPedido(mensaje, "error");
         alert(mensaje);
 
     } finally {
@@ -1413,6 +1332,30 @@ async function manejarConfirmacion() {
 
 
 /* =========================================================
+   CONSULTAR DESDE LA PANTALLA DE RESULTADO
+   ========================================================= */
+
+async function consultarDesdeResultado() {
+    if (procesandoCompra) return;
+
+    if (!pedidoPendienteId) {
+        alert(
+            "No hay un pedido pendiente guardado para consultar."
+        );
+        return;
+    }
+
+    cambiarPantalla("pantallaConfirmacion");
+
+    /*
+     * El manejador detecta el pedido guardado y lo consulta
+     * sin crear un segundo pedido.
+     */
+    await manejarConfirmacion();
+}
+
+
+/* =========================================================
    INICIALIZACIÓN
    ========================================================= */
 
@@ -1431,23 +1374,19 @@ function inicializar() {
     }
 
     if (el("juegoConfirmacion")) {
-        el("juegoConfirmacion").textContent =
-            NOMBRE_JUEGO;
+        el("juegoConfirmacion").textContent = NOMBRE_JUEGO;
     }
 
     if (el("descripcionOfertas")) {
         el("descripcionOfertas").textContent =
-            `Elige una oferta especial de ${
-                NOMBRE_JUEGO || "este juego"
-            }.`;
+            `Elige una oferta especial de ${NOMBRE_JUEGO || "este juego"}.`;
     }
 
-    const nota = el("notaOfertas");
-
-    if (nota) {
-        nota.textContent = ES_VENTAS_HABILITADAS
-            ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
-            : "Las ventas de este juego aún no están habilitadas.";
+    if (el("notaOfertas")) {
+        el("notaOfertas").textContent =
+            ES_VENTAS_HABILITADAS
+                ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
+                : "Las ventas de este juego aún no están habilitadas.";
     }
 
     const confirmar = el("confirmarBtn");
@@ -1465,22 +1404,17 @@ function inicializar() {
         );
     }
 
-    if (el("continuarBtn")) {
-        el("continuarBtn").disabled = true;
+    const consultar = el("consultarPedidoBtn");
+
+    if (consultar) {
+        consultar.addEventListener(
+            "click",
+            consultarDesdeResultado
+        );
     }
 
-    if (el("pantallaExito")) {
-        const btn =
-            el("pantallaExito").querySelector("button");
-
-        if (btn) {
-            btn.textContent =
-                `Volver a ${NOMBRE_JUEGO || "inicio"} ⚡`;
-
-            btn.onclick = () => {
-                window.location.href = PAGINA_VOLVER;
-            };
-        }
+    if (el("continuarBtn")) {
+        el("continuarBtn").disabled = true;
     }
 
     if (!CONFIG || !NOMBRE_JUEGO || !JUEGO_API) {
@@ -1493,13 +1427,13 @@ function inicializar() {
         return;
     }
 
-    if (!ES_VENTAS_HABILITADAS && el("confirmarBtn")) {
-        el("confirmarBtn").disabled = true;
-    }
-
     cargarOfertas();
 }
 
+/*
+ * La página HTML no debe declarar de nuevo estas funciones:
+ * el módulo es el propietario de la navegación.
+ */
 window.irAConfirmacion = irAConfirmacion;
 window.volverOfertas = volverOfertas;
 
@@ -1511,4 +1445,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-       }
+   }
