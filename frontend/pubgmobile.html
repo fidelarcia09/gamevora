@@ -132,11 +132,17 @@
             font-size: 13px;
             line-height: 1.5;
             overflow-wrap: anywhere;
+            white-space: pre-line;
         }
 
         .estado.error {
             color: #ffaaaa;
             border-color: #843d4b;
+        }
+
+        .estado.exito {
+            color: #a5ffd0;
+            border-color: #21895a;
         }
 
         .catalogo {
@@ -172,6 +178,11 @@
             box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
         }
 
+        .producto:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
         .producto-nombre {
             font-size: 14px;
             font-weight: bold;
@@ -179,9 +190,9 @@
             overflow-wrap: anywhere;
         }
 
-        .producto-estado {
+        .producto-precio {
             color: #45c8ff;
-            font-size: 12px;
+            font-size: 16px;
             font-weight: bold;
         }
 
@@ -204,6 +215,11 @@
             margin-top: 18px;
             background: linear-gradient(90deg, #087cff, #00baff);
             color: white;
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .continuar:disabled {
             cursor: not-allowed;
             opacity: 0.55;
         }
@@ -267,7 +283,7 @@
         <h1>PUBG Mobile</h1>
 
         <p class="descripcion">
-            Selecciona tu región y el paquete de UC que deseas consultar.
+            Selecciona tu región y el paquete de UC que deseas comprar.
         </p>
 
         <label class="etiqueta" for="idJugador">
@@ -279,7 +295,7 @@
             id="idJugador"
             placeholder="Introduce tu ID de PUBG Mobile"
             autocomplete="off"
-            maxlength="40"
+            maxlength="100"
         >
 
         <p class="ayuda">
@@ -291,9 +307,7 @@
         </label>
 
         <select id="regionJugador">
-            <option value="">Selecciona una región</option>
-            <option value="global">Global</option>
-            <option value="united-states">United States</option>
+            <option value="Global">Global</option>
         </select>
 
         <label class="etiqueta">
@@ -301,7 +315,7 @@
         </label>
 
         <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Cargando paquetes de PUBG Mobile...
+            Cargando paquetes...
         </div>
 
         <div id="catalogo" class="catalogo"></div>
@@ -312,7 +326,7 @@
             type="button"
             disabled
         >
-            Compras temporalmente desactivadas
+            Selecciona un paquete
         </button>
 
         <div class="separador-ofertas">
@@ -326,14 +340,14 @@
         </div>
 
         <p class="nota">
-            Los paquetes se consultan desde Next Level.
-            Las compras se habilitarán cuando se configuren
-            los precios y se complete la integración del sistema de pedidos.
+            Revisa el ID del jugador y el precio antes de confirmar tu compra.
         </p>
 
     </main>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 "use strict";
@@ -348,15 +362,27 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const URL_CATALOGO =
-    SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
+);
 
 const catalogo = document.getElementById("catalogo");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
 const selectorRegion = document.getElementById("regionJugador");
+const campoJugador = document.getElementById("idJugador");
+const botonContinuar = document.getElementById("botonContinuar");
 
 let productosDisponibles = [];
 let productoSeleccionado = null;
+let procesandoCompra = false;
 
 /* =====================================================
    NAVEGACIÓN
@@ -370,148 +396,38 @@ function abrirOfertas() {
    MENSAJES
 ===================================================== */
 
-function mostrarEstado(mensaje, esError = false) {
+function mostrarEstado(mensaje, tipo = "") {
     estadoCatalogo.textContent = mensaje;
-    estadoCatalogo.classList.toggle("error", esError);
+    estadoCatalogo.classList.remove("error", "exito");
+
+    if (tipo === "error") {
+        estadoCatalogo.classList.add("error");
+    }
+
+    if (tipo === "exito") {
+        estadoCatalogo.classList.add("exito");
+    }
 }
 
 /* =====================================================
-   EXTRAER PRODUCTOS
+   FORMATO DE PRECIOS
 ===================================================== */
 
-function extraerProductos(respuesta) {
-    if (Array.isArray(respuesta)) {
-        return respuesta;
+function formatearGVR(valor) {
+    const precio = Number(valor);
+
+    if (!Number.isFinite(precio)) {
+        return "Precio no disponible";
     }
 
-    if (!respuesta || typeof respuesta !== "object") {
-        return [];
-    }
-
-    if (Array.isArray(respuesta.productos)) {
-        return respuesta.productos;
-    }
-
-    if (Array.isArray(respuesta.products)) {
-        return respuesta.products;
-    }
-
-    if (Array.isArray(respuesta.data)) {
-        return respuesta.data;
-    }
-
-    if (Array.isArray(respuesta.data?.products)) {
-        return respuesta.data.products;
-    }
-
-    if (Array.isArray(respuesta.data?.productos)) {
-        return respuesta.data.productos;
-    }
-
-    return [];
+    return precio.toLocaleString("es-ES", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }) + " GVR";
 }
 
 /* =====================================================
-   DATOS DE PRODUCTOS
-===================================================== */
-
-function obtenerProductId(producto) {
-    return String(
-        producto.productId ||
-        producto.product_id ||
-        producto.provider_product_id ||
-        producto.id ||
-        ""
-    ).trim();
-}
-
-function obtenerNombre(producto) {
-    return String(
-        producto.name ||
-        producto.productName ||
-        producto.product_name ||
-        producto.title ||
-        producto.nombre ||
-        obtenerProductId(producto)
-    ).trim();
-}
-
-/* =====================================================
-   DETECTAR REGIÓN
-===================================================== */
-
-function obtenerRegion(producto) {
-    const posiblesValores = [
-        producto.region,
-        producto.server,
-        producto.provider_region,
-        producto.game?.region,
-        producto.game?.server
-    ];
-
-    for (const valor of posiblesValores) {
-        if (typeof valor === "string" && valor.trim()) {
-            return valor.trim();
-        }
-
-        if (valor && typeof valor === "object") {
-            const nombre =
-                valor.name ||
-                valor.code ||
-                valor.id ||
-                "";
-
-            if (String(nombre).trim()) {
-                return String(nombre).trim();
-            }
-        }
-    }
-
-    return "";
-}
-
-function clasificarRegion(producto) {
-    const region = obtenerRegion(producto).toLowerCase();
-    const texto = (
-        obtenerProductId(producto) + " " +
-        obtenerNombre(producto) + " " +
-        region
-    ).toLowerCase();
-
-    if (
-        /united[\s_-]*states|usa|us-region|us_region/.test(texto)
-    ) {
-        return "united-states";
-    }
-
-    if (/\bglobal\b/.test(texto)) {
-        return "global";
-    }
-
-    return "unknown";
-}
-
-/* =====================================================
-   FILTRAR RECARGAS DE UC
-===================================================== */
-
-function esRecargaUC(producto) {
-    const nombre = obtenerNombre(producto).toLowerCase();
-    const id = obtenerProductId(producto).toLowerCase();
-
-    const tieneUC =
-        /\buc\b/i.test(nombre) ||
-        /(?:^|[_-])uc(?:[_-]|$)/i.test(id);
-
-    const esOfertaEspecial =
-        /pass|pase|royale|elite|membership|membresia|membresía/i
-            .test(nombre + " " + id);
-
-    return tieneUC && !esOfertaEspecial;
-}
-
-/* =====================================================
-   CARGAR CATÁLOGO
+   CARGAR PRODUCTOS DE SUPABASE
 ===================================================== */
 
 async function cargarCatalogo() {
@@ -519,184 +435,360 @@ async function cargarCatalogo() {
     productosDisponibles = [];
 
     catalogo.replaceChildren();
+    botonContinuar.disabled = true;
+    botonContinuar.textContent = "Selecciona un paquete";
 
-    mostrarEstado("Cargando paquetes de PUBG Mobile...");
+    mostrarEstado("Cargando paquetes...");
 
     try {
-        const respuestaHTTP = await fetch(
-            URL_CATALOGO + "?game=pubg-mobile",
-            {
-                method: "GET",
-                headers: {
-                    "apikey": SUPABASE_KEY,
-                    "Authorization": "Bearer " + SUPABASE_KEY,
-                    "Accept": "application/json"
-                },
-                cache: "no-store"
-            }
-        );
+        const { data, error } = await supabaseClient
+            .from("game_products")
+            .select(`
+                id,
+                game,
+                product_name,
+                game_currency_amount,
+                price_gvr,
+                active,
+                provider,
+                provider_product_id,
+                provider_region
+            `)
+            .eq("game", "PUBG Mobile")
+            .eq("active", true)
+            .eq("provider", "nextlevel")
+            .eq("provider_region", "Global")
+            .gt("game_currency_amount", 0)
+            .order("game_currency_amount", {
+                ascending: true
+            });
 
-        let respuesta;
+        if (error) {
+            console.error("Error cargando paquetes:", error);
 
-        try {
-            respuesta = await respuestaHTTP.json();
-        } catch {
             throw new Error(
-                "El catálogo devolvió una respuesta no válida."
+                "No se pudieron cargar los paquetes. Inténtalo de nuevo."
             );
         }
 
-        console.log("CATÁLOGO PUBG MOBILE:", respuesta);
-
-        if (!respuestaHTTP.ok) {
-            throw new Error(
-                respuesta.message ||
-                respuesta.error ||
-                "Error HTTP " + respuestaHTTP.status
+        productosDisponibles = (data || []).filter(producto => {
+            const nombre = String(
+                producto.product_name || ""
             );
-        }
 
-        if (respuesta?.success === false) {
-            throw new Error(
-                respuesta.message ||
-                respuesta.error ||
-                "No se pudo cargar el catálogo."
+            const precio = Number(producto.price_gvr);
+
+            return (
+                producto.provider_product_id &&
+                /\bUC\b/i.test(nombre) &&
+                Number.isFinite(precio) &&
+                precio > 0
             );
-        }
-
-        const productos = extraerProductos(respuesta);
-
-        if (productos.length === 0) {
-            throw new Error(
-                "No se encontraron paquetes disponibles en este momento."
-            );
-        }
-
-        const mapa = new Map();
-
-        productos.forEach(producto => {
-            if (
-                !producto ||
-                producto.available !== true ||
-                !obtenerProductId(producto) ||
-                !esRecargaUC(producto)
-            ) {
-                return;
-            }
-
-            const id = obtenerProductId(producto);
-
-            if (!mapa.has(id)) {
-                mapa.set(id, producto);
-            }
         });
 
-        productosDisponibles = Array.from(mapa.values());
+        if (productosDisponibles.length === 0) {
+            mostrarEstado(
+                "No hay paquetes disponibles en este momento.",
+                "error"
+            );
 
-        console.log(
-            "PAQUETES PUBG MOBILE:",
-            productosDisponibles.map(producto => ({
-                id: obtenerProductId(producto),
-                nombre: obtenerNombre(producto),
-                region: obtenerRegion(producto),
-                regionDetectada: clasificarRegion(producto)
-            }))
+            return;
+        }
+
+        productosDisponibles.forEach(producto => {
+            const tarjeta = document.createElement("button");
+
+            tarjeta.type = "button";
+            tarjeta.className = "producto";
+
+            const nombre = document.createElement("div");
+            nombre.className = "producto-nombre";
+            nombre.textContent = producto.product_name;
+
+            const precio = document.createElement("div");
+            precio.className = "producto-precio";
+            precio.textContent = formatearGVR(producto.price_gvr);
+
+            tarjeta.append(nombre, precio);
+
+            tarjeta.addEventListener("click", () => {
+                seleccionarProducto(producto, tarjeta);
+            });
+
+            catalogo.appendChild(tarjeta);
+        });
+
+        mostrarEstado(
+            productosDisponibles.length +
+            " paquetes disponibles."
         );
 
-        actualizarCatalogo();
-
     } catch (error) {
-        console.error("ERROR PUBG MOBILE:", error);
+        console.error("Error en el catálogo:", error);
 
-        productosDisponibles = [];
-        productoSeleccionado = null;
         catalogo.replaceChildren();
 
         mostrarEstado(
-            "No se pudo cargar el catálogo de Next Level. " +
-            error.message,
-            true
+            error.message || "No se pudo cargar el catálogo.",
+            "error"
         );
     }
 }
 
 /* =====================================================
-   MOSTRAR PRODUCTOS DE LA REGIÓN ELEGIDA
+   SELECCIONAR PRODUCTO
 ===================================================== */
 
-function actualizarCatalogo() {
-    catalogo.replaceChildren();
-    productoSeleccionado = null;
-
-    const regionElegida = selectorRegion.value;
-
-    if (!regionElegida) {
-        mostrarEstado(
-            productosDisponibles.length
-                ? "Catálogo cargado. Selecciona tu región para consultar los paquetes."
-                : "Selecciona tu región."
-        );
+function seleccionarProducto(producto, tarjetaSeleccionada) {
+    if (procesandoCompra) {
         return;
     }
 
-    /*
-       Solo mostramos productos cuya región pueda identificarse
-       de forma explícita. No asignamos una región por suposición.
-    */
+    productoSeleccionado = producto;
 
-    const productosFiltrados = productosDisponibles.filter(producto => {
-        return clasificarRegion(producto) === regionElegida;
+    document.querySelectorAll(".producto").forEach(tarjeta => {
+        tarjeta.classList.remove("seleccionado");
     });
 
-    if (productosFiltrados.length === 0) {
-        mostrarEstado(
-            "No encontramos paquetes identificados para esta región. " +
-            "Debemos revisar los datos reales de Next Level para confirmar " +
-            "sus identificadores y regiones.",
-            true
-        );
-        return;
-    }
+    tarjetaSeleccionada.classList.add("seleccionado");
 
-    productosFiltrados.forEach(producto => {
-        const tarjeta = document.createElement("button");
-
-        tarjeta.type = "button";
-        tarjeta.className = "producto";
-
-        const nombre = document.createElement("div");
-        nombre.className = "producto-nombre";
-        nombre.textContent = obtenerNombre(producto);
-
-        const etiqueta = document.createElement("div");
-        etiqueta.className = "producto-estado";
-        etiqueta.textContent = "Seleccionar paquete";
-
-        tarjeta.append(nombre, etiqueta);
-
-        tarjeta.addEventListener("click", () => {
-            document.querySelectorAll(".producto").forEach(elemento => {
-                elemento.classList.remove("seleccionado");
-            });
-
-            tarjeta.classList.add("seleccionado");
-            productoSeleccionado = producto;
-        });
-
-        catalogo.appendChild(tarjeta);
-    });
+    botonContinuar.disabled = false;
+    botonContinuar.textContent =
+        "Comprar por " + formatearGVR(producto.price_gvr);
 
     mostrarEstado(
-        productosFiltrados.length +
-        " paquetes disponibles para la región seleccionada."
+        producto.product_name +
+        " seleccionado. Total: " +
+        formatearGVR(producto.price_gvr)
     );
+}
+
+/* =====================================================
+   INICIAR COMPRA
+===================================================== */
+
+async function continuarCompra() {
+    if (procesandoCompra) {
+        return;
+    }
+
+    const playerId = campoJugador.value.trim();
+
+    if (!playerId) {
+        mostrarEstado(
+            "Introduce el ID de tu jugador.",
+            "error"
+        );
+
+        campoJugador.focus();
+        return;
+    }
+
+    if (playerId.length > 100) {
+        mostrarEstado(
+            "El ID del jugador no es válido.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (!productoSeleccionado) {
+        mostrarEstado(
+            "Selecciona un paquete antes de continuar.",
+            "error"
+        );
+
+        return;
+    }
+
+    const { data: sessionData, error: sessionError } =
+        await supabaseClient.auth.getSession();
+
+    const session = sessionData?.session;
+
+    if (sessionError || !session) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    procesandoCompra = true;
+    botonContinuar.disabled = true;
+    botonContinuar.textContent = "Procesando compra...";
+
+    mostrarEstado("Registrando tu pedido...");
+
+    let gameOrderId = null;
+
+    try {
+        /*
+         * PASO 1:
+         * Crear el pedido local y descontar el saldo GVR.
+         *
+         * El servidor comprueba el precio, el producto y
+         * el saldo. El precio enviado por el navegador no
+         * se utiliza para calcular el cobro.
+         */
+
+        const { data: orderId, error: purchaseError } =
+            await supabaseClient.rpc(
+                "purchase_game_product",
+                {
+                    p_product_id: productoSeleccionado.id,
+                    p_player_id: playerId,
+                    p_zone_id: null
+                }
+            );
+
+        if (purchaseError) {
+            console.error(
+                "Error registrando la compra:",
+                purchaseError
+            );
+
+            if (
+                purchaseError.message &&
+                purchaseError.message.toLowerCase().includes("iniciar sesión")
+            ) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            throw new Error(
+                purchaseError.message ||
+                "No se pudo registrar el pedido."
+            );
+        }
+
+        if (!orderId) {
+            throw new Error(
+                "No se recibió el identificador del pedido."
+            );
+        }
+
+        gameOrderId = orderId;
+
+        /*
+         * PASO 2:
+         * Enviar el pedido ya creado a la función de pedidos.
+         *
+         * Si esta llamada falla después de crear el pedido
+         * local, no se vuelve a ejecutar la compra.
+         */
+
+        mostrarEstado("Enviando tu pedido...");
+
+        const { data: resultado, error: envioError } =
+            await supabaseClient.functions.invoke(
+                "nextlevel-crear-pedido",
+                {
+                    body: {
+                        game_order_id: gameOrderId
+                    },
+                    headers: {
+                        Authorization:
+                            "Bearer " + session.access_token
+                    }
+                }
+            );
+
+        if (envioError) {
+            console.error(
+                "Error enviando el pedido:",
+                envioError
+            );
+
+            mostrarEstado(
+                "Tu pedido quedó registrado con el número:\n" +
+                gameOrderId +
+                "\n\nNo se pudo confirmar el envío. No repitas la compra. " +
+                "Conserva este número para revisar el estado del pedido.",
+                "error"
+            );
+
+            botonContinuar.textContent = "Pedido pendiente de revisión";
+
+            return;
+        }
+
+        if (!resultado || resultado.success !== true) {
+            console.error(
+                "Respuesta inesperada del pedido:",
+                resultado
+            );
+
+            mostrarEstado(
+                "Tu pedido quedó registrado con el número:\n" +
+                gameOrderId +
+                "\n\nNo se confirmó el envío. No repitas la compra. " +
+                "Conserva este número para revisar el estado.",
+                "error"
+            );
+
+            botonContinuar.textContent = "Pedido pendiente de revisión";
+
+            return;
+        }
+
+        /*
+         * PASO 3:
+         * Mostrar confirmación sin afirmar que la recarga
+         * ya se completó.
+         */
+
+        mostrarEstado(
+            "¡Pedido enviado correctamente!\n\n" +
+            "Paquete: " + productoSeleccionado.product_name + "\n" +
+            "Precio: " + formatearGVR(productoSeleccionado.price_gvr) + "\n" +
+            "ID del jugador: " + playerId + "\n" +
+            "Número de pedido: " + gameOrderId + "\n\n" +
+            "El pedido está registrado. La recarga puede tardar unos momentos en completarse.",
+            "exito"
+        );
+
+        botonContinuar.textContent = "Pedido registrado";
+
+    } catch (error) {
+        console.error("Error durante la compra:", error);
+
+        if (gameOrderId) {
+            /*
+             * El pedido local ya existe. No repetir RPC ni
+             * intentar crear una segunda compra.
+             */
+
+            mostrarEstado(
+                "El pedido quedó registrado con el número:\n" +
+                gameOrderId +
+                "\n\nNo repitas la compra. Revisa el estado del pedido antes de intentar otra operación.",
+                "error"
+            );
+
+            botonContinuar.textContent = "Pedido pendiente de revisión";
+
+        } else {
+            mostrarEstado(
+                error.message ||
+                "No se pudo completar la operación.",
+                "error"
+            );
+
+            botonContinuar.disabled = false;
+            botonContinuar.textContent = productoSeleccionado
+                ? "Comprar por " + formatearGVR(productoSeleccionado.price_gvr)
+                : "Selecciona un paquete";
+        }
+
+    } finally {
+        procesandoCompra = false;
+    }
 }
 
 /* =====================================================
    EVENTOS
 ===================================================== */
 
-selectorRegion.addEventListener("change", actualizarCatalogo);
+botonContinuar.addEventListener("click", continuarCompra);
 
 /* =====================================================
    INICIALIZAR
