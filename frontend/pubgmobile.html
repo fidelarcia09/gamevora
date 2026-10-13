@@ -23,6 +23,10 @@
             padding: 20px;
         }
 
+        body.modal-abierto {
+            overflow: hidden;
+        }
+
         .contenedor {
             max-width: 650px;
             margin: auto;
@@ -197,10 +201,6 @@
             font-weight: bold;
         }
 
-        .producto-no-disponible .producto-estado {
-            color: #ffcf8a;
-        }
-
         .separador-ofertas {
             margin-top: 22px;
             padding-top: 18px;
@@ -225,7 +225,7 @@
         }
 
         .continuar:disabled {
-            cursor: wait;
+            cursor: not-allowed;
             opacity: 0.55;
         }
 
@@ -249,6 +249,142 @@
             line-height: 1.6;
         }
 
+        /* VENTANA DE CONFIRMACIÓN */
+
+        .modal-fondo {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(1, 6, 17, 0.82);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-fondo.visible {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 390px;
+            padding: 24px 20px;
+            background: #091a35;
+            border: 1px solid #168cff;
+            border-radius: 18px;
+            box-shadow: 0 0 35px rgba(0, 140, 255, 0.2);
+            animation: aparecer 0.18s ease-out;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-titulo {
+            margin-bottom: 10px;
+            color: white;
+            font-size: 21px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .modal-descripcion {
+            margin-bottom: 18px;
+            color: #9fb4cc;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .modal-detalles {
+            padding: 14px;
+            margin-bottom: 20px;
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 11px;
+        }
+
+        .modal-fila {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 7px 0;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .modal-fila + .modal-fila {
+            border-top: 1px solid #173451;
+        }
+
+        .modal-etiqueta {
+            color: #8fa5bd;
+            flex-shrink: 0;
+        }
+
+        .modal-valor {
+            color: white;
+            font-weight: bold;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .modal-precio {
+            color: #43c5ff;
+            font-size: 16px;
+        }
+
+        .modal-botones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .modal-boton {
+            min-height: 45px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-cancelar {
+            color: #c6d4e4;
+            background: #07152b;
+            border: 1px solid #31506f;
+        }
+
+        .modal-cancelar:hover {
+            background: #10233c;
+        }
+
+        .modal-aceptar {
+            color: white;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            border: 1px solid #168cff;
+        }
+
+        .modal-aceptar:hover {
+            filter: brightness(1.1);
+        }
+
+        .modal-boton:disabled {
+            opacity: 0.55;
+            cursor: wait;
+        }
+
         @media (max-width: 380px) {
             body {
                 padding: 12px;
@@ -265,11 +401,16 @@
             .logo {
                 font-size: 17px;
             }
+
+            .modal {
+                padding: 21px 15px;
+            }
         }
     </style>
 </head>
 
 <body>
+
 <div class="contenedor">
 
     <header class="header">
@@ -344,6 +485,73 @@
     </main>
 </div>
 
+<!-- MODAL DE CONFIRMACIÓN -->
+
+<div
+    id="modalFondo"
+    class="modal-fondo"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitulo"
+    aria-describedby="modalDescripcion"
+>
+    <div class="modal">
+
+        <h2 id="modalTitulo" class="modal-titulo">
+            Confirmar recarga
+        </h2>
+
+        <p id="modalDescripcion" class="modal-descripcion">
+            Comprueba los datos antes de continuar.
+        </p>
+
+        <div class="modal-detalles">
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Juego</span>
+                <span class="modal-valor">PUBG Mobile</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Paquete</span>
+                <span id="modalProducto" class="modal-valor">—</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">ID del jugador</span>
+                <span id="modalJugador" class="modal-valor">—</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Total</span>
+                <span id="modalPrecio" class="modal-valor modal-precio">—</span>
+            </div>
+
+        </div>
+
+        <div class="modal-botones">
+
+            <button
+                id="modalCancelar"
+                class="modal-boton modal-cancelar"
+                type="button"
+            >
+                CANCELAR
+            </button>
+
+            <button
+                id="modalAceptar"
+                class="modal-boton modal-aceptar"
+                type="button"
+            >
+                ACEPTAR
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
 <script type="module">
 "use strict";
 
@@ -380,11 +588,19 @@ const botonContinuar = document.getElementById("botonContinuar");
 const botonOfertas = document.getElementById("botonOfertas");
 const campoJugador = document.getElementById("idjugador");
 
+const modalFondo = document.getElementById("modalFondo");
+const modalProducto = document.getElementById("modalProducto");
+const modalJugador = document.getElementById("modalJugador");
+const modalPrecio = document.getElementById("modalPrecio");
+const modalCancelar = document.getElementById("modalCancelar");
+const modalAceptar = document.getElementById("modalAceptar");
+
 let productosDisponibles = [];
 let productoSeleccionado = null;
 let procesando = false;
 let usuarioActualId = null;
 let pedidoPendienteId = null;
+let resolverConfirmacion = null;
 
 /* NAVEGACIÓN */
 
@@ -412,7 +628,7 @@ function obtenerMensajeError(error, alternativo) {
     return error?.message || alternativo;
 }
 
-/* PRECIOS: conservar los decimales */
+/* PRECIOS EN GVR */
 
 function mostrarPrecio(valor) {
     const precio = Number(valor);
@@ -426,6 +642,65 @@ function mostrarPrecio(valor) {
         maximumFractionDigits: 2
     }) + " GVR";
 }
+
+/* MODAL DE CONFIRMACIÓN */
+
+function abrirModalConfirmacion(producto, playerId) {
+    modalProducto.textContent = producto.product_name;
+    modalJugador.textContent = playerId;
+    modalPrecio.textContent = mostrarPrecio(producto.price_gvr);
+
+    modalFondo.classList.add("visible");
+    document.body.classList.add("modal-abierto");
+
+    modalCancelar.disabled = false;
+    modalAceptar.disabled = false;
+
+    return new Promise(resolve => {
+        resolverConfirmacion = resolve;
+        modalCancelar.focus();
+    });
+}
+
+function cerrarModalConfirmacion(resultado) {
+    if (!resolverConfirmacion) {
+        return;
+    }
+
+    const resolver = resolverConfirmacion;
+    resolverConfirmacion = null;
+
+    modalFondo.classList.remove("visible");
+    document.body.classList.remove("modal-abierto");
+
+    modalCancelar.disabled = false;
+    modalAceptar.disabled = false;
+
+    resolver(resultado);
+}
+
+modalCancelar.addEventListener("click", () => {
+    cerrarModalConfirmacion(false);
+});
+
+modalAceptar.addEventListener("click", () => {
+    cerrarModalConfirmacion(true);
+});
+
+modalFondo.addEventListener("click", evento => {
+    if (evento.target === modalFondo) {
+        cerrarModalConfirmacion(false);
+    }
+});
+
+document.addEventListener("keydown", evento => {
+    if (
+        evento.key === "Escape" &&
+        modalFondo.classList.contains("visible")
+    ) {
+        cerrarModalConfirmacion(false);
+    }
+});
 
 /* PEDIDO PENDIENTE */
 
@@ -468,10 +743,6 @@ function recuperarPedidoPendiente(userId) {
             pedidoPendienteId
         )
     ) {
-        /*
-         * No eliminamos automáticamente una referencia desconocida.
-         * Es más seguro impedir otra compra hasta aclararla.
-         */
         mostrarEstado(
             "Hay una referencia de pedido guardada que no se puede validar. " +
             "No realices otra compra hasta revisar su estado.",
@@ -480,10 +751,12 @@ function recuperarPedidoPendiente(userId) {
 
         botonContinuar.disabled = true;
         botonContinuar.textContent = "PEDIDO PENDIENTE";
-        return;
+
+        return false;
     }
 
     actualizarBoton();
+    return true;
 }
 
 function actualizarBoton() {
@@ -492,21 +765,21 @@ function actualizarBoton() {
     }
 
     if (pedidoPendienteId) {
-        botonContinuar.textContent = "RECUPERAR PEDIDO";
+        botonContinuar.textContent = "CONSULTAR PEDIDO";
         botonContinuar.disabled = false;
         return;
     }
 
-    botonContinuar.textContent = productoSeleccionado
-        ? "RECARGAR POR " + mostrarPrecio(
-            productoSeleccionado.price_gvr
-        )
-        : "RECARGAR";
+    /*
+     * El precio se muestra en la tarjeta y en la confirmación,
+     * no dentro del botón principal.
+     */
 
+    botonContinuar.textContent = "RECARGAR";
     botonContinuar.disabled = !productoSeleccionado;
 }
 
-/* CARGAR PRODUCTOS ACTIVOS DE PUBG MOBILE */
+/* CARGAR CATÁLOGO */
 
 async function cargarCatalogo() {
     productosDisponibles = [];
@@ -607,7 +880,6 @@ async function cargarCatalogo() {
                 tarjeta.classList.add("seleccionado");
 
                 productoSeleccionado = producto;
-
                 estado.textContent = "Paquete seleccionado";
 
                 mostrarEstado(
@@ -643,7 +915,7 @@ async function cargarCatalogo() {
     }
 }
 
-/* LLAMAR A LAS FUNCIONES DE PEDIDOS */
+/* LLAMADAS A LAS FUNCIONES DE PEDIDOS */
 
 async function llamarFuncion(url, accessToken, body) {
     const respuesta = await fetch(url, {
@@ -680,7 +952,7 @@ async function llamarFuncion(url, accessToken, body) {
     return datos;
 }
 
-/* CONSULTAR EL PEDIDO EXISTENTE EN LA BASE DE DATOS */
+/* VERIFICAR EL PEDIDO LOCAL EXISTENTE */
 
 async function obtenerPedidoActual(userId) {
     if (!pedidoPendienteId) {
@@ -782,7 +1054,9 @@ async function enviarPedido(accessToken) {
 
 async function consultarPedido(accessToken) {
     if (!pedidoPendienteId) {
-        throw new Error("No hay ningún pedido pendiente para consultar.");
+        throw new Error(
+            "No hay ningún pedido pendiente para consultar."
+        );
     }
 
     mostrarEstado("Consultando el estado de tu pedido...");
@@ -803,7 +1077,9 @@ async function consultarPedido(accessToken) {
             "correcto"
         );
 
-        alert("¡Tu recarga de PUBG Mobile se ha completado!");
+        alert(
+            "¡Tu recarga de PUBG Mobile se ha completado!"
+        );
 
         return;
     }
@@ -843,32 +1119,35 @@ async function crearCompra(accessToken, playerId) {
         throw new Error("Selecciona un paquete de UC.");
     }
 
-    const confirmar = confirm(
-        "Confirma tu recarga de PUBG Mobile:\n\n" +
-        "Paquete: " + productoSeleccionado.product_name + "\n" +
-        "ID del jugador: " + playerId + "\n" +
-        "Precio: " + mostrarPrecio(productoSeleccionado.price_gvr) + "\n\n" +
-        "¿Deseas confirmar esta compra?"
+    const confirmado = await abrirModalConfirmacion(
+        productoSeleccionado,
+        playerId
     );
 
-    if (!confirmar) {
+    if (!confirmado) {
+        mostrarEstado("Compra cancelada.");
         return;
     }
 
     /*
      * El servidor comprueba el precio y el saldo GVR.
-     * El precio mostrado en pantalla no se utiliza para
-     * calcular el descuento.
+     * El precio mostrado en pantalla no determina el descuento.
      */
 
     mostrarEstado("Registrando tu pedido...");
+
+    /*
+     * La función purchase_game_product acepta solamente:
+     * p_product_id y p_player_id.
+     *
+     * PUBG Mobile no necesita zoneId en esta compra.
+     */
 
     const { data: orderId, error } = await supabase.rpc(
         "purchase_game_product",
         {
             p_product_id: productoSeleccionado.id,
-            p_player_id: playerId,
-            p_zone_id: null
+            p_player_id: playerId
         }
     );
 
@@ -897,8 +1176,9 @@ async function crearCompra(accessToken, playerId) {
     }
 
     /*
-     * Guardar inmediatamente la referencia local para que
-     * un error posterior no provoque una segunda compra.
+     * Guardar la referencia local inmediatamente.
+     * Si falla el envío, se conserva el mismo pedido y no
+     * se vuelve a descontar GVR creando una compra nueva.
      */
 
     pedidoPendienteId = orderId;
@@ -940,10 +1220,14 @@ botonContinuar.addEventListener("click", async () => {
             return;
         }
 
-        recuperarPedidoPendiente(user.id);
+        const referenciaValida = recuperarPedidoPendiente(user.id);
+
+        if (!referenciaValida) {
+            return;
+        }
 
         /*
-         * Si existe un pedido guardado, se comprueba antes
+         * Si existe un pedido guardado, se verifica antes
          * de permitir cualquier compra nueva.
          */
 
@@ -962,7 +1246,7 @@ botonContinuar.addEventListener("click", async () => {
             if (pedido.provider_client_reference) {
                 /*
                  * Ya se reservó una referencia de envío.
-                 * No repetir POST /orders a ciegas.
+                 * No repetimos la creación del pedido a ciegas.
                  */
 
                 await consultarPedido(session.access_token);
@@ -970,9 +1254,9 @@ botonContinuar.addEventListener("click", async () => {
             }
 
             /*
-             * El pedido local existe, pero no tiene referencia
-             * reservada. Puede intentarse enviar ese mismo pedido,
-             * sin crear otro descuento GVR.
+             * El pedido local existe, pero todavía no tiene
+             * referencia reservada en el proveedor.
+             * Intentamos enviar ese mismo pedido, sin crear otro.
              */
 
             await enviarPedido(session.access_token);
@@ -983,7 +1267,6 @@ botonContinuar.addEventListener("click", async () => {
 
         if (!playerId) {
             campoJugador.focus();
-
             throw new Error("Introduce tu ID de PUBG Mobile.");
         }
 
@@ -1001,7 +1284,10 @@ botonContinuar.addEventListener("click", async () => {
         );
 
     } catch (error) {
-        console.error("Error en la compra de PUBG Mobile:", error);
+        console.error(
+            "Error en la compra de PUBG Mobile:",
+            error
+        );
 
         mostrarEstado(
             obtenerMensajeError(
@@ -1012,8 +1298,8 @@ botonContinuar.addEventListener("click", async () => {
         );
 
         /*
-         * Si el pedido ya fue creado, conservamos su referencia.
-         * No se crea otra compra automáticamente.
+         * Si ya existe un pedido, mantenemos su referencia.
+         * No creamos automáticamente otro pedido.
          */
 
         if (pedidoPendienteId) {
@@ -1046,7 +1332,10 @@ async function iniciar() {
             recuperarPedidoPendiente(session.user.id);
         }
     } catch (error) {
-        console.error("Error recuperando la sesión:", error);
+        console.error(
+            "Error recuperando la sesión:",
+            error
+        );
     }
 
     await cargarCatalogo();
@@ -1054,5 +1343,6 @@ async function iniciar() {
 
 iniciar();
 </script>
+
 </body>
-</html>
+    </html>
