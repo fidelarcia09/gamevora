@@ -61,13 +61,13 @@ const JUEGO_NORMALIZADO =
     normalizarTexto(NOMBRE_JUEGO);
 
 const JUEGOS_API = {
-freefire: "free-fire",
-mobilelegends: "mobile-legends",
-bloodstrike: "blood-strike",
-pubgmobile: "pubg-mobile",
-honorofkings: "honor-of-kings",
-arenabreakout: "arena-breakout",
-genshinimpact: "genshin-impact"
+    freefire: "free-fire",
+    mobilelegends: "mobile-legends",
+    bloodstrike: "blood-strike",
+    pubgmobile: "pubg-mobile",
+    honorofkings: "honor-of-kings",
+    arenabreakout: "arena-breakout",
+    genshinimpact: "genshin-impact"
 };
 
 const JUEGO_API =
@@ -86,12 +86,8 @@ const ES_GENSHIN_IMPACT =
     JUEGO_NORMALIZADO === "genshinimpact";
 
 /*
- * Honor of Kings se habilita únicamente cuando la página
- * incluye habilitarCompras: true.
- *
- * Free Fire conserva su comportamiento anterior.
- * Blood Strike conserva su propia condición.
- * Los demás juegos no se habilitan por este cambio.
+ * Se conserva la habilitación anterior de cada juego.
+ * El cambio de servidor solo afecta a Genshin Impact.
  */
 const ES_VENTAS_HABILITADAS =
     ES_FREE_FIRE ||
@@ -218,9 +214,6 @@ function mensajeErrorPedido(error) {
         .join(" ")
         .toLowerCase();
 
-    /*
-     * Ocultar detalles internos del proveedor y de reembolsos.
-     */
     if (
         textoCompleto.includes("reembols") ||
         textoCompleto.includes("proveedor") ||
@@ -261,7 +254,8 @@ function mensajeErrorPedido(error) {
         "La información guardada del pedido no es válida. No iniciaremos otra compra automáticamente.",
         "No pudimos recuperar la referencia del pedido. No iniciaremos otra compra automáticamente.",
         "La solicitud tardó demasiado. Verifica el estado del pedido antes de intentarlo otra vez.",
-        "No se pudo crear el pedido. Comprueba tu sesión y saldo."
+        "No se pudo crear el pedido. Comprueba tu sesión y saldo.",
+        "Selecciona el servidor de tu cuenta de Genshin Impact."
     ];
 
     if (mensajesPermitidos.includes(mensaje)) {
@@ -322,6 +316,37 @@ function obtenerPrecioLocal(producto) {
     return Number.isFinite(precio) && precio > 0
         ? precio
         : null;
+}
+
+
+/* =========================================================
+   SERVIDOR DE GENSHIN IMPACT
+   Solo se utiliza en la página de Genshin.
+   ========================================================= */
+
+function obtenerServidorGenshin() {
+    if (!ES_GENSHIN_IMPACT) {
+        return null;
+    }
+
+    const zona = String(
+        el("zonaJugador")?.value || ""
+    ).trim();
+
+    const servidoresValidos = [
+        "America",
+        "Europe",
+        "Asia",
+        "TW_HK_MO"
+    ];
+
+    if (!servidoresValidos.includes(zona)) {
+        throw new Error(
+            "Selecciona el servidor de tu cuenta de Genshin Impact."
+        );
+    }
+
+    return zona;
 }
 
 
@@ -832,6 +857,10 @@ function irAConfirmacion() {
         el("idJugador").value = "";
     }
 
+    /*
+     * No se cambia ni se elimina el selector de servidor.
+     * Genshin necesita conservar la selección del usuario.
+     */
     ocultarEstadoPedido();
 
     const boton = el("confirmarBtn");
@@ -1149,7 +1178,17 @@ async function verificarPedidoGuardado(userId) {
    CREAR PEDIDO LOCAL
    ========================================================= */
 
-async function crearCompra(accessToken, playerId) {
+/*
+ * IMPORTANTE:
+ * - Genshin valida y envía p_zone_id.
+ * - Los demás juegos siguen enviando únicamente
+ *   p_product_id y p_player_id, como antes.
+ */
+async function crearCompra(
+    accessToken,
+    playerId,
+    zoneId = null
+) {
     if (!productoSeleccionado) {
         throw new Error("Selecciona primero una oferta.");
     }
@@ -1166,6 +1205,29 @@ async function crearCompra(accessToken, playerId) {
         throw new Error(
             "Esta oferta no está correctamente configurada para la compra."
         );
+    }
+
+    /*
+     * Validar el servidor únicamente en Genshin Impact.
+     * No se exige servidor a los demás juegos.
+     */
+    if (ES_GENSHIN_IMPACT) {
+        zoneId = String(zoneId || "").trim();
+
+        const servidoresValidos = [
+            "America",
+            "Europe",
+            "Asia",
+            "TW_HK_MO"
+        ];
+
+        if (!servidoresValidos.includes(zoneId)) {
+            throw new Error(
+                "Selecciona el servidor de tu cuenta de Genshin Impact."
+            );
+        }
+    } else {
+        zoneId = null;
     }
 
     /*
@@ -1210,6 +1272,11 @@ async function crearCompra(accessToken, playerId) {
         `Confirma tu oferta de ${NOMBRE_JUEGO}:\n\n` +
         `Oferta: ${productoSeleccionado.oferta.nombre}\n` +
         `ID de jugador: ${playerId}\n` +
+        (
+            ES_GENSHIN_IMPACT
+                ? `Servidor: ${zoneId}\n`
+                : ""
+        ) +
         `Precio: ${mostrarPrecio(precioConfirmado)}\n\n` +
         "¿Deseas continuar con el pedido?"
     );
@@ -1222,14 +1289,26 @@ async function crearCompra(accessToken, playerId) {
         "Creando tu pedido. No cierres esta página..."
     );
 
-    const { data: orderId, error: errorCompra } =
-        await supabase.rpc(
-            "purchase_game_product",
-            {
-                p_product_id: actual.id,
-                p_player_id: playerId
-            }
-        );
+    /*
+     * Parámetros originales para todos los juegos.
+     * Solo Genshin recibe el parámetro adicional p_zone_id.
+     */
+    const parametrosCompra = {
+        p_product_id: actual.id,
+        p_player_id: playerId
+    };
+
+    if (ES_GENSHIN_IMPACT) {
+        parametrosCompra.p_zone_id = zoneId;
+    }
+
+    const {
+        data: orderId,
+        error: errorCompra
+    } = await supabase.rpc(
+        "purchase_game_product",
+        parametrosCompra
+    );
 
     if (errorCompra) {
         console.error(
@@ -1315,6 +1394,11 @@ async function manejarConfirmacion() {
 
         recuperarPedidoPendiente(user.id);
 
+        /*
+         * La recuperación de pedidos existentes se conserva.
+         * No se les cambia el servidor ni se crean pedidos
+         * adicionales al recuperarlos.
+         */
         if (pedidoPendienteId) {
             await verificarPedidoGuardado(user.id);
 
@@ -1353,9 +1437,18 @@ async function manejarConfirmacion() {
             throw new Error("El ID de jugador es demasiado largo.");
         }
 
+        /*
+         * Solo se lee zonaJugador en Genshin Impact.
+         * Los demás juegos pasan null y conservan su flujo.
+         */
+        const zoneId = ES_GENSHIN_IMPACT
+            ? obtenerServidorGenshin()
+            : null;
+
         await crearCompra(
             session.access_token,
-            playerId
+            playerId,
+            zoneId
         );
 
     } catch (error) {
@@ -1505,4 +1598,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-}
+       }
