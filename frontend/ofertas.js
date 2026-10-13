@@ -82,6 +82,9 @@ const ES_BLOOD_STRIKE =
 const ES_HONOR_OF_KINGS =
     JUEGO_NORMALIZADO === "honorofkings";
 
+const ES_GENSHIN_IMPACT =
+    JUEGO_NORMALIZADO === "genshinimpact";
+
 /*
  * Honor of Kings se habilita únicamente cuando la página
  * incluye habilitarCompras: true.
