@@ -475,10 +475,12 @@ function mensajeAmigable(error) {
     }
 
     if (
-        mensaje.includes("se reembolsó el saldo gvr") ||
-        mensaje.includes("gvr reembolsado")
-    ) {
-        return "No se pudo completar la recarga porque Next Level no tiene saldo suficiente. El sistema registró el reembolso de tus GVR. Consulta tu historial de pedidos.";
+mensaje.includes("se reembolsó el saldo gvr") ||
+mensaje.includes("gvr reembolsado") ||
+mensaje.includes("insufficient_balance") ||
+mensaje.includes("saldo nxc insuficiente")
+) {
+return "No pudimos confirmar el envío del pedido existente. No se creará otra compra. Consulta el estado del pedido. No se pudo confirmar la creación del pedido. Se reembolsó el saldo GVR.";
     }
 
     return "No se pudo completar la operación. Comprueba tu sesión y vuelve a consultar el pedido antes de intentarlo otra vez.";
