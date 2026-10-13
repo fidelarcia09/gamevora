@@ -1188,6 +1188,11 @@ async function verificarPedidoGuardado(userId) {
         .eq("user_id", userId)
         .maybeSingle();
 
+    /*
+     * Si hay un error consultando el registro, no enviamos
+     * otra compra. Conservamos la referencia para consultar
+     * el pedido mediante la función del servidor.
+     */
     if (error) {
         console.error(
             "[Gamers Gold] Error verificando pedido:",
@@ -1197,26 +1202,35 @@ async function verificarPedidoGuardado(userId) {
         accionPendiente = "consultar";
         guardarPedidoPendiente();
 
-        throw new Error(
-            "No pudimos verificar tu pedido anterior. " +
-            "Conservamos su referencia para evitar duplicarlo. " +
-            "Intenta consultar su estado nuevamente."
-        );
+        return true;
     }
 
+    /*
+     * Si no aparece el registro en la consulta directa,
+     * intentaremos consultar el estado mediante
+     * nextlevel-consultar-pedido.
+     *
+     * No borramos la referencia ni permitimos una compra nueva.
+     */
     if (!data) {
+        console.warn(
+            "[Gamers Gold] El pedido no apareció en la consulta directa. " +
+            "Se comprobará mediante la función del servidor.",
+            { orderId: id }
+        );
+
         accionPendiente = "consultar";
         guardarPedidoPendiente();
 
-        throw new Error(
-            "No encontramos el pedido en el registro. " +
-            "Conservamos su referencia por seguridad. " +
-            "No hagas otra compra hasta aclarar su estado."
-        );
+        return true;
     }
 
     const status = String(data.status || "").toLowerCase();
 
+    /*
+     * Los pedidos finalizados no deben seguir bloqueando
+     * la selección de otra oferta.
+     */
     if (status === "completed" || status === "refunded") {
         borrarPedidoPendiente();
         return false;
@@ -1228,6 +1242,11 @@ async function verificarPedidoGuardado(userId) {
         data.provider_submitted_at
     );
 
+    /*
+     * Si ya existen datos del proveedor, solo consultamos.
+     * Nunca reenviamos automáticamente un pedido que pudo
+     * haber sido recibido anteriormente por Next Level.
+     */
     if (tieneDatosProveedor) {
         accionPendiente = "consultar";
     } else if (accionAnterior === "consultar") {
