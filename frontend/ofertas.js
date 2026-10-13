@@ -1572,9 +1572,12 @@ function inicializar() {
         );
     }
 
-    if (el("continuarBtn")) {
-        el("continuarBtn").disabled = true;
-    }
+    const continuar = el("continuarBtn");
+
+if (continuar) {
+    continuar.disabled = true;
+    continuar.addEventListener("click", irAConfirmacion);
+}
 
     if (!CONFIG || !NOMBRE_JUEGO || !JUEGO_API) {
         actualizarEstadoCarga(
