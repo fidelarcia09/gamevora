@@ -66,8 +66,7 @@ const JUEGOS_API = {
     bloodstrike: "blood-strike",
     pubgmobile: "pubg-mobile",
     honorofkings: "honor-of-kings",
-    arenabreakout: "arena-breakout",
-    genshinimpact: "genshin-impact"
+    arenabreakout: "arena-breakout"
 };
 
 const JUEGO_API =
@@ -82,12 +81,14 @@ const ES_BLOOD_STRIKE =
 const ES_HONOR_OF_KINGS =
     JUEGO_NORMALIZADO === "honorofkings";
 
-const ES_GENSHIN =
-    JUEGO_NORMALIZADO === "genshinimpact";
-
-const ES_ARENA_BREAKOUT =
-    JUEGO_NORMALIZADO === "arenabreakout";
-
+/*
+ * Honor of Kings se habilita únicamente cuando la página
+ * incluye habilitarCompras: true.
+ *
+ * Free Fire conserva su comportamiento anterior.
+ * Blood Strike conserva su propia condición.
+ * Los demás juegos no se habilitan por este cambio.
+ */
 const ES_VENTAS_HABILITADAS =
     ES_FREE_FIRE ||
     (
@@ -96,14 +97,6 @@ const ES_VENTAS_HABILITADAS =
     ) ||
     (
         ES_HONOR_OF_KINGS &&
-        CONFIG?.habilitarCompras === true
-    ) ||
-    (
-        ES_GENSHIN &&
-        CONFIG?.habilitarCompras === true
-    ) ||
-    (
-        ES_ARENA_BREAKOUT &&
         CONFIG?.habilitarCompras === true
     );
 
@@ -120,8 +113,6 @@ let procesandoCompra = false;
 let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
-
-let zonaJugadorActual = "";
 
 const el = id => document.getElementById(id);
 
@@ -228,8 +219,7 @@ function mensajeErrorPedido(error) {
 
     if (
         mensaje.startsWith("Escribe tu ID de jugador") ||
-        mensaje.startsWith("El ID de jugador") ||
-        mensaje.startsWith("Selecciona el servidor")
+        mensaje.startsWith("El ID de jugador")
     ) {
         return mensaje;
     }
@@ -272,15 +262,12 @@ function obtenerIdProveedor(producto) {
 }
 
 function obtenerNombreProveedor(producto) {
-    const nombre =
+    return String(
         producto?.name ??
         producto?.productName ??
         producto?.product_name ??
-        producto?.title;
-
-    return String(
-        nombre ||
-        obtenerIdProveedor(producto) ||
+        producto?.title ??
+        obtenerIdProveedor(producto) ??
         `Oferta de ${NOMBRE_JUEGO || "juego"}`
     ).trim();
 }
@@ -295,7 +282,7 @@ function obtenerPrecioLocal(producto) {
 
 
 /* =========================================================
-   PEDIDO PENDIENTE
+   GUARDADO DEL PEDIDO PENDIENTE
    ========================================================= */
 
 function clavePedidoPendiente(userId) {
@@ -310,14 +297,7 @@ function guardarPedidoPendiente() {
             clavePedidoPendiente(usuarioActualId),
             JSON.stringify({
                 orderId: pedidoPendienteId,
-                accion: accionPendiente,
-
-                ...(
-                    (ES_GENSHIN || ES_ARENA_BREAKOUT) &&
-                    zonaJugadorActual
-                        ? { zoneId: zonaJugadorActual }
-                        : {}
-                )
+                accion: accionPendiente
             })
         );
     } catch (error) {
@@ -344,7 +324,6 @@ function borrarPedidoPendiente() {
 
     pedidoPendienteId = null;
     accionPendiente = "crear";
-    zonaJugadorActual = "";
 }
 
 function recuperarPedidoPendiente(userId) {
@@ -364,7 +343,6 @@ function recuperarPedidoPendiente(userId) {
     if (!guardado) {
         pedidoPendienteId = null;
         accionPendiente = "crear";
-        zonaJugadorActual = "";
         return;
     }
 
@@ -395,12 +373,6 @@ function recuperarPedidoPendiente(userId) {
         datos.accion === "consultar"
             ? "consultar"
             : "enviar";
-
-    zonaJugadorActual =
-        (ES_GENSHIN || ES_ARENA_BREAKOUT) &&
-        typeof datos.zoneId === "string"
-            ? datos.zoneId
-            : "";
 }
 
 
@@ -519,77 +491,6 @@ function productoComprable(local) {
 
 
 /* =========================================================
-   ENCONTRAR OFERTAS POR ID O POR NOMBRE
-   ========================================================= */
-
-function buscarProductoProveedorParaOferta(oferta) {
-    if (!oferta || typeof oferta !== "object") {
-        return null;
-    }
-
-    const idConfigurado = String(
-        oferta.id ??
-        oferta.provider_product_id ??
-        oferta.providerProductId ??
-        ""
-    ).trim();
-
-    if (idConfigurado && productosPorId[idConfigurado]) {
-        return productosPorId[idConfigurado];
-    }
-
-    const nombreOferta = normalizarTexto(
-        oferta.nombre ??
-        oferta.name ??
-        oferta.product_name ??
-        oferta.productName ??
-        ""
-    );
-
-    if (!nombreOferta) {
-        return null;
-    }
-
-    const coincidenciaProveedor = productosProveedor.find(
-        producto => {
-            const nombresProveedor = [
-                producto?.name,
-                producto?.productName,
-                producto?.product_name,
-                producto?.title
-            ];
-
-            return nombresProveedor.some(
-                nombre =>
-                    normalizarTexto(nombre) === nombreOferta
-            );
-        }
-    );
-
-    if (coincidenciaProveedor) {
-        return coincidenciaProveedor;
-    }
-
-    const coincidenciaLocal = productosLocales.find(
-        producto =>
-            normalizarTexto(producto.product_name) === nombreOferta
-    );
-
-    if (coincidenciaLocal) {
-        const idLocal = String(
-            coincidenciaLocal.provider_product_id || ""
-        ).trim();
-
-        if (idLocal && productosPorId[idLocal]) {
-            return productosPorId[idLocal];
-        }
-    }
-
-    return null;
-}
-
-
-/* =========================================================
    TARJETAS
    ========================================================= */
 
@@ -615,11 +516,8 @@ function crearTarjetaOferta(oferta, proveedor) {
 
     const nombre = document.createElement("div");
     nombre.className = "nombre-oferta";
-
     nombre.textContent =
-        oferta.nombre ||
-        oferta.name ||
-        obtenerNombreProveedor(proveedor);
+        oferta.nombre || obtenerNombreProveedor(proveedor);
 
     foto.appendChild(emoji);
     tarjeta.append(foto, nombre);
@@ -656,11 +554,6 @@ function crearTarjetaOferta(oferta, proveedor) {
     return tarjeta;
 }
 
-
-/* =========================================================
-   CARGAR OFERTAS
-   ========================================================= */
-
 async function cargarOfertas() {
     const lista = el("listaOfertas");
 
@@ -688,16 +581,15 @@ async function cargarOfertas() {
     );
 
     try {
-        await Promise.all([
-            consultarCatalogoNextLevel().then(productos => {
-                productosProveedor = productos;
-            }),
+        const [proveedor] = await Promise.all([
+            consultarCatalogoNextLevel(),
             cargarProductosLocales()
         ]);
 
+        productosProveedor = proveedor;
         productosPorId = Object.create(null);
 
-        productosProveedor.forEach(producto => {
+        proveedor.forEach(producto => {
             const id = obtenerIdProveedor(producto);
 
             if (id) {
@@ -713,25 +605,23 @@ async function cargarOfertas() {
         let cantidad = 0;
 
         configuradas.forEach(oferta => {
-            const productoProveedor =
-                buscarProductoProveedorParaOferta(oferta);
+            const id = String(oferta.id || "").trim();
 
-            if (!productoProveedor) {
+            if (!id) {
                 console.warn(
-                    "[Gamers Gold] No se encontró el producto " +
-                    "de esta oferta por ID ni por nombre:",
+                    "[Gamers Gold] Oferta sin identificador:",
                     oferta
                 );
 
                 return;
             }
 
-            const id = obtenerIdProveedor(productoProveedor);
+            const productoProveedor = productosPorId[id];
 
-            if (!id) {
+            if (!productoProveedor) {
                 console.warn(
-                    "[Gamers Gold] El producto no tiene identificador:",
-                    productoProveedor
+                    "[Gamers Gold] Oferta no encontrada en el catálogo:",
+                    id
                 );
 
                 return;
@@ -741,15 +631,6 @@ async function cargarOfertas() {
                 productoProveedor.available === false ||
                 productoProveedor.available === "false"
             ) {
-                console.warn(
-                    "[Gamers Gold] Producto no disponible:",
-                    obtenerNombreProveedor(productoProveedor)
-                );
-
-                return;
-            }
-
-            if (productosMostrados[id]) {
                 return;
             }
 
@@ -759,10 +640,7 @@ async function cargarOfertas() {
             };
 
             lista.appendChild(
-                crearTarjetaOferta(
-                    oferta,
-                    productoProveedor
-                )
+                crearTarjetaOferta(oferta, productoProveedor)
             );
 
             cantidad++;
@@ -770,44 +648,20 @@ async function cargarOfertas() {
 
         if (!cantidad) {
             actualizarEstadoCarga(
-                "No se encontraron ofertas configuradas para este juego. Revisa los nombres de las ofertas y el catálogo del proveedor.",
+                "No hay ofertas disponibles en este momento.",
                 true
-            );
-
-            console.warn(
-                "[Gamers Gold] Diagnóstico de ofertas:",
-                {
-                    juego: NOMBRE_JUEGO,
-                    juegoApi: JUEGO_API,
-                    ofertasConfiguradas: configuradas,
-                    productosProveedor: productosProveedor.map(
-                        producto => ({
-                            id: obtenerIdProveedor(producto),
-                            nombre: obtenerNombreProveedor(producto)
-                        })
-                    ),
-                    productosLocales: productosLocales.map(
-                        producto => ({
-                            id: producto.provider_product_id,
-                            nombre: producto.product_name,
-                            activo: producto.active,
-                            precio: producto.price_gvr
-                        })
-                    )
-                }
             );
 
             return;
         }
 
         lista.style.display = "flex";
-
         actualizarEstadoCarga("", false);
 
         if (el("notaOfertas")) {
             el("notaOfertas").textContent =
                 ES_VENTAS_HABILITADAS
-                    ? "Precios en GVR. Comprueba tu UID y servidor antes de confirmar."
+                    ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
                     : "Las ventas de este juego aún no están habilitadas.";
         }
 
@@ -872,7 +726,7 @@ function seleccionarOferta(
     if (el("continuarBtn")) {
         el("continuarBtn").style.display = "block";
         el("continuarBtn").disabled = false;
-        el("continuarBtn").textContent = "Continuar";
+        el("continuarBtn").textContent = "Continuar ⚡";
     }
 
     ocultarEstadoPedido();
@@ -918,9 +772,7 @@ function irAConfirmacion() {
 
     if (el("confirmarOferta")) {
         el("confirmarOferta").textContent =
-            productoSeleccionado.oferta.nombre ||
-            productoSeleccionado.oferta.name ||
-            obtenerNombreProveedor(productoSeleccionado.proveedor);
+            productoSeleccionado.oferta.nombre;
     }
 
     if (el("juegoConfirmacion")) {
@@ -936,20 +788,13 @@ function irAConfirmacion() {
         el("idJugador").value = "";
     }
 
-    if (
-        (ES_GENSHIN || ES_ARENA_BREAKOUT) &&
-        el("zonaJugador")
-    ) {
-        el("zonaJugador").value = "";
-    }
-
     ocultarEstadoPedido();
 
     const boton = el("confirmarBtn");
 
     if (boton) {
         boton.disabled = false;
-        boton.textContent = "Confirmar y recargar";
+        boton.textContent = "Confirmar y recargar ⚡";
     }
 
     cambiarPantalla("pantallaConfirmacion");
@@ -962,7 +807,7 @@ function volverOfertas() {
 
 
 /* =========================================================
-   PETICIONES A EDGE FUNCTIONS
+   PETICIONES A LAS EDGE FUNCTIONS
    ========================================================= */
 
 async function llamarFuncion(url, accessToken, body) {
@@ -1129,24 +974,20 @@ async function enviarPedido(accessToken) {
         throw new Error("No hay pedido pendiente para enviar.");
     }
 
+    /*
+     * Se conserva la referencia y se pasa a consulta antes
+     * de enviar. Así no se repite una compra a ciegas si
+     * se pierde la respuesta de la Edge Function.
+     */
     accionPendiente = "consultar";
     guardarPedidoPendiente();
-
-    const cuerpoPedido = {
-        game_order_id: pedidoPendienteId
-    };
-
-    if (
-        (ES_GENSHIN || ES_ARENA_BREAKOUT) &&
-        zonaJugadorActual
-    ) {
-        cuerpoPedido.zone_id = zonaJugadorActual;
-    }
 
     const datos = await llamarFuncion(
         URL_CREAR_PEDIDO,
         accessToken,
-        cuerpoPedido
+        {
+            game_order_id: pedidoPendienteId
+        }
     );
 
     accionPendiente = "consultar";
@@ -1168,7 +1009,7 @@ async function enviarPedido(accessToken) {
 
 
 /* =========================================================
-   VERIFICAR PEDIDO GUARDADO EN SUPABASE
+   VERIFICAR PEDIDO PENDIENTE EN SUPABASE
    ========================================================= */
 
 async function verificarPedidoGuardado(userId) {
@@ -1188,11 +1029,6 @@ async function verificarPedidoGuardado(userId) {
         .eq("user_id", userId)
         .maybeSingle();
 
-    /*
-     * Si hay un error consultando el registro, no enviamos
-     * otra compra. Conservamos la referencia para consultar
-     * el pedido mediante la función del servidor.
-     */
     if (error) {
         console.error(
             "[Gamers Gold] Error verificando pedido:",
@@ -1202,35 +1038,26 @@ async function verificarPedidoGuardado(userId) {
         accionPendiente = "consultar";
         guardarPedidoPendiente();
 
-        return true;
+        throw new Error(
+            "No pudimos verificar tu pedido anterior. " +
+            "Conservamos su referencia para evitar duplicarlo. " +
+            "Intenta consultar su estado nuevamente."
+        );
     }
 
-    /*
-     * Si no aparece el registro en la consulta directa,
-     * intentaremos consultar el estado mediante
-     * nextlevel-consultar-pedido.
-     *
-     * No borramos la referencia ni permitimos una compra nueva.
-     */
     if (!data) {
-        console.warn(
-            "[Gamers Gold] El pedido no apareció en la consulta directa. " +
-            "Se comprobará mediante la función del servidor.",
-            { orderId: id }
-        );
-
         accionPendiente = "consultar";
         guardarPedidoPendiente();
 
-        return true;
+        throw new Error(
+            "No encontramos el pedido en el registro. " +
+            "Conservamos su referencia por seguridad. " +
+            "No hagas otra compra hasta aclarar su estado."
+        );
     }
 
     const status = String(data.status || "").toLowerCase();
 
-    /*
-     * Los pedidos finalizados no deben seguir bloqueando
-     * la selección de otra oferta.
-     */
     if (status === "completed" || status === "refunded") {
         borrarPedidoPendiente();
         return false;
@@ -1242,11 +1069,6 @@ async function verificarPedidoGuardado(userId) {
         data.provider_submitted_at
     );
 
-    /*
-     * Si ya existen datos del proveedor, solo consultamos.
-     * Nunca reenviamos automáticamente un pedido que pudo
-     * haber sido recibido anteriormente por Next Level.
-     */
     if (tieneDatosProveedor) {
         accionPendiente = "consultar";
     } else if (accionAnterior === "consultar") {
@@ -1267,11 +1089,7 @@ async function verificarPedidoGuardado(userId) {
    CREAR PEDIDO LOCAL
    ========================================================= */
 
-async function crearCompra(
-    accessToken,
-    playerId,
-    zoneId = ""
-) {
+async function crearCompra(accessToken, playerId) {
     if (!productoSeleccionado) {
         throw new Error("Selecciona primero una oferta.");
     }
@@ -1290,13 +1108,9 @@ async function crearCompra(
         );
     }
 
-    if (
-        (ES_GENSHIN || ES_ARENA_BREAKOUT) &&
-        !zoneId
-    ) {
-        throw new Error("Selecciona el servidor de tu cuenta.");
-    }
-
+    /*
+     * Revalidar el producto en Supabase antes de cobrar.
+     */
     const { data: actual, error } = await supabase
         .from("game_products")
         .select(
@@ -1332,20 +1146,10 @@ async function crearCompra(
 
     const precioConfirmado = Number(actual.price_gvr);
 
-    const nombreOferta =
-        productoSeleccionado.oferta.nombre ||
-        productoSeleccionado.oferta.name ||
-        obtenerNombreProveedor(productoSeleccionado.proveedor);
-
     const confirmado = window.confirm(
         `Confirma tu oferta de ${NOMBRE_JUEGO}:\n\n` +
-        `Oferta: ${nombreOferta}\n` +
+        `Oferta: ${productoSeleccionado.oferta.nombre}\n` +
         `ID de jugador: ${playerId}\n` +
-        (
-            (ES_GENSHIN || ES_ARENA_BREAKOUT)
-                ? `Servidor/Zona: ${zoneId}\n`
-                : ""
-        ) +
         `Precio: ${mostrarPrecio(precioConfirmado)}\n\n` +
         "¿Deseas continuar con el pedido?"
     );
@@ -1358,19 +1162,13 @@ async function crearCompra(
         "Creando tu pedido. No cierres esta página..."
     );
 
-    const argumentosCompra = {
-        p_product_id: actual.id,
-        p_player_id: playerId
-    };
-
-    if (ES_GENSHIN || ES_ARENA_BREAKOUT) {
-        argumentosCompra.p_zone_id = zoneId;
-    }
-
     const { data: orderId, error: errorCompra } =
         await supabase.rpc(
             "purchase_game_product",
-            argumentosCompra
+            {
+                p_product_id: actual.id,
+                p_player_id: playerId
+            }
         );
 
     if (errorCompra) {
@@ -1388,6 +1186,10 @@ async function crearCompra(
         typeof orderId !== "string" ||
         !UUID_RE.test(orderId)
     ) {
+        /*
+         * Si el RPC devolviera una forma inesperada, no se
+         * inicia una segunda compra automáticamente.
+         */
         throw new Error(
             "No recibimos un ID de pedido válido. " +
             "Revisa el estado del pedido antes de volver a intentarlo."
@@ -1396,11 +1198,6 @@ async function crearCompra(
 
     pedidoPendienteId = orderId;
     accionPendiente = "enviar";
-
-    zonaJugadorActual =
-        (ES_GENSHIN || ES_ARENA_BREAKOUT)
-            ? zoneId
-            : "";
 
     guardarPedidoPendiente();
 
@@ -1496,40 +1293,9 @@ async function manejarConfirmacion() {
             throw new Error("El ID de jugador es demasiado largo.");
         }
 
-        let zoneId = "";
-
-        if (ES_GENSHIN || ES_ARENA_BREAKOUT) {
-            zoneId = String(
-                el("zonaJugador")?.value || ""
-            ).trim();
-
-            if (!zoneId) {
-                throw new Error(
-                    "Selecciona el servidor de tu cuenta."
-                );
-            }
-
-            if (
-                ES_GENSHIN &&
-                ![
-                    "America",
-                    "Europe",
-                    "Asia",
-                    "TW_HK_MO"
-                ].includes(zoneId)
-            ) {
-                throw new Error(
-                    "Selecciona el servidor de tu cuenta."
-                );
-            }
-
-            zonaJugadorActual = zoneId;
-        }
-
         await crearCompra(
             session.access_token,
-            playerId,
-            zoneId
+            playerId
         );
 
     } catch (error) {
@@ -1557,7 +1323,7 @@ async function manejarConfirmacion() {
                 )
                 : (
                     ES_VENTAS_HABILITADAS
-                        ? "Confirmar y recargar"
+                        ? "Confirmar y recargar ⚡"
                         : "Ventas no habilitadas"
                 );
         }
@@ -1581,6 +1347,10 @@ async function consultarDesdeResultado() {
 
     cambiarPantalla("pantallaConfirmacion");
 
+    /*
+     * El manejador detecta el pedido guardado y lo consulta
+     * sin crear un segundo pedido.
+     */
     await manejarConfirmacion();
 }
 
@@ -1625,7 +1395,7 @@ function inicializar() {
         confirmar.disabled = !ES_VENTAS_HABILITADAS;
 
         confirmar.textContent = ES_VENTAS_HABILITADAS
-            ? "Confirmar y recargar"
+            ? "Confirmar y recargar ⚡"
             : "Ventas no habilitadas";
 
         confirmar.addEventListener(
@@ -1643,15 +1413,9 @@ function inicializar() {
         );
     }
 
-    const continuar = el("continuarBtn");
-
-if (continuar) {
-    continuar.disabled = true;
-
-    continuar.addEventListener("click", () => {
-        irAConfirmacion();
-    });
-}
+    if (el("continuarBtn")) {
+        el("continuarBtn").disabled = true;
+    }
 
     if (!CONFIG || !NOMBRE_JUEGO || !JUEGO_API) {
         actualizarEstadoCarga(
@@ -1666,11 +1430,10 @@ if (continuar) {
     cargarOfertas();
 }
 
-
-/* =========================================================
-   FUNCIONES GLOBALES DE NAVEGACIÓN
-   ========================================================= */
-
+/*
+ * La página HTML no debe declarar de nuevo estas funciones:
+ * el módulo es el propietario de la navegación.
+ */
 window.irAConfirmacion = irAConfirmacion;
 window.volverOfertas = volverOfertas;
 
@@ -1682,4 +1445,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-}
+       }
