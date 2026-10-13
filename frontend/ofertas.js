@@ -61,12 +61,13 @@ const JUEGO_NORMALIZADO =
     normalizarTexto(NOMBRE_JUEGO);
 
 const JUEGOS_API = {
-    freefire: "free-fire",
-    mobilelegends: "mobile-legends",
-    bloodstrike: "blood-strike",
-    pubgmobile: "pubg-mobile",
-    honorofkings: "honor-of-kings",
-    arenabreakout: "arena-breakout"
+freefire: "free-fire",
+mobilelegends: "mobile-legends",
+bloodstrike: "blood-strike",
+pubgmobile: "pubg-mobile",
+honorofkings: "honor-of-kings",
+arenabreakout: "arena-breakout",
+genshinimpact: "genshin-impact"
 };
 
 const JUEGO_API =
