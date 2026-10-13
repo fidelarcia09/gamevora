@@ -189,8 +189,13 @@ function mensajeErrorCatalogo(error) {
     return "No pudimos cargar las ofertas. Inténtalo de nuevo más tarde.";
 }
 
+/* =========================================================
+   MENSAJES DE ERROR PARA EL CLIENTE
+   ========================================================= */
+
 function mensajeErrorPedido(error) {
     const mensaje = String(error?.message || "").trim();
+    const mensajeMinusculas = mensaje.toLowerCase();
 
     const mensajesPermitidos = [
         "No hay un pedido guardado para consultar.",
@@ -210,7 +215,8 @@ function mensajeErrorPedido(error) {
         "La referencia guardada del pedido no es válida. No iniciaremos otra compra automáticamente.",
         "La información guardada del pedido no es válida. No iniciaremos otra compra automáticamente.",
         "No pudimos recuperar la referencia del pedido. No iniciaremos otra compra automáticamente.",
-        "La solicitud tardó demasiado. Verifica el estado del pedido antes de intentarlo otra vez."
+        "La solicitud tardó demasiado. Verifica el estado del pedido antes de intentarlo otra vez.",
+        "No se pudo crear el pedido. Comprueba tu sesión y saldo."
     ];
 
     if (mensajesPermitidos.includes(mensaje)) {
@@ -225,16 +231,28 @@ function mensajeErrorPedido(error) {
     }
 
     /*
-     * NUEVO:
-     * Si el error viene de una respuesta HTTP de Supabase,
-     * mostrar el mensaje real en vez de ocultarlo detrás
-     * del mensaje genérico.
+     * No mostrar al cliente mensajes internos relacionados
+     * con el proveedor, el saldo NXC o el reembolso.
      */
     if (
-        Number.isInteger(error?.status) &&
-        mensaje
+        mensajeMinusculas.includes("reembols") ||
+        mensajeMinusculas.includes("proveedor") ||
+        mensajeMinusculas.includes("nextlevel") ||
+        mensajeMinusculas.includes("nxc") ||
+        mensajeMinusculas.includes("insufficient_balance") ||
+        mensajeMinusculas.includes("saldo gvr utilizado") ||
+        mensajeMinusculas.includes("provider_error") ||
+        mensajeMinusculas.includes("provider_status")
     ) {
-        return mensaje.slice(0, 700);
+        return "No se pudo completar tu pedido. Si el reembolso fue confirmado, el saldo GVR estará disponible en tu cuenta. Comprueba tu saldo antes de volver a intentarlo.";
+    }
+
+    /*
+     * No se muestran directamente errores HTTP ni mensajes
+     * técnicos recibidos de las funciones del servidor.
+     */
+    if (Number.isInteger(error?.status)) {
+        return "No pudimos procesar la solicitud. Consulta el estado de tu pedido antes de volver a intentarlo.";
     }
 
     return "No pudimos procesar la solicitud. Consulta el estado de tu pedido antes de volver a intentarlo.";
@@ -864,8 +882,8 @@ async function llamarFuncion(url, accessToken, body) {
             );
 
             /*
-             * NUEVO:
-             * Obtener el mensaje real enviado por Supabase.
+             * Guardar el error original para los registros internos,
+             * pero no mostrarlo directamente al cliente.
              */
             const mensajeBase =
                 (
@@ -878,20 +896,7 @@ async function llamarFuncion(url, accessToken, body) {
                 ) ||
                 `La solicitud falló (HTTP ${respuesta.status}).`;
 
-            const detalleProveedor =
-                typeof datos?.provider_error === "string" &&
-                datos.provider_error.trim()
-                    ? ` Detalle del proveedor: ${datos.provider_error.trim()}`
-                    : "";
-
-            const mensajeReembolso =
-                datos?.refunded === true
-                    ? " El sistema informa que el saldo GVR fue reembolsado."
-                    : "";
-
-            const error = new Error(
-                `${mensajeBase}${detalleProveedor}${mensajeReembolso}`
-            );
+            const error = new Error(mensajeBase);
 
             error.status = respuesta.status;
             error.data = datos;
@@ -1012,7 +1017,7 @@ async function consultarPedido(accessToken) {
 
 
 /* =========================================================
-   ENVIAR PEDIDO A NEXT LEVEL
+   ENVIAR PEDIDO AL PROVEEDOR
    ========================================================= */
 
 async function enviarPedido(accessToken) {
@@ -1491,4 +1496,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-}
+           }
