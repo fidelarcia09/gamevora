@@ -104,7 +104,7 @@ const ES_VENTAS_HABILITADAS =
     (
         ES_GENSHIN_IMPACT &&
         CONFIG?.habilitarCompras === true
-    )
+    ) ||
     (
         ES_ARENA_BREAKOUT &&
         CONFIG?.habilitarCompras === true
