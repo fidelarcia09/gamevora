@@ -85,6 +85,8 @@ const ES_HONOR_OF_KINGS =
 const ES_GENSHIN_IMPACT =
     JUEGO_NORMALIZADO === "genshinimpact";
 
+const ES_ARENA_BREAKOUT =
+    JUEGO_NORMALIZADO === "arenabreakout";
 /*
  * Se conserva la habilitación anterior de cada juego.
  * El cambio de servidor solo afecta a Genshin Impact.
@@ -101,6 +103,10 @@ const ES_VENTAS_HABILITADAS =
     ) ||
     (
         ES_GENSHIN_IMPACT &&
+        CONFIG?.habilitarCompras === true
+    );
+    (
+        ES_ARENA_BREAKOUT &&
         CONFIG?.habilitarCompras === true
     );
 
