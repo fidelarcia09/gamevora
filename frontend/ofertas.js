@@ -102,6 +102,10 @@ const ES_VENTAS_HABILITADAS =
     (
         ES_HONOR_OF_KINGS &&
         CONFIG?.habilitarCompras === true
+    ) ||
+    (
+        ES_GENSHIN_IMPACT &&
+        CONFIG?.habilitarCompras === true
     );
 
 let productosLocales = [];
