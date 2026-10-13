@@ -224,6 +224,19 @@ function mensajeErrorPedido(error) {
         return mensaje;
     }
 
+    /*
+     * NUEVO:
+     * Si el error viene de una respuesta HTTP de Supabase,
+     * mostrar el mensaje real en vez de ocultarlo detrás
+     * del mensaje genérico.
+     */
+    if (
+        Number.isInteger(error?.status) &&
+        mensaje
+    ) {
+        return mensaje.slice(0, 700);
+    }
+
     return "No pudimos procesar la solicitud. Consulta el estado de tu pedido antes de volver a intentarlo.";
 }
 
@@ -850,10 +863,43 @@ async function llamarFuncion(url, accessToken, body) {
                 datos
             );
 
-            throw new Error(
-                "No pudimos procesar la solicitud. " +
-                "Consulta el estado de tu pedido antes de volver a intentarlo."
+            /*
+             * NUEVO:
+             * Obtener el mensaje real enviado por Supabase.
+             */
+            const mensajeBase =
+                (
+                    typeof datos?.error === "string" &&
+                    datos.error.trim()
+                ) ||
+                (
+                    typeof datos?.message === "string" &&
+                    datos.message.trim()
+                ) ||
+                `La solicitud falló (HTTP ${respuesta.status}).`;
+
+            const detalleProveedor =
+                typeof datos?.provider_error === "string" &&
+                datos.provider_error.trim()
+                    ? ` Detalle del proveedor: ${datos.provider_error.trim()}`
+                    : "";
+
+            const mensajeReembolso =
+                datos?.refunded === true
+                    ? " El sistema informa que el saldo GVR fue reembolsado."
+                    : "";
+
+            const error = new Error(
+                `${mensajeBase}${detalleProveedor}${mensajeReembolso}`
             );
+
+            error.status = respuesta.status;
+            error.data = datos;
+            error.retry_safe = datos?.retry_safe;
+            error.reconciliation_required =
+                datos?.reconciliation_required === true;
+
+            throw error;
         }
 
         return datos;
@@ -1445,4 +1491,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-       }
+}
