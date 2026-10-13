@@ -189,13 +189,50 @@ function mensajeErrorCatalogo(error) {
     return "No pudimos cargar las ofertas. Inténtalo de nuevo más tarde.";
 }
 
+
 /* =========================================================
    MENSAJES DE ERROR PARA EL CLIENTE
    ========================================================= */
 
 function mensajeErrorPedido(error) {
     const mensaje = String(error?.message || "").trim();
-    const mensajeMinusculas = mensaje.toLowerCase();
+    const datos = error?.data || {};
+
+    const textoCompleto = [
+        mensaje,
+        datos.error,
+        datos.message,
+        datos.provider_error,
+        datos.details,
+        datos.hint
+    ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+    /*
+     * Ocultar detalles internos del proveedor y de reembolsos.
+     */
+    if (
+        textoCompleto.includes("reembols") ||
+        textoCompleto.includes("proveedor") ||
+        textoCompleto.includes("nextlevel") ||
+        textoCompleto.includes("next level") ||
+        textoCompleto.includes("nxc") ||
+        textoCompleto.includes("insufficient_balance") ||
+        textoCompleto.includes("saldo insuficiente") ||
+        textoCompleto.includes("saldo gvr utilizado") ||
+        textoCompleto.includes("no se pudo confirmar la creación del pedido")
+    ) {
+        return "No se pudo completar tu pedido. Si el reembolso fue confirmado, el saldo GVR estará disponible en tu cuenta. Comprueba tu saldo antes de volver a intentarlo.";
+    }
+
+    if (
+        mensaje.startsWith("Escribe tu ID de jugador") ||
+        mensaje.startsWith("El ID de jugador")
+    ) {
+        return mensaje;
+    }
 
     const mensajesPermitidos = [
         "No hay un pedido guardado para consultar.",
@@ -221,38 +258,6 @@ function mensajeErrorPedido(error) {
 
     if (mensajesPermitidos.includes(mensaje)) {
         return mensaje;
-    }
-
-    if (
-        mensaje.startsWith("Escribe tu ID de jugador") ||
-        mensaje.startsWith("El ID de jugador")
-    ) {
-        return mensaje;
-    }
-
-    /*
-     * No mostrar al cliente mensajes internos relacionados
-     * con el proveedor, el saldo NXC o el reembolso.
-     */
-    if (
-        mensajeMinusculas.includes("reembols") ||
-        mensajeMinusculas.includes("proveedor") ||
-        mensajeMinusculas.includes("nextlevel") ||
-        mensajeMinusculas.includes("nxc") ||
-        mensajeMinusculas.includes("insufficient_balance") ||
-        mensajeMinusculas.includes("saldo gvr utilizado") ||
-        mensajeMinusculas.includes("provider_error") ||
-        mensajeMinusculas.includes("provider_status")
-    ) {
-        return "No se pudo completar tu pedido. Si el reembolso fue confirmado, el saldo GVR estará disponible en tu cuenta. Comprueba tu saldo antes de volver a intentarlo.";
-    }
-
-    /*
-     * No se muestran directamente errores HTTP ni mensajes
-     * técnicos recibidos de las funciones del servidor.
-     */
-    if (Number.isInteger(error?.status)) {
-        return "No pudimos procesar la solicitud. Consulta el estado de tu pedido antes de volver a intentarlo.";
     }
 
     return "No pudimos procesar la solicitud. Consulta el estado de tu pedido antes de volver a intentarlo.";
@@ -881,10 +886,6 @@ async function llamarFuncion(url, accessToken, body) {
                 datos
             );
 
-            /*
-             * Guardar el error original para los registros internos,
-             * pero no mostrarlo directamente al cliente.
-             */
             const mensajeBase =
                 (
                     typeof datos?.error === "string" &&
@@ -1496,4 +1497,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-           }
+}
