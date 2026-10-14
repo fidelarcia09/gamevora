@@ -1,329 +1,562 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
     <meta name="description" content="Recargas de BC de Blood Strike en Gamers Gold Top-Up.">
-    <title>Blood Strike | Gamers Gold Top-Up</title><style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
+    <title>Blood Strike | Gamers Gold Top-Up</title>
 
-    body {
-        background: #050b18;
-        color: white;
-        min-height: 100vh;
-        padding: 20px;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-    .contenedor {
-        max-width: 650px;
-        margin: auto;
-    }
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 25px;
-    }
-
-    .logo {
-        font-size: 21px;
-        font-weight: 900;
-    }
-
-    .rayo {
-        color: #00b7ff;
-        text-shadow: 0 0 12px #008cff;
-    }
-
-    .volver {
-        color: #28a9ff;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
-        white-space: nowrap;
-    }
-
-    .card {
-        background: #091a35;
-        border: 1px solid #15518c;
-        border-radius: 20px;
-        padding: 25px 20px;
-        box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-    }
-
-    .icono {
-        text-align: center;
-        font-size: 52px;
-        margin-bottom: 10px;
-    }
-
-    h1 {
-        text-align: center;
-        font-size: 27px;
-        margin-bottom: 10px;
-    }
-
-    .descripcion {
-        text-align: center;
-        color: #8fa5bd;
-        font-size: 14px;
-        line-height: 1.6;
-        margin-bottom: 22px;
-    }
-
-    .etiqueta {
-        display: block;
-        margin: 18px 0 10px;
-        color: #b8c9dc;
-        font-size: 13px;
-        font-weight: bold;
-    }
-
-    input {
-        width: 100%;
-        padding: 13px;
-        background: #061226;
-        color: white;
-        border: 1px solid #204c78;
-        border-radius: 10px;
-        font-size: 15px;
-        outline: none;
-    }
-
-    input:focus {
-        border-color: #159dff;
-        box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-    }
-
-    .estado {
-        padding: 13px;
-        margin: 18px 0;
-        border: 1px solid #204c78;
-        border-radius: 10px;
-        background: #061226;
-        color: #a9c4df;
-        text-align: center;
-        font-size: 13px;
-        line-height: 1.5;
-        white-space: pre-line;
-    }
-
-    .estado.error {
-        color: #ffaaaa;
-        border-color: #843d4b;
-    }
-
-    .estado.correcto {
-        color: #8df5b0;
-        border-color: #24794a;
-    }
-
-    .catalogo {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 12px;
-    }
-
-    .producto {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 10px;
-        min-width: 0;
-        min-height: 125px;
-        padding: 15px 12px;
-        background: #061226;
-        color: white;
-        border: 1px solid #164b75;
-        border-radius: 13px;
-        text-align: left;
-        cursor: pointer;
-        transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .producto:hover:not(:disabled) {
-        border-color: #168cff;
-    }
-
-    .producto.seleccionado {
-        border-color: #00baff;
-        box-shadow: 0 0 12px rgba(0, 186, 255, 0.2);
-    }
-
-    .producto:disabled {
-        cursor: not-allowed;
-        opacity: 0.58;
-    }
-
-    .producto-nombre {
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 1.45;
-        overflow-wrap: anywhere;
-    }
-
-    .producto-precio {
-        color: #45c8ff;
-        font-size: 16px;
-        font-weight: 900;
-    }
-
-    .producto-estado {
-        color: #45c8ff;
-        font-size: 12px;
-        font-weight: bold;
-        line-height: 1.4;
-    }
-
-    .producto-no-disponible .producto-precio {
-        color: #8299b4;
-        font-size: 12px;
-    }
-
-    .producto-no-disponible .producto-estado {
-        color: #a0aabc;
-    }
-
-    .separador-ofertas {
-        margin-top: 22px;
-        padding-top: 18px;
-        border-top: 1px solid #164b8f;
-    }
-
-    .boton {
-        width: 100%;
-        padding: 14px;
-        border: none;
-        border-radius: 10px;
-        font-size: 15px;
-        font-weight: bold;
-    }
-
-    .continuar {
-        margin-top: 18px;
-        background: linear-gradient(90deg, #087cff, #00baff);
-        color: white;
-        cursor: pointer;
-    }
-
-    .continuar:disabled {
-        cursor: not-allowed;
-        opacity: 0.55;
-    }
-
-    .boton-ofertas {
-        background: #07152b;
-        color: #28a9ff;
-        border: 1px solid #168cff;
-        cursor: pointer;
-    }
-
-    .nota {
-        margin-top: 20px;
-        text-align: center;
-        color: #8299b4;
-        font-size: 11px;
-        line-height: 1.6;
-    }
-
-    @media (max-width: 380px) {
         body {
-            padding: 12px;
+            background: #050b18;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        .card {
-            padding: 22px 14px;
+        body.modal-abierto {
+            overflow: hidden;
         }
 
-        .catalogo {
-            grid-template-columns: 1fr;
+        .contenedor {
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .logo {
-            font-size: 17px;
+            font-size: 21px;
+            font-weight: 900;
         }
-    }
-</style>
 
-</head><body>
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 12px #008cff;
+        }
+
+        .volver {
+            color: #28a9ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #15518c;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        }
+
+        .icono {
+            text-align: center;
+            font-size: 52px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #8fa5bd;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .etiqueta {
+            display: block;
+            margin: 18px 0 10px;
+            color: #b8c9dc;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+        }
+
+        .ayuda {
+            margin-top: 7px;
+            color: #8299b4;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .estado {
+            padding: 13px;
+            margin: 18px 0;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            background: #061226;
+            color: #a9c4df;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+            white-space: pre-line;
+        }
+
+        .estado.error {
+            color: #ffaaaa;
+            border-color: #843d4b;
+        }
+
+        .estado.correcto {
+            color: #8fffc0;
+            border-color: #267b55;
+        }
+
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .producto {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+            min-height: 115px;
+            padding: 15px 12px;
+            background: #061226;
+            color: white;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            text-align: left;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        button.producto {
+            cursor: pointer;
+        }
+
+        .producto:hover:not(:disabled) {
+            border-color: #168cff;
+        }
+
+        .producto:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .producto.seleccionado {
+            border-color: #00baff;
+            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+        }
+
+        .producto-nombre {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .producto-precio {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .producto-estado {
+            color: #45c8ff;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .producto-no-disponible .producto-precio {
+            color: #8299b4;
+            font-size: 12px;
+        }
+
+        .producto-no-disponible .producto-estado {
+            color: #a0aabc;
+        }
+
+        .separador-ofertas {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #164b8f;
+        }
+
+        .boton {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .continuar {
+            margin-top: 18px;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .continuar:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+
+        .boton-ofertas {
+            background: #07152b;
+            color: #28a9ff;
+            border: 1px solid #168cff;
+            cursor: pointer;
+        }
+
+        .boton-ofertas:hover {
+            background: #0a2345;
+            border-color: #38a8ff;
+        }
+
+        .nota {
+            margin-top: 20px;
+            text-align: center;
+            color: #8299b4;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* VENTANA DE CONFIRMACIÓN: MISMO ESTILO QUE PUBG MOBILE */
+
+        .modal-fondo {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(1, 6, 17, 0.82);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-fondo.visible {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 390px;
+            padding: 24px 20px;
+            background: #091a35;
+            border: 1px solid #168cff;
+            border-radius: 18px;
+            box-shadow: 0 0 35px rgba(0, 140, 255, 0.2);
+            animation: aparecer 0.18s ease-out;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-titulo {
+            margin-bottom: 10px;
+            color: white;
+            font-size: 21px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .modal-descripcion {
+            margin-bottom: 18px;
+            color: #9fb4cc;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .modal-detalles {
+            padding: 14px;
+            margin-bottom: 20px;
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 11px;
+        }
+
+        .modal-fila {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 7px 0;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .modal-fila + .modal-fila {
+            border-top: 1px solid #173451;
+        }
+
+        .modal-etiqueta {
+            color: #8fa5bd;
+            flex-shrink: 0;
+        }
+
+        .modal-valor {
+            color: white;
+            font-weight: bold;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .modal-precio {
+            color: #43c5ff;
+            font-size: 16px;
+        }
+
+        .modal-botones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .modal-boton {
+            min-height: 45px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-cancelar {
+            color: #c6d4e4;
+            background: #07152b;
+            border: 1px solid #31506f;
+        }
+
+        .modal-cancelar:hover {
+            background: #10233c;
+        }
+
+        .modal-aceptar {
+            color: white;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            border: 1px solid #168cff;
+        }
+
+        .modal-aceptar:hover {
+            filter: brightness(1.1);
+        }
+
+        .modal-boton:disabled {
+            opacity: 0.55;
+            cursor: wait;
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 22px 14px;
+            }
+
+            .catalogo {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
+
+            .modal {
+                padding: 21px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
 <div class="contenedor">
     <header class="header">
         <div class="logo">
             <span class="rayo">⚡</span> Gamers Gold Top-Up
         </div>
         <a href="juegos.html" class="volver">← Juegos</a>
-    </header><main class="card">
-    <div class="icono">🔥</div>
-    <h1>Blood Strike</h1>
+    </header>
 
-    <p class="descripcion">
-        Selecciona tu paquete de BC de Blood Strike.
-    </p>
+    <main class="card">
+        <div class="icono">🔥</div>
+        <h1>Blood Strike</h1>
 
-    <label class="etiqueta" for="idjugador">
-        ID del jugador
-    </label>
+        <p class="descripcion">
+            Selecciona tu paquete de BC de Blood Strike.
+        </p>
 
-    <input
-        type="text"
-        id="idjugador"
-        placeholder="Introduce tu ID de Blood Strike"
-        autocomplete="off"
-        maxlength="50"
-    >
+        <label class="etiqueta" for="idjugador">
+            ID del jugador
+        </label>
 
-    <label class="etiqueta">
-        Selecciona una cantidad de BC
-    </label>
-
-    <div id="estadoCatalogo" class="estado" aria-live="polite">
-        Cargando paquetes de Blood Strike...
-    </div>
-
-    <div id="catalogo" class="catalogo"></div>
-
-    <button
-        id="botonContinuar"
-        class="boton continuar"
-        type="button"
-        disabled
-    >
-        RECARGAR
-    </button>
-
-    <div class="separador-ofertas">
-        <button
-            id="botonOfertas"
-            class="boton boton-ofertas"
-            type="button"
+        <input
+            type="text"
+            id="idjugador"
+            placeholder="Introduce tu ID de Blood Strike"
+            autocomplete="off"
+            maxlength="50"
         >
-            🎁 Ofertas especiales
+
+        <p class="ayuda">
+            Comprueba tu ID antes de confirmar la recarga.
+        </p>
+
+        <label class="etiqueta">
+            Selecciona una cantidad de BC
+        </label>
+
+        <div id="estadoCatalogo" class="estado" aria-live="polite">
+            Cargando paquetes de Blood Strike...
+        </div>
+
+        <div id="catalogo" class="catalogo"></div>
+
+        <button
+            id="botonContinuar"
+            class="boton continuar"
+            type="button"
+            disabled
+        >
+            RECARGAR
         </button>
+
+        <div class="separador-ofertas">
+            <button
+                id="botonOfertas"
+                class="boton boton-ofertas"
+                type="button"
+            >
+                🎁 Ofertas especiales
+            </button>
+        </div>
+
+        <p class="nota">
+            Los precios se muestran en GVR e incluyen decimales.
+            Comprueba tu ID antes de confirmar la recarga.
+            Si tienes un pedido pendiente, consulta su estado antes
+            de iniciar otra compra.
+        </p>
+    </main>
+</div>
+
+<!-- MODAL DE CONFIRMACIÓN -->
+
+<div
+    id="modalFondo"
+    class="modal-fondo"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitulo"
+    aria-describedby="modalDescripcion"
+>
+    <div class="modal">
+        <h2 id="modalTitulo" class="modal-titulo">
+            Confirmar recarga
+        </h2>
+
+        <p id="modalDescripcion" class="modal-descripcion">
+            Comprueba los datos antes de continuar.
+        </p>
+
+        <div class="modal-detalles">
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Juego</span>
+                <span class="modal-valor">Blood Strike</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Paquete</span>
+                <span id="modalProducto" class="modal-valor">—</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">ID del jugador</span>
+                <span id="modalJugador" class="modal-valor">—</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Total</span>
+                <span id="modalPrecio" class="modal-valor modal-precio">—</span>
+            </div>
+        </div>
+
+        <div class="modal-botones">
+            <button
+                id="modalCancelar"
+                class="modal-boton modal-cancelar"
+                type="button"
+            >
+                CANCELAR
+            </button>
+
+            <button
+                id="modalAceptar"
+                class="modal-boton modal-aceptar"
+                type="button"
+            >
+                ACEPTAR
+            </button>
+        </div>
     </div>
+</div>
 
-    <p class="nota">
-        Los precios se muestran en GVR e incluyen decimales.
-        Comprueba tu ID antes de confirmar la recarga.
-        Si tienes un pedido pendiente, consulta su estado antes
-        de iniciar otra compra.
-    </p>
-</main>
-
-</div><script type="module">
+<script type="module">
 "use strict";
 
 import { createClient } from
     "https://esm.sh/@supabase/supabase-js@2";
 
-/* CONFIGURACIÓN */
+/* CONFIGURACIÓN ORIGINAL: SE CONSERVAN LAS CONEXIONES */
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -358,6 +591,13 @@ const botonContinuar = document.getElementById("botonContinuar");
 const botonOfertas = document.getElementById("botonOfertas");
 const campoJugador = document.getElementById("idjugador");
 
+const modalFondo = document.getElementById("modalFondo");
+const modalProducto = document.getElementById("modalProducto");
+const modalJugador = document.getElementById("modalJugador");
+const modalPrecio = document.getElementById("modalPrecio");
+const modalCancelar = document.getElementById("modalCancelar");
+const modalAceptar = document.getElementById("modalAceptar");
+
 let productoSeleccionado = null;
 let productosDisponibles = [];
 let productosLocales = [];
@@ -365,8 +605,9 @@ let procesando = false;
 let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
+let resolverConfirmacion = null;
 
-/* NAVEGACIÓN */
+/* NAVEGACIÓN ORIGINAL */
 
 botonOfertas.addEventListener("click", () => {
     window.location.href = "ofertas-bloodstrike.html";
@@ -393,7 +634,73 @@ function normalizarTexto(valor) {
         .replace(/[\s_-]/g, "");
 }
 
-/* BOTÓN: VALIDACIÓN Y ESTADO */
+/* PRECIO EN GVR */
+
+function mostrarPrecio(precio) {
+    return Number(precio).toLocaleString("es-ES", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }) + " GVR";
+}
+
+/* MODAL VISUAL DE CONFIRMACIÓN: NO CAMBIA EL SISTEMA DE COMPRA */
+
+function abrirModalConfirmacion(producto, playerId, precio) {
+    modalProducto.textContent = obtenerNombre(producto);
+    modalJugador.textContent = playerId;
+    modalPrecio.textContent = mostrarPrecio(precio);
+
+    modalFondo.classList.add("visible");
+    document.body.classList.add("modal-abierto");
+
+    modalCancelar.disabled = false;
+    modalAceptar.disabled = false;
+
+    return new Promise(resolve => {
+        resolverConfirmacion = resolve;
+        modalCancelar.focus();
+    });
+}
+
+function cerrarModalConfirmacion(resultado) {
+    if (!resolverConfirmacion) return;
+
+    const resolver = resolverConfirmacion;
+    resolverConfirmacion = null;
+
+    modalFondo.classList.remove("visible");
+    document.body.classList.remove("modal-abierto");
+
+    modalCancelar.disabled = false;
+    modalAceptar.disabled = false;
+
+    resolver(resultado);
+}
+
+modalCancelar.addEventListener("click", () => {
+    cerrarModalConfirmacion(false);
+});
+
+modalAceptar.addEventListener("click", () => {
+    cerrarModalConfirmacion(true);
+});
+
+modalFondo.addEventListener("click", evento => {
+    if (evento.target === modalFondo) {
+        cerrarModalConfirmacion(false);
+    }
+});
+
+document.addEventListener("keydown", evento => {
+    if (
+        evento.key === "Escape" &&
+        modalFondo.classList.contains("visible")
+    ) {
+        cerrarModalConfirmacion(false);
+    }
+});
+
+/* BOTÓN: ESTADO ORIGINAL */
 
 function actualizarBoton() {
     if (procesando) {
@@ -427,7 +734,7 @@ function actualizarBoton() {
 
 campoJugador.addEventListener("input", actualizarBoton);
 
-/* PEDIDOS PENDIENTES */
+/* PEDIDOS PENDIENTES: SE CONSERVA EL SISTEMA ACTUAL */
 
 function clavePedidoPendiente(userId) {
     return "ggtopup_bloodstrike_pedido_" + userId;
@@ -485,10 +792,6 @@ function recuperarPedidoPendiente(userId) {
     } catch (error) {
         console.error("Referencia de pedido inválida:", error);
 
-        /*
-         * No permitimos una nueva compra si hay una referencia
-         * guardada dañada que necesita revisión.
-         */
         pedidoPendienteId = null;
         accionPendiente = "crear";
 
@@ -555,7 +858,7 @@ async function verificarPedidoGuardado(userId) {
     return true;
 }
 
-/* CATÁLOGO NEXT LEVEL */
+/* CATÁLOGO NEXT LEVEL ORIGINAL */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) return respuesta;
@@ -610,7 +913,7 @@ function esPaqueteBC(producto) {
     return esBC && !esOfertaEspecial;
 }
 
-/* PRODUCTOS LOCALES Y PRECIOS */
+/* PRODUCTOS LOCALES Y PRECIOS PROPIOS DE BLOOD STRIKE */
 
 async function cargarProductosLocales() {
     const { data, error } = await supabase
@@ -651,14 +954,7 @@ function productoComprable(productoLocal) {
         precio > 0;
 }
 
-function mostrarPrecio(precio) {
-    return Number(precio).toLocaleString("es-ES", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }) + " GVR";
-}
-
-/* DIBUJAR CATÁLOGO */
+/* DIBUJAR CATÁLOGO ORIGINAL DE BLOOD STRIKE */
 
 function renderizarCatalogo() {
     catalogo.replaceChildren();
@@ -720,7 +1016,6 @@ function renderizarCatalogo() {
                     "correcto"
                 );
 
-                /* CORRECCIÓN: recalcular el botón al seleccionar */
                 actualizarBoton();
             });
         }
@@ -728,11 +1023,10 @@ function renderizarCatalogo() {
         catalogo.appendChild(tarjeta);
     });
 
-    /* Después de dibujar, revisar el estado del botón */
     actualizarBoton();
 }
 
-/* CARGAR CATÁLOGO */
+/* CARGAR CATÁLOGO ORIGINAL */
 
 async function cargarCatalogo() {
     productoSeleccionado = null;
@@ -820,7 +1114,7 @@ async function cargarCatalogo() {
     }
 }
 
-/* LLAMADAS A EDGE FUNCTIONS */
+/* LLAMADAS A EDGE FUNCTIONS: SIN CAMBIOS */
 
 async function llamarFuncion(url, accessToken, body) {
     const respuesta = await fetch(url, {
@@ -852,7 +1146,7 @@ async function llamarFuncion(url, accessToken, body) {
     return datos;
 }
 
-/* CONSULTAR PEDIDO */
+/* CONSULTAR PEDIDO: MISMA LÓGICA ORIGINAL */
 
 async function consultarPedido(accessToken) {
     if (!pedidoPendienteId) {
@@ -909,17 +1203,13 @@ async function consultarPedido(accessToken) {
     );
 }
 
-/* ENVIAR PEDIDO EXISTENTE */
+/* ENVIAR PEDIDO EXISTENTE: MISMA LÓGICA ORIGINAL */
 
 async function enviarPedido(accessToken) {
     if (!pedidoPendienteId) {
         throw new Error("No hay ningún pedido guardado para enviar.");
     }
 
-    /*
-     * Si la respuesta se pierde, el sistema conserva la referencia
-     * del pedido y no crea automáticamente una compra nueva.
-     */
     accionPendiente = "consultar";
     guardarPedidoPendiente();
     actualizarBoton();
@@ -947,7 +1237,7 @@ async function enviarPedido(accessToken) {
     );
 }
 
-/* CREAR COMPRA */
+/* CREAR COMPRA: SOLO SE CAMBIA confirm() POR EL MODAL VISUAL */
 
 async function crearCompra(accessToken, playerId) {
     if (!productoSeleccionado) {
@@ -992,15 +1282,16 @@ async function crearCompra(accessToken, playerId) {
 
     const precioConfirmado = Number(productoActual.price_gvr);
 
-    const confirmar = confirm(
-        "Confirma tu recarga de Blood Strike:\n\n" +
-        "Paquete: " + obtenerNombre(productoSeleccionado.proveedor) + "\n" +
-        "ID de jugador: " + playerId + "\n" +
-        "Precio: " + mostrarPrecio(precioConfirmado) + "\n\n" +
-        "¿Deseas continuar con la recarga?"
+    const confirmar = await abrirModalConfirmacion(
+        productoSeleccionado.proveedor,
+        playerId,
+        precioConfirmado
     );
 
-    if (!confirmar) return;
+    if (!confirmar) {
+        mostrarEstado("Compra cancelada.");
+        return;
+    }
 
     mostrarEstado("Creando pedido. No cierres esta página...");
 
@@ -1035,7 +1326,7 @@ async function crearCompra(accessToken, playerId) {
     await enviarPedido(accessToken);
 }
 
-/* BOTÓN PRINCIPAL */
+/* BOTÓN PRINCIPAL: FLUJO ORIGINAL */
 
 botonContinuar.addEventListener("click", async () => {
     if (procesando) return;
@@ -1120,7 +1411,7 @@ botonContinuar.addEventListener("click", async () => {
     }
 });
 
-/* INICIO */
+/* INICIO ORIGINAL */
 
 async function iniciar() {
     try {
@@ -1143,6 +1434,6 @@ async function iniciar() {
 }
 
 iniciar();
-
-</script></body>
+</script>
+</body>
 </html>
