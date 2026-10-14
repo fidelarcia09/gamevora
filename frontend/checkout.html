@@ -375,15 +375,9 @@ h1 span {
 
 </main>
 
-<script>
-"use strict";
 
-/*
- IMPORTANTE:
- Este archivo consulta game_orders.
- Se asume que la tabla tiene las columnas id y user_id.
- No crea pedidos, no modifica saldos y no llama al proveedor.
-*/
+        <script>
+"use strict";
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -411,6 +405,8 @@ const idPedido =
     parametros.get("order");
 
 const $ = id => document.getElementById(id);
+
+let cargando = false;
 
 function texto(valor) {
     if (valor === null || valor === undefined || valor === "") {
@@ -509,7 +505,7 @@ function interpretarEstado(estado) {
             descripcion:
                 "El pedido figura como fallido. Consulta el historial para revisar su estado.",
             etiqueta: "FALLIDO",
-            icono: "!"
+            icono: "!",
         };
     }
 
@@ -517,8 +513,8 @@ function interpretarEstado(estado) {
         tipo: "en-proceso",
         titulo: "TU PEDIDO <span>ESTÁ EN PROCESO</span>",
         descripcion:
-            "Estamos esperando la confirmación final de tu recarga.",
-        etiqueta: "EN PROCESO",
+            "Estamos consultando el estado registrado para tu pedido.",
+        etiqueta: bonito(estado || "PENDIENTE").toUpperCase(),
         icono: "…"
     };
 }
@@ -553,16 +549,32 @@ function mostrarPedido(pedido) {
         ]))
     );
 
-    agregarFila(
-        "Producto",
-        elegir(pedido, [
-            "product_name",
-            "product",
-            "nombre_producto",
-            "game_currency_amount",
-            "item_name"
-        ])
-    );
+    const nombreProducto = elegir(pedido, [
+        "product_name",
+        "product",
+        "nombre_producto",
+        "item_name"
+    ]);
+
+    const cantidad = elegir(pedido, [
+        "game_currency_amount",
+        "cantidad",
+        "product_amount"
+    ]);
+
+    let productoMostrar = nombreProducto;
+
+    if (
+        nombreProducto &&
+        cantidad !== null &&
+        String(nombreProducto) !== String(cantidad)
+    ) {
+        productoMostrar = nombreProducto;
+    } else if (cantidad !== null) {
+        productoMostrar = cantidad;
+    }
+
+    agregarFila("Producto", productoMostrar);
 
     agregarFila(
         "ID del jugador",
@@ -613,6 +625,7 @@ function mostrarPedido(pedido) {
         elegir(pedido, [
             "id",
             "provider_order_id",
+            "provider_client_reference",
             "client_reference"
         ])
     );
@@ -628,7 +641,7 @@ function mostrarPedido(pedido) {
             "El pedido aparece como fallido. Esta pantalla no confirma por sí sola que se haya devuelto el saldo.";
     } else {
         $("aviso").textContent =
-            "No repitas la compra mientras el pedido siga pendiente o procesándose. Consulta el historial para comprobar las actualizaciones.";
+            "Este pedido todavía no figura como completado. No repitas la compra mientras verificamos su estado.";
     }
 }
 
@@ -643,6 +656,8 @@ function mostrarMensaje(mensaje) {
 }
 
 async function cargarPedido() {
+    if (cargando) return;
+
     if (!idPedido) {
         mostrarMensaje(
             "Falta el identificador del pedido. Abre esta página desde el historial de pedidos para consultar el pedido correcto."
@@ -650,46 +665,113 @@ async function cargarPedido() {
         return;
     }
 
-    const { data: sesionData, error: sesionError } =
-        await db.auth.getSession();
+    cargando = true;
 
-    const sesion = sesionData?.session;
+    try {
+        const { data: sesionData, error: sesionError } =
+            await db.auth.getSession();
 
-    if (sesionError || !sesion) {
+        const sesion = sesionData?.session;
+
+        if (sesionError || !sesion) {
+            mostrarMensaje(
+                "Inicia sesión con la cuenta que realizó la compra y vuelve a abrir el pedido."
+            );
+            return;
+        }
+
+        /*
+         * Consultamos únicamente el pedido del usuario autenticado.
+         * Esta página no crea pedidos, no cambia saldos
+         * y no envía órdenes a ningún proveedor.
+         */
+
+        const { data: pedido, error: errorPedido } = await db
+            .from("game_orders")
+            .select("*")
+            .eq("user_id", sesion.user.id)
+            .eq("id", idPedido)
+            .maybeSingle();
+
+        if (errorPedido) {
+            console.error(
+                "Error consultando game_orders:",
+                errorPedido
+            );
+
+            mostrarMensaje(
+                "No pudimos cargar el pedido. Comprueba tu conexión e inténtalo de nuevo."
+            );
+
+            return;
+        }
+
+        if (!pedido) {
+            mostrarMensaje(
+                "No encontramos ese pedido en tu cuenta. Entra desde Mis pedidos y abre el pedido correcto."
+            );
+
+            return;
+        }
+
+        /*
+         * game_orders guarda product_id, pero no necesariamente
+         * el nombre del juego ni el nombre del producto.
+         * Por eso consultamos game_products usando ese ID.
+         */
+
+        let pedidoCompleto = { ...pedido };
+
+        if (pedido.product_id) {
+            const { data: producto, error: errorProducto } = await db
+                .from("game_products")
+                .select("game, product_name, game_currency_amount")
+                .eq("id", pedido.product_id)
+                .maybeSingle();
+
+            if (errorProducto) {
+                console.warn(
+                    "No se pudieron consultar los detalles del producto:",
+                    errorProducto
+                );
+            }
+
+            if (producto) {
+                pedidoCompleto.game =
+                    producto.game ?? pedidoCompleto.game;
+
+                pedidoCompleto.product_name =
+                    producto.product_name ?? pedidoCompleto.product_name;
+
+                pedidoCompleto.game_currency_amount =
+                    producto.game_currency_amount ??
+                    pedidoCompleto.game_currency_amount;
+            }
+        }
+
+        mostrarPedido(pedidoCompleto);
+
+    } catch (error) {
+        console.error("Error inesperado:", error);
+
         mostrarMensaje(
-            "Inicia sesión con la cuenta que realizó la compra y vuelve a abrir el pedido."
+            "Ocurrió un error al consultar el pedido. Inténtalo de nuevo."
         );
-        return;
+
+    } finally {
+        cargando = false;
     }
+}
 
-    /*
-      La consulta limita los resultados al usuario autenticado.
-      RLS de Supabase también debe permanecer habilitado.
-    */
+cargarPedido();
 
-    const { data, error } = await db
-        .from("game_orders")
-        .select("*")
-        .eq("user_id", sesion.user.id)
-        .eq("id", idPedido)
-        .maybeSingle();
+/*
+ * Actualiza los datos cada 10 segundos.
+ * Solo vuelve a consultar; no compra ni modifica pedidos.
+ */
 
-    if (error) {
-        console.error("Error consultando pedido:", error);
-
-        mostrarMensaje(
-            "No pudimos cargar el pedido. Comprueba tu conexión e inténtalo de nuevo."
-        );
-
-        return;
-    }
-
-    if (!data) {
-        mostrarMensaje(
-            "No encontramos ese pedido en tu cuenta. Entra desde Mis pedidos y abre el pedido correcto."
-        );
-
-        return;
+setInterval(cargarPedido, 10000);
+        </script>        return;
     }
 
     mostrarPedido(data);
