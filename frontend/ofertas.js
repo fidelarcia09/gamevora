@@ -1,6 +1,6 @@
 /* =========================================================
    GAMERS GOLD TOP-UP
-   MOTOR DE OFERTAS Y PEDIDOS
+   MOTOR UNIVERSAL DE OFERTAS Y PEDIDOS
    ========================================================= */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -87,9 +87,14 @@ const ES_GENSHIN_IMPACT =
 
 const ES_ARENA_BREAKOUT =
     JUEGO_NORMALIZADO === "arenabreakout";
+
+const ES_PUBG_MOBILE =
+    JUEGO_NORMALIZADO === "pubgmobile";
+
 /*
- * Se conserva la habilitación anterior de cada juego.
- * El cambio de servidor solo afecta a Genshin Impact.
+ * Se conserva la habilitación previa de cada juego.
+ * PUBG se habilita solo si su propia configuración lo permite.
+ * Los demás juegos no cambian su configuración.
  */
 const ES_VENTAS_HABILITADAS =
     ES_FREE_FIRE ||
@@ -108,6 +113,10 @@ const ES_VENTAS_HABILITADAS =
     (
         ES_ARENA_BREAKOUT &&
         CONFIG?.habilitarCompras === true
+    ) ||
+    (
+        ES_PUBG_MOBILE &&
+        CONFIG?.habilitarCompras === true
     );
 
 let productosLocales = [];
@@ -123,6 +132,8 @@ let procesandoCompra = false;
 let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
+
+let resolverConfirmacionModal = null;
 
 const el = id => document.getElementById(id);
 
@@ -322,6 +333,84 @@ function obtenerPrecioLocal(producto) {
     return Number.isFinite(precio) && precio > 0
         ? precio
         : null;
+}
+
+
+/* =========================================================
+   CONFIRMACIÓN PERSONALIZADA
+   Se usa únicamente en PUBG Mobile.
+   ========================================================= */
+
+function cerrarModalConfirmacion(resultado) {
+    const modal = el("modalConfirmacionCompra");
+
+    if (modal) {
+        modal.classList.remove("abierto");
+        modal.setAttribute("aria-hidden", "true");
+    }
+
+    if (typeof resolverConfirmacionModal === "function") {
+        const resolver = resolverConfirmacionModal;
+        resolverConfirmacionModal = null;
+        resolver(resultado);
+    }
+}
+
+function confirmarConModalPersonalizado(datos) {
+    const modal = el("modalConfirmacionCompra");
+
+    if (!modal) {
+        return Promise.reject(
+            new Error("No se encontró la ventana de confirmación.")
+        );
+    }
+
+    if (resolverConfirmacionModal) {
+        cerrarModalConfirmacion(false);
+    }
+
+    el("modalNombreOferta").textContent = datos.nombre;
+    el("modalIdJugador").textContent = datos.playerId;
+    el("modalPrecioOferta").textContent = mostrarPrecio(datos.precio);
+
+    modal.classList.add("abierto");
+    modal.setAttribute("aria-hidden", "false");
+
+    return new Promise(resolve => {
+        resolverConfirmacionModal = resolve;
+    });
+}
+
+function inicializarModalConfirmacion() {
+    const aceptar = el("aceptarCompraBtn");
+    const cancelar = el("cancelarCompraBtn");
+    const modal = el("modalConfirmacionCompra");
+
+    if (aceptar) {
+        aceptar.addEventListener("click", () => {
+            cerrarModalConfirmacion(true);
+        });
+    }
+
+    if (cancelar) {
+        cancelar.addEventListener("click", () => {
+            cerrarModalConfirmacion(false);
+        });
+    }
+
+    if (modal) {
+        modal.addEventListener("click", evento => {
+            if (evento.target === modal) {
+                cerrarModalConfirmacion(false);
+            }
+        });
+    }
+
+    document.addEventListener("keydown", evento => {
+        if (evento.key === "Escape") {
+            cerrarModalConfirmacion(false);
+        }
+    });
 }
 
 
@@ -656,10 +745,12 @@ async function cargarOfertas() {
     );
 
     try {
-        const [proveedor] = await Promise.all([
+        const resultados = await Promise.all([
             consultarCatalogoNextLevel(),
             cargarProductosLocales()
         ]);
+
+        const proveedor = resultados[0];
 
         productosProveedor = proveedor;
         productosPorId = Object.create(null);
@@ -682,14 +773,7 @@ async function cargarOfertas() {
         configuradas.forEach(oferta => {
             const id = String(oferta.id || "").trim();
 
-            if (!id) {
-                console.warn(
-                    "[Gamers Gold] Oferta sin identificador:",
-                    oferta
-                );
-
-                return;
-            }
+            if (!id) return;
 
             const productoProveedor = productosPorId[id];
 
@@ -698,7 +782,6 @@ async function cargarOfertas() {
                     "[Gamers Gold] Oferta no encontrada en el catálogo:",
                     id
                 );
-
                 return;
             }
 
@@ -726,7 +809,6 @@ async function cargarOfertas() {
                 "No hay ofertas disponibles en este momento.",
                 true
             );
-
             return;
         }
 
@@ -761,7 +843,6 @@ function seleccionarOferta(
             "Consulta su estado antes de iniciar otra compra.",
             "error"
         );
-
         return;
     }
 
@@ -801,7 +882,7 @@ function seleccionarOferta(
     if (el("continuarBtn")) {
         el("continuarBtn").style.display = "block";
         el("continuarBtn").disabled = false;
-        el("continuarBtn").textContent = "Continuar ⚡";
+        el("continuarBtn").textContent = "Continuar";
     }
 
     ocultarEstadoPedido();
@@ -828,7 +909,10 @@ function cambiarPantalla(idMostrar) {
         }
     });
 
-    window.scrollTo(0, 0);
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 function irAConfirmacion() {
@@ -863,17 +947,13 @@ function irAConfirmacion() {
         el("idJugador").value = "";
     }
 
-    /*
-     * No se cambia ni se elimina el selector de servidor.
-     * Genshin necesita conservar la selección del usuario.
-     */
     ocultarEstadoPedido();
 
     const boton = el("confirmarBtn");
 
     if (boton) {
         boton.disabled = false;
-        boton.textContent = "Confirmar y recargar ⚡";
+        boton.textContent = "Confirmar y recargar";
     }
 
     cambiarPantalla("pantallaConfirmacion");
@@ -1070,9 +1150,8 @@ async function enviarPedido(accessToken) {
     }
 
     /*
-     * Se conserva la referencia y se pasa a consulta antes
-     * de enviar. Así no se repite una compra a ciegas si
-     * se pierde la respuesta de la Edge Function.
+     * Antes de llamar al proveedor, guardamos la referencia
+     * como consulta para evitar repetir el envío a ciegas.
      */
     accionPendiente = "consultar";
     guardarPedidoPendiente();
@@ -1181,15 +1260,9 @@ async function verificarPedidoGuardado(userId) {
 
 
 /* =========================================================
-   CREAR PEDIDO LOCAL
+   CREAR PEDIDO LOCAL Y ENVIARLO A NEXT LEVEL
    ========================================================= */
 
-/*
- * IMPORTANTE:
- * - Genshin valida y envía p_zone_id.
- * - Los demás juegos siguen enviando únicamente
- *   p_product_id y p_player_id, como antes.
- */
 async function crearCompra(
     accessToken,
     playerId,
@@ -1214,8 +1287,8 @@ async function crearCompra(
     }
 
     /*
-     * Validar el servidor únicamente en Genshin Impact.
-     * No se exige servidor a los demás juegos.
+     * Genshin es el único juego de este motor que necesita zona.
+     * PUBG continúa usando p_product_id y p_player_id.
      */
     if (ES_GENSHIN_IMPACT) {
         zoneId = String(zoneId || "").trim();
@@ -1237,7 +1310,7 @@ async function crearCompra(
     }
 
     /*
-     * Revalidar el producto en Supabase antes de cobrar.
+     * Volver a verificar producto y precio antes de comprar.
      */
     const { data: actual, error } = await supabase
         .from("game_products")
@@ -1274,18 +1347,32 @@ async function crearCompra(
 
     const precioConfirmado = Number(actual.price_gvr);
 
-    const confirmado = window.confirm(
-        `Confirma tu oferta de ${NOMBRE_JUEGO}:\n\n` +
-        `Oferta: ${productoSeleccionado.oferta.nombre}\n` +
-        `ID de jugador: ${playerId}\n` +
-        (
-            ES_GENSHIN_IMPACT
-                ? `Servidor: ${zoneId}\n`
-                : ""
-        ) +
-        `Precio: ${mostrarPrecio(precioConfirmado)}\n\n` +
-        "¿Deseas continuar con el pedido?"
-    );
+    /*
+     * PUBG utiliza la ventana personalizada.
+     * Los demás juegos conservan window.confirm().
+     */
+    let confirmado;
+
+    if (ES_PUBG_MOBILE) {
+        confirmado = await confirmarConModalPersonalizado({
+            nombre: productoSeleccionado.oferta.nombre,
+            playerId,
+            precio: precioConfirmado
+        });
+    } else {
+        confirmado = window.confirm(
+            `Confirma tu oferta de ${NOMBRE_JUEGO}:\n\n` +
+            `Oferta: ${productoSeleccionado.oferta.nombre}\n` +
+            `ID de jugador: ${playerId}\n` +
+            (
+                ES_GENSHIN_IMPACT
+                    ? `Servidor: ${zoneId}\n`
+                    : ""
+            ) +
+            `Precio: ${mostrarPrecio(precioConfirmado)}\n\n` +
+            "¿Deseas continuar con el pedido?"
+        );
+    }
 
     if (!confirmado) {
         return;
@@ -1296,8 +1383,7 @@ async function crearCompra(
     );
 
     /*
-     * Parámetros originales para todos los juegos.
-     * Solo Genshin recibe el parámetro adicional p_zone_id.
+     * RPC existente. PUBG no necesita p_zone_id.
      */
     const parametrosCompra = {
         p_product_id: actual.id,
@@ -1331,16 +1417,16 @@ async function crearCompra(
         typeof orderId !== "string" ||
         !UUID_RE.test(orderId)
     ) {
-        /*
-         * Si el RPC devolviera una forma inesperada, no se
-         * inicia una segunda compra automáticamente.
-         */
         throw new Error(
             "No recibimos un ID de pedido válido. " +
             "Revisa el estado del pedido antes de volver a intentarlo."
         );
     }
 
+    /*
+     * Guardar el UUID real devuelto por el RPC.
+     * La Edge Function usa ese mismo game_order_id.
+     */
     pedidoPendienteId = orderId;
     accionPendiente = "enviar";
 
@@ -1401,9 +1487,8 @@ async function manejarConfirmacion() {
         recuperarPedidoPendiente(user.id);
 
         /*
-         * La recuperación de pedidos existentes se conserva.
-         * No se les cambia el servidor ni se crean pedidos
-         * adicionales al recuperarlos.
+         * Recuperar primero cualquier pedido anterior.
+         * Nunca se crea otro pedido si el anterior sigue pendiente.
          */
         if (pedidoPendienteId) {
             await verificarPedidoGuardado(user.id);
@@ -1443,10 +1528,6 @@ async function manejarConfirmacion() {
             throw new Error("El ID de jugador es demasiado largo.");
         }
 
-        /*
-         * Solo se lee zonaJugador en Genshin Impact.
-         * Los demás juegos pasan null y conservan su flujo.
-         */
         const zoneId = ES_GENSHIN_IMPACT
             ? obtenerServidorGenshin()
             : null;
@@ -1482,7 +1563,7 @@ async function manejarConfirmacion() {
                 )
                 : (
                     ES_VENTAS_HABILITADAS
-                        ? "Confirmar y recargar ⚡"
+                        ? "Confirmar y recargar"
                         : "Ventas no habilitadas"
                 );
         }
@@ -1505,11 +1586,6 @@ async function consultarDesdeResultado() {
     }
 
     cambiarPantalla("pantallaConfirmacion");
-
-    /*
-     * El manejador detecta el pedido guardado y lo consulta
-     * sin crear un segundo pedido.
-     */
     await manejarConfirmacion();
 }
 
@@ -1548,13 +1624,15 @@ function inicializar() {
                 : "Las ventas de este juego aún no están habilitadas.";
     }
 
+    inicializarModalConfirmacion();
+
     const confirmar = el("confirmarBtn");
 
     if (confirmar) {
         confirmar.disabled = !ES_VENTAS_HABILITADAS;
 
         confirmar.textContent = ES_VENTAS_HABILITADAS
-            ? "Confirmar y recargar ⚡"
+            ? "Confirmar y recargar"
             : "Ventas no habilitadas";
 
         confirmar.addEventListener(
@@ -1574,10 +1652,28 @@ function inicializar() {
 
     const continuar = el("continuarBtn");
 
-if (continuar) {
-    continuar.disabled = true;
-    continuar.addEventListener("click", irAConfirmacion);
-}
+    if (continuar) {
+        continuar.disabled = true;
+        continuar.addEventListener("click", irAConfirmacion);
+    }
+
+    const cambiar = el("botonCambiar");
+
+    if (cambiar) {
+        cambiar.addEventListener("click", volverOfertas);
+    }
+
+    const volver = el("botonVolverOfertas");
+
+    if (volver) {
+        volver.addEventListener("click", () => {
+            /*
+             * No borramos la referencia de un pedido pendiente.
+             * Así se mantiene la protección contra duplicados.
+             */
+            volverOfertas();
+        });
+    }
 
     if (!CONFIG || !NOMBRE_JUEGO || !JUEGO_API) {
         actualizarEstadoCarga(
@@ -1592,10 +1688,6 @@ if (continuar) {
     cargarOfertas();
 }
 
-/*
- * La página HTML no debe declarar de nuevo estas funciones:
- * el módulo es el propietario de la navegación.
- */
 window.irAConfirmacion = irAConfirmacion;
 window.volverOfertas = volverOfertas;
 
@@ -1607,4 +1699,4 @@ if (document.readyState === "loading") {
     );
 } else {
     inicializar();
-       }
+   }
