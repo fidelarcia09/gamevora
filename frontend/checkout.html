@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b18">
+
+<title>Estado del pedido | Gamers Gold Top-Up</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --fondo: #050b18;
+    --panel: #09172b;
+    --azul: #08baff;
+    --verde: #39ff88;
+    --dorado: #ffd66b;
+    --texto: #f4f9ff;
+    --muted: #9eb6d4;
+    --borde: rgba(8,186,255,.35);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--texto);
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(ellipse at top, #10315b 0%, transparent 50%),
+        linear-gradient(145deg, #050b18, #020610);
+}
+
+a {
+    text-decoration: none;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 18px 16px;
+    border-bottom: 1px solid var(--borde);
+    background: rgba(3,10,24,.88);
+}
+
+.marca {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+.marca span {
+    display: block;
+    color: var(--azul);
+    font-size: 1.3em;
+    text-shadow: 0 0 15px rgba(8,186,255,.6);
+}
+
+.marca small {
+    display: block;
+    margin-top: 5px;
+    color: #b7d9f5;
+    font-size: 9px;
+    letter-spacing: 4px;
+}
+
+.enlace {
+    color: #8ce4ff;
+    border: 1px solid var(--borde);
+    padding: 9px 11px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+main {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    padding: 30px 16px;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.icono {
+    display: grid;
+    place-items: center;
+    width: 112px;
+    height: 112px;
+    margin: 0 auto 22px;
+    border: 4px solid var(--verde);
+    border-radius: 50%;
+    color: var(--verde);
+    background: radial-gradient(circle, #07512b, #031629);
+    font-size: 66px;
+    font-weight: 900;
+    text-shadow: 0 0 22px var(--verde);
+    box-shadow:
+        0 0 28px rgba(57,255,136,.25),
+        inset 0 0 20px rgba(57,255,136,.12);
+}
+
+.etiqueta {
+    color: var(--azul);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 4px;
+}
+
+h1 {
+    margin: 12px 0;
+    font-size: clamp(28px, 7vw, 43px);
+    font-weight: 1000;
+    font-style: italic;
+    line-height: 1.1;
+}
+
+h1 span {
+    color: var(--azul);
+}
+
+.descripcion {
+    max-width: 480px;
+    margin: auto;
+    color: #c1d7ed;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.tarjeta {
+    padding: 22px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    border-radius: 20px;
+    background: linear-gradient(145deg, #0a1b33, #030b19);
+    box-shadow: 0 0 32px rgba(0,139,255,.12);
+}
+
+.tarjeta-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 17px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid rgba(8,186,255,.2);
+}
+
+.tarjeta-cabecera h2 {
+    font-size: 15px;
+}
+
+.estado {
+    padding: 8px 10px;
+    border: 1px solid rgba(57,255,136,.5);
+    border-radius: 30px;
+    background: rgba(57,255,136,.08);
+    color: var(--verde);
+    font-size: 10px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(8,186,255,.14);
+}
+
+.fila:last-child {
+    border-bottom: none;
+}
+
+.nombre-campo {
+    margin-bottom: 7px;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.valor {
+    max-width: 62%;
+    overflow-wrap: anywhere;
+    text-align: right;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.precio {
+    color: var(--dorado);
+    font-size: 19px;
+}
+
+.aviso {
+    margin-top: 16px;
+    padding: 14px;
+    border: 1px solid rgba(8,186,255,.23);
+    border-radius: 12px;
+    background: rgba(8,130,255,.06);
+    color: #b9d9f5;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.botones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.boton {
+    display: block;
+    padding: 15px 10px;
+    border: 1px solid var(--azul);
+    border-radius: 12px;
+    background: linear-gradient(110deg, #087cff, #05b8ff);
+    box-shadow: 0 0 18px rgba(0,157,255,.18);
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.boton-secundario {
+    background: #061326;
+    color: #5cdbff;
+    box-shadow: none;
+}
+
+.pie {
+    padding: 27px 5px 5px;
+    color: #7897b9;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.mensaje {
+    padding: 20px 5px;
+    color: #c1d7ed;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.en-proceso .icono {
+    color: var(--dorado);
+    border-color: var(--dorado);
+    background: radial-gradient(circle, #49350a, #031629);
+    text-shadow: 0 0 20px var(--dorado);
+}
+
+.en-proceso .estado {
+    color: var(--dorado);
+    border-color: rgba(255,214,107,.5);
+    background: rgba(255,214,107,.08);
+}
+
+.fallido .icono,
+.reembolsado .icono {
+    color: #ffb45c;
+    border-color: #ffb45c;
+    background: radial-gradient(circle, #49240a, #031629);
+}
+
+.fallido .estado,
+.reembolsado .estado {
+    color: #ffb45c;
+    border-color: rgba(255,180,92,.5);
+    background: rgba(255,180,92,.08);
+}
+
+@media(max-width: 480px) {
+    header {
+        padding: 15px 10px;
+    }
+
+    .marca {
+        font-size: 14px;
+    }
+
+    .enlace {
+        padding: 8px;
+        font-size: 9px;
+    }
+
+    .tarjeta {
+        padding: 17px 13px;
+    }
+
+    .icono {
+        width: 98px;
+        height: 98px;
+        font-size: 56px;
+    }
+
+    .botones {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a class="enlace" href="../index.html">INICIO</a>
+
+    <div class="marca">
+        GAMERS
+        <span>GOLD</span>
+        <small>TOP-UP</small>
+    </div>
+
+    <a class="enlace" href="pedidos.html">MIS PEDIDOS</a>
+</header>
+
+<main id="contenedor">
+
+    <section class="hero">
+        <div class="icono" id="icono">✓</div>
+
+        <div class="etiqueta">GAMERS GOLD TOP-UP</div>
+
+        <h1 id="titulo">
+            CONSULTANDO <span>TU PEDIDO</span>
+        </h1>
+
+        <p class="descripcion" id="descripcion">
+            Estamos consultando el estado de tu recarga.
+        </p>
+    </section>
+
+    <section class="tarjeta">
+        <div class="tarjeta-cabecera">
+            <h2>DETALLES DEL PEDIDO</h2>
+            <span class="estado" id="estado">CONSULTANDO</span>
+        </div>
+
+        <div id="detalles">
+            <div class="mensaje">Cargando los datos del pedido...</div>
+        </div>
+    </section>
+
+    <div class="aviso" id="aviso">
+        El estado de la recarga se consulta a partir del pedido registrado.
+    </div>
+
+    <div class="botones">
+        <a class="boton" href="../index.html">VOLVER AL INICIO</a>
+        <a class="boton boton-secundario" href="pedidos.html">VER MIS PEDIDOS</a>
+    </div>
+
+    <footer class="pie">
+        GAMERS GOLD TOP-UP · © 2026
+    </footer>
+
+</main>
+
+<script>
+"use strict";
+
+/*
+ IMPORTANTE:
+ Este archivo consulta game_orders.
+ Se asume que la tabla tiene las columnas id y user_id.
+ No crea pedidos, no modifica saldos y no llama al proveedor.
+*/
+
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
+);
+
+const parametros = new URLSearchParams(location.search);
+
+const idPedido =
+    parametros.get("id") ||
+    parametros.get("pedido") ||
+    parametros.get("order");
+
+const $ = id => document.getElementById(id);
+
+function texto(valor) {
+    if (valor === null || valor === undefined || valor === "") {
+        return "—";
+    }
+
+    return String(valor);
+}
+
+function elegir(registro, columnas) {
+    for (const columna of columnas) {
+        if (
+            registro[columna] !== null &&
+            registro[columna] !== undefined &&
+            registro[columna] !== ""
+        ) {
+            return registro[columna];
+        }
+    }
+
+    return null;
+}
+
+function bonito(valor) {
+    return String(valor || "—")
+        .replace(/[_-]+/g, " ")
+        .replace(/\b\w/g, letra => letra.toUpperCase());
+}
+
+function agregarFila(nombre, valor, clase = "") {
+    const fila = document.createElement("div");
+    fila.className = "fila";
+
+    const izquierda = document.createElement("div");
+
+    const etiqueta = document.createElement("div");
+    etiqueta.className = "nombre-campo";
+    etiqueta.textContent = nombre;
+
+    izquierda.appendChild(etiqueta);
+
+    const derecha = document.createElement("div");
+    derecha.className = "valor " + clase;
+    derecha.textContent = texto(valor);
+
+    fila.append(izquierda, derecha);
+
+    $("detalles").appendChild(fila);
+}
+
+function interpretarEstado(estado) {
+    const valor = String(estado || "").toLowerCase();
+
+    if ([
+        "completed",
+        "complete",
+        "success",
+        "successful",
+        "completado",
+        "completada"
+    ].includes(valor)) {
+        return {
+            tipo: "completado",
+            titulo: "¡RECARGA <span>COMPLETADA!</span>",
+            descripcion:
+                "Tu pedido figura como completado. ¡Gracias por elegir Gamers Gold!",
+            etiqueta: "COMPLETADO",
+            icono: "✓"
+        };
+    }
+
+    if ([
+        "refunded",
+        "reembolsado",
+        "reembolsada"
+    ].includes(valor)) {
+        return {
+            tipo: "reembolsado",
+            titulo: "PEDIDO <span>REEMBOLSADO</span>",
+            descripcion:
+                "El pedido figura como reembolsado en el sistema.",
+            etiqueta: "REEMBOLSADO",
+            icono: "↺"
+        };
+    }
+
+    if ([
+        "failed",
+        "error",
+        "fallido",
+        "fallida"
+    ].includes(valor)) {
+        return {
+            tipo: "fallido",
+            titulo: "PEDIDO <span>NO COMPLETADO</span>",
+            descripcion:
+                "El pedido figura como fallido. Consulta el historial para revisar su estado.",
+            etiqueta: "FALLIDO",
+            icono: "!"
+        };
+    }
+
+    return {
+        tipo: "en-proceso",
+        titulo: "TU PEDIDO <span>ESTÁ EN PROCESO</span>",
+        descripcion:
+            "Estamos esperando la confirmación final de tu recarga.",
+        etiqueta: "EN PROCESO",
+        icono: "…"
+    };
+}
+
+function mostrarPedido(pedido) {
+    const estadoPedido = elegir(pedido, ["status", "estado"]);
+    const info = interpretarEstado(estadoPedido);
+
+    $("contenedor").classList.remove(
+        "en-proceso",
+        "fallido",
+        "reembolsado"
+    );
+
+    if (info.tipo !== "completado") {
+        $("contenedor").classList.add(info.tipo);
+    }
+
+    $("icono").textContent = info.icono;
+    $("titulo").innerHTML = info.titulo;
+    $("descripcion").textContent = info.descripcion;
+    $("estado").textContent = info.etiqueta;
+
+    $("detalles").replaceChildren();
+
+    agregarFila(
+        "Juego",
+        bonito(elegir(pedido, [
+            "game",
+            "game_name",
+            "nombre_juego"
+        ]))
+    );
+
+    agregarFila(
+        "Producto",
+        elegir(pedido, [
+            "product_name",
+            "product",
+            "nombre_producto",
+            "game_currency_amount",
+            "item_name"
+        ])
+    );
+
+    agregarFila(
+        "ID del jugador",
+        elegir(pedido, [
+            "player_id",
+            "playerId",
+            "game_player_id"
+        ])
+    );
+
+    const total = elegir(pedido, [
+        "price_gvr",
+        "total_gvr",
+        "amount_gvr",
+        "total",
+        "price"
+    ]);
+
+    agregarFila(
+        "Total del pedido",
+        total === null ? "—" : total + " GVR",
+        "precio"
+    );
+
+    const fecha = elegir(pedido, [
+        "created_at",
+        "inserted_at",
+        "created"
+    ]);
+
+    let fechaBonita = "—";
+
+    if (fecha) {
+        const fechaObjeto = new Date(fecha);
+
+        fechaBonita = Number.isNaN(fechaObjeto.getTime())
+            ? String(fecha)
+            : fechaObjeto.toLocaleString("es-ES", {
+                dateStyle: "medium",
+                timeStyle: "short"
+            });
+    }
+
+    agregarFila("Fecha", fechaBonita);
+
+    agregarFila(
+        "Número de pedido",
+        elegir(pedido, [
+            "id",
+            "provider_order_id",
+            "client_reference"
+        ])
+    );
+
+    if (info.tipo === "completado") {
+        $("aviso").textContent =
+            "El pedido aparece como completado según el estado registrado en la base de datos.";
+    } else if (info.tipo === "reembolsado") {
+        $("aviso").textContent =
+            "El pedido figura como reembolsado. Consulta tu Wallet y el historial de movimientos para revisar el reembolso.";
+    } else if (info.tipo === "fallido") {
+        $("aviso").textContent =
+            "El pedido aparece como fallido. Esta pantalla no confirma por sí sola que se haya devuelto el saldo.";
+    } else {
+        $("aviso").textContent =
+            "No repitas la compra mientras el pedido siga pendiente o procesándose. Consulta el historial para comprobar las actualizaciones.";
+    }
+}
+
+function mostrarMensaje(mensaje) {
+    $("detalles").replaceChildren();
+
+    const elemento = document.createElement("div");
+    elemento.className = "mensaje";
+    elemento.textContent = mensaje;
+
+    $("detalles").appendChild(elemento);
+}
+
+async function cargarPedido() {
+    if (!idPedido) {
+        mostrarMensaje(
+            "Falta el identificador del pedido. Abre esta página desde el historial de pedidos para consultar el pedido correcto."
+        );
+        return;
+    }
+
+    const { data: sesionData, error: sesionError } =
+        await db.auth.getSession();
+
+    const sesion = sesionData?.session;
+
+    if (sesionError || !sesion) {
+        mostrarMensaje(
+            "Inicia sesión con la cuenta que realizó la compra y vuelve a abrir el pedido."
+        );
+        return;
+    }
+
+    /*
+      La consulta limita los resultados al usuario autenticado.
+      RLS de Supabase también debe permanecer habilitado.
+    */
+
+    const { data, error } = await db
+        .from("game_orders")
+        .select("*")
+        .eq("user_id", sesion.user.id)
+        .eq("id", idPedido)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Error consultando pedido:", error);
+
+        mostrarMensaje(
+            "No pudimos cargar el pedido. Comprueba tu conexión e inténtalo de nuevo."
+        );
+
+        return;
+    }
+
+    if (!data) {
+        mostrarMensaje(
+            "No encontramos ese pedido en tu cuenta. Entra desde Mis pedidos y abre el pedido correcto."
+        );
+
+        return;
+    }
+
+    mostrarPedido(data);
+}
+
+cargarPedido();
+
+setInterval(cargarPedido, 10000);
+</script>
+
+</body>
+      </html>
