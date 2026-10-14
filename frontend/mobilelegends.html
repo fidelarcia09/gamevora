@@ -299,12 +299,25 @@
             Introduce el Zone ID que aparece junto a tu ID de jugador.
         </p>
 
+        <label class="etiqueta" for="regionJugador">
+            Seleccionar región
+        </label>
+
+        <select id="regionJugador">
+            <option value="global" selected>🌎 Global</option>
+            <option value="united_states">🇺🇸 United States</option>
+        </select>
+
+        <p class="ayuda">
+            Se mostrarán únicamente los paquetes disponibles para la región seleccionada.
+        </p>
+
         <label class="etiqueta">
             Selecciona una cantidad de diamantes
         </label>
 
         <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Cargando paquetes de Mobile Legends...
+            Conectando con el catálogo de Next Level...
         </div>
 
         <div id="catalogo" class="catalogo"></div>
@@ -341,9 +354,7 @@
 <script>
 "use strict";
 
-/* =====================================================
-   CONFIGURACIÓN
-===================================================== */
+/* CONFIGURACIÓN */
 
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -356,30 +367,26 @@ const URL_CATALOGO =
 
 const catalogo = document.getElementById("catalogo");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
+const regionJugador = document.getElementById("regionJugador");
 
 let productoSeleccionado = null;
+let productosCatalogo = [];
 let productosDisponibles = [];
 
-/* =====================================================
-   NAVEGACIÓN
-===================================================== */
+/* NAVEGACIÓN */
 
 function abrirOfertas() {
     window.location.href = "ofertas-mobilelegends.html";
 }
 
-/* =====================================================
-   MENSAJES
-===================================================== */
+/* MENSAJES */
 
 function mostrarEstado(mensaje, esError = false) {
     estadoCatalogo.textContent = mensaje;
     estadoCatalogo.classList.toggle("error", esError);
 }
 
-/* =====================================================
-   EXTRAER PRODUCTOS
-===================================================== */
+/* EXTRAER PRODUCTOS */
 
 function extraerProductos(respuesta) {
     if (Array.isArray(respuesta)) {
@@ -412,9 +419,7 @@ function extraerProductos(respuesta) {
     return [];
 }
 
-/* =====================================================
-   IDENTIFICAR PRODUCTOS
-===================================================== */
+/* IDENTIFICAR PRODUCTOS */
 
 function obtenerProductId(producto) {
     return String(
@@ -435,9 +440,7 @@ function obtenerNombre(producto) {
     ).trim();
 }
 
-/* =====================================================
-   FILTRAR RECARGAS DE DIAMANTES
-===================================================== */
+/* FILTRAR RECARGAS DE DIAMANTES */
 
 function esPaqueteDiamantes(producto) {
     const nombre = obtenerNombre(producto)
@@ -447,22 +450,12 @@ function esPaqueteDiamantes(producto) {
 
     const id = obtenerProductId(producto).toLowerCase();
 
-    /*
-       Excluir productos que sean pases, membresías
-       u ofertas que no correspondan a recargas normales.
-    */
-
     const palabrasExcluidas =
         /\b(pass|pase|membership|weekly|monthly|twilight|elite|starlight|subscription|suscripcion)\b/;
 
     if (palabrasExcluidas.test(nombre)) {
         return false;
     }
-
-    /*
-       Aceptar productos que indiquen diamantes,
-       diamonds o una referencia de diamantes en su ID.
-    */
 
     const indicaDiamantes =
         /\bdiamonds?\b|\bdiamantes?\b/.test(nombre) ||
@@ -471,17 +464,99 @@ function esPaqueteDiamantes(producto) {
     return indicaDiamantes;
 }
 
-/* =====================================================
-   CARGAR CATÁLOGO DE NEXT LEVEL
-===================================================== */
+/* FILTRAR POR REGIÓN */
+
+function perteneceALaRegion(producto, region) {
+    const id = obtenerProductId(producto).toLowerCase();
+
+    if (region === "global") {
+        return id.startsWith("fz-mobile_legends_global-");
+    }
+
+    if (region === "united_states") {
+        return id.startsWith("fz-mobile_legends_united_states-");
+    }
+
+    return false;
+}
+
+/* MOSTRAR PRODUCTOS DE LA REGIÓN */
+
+function mostrarProductosDeLaRegion() {
+    productoSeleccionado = null;
+
+    productosDisponibles = productosCatalogo.filter(producto =>
+        perteneceALaRegion(producto, regionJugador.value)
+    );
+
+    catalogo.replaceChildren();
+
+    const nombreRegion = regionJugador.value === "global"
+        ? "Global"
+        : "United States";
+
+    if (productosDisponibles.length === 0) {
+        mostrarEstado(
+            "No hay paquetes de diamantes disponibles para la región " +
+            nombreRegion + ".",
+            true
+        );
+        return;
+    }
+
+    productosDisponibles.forEach(producto => {
+        const tarjeta = document.createElement("button");
+        tarjeta.type = "button";
+        tarjeta.className = "producto";
+
+        const nombre = document.createElement("div");
+        nombre.className = "producto-nombre";
+        nombre.textContent = obtenerNombre(producto);
+
+        const estado = document.createElement("div");
+        estado.className = "producto-estado";
+        estado.textContent = "Seleccionar paquete";
+
+        tarjeta.append(nombre, estado);
+
+        tarjeta.addEventListener("click", () => {
+            document.querySelectorAll(".producto").forEach(elemento => {
+                elemento.classList.remove("seleccionado");
+            });
+
+            tarjeta.classList.add("seleccionado");
+            productoSeleccionado = producto;
+
+            console.log(
+                "PRODUCTO SELECCIONADO:",
+                obtenerProductId(productoSeleccionado)
+            );
+        });
+
+        catalogo.appendChild(tarjeta);
+    });
+
+    mostrarEstado(
+        productosDisponibles.length +
+        " paquetes disponibles para " + nombreRegion + "."
+    );
+}
+
+regionJugador.addEventListener(
+    "change",
+    mostrarProductosDeLaRegion
+);
+
+/* CARGAR CATÁLOGO DE NEXT LEVEL */
 
 async function cargarCatalogo() {
     productoSeleccionado = null;
+    productosCatalogo = [];
     productosDisponibles = [];
 
     catalogo.replaceChildren();
 
-    mostrarEstado("Cargando paquetes de Mobile Legends...");
+    mostrarEstado("Conectando con el catálogo de Next Level...");
 
     try {
         const respuesta = await fetch(
@@ -507,10 +582,7 @@ async function cargarCatalogo() {
             );
         }
 
-        console.log(
-            "CATÁLOGO MOBILE LEGENDS:",
-            resultado
-        );
+        console.log("CATÁLOGO MOBILE LEGENDS:", resultado);
 
         if (!respuesta.ok) {
             throw new Error(
@@ -524,14 +596,9 @@ async function cargarCatalogo() {
 
         if (productos.length === 0) {
             throw new Error(
-                "No se encontraron paquetes disponibles en este momento."
+                "Next Level no devolvió productos para Mobile Legends."
             );
         }
-
-        /*
-           Solo mostrar productos que el proveedor
-           marque expresamente como disponibles.
-        */
 
         const mapaProductos = new Map();
 
@@ -546,78 +613,32 @@ async function cargarCatalogo() {
                 return;
             }
 
-            /*
-               Evitar duplicados si el catálogo repite
-               un mismo identificador de producto.
-            */
-
             mapaProductos.set(id, producto);
         });
 
-        productosDisponibles = Array.from(
-            mapaProductos.values()
-        );
+        productosCatalogo = Array.from(mapaProductos.values());
 
         console.log(
             "PRODUCTOS MOBILE LEGENDS DISPONIBLES:",
-            productosDisponibles.map(producto => ({
+            productosCatalogo.map(producto => ({
                 id: obtenerProductId(producto),
                 nombre: obtenerNombre(producto)
             }))
         );
 
-        if (productosDisponibles.length === 0) {
+        if (productosCatalogo.length === 0) {
             mostrarEstado(
                 "No se encontraron recargas de diamantes disponibles. " +
-                "Es posible que debamos ajustar el filtro a los nombres reales del catálogo.",
+                "Comprueba el catálogo de Next Level.",
                 true
             );
             return;
         }
 
-        productosDisponibles.forEach(producto => {
-            const tarjeta = document.createElement("button");
-
-            tarjeta.type = "button";
-            tarjeta.className = "producto";
-
-            const nombre = document.createElement("div");
-            nombre.className = "producto-nombre";
-            nombre.textContent = obtenerNombre(producto);
-
-            const estado = document.createElement("div");
-            estado.className = "producto-estado";
-            estado.textContent = "Seleccionar paquete";
-
-            tarjeta.append(nombre, estado);
-
-            tarjeta.addEventListener("click", () => {
-                document.querySelectorAll(".producto").forEach(elemento => {
-                    elemento.classList.remove("seleccionado");
-                });
-
-                tarjeta.classList.add("seleccionado");
-                productoSeleccionado = producto;
-
-                console.log(
-                    "PRODUCTO SELECCIONADO:",
-                    obtenerProductId(productoSeleccionado)
-                );
-            });
-
-            catalogo.appendChild(tarjeta);
-        });
-
-        mostrarEstado(
-            productosDisponibles.length +
-            " paquetes disponibles."
-        );
+        mostrarProductosDeLaRegion();
 
     } catch (error) {
-        console.error(
-            "ERROR CARGANDO MOBILE LEGENDS:",
-            error
-        );
+        console.error("ERROR CARGANDO MOBILE LEGENDS:", error);
 
         catalogo.replaceChildren();
 
@@ -629,9 +650,7 @@ async function cargarCatalogo() {
     }
 }
 
-/* =====================================================
-   INICIALIZAR
-===================================================== */
+/* INICIALIZAR */
 
 cargarCatalogo();
 </script>
