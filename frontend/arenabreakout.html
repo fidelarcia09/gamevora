@@ -123,6 +123,11 @@
             border-color: #843d4b;
         }
 
+        .estado.correcto {
+            color: #8fffc0;
+            border-color: #267b55;
+        }
+
         .catalogo {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -147,8 +152,13 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .producto:hover {
+        .producto:hover:not(:disabled) {
             border-color: #168cff;
+        }
+
+        .producto:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
         }
 
         .producto.seleccionado {
@@ -163,10 +173,20 @@
             overflow-wrap: anywhere;
         }
 
+        .producto-precio {
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
         .producto-estado {
             color: #45c8ff;
             font-size: 12px;
             font-weight: bold;
+        }
+
+        .producto-no-disponible .producto-estado {
+            color: #ffcf8a;
         }
 
         .separador-ofertas {
@@ -188,7 +208,12 @@
             margin-top: 18px;
             background: linear-gradient(90deg, #087cff, #00baff);
             color: white;
-            cursor: not-allowed;
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .continuar:disabled {
+            cursor: wait;
             opacity: 0.55;
         }
 
@@ -197,6 +222,12 @@
             color: #28a9ff;
             border: 1px solid #168cff;
             cursor: pointer;
+            transition: background .2s, box-shadow .2s;
+        }
+
+        .boton-ofertas:hover {
+            background: #0b2040;
+            box-shadow: 0 0 12px rgba(0, 140, 255, .16);
         }
 
         .nota {
@@ -275,72 +306,34 @@
 
 <body>
 <div class="contenedor">
-
     <header class="header">
         <div class="logo">
             <span class="rayo">⚡</span> Gamers Gold Top-Up
         </div>
-
         <a href="juegos.html" class="volver">← Juegos</a>
     </header>
 
     <main class="card">
         <div class="icono">🎯</div>
-
         <h1>Arena Breakout</h1>
+        <p class="descripcion">Selecciona tu paquete de Bonds de Arena Breakout.</p>
 
-        <p class="descripcion">
-            Selecciona tu paquete de Bonds de Arena Breakout.
-        </p>
+        <label class="etiqueta" for="idjugador">ID del jugador</label>
+        <input type="text" id="idjugador" placeholder="Introduce tu ID" autocomplete="off" maxlength="100">
 
-        <label class="etiqueta" for="idjugador">
-            ID del jugador
-        </label>
-
-        <input
-            type="text"
-            id="idjugador"
-            placeholder="Introduce tu ID"
-            autocomplete="off"
-        >
-
-        <label class="etiqueta">
-            Selecciona una cantidad de Bonds
-        </label>
-
-        <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo...
-        </div>
-
+        <label class="etiqueta">Selecciona una cantidad de Bonds</label>
+        <div id="estadoCatalogo" class="estado" aria-live="polite">Cargando paquetes disponibles...</div>
         <div id="catalogo" class="catalogo"></div>
 
-        <button
-            id="botonContinuar"
-            class="boton continuar"
-            type="button"
-            disabled
-        >
-            Compras temporalmente desactivadas
-        </button>
+        <button id="botonContinuar" class="boton continuar" type="button" disabled>RECARGAR</button>
 
         <div class="separador-ofertas">
-            <button
-                class="boton boton-ofertas"
-                type="button"
-                onclick="abrirOfertas()"
-            >
-                🎁 Ofertas especiales
-            </button>
+            <button id="botonOfertas" class="boton boton-ofertas" type="button">🎁 Ofertas especiales</button>
         </div>
 
-        <p class="nota">
-            Consulta los paquetes disponibles de Arena Breakout.
-            Las compras se habilitarán cuando se configuren
-            los precios de venta y el sistema de pedidos.
-        </p>
+        <p class="nota">Los precios se muestran en GVR. Comprueba tu ID antes de confirmar la recarga.</p>
     </main>
 </div>
-
 
 <div aria-hidden="true" aria-labelledby="modalTitulo" aria-modal="true" class="modal-fondo" id="modalFondo" role="dialog">
     <div class="modal">
@@ -828,4 +821,5 @@ iniciar();
 
 </body>
 </html>
+
 
