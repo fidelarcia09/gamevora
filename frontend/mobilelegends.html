@@ -23,6 +23,10 @@
             padding: 20px;
         }
 
+        body.modal-abierto {
+            overflow: hidden;
+        }
+
         .contenedor {
             max-width: 650px;
             margin: auto;
@@ -54,7 +58,7 @@
             white-space: nowrap;
         }
 
-        .tarjeta {
+        .card {
             background: #091a35;
             border: 1px solid #15518c;
             border-radius: 20px;
@@ -131,11 +135,18 @@
             text-align: center;
             font-size: 13px;
             line-height: 1.5;
+            overflow-wrap: anywhere;
+            white-space: pre-line;
         }
 
         .estado.error {
             color: #ffaaaa;
             border-color: #843d4b;
+        }
+
+        .estado.correcto {
+            color: #8fffc0;
+            border-color: #267b55;
         }
 
         .catalogo {
@@ -151,19 +162,27 @@
             justify-content: space-between;
             gap: 12px;
             min-width: 0;
-            min-height: 125px;
+            min-height: 115px;
             padding: 15px 12px;
             background: #061226;
             color: white;
             border: 1px solid #164b75;
             border-radius: 13px;
             text-align: left;
-            cursor: pointer;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .producto:hover {
+        button.producto {
+            cursor: pointer;
+        }
+
+        .producto:hover:not(:disabled) {
             border-color: #168cff;
+        }
+
+        .producto:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
         }
 
         .producto.seleccionado {
@@ -176,6 +195,12 @@
             font-weight: bold;
             line-height: 1.45;
             overflow-wrap: anywhere;
+        }
+
+        .producto-precio {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: bold;
         }
 
         .producto-estado {
@@ -203,6 +228,11 @@
             margin-top: 18px;
             background: linear-gradient(90deg, #087cff, #00baff);
             color: white;
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .continuar:disabled {
             cursor: not-allowed;
             opacity: 0.55;
         }
@@ -227,12 +257,148 @@
             line-height: 1.6;
         }
 
+        /* VENTANA DE CONFIRMACIÓN */
+
+        .modal-fondo {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(1, 6, 17, 0.82);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-fondo.visible {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 390px;
+            padding: 24px 20px;
+            background: #091a35;
+            border: 1px solid #168cff;
+            border-radius: 18px;
+            box-shadow: 0 0 35px rgba(0, 140, 255, 0.2);
+            animation: aparecer 0.18s ease-out;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-titulo {
+            margin-bottom: 10px;
+            color: white;
+            font-size: 21px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .modal-descripcion {
+            margin-bottom: 18px;
+            color: #9fb4cc;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .modal-detalles {
+            padding: 14px;
+            margin-bottom: 20px;
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 11px;
+        }
+
+        .modal-fila {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 7px 0;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .modal-fila + .modal-fila {
+            border-top: 1px solid #173451;
+        }
+
+        .modal-etiqueta {
+            color: #8fa5bd;
+            flex-shrink: 0;
+        }
+
+        .modal-valor {
+            color: white;
+            font-weight: bold;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .modal-precio {
+            color: #43c5ff;
+            font-size: 16px;
+        }
+
+        .modal-botones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .modal-boton {
+            min-height: 45px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-cancelar {
+            color: #c6d4e4;
+            background: #07152b;
+            border: 1px solid #31506f;
+        }
+
+        .modal-cancelar:hover {
+            background: #10233c;
+        }
+
+        .modal-aceptar {
+            color: white;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            border: 1px solid #168cff;
+        }
+
+        .modal-aceptar:hover {
+            filter: brightness(1.1);
+        }
+
+        .modal-boton:disabled {
+            opacity: 0.55;
+            cursor: wait;
+        }
+
         @media (max-width: 380px) {
             body {
                 padding: 12px;
             }
 
-            .tarjeta {
+            .card {
                 padding: 22px 14px;
             }
 
@@ -242,6 +408,10 @@
 
             .logo {
                 font-size: 17px;
+            }
+
+            .modal {
+                padding: 21px 15px;
             }
         }
     </style>
@@ -259,7 +429,7 @@
         <a href="juegos.html" class="volver">← Juegos</a>
     </header>
 
-    <main class="tarjeta">
+    <main class="card">
 
         <div class="icono">💎</div>
 
@@ -278,6 +448,7 @@
             id="idJugador"
             placeholder="Introduce tu ID de jugador"
             autocomplete="off"
+            maxlength="100"
         >
 
         <p class="ayuda">
@@ -285,7 +456,7 @@
         </p>
 
         <label class="etiqueta" for="zonaJugador">
-            Servidor o zona
+            Zone ID
         </label>
 
         <input
@@ -293,6 +464,7 @@
             id="zonaJugador"
             placeholder="Introduce tu Zone ID"
             autocomplete="off"
+            maxlength="100"
         >
 
         <p class="ayuda">
@@ -304,12 +476,12 @@
         </label>
 
         <select id="regionJugador">
-            <option value="global" selected>🌎 Global</option>
-            <option value="united_states">🇺🇸 United States</option>
+            <option value="global" selected>Global</option>
+            <option value="united_states">United States</option>
         </select>
 
         <p class="ayuda">
-            Se mostrarán únicamente los paquetes disponibles para la región seleccionada.
+            Selecciona la región correspondiente a tu cuenta.
         </p>
 
         <label class="etiqueta">
@@ -317,7 +489,7 @@
         </label>
 
         <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo de Next Level...
+            Cargando paquetes de Mobile Legends...
         </div>
 
         <div id="catalogo" class="catalogo"></div>
@@ -328,31 +500,109 @@
             type="button"
             disabled
         >
-            Compras temporalmente desactivadas
+            RECARGAR
         </button>
 
         <div class="separador-ofertas">
             <button
                 class="boton boton-ofertas"
                 type="button"
-                onclick="abrirOfertas()"
+                id="botonOfertas"
             >
                 🎁 Ofertas especiales
             </button>
         </div>
 
         <p class="nota">
-            Los paquetes se consultan desde Next Level.
-            Las compras se habilitarán cuando se configuren
-            los precios y se complete la integración del sistema de pedidos.
+            Comprueba tu ID y tu Zone ID antes de confirmar la recarga.
+            No crees otro pedido mientras haya uno pendiente de confirmación.
         </p>
 
     </main>
-
 </div>
 
-<script>
+<!-- VENTANA DE CONFIRMACIÓN -->
+
+<div
+    id="modalFondo"
+    class="modal-fondo"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitulo"
+    aria-describedby="modalDescripcion"
+>
+    <div class="modal">
+
+        <h2 id="modalTitulo" class="modal-titulo">
+            Confirmar recarga
+        </h2>
+
+        <p id="modalDescripcion" class="modal-descripcion">
+            Comprueba los datos antes de continuar.
+        </p>
+
+        <div class="modal-detalles">
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Juego</span>
+                <span class="modal-valor">Mobile Legends</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Región</span>
+                <span id="modalRegion" class="modal-valor">—</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Paquete</span>
+                <span id="modalProducto" class="modal-valor">—</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">ID del jugador</span>
+                <span id="modalJugador" class="modal-valor">—</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Zone ID</span>
+                <span id="modalZona" class="modal-valor">—</span>
+            </div>
+
+            <div class="modal-fila">
+                <span class="modal-etiqueta">Total</span>
+                <span id="modalPrecio" class="modal-valor modal-precio">—</span>
+            </div>
+
+        </div>
+
+        <div class="modal-botones">
+
+            <button
+                id="modalCancelar"
+                class="modal-boton modal-cancelar"
+                type="button"
+            >
+                CANCELAR
+            </button>
+
+            <button
+                id="modalAceptar"
+                class="modal-boton modal-aceptar"
+                type="button"
+            >
+                ACEPTAR
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<script type="module">
 "use strict";
+
+import { createClient } from
+    "https://esm.sh/@supabase/supabase-js@2";
 
 /* CONFIGURACIÓN */
 
@@ -362,112 +612,259 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const URL_CATALOGO =
-    SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
+const URL_CREAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/nextlevel-crear-pedido";
+
+const URL_CONSULTAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
+
+const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
+);
+
+/* ELEMENTOS */
 
 const catalogo = document.getElementById("catalogo");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
+const botonContinuar = document.getElementById("botonContinuar");
+const botonOfertas = document.getElementById("botonOfertas");
+
+const campoJugador = document.getElementById("idJugador");
+const campoZona = document.getElementById("zonaJugador");
 const regionJugador = document.getElementById("regionJugador");
 
-let productoSeleccionado = null;
-let productosCatalogo = [];
+const modalFondo = document.getElementById("modalFondo");
+const modalRegion = document.getElementById("modalRegion");
+const modalProducto = document.getElementById("modalProducto");
+const modalJugador = document.getElementById("modalJugador");
+const modalZona = document.getElementById("modalZona");
+const modalPrecio = document.getElementById("modalPrecio");
+
+const modalCancelar = document.getElementById("modalCancelar");
+const modalAceptar = document.getElementById("modalAceptar");
+
+/* ESTADO */
+
 let productosDisponibles = [];
+let productoSeleccionado = null;
+
+let procesando = false;
+let usuarioActualId = null;
+let pedidoPendienteId = null;
+let resolverConfirmacion = null;
 
 /* NAVEGACIÓN */
 
-function abrirOfertas() {
+botonOfertas.addEventListener("click", () => {
     window.location.href = "ofertas-mobilelegends.html";
-}
+});
 
 /* MENSAJES */
 
-function mostrarEstado(mensaje, esError = false) {
+function mostrarEstado(mensaje, tipo = "") {
     estadoCatalogo.textContent = mensaje;
-    estadoCatalogo.classList.toggle("error", esError);
+
+    estadoCatalogo.classList.toggle(
+        "error",
+        tipo === "error"
+    );
+
+    estadoCatalogo.classList.toggle(
+        "correcto",
+        tipo === "correcto"
+    );
 }
 
-/* EXTRAER PRODUCTOS */
+function obtenerMensajeError(error, alternativo) {
+    return error?.message || alternativo;
+}
 
-function extraerProductos(respuesta) {
-    if (Array.isArray(respuesta)) {
-        return respuesta;
+/* PRECIOS */
+
+function mostrarPrecio(valor) {
+    const precio = Number(valor);
+
+    if (!Number.isFinite(precio) || precio <= 0) {
+        return "Precio no disponible";
     }
 
-    if (!respuesta || typeof respuesta !== "object") {
-        return [];
+    return precio.toLocaleString("es-ES", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }) + " GVR";
+}
+
+/* MODAL DE CONFIRMACIÓN */
+
+function abrirModalConfirmacion(producto, playerId, zoneId) {
+    modalRegion.textContent =
+        regionJugador.value === "global"
+            ? "Global"
+            : "United States";
+
+    modalProducto.textContent = producto.product_name;
+    modalJugador.textContent = playerId;
+    modalZona.textContent = zoneId;
+    modalPrecio.textContent = mostrarPrecio(producto.price_gvr);
+
+    modalFondo.classList.add("visible");
+    document.body.classList.add("modal-abierto");
+
+    modalCancelar.disabled = false;
+    modalAceptar.disabled = false;
+
+    return new Promise(resolve => {
+        resolverConfirmacion = resolve;
+        modalCancelar.focus();
+    });
+}
+
+function cerrarModalConfirmacion(resultado) {
+    if (!resolverConfirmacion) {
+        return;
     }
 
-    if (Array.isArray(respuesta.productos)) {
-        return respuesta.productos;
+    const resolver = resolverConfirmacion;
+    resolverConfirmacion = null;
+
+    modalFondo.classList.remove("visible");
+    document.body.classList.remove("modal-abierto");
+
+    modalCancelar.disabled = false;
+    modalAceptar.disabled = false;
+
+    resolver(resultado);
+}
+
+modalCancelar.addEventListener("click", () => {
+    cerrarModalConfirmacion(false);
+});
+
+modalAceptar.addEventListener("click", () => {
+    cerrarModalConfirmacion(true);
+});
+
+modalFondo.addEventListener("click", evento => {
+    if (evento.target === modalFondo) {
+        cerrarModalConfirmacion(false);
+    }
+});
+
+document.addEventListener("keydown", evento => {
+    if (
+        evento.key === "Escape" &&
+        modalFondo.classList.contains("visible")
+    ) {
+        cerrarModalConfirmacion(false);
+    }
+});
+
+/* PEDIDOS PENDIENTES */
+
+function clavePedidoPendiente(userId) {
+    return "ggtopup_mobilelegends_pedido_" + userId;
+}
+
+function guardarPedidoPendiente() {
+    if (!usuarioActualId || !pedidoPendienteId) {
+        return;
     }
 
-    if (Array.isArray(respuesta.products)) {
-        return respuesta.products;
+    localStorage.setItem(
+        clavePedidoPendiente(usuarioActualId),
+        pedidoPendienteId
+    );
+}
+
+function borrarPedidoPendiente() {
+    if (usuarioActualId) {
+        localStorage.removeItem(
+            clavePedidoPendiente(usuarioActualId)
+        );
     }
 
-    if (Array.isArray(respuesta.data)) {
-        return respuesta.data;
-    }
+    pedidoPendienteId = null;
+    actualizarBoton();
+}
+
+function recuperarPedidoPendiente(userId) {
+    usuarioActualId = userId;
+
+    pedidoPendienteId = localStorage.getItem(
+        clavePedidoPendiente(userId)
+    );
 
     if (
-        respuesta.data &&
-        Array.isArray(respuesta.data.products)
+        pedidoPendienteId &&
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+            pedidoPendienteId
+        )
     ) {
-        return respuesta.data.products;
+        mostrarEstado(
+            "Hay una referencia de pedido guardada que no se puede validar. " +
+            "No realices otra compra hasta revisar su estado.",
+            "error"
+        );
+
+        botonContinuar.disabled = true;
+        botonContinuar.textContent = "PEDIDO PENDIENTE";
+
+        return false;
     }
 
-    return [];
+    actualizarBoton();
+
+    return true;
 }
 
-/* IDENTIFICAR PRODUCTOS */
+function actualizarBoton() {
+    if (procesando) {
+        return;
+    }
 
-function obtenerProductId(producto) {
-    return String(
-        producto.productId ||
-        producto.product_id ||
-        producto.id ||
-        ""
-    ).trim();
+    if (pedidoPendienteId) {
+        botonContinuar.textContent = "CONSULTAR PEDIDO";
+        botonContinuar.disabled = false;
+        return;
+    }
+
+    botonContinuar.textContent = "RECARGAR";
+
+    botonContinuar.disabled = !productoSeleccionado;
 }
 
-function obtenerNombre(producto) {
-    return String(
-        producto.name ||
-        producto.productName ||
-        producto.product_name ||
-        producto.title ||
-        obtenerProductId(producto)
-    ).trim();
-}
-
-/* FILTRAR RECARGAS DE DIAMANTES */
+/* FILTRAR PAQUETES DE DIAMANTES */
 
 function esPaqueteDiamantes(producto) {
-    const nombre = obtenerNombre(producto)
+    const nombre = String(producto.product_name || "")
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase();
 
-    const id = obtenerProductId(producto).toLowerCase();
-
     const palabrasExcluidas =
-        /\b(pass|pase|membership|weekly|monthly|twilight|elite|starlight|subscription|suscripcion)\b/;
+        /\b(pass|pase|membership|weekly|monthly|twilight|elite|starlight|subscription|suscripcion|pack|paquete)\b/;
 
     if (palabrasExcluidas.test(nombre)) {
         return false;
     }
 
-    const indicaDiamantes =
-        /\bdiamonds?\b|\bdiamantes?\b/.test(nombre) ||
-        /diamond|diamante/.test(id);
-
-    return indicaDiamantes;
+    return /\bdiamonds?\b|\bdiamantes?\b/.test(nombre);
 }
 
-/* FILTRAR POR REGIÓN */
+/* FILTRAR REGIÓN */
 
 function perteneceALaRegion(producto, region) {
-    const id = obtenerProductId(producto).toLowerCase();
+    const id = String(
+        producto.provider_product_id || ""
+    ).toLowerCase();
 
     if (region === "global") {
         return id.startsWith("fz-mobile_legends_global-");
@@ -480,179 +877,620 @@ function perteneceALaRegion(producto, region) {
     return false;
 }
 
-/* MOSTRAR PRODUCTOS DE LA REGIÓN */
+/* CARGAR CATÁLOGO DESDE SUPABASE */
+
+async function cargarCatalogo() {
+    productosDisponibles = [];
+    productoSeleccionado = null;
+
+    catalogo.replaceChildren();
+    actualizarBoton();
+
+    mostrarEstado("Cargando paquetes de Mobile Legends...");
+
+    try {
+        const { data, error } = await supabase
+            .from("game_products")
+            .select(`
+                id,
+                game,
+                product_name,
+                game_currency_amount,
+                price_gvr,
+                active,
+                provider,
+                provider_product_id,
+                provider_region
+            `)
+            .eq("game", "mobile-legends")
+            .eq("active", true)
+            .eq("provider", "nextlevel")
+            .gt("game_currency_amount", 0)
+            .gt("price_gvr", 0)
+            .order("game_currency_amount", {
+                ascending: true
+            });
+
+        if (error) {
+            console.error(
+                "Error cargando el catálogo:",
+                error.message
+            );
+
+            throw new Error(
+                "No se pudieron cargar los paquetes. Inténtalo más tarde."
+            );
+        }
+
+        productosDisponibles = (data || []).filter(producto => {
+            const precio = Number(producto.price_gvr);
+
+            return (
+                producto.active === true &&
+                Boolean(producto.provider_product_id) &&
+                Number(producto.game_currency_amount) > 0 &&
+                Number.isFinite(precio) &&
+                precio > 0 &&
+                esPaqueteDiamantes(producto)
+            );
+        });
+
+        mostrarProductosDeLaRegion();
+
+    } catch (error) {
+        console.error(
+            "Error cargando Mobile Legends:",
+            error
+        );
+
+        catalogo.replaceChildren();
+
+        mostrarEstado(
+            obtenerMensajeError(
+                error,
+                "No se pudo cargar el catálogo."
+            ),
+            "error"
+        );
+    }
+}
+
+/* MOSTRAR PRODUCTOS POR REGIÓN */
 
 function mostrarProductosDeLaRegion() {
     productoSeleccionado = null;
 
-    productosDisponibles = productosCatalogo.filter(producto =>
+    catalogo.replaceChildren();
+    actualizarBoton();
+
+    const productosRegion = productosDisponibles.filter(producto =>
         perteneceALaRegion(producto, regionJugador.value)
     );
-
-    catalogo.replaceChildren();
 
     const nombreRegion = regionJugador.value === "global"
         ? "Global"
         : "United States";
 
-    if (productosDisponibles.length === 0) {
+    if (productosRegion.length === 0) {
         mostrarEstado(
             "No hay paquetes de diamantes disponibles para la región " +
             nombreRegion + ".",
-            true
+            "error"
         );
+
         return;
     }
 
-    productosDisponibles.forEach(producto => {
+    productosRegion.forEach(producto => {
         const tarjeta = document.createElement("button");
+
         tarjeta.type = "button";
         tarjeta.className = "producto";
 
         const nombre = document.createElement("div");
         nombre.className = "producto-nombre";
-        nombre.textContent = obtenerNombre(producto);
+        nombre.textContent = producto.product_name;
+
+        const precio = document.createElement("div");
+        precio.className = "producto-precio";
+        precio.textContent = mostrarPrecio(producto.price_gvr);
 
         const estado = document.createElement("div");
         estado.className = "producto-estado";
         estado.textContent = "Seleccionar paquete";
 
-        tarjeta.append(nombre, estado);
+        tarjeta.append(nombre, precio, estado);
 
         tarjeta.addEventListener("click", () => {
+            if (procesando || pedidoPendienteId) {
+                return;
+            }
+
             document.querySelectorAll(".producto").forEach(elemento => {
                 elemento.classList.remove("seleccionado");
             });
 
             tarjeta.classList.add("seleccionado");
-            productoSeleccionado = producto;
 
-            console.log(
-                "PRODUCTO SELECCIONADO:",
-                obtenerProductId(productoSeleccionado)
+            productoSeleccionado = producto;
+            estado.textContent = "Paquete seleccionado";
+
+            mostrarEstado(
+                producto.product_name +
+                " seleccionado · " +
+                mostrarPrecio(producto.price_gvr),
+                "correcto"
             );
+
+            actualizarBoton();
         });
 
         catalogo.appendChild(tarjeta);
     });
 
     mostrarEstado(
-        productosDisponibles.length +
+        productosRegion.length +
         " paquetes disponibles para " + nombreRegion + "."
     );
 }
 
-regionJugador.addEventListener(
-    "change",
-    mostrarProductosDeLaRegion
-);
+regionJugador.addEventListener("change", () => {
+    if (procesando || pedidoPendienteId) {
+        return;
+    }
 
-/* CARGAR CATÁLOGO DE NEXT LEVEL */
+    mostrarProductosDeLaRegion();
+});
 
-async function cargarCatalogo() {
-    productoSeleccionado = null;
-    productosCatalogo = [];
-    productosDisponibles = [];
+/* LLAMAR FUNCIONES DE PEDIDOS */
 
-    catalogo.replaceChildren();
+async function llamarFuncion(url, accessToken, body) {
+    const respuesta = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + accessToken
+        },
+        body: JSON.stringify(body)
+    });
 
-    mostrarEstado("Conectando con el catálogo de Next Level...");
+    let datos;
 
     try {
-        const respuesta = await fetch(
-            URL_CATALOGO + "?game=mobile-legends",
-            {
-                method: "GET",
-                headers: {
-                    "apikey": SUPABASE_KEY,
-                    "Authorization": "Bearer " + SUPABASE_KEY,
-                    "Accept": "application/json"
-                },
-                cache: "no-store"
-            }
+        datos = await respuesta.json();
+    } catch {
+        datos = {};
+    }
+
+    if (!respuesta.ok) {
+        const error = new Error(
+            datos.error ||
+            datos.message ||
+            "No se pudo procesar el pedido."
         );
 
-        let resultado;
+        error.status = respuesta.status;
+        error.data = datos;
 
-        try {
-            resultado = await respuesta.json();
-        } catch {
-            throw new Error(
-                "El catálogo devolvió una respuesta no válida."
-            );
-        }
+        throw error;
+    }
 
-        console.log("CATÁLOGO MOBILE LEGENDS:", resultado);
+    return datos;
+}
 
-        if (!respuesta.ok) {
-            throw new Error(
-                resultado.error ||
-                resultado.message ||
-                "Error HTTP " + respuesta.status
-            );
-        }
+/* VERIFICAR PEDIDO EXISTENTE */
 
-        const productos = extraerProductos(resultado);
+async function obtenerPedidoActual(userId) {
+    if (!pedidoPendienteId) {
+        return null;
+    }
 
-        if (productos.length === 0) {
-            throw new Error(
-                "Next Level no devolvió productos para Mobile Legends."
-            );
-        }
+    const { data, error } = await supabase
+        .from("game_orders")
+        .select(`
+            id,
+            user_id,
+            status,
+            provider_order_id,
+            provider_client_reference,
+            provider_submitted_at
+        `)
+        .eq("id", pedidoPendienteId)
+        .eq("user_id", userId)
+        .maybeSingle();
 
-        const mapaProductos = new Map();
-
-        productos.forEach(producto => {
-            if (!producto || producto.available !== true) {
-                return;
-            }
-
-            const id = obtenerProductId(producto);
-
-            if (!id || !esPaqueteDiamantes(producto)) {
-                return;
-            }
-
-            mapaProductos.set(id, producto);
-        });
-
-        productosCatalogo = Array.from(mapaProductos.values());
-
-        console.log(
-            "PRODUCTOS MOBILE LEGENDS DISPONIBLES:",
-            productosCatalogo.map(producto => ({
-                id: obtenerProductId(producto),
-                nombre: obtenerNombre(producto)
-            }))
+    if (error) {
+        console.error(
+            "Error verificando el pedido:",
+            error.message
         );
 
-        if (productosCatalogo.length === 0) {
-            mostrarEstado(
-                "No se encontraron recargas de diamantes disponibles. " +
-                "Comprueba el catálogo de Next Level.",
-                true
-            );
+        throw new Error(
+            "No se pudo verificar el pedido anterior. " +
+            "No iniciaremos otra compra."
+        );
+    }
+
+    if (!data) {
+        throw new Error(
+            "No se pudo confirmar el pedido anterior. " +
+            "Conservamos su referencia para evitar una compra duplicada."
+        );
+    }
+
+    const estadoPedido = String(data.status || "").toLowerCase();
+
+    if (estadoPedido === "completed") {
+        borrarPedidoPendiente();
+
+        mostrarEstado(
+            "¡Tu recarga se ha completado correctamente!",
+            "correcto"
+        );
+
+        return null;
+    }
+
+    if (estadoPedido === "refunded") {
+        borrarPedidoPendiente();
+
+        mostrarEstado(
+            "El pedido fue reembolsado.",
+            "correcto"
+        );
+
+        return null;
+    }
+
+    return data;
+}
+
+/* ENVIAR PEDIDO */
+
+async function enviarPedido(accessToken) {
+    if (!pedidoPendienteId) {
+        throw new Error(
+            "No hay un pedido pendiente para enviar."
+        );
+    }
+
+    mostrarEstado(
+        "Procesando tu pedido. No cierres esta página..."
+    );
+
+    const datos = await llamarFuncion(
+        URL_CREAR_PEDIDO,
+        accessToken,
+        {
+            game_order_id: pedidoPendienteId
+        }
+    );
+
+    if (datos.success !== true) {
+        throw new Error(
+            datos.error ||
+            datos.message ||
+            "No se confirmó el envío del pedido."
+        );
+    }
+
+    mostrarEstado(
+        "¡Pedido enviado correctamente!\n\n" +
+        "Número de pedido: " + pedidoPendienteId + "\n\n" +
+        "La recarga todavía debe completarse.",
+        "correcto"
+    );
+
+    alert(
+        "¡Pedido enviado!\n\n" +
+        "Número de pedido: " + pedidoPendienteId + "\n\n" +
+        "La recarga puede tardar unos momentos en completarse."
+    );
+}
+
+/* CONSULTAR ESTADO DEL PEDIDO */
+
+async function consultarPedido(accessToken) {
+    if (!pedidoPendienteId) {
+        throw new Error(
+            "No hay ningún pedido pendiente para consultar."
+        );
+    }
+
+    mostrarEstado("Consultando el estado de tu pedido...");
+
+    const datos = await llamarFuncion(
+        URL_CONSULTAR_PEDIDO,
+        accessToken,
+        {
+            game_order_id: pedidoPendienteId
+        }
+    );
+
+    const estadoPedido = String(
+        datos.status || ""
+    ).toLowerCase();
+
+    if (estadoPedido === "completed") {
+        borrarPedidoPendiente();
+
+        mostrarEstado(
+            "¡Tu recarga se ha completado correctamente!",
+            "correcto"
+        );
+
+        alert(
+            "¡Tu recarga de Mobile Legends se ha completado!"
+        );
+
+        return;
+    }
+
+    if (estadoPedido === "refunded") {
+        borrarPedidoPendiente();
+
+        mostrarEstado(
+            "El pedido fue reembolsado.",
+            "correcto"
+        );
+
+        return;
+    }
+
+    if (datos.reconciliation_required === true) {
+        mostrarEstado(
+            "El pedido necesita una revisión antes de continuar.\n\n" +
+            "Número de pedido: " + pedidoPendienteId + "\n\n" +
+            "No vuelvas a comprar el mismo paquete.",
+            "error"
+        );
+
+        return;
+    }
+
+    mostrarEstado(
+        datos.message ||
+        "El pedido continúa pendiente. Comprueba su estado antes de realizar otra compra."
+    );
+}
+
+/* CREAR COMPRA */
+
+async function crearCompra(accessToken, playerId, zoneId) {
+    if (!productoSeleccionado) {
+        throw new Error(
+            "Selecciona un paquete de diamantes."
+        );
+    }
+
+    const confirmado = await abrirModalConfirmacion(
+        productoSeleccionado,
+        playerId,
+        zoneId
+    );
+
+    if (!confirmado) {
+        mostrarEstado("Compra cancelada.");
+        return;
+    }
+
+    mostrarEstado("Registrando tu pedido...");
+
+    /*
+     * El servidor comprueba el producto, el precio y el saldo GVR.
+     * El Zone ID se guarda en el pedido para la recarga.
+     */
+
+    const { data: orderId, error } = await supabase.rpc(
+        "purchase_game_product",
+        {
+            p_product_id: productoSeleccionado.id,
+            p_player_id: playerId,
+            p_zone_id: zoneId
+        }
+    );
+
+    if (error) {
+        console.error(
+            "Error registrando la compra:",
+            error.message
+        );
+
+        throw new Error(
+            error.message ||
+            "No se pudo registrar la compra. Comprueba tu saldo."
+        );
+    }
+
+    if (
+        typeof orderId !== "string" ||
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+            orderId
+        )
+    ) {
+        throw new Error(
+            "No se recibió un número de pedido válido. " +
+            "Revisa el historial antes de volver a intentarlo."
+        );
+    }
+
+    /*
+     * Guardamos el pedido inmediatamente.
+     * Si falla el envío, se conserva esta misma referencia.
+     */
+
+    pedidoPendienteId = orderId;
+
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    await enviarPedido(accessToken);
+}
+
+/* BOTÓN PRINCIPAL */
+
+botonContinuar.addEventListener("click", async () => {
+    if (procesando) {
+        return;
+    }
+
+    procesando = true;
+
+    botonContinuar.disabled = true;
+    botonContinuar.textContent = "PROCESANDO...";
+
+    try {
+        const {
+            data: { session },
+            error: errorSesion
+        } = await supabase.auth.getSession();
+
+        if (errorSesion || !session?.access_token) {
+            window.location.href = "login.html";
             return;
         }
 
-        mostrarProductosDeLaRegion();
+        const {
+            data: { user },
+            error: errorUsuario
+        } = await supabase.auth.getUser();
+
+        if (errorUsuario || !user) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const referenciaValida = recuperarPedidoPendiente(user.id);
+
+        if (!referenciaValida) {
+            return;
+        }
+
+        /*
+         * Si hay un pedido guardado, se verifica antes
+         * de permitir una compra nueva.
+         */
+
+        if (pedidoPendienteId) {
+            const pedido = await obtenerPedidoActual(user.id);
+
+            if (!pedido) {
+                return;
+            }
+
+            if (pedido.provider_order_id) {
+                await consultarPedido(session.access_token);
+                return;
+            }
+
+            if (pedido.provider_client_reference) {
+                await consultarPedido(session.access_token);
+                return;
+            }
+
+            /*
+             * Se intenta enviar el mismo pedido.
+             * No se crea otro pedido ni se vuelve a descontar saldo.
+             */
+
+            await enviarPedido(session.access_token);
+            return;
+        }
+
+        const playerId = campoJugador.value.trim();
+        const zoneId = campoZona.value.trim();
+
+        if (!playerId) {
+            campoJugador.focus();
+
+            throw new Error(
+                "Introduce tu ID de jugador."
+            );
+        }
+
+        if (playerId.length > 100) {
+            throw new Error(
+                "El ID del jugador es demasiado largo."
+            );
+        }
+
+        if (!zoneId) {
+            campoZona.focus();
+
+            throw new Error(
+                "Introduce tu Zone ID."
+            );
+        }
+
+        if (zoneId.length > 100) {
+            throw new Error(
+                "El Zone ID es demasiado largo."
+            );
+        }
+
+        if (!productoSeleccionado) {
+            throw new Error(
+                "Selecciona primero un paquete de diamantes."
+            );
+        }
+
+        await crearCompra(
+            session.access_token,
+            playerId,
+            zoneId
+        );
 
     } catch (error) {
-        console.error("ERROR CARGANDO MOBILE LEGENDS:", error);
-
-        catalogo.replaceChildren();
-
-        mostrarEstado(
-            "No se pudo cargar el catálogo de Next Level. " +
-            error.message,
-            true
+        console.error(
+            "Error en la compra de Mobile Legends:",
+            error
         );
+
+        const mensaje = obtenerMensajeError(
+            error,
+            "No se pudo completar la operación."
+        );
+
+        if (pedidoPendienteId) {
+            mostrarEstado(
+                mensaje +
+                "\n\nNúmero de pedido: " + pedidoPendienteId +
+                "\nNo vuelvas a comprar mientras se revisa este pedido.",
+                "error"
+            );
+        } else {
+            mostrarEstado(mensaje, "error");
+        }
+
+    } finally {
+        procesando = false;
+        actualizarBoton();
     }
-}
+});
 
 /* INICIALIZAR */
 
-cargarCatalogo();
+async function iniciar() {
+    try {
+        const {
+            data: { session }
+        } = await supabase.auth.getSession();
+
+        if (session?.user?.id) {
+            recuperarPedidoPendiente(session.user.id);
+        }
+    } catch (error) {
+        console.error(
+            "Error recuperando la sesión:",
+            error
+        );
+    }
+
+    await cargarCatalogo();
+}
+
+iniciar();
 </script>
 
 </body>
