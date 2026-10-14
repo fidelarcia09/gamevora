@@ -182,11 +182,16 @@
         -webkit-tap-highlight-color: transparent;
     }
 
-    .boton-oferta:hover {
+    .boton-oferta:hover:not(:disabled) {
         border-color: #159dff;
         background: #0a1d38;
         transform: translateY(-2px);
         box-shadow: 0 0 18px rgba(0, 157, 255, 0.18);
+    }
+
+    .boton-oferta:disabled {
+        cursor: not-allowed;
+        opacity: 0.8;
     }
 
     .boton-oferta:focus-visible,
@@ -457,14 +462,14 @@
     }
 </style>
 
-</head><body><header>
+</head><body>
+<header>
     <div class="logo">
         <span class="rayo">⚡</span>
         Gamers Gold Top-Up
     </div><a href="mobilelegends.html" class="volver">← Volver</a>
 
 </header><main class="contenedor"><section id="pantallaOfertas" class="ofertas pantalla activa">
-
     <div class="icono">🎁</div>
 
     <h1>Ofertas Especiales</h1>
@@ -492,11 +497,10 @@
         id="continuarBtn"
         class="boton-principal"
         type="button"
-        onclick="irAConfirmacion()"
         style="display:none;"
         disabled
     >
-        Continuar ⚡
+        Continuar
     </button>
 
     <div id="notaOfertas" class="nota">
@@ -505,7 +509,6 @@
 </section>
 
 <section id="pantallaConfirmacion" class="ofertas pantalla">
-
     <div class="icono">💳</div>
 
     <h1>Confirmar pedido</h1>
@@ -538,6 +541,7 @@
             id="idJugador"
             placeholder="Escribe tu ID de jugador"
             autocomplete="off"
+            maxlength="80"
         >
     </div>
 
@@ -548,8 +552,17 @@
             id="zoneId"
             placeholder="Escribe tu Zone ID"
             autocomplete="off"
+            maxlength="30"
         >
     </div>
+
+    <div
+        id="estadoPedido"
+        class="estado"
+        role="status"
+        aria-live="polite"
+        style="display:none;"
+    ></div>
 
     <button
         id="confirmarBtn"
@@ -557,7 +570,7 @@
         type="button"
         disabled
     >
-        Compras desactivadas temporalmente
+        Ventas no habilitadas
     </button>
 
     <button
@@ -570,22 +583,35 @@
 </section>
 
 <section id="pantallaExito" class="ofertas pantalla">
-
     <div class="exito">
         <div class="icono-exito">ℹ️</div>
 
-        <h2>Compras en preparación</h2>
+        <h2 id="tituloEstadoPedido">Estado del pedido</h2>
 
-        <p>
-            Estamos preparando esta función. Por ahora no se registran pedidos desde esta página.
+        <p id="mensajeEstadoPedido">
+            Consulta el estado de tu pedido.
         </p>
 
+        <div
+            id="pedidoIdVisible"
+            class="pedido-id"
+            style="display:none;"
+        ></div>
+
         <button
+            id="consultarPedidoBtn"
             class="boton-principal"
+            type="button"
+        >
+            Consultar estado del pedido
+        </button>
+
+        <button
+            class="boton-secundario"
             type="button"
             onclick="window.location.href='mobilelegends.html'"
         >
-            Volver a Mobile Legends ⚡
+            Volver a Mobile Legends
         </button>
     </div>
 </section>
@@ -597,13 +623,39 @@ window.CONFIG_OFERTAS = {
     textoId: "ID del jugador de Mobile Legends",
     placeholderId: "Escribe tu ID de jugador",
 
+    /*
+     * Esta activación afecta exclusivamente a esta página,
+     * porque el motor comprueba también el nombre del juego.
+     */
+    habilitarCompras: true,
+
     ofertas: [
-        { nombre: "Weekly Elite Pack", emoji: "🎁" },
-        { nombre: "Weekly Pass", emoji: "🎟️" },
-        { nombre: "Weekly Diamond Pass", emoji: "💎" },
-        { nombre: "Monthly Elite Pack", emoji: "👑" },
-        { nombre: "Twilight Pass", emoji: "🌌" }
+        {
+            id: "fz-mobile_legends_global-weekly_elite_pack",
+            nombre: "Weekly Elite Pack",
+            emoji: "🎁"
+        },
+        {
+            id: "fz-mobile_legends_global-weekly_pass",
+            nombre: "Weekly Pass",
+            emoji: "🎟️"
+        },
+        {
+            id: "fz-mobile_legends_global-weekly_diamond_pass",
+            nombre: "Weekly Diamond Pass",
+            emoji: "💎"
+        },
+        {
+            id: "fz-mobile_legends_global-monthly_elite_pack",
+            nombre: "Monthly Elite Pack",
+            emoji: "👑"
+        },
+        {
+            id: "fz-mobile_legends_global-twilight_pass",
+            nombre: "Twilight Pass",
+            emoji: "🌌"
+        }
     ]
 };
-</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="ofertas.js?v=20261009mobilelegends2"></script></body>
+</script><script type="module" src="ofertas.js?v=20261013mobilelegends3"></script></body>
 </html>
