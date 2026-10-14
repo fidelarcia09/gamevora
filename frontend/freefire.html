@@ -883,8 +883,9 @@ function productoComprable(productoLocal) {
 
     const precio = Number(productoLocal.price_gvr);
 
+    // Los precios GVR pueden tener decimales (por ejemplo, 0.98).
     return productoLocal.active === true &&
-        Number.isSafeInteger(precio) &&
+        Number.isFinite(precio) &&
         precio > 0;
 }
 
@@ -1187,7 +1188,7 @@ async function crearCompra(accessToken, playerId) {
     if (
         !local ||
         local.active !== true ||
-        !Number.isSafeInteger(Number(local.price_gvr)) ||
+        !Number.isFinite(Number(local.price_gvr)) ||
         Number(local.price_gvr) <= 0 ||
         local.provider !== "nextlevel" ||
         !local.provider_product_id
@@ -1214,7 +1215,7 @@ async function crearCompra(accessToken, playerId) {
         normalizarTexto(productoActual.game) !== "freefire" ||
         String(productoActual.provider_product_id || "").trim() !==
             obtenerProductId(productoSeleccionado.proveedor) ||
-        !Number.isSafeInteger(Number(productoActual.price_gvr)) ||
+        !Number.isFinite(Number(productoActual.price_gvr)) ||
         Number(productoActual.price_gvr) <= 0
     ) {
         throw new Error(
@@ -1390,4 +1391,5 @@ iniciar();
 </script>
 </body>
     </html>
+
     
