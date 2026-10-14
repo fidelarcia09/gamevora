@@ -225,6 +225,12 @@
             color: #28a9ff;
             border: 1px solid #168cff;
             cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+
+        .boton-ofertas:hover {
+            background: #0b2040;
+            box-shadow: 0 0 12px rgba(0, 140, 255, 0.16);
         }
 
         .nota {
@@ -233,6 +239,139 @@
             color: #8299b4;
             font-size: 11px;
             line-height: 1.6;
+        }
+
+
+        .ayuda {
+            margin-top: 8px;
+            color: #8299b4;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        body.modal-abierto {
+            overflow: hidden;
+        }
+
+        .modal-fondo {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(1, 6, 17, 0.82);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-fondo.visible {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 390px;
+            padding: 24px 20px;
+            background: #091a35;
+            border: 1px solid #168cff;
+            border-radius: 18px;
+            box-shadow: 0 0 35px rgba(0, 140, 255, 0.22);
+            animation: modalAparecer 0.18s ease-out;
+        }
+
+        @keyframes modalAparecer {
+            from { opacity: 0; transform: translateY(8px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal h2 {
+            margin-bottom: 9px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        .modal-descripcion {
+            margin-bottom: 18px;
+            color: #8fa5bd;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .modal-detalles {
+            padding: 14px;
+            margin-bottom: 18px;
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 12px;
+        }
+
+        .modal-fila {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 8px 0;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .modal-fila + .modal-fila {
+            border-top: 1px solid rgba(32, 76, 120, 0.55);
+        }
+
+        .modal-fila span:first-child {
+            color: #8fa5bd;
+            flex-shrink: 0;
+        }
+
+        .modal-fila strong {
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .modal-total {
+            color: #45c8ff;
+            font-size: 16px;
+        }
+
+        .modal-botones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .modal-boton {
+            min-height: 44px;
+            padding: 12px 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-cancelar {
+            background: #07152b;
+            color: #c1d0e0;
+            border: 1px solid #204c78;
+        }
+
+        .modal-aceptar {
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            border: 0;
+        }
+
+        .modal-boton:disabled {
+            opacity: 0.55;
+            cursor: wait;
+        }
+
+        @media (max-width: 380px) {
+            .modal {
+                padding: 22px 15px;
+            }
         }
 
         @media (max-width: 380px) {
@@ -286,13 +425,14 @@
             autocomplete="off"
             maxlength="50"
         >
+        <p class="ayuda">Escribe tu ID de jugador y selecciona el paquete que deseas recibir.</p>
 
         <label class="etiqueta">
             Selecciona una cantidad de diamantes
         </label>
 
         <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Cargando paquetes de Free Fire...
+            Conectando con el catálogo...
         </div>
 
         <div id="catalogo" class="catalogo"></div>
@@ -301,6 +441,7 @@
             id="botonContinuar"
             class="boton continuar"
             type="button"
+            disabled
         >
             RECARGAR
         </button>
@@ -321,6 +462,39 @@
             si el anterior está pendiente de confirmación.
         </p>
     </main>
+</div>
+
+<div id="modalFondo" class="modal-fondo" role="dialog" aria-modal="true" aria-labelledby="modalTitulo" aria-hidden="true">
+    <div class="modal">
+        <h2 id="modalTitulo">Confirmar recarga</h2>
+        <p class="modal-descripcion">Comprueba los datos antes de continuar con tu pedido.</p>
+
+        <div class="modal-detalles">
+            <div class="modal-fila">
+                <span>Juego</span>
+                <strong>Free Fire</strong>
+            </div>
+            <div class="modal-fila">
+                <span>Paquete</span>
+                <strong id="modalPaquete">—</strong>
+            </div>
+            <div class="modal-fila">
+                <span>ID de jugador</span>
+                <strong id="modalJugador">—</strong>
+            </div>
+            <div class="modal-fila">
+                <span>Total</span>
+                <strong id="modalTotal" class="modal-total">—</strong>
+            </div>
+        </div>
+
+        <p class="modal-descripcion">La compra descontará GVR de tu saldo. Si hay un pedido pendiente, primero se verificará su estado.</p>
+
+        <div class="modal-botones">
+            <button id="modalCancelar" class="modal-boton modal-cancelar" type="button">CANCELAR</button>
+            <button id="modalAceptar" class="modal-boton modal-aceptar" type="button">ACEPTAR</button>
+        </div>
+    </div>
 </div>
 
 <script type="module">
@@ -361,7 +535,14 @@ const estadoCatalogo = document.getElementById("estadoCatalogo");
 const botonContinuar = document.getElementById("botonContinuar");
 const botonOfertas = document.getElementById("botonOfertas");
 const campoJugador = document.getElementById("idjugador");
+const modalFondo = document.getElementById("modalFondo");
+const modalPaquete = document.getElementById("modalPaquete");
+const modalJugador = document.getElementById("modalJugador");
+const modalTotal = document.getElementById("modalTotal");
+const modalCancelar = document.getElementById("modalCancelar");
+const modalAceptar = document.getElementById("modalAceptar");
 
+let resolverConfirmacionModal = null;
 let productoSeleccionado = null;
 let productosDisponibles = [];
 let productosLocales = [];
@@ -534,17 +715,77 @@ async function verificarPedidoGuardado(userId) {
 }
 
 function actualizarBoton() {
-    if (procesando) return;
+    if (procesando) {
+        botonContinuar.disabled = true;
+        return;
+    }
 
     if (pedidoPendienteId) {
         botonContinuar.textContent =
             accionPendiente === "enviar"
                 ? "RECUPERAR PEDIDO"
                 : "CONSULTAR PEDIDO";
-    } else {
-        botonContinuar.textContent = "RECARGAR";
+        // Siempre se permite retomar/consultar un pedido ya existente.
+        botonContinuar.disabled = false;
+        return;
+    }
+
+    botonContinuar.textContent = "RECARGAR";
+    botonContinuar.disabled =
+        !campoJugador.value.trim() || !productoSeleccionado;
+}
+
+function cerrarModalConfirmacion(resultado) {
+    modalFondo.classList.remove("visible");
+    modalFondo.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-abierto");
+
+    if (typeof resolverConfirmacionModal === "function") {
+        const resolver = resolverConfirmacionModal;
+        resolverConfirmacionModal = null;
+        resolver(resultado);
     }
 }
+
+function abrirModalConfirmacion(producto, playerId, precio) {
+    modalPaquete.textContent = obtenerNombre(producto);
+    modalJugador.textContent = playerId;
+    modalTotal.textContent = mostrarPrecio(precio);
+
+    modalFondo.classList.add("visible");
+    modalFondo.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-abierto");
+    modalCancelar.disabled = false;
+    modalAceptar.disabled = false;
+
+    return new Promise(resolve => {
+        resolverConfirmacionModal = resolve;
+        modalCancelar.focus();
+    });
+}
+
+modalCancelar.addEventListener("click", () => {
+    cerrarModalConfirmacion(false);
+});
+
+modalAceptar.addEventListener("click", () => {
+    cerrarModalConfirmacion(true);
+});
+
+modalFondo.addEventListener("click", event => {
+    if (event.target === modalFondo) {
+        cerrarModalConfirmacion(false);
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && modalFondo.classList.contains("visible")) {
+        cerrarModalConfirmacion(false);
+    }
+});
+
+campoJugador.addEventListener("input", actualizarBoton);
+
 
 /* CATÁLOGO: se conserva la lógica original. */
 
@@ -637,17 +878,13 @@ function buscarProductoLocal(productoProveedor) {
     ) || null;
 }
 
-/*
- * CORRECCIÓN 1:
- * Acepta precios decimales positivos, como 0.98 y 14.09 GVR.
- */
 function productoComprable(productoLocal) {
     if (!productoLocal) return false;
 
     const precio = Number(productoLocal.price_gvr);
 
     return productoLocal.active === true &&
-        Number.isFinite(precio) &&
+        Number.isSafeInteger(precio) &&
         precio > 0;
 }
 
@@ -714,11 +951,14 @@ function renderizarCatalogo() {
                     mostrarPrecio(Number(local.price_gvr)),
                     "correcto"
                 );
+                actualizarBoton();
             });
         }
 
         catalogo.appendChild(tarjeta);
     });
+
+    actualizarBoton();
 }
 
 async function cargarCatalogo() {
@@ -726,7 +966,7 @@ async function cargarCatalogo() {
     productosDisponibles = [];
     catalogo.replaceChildren();
 
-    mostrarEstado("Cargando paquetes de Free Fire...");
+    mostrarEstado("Conectando con el catálogo...");
 
     try {
         const [respuestaCatalogo] = await Promise.all([
@@ -761,7 +1001,7 @@ async function cargarCatalogo() {
         const productos = extraerProductos(resultado);
 
         if (!productos.length) {
-            throw new Error("No se encontraron paquetes disponibles en este momento.");
+            throw new Error("Next Level no devolvió productos.");
         }
 
         productosDisponibles = productos.filter(producto =>
@@ -788,7 +1028,7 @@ async function cargarCatalogo() {
 
         mostrarEstado(
             productosDisponibles.length +
-            " paquetes de Free Fire encontrados. " +
+            " paquetes del catálogo encontrados. " +
             comprables + " disponibles para comprar."
         );
 
@@ -797,7 +1037,7 @@ async function cargarCatalogo() {
         catalogo.replaceChildren();
 
         mostrarEstado(
-            mensajeError(error, "No se pudo cargar los paquetes."),
+            mensajeError(error, "No se pudo cargar el catálogo."),
             "error"
         );
     }
@@ -858,8 +1098,8 @@ async function consultarPedido(accessToken) {
 
     if (estadoLocal === "completed" || estadoLocal === "refunded") {
         const mensaje = estadoLocal === "completed"
-            ? "¡Tu recarga se ha completado correctamente!"
-            : "Tu pedido ha sido reembolsado.";
+            ? "¡Recarga completada por el proveedor!"
+            : "El pedido figura como reembolsado.";
 
         borrarPedidoPendiente();
         actualizarBoton();
@@ -879,8 +1119,8 @@ async function consultarPedido(accessToken) {
         actualizarBoton();
 
         mostrarEstado(
-            "No se pudo confirmar el estado de tu recarga. " +
-            "No realices otra compra hasta verificar el pedido.",
+            "El proveedor informa FAILED. No vuelvas a comprar el mismo paquete. " +
+            "Hay que verificar el pedido y el reembolso.",
             "error"
         );
 
@@ -944,15 +1184,10 @@ async function crearCompra(accessToken, playerId) {
 
     const local = productoSeleccionado.local;
 
-    /*
-     * CORRECCIÓN 2:
-     * Se permiten precios decimales positivos.
-     * Se conserva la validación del proveedor y del producto.
-     */
     if (
         !local ||
         local.active !== true ||
-        !Number.isFinite(Number(local.price_gvr)) ||
+        !Number.isSafeInteger(Number(local.price_gvr)) ||
         Number(local.price_gvr) <= 0 ||
         local.provider !== "nextlevel" ||
         !local.provider_product_id
@@ -974,17 +1209,12 @@ async function crearCompra(accessToken, playerId) {
         throw new Error("No se pudo verificar el producto antes de comprar.");
     }
 
-    /*
-     * CORRECCIÓN 3:
-     * También acepta precios decimales en la verificación
-     * del precio actual de Supabase antes de crear el pedido.
-     */
     if (
         !productoActual ||
         normalizarTexto(productoActual.game) !== "freefire" ||
         String(productoActual.provider_product_id || "").trim() !==
             obtenerProductId(productoSeleccionado.proveedor) ||
-        !Number.isFinite(Number(productoActual.price_gvr)) ||
+        !Number.isSafeInteger(Number(productoActual.price_gvr)) ||
         Number(productoActual.price_gvr) <= 0
     ) {
         throw new Error(
@@ -994,15 +1224,16 @@ async function crearCompra(accessToken, playerId) {
 
     const precioConfirmado = Number(productoActual.price_gvr);
 
-    const confirmar = confirm(
-        "Confirma tu recarga de Free Fire:\n\n" +
-        "Paquete: " + obtenerNombre(productoSeleccionado.proveedor) + "\n" +
-        "ID de jugador: " + playerId + "\n" +
-        "Precio: " + mostrarPrecio(precioConfirmado) + "\n\n" +
-        "¿Deseas confirmar esta recarga?"
+    const confirmar = await abrirModalConfirmacion(
+        productoSeleccionado.proveedor,
+        playerId,
+        precioConfirmado
     );
 
-    if (!confirmar) return;
+    if (!confirmar) {
+        mostrarEstado("Compra cancelada. No se creó ningún pedido.");
+        return;
+    }
 
     mostrarEstado("Creando pedido. No cierres esta página...");
 
@@ -1158,4 +1389,5 @@ async function iniciar() {
 iniciar();
 </script>
 </body>
-</html>
+    </html>
+    
