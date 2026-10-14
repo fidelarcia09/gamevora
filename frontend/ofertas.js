@@ -754,7 +754,12 @@ function crearTarjetaOferta(oferta, proveedor) {
 async function cargarOfertas() {
     const lista = el("listaOfertas");
 
-    if (!lista) return;
+    if (!lista) {
+        console.error(
+            "[Gamers Gold] No existe el elemento #listaOfertas."
+        );
+        return;
+    }
 
     if (el("precioSeleccionado")) {
         el("precioSeleccionado").style.display = "none";
@@ -778,17 +783,15 @@ async function cargarOfertas() {
     );
 
     try {
-        const resultados = await Promise.all([
+        const [catalogoProveedor] = await Promise.all([
             consultarCatalogoNextLevel(),
             cargarProductosLocales()
         ]);
 
-        const proveedor = resultados[0];
-
-        productosProveedor = proveedor;
+        productosProveedor = catalogoProveedor;
         productosPorId = Object.create(null);
 
-        proveedor.forEach(producto => {
+        catalogoProveedor.forEach(producto => {
             const id = obtenerIdProveedor(producto);
 
             if (id) {
@@ -796,24 +799,74 @@ async function cargarOfertas() {
             }
         });
 
-        const configuradas =
-            Array.isArray(CONFIG?.ofertas)
-                ? CONFIG.ofertas
-                : [];
+        const configuradas = Array.isArray(CONFIG?.ofertas)
+            ? CONFIG.ofertas
+            : [];
+
+        /*
+         * Busca primero por ID.
+         * Si la configuración antigua no tiene ID,
+         * intenta encontrar el producto por su nombre.
+         */
+        function buscarEnCatalogo(oferta) {
+            const idConfigurado = String(
+                oferta?.id || ""
+            ).trim();
+
+            if (idConfigurado && productosPorId[idConfigurado]) {
+                return productosPorId[idConfigurado];
+            }
+
+            const nombresBuscados = [
+                oferta?.nombre,
+                oferta?.product_name,
+                oferta?.productName,
+                oferta?.name
+            ]
+                .filter(Boolean)
+                .map(nombre => normalizarTexto(nombre));
+
+            if (!nombresBuscados.length) {
+                return null;
+            }
+
+            return catalogoProveedor.find(producto => {
+                const nombresProveedor = [
+                    producto?.name,
+                    producto?.productName,
+                    producto?.product_name,
+                    producto?.title
+                ]
+                    .filter(Boolean)
+                    .map(nombre => normalizarTexto(nombre));
+
+                return nombresBuscados.some(nombre =>
+                    nombresProveedor.includes(nombre)
+                );
+            }) || null;
+        }
 
         let cantidad = 0;
 
         configuradas.forEach(oferta => {
-            const id = String(oferta.id || "").trim();
-
-            if (!id) return;
-
-            const productoProveedor = productosPorId[id];
+            const productoProveedor = buscarEnCatalogo(oferta);
 
             if (!productoProveedor) {
                 console.warn(
-                    "[Gamers Gold] Oferta no encontrada en el catálogo:",
-                    id
+                    "[Gamers Gold] Oferta no encontrada en Next Level:",
+                    oferta?.id || oferta?.nombre
+                );
+                return;
+            }
+
+            const idProveedor = obtenerIdProveedor(
+                productoProveedor
+            );
+
+            if (!idProveedor) {
+                console.warn(
+                    "[Gamers Gold] Producto sin ID de proveedor:",
+                    productoProveedor
                 );
                 return;
             }
@@ -825,13 +878,27 @@ async function cargarOfertas() {
                 return;
             }
 
-            productosMostrados[id] = {
+            /*
+             * Evita mostrar el mismo producto dos veces.
+             */
+            if (productosMostrados[idProveedor]) {
+                return;
+            }
+
+            productosMostrados[idProveedor] = {
                 ...oferta,
+                id: idProveedor,
                 productoProveedor
             };
 
             lista.appendChild(
-                crearTarjetaOferta(oferta, productoProveedor)
+                crearTarjetaOferta(
+                    {
+                        ...oferta,
+                        id: idProveedor
+                    },
+                    productoProveedor
+                )
             );
 
             cantidad++;
@@ -839,19 +906,31 @@ async function cargarOfertas() {
 
         if (!cantidad) {
             actualizarEstadoCarga(
-                "No hay ofertas disponibles en este momento.",
-                true
+                "No encontramos ofertas configuradas que coincidan con el catálogo actual. Revisa los nombres y los IDs de los productos.",
+                true,
+                "error"
             );
+
+            console.warn(
+                "[Gamers Gold] No hubo coincidencias.",
+                {
+                    juego: NOMBRE_JUEGO,
+                    ofertasConfiguradas: configuradas,
+                    productosProveedor: catalogoProveedor
+                }
+            );
+
             return;
         }
 
         lista.style.display = "flex";
+
         actualizarEstadoCarga("", false);
 
         if (el("notaOfertas")) {
             el("notaOfertas").textContent =
                 ES_VENTAS_HABILITADAS
-                    ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
+                    ? "Precios en GVR. Comprueba tu ID antes de confirmar."
                     : "Las ventas de este juego aún no están habilitadas.";
         }
 
@@ -862,7 +941,9 @@ async function cargarOfertas() {
             "error"
         );
     }
-}
+                 }
+
+        
 
 function seleccionarOferta(
     tarjeta,
