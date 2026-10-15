@@ -1160,48 +1160,53 @@ async function enviarPedido(accessToken) {
         throw new Error("No hay ningún pedido guardado para enviar.");
     }
 
-    /*
-     * Conservamos el identificador del pedido existente.
-     * No se crea un pedido nuevo desde el checkout.
-     */
     const idPedido = pedidoPendienteId;
 
-    /*
-     * Guardamos la referencia antes de llamar al servidor.
-     * Si la respuesta falla, podremos recuperar el pedido.
-     */
+    // Guardamos el pedido antes de contactar con el proveedor.
     accionPendiente = "consultar";
     guardarPedidoPendiente();
     actualizarBoton();
 
-    const datos = await llamarFuncion(
-        URL_CREAR_PEDIDO,
-        accessToken,
-        { game_order_id: idPedido }
-    );
+    try {
+        const datos = await llamarFuncion(
+            URL_CREAR_PEDIDO,
+            accessToken,
+            { game_order_id: idPedido }
+        );
 
-    /*
-     * La función respondió correctamente.
-     * Conservamos la referencia hasta que el pedido alcance
-     * un estado final confirmado en la base de datos.
-     */
-    accionPendiente = "consultar";
-    guardarPedidoPendiente();
-    actualizarBoton();
+        console.log("Respuesta de crear pedido:", datos);
 
-    mostrarEstado(
-        datos.message ||
-        "Solicitud procesada. Abriendo el seguimiento del pedido...",
-        "correcto"
-    );
+        mostrarEstado(
+            datos.message ||
+            "Solicitud procesada. Abriendo el seguimiento del pedido...",
+            "correcto"
+        );
 
-    /*
-     * Abrimos el checkout existente utilizando el UUID real
-     * de game_orders. No generamos otra compra.
-     */
-    window.location.assign(
-"/frontend/checkout.html?id=" + encodeURIComponent(idPedido)
-);
+    } catch (error) {
+        /*
+         * No creamos otro pedido ni borramos el existente.
+         * Guardamos el error para poder diagnosticarlo.
+         */
+        console.error(
+            "Error al enviar el pedido existente:",
+            error,
+            error.data || ""
+        );
+
+        mostrarEstado(
+            "No se pudo confirmar el envío. Abriendo el seguimiento " +
+            "del pedido existente para verificar su estado.",
+            "error"
+        );
+    }
+
+    // Abrimos el checkout con el UUID real de game_orders.
+    // No se crea una segunda compra.
+    window.location.href =
+        new URL(
+            "checkout.html?id=" + encodeURIComponent(idPedido),
+            window.location.href
+        ).href;
     }
 /* CREAR COMPRA LOCAL */
 
