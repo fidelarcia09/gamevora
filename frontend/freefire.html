@@ -1199,11 +1199,9 @@ async function enviarPedido(accessToken) {
      * Abrimos el checkout existente utilizando el UUID real
      * de game_orders. No generamos otra compra.
      */
-    window.location.href =
-    new URL(
-        "checkout.html?id=" + encodeURIComponent(idPedido),
-        window.location.href
-    ).href;
+    window.location.assign(
+"/frontend/checkout.html?id=" + encodeURIComponent(idPedido)
+);
     }
 /* CREAR COMPRA LOCAL */
 
