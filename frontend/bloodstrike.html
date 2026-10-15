@@ -1221,34 +1221,55 @@ async function consultarPedido(accessToken) {
 /* ENVIAR PEDIDO EXISTENTE: MISMA LÓGICA ORIGINAL */
 
 async function enviarPedido(accessToken) {
-    if (!pedidoPendienteId) {
-        throw new Error("No hay ningún pedido guardado para enviar.");
-    }
+if (!pedidoPendienteId) {
+throw new Error("No hay ningún pedido guardado para enviar.");
+}
 
-    accionPendiente = "consultar";
-    guardarPedidoPendiente();
-    actualizarBoton();
+const idPedido = pedidoPendienteId;
 
+// Guardamos el pedido antes de contactar con el proveedor.
+accionPendiente = "consultar";
+guardarPedidoPendiente();
+actualizarBoton();
+
+try {
     const datos = await llamarFuncion(
         URL_CREAR_PEDIDO,
         accessToken,
-        { game_order_id: pedidoPendienteId }
+        { game_order_id: idPedido }
     );
 
-    accionPendiente = "consultar";
-    guardarPedidoPendiente();
-    actualizarBoton();
+    console.log("Respuesta de crear pedido:", datos);
 
     mostrarEstado(
         datos.message ||
-        "Solicitud procesada. Consulta el estado antes de comprar otra vez.",
+        "Solicitud procesada. Abriendo el seguimiento del pedido...",
         "correcto"
     );
 
-        window.location.href =
-    "/frontend/checkout.html?id=" +
-    encodeURIComponent(pedidoPendienteId);
+} catch (error) {
+    // Conservamos el pedido y abrimos su seguimiento.
+    // No creamos otra compra ni volvemos a descontar GVR.
+    console.error(
+        "Error al enviar el pedido existente:",
+        error,
+        error.data || ""
+    );
+
+    mostrarEstado(
+        "No se pudo confirmar el envío. Abriendo el seguimiento " +
+        "del pedido existente para verificar su estado.",
+        "error"
+    );
 }
+
+// Abrimos el checkout con el UUID del pedido existente.
+window.location.href = new URL(
+    "checkout.html?id=" + encodeURIComponent(idPedido),
+    window.location.href
+).href;
+
+    }
 
 /* CREAR COMPRA: SOLO SE CAMBIA confirm() POR EL MODAL VISUAL */
 
