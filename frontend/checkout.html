@@ -11,8 +11,6 @@
         content="Consulta el estado de tu recarga en Gamers Gold Top-Up."
     >
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <style>
         * {
             box-sizing: border-box;
@@ -445,7 +443,9 @@
 
 </main>
 
-<script>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
 "use strict";
 
 /* =====================================================
@@ -458,7 +458,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabase = window.supabase.createClient(
+const supabase = createClient(
     SUPABASE_URL,
     SUPABASE_KEY,
     {
