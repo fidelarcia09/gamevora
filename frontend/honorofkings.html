@@ -789,13 +789,63 @@ async function consultarPedido(accessToken) {
 }
 
 async function enviarPedido(accessToken) {
-    if (!pedidoPendienteId) throw new Error("No hay un pedido pendiente para enviar.");
+    if (!pedidoPendienteId) {
+        throw new Error(
+            "No hay un pedido pendiente para enviar."
+        );
+    }
+
+    const idPedido = pedidoPendienteId;
+
+    // Conservamos el pedido y su referencia original.
     accionPendiente = "consultar";
     guardarPedidoPendiente();
     actualizarBoton();
-    const resultado = await llamarFuncion(URL_CREAR_PEDIDO, accessToken, { game_order_id: pedidoPendienteId });
-    mostrarEstado(resultado.message || "Solicitud procesada. Consulta el estado antes de realizar otra compra.", "correcto");
-}
+
+    mostrarEstado(
+        "Procesando tu pedido. No cierres esta página..."
+    );
+
+    try {
+        const resultado = await llamarFuncion(
+            URL_CREAR_PEDIDO,
+            accessToken,
+            {
+                game_order_id: idPedido
+            }
+        );
+
+        console.log(
+            "Respuesta de crear pedido:",
+            resultado
+        );
+
+        mostrarEstado(
+            resultado.message ||
+            "Solicitud procesada. Abriendo el seguimiento del pedido...",
+            "correcto"
+        );
+
+    } catch (error) {
+        console.error(
+            "Error al enviar el pedido existente:",
+            error,
+            error.data || ""
+        );
+
+        mostrarEstado(
+            "No se pudo confirmar el envío. Abriendo el seguimiento " +
+            "del pedido existente para verificar su estado.",
+            "error"
+        );
+    }
+
+    // Abrimos el checkout del mismo pedido.
+    window.location.href = new URL(
+        "checkout.html?id=" + encodeURIComponent(idPedido),
+        window.location.href
+    ).href;
+            }
 
 async function crearCompra(accessToken, playerId) {
     if (!productoSeleccionado) throw new Error("Selecciona primero un paquete disponible.");
