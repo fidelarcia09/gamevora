@@ -684,17 +684,60 @@ async function consultarPedido(accessToken) {
 }
 
 async function enviarPedido(accessToken) {
-    if (!pedidoPendienteId) throw new Error("No hay ningún pedido guardado para enviar.");
+    if (!pedidoPendienteId) {
+        throw new Error("No hay ningún pedido guardado para enviar.");
+    }
+
+    const idPedido = pedidoPendienteId;
+
+    // Marcar el pedido existente para consultar su estado.
     accionPendiente = "consultar";
     guardarPedidoPendiente();
     actualizarBoton();
-    const datos = await llamarFuncion(URL_CREAR_PEDIDO, accessToken, { game_order_id: pedidoPendienteId });
-    accionPendiente = "consultar";
-    guardarPedidoPendiente();
-    actualizarBoton();
-    mostrarEstado(datos.success ? "Tu pedido fue registrado. Puedes consultar su estado." : "La solicitud fue procesada. Comprueba el estado del pedido.", "correcto");
-    alert("Tu pedido ha sido procesado.\n\nNúmero de pedido: " + pedidoPendienteId + "\n\nConsulta su estado antes de realizar otra compra.");
-}
+
+    mostrarEstado(
+        "Procesando tu pedido. No cierres esta página..."
+    );
+
+    try {
+        const datos = await llamarFuncion(
+            URL_CREAR_PEDIDO,
+            accessToken,
+            {
+                game_order_id: idPedido
+            }
+        );
+
+        console.log(
+            "Respuesta de crear pedido:",
+            datos
+        );
+
+        mostrarEstado(
+            datos.message ||
+            "Solicitud procesada. Abriendo el seguimiento del pedido...",
+            "correcto"
+        );
+
+    } catch (error) {
+        console.error(
+            "Error al enviar el pedido existente:",
+            error,
+            error.data || ""
+        );
+
+        mostrarEstado(
+            "No se pudo confirmar el envío. Abriendo el seguimiento del pedido existente para verificar su estado.",
+            "error"
+        );
+    }
+
+    // Abrir el checkout del mismo pedido, sin crear otra compra.
+    window.location.href = new URL(
+        "checkout.html?id=" + encodeURIComponent(idPedido),
+        window.location.href
+    ).href;
+    }
 
 function cerrarModalConfirmacion(resultado) {
     modalFondo.classList.remove("visible");
