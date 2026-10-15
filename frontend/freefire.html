@@ -1200,7 +1200,10 @@ async function enviarPedido(accessToken) {
      * de game_orders. No generamos otra compra.
      */
     window.location.href =
-        "checkout.html?id=" + encodeURIComponent(idPedido);
+    new URL(
+        "checkout.html?id=" + encodeURIComponent(idPedido),
+        window.location.href
+    ).href;
     }
 /* CREAR COMPRA LOCAL */
 
