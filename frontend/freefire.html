@@ -1153,7 +1153,7 @@ async function consultarPedido(accessToken) {
     );
 }
 
-/* ENVIAR PEDIDO EXISTENTE */
+/* ENVIAR PEDIDO Y ABRIR CHECKOUT */
 
 async function enviarPedido(accessToken) {
     if (!pedidoPendienteId) {
@@ -1161,8 +1161,14 @@ async function enviarPedido(accessToken) {
     }
 
     /*
-     * Marcamos la acción como consulta antes de llamar al servidor.
-     * Si la respuesta se pierde, primero se verifica el registro.
+     * Conservamos el identificador del pedido existente.
+     * No se crea un pedido nuevo desde el checkout.
+     */
+    const idPedido = pedidoPendienteId;
+
+    /*
+     * Guardamos la referencia antes de llamar al servidor.
+     * Si la respuesta falla, podremos recuperar el pedido.
      */
     accionPendiente = "consultar";
     guardarPedidoPendiente();
@@ -1171,26 +1177,31 @@ async function enviarPedido(accessToken) {
     const datos = await llamarFuncion(
         URL_CREAR_PEDIDO,
         accessToken,
-        { game_order_id: pedidoPendienteId }
+        { game_order_id: idPedido }
     );
 
+    /*
+     * La función respondió correctamente.
+     * Conservamos la referencia hasta que el pedido alcance
+     * un estado final confirmado en la base de datos.
+     */
     accionPendiente = "consultar";
     guardarPedidoPendiente();
     actualizarBoton();
 
     mostrarEstado(
         datos.message ||
-        "Solicitud procesada. Consulta el estado antes de comprar otra vez.",
+        "Solicitud procesada. Abriendo el seguimiento del pedido...",
         "correcto"
     );
 
-    alert(
-        "Solicitud procesada.\n\n" +
-        "Pedido local: " + pedidoPendienteId + "\n\n" +
-        "Verifica el estado antes de iniciar otra compra."
-    );
-}
-
+    /*
+     * Abrimos el checkout existente utilizando el UUID real
+     * de game_orders. No generamos otra compra.
+     */
+    window.location.href =
+        "checkout.html?id=" + encodeURIComponent(idPedido);
+    }
 /* CREAR COMPRA LOCAL */
 
 async function crearCompra(accessToken, playerId) {
