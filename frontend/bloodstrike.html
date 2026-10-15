@@ -1246,7 +1246,8 @@ async function enviarPedido(accessToken) {
     );
 
         window.location.href =
-        "checkout.html?id=" + encodeURIComponent(pedidoPendienteId);
+    "/frontend/checkout.html?id=" +
+    encodeURIComponent(pedidoPendienteId);
 }
 
 /* CREAR COMPRA: SOLO SE CAMBIA confirm() POR EL MODAL VISUAL */
