@@ -1159,48 +1159,61 @@ async function obtenerPedidoActual(userId) {
     return data;
 }
 
-/* ENVIAR PEDIDO */
+/* ENVIAR PEDIDO Y ABRIR CHECKOUT */
 
 async function enviarPedido(accessToken) {
-    if (!pedidoPendienteId) {
-        throw new Error(
-            "No hay un pedido pendiente para enviar."
-        );
-    }
+if (!pedidoPendienteId) {
+throw new Error(
+"No hay un pedido pendiente para enviar."
+);
+}
 
-    mostrarEstado(
-        "Procesando tu pedido. No cierres esta página..."
-    );
+const idPedido = pedidoPendienteId;
 
+// Conservamos el pedido antes de contactar con Next Level.
+guardarPedidoPendiente();
+actualizarBoton();
+
+try {
     const datos = await llamarFuncion(
         URL_CREAR_PEDIDO,
         accessToken,
         {
-            game_order_id: pedidoPendienteId
+            game_order_id: idPedido
         }
     );
 
-    if (datos.success !== true) {
-        throw new Error(
-            datos.error ||
-            datos.message ||
-            "No se confirmó el envío del pedido."
-        );
-    }
+    console.log("Respuesta de crear pedido:", datos);
 
     mostrarEstado(
-        "¡Pedido enviado correctamente!\n\n" +
-        "Número de pedido: " + pedidoPendienteId + "\n\n" +
-        "La recarga todavía debe completarse.",
+        datos.message ||
+        "Solicitud procesada. Abriendo el seguimiento del pedido...",
         "correcto"
     );
 
-    alert(
-        "¡Pedido enviado!\n\n" +
-        "Número de pedido: " + pedidoPendienteId + "\n\n" +
-        "La recarga puede tardar unos momentos en completarse."
+} catch (error) {
+    // Conservamos el UUID original aunque falle el envío.
+    // No creamos otra compra ni volvemos a descontar GVR.
+    console.error(
+        "Error al enviar el pedido existente:",
+        error,
+        error.data || ""
+    );
+
+    mostrarEstado(
+        "No se pudo confirmar el envío. Abriendo el seguimiento " +
+        "del pedido existente para verificar su estado.",
+        "error"
     );
 }
+
+// Abrimos el checkout del pedido existente.
+window.location.href = new URL(
+    "checkout.html?id=" + encodeURIComponent(idPedido),
+    window.location.href
+).href;
+
+    }
 
 /* CONSULTAR ESTADO DEL PEDIDO */
 
