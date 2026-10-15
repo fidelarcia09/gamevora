@@ -1025,7 +1025,6 @@ async function obtenerPedidoActual(userId) {
 /* ENVIAR UN PEDIDO LOCAL YA CREADO */
 
 async function enviarPedido(accessToken) {
-async function enviarPedido(accessToken) {
     if (!pedidoPendienteId) {
         throw new Error(
             "No hay un pedido pendiente para enviar."
