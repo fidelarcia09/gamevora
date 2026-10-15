@@ -1245,11 +1245,8 @@ async function enviarPedido(accessToken) {
         "correcto"
     );
 
-    alert(
-        "Solicitud procesada.\n\n" +
-        "Pedido local: " + pedidoPendienteId + "\n\n" +
-        "Consulta su estado antes de iniciar otra compra."
-    );
+        window.location.href =
+        "checkout.html?id=" + encodeURIComponent(pedidoPendienteId);
 }
 
 /* CREAR COMPRA: SOLO SE CAMBIA confirm() POR EL MODAL VISUAL */
