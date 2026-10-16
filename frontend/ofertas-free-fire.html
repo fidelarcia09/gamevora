@@ -457,6 +457,100 @@
             transition-duration: 0.01ms !important;
         }
     }
+
+   /* Modal de confirmación para las ofertas */
+.modal-confirmacion {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(5px);
+}
+
+.modal-confirmacion.abierto {
+    display: flex;
+}
+
+.modal-caja {
+    width: 100%;
+    max-width: 390px;
+    padding: 24px;
+    border: 1px solid #168cff;
+    border-radius: 18px;
+    background: linear-gradient(155deg, #0b1e3b, #061226);
+    box-shadow: 0 0 30px rgba(0, 140, 255, 0.25);
+}
+
+.modal-caja h2 {
+    margin-bottom: 10px;
+    color: #ffffff;
+    font-size: 22px;
+    text-align: center;
+}
+
+.modal-caja .modal-descripcion {
+    margin-bottom: 18px;
+    color: #a8bdd7;
+    font-size: 14px;
+    text-align: center;
+}
+
+.modal-dato {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #12385f;
+    font-size: 13px;
+}
+
+.modal-dato span:first-child {
+    color: #a8bdd7;
+}
+
+.modal-dato span:last-child {
+    color: #ffffff;
+    font-weight: bold;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.modal-acciones {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.modal-acciones button {
+    flex: 1;
+    min-height: 46px;
+    padding: 10px;
+    border-radius: 9px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-cancelar {
+    color: #ffffff;
+    background: #061226;
+    border: 1px solid #168cff;
+}
+
+.modal-aceptar {
+    color: #ffffff;
+    background: linear-gradient(90deg, #087cff, #00baff);
+    border: none;
+}
+
+.modal-acciones button:active {
+    transform: scale(0.98);
+        }
+    
 </style>
 </head>
 
@@ -641,7 +735,56 @@ document.getElementById("listaOfertas").addEventListener("click", function (even
     });
 });
 </script>
+<!-- Confirmación de compra de ofertas -->
+<div
+    id="modalConfirmacionCompra"
+    class="modal-confirmacion"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitulo"
+>
+    <div class="modal-caja">
+        <h2 id="modalTitulo">Confirmar recarga</h2>
 
+        <p class="modal-descripcion">
+            Revisa los datos antes de continuar.
+        </p>
+
+        <div class="modal-dato">
+            <span>Oferta</span>
+            <span id="modalNombreOferta">-</span>
+        </div>
+
+        <div class="modal-dato">
+            <span>ID de jugador</span>
+            <span id="modalIdJugador">-</span>
+        </div>
+
+        <div class="modal-dato">
+            <span>Precio</span>
+            <span id="modalPrecioOferta">-</span>
+        </div>
+
+        <div class="modal-acciones">
+            <button
+                type="button"
+                id="cancelarCompraBtn"
+                class="modal-cancelar"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="aceptarCompraBtn"
+                class="modal-aceptar"
+            >
+                Aceptar y recargar
+            </button>
+        </div>
+    </div>
+</div>
 <script
     type="module"
     src="ofertas.js?v=20261011ffventas1"
