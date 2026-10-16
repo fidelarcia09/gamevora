@@ -3,94 +3,438 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recargar GVR - Gamers Gold Top-Up</title>
+    <meta name="theme-color" content="#050b18">
+
+    <title>Comprar GVR | Gamers Gold Top-Up</title>
 
     <style>
+        :root {
+            --fondo: #050b18;
+            --panel: #0a1730;
+            --panel-secundario: #071226;
+            --borde: #17365c;
+            --azul: #00aaff;
+            --cian: #28d9ff;
+            --texto: #ffffff;
+            --muted: #91a4c0;
+            --verde: #32e6a0;
+        }
+
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
         }
 
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #020b1c;
-            color: white;
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse at top, #102750 0%, transparent 48%),
+                var(--fondo);
+            color: var(--texto);
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
         }
 
         header {
+            width: 100%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 22px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            gap: 12px;
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -.5px;
+            white-space: nowrap;
         }
 
         .logo span {
-            color: #00aaff;
+            color: var(--azul);
         }
 
         .volver {
-            color: #00aaff;
+            color: var(--cian);
             text-decoration: none;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap;
         }
 
         main {
-            padding: 20px;
+            width: 100%;
+            max-width: 680px;
+            margin: 12px auto 40px;
+            padding: 0 16px;
         }
 
-        .card {
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 30px 20px;
-            background: #081b38;
-            border: 1px solid #126dcc;
-            border-radius: 20px;
-            box-shadow: 0 0 25px rgba(0, 140, 255, 0.15);
+        .encabezado {
             text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            padding: 7px 12px;
+            border: 1px solid #14518a;
+            border-radius: 30px;
+            background: rgba(0, 170, 255, .08);
+            color: var(--cian);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            margin-bottom: 14px;
         }
 
         h1 {
-            font-size: 32px;
+            font-size: clamp(27px, 6vw, 36px);
+            line-height: 1.15;
             margin-bottom: 10px;
         }
 
         .descripcion {
-            color: #8fa3bd;
-            margin-bottom: 30px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
         }
 
-        .opciones {
-            display: grid;
-            gap: 15px;
+        .card {
+            background: linear-gradient(160deg, #0b1b36, #071226);
+            border: 1px solid var(--borde);
+            border-radius: 22px;
+            padding: 22px;
+            margin-bottom: 17px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .18);
         }
 
-        .opcion {
-            padding: 20px;
-            background: #041329;
-            border: 1px solid #164b82;
-            border-radius: 14px;
-            cursor: pointer;
+        .titulo-seccion {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 17px;
         }
 
-        .opcion:hover {
-            border-color: #00aaff;
-            box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
+        .titulo-seccion h2 {
+            font-size: 16px;
         }
 
-        .cantidad {
-            font-size: 22px;
+        .paso {
+            color: var(--muted);
+            font-size: 11px;
             font-weight: bold;
         }
 
+        .paquetes {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 11px;
+        }
+
+        .paquete {
+            position: relative;
+            min-height: 92px;
+            padding: 17px 12px;
+            text-align: left;
+            color: white;
+            background: #061329;
+            border: 1px solid #1b3c63;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: border-color .2s, background .2s, transform .2s;
+        }
+
+        .paquete:hover {
+            border-color: var(--azul);
+            transform: translateY(-2px);
+        }
+
+        .paquete.seleccionado {
+            border: 1px solid var(--azul);
+            background: linear-gradient(145deg, #0c2e52, #07182e);
+            box-shadow: inset 0 0 0 1px rgba(0, 170, 255, .12);
+        }
+
+        .paquete.seleccionado::after {
+            content: "✓";
+            position: absolute;
+            top: 9px;
+            right: 10px;
+            width: 19px;
+            height: 19px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--azul);
+            color: #00101f;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .cantidad-paquete {
+            display: block;
+            font-size: 23px;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        .unidad {
+            color: var(--cian);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .precio-referencia {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 7px;
+        }
+
+        .paquete-personalizado {
+            grid-column: 1 / -1;
+            min-height: 75px;
+        }
+
+        .personalizado-contenido {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .personalizado-contenido strong {
+            font-size: 15px;
+        }
+
+        .personalizado-contenido small {
+            display: block;
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .entrada-cantidad {
+            display: none;
+            margin-top: 14px;
+        }
+
+        .entrada-cantidad.visible {
+            display: block;
+        }
+
+        .entrada-cantidad label {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .entrada-cantidad input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 11px;
+            border: 1px solid #24486f;
+            background: #030d1d;
+            color: white;
+            outline: none;
+        }
+
+        .entrada-cantidad input:focus {
+            border-color: var(--azul);
+            box-shadow: 0 0 0 3px rgba(0, 170, 255, .1);
+        }
+
+        .metodos {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .metodo {
+            min-height: 95px;
+            padding: 14px 7px;
+            background: #061329;
+            border: 1px solid #1b3c63;
+            border-radius: 14px;
+            color: white;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .metodo:hover {
+            border-color: var(--azul);
+        }
+
+        .metodo.seleccionado {
+            border-color: var(--azul);
+            background: #0b2a49;
+            box-shadow: inset 0 0 0 1px rgba(0, 170, 255, .12);
+        }
+
+        .metodo-icono {
+            display: block;
+            font-size: 21px;
+            margin-bottom: 9px;
+        }
+
+        .metodo strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .metodo small {
+            display: block;
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .resumen {
+            background: #061329;
+            border: 1px solid #1a3a60;
+            border-radius: 15px;
+            padding: 17px;
+        }
+
+        .fila-resumen {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            font-size: 13px;
+        }
+
+        .fila-resumen:last-child {
+            margin-bottom: 0;
+        }
+
+        .fila-resumen span:first-child {
+            color: var(--muted);
+        }
+
+        .fila-resumen strong {
+            text-align: right;
+        }
+
+        .total {
+            border-top: 1px solid #1b3657;
+            padding-top: 15px;
+            margin-top: 4px;
+        }
+
+        .total strong {
+            color: var(--cian);
+            font-size: 21px;
+        }
+
         .nota {
-            margin-top: 25px;
-            color: #71859f;
-            font-size: 14px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+            margin-top: 13px;
+        }
+
+        .continuar {
+            display: block;
+            width: 100%;
+            min-height: 53px;
+            margin-top: 18px;
+            border: 0;
+            border-radius: 13px;
+            color: #00101c;
+            background: linear-gradient(100deg, #00aaff, #28d9ff);
+            font-weight: 900;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 7px 23px rgba(0, 170, 255, .17);
+            transition: transform .2s, opacity .2s;
+        }
+
+        .continuar:hover {
+            transform: translateY(-1px);
+        }
+
+        .continuar:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .mensaje {
+            display: none;
+            margin-top: 13px;
+            padding: 12px;
+            border: 1px solid #854848;
+            background: #30151b;
+            color: #ffb5b5;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .mensaje.visible {
+            display: block;
+        }
+
+        .pie {
+            padding: 8px 10px 25px;
+            text-align: center;
+            color: #617792;
+            font-size: 11px;
+        }
+
+        @media (max-width: 390px) {
+            header {
+                padding: 18px 13px;
+            }
+
+            .logo {
+                font-size: 16px;
+            }
+
+            .volver {
+                font-size: 12px;
+            }
+
+            main {
+                padding: 0 12px;
+            }
+
+            .card {
+                padding: 17px 14px;
+            }
+
+            .cantidad-paquete {
+                font-size: 21px;
+            }
+
+            .metodos {
+                gap: 6px;
+            }
+
+            .metodo {
+                padding: 12px 4px;
+            }
+
+            .metodo strong {
+                font-size: 11px;
+            }
         }
     </style>
 </head>
@@ -98,51 +442,376 @@
 <body>
 
 <header>
-    <div class="logo">⚡ Gamers Gold<span>Top-Up</span></div>
+    <div class="logo">Gamers Gold <span>Top-Up</span></div>
     <a href="cuenta.html" class="volver">← Mi cuenta</a>
 </header>
 
 <main>
-
-    <div class="card">
-
-        <h1>Recargar GVR</h1>
-
+    <section class="encabezado">
+        <div class="etiqueta">GVR WALLET</div>
+        <h1>Comprar GVR</h1>
         <p class="descripcion">
-            Selecciona la cantidad de GVR que quieres añadir.
+            Selecciona tu paquete, elige cómo pagar y revisa el importe.
         </p>
+    </section>
 
-        <div class="opciones">
-
-            <div class="opcion" onclick="seleccionarGVR(100)">
-                <div class="cantidad">⚡ 100 GVR</div>
-            </div>
-
-            <div class="opcion" onclick="seleccionarGVR(500)">
-                <div class="cantidad">⚡ 500 GVR</div>
-            </div>
-
-            <div class="opcion" onclick="seleccionarGVR(1000)">
-                <div class="cantidad">⚡ 1,000 GVR</div>
-            </div>
-
-            <div class="opcion" onclick="seleccionarGVR(5000)">
-                <div class="cantidad">⚡ 5,000 GVR</div>
-            </div>
-
+    <section class="card">
+        <div class="titulo-seccion">
+            <h2>1. Selecciona tus GVR</h2>
+            <span class="paso">ELIGE UNA OPCIÓN</span>
         </div>
 
-    </div>
+        <div class="paquetes" id="paquetes">
+            <button class="paquete seleccionado"
+                    type="button"
+                    data-cantidad="5"
+                    aria-pressed="true">
+                <span class="cantidad-paquete">5 GVR</span>
+                <span class="unidad">Paquete básico</span>
+            </button>
 
+            <button class="paquete"
+                    type="button"
+                    data-cantidad="10"
+                    aria-pressed="false">
+                <span class="cantidad-paquete">10 GVR</span>
+                <span class="unidad">Paquete estándar</span>
+            </button>
+
+            <button class="paquete"
+                    type="button"
+                    data-cantidad="25"
+                    aria-pressed="false">
+                <span class="cantidad-paquete">25 GVR</span>
+                <span class="unidad">Paquete popular</span>
+            </button>
+
+            <button class="paquete"
+                    type="button"
+                    data-cantidad="50"
+                    aria-pressed="false">
+                <span class="cantidad-paquete">50 GVR</span>
+                <span class="unidad">Paquete avanzado</span>
+            </button>
+
+            <button class="paquete"
+                    type="button"
+                    data-cantidad="100"
+                    aria-pressed="false">
+                <span class="cantidad-paquete">100 GVR</span>
+                <span class="unidad">Paquete máximo</span>
+            </button>
+
+            <button class="paquete paquete-personalizado"
+                    type="button"
+                    id="botonPersonalizado"
+                    aria-pressed="false">
+                <span class="personalizado-contenido">
+                    <span>
+                        <strong>Cantidad personalizada</strong>
+                        <small>Elige desde 1 GVR</small>
+                    </span>
+                    <span class="unidad">PERSONALIZAR</span>
+                </span>
+            </button>
+        </div>
+
+        <div class="entrada-cantidad" id="entradaCantidad">
+            <label for="cantidadPersonalizada">¿Cuántos GVR quieres comprar?</label>
+            <input
+                type="number"
+                id="cantidadPersonalizada"
+                min="1"
+                max="1000000"
+                step="1"
+                inputmode="numeric"
+                placeholder="Introduce la cantidad"
+            >
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="titulo-seccion">
+            <h2>2. Método de pago</h2>
+            <span class="paso">SELECCIONA UNO</span>
+        </div>
+
+        <div class="metodos" id="metodos">
+            <button class="metodo seleccionado"
+                    type="button"
+                    data-metodo="CUP"
+                    aria-pressed="true">
+                <span class="metodo-icono">CUP</span>
+                <strong>Transferencia</strong>
+                <small>Pesos cubanos</small>
+            </button>
+
+            <button class="metodo"
+                    type="button"
+                    data-metodo="USDT"
+                    aria-pressed="false">
+                <span class="metodo-icono">₮</span>
+                <strong>USDT</strong>
+                <small>Criptomoneda</small>
+            </button>
+
+            <button class="metodo"
+                    type="button"
+                    data-metodo="Saldo móvil"
+                    aria-pressed="false">
+                <span class="metodo-icono">MÓVIL</span>
+                <strong>Saldo móvil</strong>
+                <small>Recarga telefónica</small>
+            </button>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="titulo-seccion">
+            <h2>3. Resumen de compra</h2>
+            <span class="paso">DETALLES</span>
+        </div>
+
+        <div class="resumen">
+            <div class="fila-resumen">
+                <span>Producto</span>
+                <strong>GVR Wallet</strong>
+            </div>
+
+            <div class="fila-resumen">
+                <span>Recibirás</span>
+                <strong id="resumenCantidad">5 GVR</strong>
+            </div>
+
+            <div class="fila-resumen">
+                <span>Método de pago</span>
+                <strong id="resumenMetodo">CUP</strong>
+            </div>
+
+            <div class="fila-resumen total">
+                <span>Total a pagar</span>
+                <strong id="resumenPrecio">5.250 CUP</strong>
+            </div>
+        </div>
+
+        <p class="nota">
+            El precio se calcula según la cantidad seleccionada y el método
+            de pago. Los GVR no se acreditarán hasta que el pago sea revisado
+            y aprobado por el personal autorizado.
+        </p>
+
+        <button class="continuar" type="button" id="continuar">
+            Continuar
+        </button>
+
+        <div class="mensaje" id="mensaje" role="alert"></div>
+    </section>
+
+    <div class="pie">
+        Gamers Gold Top-Up · Compra de GVR
+    </div>
 </main>
 
 <script>
-function seleccionarGVR(cantidad) {
-    window.location.href =
-        "pago-gvr.html?cantidad=" +
-        encodeURIComponent(cantidad);
-}
+(() => {
+    "use strict";
+
+    const PRECIO_POR_GVR = {
+        "CUP": 1050,
+        "USDT": 1,
+        "Saldo móvil": 200
+    };
+
+    const paquetes = document.querySelectorAll(".paquete[data-cantidad]");
+    const botonPersonalizado = document.getElementById("botonPersonalizado");
+    const entradaCantidad = document.getElementById("entradaCantidad");
+    const cantidadPersonalizada = document.getElementById("cantidadPersonalizada");
+    const metodos = document.querySelectorAll(".metodo");
+
+    const resumenCantidad = document.getElementById("resumenCantidad");
+    const resumenMetodo = document.getElementById("resumenMetodo");
+    const resumenPrecio = document.getElementById("resumenPrecio");
+
+    const botonContinuar = document.getElementById("continuar");
+    const mensaje = document.getElementById("mensaje");
+
+    let cantidad = 5;
+    let metodo = "CUP";
+    let personalizado = false;
+
+    function formatoNumero(valor) {
+        return new Intl.NumberFormat("es-ES", {
+            maximumFractionDigits: 2,
+            minimumFractionDigits: valor % 1 === 0 ? 0 : 2
+        }).format(valor);
+    }
+
+    function formatoPrecio(valor, moneda) {
+        if (moneda === "USDT") {
+            return formatoNumero(valor) + " USDT";
+        }
+
+        if (moneda === "CUP") {
+            return formatoNumero(valor) + " CUP";
+        }
+
+        return formatoNumero(valor) + " de saldo móvil";
+    }
+
+    function obtenerCantidad() {
+        if (!personalizado) {
+            return cantidad;
+        }
+
+        const valor = cantidadPersonalizada.value.trim();
+
+        if (valor === "") {
+            return null;
+        }
+
+        const numero = Number(valor);
+
+        if (!Number.isSafeInteger(numero) || numero < 1 || numero > 1000000) {
+            return null;
+        }
+
+        return numero;
+    }
+
+    function mostrarMensaje(texto) {
+        mensaje.textContent = texto;
+        mensaje.classList.add("visible");
+    }
+
+    function ocultarMensaje() {
+        mensaje.textContent = "";
+        mensaje.classList.remove("visible");
+    }
+
+    function actualizarResumen() {
+        const cantidadActual = obtenerCantidad();
+
+        if (cantidadActual === null) {
+            resumenCantidad.textContent = personalizado
+                ? "Introduce una cantidad válida"
+                : cantidad + " GVR";
+
+            resumenMetodo.textContent = metodo;
+            resumenPrecio.textContent = "—";
+            botonContinuar.disabled = true;
+            return;
+        }
+
+        const precio = cantidadActual * PRECIO_POR_GVR[metodo];
+
+        resumenCantidad.textContent = formatoNumero(cantidadActual) + " GVR";
+        resumenMetodo.textContent = metodo;
+        resumenPrecio.textContent = formatoPrecio(precio, metodo);
+        botonContinuar.disabled = false;
+    }
+
+    function seleccionarPaquete(boton) {
+        personalizado = false;
+        cantidad = Number(boton.dataset.cantidad);
+
+        paquetes.forEach((elemento) => {
+            const seleccionado = elemento === boton;
+
+            elemento.classList.toggle("seleccionado", seleccionado);
+            elemento.setAttribute("aria-pressed", String(seleccionado));
+        });
+
+        botonPersonalizado.classList.remove("seleccionado");
+        botonPersonalizado.setAttribute("aria-pressed", "false");
+
+        entradaCantidad.classList.remove("visible");
+        cantidadPersonalizada.value = "";
+
+        ocultarMensaje();
+        actualizarResumen();
+    }
+
+    paquetes.forEach((boton) => {
+        boton.addEventListener("click", () => seleccionarPaquete(boton));
+    });
+
+    botonPersonalizado.addEventListener("click", () => {
+        personalizado = true;
+
+        paquetes.forEach((elemento) => {
+            elemento.classList.remove("seleccionado");
+            elemento.setAttribute("aria-pressed", "false");
+        });
+
+        botonPersonalizado.classList.add("seleccionado");
+        botonPersonalizado.setAttribute("aria-pressed", "true");
+
+        entradaCantidad.classList.add("visible");
+        cantidadPersonalizada.focus();
+
+        ocultarMensaje();
+        actualizarResumen();
+    });
+
+    cantidadPersonalizada.addEventListener("input", () => {
+        ocultarMensaje();
+        actualizarResumen();
+    });
+
+    metodos.forEach((boton) => {
+        boton.addEventListener("click", () => {
+            metodo = boton.dataset.metodo;
+
+            metodos.forEach((elemento) => {
+                const seleccionado = elemento === boton;
+
+                elemento.classList.toggle("seleccionado", seleccionado);
+                elemento.setAttribute("aria-pressed", String(seleccionado));
+            });
+
+            ocultarMensaje();
+            actualizarResumen();
+        });
+    });
+
+    botonContinuar.addEventListener("click", () => {
+        const cantidadActual = obtenerCantidad();
+
+        if (cantidadActual === null) {
+            mostrarMensaje(
+                "Introduce una cantidad entera entre 1 y 1.000.000 GVR."
+            );
+            return;
+        }
+
+        const precio = cantidadActual * PRECIO_POR_GVR[metodo];
+
+        if (!Number.isSafeInteger(precio) && metodo !== "USDT") {
+            mostrarMensaje("La cantidad seleccionada es demasiado grande.");
+            return;
+        }
+
+        if (!Number.isFinite(precio)) {
+            mostrarMensaje("No se pudo calcular el importe.");
+            return;
+        }
+
+        /*
+         * Conservamos la navegación existente a pago-gvr.html.
+         * Esta página todavía debe validar el precio en el servidor
+         * y crear la solicitud de compra en Supabase.
+         */
+        const parametros = new URLSearchParams({
+            cantidad: String(cantidadActual),
+            metodo: metodo
+        });
+
+        window.location.href = "pago-gvr.html?" + parametros.toString();
+    });
+
+    actualizarResumen();
+})();
 </script>
 
 </body>
-</html>
+    </html>
