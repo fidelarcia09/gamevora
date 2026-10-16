@@ -1,157 +1,180 @@
 /* =========================================================
-   GAMERS GOLD TOP-UP
-   SERVICE WORKER
-   ========================================================= */
-
+GAMERS GOLD TOP-UP
+SERVICE WORKER
+========================================================= */
 
 /* =========================================================
-   ACTUALIZACIÓN DEL SERVICE WORKER
-   ========================================================= */
+ACTUALIZACIÓN DEL SERVICE WORKER
+========================================================= */
 
 self.addEventListener("install", function (event) {
 
-    event.waitUntil(
-        self.skipWaiting()
-    );
+event.waitUntil(
+    self.skipWaiting()
+);
 
 });
-
 
 self.addEventListener("activate", function (event) {
 
-    event.waitUntil(
-        clients.claim()
-    );
+event.waitUntil(
+    clients.claim()
+);
 
 });
 
-
 /* =========================================================
-   NOTIFICACIONES PUSH
-   ========================================================= */
+NOTIFICACIONES PUSH
+========================================================= */
 
 self.addEventListener("push", function (event) {
 
-    // =========================================================
-    // GAMERS GOLD TOP-UP
-    // LOGO OFICIAL DE LAS NOTIFICACIONES
-    // =========================================================
+const LOGO =
+    "/gamevora/frontend/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png";
 
-    const LOGO =
-    "imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png";
+const URL_GVR =
+    "https://fidelarcia09.github.io/gamevora/frontend/confirmaciones-gvr.html";
 
-    let data = {
-        title: "Nueva Venta Gamers Gold",
-        body: "Tienes una nueva notificación.",
-        url: "/frontend/admin-ventas.html"
-    };
+let data = {
+    title: "Nueva Venta Gamers Gold",
+    body: "Tienes una nueva notificación.",
+    url: "/gamevora/frontend/admin-ventas.html"
+};
 
 
-    // =========================================================
-    // DATOS RECIBIDOS DEL SERVIDOR
-    // =========================================================
+/* =====================================================
+   DATOS RECIBIDOS DEL SERVIDOR
+   ===================================================== */
 
-    if (event.data) {
+if (event.data) {
 
-        try {
+    try {
 
-            const receivedData = event.data.json();
+        const receivedData = event.data.json();
 
-            data = {
-                ...data,
-                ...receivedData
-            };
+        data = {
+            ...data,
+            ...receivedData
+        };
 
-        } catch (error) {
+    } catch (error) {
 
-            data.body = event.data.text();
-
-        }
+        data.body = event.data.text();
 
     }
 
-
-    // =========================================================
-    // CONFIGURACIÓN DE LA NOTIFICACIÓN
-    // =========================================================
-
-    const options = {
-
-        body: data.body,
-
-        // SIEMPRE NUESTRO LOGO
-        icon: LOGO,
-
-        // SIEMPRE NUESTRO LOGO
-        badge: LOGO,
-
-        data: {
-            url: data.url || "/frontend/admin-ventas.html"
-        },
-
-        vibrate: [200, 100, 200],
-
-        requireInteraction: true
-
-    };
+}
 
 
-    // =========================================================
-    // MOSTRAR NOTIFICACIÓN
-    // =========================================================
+/* =====================================================
+   DETERMINAR EL DESTINO DE LA NOTIFICACIÓN
+   ===================================================== */
 
-    event.waitUntil(
+const esSolicitudGVR =
+    data.title === "Nueva solicitud de compra GVR" ||
+    data.tag?.startsWith("gvr-purchase-") ||
+    data.data?.request_id != null;
 
-        self.registration.showNotification(
+const destino = esSolicitudGVR
+    ? URL_GVR
+    : (data.url || "/gamevora/frontend/admin-ventas.html");
 
-            data.title || "Nueva Venta Gamers Gold",
 
-            options
+/* =====================================================
+   CONFIGURACIÓN DE LA NOTIFICACIÓN
+   ===================================================== */
 
-        )
+const options = {
 
-    );
+    body: data.body,
+
+    icon: LOGO,
+
+    badge: LOGO,
+
+    data: {
+        ...data.data,
+        url: destino
+    },
+
+    tag: data.tag,
+
+    vibrate: [200, 100, 200],
+
+    requireInteraction: true
+
+};
+
+
+/* =====================================================
+   MOSTRAR NOTIFICACIÓN
+   ===================================================== */
+
+event.waitUntil(
+
+    self.registration.showNotification(
+
+        data.title || "Nueva Venta Gamers Gold",
+
+        options
+
+    )
+
+);
 
 });
 
-
-
 /* =========================================================
-   CLICK EN LA NOTIFICACIÓN
-   ========================================================= */
+CLICK EN LA NOTIFICACIÓN
+========================================================= */
 
 self.addEventListener("notificationclick", function (event) {
 
-    event.notification.close();
+event.notification.close();
+
+const URL_GVR =
+    "https://fidelarcia09.github.io/gamevora/frontend/confirmaciones-gvr.html";
+
+const notificationData = event.notification.data || {};
+
+const esSolicitudGVR =
+    event.notification.title === "Nueva solicitud de compra GVR" ||
+    notificationData.tag?.startsWith("gvr-purchase-") ||
+    notificationData.request_id != null;
+
+const destino = esSolicitudGVR
+    ? URL_GVR
+    : (notificationData.url ||
+       "https://fidelarcia09.github.io/gamevora/frontend/admin-ventas.html");
 
 
-    const url =
-        event.notification.data?.url ||
-        "/frontend/admin-ventas.html";
+event.waitUntil(
 
+    clients.matchAll({
 
-    event.waitUntil(
+        type: "window",
 
-        clients.matchAll({
+        includeUncontrolled: true
 
-            type: "window",
+    })
 
-            includeUncontrolled: true
+    .then(async function (clientList) {
 
-        })
+        const destinoURL = new URL(destino);
 
-        .then(function (clientList) {
+        for (const client of clientList) {
 
+            if (
+                client.url.startsWith(self.location.origin) &&
+                "navigate" in client
+            ) {
 
-            // =================================================
-            // SI LA PÁGINA YA ESTÁ ABIERTA
-            // =================================================
+                const clientURL = new URL(client.url);
 
-            for (const client of clientList) {
-
-                if ("focus" in client) {
-
-                    client.navigate(url);
+                if (
+                    clientURL.href === destinoURL.href &&
+                    "focus" in client
+                ) {
 
                     return client.focus();
 
@@ -159,19 +182,16 @@ self.addEventListener("notificationclick", function (event) {
 
             }
 
+        }
 
-            // =================================================
-            // SI NO ESTÁ ABIERTA
-            // =================================================
+        if (clients.openWindow) {
 
-            if (clients.openWindow) {
+            return clients.openWindow(destinoURL.href);
 
-                return clients.openWindow(url);
+        }
 
-            }
+    })
 
-        })
-
-    );
+);
 
 });
