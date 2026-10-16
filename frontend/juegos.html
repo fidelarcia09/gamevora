@@ -103,7 +103,7 @@
 
         .titulo {
             text-align: center;
-            margin: 18px 0 30px;
+            margin: 18px 0 34px;
             font-size: 25px;
             font-weight: 900;
         }
@@ -117,7 +117,7 @@
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             column-gap: 15px;
-            row-gap: 28px;
+            row-gap: 35px;
             align-items: stretch;
         }
 
@@ -143,48 +143,32 @@
             transform: translateY(-3px);
         }
 
-        /* CONTENEDOR DE LA IMAGEN */
+        /* MARCO RECTANGULAR DE LA IMAGEN */
 
         .juego-imagen {
             position: relative;
             width: 100%;
-            height: 145px;
-            border: 1px solid rgba(0, 153, 255, 0.8);
+            height: 180px;
+            border: 1px solid rgba(0, 153, 255, 0.9);
             border-bottom: none;
             border-radius: 13px 13px 0 0;
             background:
                 radial-gradient(
-                    ellipse at 50% 80%,
-                    rgba(0, 123, 255, 0.19),
-                    transparent 70%
+                    ellipse at 50% 85%,
+                    rgba(0, 123, 255, 0.30),
+                    transparent 72%
                 ),
-                linear-gradient(180deg, #0b1d38, #071020);
+                linear-gradient(180deg, #0c2040, #071020 90%);
             box-shadow:
-                0 0 10px rgba(0, 140, 255, 0.15),
-                inset 0 0 15px rgba(0, 153, 255, 0.06);
+                0 0 13px rgba(0, 140, 255, 0.22),
+                inset 0 0 20px rgba(0, 153, 255, 0.10);
             z-index: 1;
+
+            /* Permite que el personaje sobresalga del marco */
+            overflow: visible;
         }
 
-        /* IMAGEN DEL PERSONAJE */
-
-        .juego-imagen img {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            left: 0;
-            bottom: 0;
-            object-fit: contain;
-            object-position: center bottom;
-            display: block;
-            z-index: 2;
-            transition: transform 0.25s ease;
-        }
-
-        .juego:hover .juego-imagen img {
-            transform: scale(1.04);
-        }
-
-        /* EFECTO DE LUZ SUPERIOR */
+        /* LUZ INTERIOR DEL MARCO */
 
         .juego-imagen::before {
             content: "";
@@ -194,46 +178,86 @@
             top: 0;
             height: 1px;
             background: var(--cian);
-            box-shadow: 0 0 10px var(--cian);
+            box-shadow:
+                0 0 8px var(--cian),
+                0 0 16px var(--azul);
             z-index: 3;
+            pointer-events: none;
         }
 
-        /* ESQUINAS LUMINOSAS */
+        /* BORDE INTERIOR */
 
         .juego-imagen::after {
             content: "";
             position: absolute;
             inset: 5px;
-            border: 1px solid rgba(0, 190, 255, 0.12);
+            border: 1px solid rgba(0, 190, 255, 0.16);
             border-radius: 9px 9px 0 0;
             pointer-events: none;
             z-index: 3;
         }
 
-        /* NOMBRE DEBAJO DE LA FOTO */
+        /* PERSONAJE MÁS GRANDE */
+
+        .juego-imagen img {
+            position: absolute;
+
+            /* Más grande que el marco */
+            width: 118%;
+            height: 118%;
+
+            left: -9%;
+            bottom: 0;
+
+            object-fit: contain;
+            object-position: center bottom;
+
+            display: block;
+            z-index: 2;
+
+            transition:
+                transform 0.25s ease,
+                filter 0.25s ease;
+
+            /* No recortar la parte superior del personaje */
+            max-width: none;
+        }
+
+        .juego:hover .juego-imagen img {
+            transform: scale(1.045);
+            filter: drop-shadow(0 0 8px rgba(0, 153, 255, 0.25));
+        }
+
+        /* NOMBRE DEBAJO DE LA IMAGEN */
 
         .juego-info {
             position: relative;
-            min-height: 56px;
-            padding: 11px 5px 9px;
+            min-height: 60px;
+            padding: 12px 5px 10px;
+
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
+
             background: linear-gradient(180deg, #0c1c35, #081326);
-            border: 1px solid rgba(0, 153, 255, 0.8);
-            border-top: 1px solid rgba(0, 217, 255, 0.55);
+
+            border: 1px solid rgba(0, 153, 255, 0.9);
+            border-top: 1px solid rgba(0, 217, 255, 0.65);
+
             border-radius: 0 0 13px 13px;
+
             box-shadow:
-                0 5px 16px rgba(0, 0, 0, 0.25),
-                0 0 10px rgba(0, 140, 255, 0.12);
+                0 5px 16px rgba(0, 0, 0, 0.28),
+                0 0 13px rgba(0, 140, 255, 0.16);
+
             z-index: 4;
         }
 
         .juego-info h3 {
             font-size: 13px;
-            line-height: 1.2;
+            line-height: 1.25;
             font-weight: 800;
             color: #ffffff;
             text-align: center;
@@ -247,17 +271,17 @@
             font-weight: 600;
         }
 
-        /* RESPLANDOR AL PASAR EL CURSOR */
+        /* RESPLANDOR DE LA TARJETA */
 
         .juego:hover .juego-imagen,
         .juego:hover .juego-info {
             border-color: var(--cian);
             box-shadow:
-                0 0 13px rgba(0, 153, 255, 0.27),
-                0 0 22px rgba(0, 153, 255, 0.12);
+                0 0 14px rgba(0, 153, 255, 0.30),
+                0 0 24px rgba(0, 153, 255, 0.15);
         }
 
-        /* PIE */
+        /* PIE DE PÁGINA */
 
         footer {
             text-align: center;
@@ -272,7 +296,7 @@
             color: #279fff;
         }
 
-        /* PANTALLAS PEQUEÑAS */
+        /* TELÉFONOS PEQUEÑOS */
 
         @media (max-width: 360px) {
             .juegos {
@@ -282,11 +306,22 @@
 
             .grid {
                 column-gap: 11px;
-                row-gap: 24px;
+                row-gap: 30px;
             }
 
             .juego-imagen {
-                height: 125px;
+                height: 155px;
+            }
+
+            .juego-imagen img {
+                width: 120%;
+                height: 120%;
+                left: -10%;
+            }
+
+            .juego-info {
+                min-height: 56px;
+                padding: 10px 4px;
             }
 
             .juego-info h3 {
@@ -298,7 +333,7 @@
             }
         }
 
-        /* TABLETS Y ORDENADORES */
+        /* TABLETS */
 
         @media (min-width: 600px) {
             .juegos {
@@ -308,15 +343,21 @@
 
             .grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 30px 22px;
+                gap: 38px 22px;
             }
 
             .juego-imagen {
-                height: 180px;
+                height: 210px;
+            }
+
+            .juego-imagen img {
+                width: 116%;
+                height: 116%;
+                left: -8%;
             }
 
             .juego-info {
-                min-height: 62px;
+                min-height: 64px;
             }
 
             .juego-info h3 {
@@ -328,14 +369,22 @@
             }
         }
 
+        /* ORDENADORES */
+
         @media (min-width: 950px) {
             .grid {
                 grid-template-columns: repeat(4, minmax(0, 1fr));
-                gap: 34px 24px;
+                gap: 42px 24px;
             }
 
             .juego-imagen {
-                height: 190px;
+                height: 220px;
+            }
+
+            .juego-imagen img {
+                width: 116%;
+                height: 116%;
+                left: -8%;
             }
         }
 
@@ -365,7 +414,6 @@
 
 </header>
 
-
 <section class="banner">
 
     <img
@@ -375,7 +423,6 @@
     >
 
 </section>
-
 
 <section class="juegos">
 
@@ -404,8 +451,7 @@
 
         </a>
 
-
-        <!-- CALL OF DUTY MOBILE: IMAGEN ANTERIOR CONSERVADA -->
+        <!-- CALL OF DUTY MOBILE -->
 
         <a href="codmobile.html" class="juego juego-cod">
 
@@ -423,7 +469,6 @@
             </div>
 
         </a>
-
 
         <!-- MOBILE LEGENDS -->
 
@@ -444,7 +489,6 @@
 
         </a>
 
-
         <!-- BLOOD STRIKE -->
 
         <a href="bloodstrike.html" class="juego juego-blood">
@@ -463,7 +507,6 @@
             </div>
 
         </a>
-
 
         <!-- PUBG MOBILE -->
 
@@ -484,7 +527,6 @@
 
         </a>
 
-
         <!-- HONOR OF KINGS -->
 
         <a href="honorofkings.html" class="juego juego-honor">
@@ -504,7 +546,6 @@
 
         </a>
 
-
         <!-- ARENA BREAKOUT -->
 
         <a href="arenabreakout.html" class="juego juego-arena">
@@ -523,7 +564,6 @@
             </div>
 
         </a>
-
 
         <!-- GENSHIN IMPACT -->
 
@@ -548,7 +588,6 @@
 
 </section>
 
-
 <footer>
 
     <p>
@@ -568,4 +607,4 @@
 </footer>
 
 </body>
-                </html>
+</html>
