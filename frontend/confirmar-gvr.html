@@ -696,8 +696,42 @@ botonContinuar.addEventListener("click",async () => {
 
         botonContinuar.textContent = "Confirmando envío...";
         await vincularComprobante(
-            solicitudId,usuario,rutaComprobanteSubido
+    solicitudId,
+    usuario,
+    rutaComprobanteSubido
+);
+
+// Notificar al administrador después de guardar el comprobante.
+try {
+    const { data: notificacion, error: errorNotificacion } =
+        await supabaseClient.functions.invoke(
+            "notificar-solicitud-gvr",
+            {
+                body: {
+                    request_id: solicitudId
+                }
+            }
         );
+
+    if (errorNotificacion) {
+        console.error(
+            "No se pudo notificar al administrador:",
+            errorNotificacion
+        );
+    } else {
+        console.log(
+            "Resultado de notificación GVR:",
+            notificacion
+        );
+    }
+} catch (errorNotificacion) {
+    console.error(
+        "Error enviando notificación GVR:",
+        errorNotificacion
+    );
+}
+
+envioCompletado = true;
 
         envioCompletado = true;
         document.getElementById("estadoCompra").textContent =
