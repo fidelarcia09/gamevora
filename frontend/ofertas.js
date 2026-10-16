@@ -707,16 +707,46 @@ function crearTarjetaOferta(oferta, proveedor) {
     const foto = document.createElement("div");
     foto.className = "foto-oferta";
 
-    const emoji = document.createElement("span");
-    emoji.className = "emoji-oferta";
-    emoji.textContent = oferta.emoji || "🎁";
+    // Mostrar la imagen configurada; usar el emoji como alternativa.
+    if (oferta.imagen) {
+        const imagen = document.createElement("img");
+
+        imagen.src = oferta.imagen;
+        imagen.alt = oferta.nombre || "Oferta de Free Fire";
+        imagen.loading = "lazy";
+        imagen.decoding = "async";
+
+        imagen.addEventListener("error", () => {
+            console.error(
+                "[Gamers Gold] No se pudo cargar la imagen:",
+                imagen.src
+            );
+
+            imagen.remove();
+
+            const emojiAlternativo = document.createElement("span");
+            emojiAlternativo.className = "emoji-oferta";
+            emojiAlternativo.textContent = oferta.emoji || "🎁";
+
+            foto.appendChild(emojiAlternativo);
+        }, { once: true });
+
+        foto.appendChild(imagen);
+    } else {
+        const emoji = document.createElement("span");
+
+        emoji.className = "emoji-oferta";
+        emoji.textContent = oferta.emoji || "🎁";
+
+        foto.appendChild(emoji);
+    }
 
     const nombre = document.createElement("div");
+
     nombre.className = "nombre-oferta";
     nombre.textContent =
         oferta.nombre || obtenerNombreProveedor(proveedor);
 
-    foto.appendChild(emoji);
     tarjeta.append(foto, nombre);
 
     const detalle = document.createElement("div");
@@ -749,8 +779,7 @@ function crearTarjetaOferta(oferta, proveedor) {
     tarjeta.appendChild(detalle);
 
     return tarjeta;
-}
-
+   }
 async function cargarOfertas() {
     const lista = el("listaOfertas");
 
