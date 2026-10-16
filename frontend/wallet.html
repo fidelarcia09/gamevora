@@ -1,7 +1,8 @@
 <!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Wallet | Gamers Gold Top-Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050b18"><title>Wallet | Gamers Gold Top-Up</title>
 
 <style>
     * {
@@ -13,13 +14,17 @@
 
     body {
         background: #050b18;
-        color: white;
+        color: #fff;
         min-height: 100vh;
         padding: 20px;
     }
 
+    button, a {
+        -webkit-tap-highlight-color: transparent;
+    }
+
     .contenedor {
-        max-width: 500px;
+        max-width: 520px;
         margin: auto;
     }
 
@@ -32,8 +37,9 @@
     }
 
     .logo {
-        font-size: 24px;
+        font-size: 21px;
         font-weight: 900;
+        letter-spacing: .3px;
     }
 
     .rayo {
@@ -49,68 +55,187 @@
     }
 
     .card {
-        background: #091a35;
-        border: 1px solid #15518c;
+        background: linear-gradient(160deg, #0a1b35, #071329);
+        border: 1px solid #173b64;
         border-radius: 20px;
-        padding: 25px 22px;
-        box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        padding: 23px 19px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, .2);
     }
 
     h1 {
-        text-align: center;
         font-size: 25px;
+        text-align: center;
         margin-bottom: 8px;
     }
 
     .subtitulo {
         text-align: center;
-        color: #8195ad;
+        color: #91a5bf;
         font-size: 13px;
         line-height: 1.5;
-        margin-bottom: 25px;
+        margin-bottom: 24px;
     }
 
     .saldo {
-        margin-bottom: 18px;
+        margin-bottom: 17px;
         padding: 24px 15px;
-        border-radius: 15px;
+        border-radius: 16px;
         text-align: center;
-        background: linear-gradient(135deg, #08244a, #063467);
+        background:
+            radial-gradient(circle at top right, rgba(0, 183, 255, .15), transparent 55%),
+            linear-gradient(135deg, #08244a, #063467);
         border: 1px solid #168cff;
-        box-shadow: 0 0 20px rgba(0, 140, 255, 0.15);
+        box-shadow: 0 0 24px rgba(0, 140, 255, .12);
     }
 
     .saldo-titulo {
-        color: #9bcfff;
+        color: #a4d6ff;
         font-size: 13px;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
 
     .saldo-valor {
-        font-size: 28px;
+        font-size: clamp(25px, 7vw, 32px);
         font-weight: 900;
-        color: white;
+        color: #fff;
         overflow-wrap: anywhere;
     }
 
     .boton {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
         width: 100%;
-        padding: 13px;
-        margin-top: 10px;
-        border-radius: 10px;
+        min-height: 49px;
+        padding: 13px 16px;
+        margin-top: 12px;
+        border-radius: 12px;
         text-align: center;
         text-decoration: none;
-        background: linear-gradient(90deg, #087cff, #00baff);
-        color: white;
+        background: linear-gradient(100deg, #087cff, #00baff);
+        color: #fff;
         font-size: 14px;
-        font-weight: bold;
-        border: none;
+        font-weight: 800;
+        border: 1px solid rgba(120, 210, 255, .3);
+        box-shadow: 0 5px 18px rgba(0, 140, 255, .16);
+        transition: transform .2s, filter .2s;
     }
 
-    .boton-secundario {
-        background: #0b203b;
-        border: 1px solid #20527e;
+    .boton:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+    }
+
+    .boton svg {
+        width: 21px;
+        height: 21px;
+        flex-shrink: 0;
+    }
+
+    .movimientos {
+        margin-top: 28px;
+    }
+
+    .movimientos-cabecera {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .movimientos-cabecera h2 {
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .etiqueta {
+        color: #83cfff;
+        background: rgba(0, 153, 255, .1);
+        border: 1px solid rgba(0, 153, 255, .22);
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .lista-movimientos {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .movimiento {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px;
+        background: #09182d;
+        border: 1px solid #17314f;
+        border-radius: 13px;
+        min-width: 0;
+    }
+
+    .movimiento-icono {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 12px;
+        background: rgba(0, 160, 255, .12);
+        color: #47c5ff;
+    }
+
+    .movimiento-icono svg {
+        width: 21px;
+        height: 21px;
+    }
+
+    .movimiento-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .movimiento-titulo {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        overflow-wrap: anywhere;
+    }
+
+    .movimiento-fecha {
+        color: #8094ae;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .movimiento-monto {
+        text-align: right;
+        font-size: 13px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .positivo {
+        color: #39dda0;
+    }
+
+    .negativo {
+        color: #ff8585;
+    }
+
+    .vacio, .cargando-movimientos {
+        text-align: center;
+        color: #8195ad;
+        font-size: 13px;
+        line-height: 1.6;
+        padding: 24px 14px;
+        background: #09182d;
+        border: 1px solid #17314f;
+        border-radius: 13px;
     }
 
     .estado {
@@ -118,60 +243,113 @@
         color: #8195ad;
         font-size: 12px;
         line-height: 1.5;
-        margin-top: 15px;
+        margin-top: 16px;
+    }
+
+    .estado.error {
+        color: #ff9999;
+    }
+
+    .estado.exito {
+        color: #58e6ae;
+    }
+
+    .pie {
+        text-align: center;
+        color: #536984;
+        font-size: 11px;
+        margin-top: 23px;
     }
 
     @media (max-width: 400px) {
+        body {
+            padding: 15px;
+        }
+
         .header {
             align-items: flex-start;
-            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 18px;
+        }
+
+        .card {
+            padding: 20px 14px;
+        }
+
+        .movimiento {
+            gap: 9px;
+            padding: 11px 9px;
+        }
+
+        .movimiento-icono {
+            width: 36px;
+            height: 36px;
+        }
+
+        .movimiento-monto {
+            font-size: 12px;
         }
     }
 </style>
 
 </head><body>
-    <div class="contenedor">
-        <div class="header">        <div class="logo">
-            <span class="rayo">⚡</span> GAMERS GOLD
+    <div class="contenedor">    <header class="header">
+        <div class="logo">
+            <span class="rayo">G</span> GAMERS GOLD
         </div>
 
-        <a href="../index.html" class="volver">
-            Inicio
-        </a>
+        <a href="../index.html" class="volver">Inicio</a>
+    </header>
 
-    </div>
-
-    <div class="card">
-
+    <main class="card">
         <h1>Mi Wallet</h1>
 
         <p class="subtitulo">
             Consulta tu saldo y administra tus GVR.
         </p>
 
-        <div class="saldo">
+        <section class="saldo" aria-label="Saldo disponible">
+            <div class="saldo-titulo">Saldo disponible</div>
 
-            <div class="saldo-titulo">
-                Saldo disponible
-            </div>
-
-            <div class="saldo-valor" id="saldoGVR">
+            <div class="saldo-valor" id="saldoGVR" aria-live="polite">
                 Cargando...
             </div>
-
-        </div>
+        </section>
 
         <a href="recargar-gvr.html" class="boton">
-            Recargar GVR
+            <svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 8v8"></path>
+                <path d="M8 12h8"></path>
+            </svg>
+            Añadir GVR
         </a>
 
-        <a href="movimientos.html" class="boton boton-secundario">
-            Ver movimientos
-        </a>
+        <section class="movimientos">
+            <div class="movimientos-cabecera">
+                <h2>Historial de movimientos</h2>
+                <span class="etiqueta">Últimos movimientos</span>
+            </div>
 
-        <p class="estado" id="estadoWallet"></p>
+            <div id="listaMovimientos" class="lista-movimientos"
+                aria-live="polite">
+                <div class="cargando-movimientos">
+                    Cargando movimientos...
+                </div>
+            </div>
+        </section>
 
-    </div>
+        <p class="estado" id="estadoWallet" role="status"></p>
+    </main>
+
+    <footer class="pie">
+        Gamers Gold Top-Up · Wallet GVR
+    </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -183,21 +361,186 @@
     const SUPABASE_PUBLISHABLE_KEY =
         "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_PUBLISHABLE_KEY
-        );
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const iconoMovimiento = `
+        <svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <path d="M12 3v18"></path>
+            <path d="M17 7.5C17 5.6 14.8 4.5 12 4.5S7 5.6 7 7.5
+                9 10.5 12 10.5s5 1.1 5 3-2.2 4-5 4-5-1.1-5-3"></path>
+        </svg>
+    `;
+
+    function escaparHTML(valor) {
+        return String(valor ?? "").replace(/[&<>"']/g, caracter => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[caracter]);
+    }
+
+    function formatoFecha(fecha) {
+        const fechaObjeto = new Date(fecha);
+
+        if (Number.isNaN(fechaObjeto.getTime())) {
+            return "Fecha no disponible";
+        }
+
+        return fechaObjeto.toLocaleString("es-ES", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    }
+
+    function formatoCantidad(cantidad) {
+        const numero = Number(cantidad);
+
+        if (!Number.isFinite(numero)) {
+            return "0";
+        }
+
+        return numero.toLocaleString("es-ES", {
+            maximumFractionDigits: 2
+        });
+    }
+
+    function nombreMovimiento(movimiento) {
+        const tipo = String(movimiento.type || "").toLowerCase();
+        const referencia = String(movimiento.reference || "").toLowerCase();
+
+        if (
+            tipo.includes("refund") ||
+            tipo.includes("reembolso") ||
+            referencia.includes("refund") ||
+            referencia.includes("reembolso")
+        ) {
+            return "Reembolso";
+        }
+
+        if (
+            tipo.includes("purchase") ||
+            tipo.includes("compra") ||
+            tipo.includes("debit") ||
+            referencia.includes("purchase")
+        ) {
+            return "Compra";
+        }
+
+        if (
+            tipo.includes("topup") ||
+            tipo.includes("top_up") ||
+            tipo.includes("deposit") ||
+            tipo.includes("recarga") ||
+            referencia.includes("topup") ||
+            referencia.includes("recarga")
+        ) {
+            return "Recarga de saldo";
+        }
+
+        return movimiento.type
+            ? String(movimiento.type).replace(/[_-]/g, " ")
+            : "Movimiento de wallet";
+    }
+
+    function esEntrada(movimiento) {
+        const tipo = String(movimiento.type || "").toLowerCase();
+
+        if (
+            tipo.includes("refund") ||
+            tipo.includes("reembolso") ||
+            tipo.includes("deposit") ||
+            tipo.includes("topup") ||
+            tipo.includes("top_up") ||
+            tipo.includes("recarga") ||
+            tipo.includes("credit") ||
+            tipo.includes("add")
+        ) {
+            return true;
+        }
+
+        if (
+            tipo.includes("purchase") ||
+            tipo.includes("compra") ||
+            tipo.includes("debit") ||
+            tipo.includes("withdraw")
+        ) {
+            return false;
+        }
+
+        const antes = Number(movimiento.balance_before);
+        const despues = Number(movimiento.balance_after);
+
+        if (
+            Number.isFinite(antes) &&
+            Number.isFinite(despues) &&
+            antes !== despues
+        ) {
+            return despues > antes;
+        }
+
+        return Number(movimiento.amount) >= 0;
+    }
+
+    function renderizarMovimiento(movimiento) {
+        const entrada = esEntrada(movimiento);
+        const cantidad = Math.abs(Number(movimiento.amount) || 0);
+        const signo = entrada ? "+" : "−";
+        const claseMonto = entrada ? "positivo" : "negativo";
+
+        const elemento = document.createElement("article");
+        elemento.className = "movimiento";
+
+        const icono = document.createElement("div");
+        icono.className = "movimiento-icono";
+        icono.innerHTML = iconoMovimiento;
+
+        const info = document.createElement("div");
+        info.className = "movimiento-info";
+
+        const titulo = document.createElement("div");
+        titulo.className = "movimiento-titulo";
+        titulo.textContent = nombreMovimiento(movimiento);
+
+        const fecha = document.createElement("div");
+        fecha.className = "movimiento-fecha";
+        fecha.textContent = formatoFecha(movimiento.created_at);
+
+        info.append(titulo, fecha);
+
+        if (movimiento.reference) {
+            const referencia = document.createElement("div");
+            referencia.className = "movimiento-fecha";
+            referencia.textContent =
+                "Referencia: " + String(movimiento.reference).slice(0, 70);
+            info.appendChild(referencia);
+        }
+
+        const monto = document.createElement("div");
+        monto.className = `movimiento-monto ${claseMonto}`;
+        monto.textContent = `${signo}${formatoCantidad(cantidad)} GVR`;
+
+        elemento.append(icono, info, monto);
+
+        return elemento;
+    }
 
     async function cargarWallet() {
-        const saldoElemento =
-            document.getElementById("saldoGVR");
+        const saldoElemento = document.getElementById("saldoGVR");
+        const estadoElemento = document.getElementById("estadoWallet");
+        const listaElemento = document.getElementById("listaMovimientos");
 
-        const estadoElemento =
-            document.getElementById("estadoWallet");
-
-        const { data, error } =
-            await supabaseClient.auth.getUser();
+        const { data, error } = await supabaseClient.auth.getUser();
 
         if (error || !data.user) {
             window.location.href = "login.html";
@@ -214,48 +557,97 @@
                 .maybeSingle();
 
         if (walletError) {
-            console.error(
-                "Error cargando wallet:",
-                walletError
-            );
+            console.error("Error cargando wallet:", walletError);
 
             saldoElemento.textContent = "No disponible";
-
             estadoElemento.textContent =
                 "No se pudo consultar el saldo. Inténtalo nuevamente.";
-
-            return;
-        }
-
-        if (!wallet) {
+            estadoElemento.className = "estado error";
+        } else if (!wallet) {
             saldoElemento.textContent = "0 GVR";
-
             estadoElemento.textContent =
                 "No se encontró una wallet para esta cuenta.";
+            estadoElemento.className = "estado error";
+        } else {
+            const saldo = Number(wallet.balance);
+
+            if (Number.isFinite(saldo)) {
+                saldoElemento.textContent =
+                    `${formatoCantidad(saldo)} GVR`;
+            } else {
+                saldoElemento.textContent = "No disponible";
+                estadoElemento.textContent =
+                    "No se pudo interpretar el saldo de la wallet.";
+                estadoElemento.className = "estado error";
+            }
+        }
+
+        const { data: movimientos, error: movimientosError } =
+            await supabaseClient
+                .from("transactions")
+                .select(
+                    "id, type, amount, balance_before, balance_after, reference, created_at"
+                )
+                .eq("user_id", usuario.id)
+                .order("created_at", { ascending: false })
+                .limit(20);
+
+        listaElemento.replaceChildren();
+
+        if (movimientosError) {
+            console.error(
+                "Error cargando movimientos:",
+                movimientosError
+            );
+
+            const mensaje = document.createElement("div");
+            mensaje.className = "vacio";
+            mensaje.textContent =
+                "No se pudo cargar el historial. Comprueba los permisos de lectura de transactions en Supabase.";
+            listaElemento.appendChild(mensaje);
+
+            if (!walletError && wallet) {
+                estadoElemento.textContent =
+                    "Tu saldo está disponible, pero no se pudo cargar el historial.";
+                estadoElemento.className = "estado error";
+            }
 
             return;
         }
 
-        const saldo = Number(wallet.balance);
-
-        if (!Number.isFinite(saldo)) {
-            saldoElemento.textContent = "No disponible";
-
-            estadoElemento.textContent =
-                "No se pudo interpretar el saldo de la wallet.";
-
+        if (!movimientos || movimientos.length === 0) {
+            const mensaje = document.createElement("div");
+            mensaje.className = "vacio";
+            mensaje.textContent =
+                "Todavía no tienes movimientos registrados en tu wallet.";
+            listaElemento.appendChild(mensaje);
             return;
         }
 
-        saldoElemento.textContent =
-            `⚡ ${saldo.toLocaleString("es-ES", {
-                maximumFractionDigits: 2
-            })} GVR`;
+        const fragmento = document.createDocumentFragment();
 
-        estadoElemento.textContent = "";
+        movimientos.forEach(movimiento => {
+            fragmento.appendChild(renderizarMovimiento(movimiento));
+        });
+
+        listaElemento.appendChild(fragmento);
     }
 
-    cargarWallet();
+    cargarWallet().catch(error => {
+        console.error("Error inesperado cargando wallet:", error);
+
+        document.getElementById("estadoWallet").textContent =
+            "Ocurrió un error al cargar la wallet. Recarga la página.";
+        document.getElementById("estadoWallet").className = "estado error";
+
+        const lista = document.getElementById("listaMovimientos");
+        lista.replaceChildren();
+
+        const mensaje = document.createElement("div");
+        mensaje.className = "vacio";
+        mensaje.textContent = "No se pudo cargar el historial.";
+        lista.appendChild(mensaje);
+    });
 </script>
 
 </body>
