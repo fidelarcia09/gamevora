@@ -313,15 +313,14 @@ async function cargarContactosUsuarios(idsUsuario) {
 
         if (error) {
             console.error("No se pudieron recuperar los contactos de usuarios:", error);
-            throw new Error(
-                "No se pudieron cargar los nombres y correos mediante admin-user-contacts. " +
-                "Comprueba que la función esté activa y que la sesión tenga permisos administrativos. " +
-                (error.message || "")
-            );
+            // Los contactos son complementarios: no bloquear el panel de ventas por este fallo.
+            // La Edge Function se encarga de la comprobación administrativa en el servidor.
+            return mapa;
         }
 
         if (data?.error) {
-            throw new Error("admin-user-contacts: " + data.error);
+            console.error("admin-user-contacts devolvió un error:", data.error, data.details || "");
+            return mapa;
         }
 
         for (const usuario of data?.users || []) {
@@ -587,4 +586,5 @@ iniciar();
 </script>
 </body>
 </html>
+
 
