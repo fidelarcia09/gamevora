@@ -1,7 +1,9 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Mi cuenta | Gamers Gold Top-Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi cuenta | Gamers Gold Top-Up</title>
 
 <style>
     * {
@@ -149,6 +151,48 @@
         box-shadow: 0 0 20px rgba(0, 170, 255, 0.35);
     }
 
+    .boton-notificaciones {
+        background: linear-gradient(90deg, #064c64, #087cff);
+        border: 1px solid #18c9ff;
+        cursor: pointer;
+    }
+
+    .boton-notificaciones:hover {
+        box-shadow: 0 0 18px rgba(0, 200, 255, 0.25);
+    }
+
+    .boton-notificaciones:disabled {
+        opacity: 0.65;
+        cursor: wait;
+    }
+
+    .estado-notificaciones {
+        display: none;
+        margin-top: 10px;
+        padding: 11px 12px;
+        border-radius: 9px;
+        background: #061226;
+        border: 1px solid #173d63;
+        color: #9ab0c9;
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .estado-notificaciones.visible {
+        display: block;
+    }
+
+    .estado-notificaciones.error {
+        border-color: #87394a;
+        color: #ff8195;
+    }
+
+    .estado-notificaciones.exito {
+        border-color: #247342;
+        color: #68df8c;
+    }
+
     .boton-cerrar {
         background: #8b1e2d;
         border: 1px solid #ff4057;
@@ -171,94 +215,93 @@
         }
     }
 </style>
+</head>
 
-</head><body><div class="contenedor"><div class="header">
+<body>
+<div class="contenedor">
 
-    <div class="logo">
-        <span class="rayo">⚡</span> GAMERS GOLD
+    <div class="header">
+        <div class="logo">
+            <span class="rayo">⚡</span> GAMERS GOLD
+        </div>
+
+        <div class="navegacion">
+            <a href="reseñas.html" class="volver">Reseñas</a>
+
+            <span class="separador">|</span>
+
+            <a href="../index.html" class="volver">Inicio</a>
+        </div>
     </div>
 
-    <div class="navegacion">
+    <div class="card">
 
-        <a href="reseñas.html" class="volver">
-            Reseñas
+        <div class="avatar">👤</div>
+
+        <h1>Mi cuenta</h1>
+
+        <p class="subtitulo">
+            Información de tu cuenta Gamers Gold Top-Up
+        </p>
+
+        <div class="dato">
+            <div class="dato-titulo">Nombre de usuario</div>
+            <div class="dato-valor" id="nombreUsuario">
+                Cargando...
+            </div>
+        </div>
+
+        <div class="dato">
+            <div class="dato-titulo">Correo electrónico</div>
+            <div class="dato-valor" id="correoUsuario">
+                Cargando...
+            </div>
+        </div>
+
+        <div class="dato">
+            <div class="dato-titulo">ID de cuenta</div>
+            <div class="dato-valor" id="idUsuario">
+                Cargando...
+            </div>
+        </div>
+
+        <div id="panelAdministracion">
+            <a href="admin-ventas.html" class="boton boton-admin">
+                Panel de ventas
+            </a>
+        </div>
+
+        <a href="soporte.html" class="boton boton-soporte">
+            Soporte
         </a>
 
-        <span class="separador">|</span>
+        <button
+            id="activarNotificacionesGVR"
+            class="boton boton-notificaciones"
+            type="button"
+        >
+            Activar notificaciones de compras GVR
+        </button>
 
-        <a href="../index.html" class="volver">
-            Inicio
-        </a>
+        <div
+            id="estadoNotificacionesGVR"
+            class="estado-notificaciones"
+            role="status"
+            aria-live="polite"
+        ></div>
+
+        <button id="cerrarSesion" class="boton boton-cerrar">
+            Cerrar sesión
+        </button>
 
     </div>
-
 </div>
 
-<div class="card">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <div class="avatar">👤</div>
+<script>
+"use strict";
 
-    <h1>Mi cuenta</h1>
-
-    <p class="subtitulo">
-        Información de tu cuenta Gamers Gold Top-Up
-    </p>
-
-    <div class="dato">
-
-        <div class="dato-titulo">
-            Nombre de usuario
-        </div>
-
-        <div class="dato-valor" id="nombreUsuario">
-            Cargando...
-        </div>
-
-    </div>
-
-    <div class="dato">
-
-        <div class="dato-titulo">
-            Correo electrónico
-        </div>
-
-        <div class="dato-valor" id="correoUsuario">
-            Cargando...
-        </div>
-
-    </div>
-
-    <div class="dato">
-
-        <div class="dato-titulo">
-            ID de cuenta
-        </div>
-
-        <div class="dato-valor" id="idUsuario">
-            Cargando...
-        </div>
-
-    </div>
-
-    <div id="panelAdministracion">
-
-        <a href="admin-ventas.html" class="boton boton-admin">
-            Panel de ventas
-        </a>
-
-    </div>
-
-    <a href="soporte.html" class="boton boton-soporte">
-        Soporte
-    </a>
-
-    <button id="cerrarSesion" class="boton boton-cerrar">
-        Cerrar sesión
-    </button>
-
-</div>
-
-</div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 const SUPABASE_URL =
     "https://gsuhzcavghsiolmipnzi.supabase.co";
 
@@ -270,6 +313,11 @@ const supabaseClient =
         SUPABASE_URL,
         SUPABASE_PUBLISHABLE_KEY
     );
+
+
+/* ==========================================
+   COMPROBAR ADMINISTRADOR
+========================================== */
 
 async function comprobarAdministrador() {
     const { data, error } =
@@ -286,6 +334,11 @@ async function comprobarAdministrador() {
 
     return data === true;
 }
+
+
+/* ==========================================
+   CARGAR CUENTA
+========================================== */
 
 async function cargarCuenta() {
     const { data, error } =
@@ -317,11 +370,194 @@ async function cargarCuenta() {
     }
 }
 
+
+/* ==========================================
+   NOTIFICACIONES PUSH DE COMPRAS GVR
+========================================== */
+
+const VAPID_PUBLIC_KEY =
+    "BOTEc5uNWGMOVSZicoL3lqSEgQZdcOgQMiZF_JKbk-Yg9dmtU9Yp2yEuONOl3Y3IU42K0DevmR8vmSTCkpq69Ig";
+
+
+function mostrarEstadoNotificaciones(mensaje, tipo = "") {
+    const elemento = document.getElementById(
+        "estadoNotificacionesGVR"
+    );
+
+    elemento.textContent = mensaje;
+
+    elemento.className =
+        "estado-notificaciones visible" +
+        (tipo ? " " + tipo : "");
+}
+
+
+function convertirClaveVapid(clave) {
+    const base64 = clave
+        .replace(/-/g, "+")
+        .replace(/_/g, "/");
+
+    const rellenada =
+        base64 + "=".repeat((4 - base64.length % 4) % 4);
+
+    const binario = atob(rellenada);
+    const salida = new Uint8Array(binario.length);
+
+    for (let i = 0; i < binario.length; i++) {
+        salida[i] = binario.charCodeAt(i);
+    }
+
+    return salida;
+}
+
+
+async function activarNotificacionesGVR() {
+    const boton = document.getElementById(
+        "activarNotificacionesGVR"
+    );
+
+    boton.disabled = true;
+    boton.textContent = "Activando notificaciones...";
+
+    try {
+        if (!window.isSecureContext) {
+            throw new Error(
+                "Las notificaciones requieren una conexión HTTPS segura."
+            );
+        }
+
+        if (
+            !("Notification" in window) ||
+            !("serviceWorker" in navigator) ||
+            !("PushManager" in window)
+        ) {
+            throw new Error(
+                "Este navegador no admite notificaciones Push. Prueba con Chrome actualizado."
+            );
+        }
+
+        const { data: sesion, error: errorSesion } =
+            await supabaseClient.auth.getUser();
+
+        if (errorSesion || !sesion.user) {
+            throw new Error(
+                "Inicia sesión para activar las notificaciones."
+            );
+        }
+
+        let permiso = Notification.permission;
+
+        if (permiso === "default") {
+            permiso = await Notification.requestPermission();
+        }
+
+        if (permiso !== "granted") {
+            throw new Error(
+                permiso === "denied"
+                    ? "Las notificaciones están bloqueadas. Permítelas en los ajustes del navegador y vuelve a intentarlo."
+                    : "No se concedió permiso para mostrar notificaciones."
+            );
+        }
+
+        const registro =
+            await navigator.serviceWorker.register(
+                "service-worker.js"
+            );
+
+        await navigator.serviceWorker.ready;
+
+        let suscripcion =
+            await registro.pushManager.getSubscription();
+
+        if (!suscripcion) {
+            suscripcion =
+                await registro.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey:
+                        convertirClaveVapid(VAPID_PUBLIC_KEY)
+                });
+        }
+
+        const datos = suscripcion.toJSON();
+
+        if (
+            !datos.endpoint ||
+            !datos.keys?.p256dh ||
+            !datos.keys?.auth
+        ) {
+            throw new Error(
+                "El navegador no devolvió una suscripción Push válida."
+            );
+        }
+
+        const { error: errorGuardar } =
+            await supabaseClient
+                .from("user_push_subscriptions")
+                .upsert({
+                    user_id: sesion.user.id,
+                    endpoint: datos.endpoint,
+                    p256dh: datos.keys.p256dh,
+                    auth: datos.keys.auth,
+                    updated_at: new Date().toISOString()
+                }, {
+                    onConflict: "endpoint"
+                });
+
+        if (errorGuardar) {
+            throw errorGuardar;
+        }
+
+        mostrarEstadoNotificaciones(
+            "Notificaciones activadas. Te avisaremos cuando tu solicitud de compra de GVR sea aprobada o rechazada.",
+            "exito"
+        );
+
+        boton.textContent =
+            "Notificaciones de GVR activadas";
+
+    } catch (error) {
+        console.error(
+            "Error activando notificaciones GVR:",
+            error
+        );
+
+        mostrarEstadoNotificaciones(
+            error.message ||
+            "No se pudieron activar las notificaciones. Inténtalo nuevamente.",
+            "error"
+        );
+
+        boton.textContent =
+            "Activar notificaciones de compras GVR";
+
+        boton.disabled = false;
+    }
+}
+
+
+document
+    .getElementById("activarNotificacionesGVR")
+    .addEventListener(
+        "click",
+        activarNotificacionesGVR
+    );
+
+
+/* ==========================================
+   INICIAR CUENTA
+========================================== */
+
 cargarCuenta();
+
+
+/* ==========================================
+   CERRAR SESIÓN
+========================================== */
 
 document
     .getElementById("cerrarSesion")
     .addEventListener("click", async function() {
+
         const { error } =
             await supabaseClient.auth.signOut();
 
@@ -336,5 +572,6 @@ document
 
         window.location.href = "login.html";
     });
-</script></body>
+</script>
+</body>
 </html>
