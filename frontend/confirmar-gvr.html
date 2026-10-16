@@ -470,10 +470,12 @@ async function obtenerUsuario() {
 }
 
 async function crearSolicitud(usuario) {
-    const metodoDB = metodoTexto;
-    const monedaDB = metodoTexto;
-    const importe = cantidad * metodo.tasa;
+    const metodoDB = metodoTexto === "SALDO MOVIL"
+    ? "SALDO_MOVIL"
+    : metodoTexto;
 
+const monedaDB = metodo.moneda;
+const importe = cantidad * metodo.tasa;
     const {data,error} = await supabaseClient
         .from("gvr_purchase_requests")
         .insert({
