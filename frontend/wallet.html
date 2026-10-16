@@ -77,16 +77,151 @@
     }
 
     .saldo {
-        margin-bottom: 17px;
-        padding: 24px 15px;
-        border-radius: 16px;
-        text-align: center;
-        background:
-            radial-gradient(circle at top right, rgba(0, 183, 255, .15), transparent 55%),
-            linear-gradient(135deg, #08244a, #063467);
-        border: 1px solid #168cff;
-        box-shadow: 0 0 24px rgba(0, 140, 255, .12);
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 17px;
+    padding: 23px 18px;
+    border-radius: 18px;
+    text-align: left;
+    background:
+        radial-gradient(circle at 85% 50%, rgba(0, 183, 255, .22), transparent 42%),
+        linear-gradient(135deg, #06152d, #083b70 60%, #06152d);
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    box-shadow:
+        0 0 12px rgba(0, 140, 255, .25),
+        0 0 28px rgba(0, 140, 255, .12),
+        inset 0 0 18px rgba(0, 183, 255, .08);
+}
+
+.saldo::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 20px;
+    padding: 2px;
+    background: linear-gradient(
+        115deg,
+        #0755a8,
+        #00c8ff,
+        #e2fbff,
+        #008cff,
+        #0755a8
+    );
+    background-size: 300% 300%;
+    animation: brilloBordeGVR 5s linear infinite;
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes brilloBordeGVR {
+    0% {
+        background-position: 0% 50%;
+        filter: brightness(.9);
     }
+    50% {
+        background-position: 100% 50%;
+        filter: brightness(1.6);
+    }
+    100% {
+        background-position: 0% 50%;
+        filter: brightness(.9);
+    }
+}
+
+.saldo-contenido {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-width: 0;
+}
+
+.saldo-titulo {
+    color: #a4d6ff;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.saldo-valor {
+    font-size: clamp(23px, 6vw, 32px);
+    font-weight: 900;
+    color: #fff;
+    overflow-wrap: anywhere;
+    text-shadow: 0 0 12px rgba(0, 183, 255, .22);
+}
+
+.saldo-emblema {
+    position: relative;
+    flex-shrink: 0;
+    width: 76px;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 30% 25%, #e8fbff 0%, #58d7ff 9%, #087ad8 35%, #052451 72%);
+    border: 2px solid #79e4ff;
+    box-shadow:
+        0 0 9px rgba(0, 200, 255, .95),
+        0 0 22px rgba(0, 140, 255, .65),
+        inset 0 0 10px rgba(255, 255, 255, .35);
+}
+
+.saldo-emblema::before {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(224, 250, 255, .7);
+    border-radius: 50%;
+}
+
+.saldo-letra {
+    font-family: Arial, sans-serif;
+    font-size: 49px;
+    line-height: 1;
+    font-weight: 900;
+    font-style: italic;
+    color: #fff;
+    transform: skewX(-7deg);
+    -webkit-text-stroke: 1px #a9efff;
+    text-shadow:
+        2px 2px 0 #07519b,
+        0 0 5px #fff,
+        0 0 13px #00c8ff,
+        0 0 22px #008cff;
+}
+
+@media (max-width: 400px) {
+    .saldo {
+        padding: 20px 13px;
+        gap: 8px;
+    }
+
+    .saldo-emblema {
+        width: 64px;
+        height: 64px;
+    }
+
+    .saldo-letra {
+        font-size: 42px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .saldo::before {
+        animation: none;
+    }
+        }
 
     .saldo-titulo {
         color: #a4d6ff;
@@ -329,11 +464,17 @@
     </p>
 
     <section class="saldo" aria-label="Saldo disponible">
+    <div class="saldo-contenido">
         <div class="saldo-titulo">Saldo disponible</div>
 
         <div class="saldo-valor" id="saldoGVR" aria-live="polite">
             Cargando...
         </div>
+    </div>
+
+    <div class="saldo-emblema" aria-label="GVR" role="img">
+        <span class="saldo-letra">G</span>
+    </div>
     </section>
 
     <a href="recargar-gvr.html" class="boton">
