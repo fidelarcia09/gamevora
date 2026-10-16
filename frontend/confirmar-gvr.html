@@ -1,326 +1,482 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#020817">
-    <title>Confirmar compra | Gamers Gold Top-Up</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Confirmar compra | Gamers Gold Top-Up</title>
 
-<style>
-    :root {
-        --fondo: #020817;
-        --panel: #08162c;
-        --panel2: #0b1e3a;
-        --azul: #087cff;
-        --cian: #00c8ff;
-        --borde: rgba(0, 174, 255, .28);
-        --texto: #f4f8ff;
-        --suave: #91a5c2;
-    }
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
+    <style>
+        :root {
+            --fondo: #020817;
+            --panel: #08162c;
+            --panel2: #0b1e3a;
+            --azul: #087cff;
+            --cian: #00c8ff;
+            --borde: rgba(0,174,255,.28);
+            --texto: #f4f8ff;
+            --suave: #91a5c2;
+            --verde: #42e6a4;
+            --rojo: #ff8585;
+        }
 
-    body {
-        min-height: 100vh;
-        background:
-            radial-gradient(ellipse at top, rgba(0, 116, 255, .15), transparent 45%),
-            var(--fondo);
-        color: var(--texto);
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-    header {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-        padding: 20px clamp(16px, 5vw, 55px);
-        border-bottom: 1px solid rgba(0, 174, 255, .13);
-    }
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse at top, rgba(0,116,255,.15), transparent 45%),
+                var(--fondo);
+            color: var(--texto);
+        }
 
-    .logo {
-        color: var(--texto);
-        font-size: clamp(18px, 4vw, 25px);
-        font-weight: 900;
-        letter-spacing: .5px;
-    }
-
-    .logo span {
-        color: var(--cian);
-    }
-
-    .volver {
-        color: var(--cian);
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 14px;
-        white-space: nowrap;
-    }
-
-    .volver:hover {
-        color: white;
-    }
-
-    main {
-        width: 100%;
-        padding: 25px 16px 50px;
-    }
-
-    .contenedor {
-        max-width: 650px;
-        margin: 0 auto;
-    }
-
-    .encabezado {
-        text-align: center;
-        margin: 15px 0 25px;
-    }
-
-    .etiqueta {
-        display: inline-block;
-        padding: 8px 13px;
-        border: 1px solid var(--borde);
-        border-radius: 30px;
-        color: var(--cian);
-        background: rgba(0, 174, 255, .07);
-        font-size: 11px;
-        font-weight: bold;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        margin-bottom: 15px;
-    }
-
-    h1 {
-        font-size: clamp(27px, 6vw, 38px);
-        margin-bottom: 12px;
-    }
-
-    .subtitulo {
-        max-width: 460px;
-        margin: 0 auto;
-        color: var(--suave);
-        line-height: 1.6;
-        font-size: 14px;
-    }
-
-    .card {
-        padding: clamp(20px, 5vw, 32px);
-        background: linear-gradient(145deg, #0a1b35, #061126);
-        border: 1px solid var(--borde);
-        border-radius: 22px;
-        box-shadow: 0 15px 45px rgba(0, 0, 0, .25);
-    }
-
-    .resumen-titulo {
-        font-size: 16px;
-        margin-bottom: 18px;
-    }
-
-    .dato {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-        padding: 17px;
-        margin-bottom: 12px;
-        border: 1px solid rgba(95, 153, 220, .16);
-        border-radius: 14px;
-        background: rgba(2, 13, 31, .65);
-    }
-
-    .dato:last-of-type {
-        margin-bottom: 0;
-    }
-
-    .dato-info {
-        min-width: 0;
-    }
-
-    .titulo {
-        color: var(--suave);
-        font-size: 12px;
-        margin-bottom: 7px;
-    }
-
-    .valor {
-        font-size: 17px;
-        font-weight: bold;
-        overflow-wrap: anywhere;
-    }
-
-    .cantidad {
-        color: var(--cian);
-        font-size: 22px;
-    }
-
-    .estado {
-        display: inline-block;
-        color: #ffd27a;
-        background: rgba(255, 190, 50, .09);
-        border: 1px solid rgba(255, 190, 50, .25);
-        border-radius: 20px;
-        padding: 7px 10px;
-        font-size: 12px;
-        white-space: nowrap;
-    }
-
-    .aviso {
-        margin-top: 20px;
-        padding: 16px;
-        background: rgba(0, 145, 255, .07);
-        border: 1px solid rgba(0, 174, 255, .2);
-        border-radius: 14px;
-        color: #c3d5ed;
-        font-size: 13px;
-        line-height: 1.65;
-    }
-
-    .aviso strong {
-        color: var(--cian);
-    }
-
-    .boton {
-        display: block;
-        width: 100%;
-        margin-top: 22px;
-        padding: 16px;
-        border: none;
-        border-radius: 12px;
-        background: linear-gradient(100deg, var(--azul), var(--cian));
-        color: white;
-        font-size: 15px;
-        font-weight: 800;
-        cursor: pointer;
-        transition: transform .2s, opacity .2s;
-    }
-
-    .boton:hover:not(:disabled) {
-        transform: translateY(-2px);
-    }
-
-    .boton:disabled {
-        opacity: .55;
-        cursor: not-allowed;
-    }
-
-    .mensaje {
-        display: none;
-        margin-top: 16px;
-        padding: 13px;
-        border-radius: 12px;
-        font-size: 13px;
-        line-height: 1.6;
-        overflow-wrap: anywhere;
-    }
-
-    .mensaje.error {
-        display: block;
-        color: #ffb5b5;
-        background: rgba(255, 50, 70, .08);
-        border: 1px solid rgba(255, 70, 90, .25);
-    }
-
-    .mensaje.info {
-        display: block;
-        color: #b8eaff;
-        background: rgba(0, 145, 255, .08);
-        border: 1px solid rgba(0, 174, 255, .25);
-    }
-
-    footer {
-        padding: 0 16px 25px;
-        text-align: center;
-        color: #657995;
-        font-size: 12px;
-    }
-
-    @media (max-width: 420px) {
         header {
-            padding: 17px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 20px clamp(16px,5vw,55px);
+            border-bottom: 1px solid rgba(0,174,255,.13);
+        }
+
+        .logo {
+            font-size: clamp(18px,4vw,25px);
+            font-weight: 900;
+            letter-spacing: .5px;
+        }
+
+        .logo span {
+            color: var(--cian);
+        }
+
+        .volver {
+            color: var(--cian);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        main {
+            padding: 25px 16px 50px;
+        }
+
+        .contenedor {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .encabezado {
+            text-align: center;
+            margin: 15px 0 25px;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            padding: 8px 13px;
+            border: 1px solid var(--borde);
+            border-radius: 30px;
+            color: var(--cian);
+            background: rgba(0,174,255,.07);
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: clamp(27px,6vw,38px);
+            margin-bottom: 12px;
+        }
+
+        .subtitulo {
+            max-width: 460px;
+            margin: 0 auto;
+            color: var(--suave);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .card {
+            padding: clamp(20px,5vw,32px);
+            background: linear-gradient(145deg,#0a1b35,#061126);
+            border: 1px solid var(--borde);
+            border-radius: 22px;
+            box-shadow: 0 15px 45px rgba(0,0,0,.25);
+        }
+
+        .seccion-titulo {
+            font-size: 16px;
+            margin: 24px 0 16px;
+        }
+
+        .seccion-titulo:first-child {
+            margin-top: 0;
         }
 
         .dato {
-            padding: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 17px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(95,153,220,.16);
+            border-radius: 14px;
+            background: rgba(2,13,31,.65);
+        }
+
+        .dato-info {
+            min-width: 0;
+        }
+
+        .titulo {
+            color: var(--suave);
+            font-size: 12px;
+            margin-bottom: 7px;
         }
 
         .valor {
-            font-size: 15px;
+            font-size: 17px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
         }
 
         .cantidad {
-            font-size: 20px;
+            color: var(--cian);
+            font-size: 22px;
         }
-    }
-</style>
 
-</head><body><header>
+        .estado {
+            display: inline-block;
+            color: #ffd27a;
+            background: rgba(255,190,50,.09);
+            border: 1px solid rgba(255,190,50,.25);
+            border-radius: 20px;
+            padding: 7px 10px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .pago-panel {
+            padding: 18px;
+            margin-top: 15px;
+            border-radius: 16px;
+            border: 1px solid var(--borde);
+            background: rgba(2,13,31,.65);
+        }
+
+        .pago-panel h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .descripcion {
+            color: var(--suave);
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .direccion {
+            padding: 14px;
+            border: 1px dashed rgba(0,200,255,.45);
+            border-radius: 12px;
+            background: rgba(0,125,255,.07);
+            color: var(--cian);
+            font-size: 16px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+        }
+
+        .boton-secundario {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            border: 1px solid rgba(0,200,255,.4);
+            border-radius: 10px;
+            background: rgba(0,125,255,.12);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .aviso {
+            margin-top: 18px;
+            padding: 15px;
+            background: rgba(0,145,255,.07);
+            border: 1px solid rgba(0,174,255,.2);
+            border-radius: 14px;
+            color: #c3d5ed;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .aviso strong {
+            color: var(--cian);
+        }
+
+        .subida {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            padding: 18px 14px;
+            border: 1px dashed rgba(0,200,255,.5);
+            border-radius: 14px;
+            background: rgba(0,125,255,.06);
+            color: white;
+            cursor: pointer;
+            line-height: 1.6;
+        }
+
+        .subida input {
+            display: block;
+            width: 100%;
+            margin-top: 12px;
+            color: var(--suave);
+            font-size: 13px;
+        }
+
+        .ayuda {
+            margin-top: 10px;
+            color: var(--suave);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .preview-contenedor {
+            display: none;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .preview-contenedor img {
+            display: block;
+            max-width: 100%;
+            max-height: 350px;
+            margin: 0 auto;
+            border-radius: 12px;
+            border: 1px solid var(--borde);
+        }
+
+        .preview-nombre {
+            margin-top: 8px;
+            color: var(--suave);
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .boton {
+            display: block;
+            width: 100%;
+            margin-top: 22px;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(100deg,var(--azul),var(--cian));
+            color: white;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .boton:disabled,
+        .boton-secundario:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        .mensaje {
+            display: none;
+            margin-top: 16px;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .mensaje.error {
+            display: block;
+            color: #ffb5b5;
+            background: rgba(255,50,70,.08);
+            border: 1px solid rgba(255,70,90,.25);
+        }
+
+        .mensaje.info {
+            display: block;
+            color: #b8eaff;
+            background: rgba(0,145,255,.08);
+            border: 1px solid rgba(0,174,255,.25);
+        }
+
+        .mensaje.exito {
+            display: block;
+            color: var(--verde);
+            background: rgba(40,220,150,.08);
+            border: 1px solid rgba(40,220,150,.25);
+        }
+
+        .oculto {
+            display: none !important;
+        }
+
+        footer {
+            padding: 0 16px 25px;
+            text-align: center;
+            color: #657995;
+            font-size: 12px;
+        }
+
+        @media(max-width:420px) {
+            header {
+                padding: 17px 14px;
+            }
+
+            .dato {
+                padding: 14px;
+            }
+
+            .valor {
+                font-size: 15px;
+            }
+
+            .cantidad {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
     <div class="logo">GAMERS<span>GOLD</span></div>
     <a href="pago-gvr.html" class="volver">← Volver</a>
-</header><main>
-    <div class="contenedor">    <div class="encabezado">
-        <div class="etiqueta">Compra de GVR</div>
-        <h1>Confirma tu compra</h1>
-        <p class="subtitulo">
-            Revisa la cantidad y el método de pago antes de continuar.
-        </p>
+</header>
+
+<main>
+    <div class="contenedor">
+        <div class="encabezado">
+            <div class="etiqueta">Compra de GVR</div>
+            <h1>Confirma tu compra</h1>
+            <p class="subtitulo">
+                Realiza el pago con los datos indicados y adjunta una imagen del comprobante.
+            </p>
+        </div>
+
+        <section class="card">
+            <h2 class="seccion-titulo">Resumen de la compra</h2>
+
+            <div class="dato">
+                <div class="dato-info">
+                    <div class="titulo">Cantidad solicitada</div>
+                    <div class="valor cantidad" id="mostrarCantidad">Cargando...</div>
+                </div>
+            </div>
+
+            <div class="dato">
+                <div class="dato-info">
+                    <div class="titulo">Método de pago</div>
+                    <div class="valor" id="mostrarMetodo">Cargando...</div>
+                </div>
+            </div>
+
+            <div class="dato">
+                <div class="dato-info">
+                    <div class="titulo">Importe exacto</div>
+                    <div class="valor" id="mostrarPrecio">Calculando...</div>
+                </div>
+            </div>
+
+            <div class="dato">
+                <div class="dato-info">
+                    <div class="titulo">Estado</div>
+                    <div class="valor">Esperando comprobante</div>
+                </div>
+                <span class="estado" id="estadoCompra">Sin enviar</span>
+            </div>
+
+            <div id="panelSaldo" class="pago-panel oculto">
+                <h3>Pago mediante saldo móvil</h3>
+                <p class="descripcion">
+                    Envía exactamente el importe indicado al siguiente número y guarda la captura del pago.
+                </p>
+                <div class="titulo">Número receptor</div>
+                <div class="direccion" id="numeroSaldo">63638032</div>
+                <button class="boton-secundario" type="button" id="copiarSaldo">
+                    Copiar número
+                </button>
+            </div>
+
+            <div id="panelUsdt" class="pago-panel oculto">
+                <h3>Pago mediante USDT</h3>
+                <p class="descripcion">
+                    Envía USDT usando exclusivamente la red BNB Smart Chain (BEP20).
+                    Comprueba la red antes de confirmar la transferencia.
+                </p>
+                <div class="titulo">Dirección receptora BEP20</div>
+                <div class="direccion" id="direccionUsdt">
+                    0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C
+                </div>
+                <button class="boton-secundario" type="button" id="copiarUsdt">
+                    Copiar dirección
+                </button>
+            </div>
+
+            <div id="panelCup" class="pago-panel oculto">
+                <h3>Pago mediante CUP</h3>
+                <p class="descripcion">
+                    Este método todavía no está disponible. Podrás utilizarlo cuando se configure la tarjeta receptora.
+                </p>
+            </div>
+
+            <div class="aviso">
+                <strong>Importante:</strong> enviar una imagen no confirma por sí solo el pago.
+                La solicitud deberá ser revisada por el personal autorizado.
+                Los GVR no se acreditarán hasta que la compra sea aprobada.
+            </div>
+
+            <h2 class="seccion-titulo">Comprobante de pago</h2>
+
+            <label class="subida" for="archivoComprobante">
+                Selecciona la captura del pago
+                <input
+                    type="file"
+                    id="archivoComprobante"
+                    accept="image/jpeg,image/png,image/webp"
+                    capture="environment"
+                >
+            </label>
+
+            <p class="ayuda">
+                Formatos permitidos: JPG, PNG y WEBP. Tamaño máximo: 5 MB.
+            </p>
+
+            <div class="preview-contenedor" id="previewContenedor">
+                <img id="previewImagen" alt="Vista previa del comprobante">
+                <div class="preview-nombre" id="previewNombre"></div>
+            </div>
+
+            <button class="boton" id="botonContinuar" type="button">
+                Enviar comprobante
+            </button>
+
+            <div id="mensaje" class="mensaje" role="status" aria-live="polite"></div>
+        </section>
     </div>
+</main>
 
-    <section class="card">
+<footer>Gamers Gold Top-Up · Compras de GVR</footer>
 
-        <h2 class="resumen-titulo">Resumen de la compra</h2>
-
-        <div class="dato">
-            <div class="dato-info">
-                <div class="titulo">Cantidad solicitada</div>
-                <div class="valor cantidad" id="mostrarCantidad">Cargando...</div>
-            </div>
-        </div>
-
-        <div class="dato">
-            <div class="dato-info">
-                <div class="titulo">Método de pago</div>
-                <div class="valor" id="mostrarMetodo">Cargando...</div>
-            </div>
-        </div>
-
-        <div class="dato">
-            <div class="dato-info">
-                <div class="titulo">Importe estimado</div>
-                <div class="valor" id="mostrarPrecio">Calculando...</div>
-            </div>
-        </div>
-
-        <div class="dato">
-            <div class="dato-info">
-                <div class="titulo">Estado de la compra</div>
-                <div class="valor">Sin enviar</div>
-            </div>
-            <span class="estado">Pendiente</span>
-        </div>
-
-        <div class="aviso">
-            <strong>Importante:</strong> esta pantalla todavía no confirma un pago.
-            Tu saldo GVR no se modificará aquí. Para completar la compra,
-            el siguiente paso será enviar el comprobante y esperar la revisión
-            del personal autorizado.
-        </div>
-
-        <button class="boton" id="botonContinuar" type="button">
-            Continuar con la compra
-        </button>
-
-        <div id="mensaje" class="mensaje" role="status" aria-live="polite"></div>
-
-    </section>
-</div>
-
-</main><footer>
-    Gamers Gold Top-Up · Compras de GVR
-</footer><script>
+<script>
 "use strict";
 
 const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -340,13 +496,11 @@ const supabaseClient = window.supabase.createClient(
 
 const parametros = new URLSearchParams(window.location.search);
 const cantidadTexto = parametros.get("cantidad") || "";
-const metodoTexto = (parametros.get("metodo") || "").trim().toUpperCase();
-
-const mostrarCantidad = document.getElementById("mostrarCantidad");
-const mostrarMetodo = document.getElementById("mostrarMetodo");
-const mostrarPrecio = document.getElementById("mostrarPrecio");
-const botonContinuar = document.getElementById("botonContinuar");
-const mensaje = document.getElementById("mensaje");
+const metodoTexto = (parametros.get("metodo") || "")
+    .trim()
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
 const METODOS = {
     "CUP": {
@@ -360,12 +514,6 @@ const METODOS = {
         tasa: 1,
         moneda: "USDT",
         decimales: 2
-    },
-    "SALDO MÓVIL": {
-        nombre: "Saldo móvil",
-        tasa: 200,
-        moneda: "Saldo móvil",
-        decimales: 0
     },
     "SALDO MOVIL": {
         nombre: "Saldo móvil",
@@ -383,6 +531,19 @@ const cantidadValida =
     cantidad >= 1 &&
     cantidad <= 1000000;
 
+const mostrarCantidad = document.getElementById("mostrarCantidad");
+const mostrarMetodo = document.getElementById("mostrarMetodo");
+const mostrarPrecio = document.getElementById("mostrarPrecio");
+const botonContinuar = document.getElementById("botonContinuar");
+const mensaje = document.getElementById("mensaje");
+const archivoComprobante = document.getElementById("archivoComprobante");
+const previewContenedor = document.getElementById("previewContenedor");
+const previewImagen = document.getElementById("previewImagen");
+const previewNombre = document.getElementById("previewNombre");
+
+let archivoSeleccionado = null;
+let previewUrl = null;
+
 function mostrarMensaje(texto, tipo) {
     mensaje.textContent = texto;
     mensaje.className = "mensaje " + tipo;
@@ -395,6 +556,22 @@ function formatoNumero(numero, decimales = 0) {
     }).format(numero);
 }
 
+function mostrarPanelMetodo() {
+    document.getElementById("panelSaldo").classList.add("oculto");
+    document.getElementById("panelUsdt").classList.add("oculto");
+    document.getElementById("panelCup").classList.add("oculto");
+
+    if (!metodo) return;
+
+    if (metodoTexto === "SALDO MOVIL") {
+        document.getElementById("panelSaldo").classList.remove("oculto");
+    } else if (metodoTexto === "USDT") {
+        document.getElementById("panelUsdt").classList.remove("oculto");
+    } else if (metodoTexto === "CUP") {
+        document.getElementById("panelCup").classList.remove("oculto");
+    }
+}
+
 if (cantidadValida) {
     mostrarCantidad.textContent = formatoNumero(cantidad) + " GVR";
 } else {
@@ -405,9 +582,9 @@ if (metodo) {
     mostrarMetodo.textContent = metodo.nombre;
 
     if (cantidadValida) {
-        const total = cantidad * metodo.tasa;
         mostrarPrecio.textContent =
-            formatoNumero(total, metodo.decimales) + " " + metodo.moneda;
+            formatoNumero(cantidad * metodo.tasa, metodo.decimales) +
+            " " + metodo.moneda;
     } else {
         mostrarPrecio.textContent = "No disponible";
     }
@@ -416,7 +593,15 @@ if (metodo) {
     mostrarPrecio.textContent = "No disponible";
 }
 
-if (!cantidadValida || !metodo) {
+mostrarPanelMetodo();
+
+if (metodoTexto === "CUP") {
+    botonContinuar.disabled = true;
+    mostrarMensaje(
+        "El pago mediante CUP todavía no está disponible porque falta configurar la tarjeta receptora.",
+        "error"
+    );
+} else if (!cantidadValida || !metodo) {
     botonContinuar.disabled = true;
     mostrarMensaje(
         "Los datos de esta compra no son válidos. Regresa a la selección de GVR e inténtalo de nuevo.",
@@ -424,7 +609,80 @@ if (!cantidadValida || !metodo) {
     );
 }
 
+archivoComprobante.addEventListener("change", () => {
+    const archivo = archivoComprobante.files?.[0] || null;
+    archivoSeleccionado = null;
+
+    if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        previewUrl = null;
+    }
+
+    previewContenedor.style.display = "none";
+    previewImagen.removeAttribute("src");
+    previewNombre.textContent = "";
+
+    if (!archivo) return;
+
+    const tiposPermitidos = ["image/jpeg", "image/png", "image/webp"];
+    const extensionesPermitidas = /\.(jpe?g|png|webp)$/i;
+
+    if (
+        !tiposPermitidos.includes(archivo.type) ||
+        !extensionesPermitidas.test(archivo.name)
+    ) {
+        archivoComprobante.value = "";
+        mostrarMensaje("Selecciona una imagen JPG, PNG o WEBP.", "error");
+        return;
+    }
+
+    if (archivo.size > 5 * 1024 * 1024) {
+        archivoComprobante.value = "";
+        mostrarMensaje("La imagen supera el límite de 5 MB.", "error");
+        return;
+    }
+
+    archivoSeleccionado = archivo;
+    previewUrl = URL.createObjectURL(archivo);
+    previewImagen.src = previewUrl;
+    previewNombre.textContent =
+        archivo.name + " · " + formatoNumero(archivo.size / 1024, 0) + " KB";
+    previewContenedor.style.display = "block";
+
+    mostrarMensaje("Imagen seleccionada. Aún falta enviar la solicitud.", "info");
+});
+
+async function copiarTexto(texto) {
+    try {
+        await navigator.clipboard.writeText(texto);
+        mostrarMensaje("Copiado correctamente.", "info");
+    } catch (error) {
+        mostrarMensaje(
+            "No se pudo copiar automáticamente. Mantén pulsado el texto para copiarlo.",
+            "error"
+        );
+    }
+}
+
+document.getElementById("copiarSaldo").addEventListener("click", () => {
+    copiarTexto("63638032");
+});
+
+document.getElementById("copiarUsdt").addEventListener("click", () => {
+    copiarTexto("0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C");
+});
+
 botonContinuar.addEventListener("click", async () => {
+    if (!cantidadValida || !metodo || metodoTexto === "CUP") {
+        mostrarMensaje("Revisa la cantidad y el método de pago.", "error");
+        return;
+    }
+
+    if (!archivoSeleccionado) {
+        mostrarMensaje("Selecciona primero la captura del pago.", "error");
+        return;
+    }
+
     botonContinuar.disabled = true;
     botonContinuar.textContent = "Verificando sesión...";
 
@@ -433,38 +691,34 @@ botonContinuar.addEventListener("click", async () => {
 
         if (error || !data?.user) {
             mostrarMensaje(
-                "Inicia sesión en tu cuenta antes de continuar con la compra.",
+                "Inicia sesión antes de enviar el comprobante.",
                 "error"
             );
             return;
         }
 
         /*
-         * A propósito no insertamos una venta ni acreditamos GVR aquí.
-         * El importe mostrado es informativo: el servidor debe validar
-         * cantidad, método y precio antes de crear una solicitud real.
-         *
-         * El próximo paso es conectar un flujo seguro que:
-         * 1. cree una solicitud pendiente en la base de datos;
-         * 2. permita adjuntar el comprobante;
-         * 3. registre la revisión manual;
-         * 4. acredite el saldo una sola vez después de aprobarla.
+         * No se envía ni se guarda una solicitud todavía.
+         * La tabla, el almacenamiento y la política de acceso deben
+         * verificarse con el esquema real antes de activar el envío.
+         * Este botón no acredita GVR ni registra una compra falsa.
          */
         mostrarMensaje(
-            "Sesión verificada. Todavía falta conectar el registro seguro de la solicitud y la subida del comprobante. No se ha creado una compra ni se ha añadido GVR a tu saldo.",
+            "Sesión verificada, pero el envío seguro todavía no está conectado. No se ha registrado la compra ni se ha subido la imagen. No vuelvas a pagar hasta que el envío esté habilitado.",
             "info"
         );
 
     } catch (error) {
-        console.error("Error al verificar la sesión:", error);
+        console.error("Error verificando sesión:", error);
         mostrarMensaje(
-            "No se pudo verificar la sesión. Comprueba tu conexión e inténtalo otra vez.",
+            "No se pudo verificar tu sesión. Comprueba tu conexión e inténtalo otra vez.",
             "error"
         );
     } finally {
         botonContinuar.disabled = false;
-        botonContinuar.textContent = "Continuar con la compra";
+        botonContinuar.textContent = "Enviar comprobante";
     }
 });
-</script></body>
+</script>
+</body>
 </html>
