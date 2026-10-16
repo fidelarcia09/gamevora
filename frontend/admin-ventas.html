@@ -36,6 +36,7 @@
             justify-content: space-between;
             align-items: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         .logo {
@@ -45,13 +46,33 @@
             text-shadow: 0 0 15px rgba(0, 170, 255, 0.7);
         }
 
-        .volver {
+        .acciones-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .volver,
+        .boton-push {
             color: white;
             text-decoration: none;
             padding: 10px 15px;
             border-radius: 10px;
             background: rgba(0, 130, 255, 0.15);
             border: 1px solid rgba(0, 170, 255, 0.3);
+            font-size: 14px;
+        }
+
+        .boton-push {
+            cursor: pointer;
+            background: #006be6;
+            border-color: #00b7ff;
+        }
+
+        .boton-push:disabled {
+            opacity: 0.65;
+            cursor: wait;
         }
 
         .contenedor {
@@ -224,6 +245,36 @@
             margin-bottom: 20px;
         }
 
+        #estadoPush {
+            display: none;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        #estadoPush.correcto {
+            display: block;
+            background: rgba(0, 255, 130, 0.08);
+            border: 1px solid rgba(0, 255, 130, 0.4);
+            color: #83ffc0;
+        }
+
+        #estadoPush.aviso {
+            display: block;
+            background: rgba(255, 190, 0, 0.08);
+            border: 1px solid rgba(255, 190, 0, 0.4);
+            color: #ffda75;
+        }
+
+        #estadoPush.fallo {
+            display: block;
+            background: rgba(255, 50, 50, 0.08);
+            border: 1px solid rgba(255, 50, 50, 0.4);
+            color: #ff9b9b;
+        }
+
         @media (max-width: 800px) {
             .estadisticas {
                 grid-template-columns: repeat(2, 1fr);
@@ -251,6 +302,20 @@
             .titulo h1 {
                 font-size: 25px;
             }
+
+            .logo {
+                font-size: 21px;
+            }
+
+            .acciones-header {
+                width: 100%;
+            }
+
+            .acciones-header a,
+            .acciones-header button {
+                flex: 1;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -259,22 +324,39 @@
 
 <header>
     <div class="header-contenido">
+
         <div class="logo">
             Gamers Gold Top-Up
         </div>
 
-        <a href="cuenta.html" class="volver">
-            ← Mi cuenta
-        </a>
+        <div class="acciones-header">
+
+            <button
+                type="button"
+                id="botonActivarPush"
+                class="boton-push"
+                hidden
+            >
+                Activar notificaciones
+            </button>
+
+            <a href="cuenta.html" class="volver">
+                ← Mi cuenta
+            </a>
+
+        </div>
+
     </div>
 </header>
 
 <main class="contenedor">
 
     <div class="titulo">
-        <h1>🛒 Panel de ventas</h1>
-        <p>Control de compras GVR y recargas de juegos</p>
+        <h1>Panel de ventas</h1>
+        <p>Control de ventas y recargas de juegos</p>
     </div>
+
+    <div id="estadoPush" role="status" aria-live="polite"></div>
 
     <div id="error"></div>
 
@@ -309,19 +391,19 @@
         </button>
 
         <button class="filtro" data-filtro="gvr">
-            💎 GVR
+            GVR
         </button>
 
         <button class="filtro" data-filtro="recarga">
-            🎮 Recargas
+            Recargas
         </button>
 
         <button class="filtro" data-filtro="pendiente">
-            🟡 Pendientes
+            Pendientes
         </button>
 
         <button class="filtro" data-filtro="completado">
-            🟢 Completadas
+            Completadas
         </button>
 
     </div>
@@ -356,9 +438,9 @@ let todasLasVentas = [];
 let filtroActual = "todas";
 
 
-// ================================
-// MOSTRAR ERROR
-// ================================
+// ========================================
+// MOSTRAR MENSAJES
+// ========================================
 
 function mostrarError(mensaje) {
     const errorBox = document.getElementById("error");
@@ -367,10 +449,18 @@ function mostrarError(mensaje) {
     errorBox.style.display = "block";
 }
 
+function mostrarEstadoPush(mensaje, tipo) {
+    const caja = document.getElementById("estadoPush");
 
-// ================================
-// CONVERTIR VAPID PUBLIC KEY
-// ================================
+    caja.textContent = mensaje;
+    caja.className = tipo;
+    caja.style.display = "block";
+}
+
+
+// ========================================
+// CONVERTIR CLAVE VAPID
+// ========================================
 
 function convertirBase64UrlAUint8Array(base64UrlData) {
     const padding =
@@ -390,39 +480,131 @@ function convertirBase64UrlAUint8Array(base64UrlData) {
 }
 
 
-// ================================
-// NOTIFICACIONES PUSH
-// ================================
+// ========================================
+// GUARDAR SUSCRIPCIÓN PUSH
+// ========================================
 
-async function registrarNotificacionesPush() {
+async function guardarSuscripcionPush(suscripcion) {
+    const {
+        data: { user },
+        error: userError
+    } = await supabaseClient.auth.getUser();
+
+    if (userError) {
+        throw new Error(
+            "No se pudo comprobar la sesión: " +
+            userError.message
+        );
+    }
+
+    if (!user) {
+        throw new Error(
+            "No hay una sesión de administrador activa."
+        );
+    }
+
+    const datos = suscripcion.toJSON();
+
+    if (
+        !datos.endpoint ||
+        !datos.keys ||
+        !datos.keys.p256dh ||
+        !datos.keys.auth
+    ) {
+        throw new Error(
+            "La suscripción Push no contiene todos los datos necesarios."
+        );
+    }
+
+    const { error } = await supabaseClient
+        .from("admin_push_subscriptions")
+        .upsert(
+            {
+                user_id: user.id,
+                endpoint: datos.endpoint,
+                p256dh: datos.keys.p256dh,
+                auth: datos.keys.auth,
+                updated_at: new Date().toISOString()
+            },
+            {
+                onConflict: "endpoint"
+            }
+        );
+
+    if (error) {
+        throw new Error(
+            "Supabase no pudo guardar la suscripción Push: " +
+            error.message
+        );
+    }
+
+    return true;
+}
+
+
+// ========================================
+// CONFIGURAR PUSH
+// ========================================
+
+async function configurarNotificacionesPush(solicitarPermiso = false) {
+    const boton = document.getElementById("botonActivarPush");
+
     try {
+        if (!window.isSecureContext) {
+            throw new Error(
+                "Las notificaciones necesitan HTTPS. Abre la página publicada con HTTPS."
+            );
+        }
+
         if (!("serviceWorker" in navigator)) {
-            console.log("Service Worker no disponible");
-            return;
+            throw new Error(
+                "Este navegador no admite Service Worker."
+            );
         }
 
         if (!("PushManager" in window)) {
-            console.log("Push Notifications no disponibles");
-            return;
+            throw new Error(
+                "Este navegador no admite notificaciones Push."
+            );
         }
 
+        if (!("Notification" in window)) {
+            throw new Error(
+                "Este navegador no admite la API de notificaciones."
+            );
+        }
+
+        boton.disabled = true;
+        boton.textContent = "Configurando...";
+
+        // Registrar el Service Worker de la carpeta frontend.
         const registro =
             await navigator.serviceWorker.register(
                 "service-worker.js"
             );
 
-        console.log(
-            "Service Worker registrado:",
-            registro.scope
-        );
+        await navigator.serviceWorker.ready;
 
-        const permiso =
-            await Notification.requestPermission();
+        let permiso = Notification.permission;
+
+        // Pedir permiso solo cuando el usuario pulsa el botón.
+        if (solicitarPermiso && permiso === "default") {
+            permiso = await Notification.requestPermission();
+        }
 
         if (permiso !== "granted") {
-            console.log(
-                "Permiso de notificaciones no concedido"
-            );
+            if (permiso === "denied") {
+                mostrarEstadoPush(
+                    "Las notificaciones están bloqueadas en el navegador. Permítelas en la configuración del sitio y vuelve a intentarlo.",
+                    "aviso"
+                );
+            } else {
+                mostrarEstadoPush(
+                    "Pulsa «Activar notificaciones» y acepta el permiso para recibir avisos.",
+                    "aviso"
+                );
+            }
+
             return;
         }
 
@@ -440,51 +622,15 @@ async function registrarNotificacionesPush() {
                 });
         }
 
-        const {
-            data: { user },
-            error: userError
-        } = await supabaseClient.auth.getUser();
+        await guardarSuscripcionPush(suscripcion);
 
-        if (userError || !user) {
-            console.error(
-                "No se pudo obtener el usuario:",
-                userError
-            );
-            return;
-        }
+        mostrarEstadoPush(
+            "Notificaciones activadas y dispositivo registrado en Supabase. El envío de avisos también depende de que la función del servidor esté funcionando.",
+            "correcto"
+        );
 
-        const datosSuscripcion = suscripcion.toJSON();
-
-        if (
-            !datosSuscripcion.endpoint ||
-            !datosSuscripcion.keys ||
-            !datosSuscripcion.keys.p256dh ||
-            !datosSuscripcion.keys.auth
-        ) {
-            throw new Error(
-                "La suscripción Push no contiene los datos necesarios."
-            );
-        }
-
-        const { error: guardarError } =
-            await supabaseClient
-                .from("admin_push_subscriptions")
-                .upsert(
-                    {
-                        user_id: user.id,
-                        endpoint: datosSuscripcion.endpoint,
-                        p256dh: datosSuscripcion.keys.p256dh,
-                        auth: datosSuscripcion.keys.auth,
-                        updated_at: new Date().toISOString()
-                    },
-                    {
-                        onConflict: "endpoint"
-                    }
-                );
-
-        if (guardarError) {
-            throw guardarError;
-        }
+        boton.textContent = "Notificaciones activadas";
+        boton.hidden = true;
 
         console.log(
             "Dispositivo administrador registrado para Push."
@@ -492,21 +638,28 @@ async function registrarNotificacionesPush() {
 
     } catch (error) {
         console.error(
-            "Error configurando notificaciones:",
+            "Error configurando notificaciones Push:",
             error
         );
 
-        mostrarError(
-            "No se pudo configurar el dispositivo para notificaciones Push.\n\n" +
-            error.message
+        mostrarEstadoPush(
+            "No se pudieron activar las notificaciones.\n\n" +
+            (error.message || String(error)),
+            "fallo"
         );
+
+        boton.hidden = false;
+        boton.textContent = "Reintentar notificaciones";
+
+    } finally {
+        boton.disabled = false;
     }
 }
 
 
-// ================================
-// COMPROBAR ADMIN
-// ================================
+// ========================================
+// COMPROBAR ADMINISTRADOR
+// ========================================
 
 async function comprobarAdministrador() {
     const {
@@ -519,6 +672,7 @@ async function comprobarAdministrador() {
             "ERROR DE AUTENTICACIÓN:\n" +
             authError.message
         );
+
         return false;
     }
 
@@ -539,7 +693,11 @@ async function comprobarAdministrador() {
             "\nAyuda: " + error.hint
         );
 
-        console.error("Error is_support_admin:", error);
+        console.error(
+            "Error is_support_admin:",
+            error
+        );
+
         return false;
     }
 
@@ -552,9 +710,9 @@ async function comprobarAdministrador() {
 }
 
 
-// ================================
+// ========================================
 // NORMALIZAR ESTADOS
-// ================================
+// ========================================
 
 function normalizarEstadoVenta(estado) {
     const valor = String(estado || "")
@@ -586,9 +744,9 @@ function normalizarEstadoVenta(estado) {
 }
 
 
-// ================================
+// ========================================
 // CARGAR VENTAS
-// ================================
+// ========================================
 
 async function cargarVentas() {
     const lista =
@@ -672,7 +830,10 @@ async function cargarVentas() {
         mostrarVentas();
 
     } catch (error) {
-        console.error("Error cargando ventas:", error);
+        console.error(
+            "Error cargando ventas:",
+            error
+        );
 
         mostrarError(
             "ERROR AL CARGAR EL PANEL DE VENTAS:\n\n" +
@@ -690,9 +851,9 @@ async function cargarVentas() {
 }
 
 
-// ================================
+// ========================================
 // ESTADÍSTICAS
-// ================================
+// ========================================
 
 function actualizarEstadisticas() {
     const total = todasLasVentas.length;
@@ -712,15 +873,21 @@ function actualizarEstadisticas() {
     );
 
     document.getElementById("totalVentas").textContent = total;
-    document.getElementById("ventasPendientes").textContent = pendientes;
-    document.getElementById("ventasCompletadas").textContent = completadas;
-    document.getElementById("gvrVendidos").textContent = gvrVendidos;
+
+    document.getElementById("ventasPendientes").textContent =
+        pendientes;
+
+    document.getElementById("ventasCompletadas").textContent =
+        completadas;
+
+    document.getElementById("gvrVendidos").textContent =
+        gvrVendidos;
 }
 
 
-// ================================
+// ========================================
 // ESCAPAR HTML
-// ================================
+// ========================================
 
 function escaparHTML(valor) {
     if (valor === null || valor === undefined) {
@@ -736,12 +903,13 @@ function escaparHTML(valor) {
 }
 
 
-// ================================
+// ========================================
 // MOSTRAR VENTAS
-// ================================
+// ========================================
 
 function mostrarVentas() {
-    const lista = document.getElementById("listaVentas");
+    const lista =
+        document.getElementById("listaVentas");
 
     let ventasFiltradas = [...todasLasVentas];
 
@@ -775,6 +943,7 @@ function mostrarVentas() {
                 No hay ventas para mostrar.
             </div>
         `;
+
         return;
     }
 
@@ -784,17 +953,18 @@ function mostrarVentas() {
 }
 
 
-// ================================
-// CREAR VENTA
-// ================================
+// ========================================
+// CREAR TARJETA DE VENTA
+// ========================================
 
 function crearVentaHTML(venta) {
     const tipoTexto =
         venta.tipo === "gvr"
-            ? "💎 Compra de GVR"
-            : "🎮 Recarga de juego";
+            ? "Compra de GVR"
+            : "Recarga de juego";
 
-    const estado = normalizarEstadoVenta(venta.estado);
+    const estado =
+        normalizarEstadoVenta(venta.estado);
 
     const estadosConocidos = [
         "pendiente",
@@ -838,7 +1008,7 @@ function crearVentaHTML(venta) {
 
             <div class="venta-cabecera">
                 <div class="tipo">
-                    ${tipoTexto}
+                    ${escaparHTML(tipoTexto)}
                 </div>
 
                 <div class="estado ${claseEstado}">
@@ -913,7 +1083,7 @@ function crearVentaHTML(venta) {
                     ? `
                     <div class="dato">
                         <small>GVR comprado</small>
-                        <div>💎 ${escaparHTML(venta.gvr_comprado)} GVR</div>
+                        <div>${escaparHTML(venta.gvr_comprado)} GVR</div>
                     </div>
                     `
                     : ""
@@ -954,14 +1124,14 @@ function crearVentaHTML(venta) {
 }
 
 
-// ================================
+// ========================================
 // FILTROS
-// ================================
+// ========================================
 
 document.querySelectorAll(".filtro").forEach(boton => {
     boton.addEventListener("click", () => {
         document.querySelectorAll(".filtro").forEach(
-            b => b.classList.remove("activo")
+            elemento => elemento.classList.remove("activo")
         );
 
         boton.classList.add("activo");
@@ -972,9 +1142,20 @@ document.querySelectorAll(".filtro").forEach(boton => {
 });
 
 
-// ================================
+// ========================================
+// BOTÓN DE NOTIFICACIONES
+// ========================================
+
+document
+    .getElementById("botonActivarPush")
+    .addEventListener("click", async () => {
+        await configurarNotificacionesPush(true);
+    });
+
+
+// ========================================
 // INICIO
-// ================================
+// ========================================
 
 async function iniciar() {
     const esAdmin = await comprobarAdministrador();
@@ -983,9 +1164,28 @@ async function iniciar() {
         return;
     }
 
+    // Las ventas se cargan como antes.
     await cargarVentas();
 
-    await registrarNotificacionesPush();
+    const boton =
+        document.getElementById("botonActivarPush");
+
+    boton.hidden = false;
+
+    // Si el permiso ya fue concedido, registrar el dispositivo.
+    // Si aún no hay permiso, se espera a que el administrador
+    // pulse el botón.
+    if (
+        "Notification" in window &&
+        Notification.permission === "granted"
+    ) {
+        await configurarNotificacionesPush(false);
+    } else {
+        mostrarEstadoPush(
+            "Activa las notificaciones para recibir avisos de solicitudes GVR. Esto no acredita GVR ni modifica las ventas.",
+            "aviso"
+        );
+    }
 }
 
 iniciar();
@@ -993,4 +1193,4 @@ iniciar();
 </script>
 
 </body>
-    </html>
+</html>
