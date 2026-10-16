@@ -199,28 +199,26 @@
     }
 
     .foto-oferta {
-        width: 100%;
-        height: 145px;
-        min-height: 145px;
-        flex: none;
-        background:
-            radial-gradient(ellipse at center, rgba(0, 140, 255, 0.13), transparent 70%),
-            #07172d;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        padding: 0;
-    }
+    .foto-oferta {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border-radius: inherit;
+}
 
-    /* Imágenes de las ofertas: ocupan el espacio de la imagen del botón */
-    .foto-oferta img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        object-position: center;
-    }
+.foto-oferta img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    object-fit: cover;
+    object-position: center;
+    border: none;
+    border-radius: inherit;
+}
 
     .foto-oferta span {
         color: #b4d9f7;
