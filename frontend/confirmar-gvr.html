@@ -1,359 +1,244 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#020817">
-    <title>Confirmar compra | Gamers Gold Top-Up</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#020817">
+<title>Confirmar compra | Gamers Gold Top-Up</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        :root {
-            --fondo: #020817;
-            --panel: #08162c;
-            --panel2: #0b1e3a;
-            --azul: #087cff;
-            --cian: #00c8ff;
-            --borde: rgba(0,174,255,.28);
-            --texto: #f4f8ff;
-            --suave: #91a5c2;
-            --verde: #42e6a4;
-            --rojo: #ff8585;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            background:
-                radial-gradient(ellipse at top, rgba(0,116,255,.15), transparent 45%),
-                var(--fondo);
-            color: var(--texto);
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            padding: 20px clamp(16px,5vw,55px);
-            border-bottom: 1px solid rgba(0,174,255,.13);
-        }
-
-        .logo {
-            font-size: clamp(18px,4vw,25px);
-            font-weight: 900;
-            letter-spacing: .5px;
-        }
-
-        .logo span {
-            color: var(--cian);
-        }
-
-        .volver {
-            color: var(--cian);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        main {
-            padding: 25px 16px 50px;
-        }
-
-        .contenedor {
-            max-width: 650px;
-            margin: 0 auto;
-        }
-
-        .encabezado {
-            text-align: center;
-            margin: 15px 0 25px;
-        }
-
-        .etiqueta {
-            display: inline-block;
-            padding: 8px 13px;
-            border: 1px solid var(--borde);
-            border-radius: 30px;
-            color: var(--cian);
-            background: rgba(0,174,255,.07);
-            font-size: 11px;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            font-size: clamp(27px,6vw,38px);
-            margin-bottom: 12px;
-        }
-
-        .subtitulo {
-            max-width: 460px;
-            margin: 0 auto;
-            color: var(--suave);
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        .card {
-            padding: clamp(20px,5vw,32px);
-            background: linear-gradient(145deg,#0a1b35,#061126);
-            border: 1px solid var(--borde);
-            border-radius: 22px;
-            box-shadow: 0 15px 45px rgba(0,0,0,.25);
-        }
-
-        .seccion-titulo {
-            font-size: 16px;
-            margin: 24px 0 16px;
-        }
-
-        .seccion-titulo:first-child {
-            margin-top: 0;
-        }
-
-        .dato {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            padding: 17px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(95,153,220,.16);
-            border-radius: 14px;
-            background: rgba(2,13,31,.65);
-        }
-
-        .dato-info {
-            min-width: 0;
-        }
-
-        .titulo {
-            color: var(--suave);
-            font-size: 12px;
-            margin-bottom: 7px;
-        }
-
-        .valor {
-            font-size: 17px;
-            font-weight: bold;
-            overflow-wrap: anywhere;
-        }
-
-        .cantidad {
-            color: var(--cian);
-            font-size: 22px;
-        }
-
-        .estado {
-            display: inline-block;
-            color: #ffd27a;
-            background: rgba(255,190,50,.09);
-            border: 1px solid rgba(255,190,50,.25);
-            border-radius: 20px;
-            padding: 7px 10px;
-            font-size: 12px;
-            white-space: nowrap;
-        }
-
-        .pago-panel {
-            padding: 18px;
-            margin-top: 15px;
-            border-radius: 16px;
-            border: 1px solid var(--borde);
-            background: rgba(2,13,31,.65);
-        }
-
-        .pago-panel h3 {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .descripcion {
-            color: var(--suave);
-            font-size: 13px;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .direccion {
-            padding: 14px;
-            border: 1px dashed rgba(0,200,255,.45);
-            border-radius: 12px;
-            background: rgba(0,125,255,.07);
-            color: var(--cian);
-            font-size: 16px;
-            font-weight: bold;
-            overflow-wrap: anywhere;
-            line-height: 1.6;
-        }
-
-        .boton-secundario {
-            width: 100%;
-            margin-top: 12px;
-            padding: 12px;
-            border: 1px solid rgba(0,200,255,.4);
-            border-radius: 10px;
-            background: rgba(0,125,255,.12);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .aviso {
-            margin-top: 18px;
-            padding: 15px;
-            background: rgba(0,145,255,.07);
-            border: 1px solid rgba(0,174,255,.2);
-            border-radius: 14px;
-            color: #c3d5ed;
-            font-size: 13px;
-            line-height: 1.65;
-        }
-
-        .aviso strong {
-            color: var(--cian);
-        }
-
-        .subida {
-            display: block;
-            width: 100%;
-            margin-top: 10px;
-            padding: 18px 14px;
-            border: 1px dashed rgba(0,200,255,.5);
-            border-radius: 14px;
-            background: rgba(0,125,255,.06);
-            color: white;
-            cursor: pointer;
-            line-height: 1.6;
-        }
-
-        .subida input {
-            display: block;
-            width: 100%;
-            margin-top: 12px;
-            color: var(--suave);
-            font-size: 13px;
-        }
-
-        .ayuda {
-            margin-top: 10px;
-            color: var(--suave);
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .preview-contenedor {
-            display: none;
-            margin-top: 15px;
-            text-align: center;
-        }
-
-        .preview-contenedor img {
-            display: block;
-            max-width: 100%;
-            max-height: 350px;
-            margin: 0 auto;
-            border-radius: 12px;
-            border: 1px solid var(--borde);
-        }
-
-        .preview-nombre {
-            margin-top: 8px;
-            color: var(--suave);
-            font-size: 12px;
-            overflow-wrap: anywhere;
-        }
-
-        .boton {
-            display: block;
-            width: 100%;
-            margin-top: 22px;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(100deg,var(--azul),var(--cian));
-            color: white;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        .boton:disabled,
-        .boton-secundario:disabled {
-            opacity: .55;
-            cursor: not-allowed;
-        }
-
-        .mensaje {
-            display: none;
-            margin-top: 16px;
-            padding: 13px;
-            border-radius: 12px;
-            font-size: 13px;
-            line-height: 1.6;
-            overflow-wrap: anywhere;
-        }
-
-        .mensaje.error {
-            display: block;
-            color: #ffb5b5;
-            background: rgba(255,50,70,.08);
-            border: 1px solid rgba(255,70,90,.25);
-        }
-
-        .mensaje.info {
-            display: block;
-            color: #b8eaff;
-            background: rgba(0,145,255,.08);
-            border: 1px solid rgba(0,174,255,.25);
-        }
-
-        .mensaje.exito {
-            display: block;
-            color: var(--verde);
-            background: rgba(40,220,150,.08);
-            border: 1px solid rgba(40,220,150,.25);
-        }
-
-        .oculto {
-            display: none !important;
-        }
-
-        footer {
-            padding: 0 16px 25px;
-            text-align: center;
-            color: #657995;
-            font-size: 12px;
-        }
-
-        @media(max-width:420px) {
-            header {
-                padding: 17px 14px;
-            }
-
-            .dato {
-                padding: 14px;
-            }
-
-            .valor {
-                font-size: 15px;
-            }
-
-            .cantidad {
-                font-size: 20px;
-            }
-        }
-    </style>
+<style>
+:root {
+    --fondo:#020817;
+    --panel:#08162c;
+    --azul:#087cff;
+    --cian:#00c8ff;
+    --borde:rgba(0,174,255,.28);
+    --texto:#f4f8ff;
+    --suave:#91a5c2;
+    --verde:#42e6a4;
+}
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+body {
+    min-height:100vh;
+    background:radial-gradient(ellipse at top,rgba(0,116,255,.15),transparent 45%),var(--fondo);
+    color:var(--texto);
+}
+header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    padding:20px clamp(16px,5vw,55px);
+    border-bottom:1px solid rgba(0,174,255,.13);
+}
+.logo {
+    font-size:clamp(18px,4vw,25px);
+    font-weight:900;
+    letter-spacing:.5px;
+}
+.logo span {color:var(--cian)}
+.volver {
+    color:var(--cian);
+    text-decoration:none;
+    font-weight:bold;
+    font-size:14px;
+}
+main {padding:25px 16px 50px}
+.contenedor {max-width:650px;margin:0 auto}
+.encabezado {text-align:center;margin:15px 0 25px}
+.etiqueta {
+    display:inline-block;
+    padding:8px 13px;
+    border:1px solid var(--borde);
+    border-radius:30px;
+    color:var(--cian);
+    background:rgba(0,174,255,.07);
+    font-size:11px;
+    font-weight:bold;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-bottom:15px;
+}
+h1 {font-size:clamp(27px,6vw,38px);margin-bottom:12px}
+.subtitulo {
+    max-width:460px;
+    margin:0 auto;
+    color:var(--suave);
+    line-height:1.6;
+    font-size:14px;
+}
+.card {
+    padding:clamp(20px,5vw,32px);
+    background:linear-gradient(145deg,#0a1b35,#061126);
+    border:1px solid var(--borde);
+    border-radius:22px;
+    box-shadow:0 15px 45px rgba(0,0,0,.25);
+}
+.seccion-titulo {font-size:16px;margin:24px 0 16px}
+.seccion-titulo:first-child {margin-top:0}
+.dato {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    padding:17px;
+    margin-bottom:12px;
+    border:1px solid rgba(95,153,220,.16);
+    border-radius:14px;
+    background:rgba(2,13,31,.65);
+}
+.dato-info {min-width:0}
+.titulo {color:var(--suave);font-size:12px;margin-bottom:7px}
+.valor {font-size:17px;font-weight:bold;overflow-wrap:anywhere}
+.cantidad {color:var(--cian);font-size:22px}
+.estado {
+    display:inline-block;
+    color:#ffd27a;
+    background:rgba(255,190,50,.09);
+    border:1px solid rgba(255,190,50,.25);
+    border-radius:20px;
+    padding:7px 10px;
+    font-size:12px;
+    white-space:nowrap;
+}
+.pago-panel {
+    padding:18px;
+    margin-top:15px;
+    border-radius:16px;
+    border:1px solid var(--borde);
+    background:rgba(2,13,31,.65);
+}
+.pago-panel h3 {font-size:16px;margin-bottom:10px}
+.descripcion {
+    color:var(--suave);
+    font-size:13px;
+    line-height:1.6;
+    margin-bottom:15px;
+}
+.direccion {
+    padding:14px;
+    border:1px dashed rgba(0,200,255,.45);
+    border-radius:12px;
+    background:rgba(0,125,255,.07);
+    color:var(--cian);
+    font-size:16px;
+    font-weight:bold;
+    overflow-wrap:anywhere;
+    line-height:1.6;
+}
+.boton-secundario {
+    width:100%;
+    margin-top:12px;
+    padding:12px;
+    border:1px solid rgba(0,200,255,.4);
+    border-radius:10px;
+    background:rgba(0,125,255,.12);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+.aviso {
+    margin-top:18px;
+    padding:15px;
+    background:rgba(0,145,255,.07);
+    border:1px solid rgba(0,174,255,.2);
+    border-radius:14px;
+    color:#c3d5ed;
+    font-size:13px;
+    line-height:1.65;
+}
+.aviso strong {color:var(--cian)}
+.subida {
+    display:block;
+    width:100%;
+    margin-top:10px;
+    padding:18px 14px;
+    border:1px dashed rgba(0,200,255,.5);
+    border-radius:14px;
+    background:rgba(0,125,255,.06);
+    color:white;
+    cursor:pointer;
+    line-height:1.6;
+}
+.subida input {
+    display:block;
+    width:100%;
+    margin-top:12px;
+    color:var(--suave);
+    font-size:13px;
+}
+.ayuda {margin-top:10px;color:var(--suave);font-size:12px;line-height:1.5}
+.preview-contenedor {display:none;margin-top:15px;text-align:center}
+.preview-contenedor img {
+    display:block;
+    max-width:100%;
+    max-height:350px;
+    margin:0 auto;
+    border-radius:12px;
+    border:1px solid var(--borde);
+}
+.preview-nombre {
+    margin-top:8px;
+    color:var(--suave);
+    font-size:12px;
+    overflow-wrap:anywhere;
+}
+.boton {
+    display:block;
+    width:100%;
+    margin-top:22px;
+    padding:16px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(100deg,var(--azul),var(--cian));
+    color:white;
+    font-size:15px;
+    font-weight:800;
+    cursor:pointer;
+}
+.boton:disabled,.boton-secundario:disabled {opacity:.55;cursor:not-allowed}
+.mensaje {
+    display:none;
+    margin-top:16px;
+    padding:13px;
+    border-radius:12px;
+    font-size:13px;
+    line-height:1.6;
+    overflow-wrap:anywhere;
+}
+.mensaje.error {
+    display:block;
+    color:#ffb5b5;
+    background:rgba(255,50,70,.08);
+    border:1px solid rgba(255,70,90,.25);
+}
+.mensaje.info {
+    display:block;
+    color:#b8eaff;
+    background:rgba(0,145,255,.08);
+    border:1px solid rgba(0,174,255,.25);
+}
+.mensaje.exito {
+    display:block;
+    color:var(--verde);
+    background:rgba(40,220,150,.08);
+    border:1px solid rgba(40,220,150,.25);
+}
+.oculto {display:none!important}
+footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
+@media(max-width:420px) {
+    header {padding:17px 14px}
+    .dato {padding:14px}
+    .valor {font-size:15px}
+    .cantidad {font-size:20px}
+}
+</style>
 </head>
 
 <body>
@@ -363,115 +248,104 @@
 </header>
 
 <main>
-    <div class="contenedor">
-        <div class="encabezado">
-            <div class="etiqueta">Compra de GVR</div>
-            <h1>Confirma tu compra</h1>
-            <p class="subtitulo">
-                Realiza el pago con los datos indicados y adjunta una imagen del comprobante.
+<div class="contenedor">
+    <div class="encabezado">
+        <div class="etiqueta">Compra de GVR</div>
+        <h1>Confirma tu compra</h1>
+        <p class="subtitulo">
+            Realiza el pago con los datos indicados y adjunta una imagen del comprobante.
+        </p>
+    </div>
+
+    <section class="card">
+        <h2 class="seccion-titulo">Resumen de la compra</h2>
+
+        <div class="dato">
+            <div class="dato-info">
+                <div class="titulo">Cantidad solicitada</div>
+                <div class="valor cantidad" id="mostrarCantidad">Cargando...</div>
+            </div>
+        </div>
+
+        <div class="dato">
+            <div class="dato-info">
+                <div class="titulo">Método de pago</div>
+                <div class="valor" id="mostrarMetodo">Cargando...</div>
+            </div>
+        </div>
+
+        <div class="dato">
+            <div class="dato-info">
+                <div class="titulo">Importe exacto</div>
+                <div class="valor" id="mostrarPrecio">Calculando...</div>
+            </div>
+        </div>
+
+        <div class="dato">
+            <div class="dato-info">
+                <div class="titulo">Estado</div>
+                <div class="valor">Esperando comprobante</div>
+            </div>
+            <span class="estado" id="estadoCompra">Sin enviar</span>
+        </div>
+
+        <div id="panelSaldo" class="pago-panel oculto">
+            <h3>Pago mediante saldo móvil</h3>
+            <p class="descripcion">
+                Envía exactamente el importe indicado al siguiente número y guarda la captura del pago.
+            </p>
+            <div class="titulo">Número receptor</div>
+            <div class="direccion">63638032</div>
+            <button class="boton-secundario" type="button" id="copiarSaldo">Copiar número</button>
+        </div>
+
+        <div id="panelUsdt" class="pago-panel oculto">
+            <h3>Pago mediante USDT</h3>
+            <p class="descripcion">
+                Envía USDT exclusivamente por la red BNB Smart Chain (BEP20).
+                Comprueba la red antes de confirmar la transferencia.
+            </p>
+            <div class="titulo">Dirección receptora BEP20</div>
+            <div class="direccion">0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C</div>
+            <button class="boton-secundario" type="button" id="copiarUsdt">Copiar dirección</button>
+        </div>
+
+        <div id="panelCup" class="pago-panel oculto">
+            <h3>Pago mediante CUP</h3>
+            <p class="descripcion">
+                Este método todavía no está disponible porque falta configurar la tarjeta receptora.
             </p>
         </div>
 
-        <section class="card">
-            <h2 class="seccion-titulo">Resumen de la compra</h2>
+        <div class="aviso">
+            <strong>Importante:</strong> enviar una imagen no confirma por sí solo el pago.
+            La solicitud será revisada por el personal autorizado.
+            Los GVR no se acreditarán hasta que la compra sea aprobada.
+        </div>
 
-            <div class="dato">
-                <div class="dato-info">
-                    <div class="titulo">Cantidad solicitada</div>
-                    <div class="valor cantidad" id="mostrarCantidad">Cargando...</div>
-                </div>
-            </div>
+        <h2 class="seccion-titulo">Comprobante de pago</h2>
 
-            <div class="dato">
-                <div class="dato-info">
-                    <div class="titulo">Método de pago</div>
-                    <div class="valor" id="mostrarMetodo">Cargando...</div>
-                </div>
-            </div>
+        <label class="subida" for="archivoComprobante">
+            Selecciona la captura del pago
+            <input type="file" id="archivoComprobante"
+                   accept="image/jpeg,image/png,image/webp"
+                   capture="environment">
+        </label>
 
-            <div class="dato">
-                <div class="dato-info">
-                    <div class="titulo">Importe exacto</div>
-                    <div class="valor" id="mostrarPrecio">Calculando...</div>
-                </div>
-            </div>
+        <p class="ayuda">Formatos permitidos: JPG, PNG y WEBP. Tamaño máximo: 5 MB.</p>
 
-            <div class="dato">
-                <div class="dato-info">
-                    <div class="titulo">Estado</div>
-                    <div class="valor">Esperando comprobante</div>
-                </div>
-                <span class="estado" id="estadoCompra">Sin enviar</span>
-            </div>
+        <div class="preview-contenedor" id="previewContenedor">
+            <img id="previewImagen" alt="Vista previa del comprobante">
+            <div class="preview-nombre" id="previewNombre"></div>
+        </div>
 
-            <div id="panelSaldo" class="pago-panel oculto">
-                <h3>Pago mediante saldo móvil</h3>
-                <p class="descripcion">
-                    Envía exactamente el importe indicado al siguiente número y guarda la captura del pago.
-                </p>
-                <div class="titulo">Número receptor</div>
-                <div class="direccion" id="numeroSaldo">63638032</div>
-                <button class="boton-secundario" type="button" id="copiarSaldo">
-                    Copiar número
-                </button>
-            </div>
+        <button class="boton" id="botonContinuar" type="button">
+            Enviar comprobante
+        </button>
 
-            <div id="panelUsdt" class="pago-panel oculto">
-                <h3>Pago mediante USDT</h3>
-                <p class="descripcion">
-                    Envía USDT usando exclusivamente la red BNB Smart Chain (BEP20).
-                    Comprueba la red antes de confirmar la transferencia.
-                </p>
-                <div class="titulo">Dirección receptora BEP20</div>
-                <div class="direccion" id="direccionUsdt">
-                    0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C
-                </div>
-                <button class="boton-secundario" type="button" id="copiarUsdt">
-                    Copiar dirección
-                </button>
-            </div>
-
-            <div id="panelCup" class="pago-panel oculto">
-                <h3>Pago mediante CUP</h3>
-                <p class="descripcion">
-                    Este método todavía no está disponible. Podrás utilizarlo cuando se configure la tarjeta receptora.
-                </p>
-            </div>
-
-            <div class="aviso">
-                <strong>Importante:</strong> enviar una imagen no confirma por sí solo el pago.
-                La solicitud deberá ser revisada por el personal autorizado.
-                Los GVR no se acreditarán hasta que la compra sea aprobada.
-            </div>
-
-            <h2 class="seccion-titulo">Comprobante de pago</h2>
-
-            <label class="subida" for="archivoComprobante">
-                Selecciona la captura del pago
-                <input
-                    type="file"
-                    id="archivoComprobante"
-                    accept="image/jpeg,image/png,image/webp"
-                    capture="environment"
-                >
-            </label>
-
-            <p class="ayuda">
-                Formatos permitidos: JPG, PNG y WEBP. Tamaño máximo: 5 MB.
-            </p>
-
-            <div class="preview-contenedor" id="previewContenedor">
-                <img id="previewImagen" alt="Vista previa del comprobante">
-                <div class="preview-nombre" id="previewNombre"></div>
-            </div>
-
-            <button class="boton" id="botonContinuar" type="button">
-                Enviar comprobante
-            </button>
-
-            <div id="mensaje" class="mensaje" role="status" aria-live="polite"></div>
-        </section>
-    </div>
+        <div id="mensaje" class="mensaje" role="status" aria-live="polite"></div>
+    </section>
+</div>
 </main>
 
 <footer>Gamers Gold Top-Up · Compras de GVR</footer>
@@ -481,6 +355,7 @@
 
 const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+const BUCKET_COMPROBANTES = "gvr-payment-proofs";
 
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
@@ -494,32 +369,17 @@ const supabaseClient = window.supabase.createClient(
     }
 );
 
-const parametros = new URLSearchParams(window.location.search);
+const parametros = new URLSearchParams(location.search);
 const cantidadTexto = parametros.get("cantidad") || "";
 const metodoTexto = (parametros.get("metodo") || "")
-    .trim()
-    .toUpperCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .trim().toUpperCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 const METODOS = {
-    "CUP": {
-        nombre: "CUP",
-        tasa: 1050,
-        moneda: "CUP",
-        decimales: 0
-    },
-    "USDT": {
-        nombre: "USDT",
-        tasa: 1,
-        moneda: "USDT",
-        decimales: 2
-    },
+    CUP: {nombre:"CUP", tasa:1050, moneda:"CUP", decimales:0},
+    USDT: {nombre:"USDT", tasa:1, moneda:"USDT", decimales:2},
     "SALDO MOVIL": {
-        nombre: "Saldo móvil",
-        tasa: 200,
-        moneda: "Saldo móvil",
-        decimales: 0
+        nombre:"Saldo móvil", tasa:200, moneda:"SALDO_MOVIL", decimales:0
     }
 };
 
@@ -543,25 +403,27 @@ const previewNombre = document.getElementById("previewNombre");
 
 let archivoSeleccionado = null;
 let previewUrl = null;
+let solicitudId = null;
+let rutaComprobanteSubido = null;
+let envioCompletado = false;
+let enviando = false;
 
 function mostrarMensaje(texto, tipo) {
     mensaje.textContent = texto;
     mensaje.className = "mensaje " + tipo;
 }
 
-function formatoNumero(numero, decimales = 0) {
+function formatoNumero(numero, decimales=0) {
     return new Intl.NumberFormat("es-ES", {
-        minimumFractionDigits: decimales,
-        maximumFractionDigits: decimales
+        minimumFractionDigits:decimales,
+        maximumFractionDigits:decimales
     }).format(numero);
 }
 
 function mostrarPanelMetodo() {
-    document.getElementById("panelSaldo").classList.add("oculto");
-    document.getElementById("panelUsdt").classList.add("oculto");
-    document.getElementById("panelCup").classList.add("oculto");
-
-    if (!metodo) return;
+    ["panelSaldo","panelUsdt","panelCup"].forEach(id =>
+        document.getElementById(id).classList.add("oculto")
+    );
 
     if (metodoTexto === "SALDO MOVIL") {
         document.getElementById("panelSaldo").classList.remove("oculto");
@@ -572,44 +434,182 @@ function mostrarPanelMetodo() {
     }
 }
 
-if (cantidadValida) {
-    mostrarCantidad.textContent = formatoNumero(cantidad) + " GVR";
-} else {
-    mostrarCantidad.textContent = "Cantidad no válida";
+function obtenerExtension(archivo) {
+    const nombre = archivo.name.toLowerCase();
+    if (nombre.endsWith(".jpeg")) return "jpeg";
+    if (nombre.endsWith(".jpg")) return "jpg";
+    if (nombre.endsWith(".png")) return "png";
+    if (nombre.endsWith(".webp")) return "webp";
+    return null;
 }
 
-if (metodo) {
-    mostrarMetodo.textContent = metodo.nombre;
+function validarArchivo(archivo) {
+    if (!archivo) throw new Error("Selecciona primero la captura del pago.");
 
-    if (cantidadValida) {
-        mostrarPrecio.textContent =
-            formatoNumero(cantidad * metodo.tasa, metodo.decimales) +
-            " " + metodo.moneda;
-    } else {
-        mostrarPrecio.textContent = "No disponible";
+    const tipos = ["image/jpeg","image/png","image/webp"];
+    const extension = obtenerExtension(archivo);
+
+    if (!tipos.includes(archivo.type) || !extension) {
+        throw new Error("Selecciona una imagen JPG, PNG o WEBP.");
     }
-} else {
-    mostrarMetodo.textContent = "Método no válido";
-    mostrarPrecio.textContent = "No disponible";
+    if (archivo.size <= 0) throw new Error("El archivo está vacío.");
+    if (archivo.size > 5 * 1024 * 1024) {
+        throw new Error("La imagen supera el límite de 5 MB.");
+    }
+    return extension;
 }
+
+async function obtenerUsuario() {
+    const {data,error} = await supabaseClient.auth.getUser();
+
+    if (error) throw new Error("No se pudo verificar tu sesión: " + error.message);
+    if (!data?.user) throw new Error("Inicia sesión antes de enviar el comprobante.");
+
+    return data.user;
+}
+
+async function crearSolicitud(usuario) {
+    const metodoDB = metodoTexto;
+    const monedaDB = metodoTexto;
+    const importe = cantidad * metodo.tasa;
+
+    const {data,error} = await supabaseClient
+        .from("gvr_purchase_requests")
+        .insert({
+            user_id:usuario.id,
+            gvr_amount:cantidad,
+            payment_method:metodoDB,
+            payment_amount:importe,
+            payment_currency:monedaDB
+        })
+        .select("id")
+        .single();
+
+    if (error) {
+        console.error("Error creando solicitud:",error);
+        throw new Error(
+            "No se pudo registrar la solicitud en Supabase. " +
+            "Comprueba los permisos y vuelve a intentarlo."
+        );
+    }
+
+    if (!data?.id) throw new Error("Supabase no devolvió el ID de la solicitud.");
+    return data.id;
+}
+
+async function subirComprobante(usuario,idSolicitud,archivo) {
+    const extension = obtenerExtension(archivo);
+    const ruta = usuario.id + "/" + idSolicitud + "-" +
+        crypto.randomUUID() + "." + extension;
+
+    const {error} = await supabaseClient.storage
+        .from(BUCKET_COMPROBANTES)
+        .upload(ruta,archivo,{
+            contentType:archivo.type,
+            upsert:false
+        });
+
+    if (error) {
+        console.error("Error subiendo comprobante:",error);
+        throw new Error(
+            "La solicitud se creó, pero falló la subida de la imagen. " +
+            "Puedes reintentar en esta misma página. " + error.message
+        );
+    }
+
+    return ruta;
+}
+
+async function vincularComprobante(idSolicitud,usuario,ruta) {
+    const {data,error} = await supabaseClient
+        .from("gvr_purchase_requests")
+        .update({proof_path:ruta})
+        .eq("id",idSolicitud)
+        .eq("user_id",usuario.id)
+        .is("proof_path",null)
+        .select("id")
+        .maybeSingle();
+
+    if (error) {
+        console.error("Error vinculando comprobante:",error);
+        throw new Error(
+            "La imagen se subió, pero no se pudo vincular. " +
+            "No hagas otro pago. Solicitud: " + idSolicitud
+        );
+    }
+
+    if (!data) {
+        /*
+         * Comprobamos si la operación anterior sí se guardó,
+         * por ejemplo, si se perdió la respuesta de red.
+         */
+        const {data:actual,error:errorLectura} = await supabaseClient
+            .from("gvr_purchase_requests")
+            .select("id,proof_path,status")
+            .eq("id",idSolicitud)
+            .eq("user_id",usuario.id)
+            .maybeSingle();
+
+        if (errorLectura || !actual || actual.proof_path !== ruta) {
+            throw new Error(
+                "No se pudo confirmar el vínculo del comprobante. " +
+                "No vuelvas a pagar. Solicitud: " + idSolicitud
+            );
+        }
+    }
+}
+
+async function copiarTexto(texto) {
+    try {
+        await navigator.clipboard.writeText(texto);
+        mostrarMensaje("Copiado correctamente.","info");
+    } catch {
+        mostrarMensaje(
+            "No se pudo copiar automáticamente. Mantén pulsado el texto para copiarlo.",
+            "error"
+        );
+    }
+}
+
+/* Mostrar resumen */
+
+mostrarCantidad.textContent = cantidadValida
+    ? formatoNumero(cantidad) + " GVR"
+    : "Cantidad no válida";
+
+mostrarMetodo.textContent = metodo ? metodo.nombre : "Método no válido";
+
+mostrarPrecio.textContent = cantidadValida && metodo
+    ? formatoNumero(cantidad * metodo.tasa,metodo.decimales) +
+      " " + (metodoTexto === "SALDO MOVIL" ? "Saldo móvil" : metodo.moneda)
+    : "No disponible";
 
 mostrarPanelMetodo();
 
 if (metodoTexto === "CUP") {
     botonContinuar.disabled = true;
-    mostrarMensaje(
-        "El pago mediante CUP todavía no está disponible porque falta configurar la tarjeta receptora.",
-        "error"
-    );
+    mostrarMensaje("El pago mediante CUP todavía no está disponible.","error");
 } else if (!cantidadValida || !metodo) {
     botonContinuar.disabled = true;
-    mostrarMensaje(
-        "Los datos de esta compra no son válidos. Regresa a la selección de GVR e inténtalo de nuevo.",
-        "error"
-    );
+    mostrarMensaje("Los datos de esta compra no son válidos.","error");
 }
 
-archivoComprobante.addEventListener("change", () => {
+/* Selector y vista previa */
+
+archivoComprobante.addEventListener("change",() => {
+    /*
+     * Si ya se creó una solicitud, conservamos el archivo original
+     * para que el usuario pueda reintentar la misma operación.
+     */
+    if (solicitudId && !envioCompletado) {
+        archivoComprobante.value = "";
+        mostrarMensaje(
+            "Ya hay una solicitud en proceso. Se conservará el comprobante seleccionado para permitir el reintento.",
+            "info"
+        );
+        return;
+    }
+
     const archivo = archivoComprobante.files?.[0] || null;
     archivoSeleccionado = null;
 
@@ -624,99 +624,109 @@ archivoComprobante.addEventListener("change", () => {
 
     if (!archivo) return;
 
-    const tiposPermitidos = ["image/jpeg", "image/png", "image/webp"];
-    const extensionesPermitidas = /\.(jpe?g|png|webp)$/i;
-
-    if (
-        !tiposPermitidos.includes(archivo.type) ||
-        !extensionesPermitidas.test(archivo.name)
-    ) {
-        archivoComprobante.value = "";
-        mostrarMensaje("Selecciona una imagen JPG, PNG o WEBP.", "error");
-        return;
-    }
-
-    if (archivo.size > 5 * 1024 * 1024) {
-        archivoComprobante.value = "";
-        mostrarMensaje("La imagen supera el límite de 5 MB.", "error");
-        return;
-    }
-
-    archivoSeleccionado = archivo;
-    previewUrl = URL.createObjectURL(archivo);
-    previewImagen.src = previewUrl;
-    previewNombre.textContent =
-        archivo.name + " · " + formatoNumero(archivo.size / 1024, 0) + " KB";
-    previewContenedor.style.display = "block";
-
-    mostrarMensaje("Imagen seleccionada. Aún falta enviar la solicitud.", "info");
-});
-
-async function copiarTexto(texto) {
     try {
-        await navigator.clipboard.writeText(texto);
-        mostrarMensaje("Copiado correctamente.", "info");
+        validarArchivo(archivo);
+        archivoSeleccionado = archivo;
+        previewUrl = URL.createObjectURL(archivo);
+        previewImagen.src = previewUrl;
+        previewNombre.textContent = archivo.name + " · " +
+            formatoNumero(archivo.size / 1024,0) + " KB";
+        previewContenedor.style.display = "block";
+        mostrarMensaje("Imagen seleccionada. Aún falta enviarla.","info");
     } catch (error) {
-        mostrarMensaje(
-            "No se pudo copiar automáticamente. Mantén pulsado el texto para copiarlo.",
-            "error"
-        );
+        archivoComprobante.value = "";
+        mostrarMensaje(error.message,"error");
     }
-}
-
-document.getElementById("copiarSaldo").addEventListener("click", () => {
-    copiarTexto("63638032");
 });
 
-document.getElementById("copiarUsdt").addEventListener("click", () => {
-    copiarTexto("0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C");
-});
+document.getElementById("copiarSaldo").addEventListener("click",() =>
+    copiarTexto("63638032")
+);
 
-botonContinuar.addEventListener("click", async () => {
+document.getElementById("copiarUsdt").addEventListener("click",() =>
+    copiarTexto("0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C")
+);
+
+/* Crear solicitud, subir comprobante y asociarlo */
+
+botonContinuar.addEventListener("click",async () => {
+    if (enviando || envioCompletado) return;
+
     if (!cantidadValida || !metodo || metodoTexto === "CUP") {
-        mostrarMensaje("Revisa la cantidad y el método de pago.", "error");
+        mostrarMensaje("Revisa la cantidad y el método de pago.","error");
         return;
     }
 
-    if (!archivoSeleccionado) {
-        mostrarMensaje("Selecciona primero la captura del pago.", "error");
+    if (!solicitudId && !archivoSeleccionado) {
+        mostrarMensaje("Selecciona primero la captura del pago.","error");
         return;
     }
-
-    botonContinuar.disabled = true;
-    botonContinuar.textContent = "Verificando sesión...";
 
     try {
-        const { data, error } = await supabaseClient.auth.getUser();
-
-        if (error || !data?.user) {
-            mostrarMensaje(
-                "Inicia sesión antes de enviar el comprobante.",
-                "error"
-            );
-            return;
+        if (archivoSeleccionado && !rutaComprobanteSubido) {
+            validarArchivo(archivoSeleccionado);
         }
 
-        /*
-         * No se envía ni se guarda una solicitud todavía.
-         * La tabla, el almacenamiento y la política de acceso deben
-         * verificarse con el esquema real antes de activar el envío.
-         * Este botón no acredita GVR ni registra una compra falsa.
-         */
+        enviando = true;
+        botonContinuar.disabled = true;
+
+        const usuario = await obtenerUsuario();
+
+        if (!solicitudId) {
+            botonContinuar.textContent = "Registrando solicitud...";
+            solicitudId = await crearSolicitud(usuario);
+        }
+
+        if (!rutaComprobanteSubido) {
+            if (!archivoSeleccionado) {
+                throw new Error(
+                    "La solicitud existe, pero falta el comprobante seleccionado. " +
+                    "Mantén esta página abierta para reintentar."
+                );
+            }
+
+            botonContinuar.textContent = "Subiendo comprobante...";
+            rutaComprobanteSubido = await subirComprobante(
+                usuario,solicitudId,archivoSeleccionado
+            );
+        }
+
+        botonContinuar.textContent = "Confirmando envío...";
+        await vincularComprobante(
+            solicitudId,usuario,rutaComprobanteSubido
+        );
+
+        envioCompletado = true;
+        document.getElementById("estadoCompra").textContent =
+            "Pendiente de revisión";
+
+        archivoComprobante.disabled = true;
+        botonContinuar.disabled = true;
+        botonContinuar.textContent = "Comprobante enviado";
+
         mostrarMensaje(
-            "Sesión verificada, pero el envío seguro todavía no está conectado. No se ha registrado la compra ni se ha subido la imagen. No vuelvas a pagar hasta que el envío esté habilitado.",
-            "info"
+            "¡Solicitud enviada correctamente! Identificador: " +
+            solicitudId + ". Tu compra está pendiente de revisión. " +
+            "Todavía no se han acreditado GVR. No realices otro pago para esta solicitud.",
+            "exito"
         );
 
     } catch (error) {
-        console.error("Error verificando sesión:", error);
+        console.error("Error en compra GVR:",error);
         mostrarMensaje(
-            "No se pudo verificar tu sesión. Comprueba tu conexión e inténtalo otra vez.",
+            (error.message || "No se pudo completar el envío.") +
+            (solicitudId ? " ID de solicitud: " + solicitudId : ""),
             "error"
         );
-    } finally {
+
         botonContinuar.disabled = false;
-        botonContinuar.textContent = "Enviar comprobante";
+        botonContinuar.textContent = solicitudId
+            ? "Reintentar envío"
+            : "Enviar comprobante";
+
+    } finally {
+        enviando = false;
+        if (!envioCompletado) botonContinuar.disabled = false;
     }
 });
 </script>
