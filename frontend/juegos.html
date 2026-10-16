@@ -132,7 +132,7 @@
             color: white;
             background: transparent;
             border: none;
-            border-radius: 0;
+            border-radius: 13px;
             padding: 0;
             text-align: center;
             isolation: isolate;
@@ -143,32 +143,61 @@
             transform: translateY(-3px);
         }
 
-        /* MARCO RECTANGULAR DE LA IMAGEN */
+        /* MARCO DE LA FOTO */
 
         .juego-imagen {
             position: relative;
             width: 100%;
             height: 180px;
+            flex-shrink: 0;
+
             border: 1px solid rgba(0, 153, 255, 0.9);
             border-bottom: none;
             border-radius: 13px 13px 0 0;
+
             background:
                 radial-gradient(
-                    ellipse at 50% 85%,
-                    rgba(0, 123, 255, 0.30),
+                    ellipse at 50% 80%,
+                    rgba(0, 123, 255, 0.25),
                     transparent 72%
                 ),
                 linear-gradient(180deg, #0c2040, #071020 90%);
+
             box-shadow:
                 0 0 13px rgba(0, 140, 255, 0.22),
                 inset 0 0 20px rgba(0, 153, 255, 0.10);
-            z-index: 1;
 
-            /* Permite que el personaje sobresalga del marco */
-            overflow: visible;
+            overflow: hidden;
+            z-index: 1;
         }
 
-        /* LUZ INTERIOR DEL MARCO */
+        /* FOTO: MISMO TAMAÑO QUE EL MARCO */
+
+        .juego-imagen img {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+            object-position: center center;
+
+            display: block;
+            max-width: 100%;
+
+            transition:
+                transform 0.25s ease,
+                filter 0.25s ease;
+        }
+
+        .juego:hover .juego-imagen img {
+            transform: scale(1.02);
+            filter: brightness(1.05);
+        }
+
+        /* LUZ SUPERIOR */
 
         .juego-imagen::before {
             content: "";
@@ -177,10 +206,13 @@
             right: 12%;
             top: 0;
             height: 1px;
+
             background: var(--cian);
+
             box-shadow:
                 0 0 8px var(--cian),
                 0 0 16px var(--azul);
+
             z-index: 3;
             pointer-events: none;
         }
@@ -191,48 +223,22 @@
             content: "";
             position: absolute;
             inset: 5px;
+
             border: 1px solid rgba(0, 190, 255, 0.16);
             border-radius: 9px 9px 0 0;
+
             pointer-events: none;
             z-index: 3;
         }
 
-        /* PERSONAJE MÁS GRANDE */
-
-        .juego-imagen img {
-            position: absolute;
-
-            /* Más grande que el marco */
-            width: 118%;
-            height: 118%;
-
-            left: -9%;
-            bottom: 0;
-
-            object-fit: contain;
-            object-position: center bottom;
-
-            display: block;
-            z-index: 2;
-
-            transition:
-                transform 0.25s ease,
-                filter 0.25s ease;
-
-            /* No recortar la parte superior del personaje */
-            max-width: none;
-        }
-
-        .juego:hover .juego-imagen img {
-            transform: scale(1.045);
-            filter: drop-shadow(0 0 8px rgba(0, 153, 255, 0.25));
-        }
-
-        /* NOMBRE DEBAJO DE LA IMAGEN */
+        /* NOMBRE DEBAJO DE LA FOTO */
 
         .juego-info {
             position: relative;
+            width: 100%;
             min-height: 60px;
+            flex: 1;
+
             padding: 12px 5px 10px;
 
             display: flex;
@@ -241,7 +247,11 @@
             align-items: center;
             gap: 5px;
 
-            background: linear-gradient(180deg, #0c1c35, #081326);
+            background: linear-gradient(
+                180deg,
+                #0c1c35,
+                #081326
+            );
 
             border: 1px solid rgba(0, 153, 255, 0.9);
             border-top: 1px solid rgba(0, 217, 255, 0.65);
@@ -271,11 +281,12 @@
             font-weight: 600;
         }
 
-        /* RESPLANDOR DE LA TARJETA */
+        /* RESPLANDOR AL INTERACTUAR */
 
         .juego:hover .juego-imagen,
         .juego:hover .juego-info {
             border-color: var(--cian);
+
             box-shadow:
                 0 0 14px rgba(0, 153, 255, 0.30),
                 0 0 24px rgba(0, 153, 255, 0.15);
@@ -313,12 +324,6 @@
                 height: 155px;
             }
 
-            .juego-imagen img {
-                width: 120%;
-                height: 120%;
-                left: -10%;
-            }
-
             .juego-info {
                 min-height: 56px;
                 padding: 10px 4px;
@@ -350,12 +355,6 @@
                 height: 210px;
             }
 
-            .juego-imagen img {
-                width: 116%;
-                height: 116%;
-                left: -8%;
-            }
-
             .juego-info {
                 min-height: 64px;
             }
@@ -379,12 +378,6 @@
 
             .juego-imagen {
                 height: 220px;
-            }
-
-            .juego-imagen img {
-                width: 116%;
-                height: 116%;
-                left: -8%;
             }
         }
 
