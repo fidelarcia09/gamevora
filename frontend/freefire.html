@@ -62,18 +62,18 @@
         }
 
         .icono {
-    text-align: center;
-    margin-bottom: 14px;
-}
+            text-align: center;
+            margin-bottom: 14px;
+        }
 
-.icono img {
-width: 200px;
-height: 200px;
-object-fit: contain;
-display: block;
-margin: 0 auto;
-border-radius: 16px;
-                }
+        .icono img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+            border-radius: 16px;
+        }
 
         h1 {
             text-align: center;
@@ -134,6 +134,39 @@ border-radius: 16px;
         .estado.correcto {
             color: #8fffc0;
             border-color: #267b55;
+        }
+
+        /* Estado independiente para la validación del jugador. */
+        .estado-validacion {
+            display: none;
+            padding: 13px;
+            margin-top: 12px;
+            border: 1px solid #204c78;
+            border-radius: 10px;
+            background: #061226;
+            color: #a9c4df;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .estado-validacion.visible {
+            display: block;
+        }
+
+        .estado-validacion.error {
+            color: #ffaaaa;
+            border-color: #843d4b;
+        }
+
+        .estado-validacion.correcto {
+            color: #8fffc0;
+            border-color: #267b55;
+        }
+
+        .estado-validacion.aviso {
+            color: #ffcf8a;
+            border-color: #8a672f;
         }
 
         .catalogo {
@@ -249,7 +282,6 @@ border-radius: 16px;
             line-height: 1.6;
         }
 
-
         .ayuda {
             margin-top: 8px;
             color: #8299b4;
@@ -289,8 +321,15 @@ border-radius: 16px;
         }
 
         @keyframes modalAparecer {
-            from { opacity: 0; transform: translateY(8px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .modal h2 {
@@ -415,12 +454,12 @@ border-radius: 16px;
 
     <main class="card">
         <div class="icono">
-    <img
-        src="imagenes/file_00000000323881f5b39e628c9a42a0d2.png"
-        alt="Free Fire"
-        width="200"
-        height="200"
-    >
+            <img
+                src="imagenes/file_00000000323881f5b39e628c9a42a0d2.png"
+                alt="Free Fire"
+                width="200"
+                height="200"
+            >
         </div>
 
         <h1>Free Fire</h1>
@@ -440,7 +479,18 @@ border-radius: 16px;
             autocomplete="off"
             maxlength="50"
         >
-        <p class="ayuda">Escribe tu ID de jugador y selecciona el paquete que deseas recibir.</p>
+
+        <p class="ayuda">
+            Escribe tu ID de jugador y selecciona el paquete que deseas recibir.
+        </p>
+
+        <!-- NUEVO: aquí se muestra el resultado de la validación. -->
+        <div
+            id="estadoValidacion"
+            class="estado-validacion"
+            aria-live="polite"
+            role="status"
+        ></div>
 
         <label class="etiqueta">
             Selecciona una cantidad de diamantes
@@ -479,35 +529,64 @@ border-radius: 16px;
     </main>
 </div>
 
-<div id="modalFondo" class="modal-fondo" role="dialog" aria-modal="true" aria-labelledby="modalTitulo" aria-hidden="true">
+<div
+    id="modalFondo"
+    class="modal-fondo"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitulo"
+    aria-hidden="true"
+>
     <div class="modal">
         <h2 id="modalTitulo">Confirmar recarga</h2>
-        <p class="modal-descripcion">Comprueba los datos antes de continuar con tu pedido.</p>
+
+        <p class="modal-descripcion">
+            Comprueba los datos antes de continuar con tu pedido.
+        </p>
 
         <div class="modal-detalles">
             <div class="modal-fila">
                 <span>Juego</span>
                 <strong>Free Fire</strong>
             </div>
+
             <div class="modal-fila">
                 <span>Paquete</span>
                 <strong id="modalPaquete">—</strong>
             </div>
+
             <div class="modal-fila">
                 <span>ID de jugador</span>
                 <strong id="modalJugador">—</strong>
             </div>
+
             <div class="modal-fila">
                 <span>Total</span>
                 <strong id="modalTotal" class="modal-total">—</strong>
             </div>
         </div>
 
-        <p class="modal-descripcion">La compra descontará GVR de tu saldo. Si hay un pedido pendiente, primero se verificará su estado.</p>
+        <p class="modal-descripcion">
+            La compra descontará GVR de tu saldo. Si hay un pedido pendiente,
+            primero se verificará su estado.
+        </p>
 
         <div class="modal-botones">
-            <button id="modalCancelar" class="modal-boton modal-cancelar" type="button">CANCELAR</button>
-            <button id="modalAceptar" class="modal-boton modal-aceptar" type="button">ACEPTAR</button>
+            <button
+                id="modalCancelar"
+                class="modal-boton modal-cancelar"
+                type="button"
+            >
+                CANCELAR
+            </button>
+
+            <button
+                id="modalAceptar"
+                class="modal-boton modal-aceptar"
+                type="button"
+            >
+                ACEPTAR
+            </button>
         </div>
     </div>
 </div>
@@ -533,6 +612,10 @@ const URL_CREAR_PEDIDO =
 const URL_CONSULTAR_PEDIDO =
     SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
 
+/* NUEVO: función independiente de validación. */
+const URL_VALIDAR_JUGADOR =
+    SUPABASE_URL + "/functions/v1/nextlevel-validar-jugador";
+
 const supabase = createClient(
     SUPABASE_URL,
     SUPABASE_KEY,
@@ -550,6 +633,8 @@ const estadoCatalogo = document.getElementById("estadoCatalogo");
 const botonContinuar = document.getElementById("botonContinuar");
 const botonOfertas = document.getElementById("botonOfertas");
 const campoJugador = document.getElementById("idjugador");
+const estadoValidacion = document.getElementById("estadoValidacion");
+
 const modalFondo = document.getElementById("modalFondo");
 const modalPaquete = document.getElementById("modalPaquete");
 const modalJugador = document.getElementById("modalJugador");
@@ -565,6 +650,27 @@ let procesando = false;
 let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
+
+/*
+ * NUEVO: estado de validación.
+ *
+ * VALID: proveedor confirmó la cuenta y devolvió el nombre.
+ * INVALID: proveedor confirmó que el ID no es válido.
+ * UNAVAILABLE: no se pudo comprobar la cuenta ahora.
+ * UNKNOWN: todavía no hay una respuesta válida.
+ */
+let validacionJugador = {
+    status: "UNKNOWN",
+    playerId: "",
+    productId: "",
+    nickname: "",
+    region: "",
+    message: ""
+};
+
+let temporizadorValidacion = null;
+let numeroSolicitudValidacion = 0;
+let claveUltimaValidacion = "";
 
 /* Este botón y su destino se conservan sin cambios. */
 botonOfertas.addEventListener("click", () => {
@@ -631,10 +737,6 @@ function recuperarPedidoPendiente(userId) {
             typeof datos.orderId !== "string" ||
             !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(datos.orderId)
         ) {
-            /*
-             * Una referencia dañada no debe convertirse
-             * en permiso para crear otra compra automáticamente.
-             */
             throw new Error("La referencia del pedido guardado no es válida.");
         }
 
@@ -646,10 +748,6 @@ function recuperarPedidoPendiente(userId) {
     } catch (error) {
         console.error("Error recuperando pedido guardado:", error);
 
-        /*
-         * Conservamos la referencia guardada si existe.
-         * No iniciamos una compra nueva automáticamente.
-         */
         pedidoPendienteId = null;
         accionPendiente = "crear";
     }
@@ -707,10 +805,6 @@ async function verificarPedidoGuardado(userId) {
         return false;
     }
 
-    /*
-     * Si ya hay datos que indican que el pedido pudo enviarse,
-     * consultamos el estado. No lo volvemos a enviar a ciegas.
-     */
     if (
         data.provider_order_id ||
         data.provider_client_reference ||
@@ -740,7 +834,7 @@ function actualizarBoton() {
             accionPendiente === "enviar"
                 ? "RECUPERAR PEDIDO"
                 : "CONSULTAR PEDIDO";
-        // Siempre se permite retomar/consultar un pedido ya existente.
+
         botonContinuar.disabled = false;
         return;
     }
@@ -794,13 +888,339 @@ modalFondo.addEventListener("click", event => {
 });
 
 document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && modalFondo.classList.contains("visible")) {
+    if (
+        event.key === "Escape" &&
+        modalFondo.classList.contains("visible")
+    ) {
         cerrarModalConfirmacion(false);
     }
 });
 
-campoJugador.addEventListener("input", actualizarBoton);
+/* =========================================================
+   NUEVO: VALIDACIÓN DE JUGADOR CON NEXT LEVEL
+   No crea pedidos, no modifica el saldo y no toca el catálogo.
+   ========================================================= */
 
+function mostrarEstadoValidacion(mensaje, tipo = "") {
+    estadoValidacion.textContent = mensaje;
+    estadoValidacion.classList.add("visible");
+    estadoValidacion.classList.remove(
+        "error",
+        "correcto",
+        "aviso"
+    );
+
+    if (tipo) {
+        estadoValidacion.classList.add(tipo);
+    }
+}
+
+function ocultarEstadoValidacion() {
+    estadoValidacion.textContent = "";
+    estadoValidacion.classList.remove(
+        "visible",
+        "error",
+        "correcto",
+        "aviso"
+    );
+}
+
+function reiniciarValidacionJugador() {
+    numeroSolicitudValidacion++;
+    claveUltimaValidacion = "";
+
+    validacionJugador = {
+        status: "UNKNOWN",
+        playerId: "",
+        productId: "",
+        nickname: "",
+        region: "",
+        message: ""
+    };
+
+    ocultarEstadoValidacion();
+}
+
+function obtenerClaveValidacion(playerId, productId) {
+    return playerId + "::" + productId;
+}
+
+function normalizarEstadoValidacion(datos) {
+    const estado = String(
+        datos?.status ||
+        datos?.result ||
+        datos?.code ||
+        ""
+    ).trim().toUpperCase();
+
+    if (estado === "VALID" || datos?.valid === true) {
+        return "VALID";
+    }
+
+    if (estado === "INVALID" || datos?.valid === false) {
+        return "INVALID";
+    }
+
+    return "UNAVAILABLE";
+}
+
+async function validarJugador() {
+    const playerId = campoJugador.value.trim();
+
+    if (!playerId || !productoSeleccionado) {
+        reiniciarValidacionJugador();
+        return;
+    }
+
+    if (playerId.length > 50) {
+        reiniciarValidacionJugador();
+
+        mostrarEstadoValidacion(
+            "El ID del jugador es demasiado largo.",
+            "error"
+        );
+
+        return;
+    }
+
+    const productId = obtenerProductId(
+        productoSeleccionado.proveedor
+    );
+
+    if (!productId) {
+        reiniciarValidacionJugador();
+
+        mostrarEstadoValidacion(
+            "No se pudo identificar el paquete para comprobar el jugador.",
+            "aviso"
+        );
+
+        return;
+    }
+
+    const clave = obtenerClaveValidacion(playerId, productId);
+
+    /*
+     * No repetimos la consulta si ya tenemos el resultado
+     * para el mismo ID y el mismo paquete.
+     */
+    if (
+        claveUltimaValidacion === clave &&
+        validacionJugador.playerId === playerId &&
+        validacionJugador.productId === productId &&
+        validacionJugador.status !== "UNKNOWN"
+    ) {
+        return;
+    }
+
+    const numeroSolicitud = ++numeroSolicitudValidacion;
+
+    claveUltimaValidacion = clave;
+
+    validacionJugador = {
+        status: "UNKNOWN",
+        playerId,
+        productId,
+        nickname: "",
+        region: "",
+        message: ""
+    };
+
+    mostrarEstadoValidacion(
+        "Comprobando tu cuenta de Free Fire...",
+        ""
+    );
+
+    try {
+        const {
+            data: { session },
+            error: sessionError
+        } = await supabase.auth.getSession();
+
+        if (numeroSolicitud !== numeroSolicitudValidacion) {
+            return;
+        }
+
+        if (sessionError || !session?.access_token) {
+            validacionJugador.status = "UNAVAILABLE";
+
+            mostrarEstadoValidacion(
+                "Inicia sesión para verificar el nombre de tu cuenta. " +
+                "La validación no se ha completado.",
+                "aviso"
+            );
+
+            return;
+        }
+
+        const respuesta = await fetch(URL_VALIDAR_JUGADOR, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                apikey: SUPABASE_KEY,
+                Authorization: "Bearer " + session.access_token,
+                Accept: "application/json"
+            },
+            body: JSON.stringify({
+                playerId: playerId,
+                productId: productId,
+                game: "free-fire"
+            }),
+            cache: "no-store"
+        });
+
+        let datos;
+
+        try {
+            datos = await respuesta.json();
+        } catch {
+            datos = {};
+        }
+
+        /*
+         * Ignoramos las respuestas de validaciones anteriores
+         * si el usuario ya cambió el ID o el paquete.
+         */
+        if (numeroSolicitud !== numeroSolicitudValidacion) {
+            return;
+        }
+
+        if (!respuesta.ok) {
+            const mensaje =
+                datos.error ||
+                datos.message ||
+                "No se pudo consultar la validación.";
+
+            validacionJugador.status = "UNAVAILABLE";
+            validacionJugador.message = mensaje;
+
+            mostrarEstadoValidacion(
+                "No se pudo verificar el jugador en este momento. " +
+                "Esto no significa que el ID sea incorrecto. " +
+                mensaje,
+                "aviso"
+            );
+
+            return;
+        }
+
+        const estado = normalizarEstadoValidacion(datos);
+
+        const nickname = String(
+            datos.nickname ||
+            datos.player?.nickname ||
+            datos.player?.name ||
+            ""
+        ).trim();
+
+        const region = String(
+            datos.region ||
+            datos.player?.region ||
+            ""
+        ).trim();
+
+        validacionJugador = {
+            status: estado,
+            playerId,
+            productId,
+            nickname,
+            region,
+            message: String(
+                datos.message ||
+                datos.error ||
+                ""
+            ).trim()
+        };
+
+        if (estado === "VALID") {
+            if (nickname) {
+                mostrarEstadoValidacion(
+                    "Cuenta verificada. Nickname: " + nickname +
+                    (region ? " · Región: " + region : ""),
+                    "correcto"
+                );
+            } else {
+                mostrarEstadoValidacion(
+                    "El proveedor confirmó que el jugador es válido, " +
+                    "pero no devolvió un nickname.",
+                    "correcto"
+                );
+            }
+
+            return;
+        }
+
+        if (estado === "INVALID") {
+            mostrarEstadoValidacion(
+                "El proveedor indica que este ID no es válido. " +
+                "Comprueba el número antes de realizar la recarga.",
+                "error"
+            );
+
+            return;
+        }
+
+        mostrarEstadoValidacion(
+            validacionJugador.message ||
+            "La validación no está disponible en este momento. " +
+            "No podemos confirmar el nombre ni afirmar que el ID sea incorrecto.",
+            "aviso"
+        );
+
+    } catch (error) {
+        if (numeroSolicitud !== numeroSolicitudValidacion) {
+            return;
+        }
+
+        console.error(
+            "Error validando jugador de Free Fire:",
+            error
+        );
+
+        validacionJugador = {
+            status: "UNAVAILABLE",
+            playerId,
+            productId,
+            nickname: "",
+            region: "",
+            message: error?.message || ""
+        };
+
+        mostrarEstadoValidacion(
+            "No se pudo conectar con la validación del proveedor. " +
+            "Esto no significa que el ID sea incorrecto.",
+            "aviso"
+        );
+    }
+}
+
+function programarValidacionJugador() {
+    clearTimeout(temporizadorValidacion);
+
+    reiniciarValidacionJugador();
+
+    if (
+        !campoJugador.value.trim() ||
+        !productoSeleccionado ||
+        pedidoPendienteId
+    ) {
+        return;
+    }
+
+    /*
+     * Esperamos un momento para evitar llamar al proveedor
+     * por cada tecla que escribe el usuario.
+     */
+    temporizadorValidacion = setTimeout(() => {
+        validarJugador();
+    }, 650);
+}
+
+/* Al cambiar el ID, se invalida el resultado anterior. */
+campoJugador.addEventListener("input", () => {
+    programarValidacionJugador();
+    actualizarBoton();
+});
 
 /* CATÁLOGO: se conserva la lógica original. */
 
@@ -898,7 +1318,6 @@ function productoComprable(productoLocal) {
 
     const precio = Number(productoLocal.price_gvr);
 
-    // Los precios GVR pueden tener decimales (por ejemplo, 0.98).
     return productoLocal.active === true &&
         Number.isFinite(precio) &&
         precio > 0;
@@ -911,6 +1330,8 @@ function mostrarPrecio(precio) {
 function renderizarCatalogo() {
     catalogo.replaceChildren();
     productoSeleccionado = null;
+
+    reiniciarValidacionJugador();
 
     productosDisponibles.forEach(producto => {
         const local = buscarProductoLocal(producto);
@@ -967,6 +1388,13 @@ function renderizarCatalogo() {
                     mostrarPrecio(Number(local.price_gvr)),
                     "correcto"
                 );
+
+                /*
+                 * NUEVO: al seleccionar un paquete, validamos
+                 * el ID escrito si ya existe.
+                 */
+                programarValidacionJugador();
+
                 actualizarBoton();
             });
         }
@@ -981,6 +1409,8 @@ async function cargarCatalogo() {
     productoSeleccionado = null;
     productosDisponibles = [];
     catalogo.replaceChildren();
+
+    reiniciarValidacionJugador();
 
     mostrarEstado("Conectando con el catálogo...");
 
@@ -1162,7 +1592,6 @@ async function enviarPedido(accessToken) {
 
     const idPedido = pedidoPendienteId;
 
-    // Guardamos el pedido antes de contactar con el proveedor.
     accionPendiente = "consultar";
     guardarPedidoPendiente();
     actualizarBoton();
@@ -1183,10 +1612,6 @@ async function enviarPedido(accessToken) {
         );
 
     } catch (error) {
-        /*
-         * No creamos otro pedido ni borramos el existente.
-         * Guardamos el error para poder diagnosticarlo.
-         */
         console.error(
             "Error al enviar el pedido existente:",
             error,
@@ -1200,19 +1625,40 @@ async function enviarPedido(accessToken) {
         );
     }
 
-    // Abrimos el checkout con el UUID real de game_orders.
-    // No se crea una segunda compra.
     window.location.href =
         new URL(
             "checkout.html?id=" + encodeURIComponent(idPedido),
             window.location.href
         ).href;
-    }
+}
+
 /* CREAR COMPRA LOCAL */
 
 async function crearCompra(accessToken, playerId) {
     if (!productoSeleccionado) {
         throw new Error("Selecciona primero un paquete disponible.");
+    }
+
+    /*
+     * NUEVO: si el proveedor confirmó que el ID es inválido,
+     * no permitimos crear un pedido nuevo con ese ID.
+     *
+     * Si la validación está temporalmente indisponible,
+     * no la tratamos como un ID incorrecto.
+     */
+    const productIdValidacion = obtenerProductId(
+        productoSeleccionado.proveedor
+    );
+
+    if (
+        validacionJugador.status === "INVALID" &&
+        validacionJugador.playerId === playerId &&
+        validacionJugador.productId === productIdValidacion
+    ) {
+        throw new Error(
+            "Next Level confirmó que el ID del jugador no es válido. " +
+            "Corrígelo y vuelve a verificarlo antes de comprar."
+        );
     }
 
     const local = productoSeleccionado.local;
@@ -1342,7 +1788,7 @@ botonContinuar.addEventListener("click", async () => {
         recuperarPedidoPendiente(user.id);
 
         /*
-         * Se verifica primero el pedido anterior.
+         * Primero se verifica el pedido anterior.
          * Nunca se inicia otra compra mientras exista uno sin resolver.
          */
         await verificarPedidoGuardado(user.id);
@@ -1422,6 +1868,6 @@ async function iniciar() {
 iniciar();
 </script>
 </body>
-    </html>
+            </html>
 
     
