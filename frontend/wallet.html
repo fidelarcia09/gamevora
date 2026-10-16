@@ -470,44 +470,46 @@
             : "Movimiento de wallet";
     }
 
-    function esEntrada(movimiento) {
-        const tipo = String(movimiento.type || "").toLowerCase();
+function esEntrada(movimiento) {
+    const antes = Number(movimiento.balance_before);
+    const despues = Number(movimiento.balance_after);
 
-        if (
-            tipo.includes("refund") ||
-            tipo.includes("reembolso") ||
-            tipo.includes("deposit") ||
-            tipo.includes("topup") ||
-            tipo.includes("top_up") ||
-            tipo.includes("recarga") ||
-            tipo.includes("credit") ||
-            tipo.includes("add")
-        ) {
-            return true;
-        }
-
-        if (
-            tipo.includes("purchase") ||
-            tipo.includes("compra") ||
-            tipo.includes("debit") ||
-            tipo.includes("withdraw")
-        ) {
-            return false;
-        }
-
-        const antes = Number(movimiento.balance_before);
-        const despues = Number(movimiento.balance_after);
-
-        if (
-            Number.isFinite(antes) &&
-            Number.isFinite(despues) &&
-            antes !== despues
-        ) {
-            return despues > antes;
-        }
-
-        return Number(movimiento.amount) >= 0;
+    // La variación real del saldo determina la dirección.
+    if (
+        Number.isFinite(antes) &&
+        Number.isFinite(despues) &&
+        despues !== antes
+    ) {
+        return despues > antes;
     }
+
+    const tipo = String(movimiento.type || "").toLowerCase();
+
+    // Tipos que representan ingresos.
+    if (
+        tipo.includes("gvr_purchase") ||
+        tipo.includes("refund") ||
+        tipo.includes("reembolso") ||
+        tipo.includes("deposit") ||
+        tipo.includes("topup") ||
+        tipo.includes("top_up") ||
+        tipo.includes("recarga")
+    ) {
+        return true;
+    }
+
+    // Tipos que representan gastos.
+    if (
+        tipo.includes("game_purchase") ||
+        tipo.includes("compra") ||
+        tipo.includes("debit") ||
+        tipo.includes("withdraw")
+    ) {
+        return false;
+    }
+
+    return Number(movimiento.amount) >= 0;
+            }
 
     function renderizarMovimiento(movimiento) {
         const entrada = esEntrada(movimiento);
