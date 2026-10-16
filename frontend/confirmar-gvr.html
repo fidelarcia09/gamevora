@@ -1,519 +1,470 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmar GVR - Gamers Gold Top-Up</title>
+    <meta name="theme-color" content="#020817">
+    <title>Confirmar compra | Gamers Gold Top-Up</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+    :root {
+        --fondo: #020817;
+        --panel: #08162c;
+        --panel2: #0b1e3a;
+        --azul: #087cff;
+        --cian: #00c8ff;
+        --borde: rgba(0, 174, 255, .28);
+        --texto: #f4f8ff;
+        --suave: #91a5c2;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #020b1c;
-            color: white;
-        }
+    body {
+        min-height: 100vh;
+        background:
+            radial-gradient(ellipse at top, rgba(0, 116, 255, .15), transparent 45%),
+            var(--fondo);
+        color: var(--texto);
+    }
 
+    header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        padding: 20px clamp(16px, 5vw, 55px);
+        border-bottom: 1px solid rgba(0, 174, 255, .13);
+    }
+
+    .logo {
+        color: var(--texto);
+        font-size: clamp(18px, 4vw, 25px);
+        font-weight: 900;
+        letter-spacing: .5px;
+    }
+
+    .logo span {
+        color: var(--cian);
+    }
+
+    .volver {
+        color: var(--cian);
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .volver:hover {
+        color: white;
+    }
+
+    main {
+        width: 100%;
+        padding: 25px 16px 50px;
+    }
+
+    .contenedor {
+        max-width: 650px;
+        margin: 0 auto;
+    }
+
+    .encabezado {
+        text-align: center;
+        margin: 15px 0 25px;
+    }
+
+    .etiqueta {
+        display: inline-block;
+        padding: 8px 13px;
+        border: 1px solid var(--borde);
+        border-radius: 30px;
+        color: var(--cian);
+        background: rgba(0, 174, 255, .07);
+        font-size: 11px;
+        font-weight: bold;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+    }
+
+    h1 {
+        font-size: clamp(27px, 6vw, 38px);
+        margin-bottom: 12px;
+    }
+
+    .subtitulo {
+        max-width: 460px;
+        margin: 0 auto;
+        color: var(--suave);
+        line-height: 1.6;
+        font-size: 14px;
+    }
+
+    .card {
+        padding: clamp(20px, 5vw, 32px);
+        background: linear-gradient(145deg, #0a1b35, #061126);
+        border: 1px solid var(--borde);
+        border-radius: 22px;
+        box-shadow: 0 15px 45px rgba(0, 0, 0, .25);
+    }
+
+    .resumen-titulo {
+        font-size: 16px;
+        margin-bottom: 18px;
+    }
+
+    .dato {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        padding: 17px;
+        margin-bottom: 12px;
+        border: 1px solid rgba(95, 153, 220, .16);
+        border-radius: 14px;
+        background: rgba(2, 13, 31, .65);
+    }
+
+    .dato:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .dato-info {
+        min-width: 0;
+    }
+
+    .titulo {
+        color: var(--suave);
+        font-size: 12px;
+        margin-bottom: 7px;
+    }
+
+    .valor {
+        font-size: 17px;
+        font-weight: bold;
+        overflow-wrap: anywhere;
+    }
+
+    .cantidad {
+        color: var(--cian);
+        font-size: 22px;
+    }
+
+    .estado {
+        display: inline-block;
+        color: #ffd27a;
+        background: rgba(255, 190, 50, .09);
+        border: 1px solid rgba(255, 190, 50, .25);
+        border-radius: 20px;
+        padding: 7px 10px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .aviso {
+        margin-top: 20px;
+        padding: 16px;
+        background: rgba(0, 145, 255, .07);
+        border: 1px solid rgba(0, 174, 255, .2);
+        border-radius: 14px;
+        color: #c3d5ed;
+        font-size: 13px;
+        line-height: 1.65;
+    }
+
+    .aviso strong {
+        color: var(--cian);
+    }
+
+    .boton {
+        display: block;
+        width: 100%;
+        margin-top: 22px;
+        padding: 16px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(100deg, var(--azul), var(--cian));
+        color: white;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform .2s, opacity .2s;
+    }
+
+    .boton:hover:not(:disabled) {
+        transform: translateY(-2px);
+    }
+
+    .boton:disabled {
+        opacity: .55;
+        cursor: not-allowed;
+    }
+
+    .mensaje {
+        display: none;
+        margin-top: 16px;
+        padding: 13px;
+        border-radius: 12px;
+        font-size: 13px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    .mensaje.error {
+        display: block;
+        color: #ffb5b5;
+        background: rgba(255, 50, 70, .08);
+        border: 1px solid rgba(255, 70, 90, .25);
+    }
+
+    .mensaje.info {
+        display: block;
+        color: #b8eaff;
+        background: rgba(0, 145, 255, .08);
+        border: 1px solid rgba(0, 174, 255, .25);
+    }
+
+    footer {
+        padding: 0 16px 25px;
+        text-align: center;
+        color: #657995;
+        font-size: 12px;
+    }
+
+    @media (max-width: 420px) {
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .logo span {
-            color: #00aaff;
-        }
-
-        .volver {
-            color: #00aaff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        .card {
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 30px 20px;
-            background: #081b38;
-            border: 1px solid #126dcc;
-            border-radius: 20px;
-            box-shadow: 0 0 25px rgba(0, 140, 255, 0.15);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
+            padding: 17px 14px;
         }
 
         .dato {
-            background: #041329;
-            border: 1px solid #164b82;
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 15px;
-        }
-
-        .titulo {
-            color: #8fa3bd;
-            font-size: 14px;
-            margin-bottom: 7px;
+            padding: 14px;
         }
 
         .valor {
-            font-size: 22px;
-            font-weight: bold;
+            font-size: 15px;
         }
 
-        .boton {
-            display: block;
-            width: 100%;
-            margin-top: 25px;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
+        .cantidad {
+            font-size: 20px;
         }
+    }
+</style>
 
-        .boton:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .nota {
-            text-align: center;
-            color: #71859f;
-            font-size: 14px;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-
-<body>
-
-<header>
-
-    <div class="logo">
-        ⚡ GAMERS<span>GOLD</span>
+</head><body><header>
+    <div class="logo">GAMERS<span>GOLD</span></div>
+    <a href="pago-gvr.html" class="volver">← Volver</a>
+</header><main>
+    <div class="contenedor">    <div class="encabezado">
+        <div class="etiqueta">Compra de GVR</div>
+        <h1>Confirma tu compra</h1>
+        <p class="subtitulo">
+            Revisa la cantidad y el método de pago antes de continuar.
+        </p>
     </div>
 
-    <a href="recargar-gvr.html" class="volver">
-        ← Volver
-    </a>
+    <section class="card">
 
-</header>
-
-<main>
-
-    <div class="card">
-
-        <h1>Confirmar recarga</h1>
+        <h2 class="resumen-titulo">Resumen de la compra</h2>
 
         <div class="dato">
-
-            <div class="titulo">
-                Cantidad de GVR
+            <div class="dato-info">
+                <div class="titulo">Cantidad solicitada</div>
+                <div class="valor cantidad" id="mostrarCantidad">Cargando...</div>
             </div>
-
-            <div class="valor" id="mostrarCantidad">
-                Cargando...
-            </div>
-
         </div>
 
         <div class="dato">
-
-            <div class="titulo">
-                Método de pago
+            <div class="dato-info">
+                <div class="titulo">Método de pago</div>
+                <div class="valor" id="mostrarMetodo">Cargando...</div>
             </div>
-
-            <div class="valor" id="mostrarMetodo">
-                Cargando...
-            </div>
-
         </div>
 
         <div class="dato">
-
-            <div class="titulo">
-                Estado
+            <div class="dato-info">
+                <div class="titulo">Importe estimado</div>
+                <div class="valor" id="mostrarPrecio">Calculando...</div>
             </div>
-
-            <div class="valor">
-                Pendiente de pago
-            </div>
-
         </div>
 
-        <button
-            class="boton"
-            id="botonContinuar"
-            type="button"
-            onclick="continuarPago()"
-        >
-            Continuar ⚡
+        <div class="dato">
+            <div class="dato-info">
+                <div class="titulo">Estado de la compra</div>
+                <div class="valor">Sin enviar</div>
+            </div>
+            <span class="estado">Pendiente</span>
+        </div>
+
+        <div class="aviso">
+            <strong>Importante:</strong> esta pantalla todavía no confirma un pago.
+            Tu saldo GVR no se modificará aquí. Para completar la compra,
+            el siguiente paso será enviar el comprobante y esperar la revisión
+            del personal autorizado.
+        </div>
+
+        <button class="boton" id="botonContinuar" type="button">
+            Continuar con la compra
         </button>
 
-    </div>
+        <div id="mensaje" class="mensaje" role="status" aria-live="polite"></div>
 
-</main>
+    </section>
+</div>
 
-<script>
+</main><footer>
+    Gamers Gold Top-Up · Compras de GVR
+</footer><script>
+"use strict";
 
-// ==========================================
-// SUPABASE
-// ==========================================
+const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const SUPABASE_URL =
-    "https://gsuhzcavghsiolmipnzi.supabase.co";
-
-const SUPABASE_ANON_KEY =
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
-        {
-            auth: {
-                persistSession: true,
-                autoRefreshToken: true,
-                detectSessionInUrl: true
-            }
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
         }
-    );
+    }
+);
 
+const parametros = new URLSearchParams(window.location.search);
+const cantidadTexto = parametros.get("cantidad") || "";
+const metodoTexto = (parametros.get("metodo") || "").trim().toUpperCase();
 
-// ==========================================
-// PARÁMETROS
-// ==========================================
+const mostrarCantidad = document.getElementById("mostrarCantidad");
+const mostrarMetodo = document.getElementById("mostrarMetodo");
+const mostrarPrecio = document.getElementById("mostrarPrecio");
+const botonContinuar = document.getElementById("botonContinuar");
+const mensaje = document.getElementById("mensaje");
 
-const parametros =
-    new URLSearchParams(
-        window.location.search
-    );
+const METODOS = {
+    "CUP": {
+        nombre: "CUP",
+        tasa: 1050,
+        moneda: "CUP",
+        decimales: 0
+    },
+    "USDT": {
+        nombre: "USDT",
+        tasa: 1,
+        moneda: "USDT",
+        decimales: 2
+    },
+    "SALDO MÓVIL": {
+        nombre: "Saldo móvil",
+        tasa: 200,
+        moneda: "Saldo móvil",
+        decimales: 0
+    },
+    "SALDO MOVIL": {
+        nombre: "Saldo móvil",
+        tasa: 200,
+        moneda: "Saldo móvil",
+        decimales: 0
+    }
+};
 
-const cantidad =
-    parametros.get("cantidad");
+const cantidad = Number(cantidadTexto);
+const metodo = METODOS[metodoTexto];
+const cantidadValida =
+    /^\d+$/.test(cantidadTexto) &&
+    Number.isSafeInteger(cantidad) &&
+    cantidad >= 1 &&
+    cantidad <= 1000000;
 
-const metodo =
-    parametros.get("metodo");
-
-
-// ==========================================
-// ELEMENTOS
-// ==========================================
-
-const mostrarCantidad =
-    document.getElementById(
-        "mostrarCantidad"
-    );
-
-const mostrarMetodo =
-    document.getElementById(
-        "mostrarMetodo"
-    );
-
-const botonContinuar =
-    document.getElementById(
-        "botonContinuar"
-    );
-
-
-// ==========================================
-// MOSTRAR DATOS
-// ==========================================
-
-if (cantidad) {
-
-    mostrarCantidad.textContent =
-        "⚡ " + cantidad + " GVR";
-
-} else {
-
-    mostrarCantidad.textContent =
-        "No especificada";
-
+function mostrarMensaje(texto, tipo) {
+    mensaje.textContent = texto;
+    mensaje.className = "mensaje " + tipo;
 }
 
+function formatoNumero(numero, decimales = 0) {
+    return new Intl.NumberFormat("es-ES", {
+        minimumFractionDigits: decimales,
+        maximumFractionDigits: decimales
+    }).format(numero);
+}
+
+if (cantidadValida) {
+    mostrarCantidad.textContent = formatoNumero(cantidad) + " GVR";
+} else {
+    mostrarCantidad.textContent = "Cantidad no válida";
+}
 
 if (metodo) {
+    mostrarMetodo.textContent = metodo.nombre;
 
-    mostrarMetodo.textContent =
-        "💵 " + metodo;
-
+    if (cantidadValida) {
+        const total = cantidad * metodo.tasa;
+        mostrarPrecio.textContent =
+            formatoNumero(total, metodo.decimales) + " " + metodo.moneda;
+    } else {
+        mostrarPrecio.textContent = "No disponible";
+    }
 } else {
-
-    mostrarMetodo.textContent =
-        "No especificado";
-
+    mostrarMetodo.textContent = "Método no válido";
+    mostrarPrecio.textContent = "No disponible";
 }
 
-
-// ==========================================
-// CONTINUAR PAGO
-// ==========================================
-
-async function continuarPago() {
-
-    if (!cantidad || !metodo) {
-
-        alert(
-            "Faltan datos de la compra."
-        );
-
-        return;
-    }
-
-
-    const cantidadNumerica =
-        Number(
-            cantidad.replace(/,/g, "")
-        );
-
-
-    if (
-        isNaN(cantidadNumerica) ||
-        cantidadNumerica <= 0
-    ) {
-
-        alert(
-            "La cantidad de GVR no es válida."
-        );
-
-        return;
-    }
-
-
+if (!cantidadValida || !metodo) {
     botonContinuar.disabled = true;
-
-    botonContinuar.textContent =
-        "Comprobando sesión...";
-
-
-    // ======================================
-    // COMPROBAR SESIÓN GUARDADA
-    // ======================================
-
-    const {
-        data: sessionData,
-        error: sessionError
-    } =
-        await supabaseClient.auth.getSession();
-
-
-    console.log(
-        "Sesión encontrada:",
-        sessionData?.session
+    mostrarMensaje(
+        "Los datos de esta compra no son válidos. Regresa a la selección de GVR e inténtalo de nuevo.",
+        "error"
     );
-
-
-    if (
-        sessionError ||
-        !sessionData?.session
-    ) {
-
-        botonContinuar.disabled = false;
-
-        botonContinuar.textContent =
-            "Continuar ⚡";
-
-        console.error(
-            "Error de sesión:",
-            sessionError
-        );
-
-        alert(
-            "Gamevora no pudo detectar tu sesión.\n\n" +
-            "Aunque aparezcas conectado en tu cuenta, " +
-            "esta página no está recibiendo la sesión de Supabase."
-        );
-
-        return;
-    }
-
-
-    // ======================================
-    // OBTENER USUARIO
-    // ======================================
-
-    botonContinuar.textContent =
-        "Verificando usuario...";
-
-
-    const {
-        data: userData,
-        error: userError
-    } =
-        await supabaseClient.auth.getUser();
-
-
-    const user =
-        userData?.user;
-
-
-    console.log(
-        "Usuario detectado:",
-        user
-    );
-
-
-    if (
-        userError ||
-        !user
-    ) {
-
-        botonContinuar.disabled = false;
-
-        botonContinuar.textContent =
-            "Continuar ⚡";
-
-        console.error(
-            "Error obteniendo usuario:",
-            userError
-        );
-
-        alert(
-            "No se pudo verificar tu usuario en Gamevora."
-        );
-
-        return;
-    }
-
-
-    // ======================================
-    // REGISTRAR VENTA
-    // ======================================
-
-    botonContinuar.textContent =
-        "Registrando compra...";
-
-
-    const {
-        error: ventaError
-    } =
-        await supabaseClient
-            .from("ventas")
-            .insert({
-
-                tipo:
-                    "gvr",
-
-                usuario_id:
-                    user.id,
-
-                nombre_usuario:
-                    user.user_metadata?.username ||
-                    user.user_metadata?.nombre ||
-                    user.email?.split("@")[0] ||
-                    "Usuario",
-
-                correo_usuario:
-                    user.email,
-
-                gvr_comprado:
-                    cantidadNumerica,
-
-                precio:
-                    null,
-
-                moneda:
-                    "USD",
-
-                metodo_pago:
-                    metodo,
-
-                estado:
-                    "pendiente"
-
-            });
-
-
-    // ======================================
-    // ERROR DE VENTA
-    // ======================================
-
-    if (ventaError) {
-
-        console.error(
-            "Error registrando venta:",
-            ventaError
-        );
-
-        botonContinuar.disabled = false;
-
-        botonContinuar.textContent =
-            "Continuar ⚡";
-
-        alert(
-            "No se pudo registrar la compra.\n\n" +
-            ventaError.message
-        );
-
-        return;
-    }
-
-
-    // ======================================
-    // MODO DE PRUEBA
-    // ======================================
-
-    const saldoActual =
-        Number(
-            localStorage.getItem(
-                "gamevora_gvr"
-            ) || "0"
-        );
-
-
-    const nuevoSaldo =
-        saldoActual +
-        cantidadNumerica;
-
-
-    localStorage.setItem(
-        "gamevora_gvr",
-        nuevoSaldo
-    );
-
-
-    // ======================================
-    // CONFIRMACIÓN
-    // ======================================
-
-    alert(
-        "Compra registrada correctamente.\n\n" +
-        "⚡ " +
-        cantidadNumerica +
-        " GVR\n\n" +
-        "Estado: Pendiente"
-    );
-
-
-    window.location.href =
-        "cuenta.html";
-
 }
 
-</script>
+botonContinuar.addEventListener("click", async () => {
+    botonContinuar.disabled = true;
+    botonContinuar.textContent = "Verificando sesión...";
 
-</body>
+    try {
+        const { data, error } = await supabaseClient.auth.getUser();
+
+        if (error || !data?.user) {
+            mostrarMensaje(
+                "Inicia sesión en tu cuenta antes de continuar con la compra.",
+                "error"
+            );
+            return;
+        }
+
+        /*
+         * A propósito no insertamos una venta ni acreditamos GVR aquí.
+         * El importe mostrado es informativo: el servidor debe validar
+         * cantidad, método y precio antes de crear una solicitud real.
+         *
+         * El próximo paso es conectar un flujo seguro que:
+         * 1. cree una solicitud pendiente en la base de datos;
+         * 2. permita adjuntar el comprobante;
+         * 3. registre la revisión manual;
+         * 4. acredite el saldo una sola vez después de aprobarla.
+         */
+        mostrarMensaje(
+            "Sesión verificada. Todavía falta conectar el registro seguro de la solicitud y la subida del comprobante. No se ha creado una compra ni se ha añadido GVR a tu saldo.",
+            "info"
+        );
+
+    } catch (error) {
+        console.error("Error al verificar la sesión:", error);
+        mostrarMensaje(
+            "No se pudo verificar la sesión. Comprueba tu conexión e inténtalo otra vez.",
+            "error"
+        );
+    } finally {
+        botonContinuar.disabled = false;
+        botonContinuar.textContent = "Continuar con la compra";
+    }
+});
+</script></body>
 </html>
