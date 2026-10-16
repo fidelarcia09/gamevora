@@ -1,0 +1,979 @@
+<!DOCTYPE html><html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Confirmaciones GVR | Gamers Gold Top-Up</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    :root {
+        color-scheme: dark;
+    }
+
+    body {
+        min-height: 100vh;
+        padding: 20px;
+        background: #050b18;
+        color: #fff;
+    }
+
+    button, a {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+        font: inherit;
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .logo {
+        font-size: 21px;
+        font-weight: 900;
+    }
+
+    .rayo {
+        color: #00b7ff;
+        text-shadow: 0 0 12px #008cff;
+    }
+
+    .volver {
+        color: #35baff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .volver:hover {
+        color: #fff;
+    }
+
+    .encabezado {
+        margin-bottom: 22px;
+    }
+
+    .encabezado h1 {
+        margin-bottom: 9px;
+        font-size: 28px;
+    }
+
+    .encabezado p {
+        color: #8da4c0;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .resumen {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+    .resumen-card {
+        padding: 17px;
+        border: 1px solid #173d67;
+        border-radius: 14px;
+        background: #09172d;
+    }
+
+    .resumen-label {
+        margin-bottom: 9px;
+        color: #8da4c0;
+        font-size: 12px;
+    }
+
+    .resumen-numero {
+        color: #39c5ff;
+        font-size: 25px;
+        font-weight: 900;
+    }
+
+    .filtros {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .filtro {
+        padding: 10px 14px;
+        border: 1px solid #244261;
+        border-radius: 9px;
+        background: #09172d;
+        color: #b5c8df;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .filtro.activo {
+        border-color: #168bd1;
+        background: #0b3155;
+        color: #fff;
+    }
+
+    .solicitud {
+        margin-bottom: 16px;
+        padding: 20px;
+        border: 1px solid #173d67;
+        border-radius: 17px;
+        background: linear-gradient(145deg, #0a1a32, #071326);
+    }
+
+    .solicitud-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 17px;
+    }
+
+    .solicitud h2 {
+        margin-bottom: 7px;
+        font-size: 17px;
+        overflow-wrap: anywhere;
+    }
+
+    .fecha {
+        color: #8198b2;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .estado {
+        display: inline-block;
+        padding: 7px 10px;
+        border: 1px solid;
+        border-radius: 30px;
+        font-size: 10px;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .pendiente {
+        border-color: #8a6b19;
+        background: #382b08;
+        color: #ffdb69;
+    }
+
+    .aprobado {
+        border-color: #247342;
+        background: #123820;
+        color: #68df8c;
+    }
+
+    .rechazado {
+        border-color: #87394a;
+        background: #3b1722;
+        color: #ff8195;
+    }
+
+    .datos {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .dato {
+        min-width: 0;
+        padding: 12px;
+        border: 1px solid #172f4d;
+        border-radius: 10px;
+        background: rgba(2, 10, 24, .55);
+    }
+
+    .dato-label {
+        margin-bottom: 6px;
+        color: #8198b2;
+        font-size: 11px;
+    }
+
+    .dato-valor {
+        color: #f1f7ff;
+        font-size: 13px;
+        font-weight: bold;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .cantidad {
+        color: #42c8ff;
+        font-size: 19px;
+    }
+
+    .comprobante {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 42px;
+        margin-bottom: 17px;
+        padding: 11px 15px;
+        border: 1px solid #17649a;
+        border-radius: 10px;
+        background: #0c3155;
+        color: #73d4ff;
+        font-size: 12px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .comprobante:hover {
+        background: #10416e;
+    }
+
+    .sin-comprobante {
+        margin-bottom: 17px;
+        color: #ff8195;
+        font-size: 12px;
+    }
+
+    .acciones {
+        display: flex;
+        gap: 10px;
+    }
+
+    .boton {
+        flex: 1;
+        min-height: 44px;
+        padding: 12px;
+        border: 1px solid;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 900;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .boton:disabled {
+        opacity: .5;
+        cursor: wait;
+    }
+
+    .aceptar {
+        border-color: #247342;
+        background: #123820;
+        color: #68df8c;
+    }
+
+    .aceptar:hover:not(:disabled) {
+        background: #18502d;
+    }
+
+    .cancelar {
+        border-color: #87394a;
+        background: #3b1722;
+        color: #ff8195;
+    }
+
+    .cancelar:hover:not(:disabled) {
+        background: #54202e;
+    }
+
+    .nota {
+        margin-top: 15px;
+        color: #8198b2;
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+    .mensaje {
+        padding: 30px 15px;
+        border: 1px solid #173d67;
+        border-radius: 14px;
+        background: #09172d;
+        color: #9ab0c9;
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .mensaje.error {
+        border-color: #87394a;
+        color: #ff8195;
+    }
+
+    .mensaje button {
+        margin-top: 14px;
+        padding: 10px 15px;
+        border: 1px solid #17649a;
+        border-radius: 9px;
+        background: #0c3155;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .id-solicitud {
+        display: block;
+        margin-top: 10px;
+        color: #8198b2;
+        font-size: 10px;
+        overflow-wrap: anywhere;
+    }
+
+    .oculto {
+        display: none !important;
+    }
+
+    @media (max-width: 520px) {
+        body {
+            padding: 14px;
+        }
+
+        .logo {
+            font-size: 18px;
+        }
+
+        .encabezado h1 {
+            font-size: 24px;
+        }
+
+        .resumen {
+            gap: 7px;
+        }
+
+        .resumen-card {
+            padding: 12px 9px;
+        }
+
+        .resumen-label {
+            font-size: 10px;
+        }
+
+        .resumen-numero {
+            font-size: 21px;
+        }
+
+        .solicitud {
+            padding: 15px;
+        }
+
+        .datos {
+            gap: 8px;
+        }
+
+        .dato {
+            padding: 10px;
+        }
+
+        .acciones {
+            flex-direction: column;
+        }
+    }
+</style>
+
+</head><body><main class="contenedor"><header class="header">
+    <div class="logo">
+        <span class="rayo">⚡</span>
+        Gamers Gold Top-Up
+    </div>
+
+    <a href="admin-soporte.html" class="volver">
+        ← Volver a administración
+    </a>
+</header>
+
+<section class="encabezado">
+    <h1>Confirmaciones GVR</h1>
+    <p>
+        Revisa los comprobantes y gestiona las compras
+        de GVR de los usuarios.
+    </p>
+</section>
+
+<section class="resumen">
+    <div class="resumen-card">
+        <div class="resumen-label">Pendientes</div>
+        <div class="resumen-numero" id="totalPendientes">—</div>
+    </div>
+
+    <div class="resumen-card">
+        <div class="resumen-label">Aprobadas</div>
+        <div class="resumen-numero" id="totalAprobadas">—</div>
+    </div>
+
+    <div class="resumen-card">
+        <div class="resumen-label">Rechazadas</div>
+        <div class="resumen-numero" id="totalRechazadas">—</div>
+    </div>
+</section>
+
+<nav class="filtros" aria-label="Filtrar solicitudes">
+    <button class="filtro activo" data-filtro="pending" type="button">
+        Pendientes
+    </button>
+
+    <button class="filtro" data-filtro="approved" type="button">
+        Aprobadas
+    </button>
+
+    <button class="filtro" data-filtro="rejected" type="button">
+        Rechazadas
+    </button>
+
+    <button class="filtro" data-filtro="all" type="button">
+        Todas
+    </button>
+</nav>
+
+<section id="listaSolicitudes">
+    <div class="mensaje">
+        Comprobando permisos y cargando solicitudes...
+    </div>
+</section>
+
+</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+"use strict";
+
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+const lista = document.getElementById("listaSolicitudes");
+
+let solicitudes = [];
+let filtroActual = "pending";
+let procesando = new Set();
+
+
+/* =========================
+   SEGURIDAD Y ACCESO
+========================= */
+
+async function iniciar() {
+    try {
+        const { data, error } =
+            await supabaseClient.auth.getUser();
+
+        if (error || !data.user) {
+            window.location.replace("login.html");
+            return;
+        }
+
+        const { data: esAdmin, error: errorAdmin } =
+            await supabaseClient.rpc("is_support_admin");
+
+        if (errorAdmin) {
+            throw errorAdmin;
+        }
+
+        if (esAdmin !== true) {
+            lista.innerHTML = `
+                <div class="mensaje error">
+                    No tienes permisos para administrar
+                    las compras de GVR.
+                </div>
+            `;
+            return;
+        }
+
+        await cargarSolicitudes();
+
+    } catch (error) {
+        console.error(error);
+
+        mostrarError(
+            "No se pudo comprobar tu acceso. Intenta nuevamente."
+        );
+    }
+}
+
+
+/* =========================
+   CARGAR SOLICITUDES
+========================= */
+
+async function cargarSolicitudes() {
+    lista.innerHTML = `
+        <div class="mensaje">
+            Cargando solicitudes desde Supabase...
+        </div>
+    `;
+
+    try {
+        const { data, error } =
+            await supabaseClient.rpc(
+                "admin_list_gvr_purchase_requests"
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        solicitudes = Array.isArray(data) ? data : [];
+
+        actualizarResumen();
+        mostrarSolicitudes();
+
+    } catch (error) {
+        console.error(error);
+
+        mostrarError(
+            "No se pudieron cargar las solicitudes. " +
+            "Comprueba la conexión e inténtalo nuevamente."
+        );
+    }
+}
+
+
+/* =========================
+   RESUMEN
+========================= */
+
+function actualizarResumen() {
+    document.getElementById("totalPendientes").textContent =
+        solicitudes.filter(s => s.status === "pending").length;
+
+    document.getElementById("totalAprobadas").textContent =
+        solicitudes.filter(s => s.status === "approved").length;
+
+    document.getElementById("totalRechazadas").textContent =
+        solicitudes.filter(s => s.status === "rejected").length;
+}
+
+
+/* =========================
+   MOSTRAR SOLICITUDES
+========================= */
+
+async function mostrarSolicitudes() {
+    const visibles = solicitudes.filter(s => {
+        return filtroActual === "all" ||
+            s.status === filtroActual;
+    });
+
+    if (visibles.length === 0) {
+        lista.innerHTML = `
+            <div class="mensaje">
+                No hay solicitudes en esta categoría.
+            </div>
+        `;
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    for (const solicitud of visibles) {
+        const tarjeta = crearTarjeta(solicitud);
+
+        lista.appendChild(tarjeta);
+
+        if (solicitud.proof_path) {
+            cargarEnlaceComprobante(solicitud, tarjeta);
+        }
+    }
+}
+
+
+/* =========================
+   CREAR TARJETA
+========================= */
+
+function crearTarjeta(s) {
+    const tarjeta = document.createElement("article");
+    tarjeta.className = "solicitud";
+
+    const estadoTexto = {
+        pending: "PENDIENTE",
+        approved: "APROBADA",
+        rejected: "RECHAZADA"
+    }[s.status] || s.status.toUpperCase();
+
+    const estadoClase = {
+        pending: "pendiente",
+        approved: "aprobado",
+        rejected: "rechazado"
+    }[s.status] || "pendiente";
+
+    const metodo = {
+        SALDO_MOVIL: "Saldo móvil",
+        USDT: "USDT",
+        CUP: "CUP"
+    }[s.payment_method] || s.payment_method;
+
+    const fecha = s.created_at
+        ? new Date(s.created_at).toLocaleString("es-ES")
+        : "No disponible";
+
+    tarjeta.innerHTML = `
+        <div class="solicitud-top">
+            <div>
+                <h2>${escapar(s.username || "Usuario")}</h2>
+                <div class="fecha">
+                    ${escapar(s.user_email || "Correo no disponible")}
+                    <br>
+                    Solicitud: ${escapar(fecha)}
+                </div>
+            </div>
+
+            <span class="estado ${estadoClase}">
+                ${escapar(estadoTexto)}
+            </span>
+        </div>
+
+        <div class="datos">
+            <div class="dato">
+                <div class="dato-label">Cantidad solicitada</div>
+                <div class="dato-valor cantidad">
+                    ${escapar(s.gvr_amount)} GVR
+                </div>
+            </div>
+
+            <div class="dato">
+                <div class="dato-label">Importe del pago</div>
+                <div class="dato-valor">
+                    ${escapar(formatearImporte(
+                        s.payment_amount,
+                        s.payment_currency
+                    ))}
+                </div>
+            </div>
+
+            <div class="dato">
+                <div class="dato-label">Método de pago</div>
+                <div class="dato-valor">
+                    ${escapar(metodo)}
+                </div>
+            </div>
+
+            <div class="dato">
+                <div class="dato-label">Usuario ID</div>
+                <div class="dato-valor">
+                    ${escapar(s.user_id)}
+                </div>
+            </div>
+        </div>
+
+        ${
+            s.proof_path
+            ? `
+                <a
+                    class="comprobante"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-comprobante
+                >
+                    Abrir comprobante
+                </a>
+            `
+            : `
+                <div class="sin-comprobante">
+                    Esta solicitud no tiene comprobante.
+                </div>
+            `
+        }
+
+        ${
+            s.status === "pending"
+            ? `
+                <div class="acciones">
+                    <button
+                        class="boton aceptar"
+                        type="button"
+                        data-accion="approved"
+                    >
+                        ACEPTAR Y ACREDITAR GVR
+                    </button>
+
+                    <button
+                        class="boton cancelar"
+                        type="button"
+                        data-accion="rejected"
+                    >
+                        CANCELAR SOLICITUD
+                    </button>
+                </div>
+            `
+            : `
+                <div class="fecha">
+                    Revisada: ${
+                        s.reviewed_at
+                        ? escapar(new Date(s.reviewed_at).toLocaleString("es-ES"))
+                        : "Fecha no disponible"
+                    }
+                </div>
+            `
+        }
+
+        <div class="nota">
+            El identificador permite localizar esta compra.
+            Las decisiones se procesan de forma segura en Supabase.
+        </div>
+
+        <code class="id-solicitud">
+            ID: ${escapar(s.id)}
+        </code>
+    `;
+
+    tarjeta.querySelectorAll("[data-accion]").forEach(boton => {
+        boton.addEventListener("click", async event => {
+            event.stopPropagation();
+
+            await revisarSolicitud(
+                s,
+                boton.dataset.accion,
+                tarjeta
+            );
+        });
+    });
+
+    return tarjeta;
+}
+
+
+/* =========================
+   ABRIR COMPROBANTE PRIVADO
+========================= */
+
+async function cargarEnlaceComprobante(s, tarjeta) {
+    const enlace = tarjeta.querySelector("[data-comprobante]");
+
+    if (!enlace) return;
+
+    try {
+        const { data, error } =
+            await supabaseClient.storage
+                .from("gvr-payment-proofs")
+                .createSignedUrl(s.proof_path, 300);
+
+        if (error) {
+            throw error;
+        }
+
+        enlace.href = data.signedUrl;
+        enlace.textContent = "Ver comprobante de pago";
+
+    } catch (error) {
+        console.error("Error al abrir comprobante:", error);
+
+        enlace.removeAttribute("href");
+        enlace.removeAttribute("target");
+        enlace.textContent = "Comprobante no disponible";
+        enlace.style.opacity = ".6";
+        enlace.style.pointerEvents = "none";
+    }
+}
+
+
+/* =========================
+   APROBAR O RECHAZAR
+========================= */
+
+async function revisarSolicitud(s, decision, tarjeta) {
+    if (!["approved", "rejected"].includes(decision)) {
+        return;
+    }
+
+    if (procesando.has(s.id)) {
+        return;
+    }
+
+    if (s.status !== "pending") {
+        alert("Esta solicitud ya fue procesada.");
+        return;
+    }
+
+    if (decision === "approved" && !s.proof_path) {
+        alert(
+            "No se puede aprobar una solicitud sin comprobante."
+        );
+        return;
+    }
+
+    const aprobar = decision === "approved";
+
+    const mensaje = aprobar
+        ? `Vas a acreditar ${s.gvr_amount} GVR a este usuario:\n\n` +
+          `${s.user_email || s.user_id}\n\n` +
+          `Importe registrado: ${formatearImporte(
+              s.payment_amount,
+              s.payment_currency
+          )}\n\n` +
+          `Continúa únicamente si has verificado el pago real.`
+        : `¿Confirmas que deseas rechazar esta solicitud?\n\n` +
+          `Usuario: ${s.user_email || s.user_id}\n` +
+          `Cantidad: ${s.gvr_amount} GVR\n\n` +
+          `No se acreditará ningún GVR.`;
+
+    if (!confirm(mensaje)) {
+        return;
+    }
+
+    let nota = null;
+
+    if (!aprobar) {
+        nota = prompt(
+            "Motivo del rechazo (opcional):"
+        );
+
+        if (nota === null) {
+            return;
+        }
+
+        nota = nota.trim().slice(0, 500) || null;
+    }
+
+    procesando.add(s.id);
+
+    tarjeta.querySelectorAll("button").forEach(boton => {
+        boton.disabled = true;
+    });
+
+    const botones = tarjeta.querySelectorAll("[data-accion]");
+
+    botones.forEach(boton => {
+        boton.textContent = "Procesando...";
+    });
+
+    try {
+        const { data, error } =
+            await supabaseClient.rpc(
+                "admin_review_gvr_purchase_request",
+                {
+                    p_request_id: s.id,
+                    p_decision: decision,
+                    p_review_note: nota
+                }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data || data.success !== true) {
+            throw new Error(
+                "Supabase no confirmó el resultado de la operación."
+            );
+        }
+
+        if (data.status !== decision) {
+            throw new Error(
+                "El estado devuelto no coincide con la decisión solicitada."
+            );
+        }
+
+        alert(
+            aprobar
+            ? `Compra aprobada.\n\n` +
+              `${data.gvr_amount} GVR acreditados correctamente.`
+            : "Solicitud rechazada.\n\nNo se acreditaron GVR."
+        );
+
+        await cargarSolicitudes();
+
+    } catch (error) {
+        console.error("Error al revisar solicitud:", error);
+
+        alert(
+            "No se pudo procesar la solicitud.\n\n" +
+            (error.message || "Error desconocido") +
+            "\n\nActualiza la lista antes de volver a intentarlo."
+        );
+
+        await cargarSolicitudes();
+
+    } finally {
+        procesando.delete(s.id);
+    }
+}
+
+
+/* =========================
+   FILTROS
+========================= */
+
+document.querySelectorAll("[data-filtro]").forEach(boton => {
+    boton.addEventListener("click", () => {
+        filtroActual = boton.dataset.filtro;
+
+        document.querySelectorAll("[data-filtro]").forEach(item => {
+            item.classList.toggle(
+                "activo",
+                item === boton
+            );
+        });
+
+        mostrarSolicitudes();
+    });
+});
+
+
+/* =========================
+   UTILIDADES
+========================= */
+
+function formatearImporte(importe, moneda) {
+    const numero = Number(importe);
+
+    if (!Number.isFinite(numero)) {
+        return "Importe no disponible";
+    }
+
+    const decimales = moneda === "USDT" ? 2 : 0;
+
+    return numero.toLocaleString("es-ES", {
+        minimumFractionDigits: decimales,
+        maximumFractionDigits: decimales
+    }) + " " + String(moneda || "");
+}
+
+function escapar(valor) {
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function mostrarError(mensaje) {
+    lista.innerHTML = `
+        <div class="mensaje error">
+            ${escapar(mensaje)}
+            <br>
+            <button type="button" id="reintentar">
+                Intentar nuevamente
+            </button>
+        </div>
+    `;
+
+    document.getElementById("reintentar")
+        ?.addEventListener("click", iniciar);
+}
+
+
+/* =========================
+   INICIAR
+========================= */
+
+iniciar();
+
+</script></body>
+  </html>
