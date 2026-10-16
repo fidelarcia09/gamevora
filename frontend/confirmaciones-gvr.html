@@ -1,7 +1,9 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Confirmaciones GVR | Gamers Gold Top-Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmaciones GVR | Gamers Gold Top-Up</title>
 
 <style>
     * {
@@ -380,8 +382,12 @@
         }
     }
 </style>
+</head>
 
-</head><body><main class="contenedor"><header class="header">
+<body>
+<main class="contenedor">
+
+<header class="header">
     <div class="logo">
         <span class="rayo">⚡</span>
         Gamers Gold Top-Up
@@ -441,7 +447,11 @@
     </div>
 </section>
 
-</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
 "use strict";
 
 const SUPABASE_URL =
@@ -879,6 +889,58 @@ async function revisarSolicitud(s, decision, tarjeta) {
             );
         }
 
+        /*
+         * NOTIFICACIÓN PUSH
+         *
+         * La decisión ya fue guardada correctamente.
+         * Si Push falla, no debemos tratar la decisión
+         * como fallida ni repetir la acreditación.
+         */
+
+        try {
+            const {
+                data: resultadoPush,
+                error: errorPush
+            } = await supabaseClient.functions.invoke(
+                "notificar-resultado-gvr",
+                {
+                    body: {
+                        request_id: s.id,
+                        decision: decision
+                    }
+                }
+            );
+
+            if (errorPush) {
+                console.warn(
+                    "La solicitud se procesó, pero no se pudo enviar Push:",
+                    errorPush
+                );
+            } else if (
+                resultadoPush?.code === "USER_NOT_SUBSCRIBED"
+            ) {
+                console.info(
+                    "El usuario todavía no ha activado las notificaciones Push."
+                );
+            } else if (resultadoPush?.sent > 0) {
+                console.info(
+                    "Notificación enviada al usuario:",
+                    resultadoPush.sent
+                );
+            } else if (resultadoPush?.error) {
+                console.warn(
+                    "La solicitud se procesó, pero Push devolvió un error:",
+                    resultadoPush.error
+                );
+            }
+
+        } catch (errorPush) {
+            console.warn(
+                "La solicitud se procesó, pero la notificación Push falló:",
+                errorPush
+            );
+        }
+
         alert(
             aprobar
             ? `Compra aprobada.\n\n` +
@@ -944,6 +1006,7 @@ function formatearImporte(importe, moneda) {
     }) + " " + String(moneda || "");
 }
 
+
 function escapar(valor) {
     return String(valor ?? "")
         .replace(/&/g, "&amp;")
@@ -952,6 +1015,7 @@ function escapar(valor) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
+
 
 function mostrarError(mensaje) {
     lista.innerHTML = `
@@ -975,5 +1039,6 @@ function mostrarError(mensaje) {
 
 iniciar();
 
-</script></body>
-  </html>
+</script>
+</body>
+</html>
