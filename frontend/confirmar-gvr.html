@@ -328,9 +328,9 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
         <label class="subida" for="archivoComprobante">
             Selecciona la captura del pago
             <input
-    type="file"
-    id="archivoComprobante"
-    accept="image/jpeg,image/png,image/webp">
+                type="file"
+                id="archivoComprobante"
+                accept="image/jpeg,image/png,image/webp">
         </label>
 
         <p class="ayuda">Formatos permitidos: JPG, PNG y WEBP. Tamaño máximo: 5 MB.</p>
@@ -471,11 +471,12 @@ async function obtenerUsuario() {
 
 async function crearSolicitud(usuario) {
     const metodoDB = metodoTexto === "SALDO MOVIL"
-    ? "SALDO_MOVIL"
-    : metodoTexto;
+        ? "SALDO_MOVIL"
+        : metodoTexto;
 
-const monedaDB = metodo.moneda;
-const importe = cantidad * metodo.tasa;
+    const monedaDB = metodo.moneda;
+    const importe = cantidad * metodo.tasa;
+
     const {data,error} = await supabaseClient
         .from("gvr_purchase_requests")
         .insert({
@@ -497,6 +498,7 @@ const importe = cantidad * metodo.tasa;
     }
 
     if (!data?.id) throw new Error("Supabase no devolvió el ID de la solicitud.");
+
     return data.id;
 }
 
@@ -560,6 +562,35 @@ async function vincularComprobante(idSolicitud,usuario,ruta) {
             );
         }
     }
+}
+
+/*
+ * Extrae el mensaje devuelto por la función de notificación,
+ * cuando Supabase proporciona una respuesta HTTP legible.
+ */
+async function obtenerDetalleErrorNotificacion(error) {
+    let detalle = error?.message || "Error desconocido";
+    const respuesta = error?.context;
+
+    if (respuesta && typeof respuesta.clone === "function") {
+        try {
+            const resultado = await respuesta.clone().json();
+
+            if (resultado?.error) {
+                detalle = resultado.error;
+
+                if (resultado.code) {
+                    detalle += " [" + resultado.code + "]";
+                }
+            } else if (resultado?.message) {
+                detalle = resultado.message;
+            }
+        } catch {
+            // Conservamos el mensaje original si la respuesta no es JSON.
+        }
+    }
+
+    return detalle;
 }
 
 async function copiarTexto(texto) {
@@ -690,50 +721,109 @@ botonContinuar.addEventListener("click",async () => {
 
             botonContinuar.textContent = "Subiendo comprobante...";
             rutaComprobanteSubido = await subirComprobante(
-                usuario,solicitudId,archivoSeleccionado
+                usuario,
+                solicitudId,
+                archivoSeleccionado
             );
         }
 
         botonContinuar.textContent = "Confirmando envío...";
+
         await vincularComprobante(
-    solicitudId,
-    usuario,
-    rutaComprobanteSubido
-);
+            solicitudId,
+            usuario,
+            rutaComprobanteSubido
+        );
 
-// Notificar al administrador después de guardar el comprobante.
-try {
-    const { data: notificacion, error: errorNotificacion } =
-        await supabaseClient.functions.invoke(
-            "notificar-solicitud-gvr",
-            {
-                body: {
-                    request_id: solicitudId
+        /*
+         * La solicitud y el comprobante ya están guardados.
+         * La notificación se gestiona por separado: un fallo al
+         * notificar no debe provocar que el usuario repita el pago.
+         */
+        let resultadoNotificacion = "";
+
+        try {
+            const {
+                data: notificacion,
+                error: errorNotificacion
+            } = await supabaseClient.functions.invoke(
+                "notificar-solicitud-gvr",
+                {
+                    body: {
+                        request_id: solicitudId
+                    }
                 }
+            );
+
+            if (errorNotificacion) {
+                const detalle = await obtenerDetalleErrorNotificacion(
+                    errorNotificacion
+                );
+
+                console.error("Falló la notificación GVR:", {
+                    solicitudId,
+                    detalle,
+                    error: errorNotificacion
+                });
+
+                resultadoNotificacion =
+                    " La solicitud quedó guardada, pero no se pudo confirmar " +
+                    "el envío de la notificación al administrador. Motivo: " +
+                    detalle +
+                    ". No envíes otra solicitud ni vuelvas a pagar.";
+
+            } else if (
+                notificacion?.ok &&
+                Number(notificacion.sent) > 0
+            ) {
+                console.log("Notificación GVR enviada:", notificacion);
+
+                resultadoNotificacion =
+                    " La notificación se envió al administrador.";
+
+            } else {
+                const detalle =
+                    notificacion?.error ||
+                    notificacion?.message ||
+                    notificacion?.code ||
+                    "El servidor no confirmó el envío.";
+
+                console.warn(
+                    "Notificación GVR sin confirmación:",
+                    notificacion
+                );
+
+                resultadoNotificacion =
+                    " La solicitud quedó guardada, pero la notificación " +
+                    "no se confirmó: " +
+                    detalle +
+                    ". No envíes otra solicitud ni vuelvas a pagar.";
             }
-        );
 
-    if (errorNotificacion) {
-        console.error(
-            "No se pudo notificar al administrador:",
-            errorNotificacion
-        );
-    } else {
-        console.log(
-            "Resultado de notificación GVR:",
-            notificacion
-        );
-    }
-} catch (errorNotificacion) {
-    console.error(
-        "Error enviando notificación GVR:",
-        errorNotificacion
-    );
-}
+        } catch (errorNotificacion) {
+            const detalle = await obtenerDetalleErrorNotificacion(
+                errorNotificacion
+            );
 
-envioCompletado = true;
+            console.error("Error enviando notificación GVR:", {
+                solicitudId,
+                detalle,
+                error: errorNotificacion
+            });
 
+            resultadoNotificacion =
+                " La solicitud quedó guardada, pero ocurrió un error al " +
+                "notificar al administrador: " +
+                detalle +
+                ". No envíes otra solicitud ni vuelvas a pagar.";
+        }
+
+        /*
+         * La solicitud ya está registrada y el comprobante vinculado.
+         * No permitimos que se envíe otra solicitud desde esta operación.
+         */
         envioCompletado = true;
+
         document.getElementById("estadoCompra").textContent =
             "Pendiente de revisión";
 
@@ -742,14 +832,17 @@ envioCompletado = true;
         botonContinuar.textContent = "Comprobante enviado";
 
         mostrarMensaje(
-            "¡Solicitud enviada correctamente! Identificador: " +
-            solicitudId + ". Tu compra está pendiente de revisión. " +
-            "Todavía no se han acreditado GVR. No realices otro pago para esta solicitud.",
-            "exito"
+            "¡Solicitud registrada correctamente! Identificador: " +
+            solicitudId +
+            ". Tu compra está pendiente de revisión. " +
+            "Todavía no se han acreditado GVR." +
+            resultadoNotificacion,
+            resultadoNotificacion ? "info" : "exito"
         );
 
     } catch (error) {
         console.error("Error en compra GVR:",error);
+
         mostrarMensaje(
             (error.message || "No se pudo completar el envío.") +
             (solicitudId ? " ID de solicitud: " + solicitudId : ""),
@@ -763,9 +856,12 @@ envioCompletado = true;
 
     } finally {
         enviando = false;
-        if (!envioCompletado) botonContinuar.disabled = false;
+
+        if (!envioCompletado) {
+            botonContinuar.disabled = false;
+        }
     }
 });
 </script>
 </body>
-</html>
+    </html>
