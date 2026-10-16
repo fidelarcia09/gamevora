@@ -2,9 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#050b18"><title>Wallet | Gamers Gold Top-Up</title>
-
-<style>
+    <meta name="theme-color" content="#050b18">
+    <title>Wallet | Gamers Gold Top-Up</title><style>
     * {
         box-sizing: border-box;
         margin: 0;
@@ -191,13 +190,23 @@
         justify-content: center;
         flex-shrink: 0;
         border-radius: 12px;
-        background: rgba(0, 160, 255, .12);
-        color: #47c5ff;
     }
 
     .movimiento-icono svg {
-        width: 21px;
-        height: 21px;
+        width: 22px;
+        height: 22px;
+    }
+
+    .movimiento.entrada .movimiento-icono {
+        background: rgba(57, 221, 160, .12);
+        color: #39dda0;
+        border: 1px solid rgba(57, 221, 160, .22);
+    }
+
+    .movimiento.salida .movimiento-icono {
+        background: rgba(255, 100, 100, .12);
+        color: #ff8585;
+        border: 1px solid rgba(255, 100, 100, .22);
     }
 
     .movimiento-info {
@@ -302,78 +311,67 @@
             font-size: 12px;
         }
     }
-</style>
+</style></head><body>
+<div class="contenedor"><header class="header">
+    <div class="logo">
+        <span class="rayo">GAMERS</span> GOLD
+    </div>
 
-</head><body>
-    <div class="contenedor">    <header class="header">
-        <div class="logo">
-            <span class="rayo">G</span> GAMERS GOLD
+    <a href="../index.html" class="volver">Inicio</a>
+</header>
+
+<main class="card">
+
+    <h1>Mi Wallet</h1>
+
+    <p class="subtitulo">
+        Consulta tu saldo y administra tus GVR.
+    </p>
+
+    <section class="saldo" aria-label="Saldo disponible">
+        <div class="saldo-titulo">Saldo disponible</div>
+
+        <div class="saldo-valor" id="saldoGVR" aria-live="polite">
+            Cargando...
+        </div>
+    </section>
+
+    <a href="recargar-gvr.html" class="boton">
+        <svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 8v8"></path>
+            <path d="M8 12h8"></path>
+        </svg>
+        Añadir GVR
+    </a>
+
+    <section class="movimientos">
+        <div class="movimientos-cabecera">
+            <h2>Historial de movimientos</h2>
+            <span class="etiqueta">Últimos 6</span>
         </div>
 
-        <a href="../index.html" class="volver">Inicio</a>
-    </header>
-
-    <main class="card">
-
-        <h1>Mi Wallet</h1>
-
-        <p class="subtitulo">
-            Consulta tu saldo y administra tus GVR.
-        </p>
-
-        <section class="saldo" aria-label="Saldo disponible">
-            <div class="saldo-titulo">Saldo disponible</div>
-
-            <div class="saldo-valor" id="saldoGVR" aria-live="polite">
-                Cargando...
+        <div id="listaMovimientos"
+            class="lista-movimientos"
+            aria-live="polite">
+            <div class="cargando-movimientos">
+                Cargando movimientos...
             </div>
-        </section>
+        </div>
+    </section>
 
-        <a href="recargar-gvr.html" class="boton">
-            <svg viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round"
-                aria-hidden="true">
-                <circle cx="12" cy="12" r="9"></circle>
-                <path d="M12 8v8"></path>
-                <path d="M8 12h8"></path>
-            </svg>
+    <p class="estado" id="estadoWallet" role="status"></p>
 
-            Añadir GVR
-        </a>
+</main>
 
-        <section class="movimientos">
+<footer class="pie">
+    Gamers Gold Top-Up · Wallet GVR
+</footer>
 
-            <div class="movimientos-cabecera">
-                <h2>Historial de movimientos</h2>
-                <span class="etiqueta">Últimos 2</span>
-            </div>
-
-            <div id="listaMovimientos"
-                class="lista-movimientos"
-                aria-live="polite">
-
-                <div class="cargando-movimientos">
-                    Cargando movimientos...
-                </div>
-
-            </div>
-
-        </section>
-
-        <p class="estado" id="estadoWallet" role="status"></p>
-
-    </main>
-
-    <footer class="pie">
-        Gamers Gold Top-Up · Wallet GVR
-    </footer>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
+</div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
     const SUPABASE_URL =
         "https://gsuhzcavghsiolmipnzi.supabase.co";
 
@@ -385,14 +383,23 @@
         SUPABASE_PUBLISHABLE_KEY
     );
 
-    const iconoMovimiento = `
+    const iconoEntrada = `
         <svg viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.8"
+            stroke="currentColor" stroke-width="2.2"
             stroke-linecap="round" stroke-linejoin="round"
             aria-hidden="true">
-            <path d="M12 3v18"></path>
-            <path d="M17 7.5C17 5.6 14.8 4.5 12 4.5S7 5.6 7 7.5
-                9 10.5 12 10.5s5 1.1 5 3-2.2 4-5 4-5-1.1-5-3"></path>
+            <path d="M12 19V5"></path>
+            <path d="m5 12 7-7 7 7"></path>
+        </svg>
+    `;
+
+    const iconoSalida = `
+        <svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <path d="M12 5v14"></path>
+            <path d="m19 12-7 7-7-7"></path>
         </svg>
     `;
 
@@ -507,11 +514,11 @@
         const cantidad = Math.abs(Number(movimiento.amount) || 0);
 
         const elemento = document.createElement("article");
-        elemento.className = "movimiento";
+        elemento.className = `movimiento ${entrada ? "entrada" : "salida"}`;
 
         const icono = document.createElement("div");
         icono.className = "movimiento-icono";
-        icono.innerHTML = iconoMovimiento;
+        icono.innerHTML = entrada ? iconoEntrada : iconoSalida;
 
         const info = document.createElement("div");
         info.className = "movimiento-info";
@@ -566,24 +573,17 @@
                 .maybeSingle();
 
         if (walletError) {
-            console.error(
-                "Error cargando wallet:",
-                walletError
-            );
+            console.error("Error cargando wallet:", walletError);
 
             saldoElemento.textContent = "No disponible";
-
             estadoElemento.textContent =
                 "No se pudo consultar el saldo. Inténtalo nuevamente.";
-
             estadoElemento.className = "estado error";
 
         } else if (!wallet) {
             saldoElemento.textContent = "0 GVR";
-
             estadoElemento.textContent =
                 "No se encontró una wallet para esta cuenta.";
-
             estadoElemento.className = "estado error";
 
         } else {
@@ -594,10 +594,8 @@
                     `${formatoCantidad(saldo)} GVR`;
             } else {
                 saldoElemento.textContent = "No disponible";
-
                 estadoElemento.textContent =
                     "No se pudo interpretar el saldo de la wallet.";
-
                 estadoElemento.className = "estado error";
             }
         }
@@ -610,7 +608,7 @@
                 )
                 .eq("user_id", usuario.id)
                 .order("created_at", { ascending: false })
-                .limit(2);
+                .limit(6);
 
         listaElemento.replaceChildren();
 
@@ -642,19 +640,14 @@
         const fragmento = document.createDocumentFragment();
 
         movimientos.forEach(movimiento => {
-            fragmento.appendChild(
-                renderizarMovimiento(movimiento)
-            );
+            fragmento.appendChild(renderizarMovimiento(movimiento));
         });
 
         listaElemento.appendChild(fragmento);
     }
 
     cargarWallet().catch(error => {
-        console.error(
-            "Error inesperado cargando wallet:",
-            error
-        );
+        console.error("Error inesperado cargando wallet:", error);
 
         document.getElementById("estadoWallet").textContent =
             "Ocurrió un error al cargar la wallet. Recarga la página.";
@@ -674,7 +667,5 @@
 
         lista.appendChild(mensaje);
     });
-</script>
-
-</body>
+</script></body>
 </html>
