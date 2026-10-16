@@ -60,6 +60,7 @@
         border-radius: 20px;
         padding: 23px 19px;
         box-shadow: 0 12px 35px rgba(0, 0, 0, .2);
+        min-width: 0;
     }
 
     h1 {
@@ -135,6 +136,7 @@
 
     .movimientos {
         margin-top: 28px;
+        min-width: 0;
     }
 
     .movimientos-cabecera {
@@ -158,12 +160,14 @@
         border-radius: 20px;
         font-size: 11px;
         white-space: nowrap;
+        flex-shrink: 0;
     }
 
     .lista-movimientos {
         display: flex;
         flex-direction: column;
         gap: 10px;
+        min-width: 0;
     }
 
     .movimiento {
@@ -175,6 +179,8 @@
         border: 1px solid #17314f;
         border-radius: 13px;
         min-width: 0;
+        width: 100%;
+        overflow: hidden;
     }
 
     .movimiento-icono {
@@ -197,6 +203,7 @@
     .movimiento-info {
         flex: 1;
         min-width: 0;
+        overflow: hidden;
     }
 
     .movimiento-titulo {
@@ -210,6 +217,7 @@
         color: #8094ae;
         font-size: 11px;
         line-height: 1.5;
+        overflow-wrap: anywhere;
     }
 
     .movimiento-monto {
@@ -217,6 +225,7 @@
         font-size: 13px;
         font-weight: 800;
         white-space: nowrap;
+        flex-shrink: 0;
     }
 
     .positivo {
@@ -227,7 +236,8 @@
         color: #ff8585;
     }
 
-    .vacio, .cargando-movimientos {
+    .vacio,
+    .cargando-movimientos {
         text-align: center;
         color: #8195ad;
         font-size: 13px;
@@ -248,10 +258,6 @@
 
     .estado.error {
         color: #ff9999;
-    }
-
-    .estado.exito {
-        color: #58e6ae;
     }
 
     .pie {
@@ -276,6 +282,10 @@
 
         .card {
             padding: 20px 14px;
+        }
+
+        .movimientos-cabecera h2 {
+            font-size: 15px;
         }
 
         .movimiento {
@@ -304,6 +314,7 @@
     </header>
 
     <main class="card">
+
         <h1>Mi Wallet</h1>
 
         <p class="subtitulo">
@@ -327,29 +338,37 @@
                 <path d="M12 8v8"></path>
                 <path d="M8 12h8"></path>
             </svg>
+
             Añadir GVR
         </a>
 
         <section class="movimientos">
+
             <div class="movimientos-cabecera">
                 <h2>Historial de movimientos</h2>
-                <span class="etiqueta">Últimos movimientos</span>
+                <span class="etiqueta">Últimos 2</span>
             </div>
 
-            <div id="listaMovimientos" class="lista-movimientos"
+            <div id="listaMovimientos"
+                class="lista-movimientos"
                 aria-live="polite">
+
                 <div class="cargando-movimientos">
                     Cargando movimientos...
                 </div>
+
             </div>
+
         </section>
 
         <p class="estado" id="estadoWallet" role="status"></p>
+
     </main>
 
     <footer class="pie">
         Gamers Gold Top-Up · Wallet GVR
     </footer>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -377,14 +396,16 @@
         </svg>
     `;
 
-    function escaparHTML(valor) {
-        return String(valor ?? "").replace(/[&<>"']/g, caracter => ({
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
-        })[caracter]);
+    function formatoCantidad(cantidad) {
+        const numero = Number(cantidad);
+
+        if (!Number.isFinite(numero)) {
+            return "0";
+        }
+
+        return numero.toLocaleString("es-ES", {
+            maximumFractionDigits: 2
+        });
     }
 
     function formatoFecha(fecha) {
@@ -403,27 +424,12 @@
         });
     }
 
-    function formatoCantidad(cantidad) {
-        const numero = Number(cantidad);
-
-        if (!Number.isFinite(numero)) {
-            return "0";
-        }
-
-        return numero.toLocaleString("es-ES", {
-            maximumFractionDigits: 2
-        });
-    }
-
     function nombreMovimiento(movimiento) {
         const tipo = String(movimiento.type || "").toLowerCase();
-        const referencia = String(movimiento.reference || "").toLowerCase();
 
         if (
             tipo.includes("refund") ||
-            tipo.includes("reembolso") ||
-            referencia.includes("refund") ||
-            referencia.includes("reembolso")
+            tipo.includes("reembolso")
         ) {
             return "Reembolso";
         }
@@ -431,8 +437,7 @@
         if (
             tipo.includes("purchase") ||
             tipo.includes("compra") ||
-            tipo.includes("debit") ||
-            referencia.includes("purchase")
+            tipo.includes("debit")
         ) {
             return "Compra";
         }
@@ -441,11 +446,16 @@
             tipo.includes("topup") ||
             tipo.includes("top_up") ||
             tipo.includes("deposit") ||
-            tipo.includes("recarga") ||
-            referencia.includes("topup") ||
-            referencia.includes("recarga")
+            tipo.includes("recarga")
         ) {
             return "Recarga de saldo";
+        }
+
+        if (
+            tipo.includes("credit") ||
+            tipo.includes("add")
+        ) {
+            return "Saldo añadido";
         }
 
         return movimiento.type
@@ -495,8 +505,6 @@
     function renderizarMovimiento(movimiento) {
         const entrada = esEntrada(movimiento);
         const cantidad = Math.abs(Number(movimiento.amount) || 0);
-        const signo = entrada ? "+" : "−";
-        const claseMonto = entrada ? "positivo" : "negativo";
 
         const elemento = document.createElement("article");
         elemento.className = "movimiento";
@@ -518,17 +526,12 @@
 
         info.append(titulo, fecha);
 
-        if (movimiento.reference) {
-            const referencia = document.createElement("div");
-            referencia.className = "movimiento-fecha";
-            referencia.textContent =
-                "Referencia: " + String(movimiento.reference).slice(0, 70);
-            info.appendChild(referencia);
-        }
-
         const monto = document.createElement("div");
-        monto.className = `movimiento-monto ${claseMonto}`;
-        monto.textContent = `${signo}${formatoCantidad(cantidad)} GVR`;
+        monto.className = "movimiento-monto " +
+            (entrada ? "positivo" : "negativo");
+
+        monto.textContent =
+            `${entrada ? "+" : "−"}${formatoCantidad(cantidad)} GVR`;
 
         elemento.append(icono, info, monto);
 
@@ -536,11 +539,17 @@
     }
 
     async function cargarWallet() {
-        const saldoElemento = document.getElementById("saldoGVR");
-        const estadoElemento = document.getElementById("estadoWallet");
-        const listaElemento = document.getElementById("listaMovimientos");
+        const saldoElemento =
+            document.getElementById("saldoGVR");
 
-        const { data, error } = await supabaseClient.auth.getUser();
+        const estadoElemento =
+            document.getElementById("estadoWallet");
+
+        const listaElemento =
+            document.getElementById("listaMovimientos");
+
+        const { data, error } =
+            await supabaseClient.auth.getUser();
 
         if (error || !data.user) {
             window.location.href = "login.html";
@@ -557,17 +566,26 @@
                 .maybeSingle();
 
         if (walletError) {
-            console.error("Error cargando wallet:", walletError);
+            console.error(
+                "Error cargando wallet:",
+                walletError
+            );
 
             saldoElemento.textContent = "No disponible";
+
             estadoElemento.textContent =
                 "No se pudo consultar el saldo. Inténtalo nuevamente.";
+
             estadoElemento.className = "estado error";
+
         } else if (!wallet) {
             saldoElemento.textContent = "0 GVR";
+
             estadoElemento.textContent =
                 "No se encontró una wallet para esta cuenta.";
+
             estadoElemento.className = "estado error";
+
         } else {
             const saldo = Number(wallet.balance);
 
@@ -576,8 +594,10 @@
                     `${formatoCantidad(saldo)} GVR`;
             } else {
                 saldoElemento.textContent = "No disponible";
+
                 estadoElemento.textContent =
                     "No se pudo interpretar el saldo de la wallet.";
+
                 estadoElemento.className = "estado error";
             }
         }
@@ -586,11 +606,11 @@
             await supabaseClient
                 .from("transactions")
                 .select(
-                    "id, type, amount, balance_before, balance_after, reference, created_at"
+                    "id, type, amount, balance_before, balance_after, created_at"
                 )
                 .eq("user_id", usuario.id)
                 .order("created_at", { ascending: false })
-                .limit(20);
+                .limit(2);
 
         listaElemento.replaceChildren();
 
@@ -603,15 +623,9 @@
             const mensaje = document.createElement("div");
             mensaje.className = "vacio";
             mensaje.textContent =
-                "No se pudo cargar el historial. Comprueba los permisos de lectura de transactions en Supabase.";
+                "No se pudo cargar el historial. Inténtalo nuevamente.";
+
             listaElemento.appendChild(mensaje);
-
-            if (!walletError && wallet) {
-                estadoElemento.textContent =
-                    "Tu saldo está disponible, pero no se pudo cargar el historial.";
-                estadoElemento.className = "estado error";
-            }
-
             return;
         }
 
@@ -619,7 +633,8 @@
             const mensaje = document.createElement("div");
             mensaje.className = "vacio";
             mensaje.textContent =
-                "Todavía no tienes movimientos registrados en tu wallet.";
+                "Todavía no tienes movimientos registrados.";
+
             listaElemento.appendChild(mensaje);
             return;
         }
@@ -627,25 +642,36 @@
         const fragmento = document.createDocumentFragment();
 
         movimientos.forEach(movimiento => {
-            fragmento.appendChild(renderizarMovimiento(movimiento));
+            fragmento.appendChild(
+                renderizarMovimiento(movimiento)
+            );
         });
 
         listaElemento.appendChild(fragmento);
     }
 
     cargarWallet().catch(error => {
-        console.error("Error inesperado cargando wallet:", error);
+        console.error(
+            "Error inesperado cargando wallet:",
+            error
+        );
 
         document.getElementById("estadoWallet").textContent =
             "Ocurrió un error al cargar la wallet. Recarga la página.";
-        document.getElementById("estadoWallet").className = "estado error";
 
-        const lista = document.getElementById("listaMovimientos");
+        document.getElementById("estadoWallet").className =
+            "estado error";
+
+        const lista =
+            document.getElementById("listaMovimientos");
+
         lista.replaceChildren();
 
         const mensaje = document.createElement("div");
         mensaje.className = "vacio";
-        mensaje.textContent = "No se pudo cargar el historial.";
+        mensaje.textContent =
+            "No se pudo cargar el historial.";
+
         lista.appendChild(mensaje);
     });
 </script>
