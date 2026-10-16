@@ -14,32 +14,49 @@
             font-family: Arial, sans-serif;
         }
 
+        :root {
+            --fondo: #050b18;
+            --tarjeta: #09152b;
+            --azul: #078cff;
+            --cian: #00d9ff;
+            --borde: #123b70;
+        }
+
         body {
-            background: #050b18;
+            background:
+                radial-gradient(
+                    circle at 50% 20%,
+                    rgba(0, 105, 255, 0.08),
+                    transparent 45%
+                ),
+                var(--fondo);
             color: white;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* ENCABEZADO */
 
         header {
-            background: #08152d;
+            background: rgba(8, 21, 45, 0.96);
             border-bottom: 1px solid #123b70;
             padding: 16px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            position: relative;
+            z-index: 5;
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 21px;
             font-weight: 900;
-            letter-spacing: 1px;
+            letter-spacing: 0.7px;
         }
 
         .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
+            color: var(--cian);
+            text-shadow: 0 0 12px var(--azul);
         }
 
         .logo span {
@@ -49,18 +66,24 @@
         .volver {
             color: white;
             text-decoration: none;
-            border: 1px solid #168cff;
+            border: 1px solid var(--azul);
             padding: 9px 13px;
             border-radius: 9px;
             font-weight: bold;
             font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .volver:hover {
+            background: rgba(0, 140, 255, 0.15);
+            box-shadow: 0 0 12px rgba(0, 140, 255, 0.3);
         }
 
         /* BANNER */
 
         .banner {
             margin: 18px;
-            border-radius: 20px;
+            border-radius: 18px;
             overflow: hidden;
             border: 1px solid #145ca3;
             box-shadow: 0 0 25px rgba(0, 128, 255, 0.15);
@@ -72,138 +95,166 @@
             height: auto;
         }
 
-        /* JUEGOS */
+        /* CATÁLOGO */
 
         .juegos {
-            padding: 10px 18px 30px;
+            padding: 10px 16px 35px;
         }
 
         .titulo {
             text-align: center;
-            margin: 15px 0 20px;
-            font-size: 24px;
+            margin: 18px 0 30px;
+            font-size: 25px;
+            font-weight: 900;
         }
 
         .titulo span {
-            color: #20a7ff;
+            color: var(--cian);
+            text-shadow: 0 0 14px rgba(0, 180, 255, 0.4);
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 13px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: 15px;
+            row-gap: 28px;
+            align-items: stretch;
         }
+
+        /* TARJETA COMPLETA */
 
         .juego {
+            min-width: 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
             text-decoration: none;
             color: white;
-            background: #091a35;
-            border: 1px solid #173e68;
-            border-radius: 16px;
-            padding: 22px 10px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
             text-align: center;
-            transition: 0.2s;
-        }
-
-        .juego-freefire {
-            background-image: url("./imagenes/IMG-20260926-WA0027.jpg");
-            background-size: cover;
-            background-position: center;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .juego-cod {
-            background-image: url("./imagenes/IMG-20260926-WA0024.jpg");
-            background-size: cover;
-            background-position: center;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .juego-mobile {
-            background-image: url("./imagenes/IMG-20260926-WA0022.jpg");
-            background-size: cover;
-            background-position: center;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .juego-blood {
-            background-image: url("./imagenes/IMG-20260926-WA0026.jpg");
-            background-size: cover;
-            background-position: center;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .juego-arena {
-            background-image: url("./imagenes/IMG-20260926-WA0023.jpg");
-            background-size: cover;
-            background-position: center;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .juego-pubg {
-            background-image: url("./imagenes/IMG-20260923-WA0038.jpg");
-            background-size: cover;
-            background-position: center;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .juego-honor {
-            background-image: url("./imagenes/IMG-20260926-WA0028.jpg");
-            background-size: cover;
-            background-position: center;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .juego-genshin {
-            background-image: url("./imagenes/IMG-20260926-WA0025.jpg");
-            background-size: cover;
-            background-position: center;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
+            isolation: isolate;
+            transition: transform 0.22s ease;
         }
 
         .juego:hover {
             transform: translateY(-3px);
-            border-color: #169cff;
-            box-shadow: 0 0 18px rgba(0, 153, 255, 0.20);
         }
 
-        .icono {
-            font-size: 42px;
-            margin-bottom: 12px;
+        /* CONTENEDOR DE LA IMAGEN */
+
+        .juego-imagen {
+            position: relative;
+            width: 100%;
+            height: 145px;
+            border: 1px solid rgba(0, 153, 255, 0.8);
+            border-bottom: none;
+            border-radius: 13px 13px 0 0;
+            background:
+                radial-gradient(
+                    ellipse at 50% 80%,
+                    rgba(0, 123, 255, 0.19),
+                    transparent 70%
+                ),
+                linear-gradient(180deg, #0b1d38, #071020);
+            box-shadow:
+                0 0 10px rgba(0, 140, 255, 0.15),
+                inset 0 0 15px rgba(0, 153, 255, 0.06);
+            z-index: 1;
         }
 
-        .juego h3 {
-            font-size: 15px;
-            margin-bottom: 5px;
+        /* IMAGEN DEL PERSONAJE */
+
+        .juego-imagen img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            bottom: 0;
+            object-fit: contain;
+            object-position: center bottom;
+            display: block;
+            z-index: 2;
+            transition: transform 0.25s ease;
         }
 
-        .juego p {
-            color: #8195ad;
-            font-size: 12px;
+        .juego:hover .juego-imagen img {
+            transform: scale(1.04);
+        }
+
+        /* EFECTO DE LUZ SUPERIOR */
+
+        .juego-imagen::before {
+            content: "";
+            position: absolute;
+            left: 12%;
+            right: 12%;
+            top: 0;
+            height: 1px;
+            background: var(--cian);
+            box-shadow: 0 0 10px var(--cian);
+            z-index: 3;
+        }
+
+        /* ESQUINAS LUMINOSAS */
+
+        .juego-imagen::after {
+            content: "";
+            position: absolute;
+            inset: 5px;
+            border: 1px solid rgba(0, 190, 255, 0.12);
+            border-radius: 9px 9px 0 0;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* NOMBRE DEBAJO DE LA FOTO */
+
+        .juego-info {
+            position: relative;
+            min-height: 56px;
+            padding: 11px 5px 9px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(180deg, #0c1c35, #081326);
+            border: 1px solid rgba(0, 153, 255, 0.8);
+            border-top: 1px solid rgba(0, 217, 255, 0.55);
+            border-radius: 0 0 13px 13px;
+            box-shadow:
+                0 5px 16px rgba(0, 0, 0, 0.25),
+                0 0 10px rgba(0, 140, 255, 0.12);
+            z-index: 4;
+        }
+
+        .juego-info h3 {
+            font-size: 13px;
+            line-height: 1.2;
+            font-weight: 800;
+            color: #ffffff;
+            text-align: center;
+            overflow-wrap: anywhere;
+        }
+
+        .juego-info p {
+            color: #6fcaff;
+            font-size: 10px;
+            line-height: 1.2;
+            font-weight: 600;
+        }
+
+        /* RESPLANDOR AL PASAR EL CURSOR */
+
+        .juego:hover .juego-imagen,
+        .juego:hover .juego-info {
+            border-color: var(--cian);
+            box-shadow:
+                0 0 13px rgba(0, 153, 255, 0.27),
+                0 0 22px rgba(0, 153, 255, 0.12);
         }
 
         /* PIE */
@@ -219,6 +270,83 @@
 
         footer strong {
             color: #279fff;
+        }
+
+        /* PANTALLAS PEQUEÑAS */
+
+        @media (max-width: 360px) {
+            .juegos {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .grid {
+                column-gap: 11px;
+                row-gap: 24px;
+            }
+
+            .juego-imagen {
+                height: 125px;
+            }
+
+            .juego-info h3 {
+                font-size: 12px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+        }
+
+        /* TABLETS Y ORDENADORES */
+
+        @media (min-width: 600px) {
+            .juegos {
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+            .grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 30px 22px;
+            }
+
+            .juego-imagen {
+                height: 180px;
+            }
+
+            .juego-info {
+                min-height: 62px;
+            }
+
+            .juego-info h3 {
+                font-size: 15px;
+            }
+
+            .juego-info p {
+                font-size: 11px;
+            }
+        }
+
+        @media (min-width: 950px) {
+            .grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 34px 24px;
+            }
+
+            .juego-imagen {
+                height: 190px;
+            }
+        }
+
+        /* ACCESIBILIDAD */
+
+        @media (prefers-reduced-motion: reduce) {
+            .juego,
+            .juego-imagen img,
+            .volver {
+                transition: none;
+            }
         }
     </style>
 </head>
@@ -260,64 +388,160 @@
         <!-- FREE FIRE -->
 
         <a href="freefire.html" class="juego juego-freefire">
-            <h3>Free Fire</h3>
-            <p>Diamantes</p>
+
+            <div class="juego-imagen">
+                <img
+                    src="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png"
+                    alt="Personaje de Free Fire"
+                    loading="eager"
+                >
+            </div>
+
+            <div class="juego-info">
+                <h3>Free Fire</h3>
+                <p>Diamantes</p>
+            </div>
+
         </a>
 
 
-        <!-- CALL OF DUTY MOBILE -->
+        <!-- CALL OF DUTY MOBILE: IMAGEN ANTERIOR CONSERVADA -->
 
         <a href="codmobile.html" class="juego juego-cod">
-            <h3>Call of Duty Mobile</h3>
-            <p>CP</p>
+
+            <div class="juego-imagen">
+                <img
+                    src="./imagenes/IMG-20260926-WA0024.jpg"
+                    alt="Call of Duty Mobile"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="juego-info">
+                <h3>Call of Duty Mobile</h3>
+                <p>CP</p>
+            </div>
+
         </a>
 
 
         <!-- MOBILE LEGENDS -->
 
         <a href="mobilelegends.html" class="juego juego-mobile">
-            <h3>Mobile Legends</h3>
-            <p>Diamantes</p>
+
+            <div class="juego-imagen">
+                <img
+                    src="./imagenes/file_00000000a7e081f9b4b5577efa5f6066.png"
+                    alt="Personaje de Mobile Legends"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="juego-info">
+                <h3>Mobile Legends</h3>
+                <p>Diamantes</p>
+            </div>
+
         </a>
 
 
         <!-- BLOOD STRIKE -->
 
         <a href="bloodstrike.html" class="juego juego-blood">
-            <h3>Blood Strike</h3>
-            <p>Gold</p>
+
+            <div class="juego-imagen">
+                <img
+                    src="./imagenes/file_00000000da8481f980717bbfaf5b7888.png"
+                    alt="Personaje de Blood Strike"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="juego-info">
+                <h3>Blood Strike</h3>
+                <p>Gold</p>
+            </div>
+
         </a>
 
 
         <!-- PUBG MOBILE -->
 
         <a href="pubgmobile.html" class="juego juego-pubg">
-            <h3>PUBG Mobile</h3>
-            <p>UC</p>
+
+            <div class="juego-imagen">
+                <img
+                    src="./imagenes/file_00000000cde881f6a366f4dbeb1a5fd0.png"
+                    alt="Personaje de PUBG Mobile"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="juego-info">
+                <h3>PUBG Mobile</h3>
+                <p>UC</p>
+            </div>
+
         </a>
 
 
         <!-- HONOR OF KINGS -->
 
         <a href="honorofkings.html" class="juego juego-honor">
-            <h3>Honor of Kings</h3>
-            <p>Recargas</p>
+
+            <div class="juego-imagen">
+                <img
+                    src="./imagenes/file_00000000061881f7812f5a04ddc3600d.png"
+                    alt="Personaje de Honor of Kings"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="juego-info">
+                <h3>Honor of Kings</h3>
+                <p>Recargas</p>
+            </div>
+
         </a>
 
 
         <!-- ARENA BREAKOUT -->
 
         <a href="arenabreakout.html" class="juego juego-arena">
-            <h3>Arena Breakout</h3>
-            <p>Recargas</p>
+
+            <div class="juego-imagen">
+                <img
+                    src="./imagenes/file_00000000eb3881f9a2e363c447e0f6ba.png"
+                    alt="Personaje de Arena Breakout"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="juego-info">
+                <h3>Arena Breakout</h3>
+                <p>Recargas</p>
+            </div>
+
         </a>
 
 
         <!-- GENSHIN IMPACT -->
 
         <a href="genshinimpact.html" class="juego juego-genshin">
-            <h3>Genshin Impact</h3>
-            <p>Recargas</p>
+
+            <div class="juego-imagen">
+                <img
+                    src="./imagenes/file_00000000266081f685eb030a10579fbe.png"
+                    alt="Personaje de Genshin Impact"
+                    loading="lazy"
+                >
+            </div>
+
+            <div class="juego-info">
+                <h3>Genshin Impact</h3>
+                <p>Recargas</p>
+            </div>
+
         </a>
 
     </div>
@@ -344,4 +568,4 @@
 </footer>
 
 </body>
-</html>
+                </html>
