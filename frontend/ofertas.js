@@ -1481,7 +1481,7 @@ async function crearCompra(
      */
     let confirmado;
 
-    if (ES_PUBG_MOBILE) {
+    if (ES_PUBG_MOBILE || ES_FREE_FIRE) {
         confirmado = await confirmarConModalPersonalizado({
             nombre: productoSeleccionado.oferta.nombre,
             playerId,
