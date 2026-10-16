@@ -3,453 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Panel de Ventas | Gamers Gold Top-Up</title>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background:
-                radial-gradient(circle at top, #102b55 0%, #06101f 45%, #02060d 100%);
-            color: white;
-            min-height: 100vh;
-        }
-
-        header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(0, 174, 255, 0.25);
-            background: rgba(2, 8, 18, 0.9);
-        }
-
-        .header-contenido {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            font-size: 25px;
-            font-weight: bold;
-            color: #00aaff;
-            text-shadow: 0 0 15px rgba(0, 170, 255, 0.7);
-        }
-
-        .acciones-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .volver,
-        .boton-push {
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 10px;
-            background: rgba(0, 130, 255, 0.15);
-            border: 1px solid rgba(0, 170, 255, 0.3);
-            font-size: 14px;
-        }
-
-        .boton-push {
-            cursor: pointer;
-            background: #006be6;
-            border-color: #00b7ff;
-        }
-
-        .boton-push:disabled {
-            opacity: 0.65;
-            cursor: wait;
-        }
-
-        .contenedor {
-            width: 95%;
-            max-width: 1200px;
-            margin: 30px auto;
-        }
-
-        .titulo {
-            margin-bottom: 25px;
-        }
-
-        .titulo h1 {
-            font-size: 30px;
-            margin-bottom: 8px;
-        }
-
-        .titulo p {
-            color: #9eb3ca;
-        }
-
-        .estadisticas {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .stat {
-            background: rgba(8, 24, 45, 0.9);
-            border: 1px solid rgba(0, 170, 255, 0.25);
-            border-radius: 15px;
-            padding: 20px;
-        }
-
-        .stat span {
-            display: block;
-            color: #9eb3ca;
-            margin-bottom: 8px;
-        }
-
-        .stat strong {
-            font-size: 28px;
-            color: #00b7ff;
-        }
-
-        .filtros {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .filtro {
-            border: 1px solid rgba(0, 170, 255, 0.3);
-            background: rgba(7, 25, 48, 0.9);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .filtro.activo {
-            background: #0077ff;
-            border-color: #00b7ff;
-        }
-
-        .ventas {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .venta {
-            background: rgba(7, 20, 38, 0.95);
-            border: 1px solid rgba(0, 170, 255, 0.25);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 100, 255, 0.06);
-        }
-
-        .venta-cabecera {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .tipo {
-            font-weight: bold;
-            color: #00b7ff;
-            font-size: 18px;
-        }
-
-        .estado {
-            padding: 7px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .estado-pendiente {
-            background: rgba(255, 190, 0, 0.15);
-            color: #ffd000;
-        }
-
-        .estado-procesando {
-            background: rgba(0, 150, 255, 0.15);
-            color: #00aaff;
-        }
-
-        .estado-completado {
-            background: rgba(0, 255, 130, 0.12);
-            color: #00ff91;
-        }
-
-        .estado-cancelado,
-        .estado-error,
-        .estado-reembolsado {
-            background: rgba(255, 50, 50, 0.12);
-            color: #ff5555;
-        }
-
-        .estado-desconocido {
-            background: rgba(150, 150, 150, 0.15);
-            color: #cccccc;
-        }
-
-        .datos {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .dato {
-            background: rgba(0, 0, 0, 0.18);
-            padding: 10px;
-            border-radius: 9px;
-        }
-
-        .dato small {
-            display: block;
-            color: #7990a8;
-            margin-bottom: 4px;
-        }
-
-        .dato div {
-            word-break: break-word;
-        }
-
-        .aviso-solo-lectura {
-            margin-top: 15px;
-            padding: 11px;
-            border: 1px solid rgba(0, 170, 255, 0.25);
-            border-radius: 9px;
-            color: #9eb3ca;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .vacio {
-            text-align: center;
-            padding: 50px 20px;
-            color: #8da3ba;
-            background: rgba(7, 20, 38, 0.8);
-            border-radius: 15px;
-            border: 1px solid rgba(0, 170, 255, 0.15);
-        }
-
-        #error {
-            display: none;
-            white-space: pre-wrap;
-            word-break: break-word;
-            background: rgba(120, 0, 0, 0.2);
-            border: 1px solid #ff4040;
-            color: #ff8080;
-            padding: 18px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-
-        #estadoPush {
-            display: none;
-            padding: 12px 15px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-        }
-
-        #estadoPush.correcto {
-            display: block;
-            background: rgba(0, 255, 130, 0.08);
-            border: 1px solid rgba(0, 255, 130, 0.4);
-            color: #83ffc0;
-        }
-
-        #estadoPush.aviso {
-            display: block;
-            background: rgba(255, 190, 0, 0.08);
-            border: 1px solid rgba(255, 190, 0, 0.4);
-            color: #ffda75;
-        }
-
-        #estadoPush.fallo {
-            display: block;
-            background: rgba(255, 50, 50, 0.08);
-            border: 1px solid rgba(255, 50, 50, 0.4);
-            color: #ff9b9b;
-        }
-
-        @media (max-width: 800px) {
-            .estadisticas {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .datos {
-                grid-template-columns: 1fr;
-            }
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background: radial-gradient(circle at top, #102b55 0%, #06101f 45%, #02060d 100%); color: white; min-height: 100vh; }
+        header { padding: 20px; border-bottom: 1px solid rgba(0, 174, 255, 0.25); background: rgba(2, 8, 18, 0.9); }
+        .header-contenido { max-width: 1200px; margin: auto; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .logo { font-size: 25px; font-weight: bold; color: #00aaff; text-shadow: 0 0 15px rgba(0, 170, 255, 0.7); }
+        .acciones-header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .volver, .boton-push { color: white; text-decoration: none; padding: 10px 15px; border-radius: 10px; background: rgba(0, 130, 255, 0.15); border: 1px solid rgba(0, 170, 255, 0.3); font-size: 14px; }
+        .boton-push { cursor: pointer; background: #006be6; border-color: #00b7ff; }
+        .boton-push:disabled { opacity: 0.65; cursor: wait; }
+        .contenedor { width: 95%; max-width: 1200px; margin: 30px auto; }
+        .titulo { margin-bottom: 25px; }
+        .titulo h1 { font-size: 30px; margin-bottom: 8px; }
+        .titulo p { color: #9eb3ca; }
+        .estadisticas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat { background: rgba(8, 24, 45, 0.9); border: 1px solid rgba(0, 170, 255, 0.25); border-radius: 15px; padding: 20px; }
+        .stat span { display: block; color: #9eb3ca; margin-bottom: 8px; }
+        .stat strong { font-size: 28px; color: #00b7ff; }
+        .filtros { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .filtro { border: 1px solid rgba(0, 170, 255, 0.3); background: rgba(7, 25, 48, 0.9); color: white; padding: 10px 15px; border-radius: 10px; cursor: pointer; }
+        .filtro.activo { background: #0077ff; border-color: #00b7ff; }
+        .ventas { display: flex; flex-direction: column; gap: 15px; }
+        .venta { background: rgba(7, 20, 38, 0.95); border: 1px solid rgba(0, 170, 255, 0.25); border-radius: 15px; padding: 20px; box-shadow: 0 0 20px rgba(0, 100, 255, 0.06); }
+        .venta-cabecera { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .tipo { font-weight: bold; color: #00b7ff; font-size: 18px; }
+        .estado { padding: 7px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+        .estado-pendiente { background: rgba(255, 190, 0, 0.15); color: #ffd000; }
+        .estado-procesando { background: rgba(0, 150, 255, 0.15); color: #00aaff; }
+        .estado-completado { background: rgba(0, 255, 130, 0.12); color: #00ff91; }
+        .estado-cancelado, .estado-error, .estado-reembolsado { background: rgba(255, 50, 50, 0.12); color: #ff5555; }
+        .estado-desconocido { background: rgba(150, 150, 150, 0.15); color: #cccccc; }
+        .datos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .dato { background: rgba(0, 0, 0, 0.18); padding: 10px; border-radius: 9px; }
+        .dato small { display: block; color: #7990a8; margin-bottom: 4px; }
+        .dato div { word-break: break-word; }
+        .aviso-solo-lectura { margin-top: 15px; padding: 11px; border: 1px solid rgba(0, 170, 255, 0.25); border-radius: 9px; color: #9eb3ca; font-size: 13px; line-height: 1.5; }
+        .vacio { text-align: center; padding: 50px 20px; color: #8da3ba; background: rgba(7, 20, 38, 0.8); border-radius: 15px; border: 1px solid rgba(0, 170, 255, 0.15); }
+        #error { display: none; white-space: pre-wrap; word-break: break-word; background: rgba(120, 0, 0, 0.2); border: 1px solid #ff4040; color: #ff8080; padding: 18px; border-radius: 12px; margin-bottom: 20px; }
+        #estadoPush { display: none; padding: 12px 15px; margin-bottom: 20px; border-radius: 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+        #estadoPush.correcto { display: block; background: rgba(0, 255, 130, 0.08); border: 1px solid rgba(0, 255, 130, 0.4); color: #83ffc0; }
+        #estadoPush.aviso { display: block; background: rgba(255, 190, 0, 0.08); border: 1px solid rgba(255, 190, 0, 0.4); color: #ffda75; }
+        #estadoPush.fallo { display: block; background: rgba(255, 50, 50, 0.08); border: 1px solid rgba(255, 50, 50, 0.4); color: #ff9b9b; }
+        @media (max-width: 800px) { .estadisticas { grid-template-columns: repeat(2, 1fr); } .datos { grid-template-columns: 1fr; } }
         @media (max-width: 500px) {
-            .estadisticas {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .stat strong {
-                font-size: 22px;
-            }
-
-            .venta-cabecera {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .titulo h1 {
-                font-size: 25px;
-            }
-
-            .logo {
-                font-size: 21px;
-            }
-
-            .acciones-header {
-                width: 100%;
-            }
-
-            .acciones-header a,
-            .acciones-header button {
-                flex: 1;
-                text-align: center;
-            }
+            .estadisticas { grid-template-columns: 1fr 1fr; }
+            .stat strong { font-size: 22px; }
+            .venta-cabecera { align-items: flex-start; flex-direction: column; }
+            .titulo h1 { font-size: 25px; }
+            .logo { font-size: 21px; }
+            .acciones-header { width: 100%; }
+            .acciones-header a, .acciones-header button { flex: 1; text-align: center; }
         }
     </style>
 </head>
-
 <body>
-
 <header>
     <div class="header-contenido">
-
-        <div class="logo">
-            Gamers Gold Top-Up
-        </div>
-
+        <div class="logo">Gamers Gold Top-Up</div>
         <div class="acciones-header">
-
-            <button
-                type="button"
-                id="botonActivarPush"
-                class="boton-push"
-                hidden
-            >
-                Activar notificaciones
-            </button>
-
-            <a href="cuenta.html" class="volver">
-                ← Mi cuenta
-            </a>
-
+            <button type="button" id="botonActivarPush" class="boton-push" hidden>Activar notificaciones</button>
+            <a href="cuenta.html" class="volver">← Mi cuenta</a>
         </div>
     </div>
 </header>
 
 <main class="contenedor">
-
     <div class="titulo">
         <h1>Panel de ventas</h1>
         <p>Control de ventas, recargas y solicitudes de compra GVR</p>
     </div>
-
     <div id="estadoPush" role="status" aria-live="polite"></div>
-
     <div id="error"></div>
-
     <section class="estadisticas">
-
-        <div class="stat">
-            <span>Registros totales</span>
-            <strong id="totalVentas">0</strong>
-        </div>
-
-        <div class="stat">
-            <span>Pendientes</span>
-            <strong id="ventasPendientes">0</strong>
-        </div>
-
-        <div class="stat">
-            <span>Completadas</span>
-            <strong id="ventasCompletadas">0</strong>
-        </div>
-
-        <div class="stat">
-            <span>GVR vendidos</span>
-            <strong id="gvrVendidos">0</strong>
-        </div>
-
+        <div class="stat"><span>Registros totales</span><strong id="totalVentas">0</strong></div>
+        <div class="stat"><span>Pendientes</span><strong id="ventasPendientes">0</strong></div>
+        <div class="stat"><span>Completadas</span><strong id="ventasCompletadas">0</strong></div>
+        <div class="stat"><span>GVR vendidos</span><strong id="gvrVendidos">0</strong></div>
     </section>
-
     <div class="filtros">
-
-        <button class="filtro activo" data-filtro="todas">
-            Todas
-        </button>
-
-        <button class="filtro" data-filtro="gvr">
-            GVR
-        </button>
-
-        <button class="filtro" data-filtro="recarga">
-            Recargas
-        </button>
-
-        <button class="filtro" data-filtro="pendiente">
-            Pendientes
-        </button>
-
-        <button class="filtro" data-filtro="completado">
-            Completadas
-        </button>
-
+        <button class="filtro activo" data-filtro="todas">Todas</button>
+        <button class="filtro" data-filtro="gvr">GVR</button>
+        <button class="filtro" data-filtro="recarga">Recargas</button>
+        <button class="filtro" data-filtro="pendiente">Pendientes</button>
+        <button class="filtro" data-filtro="completado">Completadas</button>
     </div>
-
-    <section id="listaVentas" class="ventas">
-        <div class="vacio">
-            Cargando ventas...
-        </div>
-    </section>
-
+    <section id="listaVentas" class="ventas"><div class="vacio">Cargando ventas...</div></section>
 </main>
 
 <script>
 "use strict";
 
-const SUPABASE_URL =
-    "https://gsuhzcavghsiolmipnzi.supabase.co";
-
-const SUPABASE_ANON_KEY =
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-
-const VAPID_PUBLIC_KEY =
-    "BOTEc5uNWGMOVSZicoL3lqSEgQZdcOgQMiZF_JKbk-Yg9dmtU9Yp2yEuONOl3Y3IU42K0DevmR8vmSTCkpq69Ig";
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
+const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+const VAPID_PUBLIC_KEY = "BOTEc5uNWGMOVSZicoL3lqSEgQZdcOgQMiZF_JKbk-Yg9dmtU9Yp2yEuONOl3Y3IU42K0DevmR8vmSTCkpq69Ig";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let todasLasVentas = [];
 let filtroActual = "todas";
-
-
-// ========================================
-// MENSAJES
-// ========================================
 
 function mostrarError(mensaje) {
     const errorBox = document.getElementById("error");
@@ -464,580 +117,353 @@ function mostrarEstadoPush(mensaje, tipo) {
     caja.style.display = "block";
 }
 
-
-// ========================================
-// CONVERTIR CLAVE VAPID
-// ========================================
-
-function convertirBase64UrlAUint8Array(base64UrlData) {
-    const padding =
-        "=".repeat((4 - base64UrlData.length % 4) % 4);
-
-    const base64 = (base64UrlData + padding)
-        .replace(/-/g, "+")
-        .replace(/_/g, "/");
-
-    const rawData = window.atob(base64);
-
-    return Uint8Array.from(
-        [...rawData].map(char => char.charCodeAt(0))
-    );
+function ocultarEstadoPush() {
+    const caja = document.getElementById("estadoPush");
+    caja.textContent = "";
+    caja.className = "";
+    caja.style.display = "none";
 }
 
-
-// ========================================
-// GUARDAR SUSCRIPCIÓN PUSH
-// ========================================
+function convertirBase64UrlAUint8Array(base64UrlData) {
+    const padding = "=".repeat((4 - base64UrlData.length % 4) % 4);
+    const base64 = (base64UrlData + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const rawData = window.atob(base64);
+    return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+}
 
 async function guardarSuscripcionPush(suscripcion) {
-    const {
-        data: { user },
-        error: userError
-    } = await supabaseClient.auth.getUser();
-
-    if (userError) {
-        throw new Error(
-            "No se pudo comprobar la sesión: " +
-            userError.message
-        );
-    }
-
-    if (!user) {
-        throw new Error(
-            "No hay una sesión de administrador activa."
-        );
-    }
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError) throw new Error("No se pudo comprobar la sesión: " + userError.message);
+    if (!user) throw new Error("No hay una sesión de administrador activa.");
 
     const datos = suscripcion.toJSON();
-
-    if (
-        !datos.endpoint ||
-        !datos.keys ||
-        !datos.keys.p256dh ||
-        !datos.keys.auth
-    ) {
-        throw new Error(
-            "La suscripción Push no contiene todos los datos necesarios."
-        );
+    if (!datos.endpoint || !datos.keys || !datos.keys.p256dh || !datos.keys.auth) {
+        throw new Error("La suscripción Push no contiene todos los datos necesarios.");
     }
 
-    const { error } = await supabaseClient
-        .from("admin_push_subscriptions")
-        .upsert(
-            {
-                user_id: user.id,
-                endpoint: datos.endpoint,
-                p256dh: datos.keys.p256dh,
-                auth: datos.keys.auth,
-                updated_at: new Date().toISOString()
-            },
-            {
-                onConflict: "endpoint"
-            }
-        );
+    const { error } = await supabaseClient.from("admin_push_subscriptions").upsert({
+        user_id: user.id,
+        endpoint: datos.endpoint,
+        p256dh: datos.keys.p256dh,
+        auth: datos.keys.auth,
+        updated_at: new Date().toISOString()
+    }, { onConflict: "endpoint" });
 
-    if (error) {
-        throw new Error(
-            "Supabase no pudo guardar la suscripción Push: " +
-            error.message
-        );
-    }
-
+    if (error) throw new Error("Supabase no pudo guardar la suscripción Push: " + error.message);
     return true;
 }
 
-
-// ========================================
-// CONFIGURAR PUSH
-// ========================================
-
-async function configurarNotificacionesPush(
-    solicitarPermiso = false
-) {
-    const boton =
-        document.getElementById("botonActivarPush");
-
+/*
+ * mostrarMensajes=true: se muestran mensajes cuando el administrador pulsa el botón.
+ * mostrarMensajes=false: comprobación automática silenciosa al entrar al panel.
+ */
+async function configurarNotificacionesPush(solicitarPermiso = false, mostrarMensajes = true) {
+    const boton = document.getElementById("botonActivarPush");
     let temporizador;
+
+    const estado = (mensaje, tipo) => {
+        if (mostrarMensajes) mostrarEstadoPush(mensaje, tipo);
+    };
 
     try {
         boton.disabled = true;
-        boton.textContent = "Configurando...";
-
-        mostrarEstadoPush(
-            "Comprobando los permisos de notificaciones...",
-            "aviso"
-        );
-
-        if (!window.isSecureContext) {
-            throw new Error(
-                "La página debe abrirse mediante HTTPS."
-            );
+        if (mostrarMensajes) {
+            boton.textContent = "Configurando...";
+            estado("Comprobando los permisos de notificaciones...", "aviso");
         }
 
-        if (!("Notification" in window)) {
-            throw new Error(
-                "Este navegador no admite notificaciones."
-            );
-        }
-
-        if (!("serviceWorker" in navigator)) {
-            throw new Error(
-                "Este navegador no admite Service Worker."
-            );
-        }
-
-        if (!("PushManager" in window)) {
-            throw new Error(
-                "Este navegador no admite notificaciones Push."
-            );
-        }
+        if (!window.isSecureContext) throw new Error("La página debe abrirse mediante HTTPS.");
+        if (!("Notification" in window)) throw new Error("Este navegador no admite notificaciones.");
+        if (!("serviceWorker" in navigator)) throw new Error("Este navegador no admite Service Worker.");
+        if (!("PushManager" in window)) throw new Error("Este navegador no admite notificaciones Push.");
 
         let permiso = Notification.permission;
-
         if (permiso === "denied") {
-            throw new Error(
-                "El navegador tiene bloqueadas las notificaciones de esta página. " +
-                "Comprueba los permisos del sitio y los ajustes de Android."
-            );
+            throw new Error("El navegador tiene bloqueadas las notificaciones de esta página. Comprueba los permisos del sitio y los ajustes de Android.");
         }
-
-        if (permiso === "default" && solicitarPermiso) {
-            permiso = await Notification.requestPermission();
-        }
-
+        if (permiso === "default" && solicitarPermiso) permiso = await Notification.requestPermission();
         if (permiso !== "granted") {
-            throw new Error(
-                "Todavía no se ha concedido el permiso de notificaciones. " +
-                "Pulsa el botón y acepta el permiso del navegador."
-            );
+            throw new Error("Todavía no se ha concedido el permiso de notificaciones. Pulsa el botón y acepta el permiso del navegador.");
         }
 
-        mostrarEstadoPush(
-            "Registrando el Service Worker...",
-            "aviso"
-        );
+        estado("Registrando el Service Worker...", "aviso");
 
         const registro = await Promise.race([
             navigator.serviceWorker.register("service-worker.js"),
             new Promise((_, reject) => {
-                temporizador = setTimeout(() => {
-                    reject(new Error(
-                        "No se pudo registrar el Service Worker en 12 segundos. " +
-                        "Comprueba que frontend/service-worker.js exista y esté publicado."
-                    ));
-                }, 12000);
+                temporizador = setTimeout(() => reject(new Error(
+                    "No se pudo registrar el Service Worker en 12 segundos. Comprueba que frontend/service-worker.js exista y esté publicado."
+                )), 12000);
             })
         ]);
-
         clearTimeout(temporizador);
         temporizador = null;
 
-        let suscripcion =
-            await registro.pushManager.getSubscription();
-
+        let suscripcion = await registro.pushManager.getSubscription();
         if (!suscripcion) {
             suscripcion = await registro.pushManager.subscribe({
                 userVisibleOnly: true,
-                applicationServerKey:
-                    convertirBase64UrlAUint8Array(VAPID_PUBLIC_KEY)
+                applicationServerKey: convertirBase64UrlAUint8Array(VAPID_PUBLIC_KEY)
             });
         }
 
         await Promise.race([
             guardarSuscripcionPush(suscripcion),
             new Promise((_, reject) => {
-                temporizador = setTimeout(() => {
-                    reject(new Error(
-                        "Supabase tardó demasiado en guardar la suscripción. " +
-                        "Comprueba la sesión y los permisos de la tabla."
-                    ));
-                }, 12000);
+                temporizador = setTimeout(() => reject(new Error(
+                    "Supabase tardó demasiado en guardar la suscripción. Comprueba la sesión y los permisos de la tabla."
+                )), 12000);
             })
         ]);
-
         clearTimeout(temporizador);
         temporizador = null;
 
-        mostrarEstadoPush(
-            "Suscripción registrada correctamente. " +
-            "Esto confirma el registro del dispositivo, no el envío de una nueva notificación.",
-            "correcto"
-        );
-
-        boton.textContent = "Notificaciones activadas";
-        boton.hidden = true;
-
-    } catch (error) {
-        console.error(
-            "Error configurando notificaciones:",
-            error
-        );
-
-        mostrarEstadoPush(
-            "No se pudieron activar las notificaciones:\n\n" +
-            (error.message || String(error)),
-            "fallo"
-        );
-
-        boton.hidden = false;
-        boton.textContent = "Reintentar notificaciones";
-
-    } finally {
-        if (temporizador) {
-            clearTimeout(temporizador);
+        if (mostrarMensajes) {
+            mostrarEstadoPush(
+                "Suscripción registrada correctamente. Esto confirma el registro del dispositivo, no el envío de una nueva notificación.",
+                "correcto"
+            );
+            boton.textContent = "Notificaciones activadas";
+            boton.hidden = true;
+        } else {
+            ocultarEstadoPush();
+            boton.hidden = true;
         }
-
+    } catch (error) {
+        console.error("Error configurando notificaciones:", error);
+        if (mostrarMensajes) {
+            mostrarEstadoPush("No se pudieron activar las notificaciones:\n\n" + (error.message || String(error)), "fallo");
+            boton.hidden = false;
+            boton.textContent = "Reintentar notificaciones";
+        } else {
+            // No mostrar avisos al entrar; dejamos disponible el botón por si hace falta reintentar.
+            ocultarEstadoPush();
+            boton.hidden = false;
+            boton.textContent = "Reintentar notificaciones";
+        }
+    } finally {
+        if (temporizador) clearTimeout(temporizador);
         boton.disabled = false;
     }
 }
 
-
-// ========================================
-// COMPROBAR ADMINISTRADOR
-// ========================================
-
 async function comprobarAdministrador() {
-    const {
-        data: { user },
-        error: authError
-    } = await supabaseClient.auth.getUser();
-
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
     if (authError) {
-        mostrarError(
-            "ERROR DE AUTENTICACIÓN:\n" +
-            authError.message
-        );
+        mostrarError("ERROR DE AUTENTICACIÓN:\n" + authError.message);
         return false;
     }
-
     if (!user) {
         window.location.href = "index.html";
         return false;
     }
 
-    const { data, error } =
-        await supabaseClient.rpc("is_support_admin");
-
+    const { data, error } = await supabaseClient.rpc("is_support_admin");
     if (error) {
-        mostrarError(
-            "ERROR AL COMPROBAR ADMIN:\n\n" +
-            "Mensaje: " + error.message +
-            "\nCódigo: " + error.code +
-            "\nDetalles: " + error.details +
-            "\nAyuda: " + error.hint
-        );
-
+        mostrarError("ERROR AL COMPROBAR ADMIN:\n\nMensaje: " + error.message +
+            "\nCódigo: " + error.code + "\nDetalles: " + error.details + "\nAyuda: " + error.hint);
         console.error("Error is_support_admin:", error);
         return false;
     }
-
     if (data !== true) {
         window.location.href = "cuenta.html";
         return false;
     }
-
     return true;
 }
 
-
-// ========================================
-// NORMALIZAR ESTADOS
-// ========================================
-
 function normalizarEstadoVenta(estado) {
-    const valor = String(estado || "")
-        .trim()
-        .toLowerCase();
-
+    const valor = String(estado || "").trim().toLowerCase();
     const equivalencias = {
-        "pending": "pendiente",
-        "pendiente": "pendiente",
-
-        "processing": "procesando",
-        "procesando": "procesando",
-
-        "completed": "completado",
-        "completado": "completado",
-        "approved": "completado",
-        "aprobado": "completado",
-        "aprobada": "completado",
-
-        "failed": "error",
-        "error": "error",
-
-        "cancelled": "cancelado",
-        "canceled": "cancelado",
-        "cancelado": "cancelado",
-        "rejected": "cancelado",
-        "rechazado": "cancelado",
-        "rechazada": "cancelado",
-
-        "refunded": "reembolsado",
-        "reembolsado": "reembolsado"
+        pending: "pendiente", pendiente: "pendiente",
+        processing: "procesando", procesando: "procesando",
+        completed: "completado", completado: "completado",
+        approved: "completado", aprobado: "completado", aprobada: "completado",
+        failed: "error", error: "error",
+        cancelled: "cancelado", canceled: "cancelado", cancelado: "cancelado",
+        rejected: "cancelado", rechazado: "cancelado", rechazada: "cancelado",
+        refunded: "reembolsado", reembolsado: "reembolsado"
     };
-
     return equivalencias[valor] || valor || "desconocido";
 }
 
+function valorUtil(valor) {
+    if (valor === null || valor === undefined) return "";
+    const texto = String(valor).trim();
+    return !texto || ["no disponible", "—", "null", "undefined"].includes(texto.toLowerCase()) ? "" : texto;
+}
 
-// ========================================
-// CARGAR VENTAS Y SOLICITUDES GVR
-// ========================================
+/*
+ * Obtiene contactos mediante la Edge Function protegida.
+ * No se consulta auth.users desde el navegador ni se expone service_role.
+ */
+async function cargarContactosUsuarios(idsUsuario) {
+    const ids = [...new Set(idsUsuario.filter(id => typeof id === "string" && id.trim()))];
+    if (!ids.length) return new Map();
 
-async function cargarVentas() {
-    const lista =
-        document.getElementById("listaVentas");
+    const mapa = new Map();
+    const tamanoLote = 100;
 
-    lista.innerHTML = `
-        <div class="vacio">Cargando ventas y solicitudes GVR...</div>
-    `;
+    for (let i = 0; i < ids.length; i += tamanoLote) {
+        const lote = ids.slice(i, i + tamanoLote);
+        const { data, error } = await supabaseClient.functions.invoke(
+            "admin-user-contacts",
+            { body: { user_ids: lote } }
+        );
 
-    document.getElementById("error").style.display = "none";
-
-    try {
-        // 1. Cargar las ventas existentes.
-        const {
-            data: ventas,
-            error: errorVentas
-        } = await supabaseClient
-            .from("ventas")
-            .select("*")
-            .order("created_at", {
-                ascending: false
-            });
-
-        if (errorVentas) {
+        if (error) {
+            console.error("No se pudieron recuperar los contactos de usuarios:", error);
             throw new Error(
-                "No se pudieron cargar las ventas existentes: " +
-                errorVentas.message
+                "No se pudieron cargar los nombres y correos mediante admin-user-contacts. " +
+                "Comprueba que la función esté activa y que la sesión tenga permisos administrativos. " +
+                (error.message || "")
             );
         }
 
+        if (data?.error) {
+            throw new Error("admin-user-contacts: " + data.error);
+        }
+
+        for (const usuario of data?.users || []) {
+            if (usuario?.user_id) mapa.set(usuario.user_id, usuario);
+        }
+    }
+
+    return mapa;
+}
+
+async function cargarVentas() {
+    const lista = document.getElementById("listaVentas");
+    lista.innerHTML = '<div class="vacio">Cargando ventas y solicitudes GVR...</div>';
+    document.getElementById("error").style.display = "none";
+
+    try {
+        const { data: ventas, error: errorVentas } = await supabaseClient
+            .from("ventas")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+        if (errorVentas) throw new Error("No se pudieron cargar las ventas existentes: " + errorVentas.message);
         const resultadoVentas = ventas || [];
 
-        // 2. Consultar el estado real de los pedidos de juegos.
-        const idsPedidos = [
-            ...new Set(
-                resultadoVentas
-                    .map(venta => venta.game_order_id)
-                    .filter(Boolean)
-            )
-        ];
-
+        const idsPedidos = [...new Set(resultadoVentas.map(v => v.game_order_id).filter(Boolean))];
         const pedidosPorId = {};
-
         if (idsPedidos.length > 0) {
-            const {
-                data: pedidos,
-                error: errorPedidos
-            } = await supabaseClient
+            const { data: pedidos, error: errorPedidos } = await supabaseClient
                 .from("game_orders")
-                .select("id, status")
+                .select("id, status, user_id")
                 .in("id", idsPedidos);
 
-            if (errorPedidos) {
-                throw new Error(
-                    "No se pudieron consultar los estados de los pedidos: " +
-                    errorPedidos.message
-                );
-            }
-
-            for (const pedido of pedidos || []) {
-                pedidosPorId[pedido.id] = pedido.status;
-            }
+            if (errorPedidos) throw new Error("No se pudieron consultar los estados de los pedidos: " + errorPedidos.message);
+            for (const pedido of pedidos || []) pedidosPorId[pedido.id] = pedido;
         }
 
         const ventasNormalizadas = resultadoVentas.map(venta => {
-            const estadoPedido = venta.game_order_id
-                ? pedidosPorId[venta.game_order_id]
-                : null;
-
+            const pedido = venta.game_order_id ? pedidosPorId[venta.game_order_id] : null;
             return {
                 ...venta,
+                usuario_id: valorUtil(venta.usuario_id) || valorUtil(pedido?.user_id),
                 tipo: String(venta.tipo || "").toLowerCase(),
-                estado: normalizarEstadoVenta(
-                    estadoPedido || venta.estado
-                ),
+                estado: normalizarEstadoVenta(pedido?.status || venta.estado),
                 es_solicitud_gvr: false
             };
         });
 
-        // 3. Cargar las solicitudes GVR directamente desde su tabla.
-        // Esta tabla es independiente de "ventas".
-        const {
-            data: solicitudesGVR,
-            error: errorGVR
-        } = await supabaseClient
+        const { data: solicitudesGVR, error: errorGVR } = await supabaseClient
             .from("gvr_purchase_requests")
-            .select(`
-                id,
-                user_id,
-                gvr_amount,
-                payment_method,
-                payment_amount,
-                payment_currency,
-                proof_path,
-                status,
-                created_at,
-                reviewed_at,
-                review_note
-            `)
-            .order("created_at", {
-                ascending: false
-            });
+            .select("id,user_id,gvr_amount,payment_method,payment_amount,payment_currency,proof_path,status,created_at,reviewed_at,review_note")
+            .order("created_at", { ascending: false });
 
         if (errorGVR) {
             throw new Error(
                 "Las ventas se consultaron, pero no se pudieron cargar las solicitudes GVR.\n\n" +
-                "Código: " + (errorGVR.code || "sin código") +
-                "\nMensaje: " + errorGVR.message +
-                "\n\nComprueba que el administrador tenga permiso para consultar " +
-                "gvr_purchase_requests y que la política RLS de soporte esté activa."
+                "Código: " + (errorGVR.code || "sin código") + "\nMensaje: " + errorGVR.message +
+                "\n\nComprueba los permisos de lectura y la política RLS de soporte."
             );
         }
 
-        // 4. Convertir las solicitudes GVR al formato de tarjeta del panel.
-        // No se actualiza la base de datos ni se acredita saldo.
-        const solicitudesNormalizadas = (solicitudesGVR || []).map(
-            solicitud => {
-                const estadoOriginal = String(
-                    solicitud.status || ""
-                ).trim().toLowerCase();
+        const solicitudesNormalizadas = (solicitudesGVR || []).map(solicitud => {
+            const estadoOriginal = String(solicitud.status || "").trim().toLowerCase();
+            return {
+                id: "gvr-request-" + solicitud.id,
+                solicitud_id: solicitud.id,
+                tipo: "gvr",
+                estado: normalizarEstadoVenta(estadoOriginal),
+                created_at: solicitud.created_at,
+                nombre_usuario: "",
+                correo_usuario: "",
+                usuario_id: solicitud.user_id,
+                gvr_solicitado: Number(solicitud.gvr_amount) || 0,
+                gvr_comprado: ["approved", "aprobado", "aprobada"].includes(estadoOriginal)
+                    ? Number(solicitud.gvr_amount) || 0 : 0,
+                precio: solicitud.payment_amount,
+                moneda: solicitud.payment_currency,
+                metodo_pago: solicitud.payment_method,
+                proveedor: "Solicitud de compra GVR",
+                id_orden_proveedor: "No aplica",
+                proof_path: solicitud.proof_path,
+                tiene_comprobante: Boolean(solicitud.proof_path),
+                reviewed_at: solicitud.reviewed_at,
+                review_note: solicitud.review_note,
+                es_solicitud_gvr: true
+            };
+        });
 
-                return {
-                    id: "gvr-request-" + solicitud.id,
-                    solicitud_id: solicitud.id,
-                    tipo: "gvr",
-                    estado: normalizarEstadoVenta(estadoOriginal),
+        // Buscar los contactos para todas las ventas y solicitudes en una sola pasada (por lotes).
+        const idsUsuarios = [
+            ...ventasNormalizadas.map(v => v.usuario_id),
+            ...solicitudesNormalizadas.map(v => v.usuario_id)
+        ].map(valorUtil).filter(Boolean);
 
-                    created_at: solicitud.created_at,
+        const contactos = await cargarContactosUsuarios(idsUsuarios);
 
-                    nombre_usuario: "No disponible",
-                    correo_usuario: "No disponible",
-                    usuario_id: solicitud.user_id,
+        function completarContacto(registro) {
+            const id = valorUtil(registro.usuario_id);
+            const contacto = id ? contactos.get(id) : null;
+            const nombreExistente = valorUtil(registro.nombre_usuario);
+            const correoExistente = valorUtil(registro.correo_usuario);
 
-                    gvr_solicitado: Number(
-                        solicitud.gvr_amount
-                    ) || 0,
+            return {
+                ...registro,
+                nombre_usuario: nombreExistente || valorUtil(contacto?.display_name) || "No disponible",
+                correo_usuario: correoExistente || valorUtil(contacto?.email) || "No disponible"
+            };
+        }
 
-                    // Solo se cuenta como vendido si la solicitud está aprobada.
-                    gvr_comprado: [
-                        "approved",
-                        "aprobado",
-                        "aprobada"
-                    ].includes(estadoOriginal)
-                        ? Number(solicitud.gvr_amount) || 0
-                        : 0,
-
-                    precio: solicitud.payment_amount,
-                    moneda: solicitud.payment_currency,
-                    metodo_pago: solicitud.payment_method,
-
-                    proveedor: "Solicitud de compra GVR",
-                    id_orden_proveedor: "No aplica",
-
-                    proof_path: solicitud.proof_path,
-                    tiene_comprobante: Boolean(
-                        solicitud.proof_path
-                    ),
-
-                    reviewed_at: solicitud.reviewed_at,
-                    review_note: solicitud.review_note,
-
-                    es_solicitud_gvr: true
-                };
-            }
-        );
-
-        // 5. Unir las ventas existentes con las solicitudes GVR.
-        // Las tarjetas se ordenan por fecha, de más reciente a más antigua.
         todasLasVentas = [
-            ...ventasNormalizadas,
-            ...solicitudesNormalizadas
+            ...ventasNormalizadas.map(completarContacto),
+            ...solicitudesNormalizadas.map(completarContacto)
         ].sort((a, b) => {
-            const fechaA = a.created_at
-                ? new Date(a.created_at).getTime()
-                : 0;
-
-            const fechaB = b.created_at
-                ? new Date(b.created_at).getTime()
-                : 0;
-
+            const fechaA = a.created_at ? new Date(a.created_at).getTime() : 0;
+            const fechaB = b.created_at ? new Date(b.created_at).getTime() : 0;
             return fechaB - fechaA;
         });
 
         actualizarEstadisticas();
         mostrarVentas();
-
     } catch (error) {
         console.error("Error cargando el panel:", error);
-
-        mostrarError(
-            "ERROR AL CARGAR EL PANEL:\n\n" +
-            error.message
-        );
-
-        lista.innerHTML = `
-            <div class="vacio">
-                No se pudieron cargar todos los registros.
-                <br><br>
-                Revisa el mensaje de error de arriba.
-            </div>
-        `;
+        mostrarError("ERROR AL CARGAR EL PANEL:\n\n" + (error.message || String(error)));
+        lista.innerHTML = '<div class="vacio">No se pudieron cargar todos los registros.<br><br>Revisa el mensaje de error de arriba.</div>';
     }
 }
-
-
-// ========================================
-// ESTADÍSTICAS
-// ========================================
 
 function actualizarEstadisticas() {
-    const total = todasLasVentas.length;
-
-    const pendientes = todasLasVentas.filter(
-        venta => venta.estado === "pendiente"
-    ).length;
-
-    const completadas = todasLasVentas.filter(
-        venta => venta.estado === "completado"
-    ).length;
-
-    // No sumar solicitudes pendientes o rechazadas como GVR vendidos.
-    const gvrVendidos = todasLasVentas.reduce(
-        (acumulado, venta) => {
-            if (venta.estado !== "completado") {
-                return acumulado;
-            }
-
-            return acumulado +
-                (Number(venta.gvr_comprado) || 0);
-        },
-        0
-    );
-
-    document.getElementById("totalVentas").textContent = total;
-
+    document.getElementById("totalVentas").textContent = todasLasVentas.length;
     document.getElementById("ventasPendientes").textContent =
-        pendientes;
-
+        todasLasVentas.filter(v => v.estado === "pendiente").length;
     document.getElementById("ventasCompletadas").textContent =
-        completadas;
+        todasLasVentas.filter(v => v.estado === "completado").length;
 
-    document.getElementById("gvrVendidos").textContent =
-        gvrVendidos;
+    const gvrVendidos = todasLasVentas.reduce((total, venta) => {
+        if (venta.estado !== "completado") return total;
+        return total + (Number(venta.gvr_comprado) || 0);
+    }, 0);
+    document.getElementById("gvrVendidos").textContent = gvrVendidos;
 }
 
-
-// ========================================
-// ESCAPAR HTML
-// ========================================
-
 function escaparHTML(valor) {
-    if (valor === null || valor === undefined || valor === "") {
-        return "—";
-    }
-
+    if (valor === null || valor === undefined || valor === "") return "—";
     return String(valor)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -1046,361 +472,119 @@ function escaparHTML(valor) {
         .replace(/'/g, "&#039;");
 }
 
-
-// ========================================
-// MOSTRAR VENTAS Y SOLICITUDES
-// ========================================
-
 function mostrarVentas() {
-    const lista =
-        document.getElementById("listaVentas");
-
+    const lista = document.getElementById("listaVentas");
     let ventasFiltradas = [...todasLasVentas];
 
-    if (filtroActual === "gvr") {
-        ventasFiltradas = ventasFiltradas.filter(
-            venta => venta.tipo === "gvr"
-        );
-    }
+    if (filtroActual === "gvr") ventasFiltradas = ventasFiltradas.filter(v => v.tipo === "gvr");
+    if (filtroActual === "recarga") ventasFiltradas = ventasFiltradas.filter(v => v.tipo !== "gvr");
+    if (filtroActual === "pendiente") ventasFiltradas = ventasFiltradas.filter(v => v.estado === "pendiente");
+    if (filtroActual === "completado") ventasFiltradas = ventasFiltradas.filter(v => v.estado === "completado");
 
-    if (filtroActual === "recarga") {
-        ventasFiltradas = ventasFiltradas.filter(
-            venta => venta.tipo !== "gvr"
-        );
-    }
-
-    if (filtroActual === "pendiente") {
-        ventasFiltradas = ventasFiltradas.filter(
-            venta => venta.estado === "pendiente"
-        );
-    }
-
-    if (filtroActual === "completado") {
-        ventasFiltradas = ventasFiltradas.filter(
-            venta => venta.estado === "completado"
-        );
-    }
-
-    if (ventasFiltradas.length === 0) {
-        lista.innerHTML = `
-            <div class="vacio">
-                No hay registros para mostrar con este filtro.
-            </div>
-        `;
+    if (!ventasFiltradas.length) {
+        lista.innerHTML = '<div class="vacio">No hay registros para mostrar con este filtro.</div>';
         return;
     }
 
-    lista.innerHTML = ventasFiltradas
-        .map(venta => crearVentaHTML(venta))
-        .join("");
+    lista.innerHTML = ventasFiltradas.map(crearVentaHTML).join("");
 }
 
-
-// ========================================
-// CREAR TARJETA
-// ========================================
-
 function crearVentaHTML(venta) {
-    const esSolicitudGVR =
-        venta.es_solicitud_gvr === true;
-
-    const tipoTexto = esSolicitudGVR
-        ? "Solicitud de compra GVR"
-        : venta.tipo === "gvr"
-            ? "Compra de GVR"
-            : "Recarga de juego";
-
+    const esSolicitudGVR = venta.es_solicitud_gvr === true;
+    const tipoTexto = esSolicitudGVR ? "Solicitud de compra GVR" :
+        venta.tipo === "gvr" ? "Compra de GVR" : "Recarga de juego";
     const estado = normalizarEstadoVenta(venta.estado);
-
-    const estadosConocidos = [
-        "pendiente",
-        "procesando",
-        "completado",
-        "cancelado",
-        "error",
-        "reembolsado"
-    ];
-
-    const claseEstado = estadosConocidos.includes(estado)
-        ? "estado-" + estado
-        : "estado-desconocido";
-
+    const estadosConocidos = ["pendiente", "procesando", "completado", "cancelado", "error", "reembolsado"];
+    const claseEstado = estadosConocidos.includes(estado) ? "estado-" + estado : "estado-desconocido";
     const etiquetasEstado = {
-        "pendiente": "Pendiente de revisión",
-        "procesando": "Procesando",
-        "completado": "Completado / aprobado",
-        "cancelado": "Rechazado / cancelado",
-        "error": "Error",
-        "reembolsado": "Reembolsado",
-        "desconocido": "Desconocido"
+        pendiente: "Pendiente de revisión",
+        procesando: "Procesando",
+        completado: "Completado / aprobado",
+        cancelado: "Rechazado / cancelado",
+        error: "Error",
+        reembolsado: "Reembolsado",
+        desconocido: "Desconocido"
     };
-
-    const textoEstado =
-        etiquetasEstado[estado] || estado;
+    const textoEstado = etiquetasEstado[estado] || estado;
 
     let fecha = "—";
-
     if (venta.created_at) {
-        fecha = new Date(
-            venta.created_at
-        ).toLocaleString("es-ES", {
-            dateStyle: "medium",
-            timeStyle: "short"
+        fecha = new Date(venta.created_at).toLocaleString("es-ES", {
+            dateStyle: "medium", timeStyle: "short"
         });
     }
 
-    const camposGVR = esSolicitudGVR
-        ? `
-            <div class="dato">
-                <small>ID de solicitud</small>
-                <div>${escaparHTML(venta.solicitud_id)}</div>
-            </div>
-
-            <div class="dato">
-                <small>GVR solicitados</small>
-                <div>${escaparHTML(venta.gvr_solicitado)} GVR</div>
-            </div>
-
-            <div class="dato">
-                <small>Comprobante</small>
-                <div>${
-                    venta.tiene_comprobante
-                        ? "Adjunto en la solicitud"
-                        : "Todavía no adjuntado"
-                }</div>
-            </div>
-
-            ${
-                venta.reviewed_at
-                    ? `
-                        <div class="dato">
-                            <small>Fecha de revisión</small>
-                            <div>${escaparHTML(
-                                new Date(
-                                    venta.reviewed_at
-                                ).toLocaleString("es-ES", {
-                                    dateStyle: "medium",
-                                    timeStyle: "short"
-                                })
-                            )}</div>
-                        </div>
-                    `
-                    : ""
-            }
-
-            ${
-                venta.review_note
-                    ? `
-                        <div class="dato">
-                            <small>Nota de revisión</small>
-                            <div>${escaparHTML(venta.review_note)}</div>
-                        </div>
-                    `
-                    : ""
-            }
-        `
-        : `
-            ${
-                venta.juego
-                    ? `
-                        <div class="dato">
-                            <small>Juego</small>
-                            <div>${escaparHTML(venta.juego)}</div>
-                        </div>
-                    `
-                    : ""
-            }
-
-            ${
-                venta.id_jugador
-                    ? `
-                        <div class="dato">
-                            <small>ID del jugador</small>
-                            <div>${escaparHTML(venta.id_jugador)}</div>
-                        </div>
-                    `
-                    : ""
-            }
-
-            ${
-                venta.producto
-                    ? `
-                        <div class="dato">
-                            <small>Producto</small>
-                            <div>${escaparHTML(venta.producto)}</div>
-                        </div>
-                    `
-                    : ""
-            }
-
-            ${
-                venta.cantidad !== null &&
-                venta.cantidad !== undefined
-                    ? `
-                        <div class="dato">
-                            <small>Cantidad</small>
-                            <div>${escaparHTML(venta.cantidad)}</div>
-                        </div>
-                    `
-                    : ""
-            }
-
-            ${
-                venta.gvr_comprado
-                    ? `
-                        <div class="dato">
-                            <small>GVR comprado</small>
-                            <div>${escaparHTML(venta.gvr_comprado)} GVR</div>
-                        </div>
-                    `
-                    : ""
-            }
-        `;
+    const camposGVR = esSolicitudGVR ? `
+        <div class="dato"><small>ID de solicitud</small><div>${escaparHTML(venta.solicitud_id)}</div></div>
+        <div class="dato"><small>GVR solicitados</small><div>${escaparHTML(venta.gvr_solicitado)} GVR</div></div>
+        <div class="dato"><small>Comprobante</small><div>${venta.tiene_comprobante ? "Adjunto en la solicitud" : "Todavía no adjuntado"}</div></div>
+        ${venta.reviewed_at ? `<div class="dato"><small>Fecha de revisión</small><div>${escaparHTML(new Date(venta.reviewed_at).toLocaleString("es-ES", {dateStyle:"medium",timeStyle:"short"}))}</div></div>` : ""}
+        ${venta.review_note ? `<div class="dato"><small>Nota de revisión</small><div>${escaparHTML(venta.review_note)}</div></div>` : ""}
+    ` : `
+        ${venta.juego ? `<div class="dato"><small>Juego</small><div>${escaparHTML(venta.juego)}</div></div>` : ""}
+        ${venta.id_jugador ? `<div class="dato"><small>ID del jugador</small><div>${escaparHTML(venta.id_jugador)}</div></div>` : ""}
+        ${venta.producto ? `<div class="dato"><small>Producto</small><div>${escaparHTML(venta.producto)}</div></div>` : ""}
+        ${venta.cantidad !== null && venta.cantidad !== undefined ? `<div class="dato"><small>Cantidad</small><div>${escaparHTML(venta.cantidad)}</div></div>` : ""}
+        ${venta.gvr_comprado ? `<div class="dato"><small>GVR comprado</small><div>${escaparHTML(venta.gvr_comprado)} GVR</div></div>` : ""}
+    `;
 
     return `
         <article class="venta">
-
             <div class="venta-cabecera">
-                <div class="tipo">
-                    ${escaparHTML(tipoTexto)}
-                </div>
-
-                <div class="estado ${claseEstado}">
-                    ${escaparHTML(textoEstado)}
-                </div>
+                <div class="tipo">${escaparHTML(tipoTexto)}</div>
+                <div class="estado ${claseEstado}">${escaparHTML(textoEstado)}</div>
             </div>
-
             <div class="datos">
-
-                <div class="dato">
-                    <small>Usuario</small>
-                    <div>${escaparHTML(venta.nombre_usuario)}</div>
-                </div>
-
-                <div class="dato">
-                    <small>Correo</small>
-                    <div>${escaparHTML(venta.correo_usuario)}</div>
-                </div>
-
-                <div class="dato">
-                    <small>ID de usuario</small>
-                    <div>${escaparHTML(venta.usuario_id)}</div>
-                </div>
-
+                <div class="dato"><small>Usuario</small><div>${escaparHTML(venta.nombre_usuario)}</div></div>
+                <div class="dato"><small>Correo</small><div>${escaparHTML(venta.correo_usuario)}</div></div>
+                <div class="dato"><small>ID de usuario</small><div>${escaparHTML(venta.usuario_id)}</div></div>
                 ${camposGVR}
-
-                <div class="dato">
-                    <small>Importe / precio</small>
-                    <div>
-                        ${escaparHTML(venta.precio)}
-                        ${escaparHTML(venta.moneda)}
-                    </div>
-                </div>
-
-                <div class="dato">
-                    <small>Método de pago</small>
-                    <div>${escaparHTML(venta.metodo_pago)}</div>
-                </div>
-
-                <div class="dato">
-                    <small>Proveedor</small>
-                    <div>${escaparHTML(venta.proveedor)}</div>
-                </div>
-
-                <div class="dato">
-                    <small>ID orden proveedor</small>
-                    <div>${escaparHTML(venta.id_orden_proveedor)}</div>
-                </div>
-
-                <div class="dato">
-                    <small>Fecha de registro</small>
-                    <div>${escaparHTML(fecha)}</div>
-                </div>
-
+                <div class="dato"><small>Importe / precio</small><div>${escaparHTML(venta.precio)} ${escaparHTML(venta.moneda)}</div></div>
+                <div class="dato"><small>Método de pago</small><div>${escaparHTML(venta.metodo_pago)}</div></div>
+                <div class="dato"><small>Proveedor</small><div>${escaparHTML(venta.proveedor)}</div></div>
+                <div class="dato"><small>ID orden proveedor</small><div>${escaparHTML(venta.id_orden_proveedor)}</div></div>
+                <div class="dato"><small>Fecha de registro</small><div>${escaparHTML(fecha)}</div></div>
             </div>
-
-            ${
-                esSolicitudGVR
-                    ? `
-                        <div class="aviso-solo-lectura">
-                            Registro informativo. La aprobación o el rechazo
-                            de esta solicitud se realizan exclusivamente desde
-                            la página de confirmaciones GVR.
-                            Este panel no modifica saldos.
-                        </div>
-                    `
-                    : ""
-            }
-
+            ${esSolicitudGVR ? `<div class="aviso-solo-lectura">Registro informativo. La aprobación o el rechazo de esta solicitud se realizan exclusivamente desde la página de confirmaciones GVR. Este panel no modifica saldos.</div>` : ""}
         </article>
     `;
 }
 
-
-// ========================================
-// FILTROS
-// ========================================
-
 document.querySelectorAll(".filtro").forEach(boton => {
     boton.addEventListener("click", () => {
-        document.querySelectorAll(".filtro").forEach(
-            elemento => elemento.classList.remove("activo")
-        );
-
+        document.querySelectorAll(".filtro").forEach(elemento => elemento.classList.remove("activo"));
         boton.classList.add("activo");
         filtroActual = boton.dataset.filtro;
-
         mostrarVentas();
     });
 });
 
-
-// ========================================
-// BOTÓN DE NOTIFICACIONES
-// ========================================
-
-document
-    .getElementById("botonActivarPush")
-    .addEventListener("click", async () => {
-        await configurarNotificacionesPush(true);
-    });
-
-
-// ========================================
-// INICIO
-// ========================================
+document.getElementById("botonActivarPush").addEventListener("click", async () => {
+    await configurarNotificacionesPush(true, true);
+});
 
 async function iniciar() {
     const esAdmin = await comprobarAdministrador();
-
-    if (!esAdmin) {
-        return;
-    }
+    if (!esAdmin) return;
 
     await cargarVentas();
 
-    const boton =
-        document.getElementById("botonActivarPush");
-
+    const boton = document.getElementById("botonActivarPush");
     boton.hidden = false;
 
-    if (
-        "Notification" in window &&
-        Notification.permission === "granted"
-    ) {
-        await configurarNotificacionesPush(false);
+    // Si ya tiene permiso, verificar/renovar la suscripción en silencio.
+    // No se muestra el mensaje de "suscripción registrada" al entrar.
+    if ("Notification" in window && Notification.permission === "granted") {
+        await configurarNotificacionesPush(false, false);
     } else {
-        mostrarEstadoPush(
-            "Activa las notificaciones para recibir avisos de solicitudes GVR. " +
-            "La activación no acredita GVR ni modifica las ventas.",
-            "aviso"
-        );
+        // No mostrar aviso automáticamente al entrar.
+        ocultarEstadoPush();
+        boton.textContent = "Activar notificaciones";
     }
 }
 
 iniciar();
-
 </script>
-
 </body>
-    </html>
+</html>
+
