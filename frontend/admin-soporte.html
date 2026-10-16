@@ -1,259 +1,338 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Administración | Gamers Gold Top-Up</title>
 
-    <title>Administración | Gamers Gold Top-Up</title>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+    body {
+        background: #050b18;
+        color: white;
+        min-height: 100vh;
+        padding: 20px;
+    }
 
+    .contenedor {
+        max-width: 700px;
+        margin: auto;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        gap: 10px;
+    }
+
+    .logo {
+        font-size: 23px;
+        font-weight: 900;
+    }
+
+    .rayo {
+        color: #00b7ff;
+        text-shadow: 0 0 12px #008cff;
+    }
+
+    .navegacion {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .volver {
+        color: #28a9ff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .separador {
+        color: #31506f;
+    }
+
+    .titulo {
+        margin-bottom: 18px;
+    }
+
+    .titulo h1 {
+        font-size: 26px;
+        margin-bottom: 5px;
+    }
+
+    .titulo p {
+        color: #8195ad;
+        font-size: 13px;
+    }
+
+    /* ACCIONES DE ADMINISTRACIÓN */
+
+    .acciones-admin {
+        display: none;
+        margin-bottom: 24px;
+    }
+
+    .boton-gvr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        padding: 17px;
+        border: 1px solid #087bc1;
+        border-radius: 15px;
+        background: linear-gradient(
+            135deg,
+            #0b2850,
+            #073b61
+        );
+        color: white;
+        text-decoration: none;
+        transition: .2s;
+    }
+
+    .boton-gvr:hover {
+        border-color: #00c8ff;
+        box-shadow: 0 0 20px rgba(0, 183, 255, .18);
+        transform: translateY(-1px);
+    }
+
+    .gvr-titulo {
+        font-size: 15px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .gvr-descripcion {
+        color: #a9c5df;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .gvr-flecha {
+        color: #38c7ff;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .ticket {
+        background: #091a35;
+        border: 1px solid #15518c;
+        border-radius: 17px;
+        padding: 18px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .ticket:hover {
+        border-color: #159dff;
+        box-shadow: 0 0 18px rgba(0, 140, 255, .12);
+    }
+
+    .ticket-asunto {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 7px;
+    }
+
+    .ticket-info {
+        color: #8195ad;
+        font-size: 12px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    .estado {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    .estado-open {
+        background: #0c3155;
+        color: #5dc8ff;
+        border: 1px solid #17649a;
+    }
+
+    .estado-human {
+        background: #382b08;
+        color: #ffd45c;
+        border: 1px solid #876d19;
+    }
+
+    .estado-resolved {
+        background: #123820;
+        color: #68df8c;
+        border: 1px solid #247342;
+    }
+
+    .cargando,
+    .vacio,
+    .error {
+        text-align: center;
+        padding: 30px 10px;
+        color: #7189a3;
+        font-size: 13px;
+    }
+
+    .error {
+        color: #ff6578;
+    }
+
+    .contador {
+        color: #28a9ff;
+        font-weight: bold;
+    }
+
+    .boton-resolver {
+        width: 100%;
+        margin-top: 12px;
+        padding: 11px;
+        border: 1px solid #247342;
+        border-radius: 10px;
+        background: #123820;
+        color: #68df8c;
+        font-size: 13px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .boton-resolver:hover {
+        background: #18502d;
+    }
+
+    .boton-resolver:disabled {
+        opacity: .6;
+        cursor: wait;
+    }
+
+    .ticket-resuelto {
+        margin-top: 12px;
+        color: #68df8c;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    @media (max-width: 450px) {
         body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .contenedor {
-            max-width: 700px;
-            margin: auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            gap: 10px;
+            padding: 14px;
         }
 
         .logo {
-            font-size: 23px;
-            font-weight: 900;
-        }
-
-        .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
-        }
-
-        .navegacion {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
+            font-size: 20px;
         }
 
         .volver {
-            color: #28a9ff;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .separador {
-            color: #31506f;
-        }
-
-        .titulo {
-            margin-bottom: 18px;
+            font-size: 12px;
         }
 
         .titulo h1 {
-            font-size: 26px;
-            margin-bottom: 5px;
+            font-size: 23px;
         }
+    }
+</style>
 
-        .titulo p {
-            color: #8195ad;
-            font-size: 13px;
-        }
+</head><body><div class="contenedor"><div class="header">
 
-        .ticket {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 17px;
-            padding: 18px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: .2s;
-        }
-
-        .ticket:hover {
-            border-color: #159dff;
-            box-shadow: 0 0 18px rgba(0, 140, 255, .12);
-        }
-
-        .ticket-asunto {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 7px;
-        }
-
-        .ticket-info {
-            color: #8195ad;
-            font-size: 12px;
-            line-height: 1.6;
-        }
-
-        .estado {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 5px 9px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-        .estado-open {
-            background: #0c3155;
-            color: #5dc8ff;
-            border: 1px solid #17649a;
-        }
-
-        .estado-human {
-            background: #382b08;
-            color: #ffd45c;
-            border: 1px solid #876d19;
-        }
-
-        .estado-resolved {
-            background: #123820;
-            color: #68df8c;
-            border: 1px solid #247342;
-        }
-
-        .cargando,
-        .vacio,
-        .error {
-            text-align: center;
-            padding: 30px 10px;
-            color: #7189a3;
-            font-size: 13px;
-        }
-
-        .error {
-            color: #ff6578;
-        }
-
-        .contador {
-            color: #28a9ff;
-            font-weight: bold;
-        }
-
-        @media (max-width: 450px) {
-
-            body {
-                padding: 14px;
-            }
-
-            .logo {
-                font-size: 20px;
-            }
-
-            .volver {
-                font-size: 12px;
-            }
-        }
-
-        .boton-resolver {
-    width: 100%;
-    margin-top: 12px;
-    padding: 11px;
-    border: 1px solid #247342;
-    border-radius: 10px;
-    background: #123820;
-    color: #68df8c;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.boton-resolver:hover {
-    background: #18502d;
-}
-
-.ticket-resuelto {
-    margin-top: 12px;
-    color: #68df8c;
-    font-size: 12px;
-    font-weight: bold;
-}
-    </style>
-</head>
-
-<body>
-
-<div class="contenedor">
-
-    <div class="header">
-
-        <div class="logo">
-            <span class="rayo">⚡</span> Gamers Gold Top-Up
-        </div>
-
-        <div class="navegacion">
-
-            <a href="soporte.html" class="volver">
-                Soporte
-            </a>
-
-            <span class="separador">|</span>
-
-            <a href="cuenta.html" class="volver">
-                Mi Cuenta
-            </a>
-
-        </div>
-
+    <div class="logo">
+        <span class="rayo">⚡</span> Gamers Gold Top-Up
     </div>
 
-    <div class="titulo">
+    <div class="navegacion">
 
-        <h1>⚙️ Administración</h1>
+        <a href="soporte.html" class="volver">
+            Soporte
+        </a>
 
-        <p>
-            Panel de soporte de Gamers Gold Top-Up
-        </p>
+        <span class="separador">|</span>
 
-    </div>
-
-    <div id="contenido">
-
-        <div class="cargando">
-            Comprobando acceso...
-        </div>
+        <a href="cuenta.html" class="volver">
+            Mi Cuenta
+        </a>
 
     </div>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="titulo">
 
-<script>
+    <h1>⚙️ Administración</h1>
+
+    <p>
+        Panel de soporte de Gamers Gold Top-Up
+    </p>
+
+</div>
+
+<!-- Solo se muestra después de verificar al administrador -->
+
+<div id="accionesAdmin" class="acciones-admin">
+
+    <a
+        href="confirmaciones-gvr.html"
+        class="boton-gvr"
+    >
+
+        <div>
+            <div class="gvr-titulo">
+                Confirmaciones GVR
+            </div>
+
+            <div class="gvr-descripcion">
+                Revisar comprobantes y gestionar las solicitudes
+                de compra de GVR.
+            </div>
+        </div>
+
+        <span class="gvr-flecha" aria-hidden="true">
+            →
+        </span>
+
+    </a>
+
+</div>
+
+<div id="contenido">
+
+    <div class="cargando">
+        Comprobando acceso...
+    </div>
+
+</div>
+
+</div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+"use strict";
 
 const SUPABASE_URL =
-"https://gsuhzcavghsiolmipnzi.supabase.co";
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-"sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
 const supabaseClient =
-window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
 
 const contenido =
-document.getElementById("contenido");
+    document.getElementById("contenido");
+
+const accionesAdmin =
+    document.getElementById("accionesAdmin");
 
 
 /* =========================
@@ -301,6 +380,9 @@ async function iniciar() {
 
         return;
     }
+
+    // Mostrar las acciones solo tras verificar al administrador.
+    accionesAdmin.style.display = "block";
 
     await cargarTickets();
 
@@ -400,53 +482,53 @@ function mostrarTickets(tickets) {
 
         html += `
 
-    <div
-        class="ticket"
-        data-id="${ticket.id}"
-    >
+            <div
+                class="ticket"
+                data-id="${escapeHTML(ticket.id)}"
+            >
 
-        <div class="ticket-asunto">
-            ${escapeHTML(ticket.subject)}
-        </div>
-
-        <div class="ticket-info">
-            Usuario:
-            ${escapeHTML(ticket.user_id)}
-            <br>
-
-            Categoría:
-            ${escapeHTML(ticket.category)}
-            <br>
-
-            Última actividad:
-            ${fecha}
-        </div>
-
-        <span class="estado ${estadoClase}">
-            ${estadoTexto}
-        </span>
-
-        ${
-            ticket.status !== "resolved"
-            ? `
-                <button
-                    class="boton-resolver"
-                    data-id="${ticket.id}"
-                    type="button"
-                >
-                    ✅ Resolver ticket
-                </button>
-            `
-            : `
-                <div class="ticket-resuelto">
-                    ✅ Ticket resuelto
+                <div class="ticket-asunto">
+                    ${escapeHTML(ticket.subject)}
                 </div>
-            `
-        }
 
-    </div>
+                <div class="ticket-info">
+                    Usuario:
+                    ${escapeHTML(ticket.user_id)}
+                    <br>
 
-`;
+                    Categoría:
+                    ${escapeHTML(ticket.category)}
+                    <br>
+
+                    Última actividad:
+                    ${escapeHTML(fecha)}
+                </div>
+
+                <span class="estado ${estadoClase}">
+                    ${estadoTexto}
+                </span>
+
+                ${
+                    ticket.status !== "resolved"
+                    ? `
+                        <button
+                            class="boton-resolver"
+                            data-id="${escapeHTML(ticket.id)}"
+                            type="button"
+                        >
+                            ✅ Resolver ticket
+                        </button>
+                    `
+                    : `
+                        <div class="ticket-resuelto">
+                            ✅ Ticket resuelto
+                        </div>
+                    `
+                }
+
+            </div>
+
+        `;
 
     });
 
@@ -460,71 +542,74 @@ function mostrarTickets(tickets) {
                 "click",
                 function() {
 
-                    const id =
-                        this.dataset.id;
+                    const id = this.dataset.id;
 
                     window.location.href =
-                        "ticket.html?id=" + id;
+                        "ticket.html?id=" +
+                        encodeURIComponent(id);
 
                 }
             );
 
         });
 
-document
-    .querySelectorAll(".boton-resolver")
-    .forEach(boton => {
+    document
+        .querySelectorAll(".boton-resolver")
+        .forEach(boton => {
 
-        boton.addEventListener(
-            "click",
-            async function(event) {
+            boton.addEventListener(
+                "click",
+                async function(event) {
 
-                event.stopPropagation();
+                    event.stopPropagation();
 
-                const ticketId =
-                    this.dataset.id;
+                    const ticketId = this.dataset.id;
 
-                const confirmar =
-                    confirm(
+                    const confirmar = confirm(
                         "¿Quieres marcar este ticket como resuelto?"
                     );
 
-                if (!confirmar) {
-                    return;
+                    if (!confirmar) {
+                        return;
+                    }
+
+                    this.disabled = true;
+                    this.textContent = "Resolviendo...";
+
+                    /*
+                     * Se conserva el comportamiento original:
+                     * eliminar el ticket de soporte.
+                     */
+
+                    const { error } =
+                        await supabaseClient
+                            .from("support_tickets")
+                            .delete()
+                            .eq("id", ticketId);
+
+                    if (error) {
+
+                        console.error(error);
+
+                        alert(
+                            "No se pudo resolver el ticket:\n\n" +
+                            error.message
+                        );
+
+                        this.disabled = false;
+                        this.textContent =
+                            "✅ Resolver ticket";
+
+                        return;
+                    }
+
+                    await cargarTickets();
+
                 }
+            );
 
-                this.disabled = true;
-                this.textContent =
-                    "Resolviendo...";
+        });
 
-                const { error } =
-    await supabaseClient
-        .from("support_tickets")
-        .delete()
-        .eq("id", ticketId);
-                if (error) {
-
-                    console.error(error);
-
-                    alert(
-                        "No se pudo resolver el ticket:\n\n" +
-                        error.message
-                    );
-
-                    this.disabled = false;
-                    this.textContent =
-                        "✅ Resolver ticket";
-
-                    return;
-                }
-
-                await cargarTickets();
-
-            }
-        );
-
-    });
-    
 }
 
 
@@ -534,7 +619,7 @@ document
 
 function escapeHTML(texto) {
 
-    return String(texto)
+    return String(texto ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -550,7 +635,5 @@ function escapeHTML(texto) {
 
 iniciar();
 
-</script>
-
-</body>
-              </html>
+</script></body>
+</html>
