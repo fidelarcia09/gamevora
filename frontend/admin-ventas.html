@@ -546,104 +546,119 @@ async function guardarSuscripcionPush(suscripcion) {
 // CONFIGURAR PUSH
 // ========================================
 
-async function configurarNotificacionesPush(solicitarPermiso = false) {
+
+        async function configurarNotificacionesPush(solicitarPermiso = false) {
     const boton = document.getElementById("botonActivarPush");
 
+    let temporizador;
+
     try {
-        if (!window.isSecureContext) {
-            throw new Error(
-                "Las notificaciones necesitan HTTPS. Abre la página publicada con HTTPS."
-            );
-        }
-
-        if (!("serviceWorker" in navigator)) {
-            throw new Error(
-                "Este navegador no admite Service Worker."
-            );
-        }
-
-        if (!("PushManager" in window)) {
-            throw new Error(
-                "Este navegador no admite notificaciones Push."
-            );
-        }
-
-        if (!("Notification" in window)) {
-            throw new Error(
-                "Este navegador no admite la API de notificaciones."
-            );
-        }
-
         boton.disabled = true;
         boton.textContent = "Configurando...";
 
-        // Registrar el Service Worker de la carpeta frontend.
-        const registro =
-            await navigator.serviceWorker.register(
-                "service-worker.js"
-            );
+        mostrarEstadoPush(
+            "Paso 1/4: comprobando el navegador...",
+            "aviso"
+        );
 
-        await navigator.serviceWorker.ready;
+        if (!window.isSecureContext) {
+            throw new Error("Abre la página publicada mediante HTTPS.");
+        }
+
+        if (!("serviceWorker" in navigator)) {
+            throw new Error("Este navegador no admite Service Worker.");
+        }
+
+        if (!("PushManager" in window)) {
+            throw new Error("Este navegador no admite notificaciones Push.");
+        }
+
+        if (!("Notification" in window)) {
+            throw new Error("Este navegador no admite la API de notificaciones.");
+        }
+
+        mostrarEstadoPush(
+            "Paso 2/4: registrando el Service Worker...",
+            "aviso"
+        );
+
+        const registro = await Promise.race([
+            navigator.serviceWorker.register("service-worker.js"),
+            new Promise((_, reject) => {
+                temporizador = setTimeout(
+                    () => reject(new Error(
+                        "El Service Worker tardó demasiado. Comprueba que frontend/service-worker.js exista y esté publicado."
+                    )),
+                    12000
+                );
+            })
+        ]);
+
+        clearTimeout(temporizador);
+        temporizador = null;
+
+        mostrarEstadoPush(
+            "Paso 3/4: preparando las notificaciones...",
+            "aviso"
+        );
 
         let permiso = Notification.permission;
 
-        // Pedir permiso solo cuando el usuario pulsa el botón.
         if (solicitarPermiso && permiso === "default") {
             permiso = await Notification.requestPermission();
         }
 
         if (permiso !== "granted") {
-            if (permiso === "denied") {
-                mostrarEstadoPush(
-                    "Las notificaciones están bloqueadas en el navegador. Permítelas en la configuración del sitio y vuelve a intentarlo.",
-                    "aviso"
-                );
-            } else {
-                mostrarEstadoPush(
-                    "Pulsa «Activar notificaciones» y acepta el permiso para recibir avisos.",
-                    "aviso"
-                );
-            }
-
-            return;
+            throw new Error(
+                permiso === "denied"
+                    ? "Las notificaciones están bloqueadas. Permite las notificaciones para este sitio desde la configuración del navegador."
+                    : "Debes aceptar el permiso de notificaciones."
+            );
         }
 
-        let suscripcion =
-            await registro.pushManager.getSubscription();
+        let suscripcion = await registro.pushManager.getSubscription();
 
         if (!suscripcion) {
-            suscripcion =
-                await registro.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey:
-                        convertirBase64UrlAUint8Array(
-                            VAPID_PUBLIC_KEY
-                        )
-                });
+            suscripcion = await registro.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey:
+                    convertirBase64UrlAUint8Array(VAPID_PUBLIC_KEY)
+            });
         }
 
-        await guardarSuscripcionPush(suscripcion);
+        mostrarEstadoPush(
+            "Paso 4/4: guardando el dispositivo en Supabase...",
+            "aviso"
+        );
+
+        await Promise.race([
+            guardarSuscripcionPush(suscripcion),
+            new Promise((_, reject) => {
+                temporizador = setTimeout(
+                    () => reject(new Error(
+                        "Supabase tardó demasiado en guardar la suscripción. Comprueba la conexión y los permisos de la tabla admin_push_subscriptions."
+                    )),
+                    12000
+                );
+            })
+        ]);
+
+        clearTimeout(temporizador);
+        temporizador = null;
 
         mostrarEstadoPush(
-            "Notificaciones activadas y dispositivo registrado en Supabase. El envío de avisos también depende de que la función del servidor esté funcionando.",
+            "Dispositivo registrado correctamente. Ahora debemos comprobar el envío real de las notificaciones desde el servidor.",
             "correcto"
         );
 
         boton.textContent = "Notificaciones activadas";
         boton.hidden = true;
 
-        console.log(
-            "Dispositivo administrador registrado para Push."
-        );
-
     } catch (error) {
-        console.error(
-            "Error configurando notificaciones Push:",
-            error
-        );
+        console.error("Error configurando Push:", error);
 
         mostrarEstadoPush(
-            "No se pudieron activar las notificaciones.\n\n" +
+            "No se pudieron activar las notificaciones:\n\n" +
             (error.message || String(error)),
             "fallo"
         );
@@ -652,10 +667,13 @@ async function configurarNotificacionesPush(solicitarPermiso = false) {
         boton.textContent = "Reintentar notificaciones";
 
     } finally {
+        if (temporizador) {
+            clearTimeout(temporizador);
+        }
+
         boton.disabled = false;
     }
-}
-
+    }
 
 // ========================================
 // COMPROBAR ADMINISTRADOR
