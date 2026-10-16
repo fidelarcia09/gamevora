@@ -224,6 +224,16 @@
             word-break: break-word;
         }
 
+        .aviso-solo-lectura {
+            margin-top: 15px;
+            padding: 11px;
+            border: 1px solid rgba(0, 170, 255, 0.25);
+            border-radius: 9px;
+            color: #9eb3ca;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
         .vacio {
             text-align: center;
             padding: 50px 20px;
@@ -345,7 +355,6 @@
             </a>
 
         </div>
-
     </div>
 </header>
 
@@ -353,7 +362,7 @@
 
     <div class="titulo">
         <h1>Panel de ventas</h1>
-        <p>Control de ventas y recargas de juegos</p>
+        <p>Control de ventas, recargas y solicitudes de compra GVR</p>
     </div>
 
     <div id="estadoPush" role="status" aria-live="polite"></div>
@@ -363,7 +372,7 @@
     <section class="estadisticas">
 
         <div class="stat">
-            <span>Ventas totales</span>
+            <span>Registros totales</span>
             <strong id="totalVentas">0</strong>
         </div>
 
@@ -439,19 +448,17 @@ let filtroActual = "todas";
 
 
 // ========================================
-// MOSTRAR MENSAJES
+// MENSAJES
 // ========================================
 
 function mostrarError(mensaje) {
     const errorBox = document.getElementById("error");
-
     errorBox.textContent = mensaje;
     errorBox.style.display = "block";
 }
 
 function mostrarEstadoPush(mensaje, tipo) {
     const caja = document.getElementById("estadoPush");
-
     caja.textContent = mensaje;
     caja.className = tipo;
     caja.style.display = "block";
@@ -466,9 +473,7 @@ function convertirBase64UrlAUint8Array(base64UrlData) {
     const padding =
         "=".repeat((4 - base64UrlData.length % 4) % 4);
 
-    const base64 = (
-        base64UrlData + padding
-    )
+    const base64 = (base64UrlData + padding)
         .replace(/-/g, "+")
         .replace(/_/g, "/");
 
@@ -546,9 +551,12 @@ async function guardarSuscripcionPush(suscripcion) {
 // CONFIGURAR PUSH
 // ========================================
 
+async function configurarNotificacionesPush(
+    solicitarPermiso = false
+) {
+    const boton =
+        document.getElementById("botonActivarPush");
 
-        async function configurarNotificacionesPush(solicitarPermiso = false) {
-    const boton = document.getElementById("botonActivarPush");
     let temporizador;
 
     try {
@@ -568,7 +576,7 @@ async function guardarSuscripcionPush(suscripcion) {
 
         if (!("Notification" in window)) {
             throw new Error(
-                "Este navegador no admite la API de notificaciones."
+                "Este navegador no admite notificaciones."
             );
         }
 
@@ -584,19 +592,12 @@ async function guardarSuscripcionPush(suscripcion) {
             );
         }
 
-        // Comprobar el permiso real del navegador.
         let permiso = Notification.permission;
-
-        console.log(
-            "Permiso actual de notificaciones:",
-            permiso
-        );
 
         if (permiso === "denied") {
             throw new Error(
-                "El navegador está devolviendo el permiso DENEGADO para esta página. " +
-                "Aunque las notificaciones parezcan activas, hay que comprobar el permiso " +
-                "de este sitio en el navegador y los ajustes de notificaciones de Android."
+                "El navegador tiene bloqueadas las notificaciones de esta página. " +
+                "Comprueba los permisos del sitio y los ajustes de Android."
             );
         }
 
@@ -607,7 +608,7 @@ async function guardarSuscripcionPush(suscripcion) {
         if (permiso !== "granted") {
             throw new Error(
                 "Todavía no se ha concedido el permiso de notificaciones. " +
-                "Pulsa el botón y acepta la solicitud del navegador."
+                "Pulsa el botón y acepta el permiso del navegador."
             );
         }
 
@@ -617,9 +618,7 @@ async function guardarSuscripcionPush(suscripcion) {
         );
 
         const registro = await Promise.race([
-            navigator.serviceWorker.register(
-                "service-worker.js"
-            ),
+            navigator.serviceWorker.register("service-worker.js"),
             new Promise((_, reject) => {
                 temporizador = setTimeout(() => {
                     reject(new Error(
@@ -633,11 +632,6 @@ async function guardarSuscripcionPush(suscripcion) {
         clearTimeout(temporizador);
         temporizador = null;
 
-        mostrarEstadoPush(
-            "Comprobando la suscripción Push...",
-            "aviso"
-        );
-
         let suscripcion =
             await registro.pushManager.getSubscription();
 
@@ -649,18 +643,13 @@ async function guardarSuscripcionPush(suscripcion) {
             });
         }
 
-        mostrarEstadoPush(
-            "Guardando la suscripción en Supabase...",
-            "aviso"
-        );
-
         await Promise.race([
             guardarSuscripcionPush(suscripcion),
             new Promise((_, reject) => {
                 temporizador = setTimeout(() => {
                     reject(new Error(
                         "Supabase tardó demasiado en guardar la suscripción. " +
-                        "Comprueba la sesión del administrador y los permisos de la tabla."
+                        "Comprueba la sesión y los permisos de la tabla."
                     ));
                 }, 12000);
             })
@@ -671,7 +660,7 @@ async function guardarSuscripcionPush(suscripcion) {
 
         mostrarEstadoPush(
             "Suscripción registrada correctamente. " +
-            "Ahora falta comprobar que el servidor pueda enviar notificaciones reales.",
+            "Esto confirma el registro del dispositivo, no el envío de una nueva notificación.",
             "correcto"
         );
 
@@ -700,7 +689,8 @@ async function guardarSuscripcionPush(suscripcion) {
 
         boton.disabled = false;
     }
-        }
+}
+
 
 // ========================================
 // COMPROBAR ADMINISTRADOR
@@ -717,7 +707,6 @@ async function comprobarAdministrador() {
             "ERROR DE AUTENTICACIÓN:\n" +
             authError.message
         );
-
         return false;
     }
 
@@ -738,11 +727,7 @@ async function comprobarAdministrador() {
             "\nAyuda: " + error.hint
         );
 
-        console.error(
-            "Error is_support_admin:",
-            error
-        );
-
+        console.error("Error is_support_admin:", error);
         return false;
     }
 
@@ -773,6 +758,9 @@ function normalizarEstadoVenta(estado) {
 
         "completed": "completado",
         "completado": "completado",
+        "approved": "completado",
+        "aprobado": "completado",
+        "aprobada": "completado",
 
         "failed": "error",
         "error": "error",
@@ -780,6 +768,9 @@ function normalizarEstadoVenta(estado) {
         "cancelled": "cancelado",
         "canceled": "cancelado",
         "cancelado": "cancelado",
+        "rejected": "cancelado",
+        "rechazado": "cancelado",
+        "rechazada": "cancelado",
 
         "refunded": "reembolsado",
         "reembolsado": "reembolsado"
@@ -790,7 +781,7 @@ function normalizarEstadoVenta(estado) {
 
 
 // ========================================
-// CARGAR VENTAS
+// CARGAR VENTAS Y SOLICITUDES GVR
 // ========================================
 
 async function cargarVentas() {
@@ -798,13 +789,13 @@ async function cargarVentas() {
         document.getElementById("listaVentas");
 
     lista.innerHTML = `
-        <div class="vacio">Cargando ventas...</div>
+        <div class="vacio">Cargando ventas y solicitudes GVR...</div>
     `;
 
     document.getElementById("error").style.display = "none";
 
     try {
-        // Conservamos la consulta original a ventas.
+        // 1. Cargar las ventas existentes.
         const {
             data: ventas,
             error: errorVentas
@@ -817,14 +808,14 @@ async function cargarVentas() {
 
         if (errorVentas) {
             throw new Error(
-                "No se pudieron cargar las ventas: " +
+                "No se pudieron cargar las ventas existentes: " +
                 errorVentas.message
             );
         }
 
         const resultadoVentas = ventas || [];
 
-        // Buscar los pedidos relacionados por game_order_id.
+        // 2. Consultar el estado real de los pedidos de juegos.
         const idsPedidos = [
             ...new Set(
                 resultadoVentas
@@ -856,38 +847,139 @@ async function cargarVentas() {
             }
         }
 
-        // Para ventas vinculadas, usar el estado real del pedido.
-        // Para las demás, conservar el estado de la venta.
-        todasLasVentas = resultadoVentas.map(venta => {
+        const ventasNormalizadas = resultadoVentas.map(venta => {
             const estadoPedido = venta.game_order_id
                 ? pedidosPorId[venta.game_order_id]
                 : null;
 
             return {
                 ...venta,
+                tipo: String(venta.tipo || "").toLowerCase(),
                 estado: normalizarEstadoVenta(
                     estadoPedido || venta.estado
-                )
+                ),
+                es_solicitud_gvr: false
             };
+        });
+
+        // 3. Cargar las solicitudes GVR directamente desde su tabla.
+        // Esta tabla es independiente de "ventas".
+        const {
+            data: solicitudesGVR,
+            error: errorGVR
+        } = await supabaseClient
+            .from("gvr_purchase_requests")
+            .select(`
+                id,
+                user_id,
+                gvr_amount,
+                payment_method,
+                payment_amount,
+                payment_currency,
+                proof_path,
+                status,
+                created_at,
+                reviewed_at,
+                review_note
+            `)
+            .order("created_at", {
+                ascending: false
+            });
+
+        if (errorGVR) {
+            throw new Error(
+                "Las ventas se consultaron, pero no se pudieron cargar las solicitudes GVR.\n\n" +
+                "Código: " + (errorGVR.code || "sin código") +
+                "\nMensaje: " + errorGVR.message +
+                "\n\nComprueba que el administrador tenga permiso para consultar " +
+                "gvr_purchase_requests y que la política RLS de soporte esté activa."
+            );
+        }
+
+        // 4. Convertir las solicitudes GVR al formato de tarjeta del panel.
+        // No se actualiza la base de datos ni se acredita saldo.
+        const solicitudesNormalizadas = (solicitudesGVR || []).map(
+            solicitud => {
+                const estadoOriginal = String(
+                    solicitud.status || ""
+                ).trim().toLowerCase();
+
+                return {
+                    id: "gvr-request-" + solicitud.id,
+                    solicitud_id: solicitud.id,
+                    tipo: "gvr",
+                    estado: normalizarEstadoVenta(estadoOriginal),
+
+                    created_at: solicitud.created_at,
+
+                    nombre_usuario: "No disponible",
+                    correo_usuario: "No disponible",
+                    usuario_id: solicitud.user_id,
+
+                    gvr_solicitado: Number(
+                        solicitud.gvr_amount
+                    ) || 0,
+
+                    // Solo se cuenta como vendido si la solicitud está aprobada.
+                    gvr_comprado: [
+                        "approved",
+                        "aprobado",
+                        "aprobada"
+                    ].includes(estadoOriginal)
+                        ? Number(solicitud.gvr_amount) || 0
+                        : 0,
+
+                    precio: solicitud.payment_amount,
+                    moneda: solicitud.payment_currency,
+                    metodo_pago: solicitud.payment_method,
+
+                    proveedor: "Solicitud de compra GVR",
+                    id_orden_proveedor: "No aplica",
+
+                    proof_path: solicitud.proof_path,
+                    tiene_comprobante: Boolean(
+                        solicitud.proof_path
+                    ),
+
+                    reviewed_at: solicitud.reviewed_at,
+                    review_note: solicitud.review_note,
+
+                    es_solicitud_gvr: true
+                };
+            }
+        );
+
+        // 5. Unir las ventas existentes con las solicitudes GVR.
+        // Las tarjetas se ordenan por fecha, de más reciente a más antigua.
+        todasLasVentas = [
+            ...ventasNormalizadas,
+            ...solicitudesNormalizadas
+        ].sort((a, b) => {
+            const fechaA = a.created_at
+                ? new Date(a.created_at).getTime()
+                : 0;
+
+            const fechaB = b.created_at
+                ? new Date(b.created_at).getTime()
+                : 0;
+
+            return fechaB - fechaA;
         });
 
         actualizarEstadisticas();
         mostrarVentas();
 
     } catch (error) {
-        console.error(
-            "Error cargando ventas:",
-            error
-        );
+        console.error("Error cargando el panel:", error);
 
         mostrarError(
-            "ERROR AL CARGAR EL PANEL DE VENTAS:\n\n" +
+            "ERROR AL CARGAR EL PANEL:\n\n" +
             error.message
         );
 
         lista.innerHTML = `
             <div class="vacio">
-                No se pudieron cargar correctamente las ventas.
+                No se pudieron cargar todos los registros.
                 <br><br>
                 Revisa el mensaje de error de arriba.
             </div>
@@ -911,9 +1003,16 @@ function actualizarEstadisticas() {
         venta => venta.estado === "completado"
     ).length;
 
+    // No sumar solicitudes pendientes o rechazadas como GVR vendidos.
     const gvrVendidos = todasLasVentas.reduce(
-        (acumulado, venta) =>
-            acumulado + (Number(venta.gvr_comprado) || 0),
+        (acumulado, venta) => {
+            if (venta.estado !== "completado") {
+                return acumulado;
+            }
+
+            return acumulado +
+                (Number(venta.gvr_comprado) || 0);
+        },
         0
     );
 
@@ -935,7 +1034,7 @@ function actualizarEstadisticas() {
 // ========================================
 
 function escaparHTML(valor) {
-    if (valor === null || valor === undefined) {
+    if (valor === null || valor === undefined || valor === "") {
         return "—";
     }
 
@@ -949,7 +1048,7 @@ function escaparHTML(valor) {
 
 
 // ========================================
-// MOSTRAR VENTAS
+// MOSTRAR VENTAS Y SOLICITUDES
 // ========================================
 
 function mostrarVentas() {
@@ -966,7 +1065,7 @@ function mostrarVentas() {
 
     if (filtroActual === "recarga") {
         ventasFiltradas = ventasFiltradas.filter(
-            venta => venta.tipo === "recarga"
+            venta => venta.tipo !== "gvr"
         );
     }
 
@@ -985,10 +1084,9 @@ function mostrarVentas() {
     if (ventasFiltradas.length === 0) {
         lista.innerHTML = `
             <div class="vacio">
-                No hay ventas para mostrar.
+                No hay registros para mostrar con este filtro.
             </div>
         `;
-
         return;
     }
 
@@ -999,17 +1097,20 @@ function mostrarVentas() {
 
 
 // ========================================
-// CREAR TARJETA DE VENTA
+// CREAR TARJETA
 // ========================================
 
 function crearVentaHTML(venta) {
-    const tipoTexto =
-        venta.tipo === "gvr"
+    const esSolicitudGVR =
+        venta.es_solicitud_gvr === true;
+
+    const tipoTexto = esSolicitudGVR
+        ? "Solicitud de compra GVR"
+        : venta.tipo === "gvr"
             ? "Compra de GVR"
             : "Recarga de juego";
 
-    const estado =
-        normalizarEstadoVenta(venta.estado);
+    const estado = normalizarEstadoVenta(venta.estado);
 
     const estadosConocidos = [
         "pendiente",
@@ -1025,10 +1126,10 @@ function crearVentaHTML(venta) {
         : "estado-desconocido";
 
     const etiquetasEstado = {
-        "pendiente": "Pendiente",
+        "pendiente": "Pendiente de revisión",
         "procesando": "Procesando",
-        "completado": "Completado",
-        "cancelado": "Cancelado",
+        "completado": "Completado / aprobado",
+        "cancelado": "Rechazado / cancelado",
         "error": "Error",
         "reembolsado": "Reembolsado",
         "desconocido": "Desconocido"
@@ -1047,6 +1148,114 @@ function crearVentaHTML(venta) {
             timeStyle: "short"
         });
     }
+
+    const camposGVR = esSolicitudGVR
+        ? `
+            <div class="dato">
+                <small>ID de solicitud</small>
+                <div>${escaparHTML(venta.solicitud_id)}</div>
+            </div>
+
+            <div class="dato">
+                <small>GVR solicitados</small>
+                <div>${escaparHTML(venta.gvr_solicitado)} GVR</div>
+            </div>
+
+            <div class="dato">
+                <small>Comprobante</small>
+                <div>${
+                    venta.tiene_comprobante
+                        ? "Adjunto en la solicitud"
+                        : "Todavía no adjuntado"
+                }</div>
+            </div>
+
+            ${
+                venta.reviewed_at
+                    ? `
+                        <div class="dato">
+                            <small>Fecha de revisión</small>
+                            <div>${escaparHTML(
+                                new Date(
+                                    venta.reviewed_at
+                                ).toLocaleString("es-ES", {
+                                    dateStyle: "medium",
+                                    timeStyle: "short"
+                                })
+                            )}</div>
+                        </div>
+                    `
+                    : ""
+            }
+
+            ${
+                venta.review_note
+                    ? `
+                        <div class="dato">
+                            <small>Nota de revisión</small>
+                            <div>${escaparHTML(venta.review_note)}</div>
+                        </div>
+                    `
+                    : ""
+            }
+        `
+        : `
+            ${
+                venta.juego
+                    ? `
+                        <div class="dato">
+                            <small>Juego</small>
+                            <div>${escaparHTML(venta.juego)}</div>
+                        </div>
+                    `
+                    : ""
+            }
+
+            ${
+                venta.id_jugador
+                    ? `
+                        <div class="dato">
+                            <small>ID del jugador</small>
+                            <div>${escaparHTML(venta.id_jugador)}</div>
+                        </div>
+                    `
+                    : ""
+            }
+
+            ${
+                venta.producto
+                    ? `
+                        <div class="dato">
+                            <small>Producto</small>
+                            <div>${escaparHTML(venta.producto)}</div>
+                        </div>
+                    `
+                    : ""
+            }
+
+            ${
+                venta.cantidad !== null &&
+                venta.cantidad !== undefined
+                    ? `
+                        <div class="dato">
+                            <small>Cantidad</small>
+                            <div>${escaparHTML(venta.cantidad)}</div>
+                        </div>
+                    `
+                    : ""
+            }
+
+            ${
+                venta.gvr_comprado
+                    ? `
+                        <div class="dato">
+                            <small>GVR comprado</small>
+                            <div>${escaparHTML(venta.gvr_comprado)} GVR</div>
+                        </div>
+                    `
+                    : ""
+            }
+        `;
 
     return `
         <article class="venta">
@@ -1078,64 +1287,10 @@ function crearVentaHTML(venta) {
                     <div>${escaparHTML(venta.usuario_id)}</div>
                 </div>
 
-                ${
-                    venta.juego
-                    ? `
-                    <div class="dato">
-                        <small>Juego</small>
-                        <div>${escaparHTML(venta.juego)}</div>
-                    </div>
-                    `
-                    : ""
-                }
-
-                ${
-                    venta.id_jugador
-                    ? `
-                    <div class="dato">
-                        <small>ID del jugador</small>
-                        <div>${escaparHTML(venta.id_jugador)}</div>
-                    </div>
-                    `
-                    : ""
-                }
-
-                ${
-                    venta.producto
-                    ? `
-                    <div class="dato">
-                        <small>Producto</small>
-                        <div>${escaparHTML(venta.producto)}</div>
-                    </div>
-                    `
-                    : ""
-                }
-
-                ${
-                    venta.cantidad !== null &&
-                    venta.cantidad !== undefined
-                    ? `
-                    <div class="dato">
-                        <small>Cantidad</small>
-                        <div>${escaparHTML(venta.cantidad)}</div>
-                    </div>
-                    `
-                    : ""
-                }
-
-                ${
-                    venta.gvr_comprado
-                    ? `
-                    <div class="dato">
-                        <small>GVR comprado</small>
-                        <div>${escaparHTML(venta.gvr_comprado)} GVR</div>
-                    </div>
-                    `
-                    : ""
-                }
+                ${camposGVR}
 
                 <div class="dato">
-                    <small>Precio</small>
+                    <small>Importe / precio</small>
                     <div>
                         ${escaparHTML(venta.precio)}
                         ${escaparHTML(venta.moneda)}
@@ -1158,11 +1313,24 @@ function crearVentaHTML(venta) {
                 </div>
 
                 <div class="dato">
-                    <small>Fecha</small>
+                    <small>Fecha de registro</small>
                     <div>${escaparHTML(fecha)}</div>
                 </div>
 
             </div>
+
+            ${
+                esSolicitudGVR
+                    ? `
+                        <div class="aviso-solo-lectura">
+                            Registro informativo. La aprobación o el rechazo
+                            de esta solicitud se realizan exclusivamente desde
+                            la página de confirmaciones GVR.
+                            Este panel no modifica saldos.
+                        </div>
+                    `
+                    : ""
+            }
 
         </article>
     `;
@@ -1209,7 +1377,6 @@ async function iniciar() {
         return;
     }
 
-    // Las ventas se cargan como antes.
     await cargarVentas();
 
     const boton =
@@ -1217,9 +1384,6 @@ async function iniciar() {
 
     boton.hidden = false;
 
-    // Si el permiso ya fue concedido, registrar el dispositivo.
-    // Si aún no hay permiso, se espera a que el administrador
-    // pulse el botón.
     if (
         "Notification" in window &&
         Notification.permission === "granted"
@@ -1227,7 +1391,8 @@ async function iniciar() {
         await configurarNotificacionesPush(false);
     } else {
         mostrarEstadoPush(
-            "Activa las notificaciones para recibir avisos de solicitudes GVR. Esto no acredita GVR ni modifica las ventas.",
+            "Activa las notificaciones para recibir avisos de solicitudes GVR. " +
+            "La activación no acredita GVR ni modifica las ventas.",
             "aviso"
         );
     }
@@ -1238,4 +1403,4 @@ iniciar();
 </script>
 
 </body>
-</html>
+    </html>
