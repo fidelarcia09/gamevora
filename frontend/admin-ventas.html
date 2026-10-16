@@ -549,7 +549,6 @@ async function guardarSuscripcionPush(suscripcion) {
 
         async function configurarNotificacionesPush(solicitarPermiso = false) {
     const boton = document.getElementById("botonActivarPush");
-
     let temporizador;
 
     try {
@@ -557,40 +556,77 @@ async function guardarSuscripcionPush(suscripcion) {
         boton.textContent = "Configurando...";
 
         mostrarEstadoPush(
-            "Paso 1/4: comprobando el navegador...",
+            "Comprobando los permisos de notificaciones...",
             "aviso"
         );
 
         if (!window.isSecureContext) {
-            throw new Error("Abre la página publicada mediante HTTPS.");
-        }
-
-        if (!("serviceWorker" in navigator)) {
-            throw new Error("Este navegador no admite Service Worker.");
-        }
-
-        if (!("PushManager" in window)) {
-            throw new Error("Este navegador no admite notificaciones Push.");
+            throw new Error(
+                "La página debe abrirse mediante HTTPS."
+            );
         }
 
         if (!("Notification" in window)) {
-            throw new Error("Este navegador no admite la API de notificaciones.");
+            throw new Error(
+                "Este navegador no admite la API de notificaciones."
+            );
+        }
+
+        if (!("serviceWorker" in navigator)) {
+            throw new Error(
+                "Este navegador no admite Service Worker."
+            );
+        }
+
+        if (!("PushManager" in window)) {
+            throw new Error(
+                "Este navegador no admite notificaciones Push."
+            );
+        }
+
+        // Comprobar el permiso real del navegador.
+        let permiso = Notification.permission;
+
+        console.log(
+            "Permiso actual de notificaciones:",
+            permiso
+        );
+
+        if (permiso === "denied") {
+            throw new Error(
+                "El navegador está devolviendo el permiso DENEGADO para esta página. " +
+                "Aunque las notificaciones parezcan activas, hay que comprobar el permiso " +
+                "de este sitio en el navegador y los ajustes de notificaciones de Android."
+            );
+        }
+
+        if (permiso === "default" && solicitarPermiso) {
+            permiso = await Notification.requestPermission();
+        }
+
+        if (permiso !== "granted") {
+            throw new Error(
+                "Todavía no se ha concedido el permiso de notificaciones. " +
+                "Pulsa el botón y acepta la solicitud del navegador."
+            );
         }
 
         mostrarEstadoPush(
-            "Paso 2/4: registrando el Service Worker...",
+            "Registrando el Service Worker...",
             "aviso"
         );
 
         const registro = await Promise.race([
-            navigator.serviceWorker.register("service-worker.js"),
+            navigator.serviceWorker.register(
+                "service-worker.js"
+            ),
             new Promise((_, reject) => {
-                temporizador = setTimeout(
-                    () => reject(new Error(
-                        "El Service Worker tardó demasiado. Comprueba que frontend/service-worker.js exista y esté publicado."
-                    )),
-                    12000
-                );
+                temporizador = setTimeout(() => {
+                    reject(new Error(
+                        "No se pudo registrar el Service Worker en 12 segundos. " +
+                        "Comprueba que frontend/service-worker.js exista y esté publicado."
+                    ));
+                }, 12000);
             })
         ]);
 
@@ -598,25 +634,12 @@ async function guardarSuscripcionPush(suscripcion) {
         temporizador = null;
 
         mostrarEstadoPush(
-            "Paso 3/4: preparando las notificaciones...",
+            "Comprobando la suscripción Push...",
             "aviso"
         );
 
-        let permiso = Notification.permission;
-
-        if (solicitarPermiso && permiso === "default") {
-            permiso = await Notification.requestPermission();
-        }
-
-        if (permiso !== "granted") {
-            throw new Error(
-                permiso === "denied"
-                    ? "Las notificaciones están bloqueadas. Permite las notificaciones para este sitio desde la configuración del navegador."
-                    : "Debes aceptar el permiso de notificaciones."
-            );
-        }
-
-        let suscripcion = await registro.pushManager.getSubscription();
+        let suscripcion =
+            await registro.pushManager.getSubscription();
 
         if (!suscripcion) {
             suscripcion = await registro.pushManager.subscribe({
@@ -627,19 +650,19 @@ async function guardarSuscripcionPush(suscripcion) {
         }
 
         mostrarEstadoPush(
-            "Paso 4/4: guardando el dispositivo en Supabase...",
+            "Guardando la suscripción en Supabase...",
             "aviso"
         );
 
         await Promise.race([
             guardarSuscripcionPush(suscripcion),
             new Promise((_, reject) => {
-                temporizador = setTimeout(
-                    () => reject(new Error(
-                        "Supabase tardó demasiado en guardar la suscripción. Comprueba la conexión y los permisos de la tabla admin_push_subscriptions."
-                    )),
-                    12000
-                );
+                temporizador = setTimeout(() => {
+                    reject(new Error(
+                        "Supabase tardó demasiado en guardar la suscripción. " +
+                        "Comprueba la sesión del administrador y los permisos de la tabla."
+                    ));
+                }, 12000);
             })
         ]);
 
@@ -647,7 +670,8 @@ async function guardarSuscripcionPush(suscripcion) {
         temporizador = null;
 
         mostrarEstadoPush(
-            "Dispositivo registrado correctamente. Ahora debemos comprobar el envío real de las notificaciones desde el servidor.",
+            "Suscripción registrada correctamente. " +
+            "Ahora falta comprobar que el servidor pueda enviar notificaciones reales.",
             "correcto"
         );
 
@@ -655,7 +679,10 @@ async function guardarSuscripcionPush(suscripcion) {
         boton.hidden = true;
 
     } catch (error) {
-        console.error("Error configurando Push:", error);
+        console.error(
+            "Error configurando notificaciones:",
+            error
+        );
 
         mostrarEstadoPush(
             "No se pudieron activar las notificaciones:\n\n" +
@@ -673,7 +700,7 @@ async function guardarSuscripcionPush(suscripcion) {
 
         boton.disabled = false;
     }
-    }
+        }
 
 // ========================================
 // COMPROBAR ADMINISTRADOR
