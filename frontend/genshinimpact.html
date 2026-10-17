@@ -16,28 +16,32 @@
             font-family: Arial, sans-serif;
         }
 
+        :root { color-scheme: dark; }
+
         body {
             background: #050b18;
-            color: white;
+            color: #fff;
             min-height: 100vh;
-            padding: 20px;
+            padding: 12px;
         }
 
         .contenedor {
-            max-width: 650px;
-            margin: auto;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 10px;
+            margin-bottom: 12px;
+            min-height: 34px;
         }
 
         .logo {
-            font-size: 21px;
+            font-size: 18px;
             font-weight: 900;
         }
 
@@ -132,111 +136,187 @@
             border-color: #843d4b;
         }
 
+        .selector-categorias {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 6px;
+            margin: 13px 0;
+        }
+
+        .pestana-categoria {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            min-height: 36px;
+            padding: 7px 4px;
+            background: #07152b;
+            color: #8fa5bd;
+            border: 1px solid #204568;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            line-height: 1.25;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .pestana-categoria.activa {
+            color: #fff;
+            background: #0b3157;
+            border-color: #00baff;
+            box-shadow: inset 0 -2px 0 #00baff;
+        }
+
+        .pestana-categoria:focus-visible {
+            outline: 2px solid #45c8ff;
+            outline-offset: 2px;
+        }
+
         .catalogo {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-            margin-top: 12px;
+            gap: 8px;
+            margin-top: 8px;
         }
 
         .producto {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: 12px;
+            gap: 8px;
             min-width: 0;
-            min-height: 125px;
-            padding: 15px 12px;
+            min-height: 83px;
+            padding: 10px;
             background: #061226;
             color: white;
             border: 1px solid #164b75;
-            border-radius: 13px;
+            border-radius: 7px;
             text-align: left;
             cursor: pointer;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .producto:hover {
-            border-color: #168cff;
-        }
+        .producto:hover:not(:disabled) { border-color: #168cff; }
+        .producto:disabled { cursor: not-allowed; opacity: 0.65; }
 
         .producto.seleccionado {
+            background: #09203b;
             border-color: #00baff;
-            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+            box-shadow: inset 0 -2px 0 #00baff;
         }
 
         .producto-nombre {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
-            line-height: 1.45;
+            line-height: 1.4;
             overflow-wrap: anywhere;
+        }
+
+        .producto-precio {
+            color: #fff;
+            font-size: 13px;
+            font-weight: bold;
         }
 
         .producto-estado {
             color: #45c8ff;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: bold;
+            line-height: 1.4;
         }
 
-        .separador-ofertas {
-            margin-top: 22px;
-            padding-top: 18px;
-            border-top: 1px solid #164b8f;
+        .producto-no-disponible .producto-estado { color: #ffcf8a; }
+        .vista-oculta { display: none !important; }
+
+        .producto-oferta { text-align: center; align-items: stretch; }
+        .producto-oferta .producto-nombre,
+        .producto-oferta .producto-precio,
+        .producto-oferta .producto-estado { text-align: center; }
+
+        .oferta-icono {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            font-size: 32px;
+            line-height: 1;
         }
 
         .boton {
             width: 100%;
-            padding: 14px;
+            min-height: 42px;
+            padding: 11px;
             border: none;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 6px;
+            font-size: 13px;
             font-weight: bold;
         }
 
         .continuar {
-            margin-top: 18px;
-            background: linear-gradient(90deg, #087cff, #00baff);
+            margin-top: 13px;
+            background: linear-gradient(90deg, #087cff, #00aaff);
             color: white;
-            cursor: not-allowed;
-            opacity: 0.55;
-        }
-
-        .boton-ofertas {
-            background: #07152b;
-            color: #28a9ff;
-            border: 1px solid #168cff;
             cursor: pointer;
         }
 
-        .boton-ofertas:hover {
-            background: #0a2345;
-            border-color: #38a8ff;
+        .continuar:disabled { cursor: not-allowed; opacity: 0.5; }
+
+        body.modal-abierto { overflow: hidden; }
+
+        .modal-fondo {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            background: rgba(1, 6, 17, 0.85);
+            backdrop-filter: blur(5px);
         }
+
+        .modal-fondo.visible { display: flex; }
+
+        .modal {
+            width: 100%;
+            max-width: 360px;
+            padding: 19px 15px;
+            background: #091a35;
+            border: 1px solid #168cff;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 140, 255, 0.18);
+        }
+
+        .modal h2 { margin-bottom: 7px; text-align: center; font-size: 19px; }
+        .modal-descripcion { margin-bottom: 13px; color: #8fa5bd; text-align: center; font-size: 11px; line-height: 1.5; }
+        .modal-detalles { padding: 10px; margin-bottom: 13px; background: #061226; border: 1px solid #204c78; border-radius: 7px; }
+        .modal-fila { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 7px 0; font-size: 12px; line-height: 1.4; }
+        .modal-fila + .modal-fila { border-top: 1px solid rgba(32, 76, 120, 0.55); }
+        .modal-fila span:first-child { color: #8fa5bd; flex-shrink: 0; }
+        .modal-fila strong { text-align: right; overflow-wrap: anywhere; }
+        .modal-total { color: #45c8ff; font-size: 15px; }
+        .modal-botones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .modal-boton { min-height: 39px; padding: 9px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .modal-cancelar { background: #07152b; color: #c1d0e0; border: 1px solid #204c78; }
+        .modal-aceptar { background: linear-gradient(90deg, #087cff, #00baff); color: white; border: 0; }
+        .modal-boton:disabled { opacity: 0.55; cursor: wait; }
 
         .nota {
-            margin-top: 20px;
+            margin-top: 13px;
             text-align: center;
             color: #8299b4;
-            font-size: 11px;
-            line-height: 1.6;
+            font-size: 10px;
+            line-height: 1.5;
         }
 
-        @media (max-width: 380px) {
-            body {
-                padding: 12px;
-            }
-
-            .tarjeta {
-                padding: 22px 14px;
-            }
-
-            .catalogo {
-                grid-template-columns: 1fr;
-            }
-
-            .logo {
-                font-size: 17px;
-            }
+        @media (max-width: 360px) {
+            body { padding: 8px; }
+            .tarjeta { padding: 13px 10px; }
+            .logo { font-size: 15px; }
+            .pestana-categoria { font-size: 10px; padding: 6px 2px; }
+            .catalogo { gap: 6px; }
+            .producto { padding: 8px; }
         }
     </style>
 </head>
@@ -254,34 +334,14 @@
     </header>
 
     <main class="tarjeta">
-
-        <div class="icono">⚔️</div>
-
         <h1>Genshin Impact</h1>
+        <p class="descripcion">Selecciona Genesis Crystals o una oferta especial.</p>
 
-        <p class="descripcion">
-            Selecciona tu paquete de Genesis Crystals.
-        </p>
+        <label class="etiqueta" for="idJugador">UID del jugador</label>
+        <input type="text" id="idJugador" placeholder="Introduce tu UID de Genshin Impact" autocomplete="off" maxlength="100">
+        <p class="ayuda">Comprueba tu UID antes de confirmar la compra.</p>
 
-        <label class="etiqueta" for="idJugador">
-            ID del jugador
-        </label>
-
-        <input
-            type="text"
-            id="idJugador"
-            placeholder="Introduce tu ID de jugador"
-            autocomplete="off"
-        >
-
-        <p class="ayuda">
-            Introduce tu UID de Genshin Impact.
-        </p>
-
-        <label class="etiqueta" for="zonaJugador">
-            Servidor o zona
-        </label>
-
+        <label class="etiqueta" for="zonaJugador">Servidor o zona</label>
         <select id="zonaJugador">
             <option value="">Selecciona tu servidor</option>
             <option value="America">América</option>
@@ -290,43 +350,50 @@
             <option value="TW_HK_MO">TW / HK / MO</option>
         </select>
 
-        <label class="etiqueta">
-            Selecciona una cantidad de Genesis Crystals
-        </label>
+        <nav class="selector-categorias" aria-label="Categorías de Genshin Impact">
+            <button type="button" class="pestana-categoria activa" id="pestanaDiamantes" aria-selected="true">Genesis Crystals</button>
+            <button type="button" class="pestana-categoria" id="pestanaOfertas" aria-selected="false">Ofertas extra</button>
+        </nav>
 
-        <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Conectando con el catálogo de Next Level...
-        </div>
+        <div id="estadoCatalogo" class="estado" aria-live="polite">Conectando con el catálogo...</div>
 
-        <div id="catalogo" class="catalogo"></div>
+        <section id="vistaDiamantes">
+            <label class="etiqueta">Selecciona un paquete de Genesis Crystals</label>
+            <div id="catalogo" class="catalogo"></div>
+        </section>
 
-        <button
-            id="botonContinuar"
-            class="boton continuar"
-            type="button"
-            disabled
-        >
-            Compras temporalmente desactivadas
-        </button>
+        <section id="vistaOfertas" class="vista-oculta">
+            <label class="etiqueta">Selecciona una oferta especial</label>
+            <div id="catalogoOfertas" class="catalogo"></div>
+        </section>
 
-        <div class="separador-ofertas">
-            <button
-                class="boton boton-ofertas"
-                type="button"
-                onclick="abrirOfertas()"
-            >
-                🎁 Ofertas especiales
-            </button>
-        </div>
+        <button id="botonContinuar" class="boton continuar" type="button" disabled>RECARGAR</button>
 
         <p class="nota">
-            Los paquetes se consultan desde Next Level.
-            Las compras se habilitarán cuando se configuren
-            los precios y se complete la integración del sistema de pedidos.
+            Los precios se muestran en GVR. La compra se registra en el sistema de pedidos.
+            No repitas una compra mientras exista un pedido pendiente.
         </p>
-
     </main>
 
+</div>
+
+<div id="modalFondo" class="modal-fondo" role="dialog" aria-modal="true" aria-labelledby="modalTitulo" aria-hidden="true">
+    <div class="modal">
+        <h2 id="modalTitulo">Confirmar compra</h2>
+        <p class="modal-descripcion">Comprueba los datos antes de continuar con tu pedido.</p>
+        <div class="modal-detalles">
+            <div class="modal-fila"><span>Juego</span><strong>Genshin Impact</strong></div>
+            <div class="modal-fila"><span>Producto</span><strong id="modalPaquete">—</strong></div>
+            <div class="modal-fila"><span>UID del jugador</span><strong id="modalJugador">—</strong></div>
+            <div class="modal-fila"><span>Servidor</span><strong id="modalZona">—</strong></div>
+            <div class="modal-fila"><span>Total</span><strong id="modalTotal" class="modal-total">—</strong></div>
+        </div>
+        <p class="modal-descripcion">La compra descontará GVR de tu saldo. Si existe un pedido pendiente, primero se verificará su estado.</p>
+        <div class="modal-botones">
+            <button id="modalCancelar" class="modal-boton modal-cancelar" type="button">CANCELAR</button>
+            <button id="modalAceptar" class="modal-boton modal-aceptar" type="button">ACEPTAR</button>
+        </div>
+    </div>
 </div>
 
 <script type="module">
@@ -342,11 +409,15 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
 });
 
 const catalogo = document.getElementById("catalogo");
+const catalogoOfertas = document.getElementById("catalogoOfertas");
+const vistaDiamantes = document.getElementById("vistaDiamantes");
+const vistaOfertas = document.getElementById("vistaOfertas");
+const pestanaDiamantes = document.getElementById("pestanaDiamantes");
+const pestanaOfertas = document.getElementById("pestanaOfertas");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
 const idJugador = document.getElementById("idJugador");
 const zonaJugador = document.getElementById("zonaJugador");
 const botonContinuar = document.getElementById("botonContinuar");
-const botonOfertas = document.getElementById("botonOfertas");
 const modalFondo = document.getElementById("modalFondo");
 const modalPaquete = document.getElementById("modalPaquete");
 const modalJugador = document.getElementById("modalJugador");
@@ -355,14 +426,24 @@ const modalTotal = document.getElementById("modalTotal");
 const modalCancelar = document.getElementById("modalCancelar");
 const modalAceptar = document.getElementById("modalAceptar");
 
-const PRODUCTOS_PERMITIDOS = [
+const PRODUCTOS_DIAMANTES = [
   "fz-genshin_impact_global-60_genesis_crystals",
   "fz-genshin_impact_global-300_30_genesis_crystals",
-  "fz-genshin_impact_global-blessing_of_the_welkin_moon",
   "fz-genshin_impact_global-980_110_genesis_crystals",
   "fz-genshin_impact_global-1980_260_genesis_crystals",
   "fz-genshin_impact_global-3280_600_genesis_crystals",
   "fz-genshin_impact_global-6480_1600_genesis_crystals"
+];
+const PRODUCTOS_OFERTAS = [
+  {
+    id: "fz-genshin_impact_global-blessing_of_the_welkin_moon",
+    nombre: "Blessing of the Welkin Moon",
+    icono: "🌙"
+  }
+];
+const PRODUCTOS_PERMITIDOS = [
+  ...PRODUCTOS_DIAMANTES,
+  ...PRODUCTOS_OFERTAS.map(oferta => oferta.id)
 ];
 const SERVIDORES_PERMITIDOS = ["America", "Europe", "Asia", "TW_HK_MO"];
 
@@ -375,6 +456,7 @@ let accionPendiente = "crear";
 let datosPendientes = null;
 let formularioBloqueado = false;
 let resolverModal = null;
+let vistaActual = "diamantes";
 
 function mostrarEstado(mensaje, tipo = "") {
   estadoCatalogo.textContent = mensaje;
@@ -418,11 +500,36 @@ function actualizarBoton() {
   if (procesandoPedido) { botonContinuar.disabled = true; botonContinuar.textContent = "Procesando pedido..."; return; }
   if (formularioBloqueado) { botonContinuar.disabled = true; botonContinuar.textContent = "Pedido pendiente de revisión"; return; }
   if (pedidoPendienteId) { botonContinuar.disabled = false; botonContinuar.textContent = accionPendiente === "enviar" ? "RECUPERAR PEDIDO" : "CONSULTAR PEDIDO"; return; }
-  if (!productosDisponibles.length) { botonContinuar.disabled = true; botonContinuar.textContent = "Paquetes no disponibles"; return; }
-  if (!productoSeleccionado) { botonContinuar.disabled = true; botonContinuar.textContent = "Selecciona un paquete"; return; }
+  if (!productoSeleccionado) {
+    botonContinuar.disabled = true;
+    botonContinuar.textContent = vistaActual === "ofertas" ? "SELECCIONA UNA OFERTA" : "SELECCIONA UN PAQUETE";
+    return;
+  }
   if (!idJugador.value.trim() || !zonaJugador.value) { botonContinuar.disabled = true; botonContinuar.textContent = "Completa los datos del jugador"; return; }
-  botonContinuar.disabled = false; botonContinuar.textContent = "RECARGAR";
+  botonContinuar.disabled = false;
+  botonContinuar.textContent = vistaActual === "ofertas" ? "COMPRAR OFERTA" : "RECARGAR";
 }
+function cambiarVista(vista) {
+  vistaActual = vista === "ofertas" ? "ofertas" : "diamantes";
+  vistaDiamantes.classList.toggle("vista-oculta", vistaActual !== "diamantes");
+  vistaOfertas.classList.toggle("vista-oculta", vistaActual !== "ofertas");
+  pestanaDiamantes.classList.toggle("activa", vistaActual === "diamantes");
+  pestanaOfertas.classList.toggle("activa", vistaActual === "ofertas");
+  pestanaDiamantes.setAttribute("aria-selected", String(vistaActual === "diamantes"));
+  pestanaOfertas.setAttribute("aria-selected", String(vistaActual === "ofertas"));
+  productoSeleccionado = null;
+  document.querySelectorAll("#catalogo .producto, #catalogoOfertas .producto").forEach(el => {
+    el.classList.remove("seleccionado");
+    el.setAttribute("aria-pressed", "false");
+    const estado = el.querySelector(".producto-estado");
+    if (estado) estado.textContent = "Disponible";
+  });
+  mostrarEstado(vistaActual === "ofertas" ? "Selecciona una oferta especial." : "Selecciona un paquete de Genesis Crystals.");
+  actualizarBoton();
+}
+pestanaDiamantes.addEventListener("click", () => cambiarVista("diamantes"));
+pestanaOfertas.addEventListener("click", () => cambiarVista("ofertas"));
+
 function cerrarModal(ok) {
   modalFondo.classList.remove("visible"); modalFondo.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-abierto");
@@ -439,15 +546,63 @@ modalCancelar.addEventListener("click", () => cerrarModal(false));
 modalAceptar.addEventListener("click", () => cerrarModal(true));
 modalFondo.addEventListener("click", e => { if (e.target === modalFondo) cerrarModal(false); });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && modalFondo.classList.contains("visible")) cerrarModal(false); });
-botonOfertas.addEventListener("click", () => { window.location.href = "ofertas-genshin.html"; });
 
 function mostrarError(m) {
   mostrarEstado(m, "error");
   window.scrollTo({ top: estadoCatalogo.getBoundingClientRect().top + window.scrollY - 20, behavior: "smooth" });
 }
+function seleccionarTarjeta(producto, boton, estadoElemento, esOferta = false) {
+  if (procesandoPedido || pedidoPendienteId || formularioBloqueado) return;
+  document.querySelectorAll("#catalogo .producto, #catalogoOfertas .producto").forEach(el => {
+    el.classList.remove("seleccionado");
+    el.setAttribute("aria-pressed", "false");
+    const estado = el.querySelector(".producto-estado");
+    if (estado) estado.textContent = "Disponible";
+  });
+  boton.classList.add("seleccionado");
+  boton.setAttribute("aria-pressed", "true");
+  estadoElemento.textContent = "Seleccionado";
+  productoSeleccionado = producto;
+  mostrarEstado((esOferta ? "Oferta seleccionada: " : "Paquete seleccionado: ") + nombreProducto(producto) + " · " + gvr(producto.price_gvr), "correcto");
+  actualizarBoton();
+}
+function renderizarDiamantes() {
+  catalogo.replaceChildren();
+  productosDisponibles.filter(p => PRODUCTOS_DIAMANTES.includes(String(p.provider_product_id || ""))).forEach(p => {
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "producto"; btn.setAttribute("aria-pressed", "false");
+    const n = document.createElement("div"); n.className = "producto-nombre"; n.textContent = nombreProducto(p);
+    const price = document.createElement("div"); price.className = "producto-precio"; price.textContent = gvr(p.price_gvr);
+    const state = document.createElement("div"); state.className = "producto-estado"; state.textContent = "Disponible";
+    btn.append(n, price, state);
+    btn.addEventListener("click", () => seleccionarTarjeta(p, btn, state, false));
+    catalogo.appendChild(btn);
+  });
+  if (!catalogo.children.length) {
+    const aviso = document.createElement("div"); aviso.className = "estado"; aviso.textContent = "No hay paquetes de Genesis Crystals disponibles."; catalogo.appendChild(aviso);
+  }
+}
+function renderizarOfertas() {
+  catalogoOfertas.replaceChildren();
+  PRODUCTOS_OFERTAS.forEach(oferta => {
+    const p = productosDisponibles.find(producto => String(producto.provider_product_id || "") === oferta.id);
+    if (!p) {
+      const aviso = document.createElement("div"); aviso.className = "estado"; aviso.textContent = oferta.nombre + " no está disponible en este momento."; catalogoOfertas.appendChild(aviso); return;
+    }
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "producto producto-oferta"; btn.setAttribute("aria-pressed", "false");
+    const icon = document.createElement("div"); icon.className = "oferta-icono"; icon.textContent = oferta.icono;
+    const n = document.createElement("div"); n.className = "producto-nombre"; n.textContent = oferta.nombre;
+    const price = document.createElement("div"); price.className = "producto-precio"; price.textContent = gvr(p.price_gvr);
+    const state = document.createElement("div"); state.className = "producto-estado"; state.textContent = "Disponible";
+    btn.append(icon, n, price, state);
+    btn.addEventListener("click", () => seleccionarTarjeta({ ...p, product_name: oferta.nombre }, btn, state, true));
+    catalogoOfertas.appendChild(btn);
+  });
+}
 async function cargarCatalogo() {
-  productoSeleccionado = null; productosDisponibles = []; catalogo.replaceChildren();
-  mostrarEstado("Cargando paquetes de Genshin Impact...");
+  productoSeleccionado = null; productosDisponibles = []; catalogo.replaceChildren(); catalogoOfertas.replaceChildren();
+  mostrarEstado("Cargando catálogo de Genshin Impact...");
   try {
     const { data, error } = await supabase.from("game_products")
       .select("id,game,product_name,price_gvr,active,provider,provider_product_id")
@@ -460,33 +615,27 @@ async function cargarCatalogo() {
       if (PRODUCTOS_PERMITIDOS.includes(id) && p.id && nombreProducto(p) && precio) mapa.set(id, { ...p, price_gvr: precio });
     });
     productosDisponibles = PRODUCTOS_PERMITIDOS.filter(id => mapa.has(id)).map(id => mapa.get(id));
-    if (!productosDisponibles.length) { mostrarEstado("No hay paquetes disponibles en este momento.", "error"); actualizarBoton(); return; }
-    productosDisponibles.forEach(p => {
-      const btn = document.createElement("button"); btn.type = "button"; btn.className = "producto"; btn.setAttribute("aria-pressed", "false");
-      const n = document.createElement("div"); n.className = "producto-nombre"; n.textContent = nombreProducto(p);
-      const price = document.createElement("div"); price.className = "producto-precio"; price.textContent = gvr(p.price_gvr);
-      const state = document.createElement("div"); state.className = "producto-estado"; state.textContent = "Seleccionar paquete";
-      btn.append(n, price, state);
-      btn.addEventListener("click", () => {
-        if (procesandoPedido || pedidoPendienteId || formularioBloqueado) return;
-        catalogo.querySelectorAll(".producto").forEach(el => { el.classList.remove("seleccionado"); el.setAttribute("aria-pressed", "false"); const s = el.querySelector(".producto-estado"); if (s) s.textContent = "Seleccionar paquete"; });
-        btn.classList.add("seleccionado"); btn.setAttribute("aria-pressed", "true"); state.textContent = "✓ Seleccionado";
-        productoSeleccionado = p; mostrarEstado(nombreProducto(p) + " seleccionado · " + gvr(p.price_gvr), "correcto"); actualizarBoton();
-      });
-      catalogo.appendChild(btn);
-    });
-    mostrarEstado(productosDisponibles.length + " paquetes disponibles."); actualizarBoton();
+    renderizarDiamantes();
+    renderizarOfertas();
+    const totalDiamantes = productosDisponibles.filter(p => PRODUCTOS_DIAMANTES.includes(String(p.provider_product_id || ""))).length;
+    const totalOfertas = productosDisponibles.filter(p => PRODUCTOS_OFERTAS.some(o => o.id === String(p.provider_product_id || ""))).length;
+    mostrarEstado("Genesis Crystals: " + totalDiamantes + " · Ofertas: " + totalOfertas);
+    actualizarBoton();
   } catch (e) {
-    console.error("Error cargando catálogo Genshin:", e); catalogo.replaceChildren();
-    mostrarEstado(e?.message || "No se pudieron cargar los paquetes. Recarga la página.", "error"); actualizarBoton();
+    console.error("Error cargando catálogo Genshin:", e);
+    catalogo.replaceChildren(); catalogoOfertas.replaceChildren();
+    mostrarEstado(e?.message || "No se pudo cargar el catálogo. Recarga la página.", "error");
+    actualizarBoton();
   }
 }
+
 function validarFormulario() {
   const jugador = idJugador.value.trim(), zona = zonaJugador.value;
   if (!jugador) { mostrarError("Introduce tu UID de Genshin Impact."); idJugador.focus(); return false; }
   if (jugador.length > 100) { mostrarError("El UID del jugador no es válido."); idJugador.focus(); return false; }
   if (!SERVIDORES_PERMITIDOS.includes(zona)) { mostrarError("Selecciona un servidor válido."); zonaJugador.focus(); return false; }
-  if (!productoSeleccionado || !productosDisponibles.some(p => p.id === productoSeleccionado.id)) { mostrarError("Selecciona un paquete disponible."); return false; }
+  const idsPermitidosVista = vistaActual === "ofertas" ? PRODUCTOS_OFERTAS.map(o => o.id) : PRODUCTOS_DIAMANTES;
+  if (!productoSeleccionado || !productosDisponibles.some(p => p.id === productoSeleccionado.id) || !idsPermitidosVista.includes(String(productoSeleccionado.provider_product_id || ""))) { mostrarError(vistaActual === "ofertas" ? "Selecciona una oferta disponible." : "Selecciona un paquete disponible."); return false; }
   return true;
 }
 async function llamarFuncion(url, token, body) {
@@ -524,7 +673,9 @@ async function consultarPedido(token) {
 }
 function bloquearFormulario() {
   formularioBloqueado = true; idJugador.disabled = true; zonaJugador.disabled = true;
-  catalogo.querySelectorAll("button").forEach(b => b.disabled = true); botonContinuar.disabled = true;
+  catalogo.querySelectorAll("button").forEach(b => b.disabled = true);
+  catalogoOfertas.querySelectorAll("button").forEach(b => b.disabled = true);
+  botonContinuar.disabled = true;
 }
 async function enviarPedido(token) {
   if (!pedidoPendienteId) throw new Error("No hay un pedido guardado para enviar.");
@@ -546,9 +697,11 @@ async function crearCompra(token, jugador, zona) {
     .select("id,game,product_name,price_gvr,active,provider,provider_product_id")
     .eq("id", seleccionado.id).eq("game", "Genshin Impact").eq("provider", "nextlevel").eq("active", true).maybeSingle();
   if (error) throw new Error("No se pudo verificar el paquete antes de comprar.");
-  if (!actual || !PRODUCTOS_PERMITIDOS.includes(String(actual.provider_product_id || "")) || !precioProducto(actual)) throw new Error("El paquete ya no está disponible o su precio no es válido. Actualiza el catálogo.");
+  const idProductoActual = String(actual?.provider_product_id || "");
+  if (!actual || !PRODUCTOS_PERMITIDOS.includes(idProductoActual) || !precioProducto(actual)) throw new Error("El producto ya no está disponible o su precio no es válido. Actualiza el catálogo.");
   if (String(actual.provider_product_id) !== String(seleccionado.provider_product_id)) throw new Error("El paquete cambió. Actualiza el catálogo antes de comprar.");
-  if (!await abrirModal(actual, jugador, zona, Number(actual.price_gvr))) { mostrarEstado("Recarga cancelada. No se creó ningún pedido."); return; }
+  const productoModal = { ...actual, product_name: nombreProducto(seleccionado) || nombreProducto(actual) };
+  if (!await abrirModal(productoModal, jugador, zona, Number(actual.price_gvr))) { mostrarEstado("Compra cancelada. No se creó ningún pedido."); return; }
   mostrarEstado("Registrando el pedido y verificando tu saldo GVR...");
   const { data: orderId, error: purchaseError } = await supabase.rpc("purchase_game_product", {
     p_product_id: actual.id, p_player_id: jugador, p_zone_id: zona
@@ -599,6 +752,7 @@ iniciar();
 
 </body>
         </html>
+
 
 
 
