@@ -32,7 +32,7 @@ input:focus{border-color:#159dff;box-shadow:0 0 7px rgba(0,157,255,.15)}
 button.producto{cursor:pointer}.producto:hover:not(:disabled){border-color:#168cff}.producto:disabled{cursor:not-allowed;opacity:.65}.producto.seleccionado{background:#09203b;border-color:#00baff;box-shadow:inset 0 -2px 0 #00baff}
 .producto-nombre{font-size:12px;font-weight:bold;line-height:1.4;overflow-wrap:anywhere}.producto-precio{color:#fff;font-size:13px;font-weight:bold}.producto-estado{color:#45c8ff;font-size:10px;font-weight:bold;line-height:1.4}.producto-no-disponible .producto-estado{color:#ffcf8a}
 .boton{width:100%;min-height:42px;padding:11px;border:0;border-radius:6px;font-size:13px;font-weight:bold}.continuar{margin-top:13px;background:linear-gradient(90deg,#087cff,#00aaff);color:white;cursor:pointer}.continuar:disabled{cursor:not-allowed;opacity:.5}
-.vista-oculta{display:none!important}.nota{margin-top:13px;text-align:center;color:#8299b4;font-size:10px;line-height:1.5}
+.vista-oculta{display:none!important}.vista-oculta.activa{display:block!important}.pantalla-motor{display:none!important}.pantalla-motor.activa{display:block!important}.nota{margin-top:13px;text-align:center;color:#8299b4;font-size:10px;line-height:1.5}
 /* El motor compartido de ofertas usa estos elementos; se les aplica el mismo diseño compacto de Free Fire. */
 #listaOfertas{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
 #listaOfertas .boton-oferta{display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-width:0;min-height:83px;padding:10px!important;background:#061226!important;color:#fff!important;border:1px solid #164b75!important;border-radius:7px!important;text-align:left!important;box-shadow:none!important}
@@ -40,7 +40,7 @@ button.producto{cursor:pointer}.producto:hover:not(:disabled){border-color:#168c
 #listaOfertas .boton-oferta.seleccionada,#listaOfertas .boton-oferta.seleccionado{background:#09203b!important;border-color:#00baff!important;box-shadow:inset 0 -2px 0 #00baff!important}
 #listaOfertas .foto-oferta{display:none!important}
 #listaOfertas .nombre-oferta{font-size:12px!important;font-weight:bold!important;line-height:1.4!important;color:#fff!important;overflow-wrap:anywhere!important}
-#listaOfertas .boton-oferta div{background:transparent!important;color:#45c8ff!important;font-size:10px!important;line-height:1.4!important;padding:0!important}
+#listaOfertas .boton-oferta div{background:transparent!important;color:#45c8ff!important;font-size:10px!important;line-height:1.4!important;padding:0!important}#listaOfertas .boton-oferta .nombre-oferta{color:#fff!important;font-size:12px!important}#listaOfertas .boton-oferta .detalle-oferta{color:#45c8ff!important;font-size:10px!important}
 #listaOfertas .boton-oferta .precio-oferta{color:#fff!important;font-size:13px!important;font-weight:bold!important}
 #notaOfertas,#descripcionOfertas{color:#8299b4;font-size:11px;line-height:1.45;margin-top:8px}
 #precioSeleccionado{color:#45c8ff;font-size:12px;font-weight:bold;margin-top:8px}
@@ -78,7 +78,7 @@ button.producto{cursor:pointer}.producto:hover:not(:disabled){border-color:#168c
 </section>
 <section id="vistaOfertas" class="vista-oculta">
 <!-- Elementos que necesita el motor compartido frontend/ofertas.js -->
-<div id="pantallaOfertas">
+<div id="pantallaOfertas" class="pantalla-motor activa">
 <div id="descripcionOfertas">Selecciona una oferta especial de Arena Breakout.</div>
 <div id="estadoProductos" class="estado" aria-live="polite">Cargando ofertas...</div>
 <div id="listaOfertas" class="catalogo"></div>
@@ -88,7 +88,7 @@ button.producto{cursor:pointer}.producto:hover:not(:disabled){border-color:#168c
 <button id="continuarBtn" class="boton continuar" type="button" disabled>COMPRAR OFERTA</button>
 <div id="notaOfertas">Los precios se muestran en GVR.</div>
 </div>
-<div id="pantallaConfirmacion" class="vista-oculta">
+<div id="pantallaConfirmacion" class="pantalla-motor">
 <h2 style="font-size:16px;margin-bottom:8px">Confirmar oferta</h2>
 <div id="juegoConfirmacion">Arena Breakout</div>
 <div id="confirmarPrecio"></div>
@@ -96,7 +96,7 @@ button.producto{cursor:pointer}.producto:hover:not(:disabled){border-color:#168c
 <button id="confirmarBtn" type="button">CONFIRMAR COMPRA</button>
 <button id="botonCambiar" type="button">CAMBIAR OFERTA</button>
 </div>
-<div id="pantallaExito" class="vista-oculta">
+<div id="pantallaExito" class="pantalla-motor">
 <h2 id="tituloEstadoPedido" style="font-size:16px;margin-bottom:8px">Estado del pedido</h2>
 <div id="estadoPedido" class="estado" aria-live="polite"></div>
 <div id="mensajeEstadoPedido"></div>
@@ -184,12 +184,16 @@ async function cargarCatalogo(){productoSeleccionado=null;productosDisponibles=[
 async function crearCompra(token,playerId){if(!productoSeleccionado)throw new Error("Selecciona un paquete disponible.");const l=productoSeleccionado.local;const {data:actual,error}=await supabase.from("game_products").select("id,game,price_gvr,active,provider,provider_product_id").eq("id",l.id).eq("provider","nextlevel").eq("active",true).maybeSingle();if(error)throw new Error("No se pudo verificar el producto antes de comprar.");if(!actual||normalizarTexto(actual.game)!=="arenabreakout"||String(actual.provider_product_id||"").trim()!==productId(productoSeleccionado.proveedor)||!Number.isFinite(Number(actual.price_gvr))||Number(actual.price_gvr)<=0)throw new Error("El producto o el precio cambió. Actualiza el catálogo antes de comprar.");const yes=await abrirModal(productoSeleccionado.proveedor,playerId,Number(actual.price_gvr));if(!yes){mostrarEstado("Compra cancelada. No se creó ningún pedido.");return}mostrarEstado("Creando pedido. No cierres esta página...");const {data:id,error:rpcError}=await supabase.rpc("purchase_game_product",{p_product_id:actual.id,p_player_id:playerId});if(rpcError)throw new Error(rpcError.message||"No se pudo crear la compra.");if(typeof id!=="string"||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))throw new Error("No recibimos un ID de pedido válido. Revisa game_orders antes de volver a intentarlo.");pedidoPendienteId=id;accionPendiente="enviar";guardarPendiente();actualizarBoton();await enviarPedido(token)}
 botonContinuar.addEventListener("click",async()=>{if(procesando)return;procesando=true;actualizarBoton();try{const {data:{session},error:se}=await supabase.auth.getSession();if(se)throw new Error("No se pudo comprobar la sesión.");if(!session?.access_token)throw new Error("Debes iniciar sesión para continuar.");const {data:{user},error:ue}=await supabase.auth.getUser();if(ue||!user)throw new Error("Tu sesión no es válida. Inicia sesión nuevamente.");usuarioActualId=user.id;recuperarPendiente(user.id);await verificarPendiente(user.id);if(pedidoPendienteId){if(accionPendiente==="enviar")await enviarPedido(session.access_token);else await consultarPedido(session.access_token);return}if(vistaActual!=="bonds")throw new Error("Usa el botón de compra de la oferta seleccionada.");const player=campoJugador.value.trim();if(!player)throw new Error("Introduce tu ID de Arena Breakout.");if(player.length>50)throw new Error("El ID del jugador es demasiado largo.");await crearCompra(session.access_token,player)}catch(e){console.error(e);mostrarEstado(e.message||"No se pudo completar la operación.","error");alert(e.message||"No se pudo completar la operación.")}finally{procesando=false;actualizarBoton()}});
 campoJugador.addEventListener("input",actualizarBoton);
+/* Compatibilidad con el motor compartido: entrar a la confirmación no debe borrar el ID que el cliente acaba de escribir. */
+const botonContinuarOferta=document.getElementById("continuarBtn");
+if(botonContinuarOferta){botonContinuarOferta.addEventListener("click",()=>{const idEscrito=campoJugador.value;setTimeout(()=>{if(!campoJugador.value.trim()&&idEscrito.trim())campoJugador.value=idEscrito;},0);});}
 async function iniciar(){try{const {data:{session}}=await supabase.auth.getSession();if(session?.user?.id){usuarioActualId=session.user.id;recuperarPendiente(usuarioActualId);actualizarBoton()}}catch(e){console.error(e)}await cargarCatalogo();actualizarBoton()}
 iniciar();
 </script>
 <script type="module" src="ofertas.js"></script>
 </body>
 </html>
+
 
 
 
