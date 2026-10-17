@@ -6,397 +6,1860 @@
 <meta name="theme-color" content="#050b18">
 <meta name="description" content="Recarga Bonds y compra ofertas de Arena Breakout en Gamers Gold Top-Up.">
 <title>Arena Breakout | Gamers Gold Top-Up</title>
+
 <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
-        :root { color-scheme: dark; }
+:root {
+    color-scheme: dark;
+}
 
-        body {
-            background: #050b18;
-            color: #fff;
-            min-height: 100vh;
-            padding: 12px;
-        }
+body {
+    background: #050b18;
+    color: #fff;
+    min-height: 100vh;
+    padding: 12px;
+}
 
-        .contenedor { width: 100%; max-width: 520px; margin: 0 auto; }
+.contenedor {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+}
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-            min-height: 34px;
-        }
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    min-height: 34px;
+}
 
-        .logo { font-size: 18px; font-weight: 900; }
-        .rayo { color: #00b7ff; text-shadow: 0 0 10px #008cff; }
-        .volver { color: #45c8ff; text-decoration: none; font-size: 13px; font-weight: bold; white-space: nowrap; }
+.logo {
+    font-size: 18px;
+    font-weight: 900;
+}
 
-        .card {
-            background: #091a35;
-            border: 1px solid #164b75;
-            border-radius: 13px;
-            padding: 16px 13px;
-            box-shadow: 0 0 22px rgba(0, 140, 255, 0.08);
-        }
+.rayo {
+    color: #00b7ff;
+    text-shadow: 0 0 10px #008cff;
+}
 
-        h1 { font-size: 21px; margin-bottom: 5px; }
-        .descripcion { color: #8fa5bd; font-size: 12px; line-height: 1.5; margin-bottom: 14px; }
-        .etiqueta { display: block; margin: 12px 0 7px; color: #b8c9dc; font-size: 12px; font-weight: bold; }
+.volver {
+    color: #45c8ff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    white-space: nowrap;
+}
 
-        input {
-            width: 100%;
-            min-height: 42px;
-            padding: 10px 12px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
-            border-radius: 7px;
-            font-size: 14px;
-            outline: none;
-        }
+.card {
+    background: #091a35;
+    border: 1px solid #164b75;
+    border-radius: 13px;
+    padding: 16px 13px;
+    box-shadow: 0 0 22px rgba(0, 140, 255, 0.08);
+}
 
-        input:focus { border-color: #159dff; box-shadow: 0 0 7px rgba(0, 157, 255, 0.15); }
-        .ayuda { margin-top: 6px; color: #8299b4; font-size: 11px; line-height: 1.45; }
+h1 {
+    font-size: 21px;
+    margin-bottom: 5px;
+}
 
-        .estado {
-            padding: 9px 10px;
-            margin: 12px 0;
-            border: 1px solid #204c78;
-            border-radius: 7px;
-            background: #061226;
-            color: #a9c4df;
-            font-size: 11px;
-            line-height: 1.45;
-            overflow-wrap: anywhere;
-        }
+.descripcion {
+    color: #8fa5bd;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 14px;
+}
 
-        .estado.error { color: #ffaaaa; border-color: #843d4b; }
-        .estado.correcto { color: #8fffc0; border-color: #267b55; }
+.etiqueta {
+    display: block;
+    margin: 12px 0 7px;
+    color: #b8c9dc;
+    font-size: 12px;
+    font-weight: bold;
+}
 
-        .estado-validacion {
-            display: none;
-            padding: 9px 10px;
-            margin-top: 8px;
-            border: 1px solid #204c78;
-            border-radius: 7px;
-            background: #061226;
-            color: #a9c4df;
-            font-size: 11px;
-            line-height: 1.45;
-            overflow-wrap: anywhere;
-        }
+input {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    background: #061226;
+    color: white;
+    border: 1px solid #204c78;
+    border-radius: 7px;
+    font-size: 14px;
+    outline: none;
+}
 
-        .estado-validacion.visible { display: block; }
-        .estado-validacion.error { color: #ffaaaa; border-color: #843d4b; }
-        .estado-validacion.correcto { color: #8fffc0; border-color: #267b55; }
-        .estado-validacion.aviso { color: #ffcf8a; border-color: #8a672f; }
+input:focus {
+    border-color: #159dff;
+    box-shadow: 0 0 7px rgba(0, 157, 255, 0.15);
+}
 
-        /* PESTAÑAS RECTANGULARES: MISMO ESTILO QUE FREE FIRE */
-        .selector-categorias {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 6px;
-            margin: 13px 0;
-            padding: 0;
-            background: transparent;
-            border: none;
-            border-radius: 0;
-        }
+.ayuda {
+    margin-top: 6px;
+    color: #8299b4;
+    font-size: 11px;
+    line-height: 1.45;
+}
 
-        .pestana-categoria {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 0;
-            min-height: 36px;
-            padding: 7px 4px;
-            background: #07152b;
-            color: #8fa5bd;
-            border: 1px solid #204568;
-            border-radius: 5px;
-            font-size: 11px;
-            font-weight: bold;
-            line-height: 1.25;
-            text-align: center;
-            cursor: pointer;
-            transition: color 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
-        }
+.estado {
+    padding: 9px 10px;
+    margin: 12px 0;
+    border: 1px solid #204c78;
+    border-radius: 7px;
+    background: #061226;
+    color: #a9c4df;
+    font-size: 11px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
 
-        .pestana-categoria:hover { border-color: #168cff; color: #fff; }
-        .pestana-categoria.activa { color: #fff; background: #0b3157; border-color: #00baff; box-shadow: inset 0 -2px 0 #00baff; }
-        .pestana-categoria:focus-visible { outline: 2px solid #45c8ff; outline-offset: 2px; }
+.estado.error {
+    color: #ffaaaa;
+    border-color: #843d4b;
+}
 
-        /* CATÁLOGO DE BONDS */
-        .catalogo {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
-            margin-top: 8px;
-        }
+.estado.correcto {
+    color: #8fffc0;
+    border-color: #267b55;
+}
 
-        .producto {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 8px;
-            min-width: 0;
-            min-height: 83px;
-            padding: 10px;
-            background: #061226;
-            color: white;
-            border: 1px solid #164b75;
-            border-radius: 7px;
-            text-align: left;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
+.estado-validacion {
+    display: none;
+    padding: 9px 10px;
+    margin-top: 8px;
+    border: 1px solid #204c78;
+    border-radius: 7px;
+    background: #061226;
+    color: #a9c4df;
+    font-size: 11px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
 
-        button.producto { cursor: pointer; }
-        .producto:hover:not(:disabled) { border-color: #168cff; }
-        .producto:disabled { cursor: not-allowed; opacity: 0.65; }
-        .producto.seleccionado { background: #09203b; border-color: #00baff; box-shadow: inset 0 -2px 0 #00baff; }
-        .producto-nombre { color: #fff; font-size: 12px; font-weight: bold; line-height: 1.4; overflow-wrap: anywhere; }
-        .producto-precio { color: #fff; font-size: 13px; font-weight: bold; }
-        .producto-estado { color: #45c8ff; font-size: 10px; font-weight: bold; line-height: 1.4; }
-        .producto-no-disponible .producto-estado { color: #ffcf8a; }
+.estado-validacion.visible {
+    display: block;
+}
 
-        .boton { width: 100%; min-height: 42px; padding: 11px; border: none; border-radius: 6px; font-size: 13px; font-weight: bold; }
-        .continuar { margin-top: 13px; background: linear-gradient(90deg, #087cff, #00aaff); color: white; cursor: pointer; }
-        .continuar:disabled { cursor: not-allowed; opacity: 0.5; }
-        .vista-oculta { display: none !important; }
-        .pantalla-motor { display: none !important; }
-        .pantalla-motor.activa { display: block !important; }
-        .nota { margin-top: 13px; text-align: center; color: #8299b4; font-size: 10px; line-height: 1.5; }
+.estado-validacion.error {
+    color: #ffaaaa;
+    border-color: #843d4b;
+}
 
-        /* OFERTAS EXTRA: MISMA TIPOGRAFÍA, COLOR Y TAMAÑO QUE LOS BONDS */
-        #listaOfertas {
-            display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
-            margin-top: 8px;
-        }
+.estado-validacion.correcto {
+    color: #8fffc0;
+    border-color: #267b55;
+}
 
-        #listaOfertas .boton-oferta {
-            display: flex !important;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: stretch;
-            gap: 8px;
-            min-width: 0;
-            min-height: 83px;
-            padding: 10px !important;
-            background: #061226 !important;
-            color: #fff !important;
-            border: 1px solid #164b75 !important;
-            border-radius: 7px !important;
-            text-align: left !important;
-            box-shadow: none !important;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
+.estado-validacion.aviso {
+    color: #ffcf8a;
+    border-color: #8a672f;
+}
 
-        #listaOfertas .boton-oferta:hover:not(:disabled) { border-color: #168cff !important; }
-        #listaOfertas .boton-oferta:disabled { cursor: not-allowed; opacity: 0.65; }
-        #listaOfertas .boton-oferta.seleccionada,
-        #listaOfertas .boton-oferta.seleccionado { background: #09203b !important; border-color: #00baff !important; box-shadow: inset 0 -2px 0 #00baff !important; }
-        #listaOfertas .foto-oferta { display: none !important; }
-        #listaOfertas .nombre-oferta { color: #fff !important; font-size: 12px !important; font-weight: bold !important; line-height: 1.4 !important; overflow-wrap: anywhere !important; text-align: left !important; }
-        #listaOfertas .boton-oferta > div:not(.foto-oferta) { width: 100%; padding: 0 !important; background: transparent !important; text-align: left !important; }
-        #listaOfertas .boton-oferta > div:last-child { color: #45c8ff !important; font-size: 10px !important; font-weight: bold !important; line-height: 1.4 !important; }
-        #listaOfertas .boton-oferta .precio-oferta { color: #fff !important; font-size: 13px !important; font-weight: bold !important; }
-        #estadoProductos { margin-top: 8px; }
-        #notaOfertas, #descripcionOfertas { color: #8299b4; font-size: 11px; line-height: 1.45; margin-top: 8px; }
-        #precioSeleccionado { color: #45c8ff; font-size: 12px; font-weight: bold; margin-top: 8px; }
-        #precio { color: #fff; font-size: 13px; font-weight: bold; margin-top: 5px; }
+/* PESTAÑAS */
 
-        #pantallaConfirmacion, #pantallaExito { margin-top: 12px; padding: 12px; background: #061226; border: 1px solid #164b75; border-radius: 7px; color: #fff; font-size: 12px; line-height: 1.5; }
-        #pantallaConfirmacion h2, #pantallaExito h2 { color: #fff; }
-        #pantallaConfirmacion button, #pantallaExito button { width: 100%; min-height: 39px; margin-top: 8px; padding: 9px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        #aceptarCompraBtn, #confirmarBtn { background: linear-gradient(90deg, #087cff, #00baff); color: #fff; border: 0; }
-        #cancelarCompraBtn, #botonCambiar, #botonVolverOfertas { background: #07152b; color: #c1d0e0; border: 1px solid #204c78; }
+.selector-categorias {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin: 13px 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+}
 
-        /* MODALES */
-        body.modal-abierto { overflow: hidden; }
-        .modal-fondo, #modalConfirmacionCompra {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 14px;
-            background: rgba(1, 6, 17, 0.85);
-            backdrop-filter: blur(5px);
-        }
+.pestana-categoria {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 36px;
+    padding: 7px 4px;
+    background: #07152b;
+    color: #8fa5bd;
+    border: 1px solid #204568;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 1.25;
+    text-align: center;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s,
+                border-color 0.2s, box-shadow 0.2s;
+}
 
-        .modal-fondo.visible, #modalConfirmacionCompra.visible, #modalConfirmacionCompra.abierto { display: flex !important; }
-        .modal, #modalConfirmacionCompra > div { width: 100%; max-width: 360px; padding: 19px 15px; background: #091a35; border: 1px solid #168cff; border-radius: 12px; box-shadow: 0 0 25px rgba(0, 140, 255, 0.18); }
-        .modal h2, #modalConfirmacionCompra h2 { margin-bottom: 7px; text-align: center; font-size: 19px; color: #fff; }
-        .modal-descripcion { margin-bottom: 13px; color: #8fa5bd; text-align: center; font-size: 11px; line-height: 1.5; }
-        .modal-detalles { padding: 10px; margin-bottom: 13px; background: #061226; border: 1px solid #204c78; border-radius: 7px; }
-        .modal-fila { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 7px 0; font-size: 12px; line-height: 1.4; }
-        .modal-fila + .modal-fila { border-top: 1px solid rgba(32, 76, 120, 0.55); }
-        .modal-fila span:first-child { color: #8fa5bd; flex-shrink: 0; }
-        .modal-fila strong { text-align: right; overflow-wrap: anywhere; }
-        .modal-total { color: #45c8ff; font-size: 15px; }
-        .modal-botones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .modal-boton { min-height: 39px; padding: 9px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        .modal-cancelar { background: #07152b; color: #c1d0e0; border: 1px solid #204c78; }
-        .modal-aceptar { background: linear-gradient(90deg, #087cff, #00baff); color: white; border: 0; }
-        .modal-boton:disabled { opacity: 0.55; cursor: wait; }
+.pestana-categoria:hover {
+    border-color: #168cff;
+    color: #fff;
+}
 
-        @media (max-width: 360px) {
-            body { padding: 8px; }
-            .card { padding: 13px 10px; }
-            .logo { font-size: 15px; }
-            .pestana-categoria { font-size: 10px; padding: 6px 2px; }
-            .catalogo, #listaOfertas { gap: 6px; }
-            .producto, #listaOfertas .boton-oferta { padding: 8px !important; }
-        }
-    </style>
+.pestana-categoria.activa {
+    color: #fff;
+    background: #0b3157;
+    border-color: #00baff;
+    box-shadow: inset 0 -2px 0 #00baff;
+}
+
+.pestana-categoria:focus-visible {
+    outline: 2px solid #45c8ff;
+    outline-offset: 2px;
+}
+
+/* CATÁLOGO DE BONDS */
+
+.catalogo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.producto {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+    min-height: 83px;
+    padding: 10px;
+    background: #061226;
+    color: white;
+    border: 1px solid #164b75;
+    border-radius: 7px;
+    text-align: left;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+button.producto {
+    cursor: pointer;
+}
+
+.producto:hover:not(:disabled) {
+    border-color: #168cff;
+}
+
+.producto:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.producto.seleccionado {
+    background: #09203b;
+    border-color: #00baff;
+    box-shadow: inset 0 -2px 0 #00baff;
+}
+
+.producto-nombre {
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.producto-precio {
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.producto-estado {
+    color: #45c8ff;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+.producto-no-disponible .producto-estado {
+    color: #ffcf8a;
+}
+
+.boton {
+    width: 100%;
+    min-height: 42px;
+    padding: 11px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.continuar {
+    margin-top: 13px;
+    background: linear-gradient(90deg, #087cff, #00aaff);
+    color: white;
+    cursor: pointer;
+}
+
+.continuar:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.vista-oculta {
+    display: none !important;
+}
+
+.pantalla-motor {
+    display: none !important;
+}
+
+.pantalla-motor.activa {
+    display: block !important;
+}
+
+.nota {
+    margin-top: 13px;
+    text-align: center;
+    color: #8299b4;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* OFERTAS EXTRA */
+
+#listaOfertas {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+}
+
+#listaOfertas .boton-oferta {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 8px;
+    min-width: 0;
+    min-height: 83px;
+    padding: 10px !important;
+    background: #061226 !important;
+    color: #fff !important;
+    border: 1px solid #164b75 !important;
+    border-radius: 7px !important;
+    text-align: left !important;
+    box-shadow: none !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#listaOfertas .boton-oferta:hover:not(:disabled) {
+    border-color: #168cff !important;
+}
+
+#listaOfertas .boton-oferta:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+#listaOfertas .boton-oferta.seleccionada,
+#listaOfertas .boton-oferta.seleccionado {
+    background: #09203b !important;
+    border-color: #00baff !important;
+    box-shadow: inset 0 -2px 0 #00baff !important;
+}
+
+#listaOfertas .foto-oferta {
+    display: none !important;
+}
+
+#listaOfertas .nombre-oferta {
+    color: #fff !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    line-height: 1.4 !important;
+    overflow-wrap: anywhere !important;
+    text-align: left !important;
+}
+
+#listaOfertas .boton-oferta > div:not(.foto-oferta) {
+    width: 100%;
+    padding: 0 !important;
+    background: transparent !important;
+    text-align: left !important;
+}
+
+#listaOfertas .boton-oferta > div:last-child {
+    color: #45c8ff !important;
+    font-size: 10px !important;
+    font-weight: bold !important;
+    line-height: 1.4 !important;
+}
+
+#listaOfertas .boton-oferta .precio-oferta {
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: bold !important;
+}
+
+#estadoProductos {
+    margin-top: 8px;
+}
+
+#notaOfertas,
+#descripcionOfertas {
+    color: #8299b4;
+    font-size: 11px;
+    line-height: 1.45;
+    margin-top: 8px;
+}
+
+#precioSeleccionado {
+    color: #45c8ff;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+#precio {
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+#pantallaConfirmacion,
+#pantallaExito {
+    margin-top: 12px;
+    padding: 12px;
+    background: #061226;
+    border: 1px solid #164b75;
+    border-radius: 7px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+#pantallaConfirmacion h2,
+#pantallaExito h2 {
+    color: #fff;
+}
+
+#pantallaConfirmacion button,
+#pantallaExito button {
+    width: 100%;
+    min-height: 39px;
+    margin-top: 8px;
+    padding: 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#aceptarCompraBtn,
+#confirmarBtn {
+    background: linear-gradient(90deg, #087cff, #00baff);
+    color: #fff;
+    border: 0;
+}
+
+#cancelarCompraBtn,
+#botonCambiar,
+#botonVolverOfertas {
+    background: #07152b;
+    color: #c1d0e0;
+    border: 1px solid #204c78;
+}
+
+/* MODAL DE BONDS */
+
+body.modal-abierto {
+    overflow: hidden;
+}
+
+.modal-fondo {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    background: rgba(1, 6, 17, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+.modal-fondo.visible {
+    display: flex !important;
+}
+
+.modal {
+    width: 100%;
+    max-width: 360px;
+    padding: 19px 15px;
+    background: #091a35;
+    border: 1px solid #168cff;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0, 140, 255, 0.18);
+}
+
+.modal h2 {
+    margin-bottom: 7px;
+    text-align: center;
+    font-size: 19px;
+    color: #fff;
+}
+
+.modal-descripcion {
+    margin-bottom: 13px;
+    color: #8fa5bd;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.modal-detalles {
+    padding: 10px;
+    margin-bottom: 13px;
+    background: #061226;
+    border: 1px solid #204c78;
+    border-radius: 7px;
+}
+
+.modal-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 7px 0;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.modal-fila + .modal-fila {
+    border-top: 1px solid rgba(32, 76, 120, 0.55);
+}
+
+.modal-fila span:first-child {
+    color: #8fa5bd;
+    flex-shrink: 0;
+}
+
+.modal-fila strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.modal-total {
+    color: #45c8ff;
+    font-size: 15px;
+}
+
+.modal-botones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.modal-boton {
+    min-height: 39px;
+    padding: 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-cancelar {
+    background: #07152b;
+    color: #c1d0e0;
+    border: 1px solid #204c78;
+}
+
+.modal-aceptar {
+    background: linear-gradient(90deg, #087cff, #00baff);
+    color: white;
+    border: 0;
+}
+
+.modal-boton:disabled {
+    opacity: 0.55;
+    cursor: wait;
+}
+
+/* CONFIRMACIÓN DE OFERTAS: MISMO DISEÑO QUE BONDS */
+
+#modalConfirmacionCompra {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    background: rgba(1, 6, 17, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+#modalConfirmacionCompra.visible,
+#modalConfirmacionCompra.abierto {
+    display: flex !important;
+}
+
+#modalConfirmacionCompra > div {
+    width: 100%;
+    max-width: 360px;
+    padding: 19px 15px;
+    background: #091a35;
+    border: 1px solid #168cff;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0, 140, 255, 0.18);
+}
+
+#modalConfirmacionCompra h2 {
+    margin-bottom: 7px !important;
+    text-align: center;
+    font-size: 19px !important;
+    color: #fff;
+}
+
+#modalConfirmacionCompra .modal-descripcion-oferta {
+    margin-bottom: 13px;
+    color: #8fa5bd;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+#modalConfirmacionCompra .detalles-confirmacion-oferta {
+    padding: 10px;
+    margin-bottom: 13px;
+    background: #061226;
+    border: 1px solid #204c78;
+    border-radius: 7px;
+}
+
+#modalConfirmacionCompra .fila-confirmacion-oferta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 7px 0;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+#modalConfirmacionCompra .fila-confirmacion-oferta + .fila-confirmacion-oferta {
+    border-top: 1px solid rgba(32, 76, 120, 0.55);
+}
+
+#modalConfirmacionCompra .fila-confirmacion-oferta > span:first-child {
+    color: #8fa5bd;
+    flex-shrink: 0;
+}
+
+#modalConfirmacionCompra .fila-confirmacion-oferta strong {
+    color: #fff;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+#modalConfirmacionCompra #modalPrecioOfertaVisible {
+    color: #45c8ff !important;
+    font-size: 15px !important;
+    font-weight: bold;
+}
+
+#modalConfirmacionCompra .botones-confirmacion-oferta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+#modalConfirmacionCompra .botones-confirmacion-oferta button {
+    width: 100%;
+    min-height: 39px;
+    margin: 0;
+    padding: 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#modalConfirmacionCompra #cancelarCompraBtn {
+    background: #07152b;
+    color: #c1d0e0;
+    border: 1px solid #204c78;
+}
+
+#modalConfirmacionCompra #aceptarCompraBtn {
+    background: linear-gradient(90deg, #087cff, #00baff);
+    color: #fff;
+    border: 0;
+}
+
+#modalConfirmacionCompra button:disabled {
+    opacity: 0.55;
+    cursor: wait;
+}
+
+@media (max-width: 360px) {
+    body {
+        padding: 8px;
+    }
+
+    .card {
+        padding: 13px 10px;
+    }
+
+    .logo {
+        font-size: 15px;
+    }
+
+    .pestana-categoria {
+        font-size: 10px;
+        padding: 6px 2px;
+    }
+
+    .catalogo,
+    #listaOfertas {
+        gap: 6px;
+    }
+
+    .producto,
+    #listaOfertas .boton-oferta {
+        padding: 8px !important;
+    }
+}
+</style>
 </head>
+
 <body>
 <div class="contenedor">
-<header class="header"><div class="logo"><span class="rayo">⚡</span> Gamers Gold Top-Up</div><a href="juegos.html" class="volver">← Juegos</a></header>
+
+<header class="header">
+    <div class="logo">
+        <span class="rayo">⚡</span> Gamers Gold Top-Up
+    </div>
+    <a href="juegos.html" class="volver">← Juegos</a>
+</header>
+
 <main class="card">
-<h1>Arena Breakout</h1>
-<p class="descripcion">Selecciona Bonds o una oferta especial para continuar con tu compra.</p>
-<label class="etiqueta" for="idJugador">ID del jugador</label>
-<input type="text" id="idJugador" placeholder="Introduce tu ID de Arena Breakout" autocomplete="off" maxlength="50">
-<p class="ayuda">Comprueba tu ID antes de confirmar la compra.</p>
-<div id="estadoValidacion" class="estado-validacion" aria-live="polite" role="status"></div>
-<nav class="selector-categorias" aria-label="Categorías de Arena Breakout">
-<button type="button" class="pestana-categoria activa" id="pestanaBonds" aria-selected="true">Bonds</button>
-<button type="button" class="pestana-categoria" id="pestanaOfertas" aria-selected="false">Ofertas extra</button>
-</nav>
-<div id="estadoCatalogo" class="estado" aria-live="polite">Conectando con el catálogo...</div>
-<section id="vistaBonds">
-<label class="etiqueta">Selecciona un paquete de Bonds</label>
-<div id="catalogo" class="catalogo"></div>
-<button id="botonContinuar" class="boton continuar" type="button" disabled>RECARGAR</button>
-</section>
-<section id="vistaOfertas" class="vista-oculta">
-<!-- Elementos que necesita el motor compartido frontend/ofertas.js -->
-<div id="pantallaOfertas" class="pantalla-motor activa">
-<div id="descripcionOfertas">Selecciona una oferta especial de Arena Breakout.</div>
-<div id="estadoProductos" class="estado" aria-live="polite">Cargando ofertas...</div>
-<div id="listaOfertas" class="catalogo"></div>
-<div id="precioSeleccionado"></div>
-<label class="etiqueta" for="precio">Precio de la oferta</label>
-<div id="precio">Selecciona una oferta disponible.</div>
-<button id="continuarBtn" class="boton continuar" type="button" disabled>COMPRAR OFERTA</button>
-<div id="notaOfertas">Los precios se muestran en GVR.</div>
-</div>
-<div id="pantallaConfirmacion" class="pantalla-motor">
-<h2 style="font-size:16px;margin-bottom:8px">Confirmar oferta</h2>
-<div id="juegoConfirmacion">Arena Breakout</div>
-<div id="confirmarPrecio"></div>
-<div id="idJugadorConfirmacion"></div>
-<button id="confirmarBtn" type="button">CONFIRMAR COMPRA</button>
-<button id="botonCambiar" type="button">CAMBIAR OFERTA</button>
-</div>
-<div id="pantallaExito" class="pantalla-motor">
-<h2 id="tituloEstadoPedido" style="font-size:16px;margin-bottom:8px">Estado del pedido</h2>
-<div id="estadoPedido" class="estado" aria-live="polite"></div>
-<div id="mensajeEstadoPedido"></div>
-<div id="pedidoIdVisible"></div>
-<button id="consultarPedidoBtn" type="button">CONSULTAR PEDIDO</button>
-<button id="botonVolverOfertas" type="button">VOLVER A OFERTAS</button>
-</div>
-<!-- IDs requeridos por el motor compartido. -->
-<input id="confirmarOferta" type="hidden">
-<input id="idJugadorMotor" type="hidden">
-<input id="modalNombreOferta" type="hidden">
-<input id="modalIdJugador" type="hidden">
-<input id="modalPrecioOferta" type="hidden">
-</section>
-<p class="nota">Los precios se muestran en GVR. Si un pedido queda pendiente, consulta su estado antes de realizar otra compra.</p>
+
+    <h1>Arena Breakout</h1>
+
+    <p class="descripcion">
+        Selecciona Bonds o una oferta especial para continuar con tu compra.
+    </p>
+
+    <label class="etiqueta" for="idJugador">ID del jugador</label>
+
+    <input
+        type="text"
+        id="idJugador"
+        placeholder="Introduce tu ID de Arena Breakout"
+        autocomplete="off"
+        maxlength="50"
+    >
+
+    <p class="ayuda">
+        Comprueba tu ID antes de confirmar la compra.
+    </p>
+
+    <div
+        id="estadoValidacion"
+        class="estado-validacion"
+        aria-live="polite"
+        role="status"
+    ></div>
+
+    <nav class="selector-categorias" aria-label="Categorías de Arena Breakout">
+        <button
+            type="button"
+            class="pestana-categoria activa"
+            id="pestanaBonds"
+            aria-selected="true"
+        >Bonds</button>
+
+        <button
+            type="button"
+            class="pestana-categoria"
+            id="pestanaOfertas"
+            aria-selected="false"
+        >Ofertas extra</button>
+    </nav>
+
+    <div id="estadoCatalogo" class="estado" aria-live="polite">
+        Conectando con el catálogo...
+    </div>
+
+    <section id="vistaBonds">
+
+        <label class="etiqueta">Selecciona un paquete de Bonds</label>
+
+        <div id="catalogo" class="catalogo"></div>
+
+        <button
+            id="botonContinuar"
+            class="boton continuar"
+            type="button"
+            disabled
+        >RECARGAR</button>
+
+    </section>
+
+    <section id="vistaOfertas" class="vista-oculta">
+
+        <!-- Elementos requeridos por el motor compartido ofertas.js -->
+
+        <div id="pantallaOfertas" class="pantalla-motor activa">
+
+            <div id="descripcionOfertas">
+                Selecciona una oferta especial de Arena Breakout.
+            </div>
+
+            <div id="estadoProductos" class="estado" aria-live="polite">
+                Cargando ofertas...
+            </div>
+
+            <div id="listaOfertas" class="catalogo"></div>
+
+            <div id="precioSeleccionado"></div>
+
+            <label class="etiqueta" for="precio">
+                Precio de la oferta
+            </label>
+
+            <div id="precio">
+                Selecciona una oferta disponible.
+            </div>
+
+            <button
+                id="continuarBtn"
+                class="boton continuar"
+                type="button"
+                disabled
+            >COMPRAR OFERTA</button>
+
+            <div id="notaOfertas">
+                Los precios se muestran en GVR.
+            </div>
+
+        </div>
+
+        <div id="pantallaConfirmacion" class="pantalla-motor">
+
+            <h2 style="font-size:16px;margin-bottom:8px">
+                Confirmar oferta
+            </h2>
+
+            <div id="juegoConfirmacion">Arena Breakout</div>
+            <div id="confirmarPrecio"></div>
+            <div id="idJugadorConfirmacion"></div>
+
+            <button id="confirmarBtn" type="button">
+                CONFIRMAR COMPRA
+            </button>
+
+            <button id="botonCambiar" type="button">
+                CAMBIAR OFERTA
+            </button>
+
+        </div>
+
+        <div id="pantallaExito" class="pantalla-motor">
+
+            <h2 id="tituloEstadoPedido" style="font-size:16px;margin-bottom:8px">
+                Estado del pedido
+            </h2>
+
+            <div id="estadoPedido" class="estado" aria-live="polite"></div>
+            <div id="mensajeEstadoPedido"></div>
+            <div id="pedidoIdVisible"></div>
+
+            <button id="consultarPedidoBtn" type="button">
+                CONSULTAR PEDIDO
+            </button>
+
+            <button id="botonVolverOfertas" type="button">
+                VOLVER A OFERTAS
+            </button>
+
+        </div>
+
+        <!-- IDs requeridos por el motor compartido -->
+
+        <input id="confirmarOferta" type="hidden">
+        <input id="idJugadorMotor" type="hidden">
+        <input id="modalNombreOferta" type="hidden">
+        <input id="modalIdJugador" type="hidden">
+        <input id="modalPrecioOferta" type="hidden">
+
+    </section>
+
+    <p class="nota">
+        Los precios se muestran en GVR. Si un pedido queda pendiente,
+        consulta su estado antes de realizar otra compra.
+    </p>
+
 </main>
 </div>
-<!-- Modal propio para la compra de Bonds -->
-<div id="modalFondo" class="modal-fondo" role="dialog" aria-modal="true" aria-labelledby="modalTitulo" aria-hidden="true">
-<div class="modal"><h2 id="modalTitulo">Confirmar compra</h2><p class="modal-descripcion">Comprueba los datos antes de continuar con tu pedido.</p>
-<div class="modal-detalles"><div class="modal-fila"><span>Juego</span><strong>Arena Breakout</strong></div><div class="modal-fila"><span>Producto</span><strong id="modalPaquete">—</strong></div><div class="modal-fila"><span>ID de jugador</span><strong id="modalJugador">—</strong></div><div class="modal-fila"><span>Total</span><strong id="modalTotal" class="modal-total">—</strong></div></div>
-<p class="modal-descripcion">La compra descontará GVR de tu saldo. No cierres la página mientras se crea el pedido.</p><div class="modal-botones"><button id="modalCancelar" class="modal-boton modal-cancelar" type="button">CANCELAR</button><button id="modalAceptar" class="modal-boton modal-aceptar" type="button">ACEPTAR</button></div></div>
+
+<!-- MODAL DE CONFIRMACIÓN DE BONDS -->
+
+<div
+    id="modalFondo"
+    class="modal-fondo"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitulo"
+    aria-hidden="true"
+>
+    <div class="modal">
+
+        <h2 id="modalTitulo">Confirmar compra</h2>
+
+        <p class="modal-descripcion">
+            Comprueba los datos antes de continuar con tu pedido.
+        </p>
+
+        <div class="modal-detalles">
+
+            <div class="modal-fila">
+                <span>Juego</span>
+                <strong>Arena Breakout</strong>
+            </div>
+
+            <div class="modal-fila">
+                <span>Producto</span>
+                <strong id="modalPaquete">—</strong>
+            </div>
+
+            <div class="modal-fila">
+                <span>ID de jugador</span>
+                <strong id="modalJugador">—</strong>
+            </div>
+
+            <div class="modal-fila">
+                <span>Total</span>
+                <strong id="modalTotal" class="modal-total">—</strong>
+            </div>
+
+        </div>
+
+        <p class="modal-descripcion">
+            La compra descontará GVR de tu saldo. No cierres la página
+            mientras se crea el pedido.
+        </p>
+
+        <div class="modal-botones">
+
+            <button
+                id="modalCancelar"
+                class="modal-boton modal-cancelar"
+                type="button"
+            >CANCELAR</button>
+
+            <button
+                id="modalAceptar"
+                class="modal-boton modal-aceptar"
+                type="button"
+            >ACEPTAR</button>
+
+        </div>
+
+    </div>
 </div>
-<!-- Modal utilizado por el motor compartido de ofertas -->
-<div id="modalConfirmacionCompra"><div><h2 style="font-size:18px;margin-bottom:10px">Confirmar compra</h2><p id="modalNombreOfertaVisible" style="font-size:13px;margin-bottom:8px"></p><p id="modalIdJugadorVisible" style="font-size:12px;color:#8fa5bd;margin-bottom:8px"></p><p id="modalPrecioOfertaVisible" style="font-size:15px;color:#45c8ff;margin-bottom:14px"></p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="cancelarCompraBtn" type="button">CANCELAR</button><button id="aceptarCompraBtn" type="button">ACEPTAR</button></div></div></div>
+
+<!-- MODAL DE OFERTAS: DISEÑO IGUAL AL DE BONDS -->
+
+<div id="modalConfirmacionCompra">
+
+    <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tituloConfirmacionOferta"
+    >
+
+        <h2 id="tituloConfirmacionOferta">Confirmar compra</h2>
+
+        <p class="modal-descripcion-oferta">
+            Comprueba los datos antes de continuar con tu pedido.
+        </p>
+
+        <div class="detalles-confirmacion-oferta">
+
+            <div class="fila-confirmacion-oferta">
+                <span>Juego</span>
+                <strong>Arena Breakout</strong>
+            </div>
+
+            <div class="fila-confirmacion-oferta">
+                <span>Oferta</span>
+                <strong id="modalNombreOfertaVisible">—</strong>
+            </div>
+
+            <div class="fila-confirmacion-oferta">
+                <span>ID de jugador</span>
+                <strong id="modalIdJugadorVisible">—</strong>
+            </div>
+
+            <div class="fila-confirmacion-oferta">
+                <span>Total</span>
+                <strong id="modalPrecioOfertaVisible">—</strong>
+            </div>
+
+        </div>
+
+        <p class="modal-descripcion-oferta">
+            La compra descontará GVR de tu saldo. No cierres la página
+            mientras se crea el pedido.
+        </p>
+
+        <div class="botones-confirmacion-oferta">
+
+            <button id="cancelarCompraBtn" type="button">
+                CANCELAR
+            </button>
+
+            <button id="aceptarCompraBtn" type="button">
+                ACEPTAR
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 <script>
 "use strict";
+
 window.CONFIG_OFERTAS = {
     juego: "Arena Breakout",
     paginaVolver: "arenabreakout.html",
     textoId: "ID del jugador",
     placeholderId: "Introduce tu ID de Arena Breakout",
     habilitarCompras: true,
+
     ofertas: [
-        { id: "fz-arena_breakout-beginner_select", nombre: "Beginner Select" },
-        { id: "fz-arena_breakout-monthly_advanced_battle_pass_activation_pass", nombre: "Monthly Advanced Battle Pass" },
-        { id: "fz-arena_breakout-bulletproof_case_30d", nombre: "Bulletproof Case 30D" },
-        { id: "fz-arena_breakout-bulletproof_case_privileges", nombre: "Bulletproof Case Privileges" },
-        { id: "fz-arena_breakout-monthly_premium_battle_pass_activation_pass", nombre: "Monthly Premium Battle Pass" },
-        { id: "fz-arena_breakout-composition_case_30d", nombre: "Composition Case 30D" },
-        { id: "fz-arena_breakout-composite_case_privileges", nombre: "Composite Case Privileges" },
-        { id: "fz-arena_breakout-quarterly_premium_battle_pass_bundle_activation_pass_bundle", nombre: "Quarterly Premium Battle Pass Bundle" }
+        {
+            id: "fz-arena_breakout-beginner_select",
+            nombre: "Beginner Select"
+        },
+        {
+            id: "fz-arena_breakout-monthly_advanced_battle_pass_activation_pass",
+            nombre: "Monthly Advanced Battle Pass"
+        },
+        {
+            id: "fz-arena_breakout-bulletproof_case_30d",
+            nombre: "Bulletproof Case 30D"
+        },
+        {
+            id: "fz-arena_breakout-bulletproof_case_privileges",
+            nombre: "Bulletproof Case Privileges"
+        },
+        {
+            id: "fz-arena_breakout-monthly_premium_battle_pass_activation_pass",
+            nombre: "Monthly Premium Battle Pass"
+        },
+        {
+            id: "fz-arena_breakout-composition_case_30d",
+            nombre: "Composition Case 30D"
+        },
+        {
+            id: "fz-arena_breakout-composite_case_privileges",
+            nombre: "Composite Case Privileges"
+        },
+        {
+            id: "fz-arena_breakout-quarterly_premium_battle_pass_bundle_activation_pass_bundle",
+            nombre: "Quarterly Premium Battle Pass Bundle"
+        }
     ]
 };
 </script>
+
 <script type="module">
 "use strict";
+
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
-const SUPABASE_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-const URL_CATALOGO=SUPABASE_URL+"/functions/v1/nextlevel-catalogo";
-const URL_CREAR_PEDIDO=SUPABASE_URL+"/functions/v1/nextlevel-crear-pedido";
-const URL_CONSULTAR_PEDIDO=SUPABASE_URL+"/functions/v1/nextlevel-consultar-pedido";
-const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-const catalogo=document.getElementById("catalogo"),estadoCatalogo=document.getElementById("estadoCatalogo"),campoJugador=document.getElementById("idJugador"),botonContinuar=document.getElementById("botonContinuar");
-const vistaBonds=document.getElementById("vistaBonds"),vistaOfertas=document.getElementById("vistaOfertas"),pestanaBonds=document.getElementById("pestanaBonds"),pestanaOfertas=document.getElementById("pestanaOfertas");
-const modalFondo=document.getElementById("modalFondo"),modalPaquete=document.getElementById("modalPaquete"),modalJugador=document.getElementById("modalJugador"),modalTotal=document.getElementById("modalTotal"),modalCancelar=document.getElementById("modalCancelar"),modalAceptar=document.getElementById("modalAceptar");
-const BONDS_PERMITIDOS=["fz-arena_breakout-66_bonds","fz-arena_breakout-335_bonds","fz-arena_breakout-675_bonds","fz-arena_breakout-1690_bonds","fz-arena_breakout-3400_bonds","fz-arena_breakout-6820_bonds"];
-let productoSeleccionado=null,productosDisponibles=[],productosLocales=[],procesando=false,usuarioActualId=null,pedidoPendienteId=null,accionPendiente="crear",resolverConfirmacionModal=null,vistaActual="bonds";
-function normalizarTexto(v){return String(v??"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[\s_-]/g,"")}
-function mostrarEstado(m,tipo=""){estadoCatalogo.textContent=m;estadoCatalogo.classList.toggle("error",tipo==="error");estadoCatalogo.classList.toggle("correcto",tipo==="correcto")}
-function extraerProductos(r){if(Array.isArray(r))return r;if(!r||typeof r!=="object")return[];if(Array.isArray(r.productos))return r.productos;if(Array.isArray(r.products))return r.products;if(Array.isArray(r.data))return r.data;if(Array.isArray(r.data?.products))return r.data.products;return[]}
-function productId(p){return String(p?.productId||p?.product_id||p?.id||"").trim()}
-function nombre(p){return String(p?.nombreMostrar||p?.name||p?.productName||p?.product_name||p?.title||productId(p)||"Producto Arena Breakout").trim()}
-function precioGVR(n){return Number(n).toLocaleString("es-ES")+" GVR"}
-function localDe(p){return productosLocales.find(x=>String(x.provider_product_id||"").trim()===productId(p))||null}
-function comprable(p){return !!p&&p.active===true&&Number.isFinite(Number(p.price_gvr))&&Number(p.price_gvr)>0&&p.provider==="nextlevel"&&!!p.provider_product_id}
-function limpiarSeleccion(){document.querySelectorAll("#catalogo .producto").forEach(x=>x.classList.remove("seleccionado"))}
-function actualizarBoton(){if(procesando){botonContinuar.disabled=true;return}botonContinuar.textContent=pedidoPendienteId?(accionPendiente==="enviar"?"RECUPERAR PEDIDO":"CONSULTAR PEDIDO"):"RECARGAR";botonContinuar.disabled=!pedidoPendienteId&&(!campoJugador.value.trim()||!productoSeleccionado)}
-function cambiarVista(v){vistaActual=v;const bonds=v==="bonds";vistaBonds.classList.toggle("vista-oculta",!bonds);vistaOfertas.classList.toggle("vista-oculta",bonds);pestanaBonds.classList.toggle("activa",bonds);pestanaOfertas.classList.toggle("activa",!bonds);pestanaBonds.setAttribute("aria-selected",String(bonds));pestanaOfertas.setAttribute("aria-selected",String(!bonds));productoSeleccionado=null;limpiarSeleccion();actualizarBoton();mostrarEstado(bonds?"Selecciona un paquete de Bonds disponible.":"Selecciona una oferta especial.")}
-pestanaBonds.addEventListener("click",()=>cambiarVista("bonds"));pestanaOfertas.addEventListener("click",()=>cambiarVista("ofertas"));
-function abrirModal(p,player,price){modalPaquete.textContent=nombre(p);modalJugador.textContent=player;modalTotal.textContent=precioGVR(price);modalFondo.classList.add("visible");modalFondo.setAttribute("aria-hidden","false");document.body.classList.add("modal-abierto");return new Promise(resolve=>{resolverConfirmacionModal=resolve;modalCancelar.focus()})}
-function cerrarModal(resultado){modalFondo.classList.remove("visible");modalFondo.setAttribute("aria-hidden","true");document.body.classList.remove("modal-abierto");if(resolverConfirmacionModal){const r=resolverConfirmacionModal;resolverConfirmacionModal=null;r(resultado)}}
-modalCancelar.addEventListener("click",()=>cerrarModal(false));modalAceptar.addEventListener("click",()=>cerrarModal(true));modalFondo.addEventListener("click",e=>{if(e.target===modalFondo)cerrarModal(false)});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modalFondo.classList.contains("visible"))cerrarModal(false)});
-function keyPendiente(uid){return "ggtopup_arenabreakout_pedido_"+uid}
-function guardarPendiente(){if(usuarioActualId&&pedidoPendienteId)localStorage.setItem(keyPendiente(usuarioActualId),JSON.stringify({orderId:pedidoPendienteId,accion:accionPendiente}))}
-function borrarPendiente(){if(usuarioActualId)localStorage.removeItem(keyPendiente(usuarioActualId));pedidoPendienteId=null;accionPendiente="crear"}
-function recuperarPendiente(uid){try{const raw=localStorage.getItem(keyPendiente(uid));if(!raw){pedidoPendienteId=null;accionPendiente="crear";return}const d=JSON.parse(raw);if(typeof d.orderId!=="string"||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(d.orderId))throw new Error("Referencia no válida");pedidoPendienteId=d.orderId;accionPendiente=d.accion==="consultar"?"consultar":"enviar"}catch(e){console.error(e);pedidoPendienteId=null;accionPendiente="crear"}}
-async function verificarPendiente(uid){if(!pedidoPendienteId)return false;const id=pedidoPendienteId;const {data,error}=await supabase.from("game_orders").select("id,status,provider_order_id,provider_client_reference,provider_submitted_at").eq("id",id).eq("user_id",uid).maybeSingle();if(error)throw new Error("No se pudo verificar el pedido anterior. No iniciaremos otra compra.");if(!data)throw new Error("No se pudo confirmar el pedido anterior en la base de datos. No realices otra compra todavía.");const st=String(data.status||"").toLowerCase();if(st==="completed"||st==="refunded"){borrarPendiente();return false}accionPendiente=(data.provider_order_id||data.provider_client_reference||data.provider_submitted_at)?"consultar":(st==="pending"?"enviar":"consultar");guardarPendiente();actualizarBoton();return true}
-async function llamarEdge(url,token,body){const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json",apikey:SUPABASE_KEY,Authorization:"Bearer "+token},body:JSON.stringify(body)});let d={};try{d=await r.json()}catch{}if(!r.ok){const e=new Error(d.error||d.message||"Error HTTP "+r.status);e.data=d;throw e}return d}
-async function consultarPedido(token){if(!pedidoPendienteId)throw new Error("No hay pedido pendiente para consultar.");const d=await llamarEdge(URL_CONSULTAR_PEDIDO,token,{game_order_id:pedidoPendienteId});const local=String(d.status||"").toLowerCase(),prov=String(d.provider_status||"").toUpperCase();if(local==="completed"||local==="refunded"){const msg=local==="completed"?"Recarga completada por el proveedor.":"El pedido figura como reembolsado.";borrarPendiente();mostrarEstado(msg,"correcto");alert(msg+"\nPedido: "+(d.game_order_id||"consultado"));return}accionPendiente="consultar";guardarPendiente();mostrarEstado(prov==="FAILED"?"El proveedor informa FAILED. Verifica el estado y el reembolso antes de comprar otra vez.":(d.message||"El pedido sigue pendiente. Consulta su estado antes de volver a comprar."),prov==="FAILED"?"error":"")}
-async function enviarPedido(token){if(!pedidoPendienteId)throw new Error("No hay pedido pendiente para enviar.");const id=pedidoPendienteId;accionPendiente="consultar";guardarPendiente();try{const d=await llamarEdge(URL_CREAR_PEDIDO,token,{game_order_id:id});mostrarEstado(d.message||"Pedido enviado. Abriendo el seguimiento...","correcto")}catch(e){console.error(e);mostrarEstado("No se pudo confirmar el envío. Abriendo el seguimiento para verificar el estado.","error")}window.location.href=new URL("checkout.html?id="+encodeURIComponent(id),window.location.href).href}
-function seleccionar(p,local,card){if(procesando||pedidoPendienteId||!comprable(local))return;limpiarSeleccion();card.classList.add("seleccionado");productoSeleccionado={proveedor:p,local};actualizarBoton()}
-async function cargarCatalogo(){productoSeleccionado=null;productosDisponibles=[];catalogo.replaceChildren();mostrarEstado("Conectando con el catálogo...");try{const [r,db]=await Promise.all([fetch(URL_CATALOGO+"?game=arena-breakout",{headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+SUPABASE_KEY,Accept:"application/json"},cache:"no-store"}),supabase.from("game_products").select("id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region").eq("provider","nextlevel")]);if(db.error)throw new Error("No se pudieron verificar los productos y precios GVR.");productosLocales=(db.data||[]).filter(p=>normalizarTexto(p.game)==="arenabreakout");let resultado;try{resultado=await r.json()}catch{throw new Error("El catálogo devolvió una respuesta no válida.")}if(!r.ok)throw new Error(resultado.error||resultado.message||"Error HTTP "+r.status);const all=extraerProductos(resultado);if(!all.length)throw new Error("Next Level no devolvió productos para Arena Breakout.");const map=new Map();all.forEach(p=>{const id=productId(p);if(p&&p.available===true&&BONDS_PERMITIDOS.includes(id))map.set(id,p)});productosDisponibles=BONDS_PERMITIDOS.filter(id=>map.has(id)).map(id=>map.get(id));if(!productosDisponibles.length){mostrarEstado("No se encontraron Bonds disponibles en Next Level.","error");return}productosDisponibles.forEach(p=>{const local=localDe(p),ok=comprable(local),card=document.createElement("button");card.type="button";card.className="producto";card.disabled=!ok;if(!ok)card.classList.add("producto-no-disponible");const n=document.createElement("div");n.className="producto-nombre";n.textContent=nombre(p);const price=document.createElement("div");price.className="producto-precio";price.textContent=ok?precioGVR(Number(local.price_gvr)):"Precio pendiente";const st=document.createElement("div");st.className="producto-estado";st.textContent=ok?"Disponible":"Temporalmente no disponible";card.append(n,price,st);if(ok)card.addEventListener("click",()=>seleccionar(p,local,card));catalogo.appendChild(card)});const count=productosDisponibles.filter(p=>comprable(localDe(p))).length;mostrarEstado(count+" paquetes de Bonds disponibles.")}catch(e){console.error("Error cargando Arena Breakout:",e);catalogo.replaceChildren();mostrarEstado(e.message||"No se pudo cargar el catálogo.","error")}actualizarBoton()}
-async function crearCompra(token,playerId){if(!productoSeleccionado)throw new Error("Selecciona un paquete disponible.");const l=productoSeleccionado.local;const {data:actual,error}=await supabase.from("game_products").select("id,game,price_gvr,active,provider,provider_product_id").eq("id",l.id).eq("provider","nextlevel").eq("active",true).maybeSingle();if(error)throw new Error("No se pudo verificar el producto antes de comprar.");if(!actual||normalizarTexto(actual.game)!=="arenabreakout"||String(actual.provider_product_id||"").trim()!==productId(productoSeleccionado.proveedor)||!Number.isFinite(Number(actual.price_gvr))||Number(actual.price_gvr)<=0)throw new Error("El producto o el precio cambió. Actualiza el catálogo antes de comprar.");const yes=await abrirModal(productoSeleccionado.proveedor,playerId,Number(actual.price_gvr));if(!yes){mostrarEstado("Compra cancelada. No se creó ningún pedido.");return}mostrarEstado("Creando pedido. No cierres esta página...");const {data:id,error:rpcError}=await supabase.rpc("purchase_game_product",{p_product_id:actual.id,p_player_id:playerId});if(rpcError)throw new Error(rpcError.message||"No se pudo crear la compra.");if(typeof id!=="string"||!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id))throw new Error("No recibimos un ID de pedido válido. Revisa game_orders antes de volver a intentarlo.");pedidoPendienteId=id;accionPendiente="enviar";guardarPendiente();actualizarBoton();await enviarPedido(token)}
-botonContinuar.addEventListener("click",async()=>{if(procesando)return;procesando=true;actualizarBoton();try{const {data:{session},error:se}=await supabase.auth.getSession();if(se)throw new Error("No se pudo comprobar la sesión.");if(!session?.access_token)throw new Error("Debes iniciar sesión para continuar.");const {data:{user},error:ue}=await supabase.auth.getUser();if(ue||!user)throw new Error("Tu sesión no es válida. Inicia sesión nuevamente.");usuarioActualId=user.id;recuperarPendiente(user.id);await verificarPendiente(user.id);if(pedidoPendienteId){if(accionPendiente==="enviar")await enviarPedido(session.access_token);else await consultarPedido(session.access_token);return}if(vistaActual!=="bonds")throw new Error("Usa el botón de compra de la oferta seleccionada.");const player=campoJugador.value.trim();if(!player)throw new Error("Introduce tu ID de Arena Breakout.");if(player.length>50)throw new Error("El ID del jugador es demasiado largo.");await crearCompra(session.access_token,player)}catch(e){console.error(e);mostrarEstado(e.message||"No se pudo completar la operación.","error");alert(e.message||"No se pudo completar la operación.")}finally{procesando=false;actualizarBoton()}});
-campoJugador.addEventListener("input",actualizarBoton);
-/* Compatibilidad con el motor compartido: entrar a la confirmación no debe borrar el ID que el cliente acaba de escribir. */
-const botonContinuarOferta=document.getElementById("continuarBtn");
-if(botonContinuarOferta){botonContinuarOferta.addEventListener("click",()=>{const idEscrito=campoJugador.value;setTimeout(()=>{if(!campoJugador.value.trim()&&idEscrito.trim())campoJugador.value=idEscrito;},0);});}
-async function iniciar(){try{const {data:{session}}=await supabase.auth.getSession();if(session?.user?.id){usuarioActualId=session.user.id;recuperarPendiente(usuarioActualId);actualizarBoton()}}catch(e){console.error(e)}await cargarCatalogo();actualizarBoton()}
+
+const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const URL_CATALOGO =
+    SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
+
+const URL_CREAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/nextlevel-crear-pedido";
+
+const URL_CONSULTAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
+
+const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
+);
+
+const catalogo = document.getElementById("catalogo");
+const estadoCatalogo = document.getElementById("estadoCatalogo");
+const campoJugador = document.getElementById("idJugador");
+const botonContinuar = document.getElementById("botonContinuar");
+
+const vistaBonds = document.getElementById("vistaBonds");
+const vistaOfertas = document.getElementById("vistaOfertas");
+const pestanaBonds = document.getElementById("pestanaBonds");
+const pestanaOfertas = document.getElementById("pestanaOfertas");
+
+const modalFondo = document.getElementById("modalFondo");
+const modalPaquete = document.getElementById("modalPaquete");
+const modalJugador = document.getElementById("modalJugador");
+const modalTotal = document.getElementById("modalTotal");
+const modalCancelar = document.getElementById("modalCancelar");
+const modalAceptar = document.getElementById("modalAceptar");
+
+const BONDS_PERMITIDOS = [
+    "fz-arena_breakout-66_bonds",
+    "fz-arena_breakout-335_bonds",
+    "fz-arena_breakout-675_bonds",
+    "fz-arena_breakout-1690_bonds",
+    "fz-arena_breakout-3400_bonds",
+    "fz-arena_breakout-6820_bonds"
+];
+
+let productoSeleccionado = null;
+let productosDisponibles = [];
+let productosLocales = [];
+let procesando = false;
+let usuarioActualId = null;
+let pedidoPendienteId = null;
+let accionPendiente = "crear";
+let resolverConfirmacionModal = null;
+let vistaActual = "bonds";
+
+function normalizarTexto(v) {
+    return String(v ?? "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\s_-]/g, "");
+}
+
+function mostrarEstado(m, tipo = "") {
+    estadoCatalogo.textContent = m;
+    estadoCatalogo.classList.toggle("error", tipo === "error");
+    estadoCatalogo.classList.toggle("correcto", tipo === "correcto");
+}
+
+function extraerProductos(r) {
+    if (Array.isArray(r)) return r;
+    if (!r || typeof r !== "object") return [];
+    if (Array.isArray(r.productos)) return r.productos;
+    if (Array.isArray(r.products)) return r.products;
+    if (Array.isArray(r.data)) return r.data;
+    if (Array.isArray(r.data?.products)) return r.data.products;
+    return [];
+}
+
+function productId(p) {
+    return String(p?.productId || p?.product_id || p?.id || "").trim();
+}
+
+function nombre(p) {
+    return String(
+        p?.nombreMostrar ||
+        p?.name ||
+        p?.productName ||
+        p?.product_name ||
+        p?.title ||
+        productId(p) ||
+        "Producto Arena Breakout"
+    ).trim();
+}
+
+function precioGVR(n) {
+    return Number(n).toLocaleString("es-ES") + " GVR";
+}
+
+function localDe(p) {
+    return productosLocales.find(
+        x => String(x.provider_product_id || "").trim() === productId(p)
+    ) || null;
+}
+
+function comprable(p) {
+    return !!p &&
+        p.active === true &&
+        Number.isFinite(Number(p.price_gvr)) &&
+        Number(p.price_gvr) > 0 &&
+        p.provider === "nextlevel" &&
+        !!p.provider_product_id;
+}
+
+function limpiarSeleccion() {
+    document.querySelectorAll("#catalogo .producto").forEach(x => {
+        x.classList.remove("seleccionado");
+    });
+}
+
+function actualizarBoton() {
+    if (procesando) {
+        botonContinuar.disabled = true;
+        return;
+    }
+
+    botonContinuar.textContent = pedidoPendienteId
+        ? (accionPendiente === "enviar" ? "RECUPERAR PEDIDO" : "CONSULTAR PEDIDO")
+        : "RECARGAR";
+
+    botonContinuar.disabled =
+        !pedidoPendienteId &&
+        (!campoJugador.value.trim() || !productoSeleccionado);
+}
+
+function cambiarVista(v) {
+    vistaActual = v;
+
+    const bonds = v === "bonds";
+
+    vistaBonds.classList.toggle("vista-oculta", !bonds);
+    vistaOfertas.classList.toggle("vista-oculta", bonds);
+
+    pestanaBonds.classList.toggle("activa", bonds);
+    pestanaOfertas.classList.toggle("activa", !bonds);
+
+    pestanaBonds.setAttribute("aria-selected", String(bonds));
+    pestanaOfertas.setAttribute("aria-selected", String(!bonds));
+
+    productoSeleccionado = null;
+    limpiarSeleccion();
+    actualizarBoton();
+
+    mostrarEstado(
+        bonds
+            ? "Selecciona un paquete de Bonds disponible."
+            : "Selecciona una oferta especial."
+    );
+}
+
+pestanaBonds.addEventListener("click", () => cambiarVista("bonds"));
+pestanaOfertas.addEventListener("click", () => cambiarVista("ofertas"));
+
+function abrirModal(p, player, price) {
+    modalPaquete.textContent = nombre(p);
+    modalJugador.textContent = player;
+    modalTotal.textContent = precioGVR(price);
+
+    modalFondo.classList.add("visible");
+    modalFondo.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-abierto");
+
+    return new Promise(resolve => {
+        resolverConfirmacionModal = resolve;
+        modalCancelar.focus();
+    });
+}
+
+function cerrarModal(resultado) {
+    modalFondo.classList.remove("visible");
+    modalFondo.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-abierto");
+
+    if (resolverConfirmacionModal) {
+        const r = resolverConfirmacionModal;
+        resolverConfirmacionModal = null;
+        r(resultado);
+    }
+}
+
+modalCancelar.addEventListener("click", () => cerrarModal(false));
+modalAceptar.addEventListener("click", () => cerrarModal(true));
+
+modalFondo.addEventListener("click", e => {
+    if (e.target === modalFondo) cerrarModal(false);
+});
+
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && modalFondo.classList.contains("visible")) {
+        cerrarModal(false);
+    }
+});
+
+function keyPendiente(uid) {
+    return "ggtopup_arenabreakout_pedido_" + uid;
+}
+
+function guardarPendiente() {
+    if (usuarioActualId && pedidoPendienteId) {
+        localStorage.setItem(
+            keyPendiente(usuarioActualId),
+            JSON.stringify({
+                orderId: pedidoPendienteId,
+                accion: accionPendiente
+            })
+        );
+    }
+}
+
+function borrarPendiente() {
+    if (usuarioActualId) {
+        localStorage.removeItem(keyPendiente(usuarioActualId));
+    }
+
+    pedidoPendienteId = null;
+    accionPendiente = "crear";
+}
+
+function recuperarPendiente(uid) {
+    try {
+        const raw = localStorage.getItem(keyPendiente(uid));
+
+        if (!raw) {
+            pedidoPendienteId = null;
+            accionPendiente = "crear";
+            return;
+        }
+
+        const d = JSON.parse(raw);
+
+        if (
+            typeof d.orderId !== "string" ||
+            !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(d.orderId)
+        ) {
+            throw new Error("Referencia no válida");
+        }
+
+        pedidoPendienteId = d.orderId;
+        accionPendiente = d.accion === "consultar" ? "consultar" : "enviar";
+
+    } catch (e) {
+        console.error(e);
+        pedidoPendienteId = null;
+        accionPendiente = "crear";
+    }
+}
+
+async function verificarPendiente(uid) {
+    if (!pedidoPendienteId) return false;
+
+    const id = pedidoPendienteId;
+
+    const { data, error } = await supabase
+        .from("game_orders")
+        .select("id,status,provider_order_id,provider_client_reference,provider_submitted_at")
+        .eq("id", id)
+        .eq("user_id", uid)
+        .maybeSingle();
+
+    if (error) {
+        throw new Error(
+            "No se pudo verificar el pedido anterior. No iniciaremos otra compra."
+        );
+    }
+
+    if (!data) {
+        throw new Error(
+            "No se pudo confirmar el pedido anterior en la base de datos. No realices otra compra todavía."
+        );
+    }
+
+    const st = String(data.status || "").toLowerCase();
+
+    if (st === "completed" || st === "refunded") {
+        borrarPendiente();
+        return false;
+    }
+
+    accionPendiente =
+        (data.provider_order_id ||
+         data.provider_client_reference ||
+         data.provider_submitted_at)
+            ? "consultar"
+            : (st === "pending" ? "enviar" : "consultar");
+
+    guardarPendiente();
+    actualizarBoton();
+
+    return true;
+}
+
+async function llamarEdge(url, token, body) {
+    const r = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            apikey: SUPABASE_KEY,
+            Authorization: "Bearer " + token
+        },
+        body: JSON.stringify(body)
+    });
+
+    let d = {};
+
+    try {
+        d = await r.json();
+    } catch {}
+
+    if (!r.ok) {
+        const e = new Error(
+            d.error || d.message || "Error HTTP " + r.status
+        );
+
+        e.data = d;
+        throw e;
+    }
+
+    return d;
+}
+
+async function consultarPedido(token) {
+    if (!pedidoPendienteId) {
+        throw new Error("No hay pedido pendiente para consultar.");
+    }
+
+    const d = await llamarEdge(
+        URL_CONSULTAR_PEDIDO,
+        token,
+        { game_order_id: pedidoPendienteId }
+    );
+
+    const local = String(d.status || "").toLowerCase();
+    const prov = String(d.provider_status || "").toUpperCase();
+
+    if (local === "completed" || local === "refunded") {
+        const msg = local === "completed"
+            ? "Recarga completada por el proveedor."
+            : "El pedido figura como reembolsado.";
+
+        borrarPendiente();
+        mostrarEstado(msg, "correcto");
+
+        alert(msg + "\nPedido: " + (d.game_order_id || "consultado"));
+        return;
+    }
+
+    accionPendiente = "consultar";
+    guardarPendiente();
+
+    mostrarEstado(
+        prov === "FAILED"
+            ? "El proveedor informa FAILED. Verifica el estado y el reembolso antes de comprar otra vez."
+            : (d.message || "El pedido sigue pendiente. Consulta su estado antes de volver a comprar."),
+        prov === "FAILED" ? "error" : ""
+    );
+}
+
+async function enviarPedido(token) {
+    if (!pedidoPendienteId) {
+        throw new Error("No hay pedido pendiente para enviar.");
+    }
+
+    const id = pedidoPendienteId;
+
+    accionPendiente = "consultar";
+    guardarPendiente();
+
+    try {
+        const d = await llamarEdge(
+            URL_CREAR_PEDIDO,
+            token,
+            { game_order_id: id }
+        );
+
+        mostrarEstado(
+            d.message || "Pedido enviado. Abriendo el seguimiento...",
+            "correcto"
+        );
+
+    } catch (e) {
+        console.error(e);
+
+        mostrarEstado(
+            "No se pudo confirmar el envío. Abriendo el seguimiento para verificar el estado.",
+            "error"
+        );
+    }
+
+    window.location.href = new URL(
+        "checkout.html?id=" + encodeURIComponent(id),
+        window.location.href
+    ).href;
+}
+
+function seleccionar(p, local, card) {
+    if (procesando || pedidoPendienteId || !comprable(local)) return;
+
+    limpiarSeleccion();
+    card.classList.add("seleccionado");
+
+    productoSeleccionado = {
+        proveedor: p,
+        local
+    };
+
+    actualizarBoton();
+}
+
+async function cargarCatalogo() {
+    productoSeleccionado = null;
+    productosDisponibles = [];
+    catalogo.replaceChildren();
+
+    mostrarEstado("Conectando con el catálogo...");
+
+    try {
+        const [r, db] = await Promise.all([
+            fetch(URL_CATALOGO + "?game=arena-breakout", {
+                headers: {
+                    apikey: SUPABASE_KEY,
+                    Authorization: "Bearer " + SUPABASE_KEY,
+                    Accept: "application/json"
+                },
+                cache: "no-store"
+            }),
+
+            supabase
+                .from("game_products")
+                .select("id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region")
+                .eq("provider", "nextlevel")
+        ]);
+
+        if (db.error) {
+            throw new Error(
+                "No se pudieron verificar los productos y precios GVR."
+            );
+        }
+
+        productosLocales = (db.data || []).filter(
+            p => normalizarTexto(p.game) === "arenabreakout"
+        );
+
+        let resultado;
+
+        try {
+            resultado = await r.json();
+        } catch {
+            throw new Error("El catálogo devolvió una respuesta no válida.");
+        }
+
+        if (!r.ok) {
+            throw new Error(
+                resultado.error ||
+                resultado.message ||
+                "Error HTTP " + r.status
+            );
+        }
+
+        const all = extraerProductos(resultado);
+
+        if (!all.length) {
+            throw new Error(
+                "Next Level no devolvió productos para Arena Breakout."
+            );
+        }
+
+        const map = new Map();
+
+        all.forEach(p => {
+            const id = productId(p);
+
+            if (
+                p &&
+                p.available === true &&
+                BONDS_PERMITIDOS.includes(id)
+            ) {
+                map.set(id, p);
+            }
+        });
+
+        productosDisponibles = BONDS_PERMITIDOS
+            .filter(id => map.has(id))
+            .map(id => map.get(id));
+
+        if (!productosDisponibles.length) {
+            mostrarEstado(
+                "No se encontraron Bonds disponibles en Next Level.",
+                "error"
+            );
+            return;
+        }
+
+        productosDisponibles.forEach(p => {
+            const local = localDe(p);
+            const ok = comprable(local);
+
+            const card = document.createElement("button");
+            card.type = "button";
+            card.className = "producto";
+            card.disabled = !ok;
+
+            if (!ok) {
+                card.classList.add("producto-no-disponible");
+            }
+
+            const n = document.createElement("div");
+            n.className = "producto-nombre";
+            n.textContent = nombre(p);
+
+            const price = document.createElement("div");
+            price.className = "producto-precio";
+            price.textContent = ok
+                ? precioGVR(Number(local.price_gvr))
+                : "Precio pendiente";
+
+            const st = document.createElement("div");
+            st.className = "producto-estado";
+            st.textContent = ok
+                ? "Disponible"
+                : "Temporalmente no disponible";
+
+            card.append(n, price, st);
+
+            if (ok) {
+                card.addEventListener("click", () => {
+                    seleccionar(p, local, card);
+                });
+            }
+
+            catalogo.appendChild(card);
+        });
+
+        const count = productosDisponibles.filter(
+            p => comprable(localDe(p))
+        ).length;
+
+        mostrarEstado(count + " paquetes de Bonds disponibles.");
+
+    } catch (e) {
+        console.error("Error cargando Arena Breakout:", e);
+
+        catalogo.replaceChildren();
+
+        mostrarEstado(
+            e.message || "No se pudo cargar el catálogo.",
+            "error"
+        );
+    }
+
+    actualizarBoton();
+}
+
+async function crearCompra(token, playerId) {
+    if (!productoSeleccionado) {
+        throw new Error("Selecciona un paquete disponible.");
+    }
+
+    const l = productoSeleccionado.local;
+
+    const { data: actual, error } = await supabase
+        .from("game_products")
+        .select("id,game,price_gvr,active,provider,provider_product_id")
+        .eq("id", l.id)
+        .eq("provider", "nextlevel")
+        .eq("active", true)
+        .maybeSingle();
+
+    if (error) {
+        throw new Error(
+            "No se pudo verificar el producto antes de comprar."
+        );
+    }
+
+    if (
+        !actual ||
+        normalizarTexto(actual.game) !== "arenabreakout" ||
+        String(actual.provider_product_id || "").trim() !==
+            productId(productoSeleccionado.proveedor) ||
+        !Number.isFinite(Number(actual.price_gvr)) ||
+        Number(actual.price_gvr) <= 0
+    ) {
+        throw new Error(
+            "El producto o el precio cambió. Actualiza el catálogo antes de comprar."
+        );
+    }
+
+    const yes = await abrirModal(
+        productoSeleccionado.proveedor,
+        playerId,
+        Number(actual.price_gvr)
+    );
+
+    if (!yes) {
+        mostrarEstado("Compra cancelada. No se creó ningún pedido.");
+        return;
+    }
+
+    mostrarEstado("Creando pedido. No cierres esta página...");
+
+    const { data: id, error: rpcError } = await supabase.rpc(
+        "purchase_game_product",
+        {
+            p_product_id: actual.id,
+            p_player_id: playerId
+        }
+    );
+
+    if (rpcError) {
+        throw new Error(
+            rpcError.message || "No se pudo crear la compra."
+        );
+    }
+
+    if (
+        typeof id !== "string" ||
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)
+    ) {
+        throw new Error(
+            "No recibimos un ID de pedido válido. Revisa game_orders antes de volver a intentarlo."
+        );
+    }
+
+    pedidoPendienteId = id;
+    accionPendiente = "enviar";
+
+    guardarPendiente();
+    actualizarBoton();
+
+    await enviarPedido(token);
+}
+
+botonContinuar.addEventListener("click", async () => {
+    if (procesando) return;
+
+    procesando = true;
+    actualizarBoton();
+
+    try {
+        const {
+            data: { session },
+            error: se
+        } = await supabase.auth.getSession();
+
+        if (se) {
+            throw new Error("No se pudo comprobar la sesión.");
+        }
+
+        if (!session?.access_token) {
+            throw new Error("Debes iniciar sesión para continuar.");
+        }
+
+        const {
+            data: { user },
+            error: ue
+        } = await supabase.auth.getUser();
+
+        if (ue || !user) {
+            throw new Error(
+                "Tu sesión no es válida. Inicia sesión nuevamente."
+            );
+        }
+
+        usuarioActualId = user.id;
+
+        recuperarPendiente(user.id);
+        await verificarPendiente(user.id);
+
+        if (pedidoPendienteId) {
+            if (accionPendiente === "enviar") {
+                await enviarPedido(session.access_token);
+            } else {
+                await consultarPedido(session.access_token);
+            }
+
+            return;
+        }
+
+        if (vistaActual !== "bonds") {
+            throw new Error(
+                "Usa el botón de compra de la oferta seleccionada."
+            );
+        }
+
+        const player = campoJugador.value.trim();
+
+        if (!player) {
+            throw new Error("Introduce tu ID de Arena Breakout.");
+        }
+
+        if (player.length > 50) {
+            throw new Error("El ID del jugador es demasiado largo.");
+        }
+
+        await crearCompra(session.access_token, player);
+
+    } catch (e) {
+        console.error(e);
+
+        mostrarEstado(
+            e.message || "No se pudo completar la operación.",
+            "error"
+        );
+
+        alert(e.message || "No se pudo completar la operación.");
+
+    } finally {
+        procesando = false;
+        actualizarBoton();
+    }
+});
+
+campoJugador.addEventListener("input", actualizarBoton);
+
+/*
+ * Compatibilidad con el motor compartido.
+ * Conserva el ID escrito cuando se abre la confirmación de una oferta.
+ */
+const botonContinuarOferta = document.getElementById("continuarBtn");
+
+if (botonContinuarOferta) {
+    botonContinuarOferta.addEventListener("click", () => {
+        const idEscrito = campoJugador.value;
+
+        setTimeout(() => {
+            if (!campoJugador.value.trim() && idEscrito.trim()) {
+                campoJugador.value = idEscrito;
+            }
+        }, 0);
+    });
+}
+
+async function iniciar() {
+    try {
+        const {
+            data: { session }
+        } = await supabase.auth.getSession();
+
+        if (session?.user?.id) {
+            usuarioActualId = session.user.id;
+            recuperarPendiente(usuarioActualId);
+            actualizarBoton();
+        }
+
+    } catch (e) {
+        console.error(e);
+    }
+
+    await cargarCatalogo();
+    actualizarBoton();
+}
+
 iniciar();
 </script>
+
 <script type="module" src="ofertas.js"></script>
+
 </body>
-</html>
+       </html>
 
 
 
