@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Recarga diamantes de Free Fire en Gamers Gold Top-Up.">
+    <meta name="description" content="Recarga diamantes y compra ofertas de Free Fire en Gamers Gold Top-Up.">
     <title>Free Fire | Gamers Gold Top-Up</title>
 
     <style>
@@ -136,7 +136,6 @@
             border-color: #267b55;
         }
 
-        /* Estado independiente para la validación del jugador. */
         .estado-validacion {
             display: none;
             padding: 13px;
@@ -227,6 +226,7 @@
             color: #45c8ff;
             font-size: 12px;
             font-weight: bold;
+            line-height: 1.5;
         }
 
         .producto-no-disponible .producto-estado {
@@ -272,6 +272,42 @@
         .boton-ofertas:hover {
             background: #0b2040;
             box-shadow: 0 0 12px rgba(0, 140, 255, 0.16);
+        }
+
+        /* NUEVO: botón para volver al catálogo de diamantes. */
+        .boton-volver-diamantes {
+            margin-top: 8px;
+            margin-bottom: 15px;
+        }
+
+        /* NUEVO: imágenes de las ofertas. */
+        .oferta-imagen {
+            display: block;
+            width: 100%;
+            height: 115px;
+            object-fit: contain;
+            margin: 0 auto 5px;
+            border-radius: 9px;
+        }
+
+        .producto-oferta {
+            text-align: center;
+            align-items: stretch;
+        }
+
+        .producto-oferta .producto-nombre {
+            text-align: center;
+            min-height: 40px;
+        }
+
+        .producto-oferta .producto-precio,
+        .producto-oferta .producto-estado {
+            text-align: center;
+        }
+
+        /* NUEVO: alternar vistas sin cambiar de página. */
+        .vista-oculta {
+            display: none !important;
         }
 
         .nota {
@@ -419,9 +455,7 @@
             .modal {
                 padding: 22px 15px;
             }
-        }
 
-        @media (max-width: 380px) {
             body {
                 padding: 12px;
             }
@@ -436,6 +470,10 @@
 
             .logo {
                 font-size: 17px;
+            }
+
+            .oferta-imagen {
+                height: 130px;
             }
         }
     </style>
@@ -465,9 +503,10 @@
         <h1>Free Fire</h1>
 
         <p class="descripcion">
-            Selecciona tu paquete de diamantes de Free Fire.
+            Selecciona tu paquete de diamantes o una de nuestras ofertas especiales.
         </p>
 
+        <!-- EL ID SE COMPARTE ENTRE DIAMANTES Y OFERTAS. -->
         <label class="etiqueta" for="idjugador">
             ID del jugador
         </label>
@@ -481,10 +520,9 @@
         >
 
         <p class="ayuda">
-            Escribe tu ID de jugador y selecciona el paquete que deseas recibir.
+            Escribe tu ID de jugador y selecciona el producto que deseas recibir.
         </p>
 
-        <!-- NUEVO: aquí se muestra el resultado de la validación. -->
         <div
             id="estadoValidacion"
             class="estado-validacion"
@@ -492,16 +530,52 @@
             role="status"
         ></div>
 
-        <label class="etiqueta">
-            Selecciona una cantidad de diamantes
-        </label>
-
+        <!-- ESTADO COMPARTIDO DEL CATÁLOGO Y LAS OFERTAS. -->
         <div id="estadoCatalogo" class="estado" aria-live="polite">
             Conectando con el catálogo...
         </div>
 
-        <div id="catalogo" class="catalogo"></div>
+        <!-- VISTA 1: DIAMANTES. -->
+        <section id="vistaDiamantes">
 
+            <label class="etiqueta">
+                Selecciona una cantidad de diamantes
+            </label>
+
+            <div id="catalogo" class="catalogo"></div>
+
+            <div class="separador-ofertas">
+                <button
+                    class="boton boton-ofertas"
+                    type="button"
+                    id="botonOfertas"
+                >
+                    🎁 Ofertas especiales
+                </button>
+            </div>
+
+        </section>
+
+        <!-- VISTA 2: OFERTAS, EN LA MISMA PÁGINA. -->
+        <section id="vistaOfertas" class="vista-oculta">
+
+            <button
+                class="boton boton-ofertas boton-volver-diamantes"
+                type="button"
+                id="botonVolverDiamantes"
+            >
+                ← Volver a diamantes
+            </button>
+
+            <label class="etiqueta">
+                Selecciona una oferta especial
+            </label>
+
+            <div id="catalogoOfertas" class="catalogo"></div>
+
+        </section>
+
+        <!-- UN SOLO BOTÓN Y UN SOLO FLUJO DE COMPRA. -->
         <button
             id="botonContinuar"
             class="boton continuar"
@@ -511,24 +585,15 @@
             RECARGAR
         </button>
 
-        <div class="separador-ofertas">
-            <button
-                class="boton boton-ofertas"
-                type="button"
-                id="botonOfertas"
-            >
-                🎁 Ofertas especiales
-            </button>
-        </div>
-
         <p class="nota">
             Los precios se muestran en GVR. Comprueba tu ID de jugador
-            antes de confirmar la recarga. No vuelvas a crear un pedido
-            si el anterior está pendiente de confirmación.
+            antes de confirmar la compra. No crees otro pedido si el
+            anterior está pendiente de confirmación.
         </p>
     </main>
 </div>
 
+<!-- MODAL DE CONFIRMACIÓN COMPARTIDO. -->
 <div
     id="modalFondo"
     class="modal-fondo"
@@ -538,7 +603,7 @@
     aria-hidden="true"
 >
     <div class="modal">
-        <h2 id="modalTitulo">Confirmar recarga</h2>
+        <h2 id="modalTitulo">Confirmar compra</h2>
 
         <p class="modal-descripcion">
             Comprueba los datos antes de continuar con tu pedido.
@@ -551,7 +616,7 @@
             </div>
 
             <div class="modal-fila">
-                <span>Paquete</span>
+                <span>Producto</span>
                 <strong id="modalPaquete">—</strong>
             </div>
 
@@ -612,7 +677,6 @@ const URL_CREAR_PEDIDO =
 const URL_CONSULTAR_PEDIDO =
     SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
 
-/* NUEVO: función independiente de validación. */
 const URL_VALIDAR_JUGADOR =
     SUPABASE_URL + "/functions/v1/nextlevel-validar-jugador";
 
@@ -628,10 +692,19 @@ const supabase = createClient(
     }
 );
 
+/* ELEMENTOS GENERALES. */
+
 const catalogo = document.getElementById("catalogo");
+const catalogoOfertas = document.getElementById("catalogoOfertas");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
+
+const vistaDiamantes = document.getElementById("vistaDiamantes");
+const vistaOfertas = document.getElementById("vistaOfertas");
+
 const botonContinuar = document.getElementById("botonContinuar");
 const botonOfertas = document.getElementById("botonOfertas");
+const botonVolverDiamantes = document.getElementById("botonVolverDiamantes");
+
 const campoJugador = document.getElementById("idjugador");
 const estadoValidacion = document.getElementById("estadoValidacion");
 
@@ -642,23 +715,53 @@ const modalTotal = document.getElementById("modalTotal");
 const modalCancelar = document.getElementById("modalCancelar");
 const modalAceptar = document.getElementById("modalAceptar");
 
+/*
+ * OFERTAS DE FREE FIRE.
+ *
+ * Los IDs deben coincidir exactamente con provider_product_id
+ * en game_products y con los productos devueltos por Next Level.
+ *
+ * Las rutas de las imágenes son relativas a frontend/freefire.html.
+ */
+const OFERTAS_FREE_FIRE = [
+    {
+        id: "fz-free_fire_latam-booyah_pass",
+        nombre: "Booyah Pass",
+        imagen: "imagenes/file_0000000083708210b16777d81d12559e.png"
+    },
+    {
+        id: "fz-free_fire_latam-weekly_membership",
+        nombre: "Membresía Semanal",
+        imagen: "imagenes/file_0000000058f481f596270e00ee90d93d.png"
+    },
+    {
+        id: "fz-free_fire_latam-monthly_membership",
+        nombre: "Membresía Mensual",
+        imagen: "imagenes/file_000000009360820e93e689acad10b27a.png"
+    }
+];
+
 let resolverConfirmacionModal = null;
+
 let productoSeleccionado = null;
 let productosDisponibles = [];
+let productosProveedor = [];
 let productosLocales = [];
+
 let procesando = false;
 let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
 
 /*
- * NUEVO: estado de validación.
- *
- * VALID: proveedor confirmó la cuenta y devolvió el nombre.
- * INVALID: proveedor confirmó que el ID no es válido.
- * UNAVAILABLE: no se pudo comprobar la cuenta ahora.
- * UNKNOWN: todavía no hay una respuesta válida.
+ * tipo:
+ * - diamantes
+ * - oferta
  */
+let vistaActual = "diamantes";
+
+/* ESTADO DE VALIDACIÓN DEL JUGADOR. */
+
 let validacionJugador = {
     status: "UNKNOWN",
     playerId: "",
@@ -672,15 +775,70 @@ let temporizadorValidacion = null;
 let numeroSolicitudValidacion = 0;
 let claveUltimaValidacion = "";
 
-/* Este botón y su destino se conservan sin cambios. */
+/* =========================================================
+   CAMBIO DE VISTA: NO ABRE OTRA PÁGINA.
+   ========================================================= */
+
+function cambiarVista(vista) {
+    if (vista !== "diamantes" && vista !== "ofertas") {
+        return;
+    }
+
+    vistaActual = vista;
+
+    vistaDiamantes.classList.toggle(
+        "vista-oculta",
+        vista !== "diamantes"
+    );
+
+    vistaOfertas.classList.toggle(
+        "vista-oculta",
+        vista !== "ofertas"
+    );
+
+    productoSeleccionado = null;
+
+    reiniciarValidacionJugador();
+
+    if (vista === "diamantes") {
+        mostrarEstado(
+            productosDisponibles.length
+                ? "Selecciona el paquete de diamantes que deseas comprar."
+                : "El catálogo de diamantes todavía no está disponible."
+        );
+    } else {
+        mostrarEstado(
+            "Selecciona una oferta especial de Free Fire."
+        );
+    }
+
+    actualizarBoton();
+}
+
 botonOfertas.addEventListener("click", () => {
-    window.location.href = "ofertas-free-fire.html";
+    cambiarVista("ofertas");
 });
+
+botonVolverDiamantes.addEventListener("click", () => {
+    cambiarVista("diamantes");
+});
+
+/* =========================================================
+   ESTADOS Y PEDIDOS PENDIENTES.
+   ========================================================= */
 
 function mostrarEstado(mensaje, tipo = "") {
     estadoCatalogo.textContent = mensaje;
-    estadoCatalogo.classList.toggle("error", tipo === "error");
-    estadoCatalogo.classList.toggle("correcto", tipo === "correcto");
+
+    estadoCatalogo.classList.toggle(
+        "error",
+        tipo === "error"
+    );
+
+    estadoCatalogo.classList.toggle(
+        "correcto",
+        tipo === "correcto"
+    );
 }
 
 function mensajeError(error, alternativo) {
@@ -701,7 +859,9 @@ function clavePedidoPendiente(userId) {
 }
 
 function guardarPedidoPendiente() {
-    if (!usuarioActualId || !pedidoPendienteId) return;
+    if (!usuarioActualId || !pedidoPendienteId) {
+        return;
+    }
 
     localStorage.setItem(
         clavePedidoPendiente(usuarioActualId),
@@ -714,7 +874,9 @@ function guardarPedidoPendiente() {
 
 function borrarPedidoPendiente() {
     if (usuarioActualId) {
-        localStorage.removeItem(clavePedidoPendiente(usuarioActualId));
+        localStorage.removeItem(
+            clavePedidoPendiente(usuarioActualId)
+        );
     }
 
     pedidoPendienteId = null;
@@ -723,7 +885,9 @@ function borrarPedidoPendiente() {
 
 function recuperarPedidoPendiente(userId) {
     try {
-        const guardado = localStorage.getItem(clavePedidoPendiente(userId));
+        const guardado = localStorage.getItem(
+            clavePedidoPendiente(userId)
+        );
 
         if (!guardado) {
             pedidoPendienteId = null;
@@ -737,29 +901,33 @@ function recuperarPedidoPendiente(userId) {
             typeof datos.orderId !== "string" ||
             !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(datos.orderId)
         ) {
-            throw new Error("La referencia del pedido guardado no es válida.");
+            throw new Error(
+                "La referencia del pedido guardado no es válida."
+            );
         }
 
         pedidoPendienteId = datos.orderId;
-        accionPendiente = datos.accion === "consultar"
-            ? "consultar"
-            : "enviar";
+
+        accionPendiente =
+            datos.accion === "consultar"
+                ? "consultar"
+                : "enviar";
 
     } catch (error) {
-        console.error("Error recuperando pedido guardado:", error);
+        console.error(
+            "Error recuperando pedido guardado:",
+            error
+        );
 
         pedidoPendienteId = null;
         accionPendiente = "crear";
     }
 }
 
-/*
- * Verifica el pedido guardado en Supabase.
- * Si la consulta falla o no encuentra el registro,
- * no elimina la referencia ni permite crear otra compra.
- */
 async function verificarPedidoGuardado(userId) {
-    if (!pedidoPendienteId) return false;
+    if (!pedidoPendienteId) {
+        return false;
+    }
 
     const idVerificado = pedidoPendienteId;
 
@@ -792,7 +960,9 @@ async function verificarPedidoGuardado(userId) {
         );
     }
 
-    const estadoLocal = String(data.status || "").toLowerCase();
+    const estadoLocal = String(
+        data.status || ""
+    ).toLowerCase();
 
     if (
         estadoLocal === "completed" ||
@@ -823,12 +993,20 @@ async function verificarPedidoGuardado(userId) {
     return true;
 }
 
+/* =========================================================
+   BOTÓN DE COMPRA COMPARTIDO.
+   ========================================================= */
+
 function actualizarBoton() {
     if (procesando) {
         botonContinuar.disabled = true;
         return;
     }
 
+    /*
+     * Si hay un pedido pendiente, el botón sirve para recuperarlo
+     * o consultar su estado, independientemente de la vista actual.
+     */
     if (pedidoPendienteId) {
         botonContinuar.textContent =
             accionPendiente === "enviar"
@@ -839,10 +1017,19 @@ function actualizarBoton() {
         return;
     }
 
-    botonContinuar.textContent = "RECARGAR";
+    botonContinuar.textContent =
+        vistaActual === "ofertas"
+            ? "COMPRAR OFERTA"
+            : "RECARGAR";
+
     botonContinuar.disabled =
-        !campoJugador.value.trim() || !productoSeleccionado;
+        !campoJugador.value.trim() ||
+        !productoSeleccionado;
 }
+
+/* =========================================================
+   MODAL DE CONFIRMACIÓN.
+   ========================================================= */
 
 function cerrarModalConfirmacion(resultado) {
     modalFondo.classList.remove("visible");
@@ -863,7 +1050,9 @@ function abrirModalConfirmacion(producto, playerId, precio) {
 
     modalFondo.classList.add("visible");
     modalFondo.setAttribute("aria-hidden", "false");
+
     document.body.classList.add("modal-abierto");
+
     modalCancelar.disabled = false;
     modalAceptar.disabled = false;
 
@@ -897,13 +1086,15 @@ document.addEventListener("keydown", event => {
 });
 
 /* =========================================================
-   NUEVO: VALIDACIÓN DE JUGADOR CON NEXT LEVEL
-   No crea pedidos, no modifica el saldo y no toca el catálogo.
+   VALIDACIÓN DEL JUGADOR.
+   Utiliza el ID real del producto seleccionado.
    ========================================================= */
 
 function mostrarEstadoValidacion(mensaje, tipo = "") {
     estadoValidacion.textContent = mensaje;
+
     estadoValidacion.classList.add("visible");
+
     estadoValidacion.classList.remove(
         "error",
         "correcto",
@@ -917,6 +1108,7 @@ function mostrarEstadoValidacion(mensaje, tipo = "") {
 
 function ocultarEstadoValidacion() {
     estadoValidacion.textContent = "";
+
     estadoValidacion.classList.remove(
         "visible",
         "error",
@@ -953,11 +1145,17 @@ function normalizarEstadoValidacion(datos) {
         ""
     ).trim().toUpperCase();
 
-    if (estado === "VALID" || datos?.valid === true) {
+    if (
+        estado === "VALID" ||
+        datos?.valid === true
+    ) {
         return "VALID";
     }
 
-    if (estado === "INVALID" || datos?.valid === false) {
+    if (
+        estado === "INVALID" ||
+        datos?.valid === false
+    ) {
         return "INVALID";
     }
 
@@ -991,19 +1189,18 @@ async function validarJugador() {
         reiniciarValidacionJugador();
 
         mostrarEstadoValidacion(
-            "No se pudo identificar el paquete para comprobar el jugador.",
+            "No se pudo identificar el producto para comprobar al jugador.",
             "aviso"
         );
 
         return;
     }
 
-    const clave = obtenerClaveValidacion(playerId, productId);
+    const clave = obtenerClaveValidacion(
+        playerId,
+        productId
+    );
 
-    /*
-     * No repetimos la consulta si ya tenemos el resultado
-     * para el mismo ID y el mismo paquete.
-     */
     if (
         claveUltimaValidacion === clave &&
         validacionJugador.playerId === playerId &&
@@ -1045,7 +1242,7 @@ async function validarJugador() {
             validacionJugador.status = "UNAVAILABLE";
 
             mostrarEstadoValidacion(
-                "Inicia sesión para verificar el nombre de tu cuenta. " +
+                "Inicia sesión para verificar tu cuenta. " +
                 "La validación no se ha completado.",
                 "aviso"
             );
@@ -1055,17 +1252,20 @@ async function validarJugador() {
 
         const respuesta = await fetch(URL_VALIDAR_JUGADOR, {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json",
                 apikey: SUPABASE_KEY,
                 Authorization: "Bearer " + session.access_token,
                 Accept: "application/json"
             },
+
             body: JSON.stringify({
                 playerId: playerId,
                 productId: productId,
                 game: "free-fire"
             }),
+
             cache: "no-store"
         });
 
@@ -1077,10 +1277,6 @@ async function validarJugador() {
             datos = {};
         }
 
-        /*
-         * Ignoramos las respuestas de validaciones anteriores
-         * si el usuario ya cambió el ID o el paquete.
-         */
         if (numeroSolicitud !== numeroSolicitudValidacion) {
             return;
         }
@@ -1153,7 +1349,7 @@ async function validarJugador() {
         if (estado === "INVALID") {
             mostrarEstadoValidacion(
                 "El proveedor indica que este ID no es válido. " +
-                "Comprueba el número antes de realizar la recarga.",
+                "Comprueba el número antes de realizar la compra.",
                 "error"
             );
 
@@ -1207,30 +1403,40 @@ function programarValidacionJugador() {
         return;
     }
 
-    /*
-     * Esperamos un momento para evitar llamar al proveedor
-     * por cada tecla que escribe el usuario.
-     */
     temporizadorValidacion = setTimeout(() => {
         validarJugador();
     }, 650);
 }
 
-/* Al cambiar el ID, se invalida el resultado anterior. */
 campoJugador.addEventListener("input", () => {
     programarValidacionJugador();
     actualizarBoton();
 });
 
-/* CATÁLOGO: se conserva la lógica original. */
+/* =========================================================
+   PRODUCTOS Y PRECIOS.
+   ========================================================= */
 
 function extraerProductos(respuesta) {
-    if (Array.isArray(respuesta)) return respuesta;
-    if (!respuesta || typeof respuesta !== "object") return [];
+    if (Array.isArray(respuesta)) {
+        return respuesta;
+    }
 
-    if (Array.isArray(respuesta.productos)) return respuesta.productos;
-    if (Array.isArray(respuesta.products)) return respuesta.products;
-    if (Array.isArray(respuesta.data)) return respuesta.data;
+    if (!respuesta || typeof respuesta !== "object") {
+        return [];
+    }
+
+    if (Array.isArray(respuesta.productos)) {
+        return respuesta.productos;
+    }
+
+    if (Array.isArray(respuesta.products)) {
+        return respuesta.products;
+    }
+
+    if (Array.isArray(respuesta.data)) {
+        return respuesta.data;
+    }
 
     if (Array.isArray(respuesta.data?.products)) {
         return respuesta.data.products;
@@ -1241,21 +1447,22 @@ function extraerProductos(respuesta) {
 
 function obtenerProductId(producto) {
     return String(
-        producto.productId ||
-        producto.product_id ||
-        producto.id ||
+        producto?.productId ||
+        producto?.product_id ||
+        producto?.id ||
         ""
     ).trim();
 }
 
 function obtenerNombre(producto) {
     return String(
-        producto.name ||
-        producto.productName ||
-        producto.product_name ||
-        producto.title ||
+        producto?.nombreMostrar ||
+        producto?.name ||
+        producto?.productName ||
+        producto?.product_name ||
+        producto?.title ||
         obtenerProductId(producto) ||
-        "Paquete de Free Fire"
+        "Producto de Free Fire"
     ).trim();
 }
 
@@ -1293,7 +1500,10 @@ async function cargarProductosLocales() {
         .eq("provider", "nextlevel");
 
     if (error) {
-        console.error("Error consultando productos:", error.message);
+        console.error(
+            "Error consultando productos:",
+            error.message
+        );
 
         throw new Error(
             "No se pudieron verificar los productos y sus precios GVR."
@@ -1314,7 +1524,9 @@ function buscarProductoLocal(productoProveedor) {
 }
 
 function productoComprable(productoLocal) {
-    if (!productoLocal) return false;
+    if (!productoLocal) {
+        return false;
+    }
 
     const precio = Number(productoLocal.price_gvr);
 
@@ -1327,17 +1539,63 @@ function mostrarPrecio(precio) {
     return Number(precio).toLocaleString("es-ES") + " GVR";
 }
 
+/* =========================================================
+   SELECCIÓN COMPARTIDA.
+   ========================================================= */
+
+function limpiarSeleccionVisual() {
+    document
+        .querySelectorAll("#catalogo .producto, #catalogoOfertas .producto")
+        .forEach(elemento => {
+            elemento.classList.remove("seleccionado");
+        });
+}
+
+function seleccionarProducto(productoProveedor, productoLocal, tipo, tarjeta) {
+    if (procesando || pedidoPendienteId) {
+        return;
+    }
+
+    if (!productoComprable(productoLocal)) {
+        return;
+    }
+
+    limpiarSeleccionVisual();
+
+    tarjeta.classList.add("seleccionado");
+
+    productoSeleccionado = {
+        proveedor: productoProveedor,
+        local: productoLocal,
+        tipo: tipo
+    };
+
+    const precio = Number(productoLocal.price_gvr);
+
+    mostrarEstado(
+        obtenerNombre(productoProveedor) +
+        " seleccionado · " +
+        mostrarPrecio(precio),
+        "correcto"
+    );
+
+    programarValidacionJugador();
+    actualizarBoton();
+}
+
+/* =========================================================
+   VISTA DE DIAMANTES.
+   ========================================================= */
+
 function renderizarCatalogo() {
     catalogo.replaceChildren();
-    productoSeleccionado = null;
-
-    reiniciarValidacionJugador();
 
     productosDisponibles.forEach(producto => {
         const local = buscarProductoLocal(producto);
         const comprable = productoComprable(local);
 
         const tarjeta = document.createElement("button");
+
         tarjeta.type = "button";
         tarjeta.className = "producto";
 
@@ -1357,7 +1615,10 @@ function renderizarCatalogo() {
         estado.className = "producto-estado";
 
         if (comprable) {
-            precio.textContent = mostrarPrecio(Number(local.price_gvr));
+            precio.textContent = mostrarPrecio(
+                Number(local.price_gvr)
+            );
+
             estado.textContent = "Seleccionar paquete";
         } else {
             precio.textContent = "Precio pendiente";
@@ -1368,47 +1629,157 @@ function renderizarCatalogo() {
 
         if (comprable) {
             tarjeta.addEventListener("click", () => {
-                if (procesando || pedidoPendienteId) return;
-
-                document.querySelectorAll(".producto").forEach(elemento => {
-                    elemento.classList.remove("seleccionado");
-                });
-
-                tarjeta.classList.add("seleccionado");
-
-                productoSeleccionado = {
-                    proveedor: producto,
-                    local: local
-                };
-
-                estado.textContent = "Paquete seleccionado";
-
-                mostrarEstado(
-                    obtenerNombre(producto) + " seleccionado · " +
-                    mostrarPrecio(Number(local.price_gvr)),
-                    "correcto"
+                seleccionarProducto(
+                    producto,
+                    local,
+                    "diamantes",
+                    tarjeta
                 );
 
-                /*
-                 * NUEVO: al seleccionar un paquete, validamos
-                 * el ID escrito si ya existe.
-                 */
-                programarValidacionJugador();
-
-                actualizarBoton();
+                estado.textContent = "Paquete seleccionado";
             });
         }
 
         catalogo.appendChild(tarjeta);
     });
-
-    actualizarBoton();
 }
+
+/* =========================================================
+   VISTA DE OFERTAS ESPECIALES.
+   ========================================================= */
+
+function buscarProductoProveedorPorId(productId) {
+    return productosProveedor.find(producto =>
+        obtenerProductId(producto) === productId
+    ) || null;
+}
+
+function renderizarOfertas() {
+    catalogoOfertas.replaceChildren();
+
+    OFERTAS_FREE_FIRE.forEach(oferta => {
+        const productoProveedor =
+            buscarProductoProveedorPorId(oferta.id);
+
+        const productoLocal = productosLocales.find(producto =>
+            String(producto.provider_product_id || "").trim() === oferta.id
+        ) || null;
+
+        /*
+         * Para comprar, necesitamos:
+         * 1. Producto devuelto por Next Level.
+         * 2. Producto local de Supabase.
+         * 3. Producto activo con precio GVR válido.
+         * 4. Producto no marcado como no disponible por el proveedor.
+         */
+        const proveedorDisponible =
+            productoProveedor !== null &&
+            productoProveedor.available !== false;
+
+        const comprable =
+            proveedorDisponible &&
+            productoComprable(productoLocal);
+
+        /*
+         * Si el producto existe en Next Level, utilizamos sus datos
+         * originales. El nombre visible se adapta a la oferta.
+         */
+        const productoParaCompra = productoProveedor
+            ? {
+                ...productoProveedor,
+                nombreMostrar: oferta.nombre
+            }
+            : null;
+
+        const tarjeta = document.createElement("button");
+
+        tarjeta.type = "button";
+        tarjeta.className = "producto producto-oferta";
+
+        if (!comprable) {
+            tarjeta.classList.add("producto-no-disponible");
+            tarjeta.disabled = true;
+        }
+
+        const imagen = document.createElement("img");
+
+        imagen.className = "oferta-imagen";
+        imagen.src = oferta.imagen;
+        imagen.alt = oferta.nombre;
+        imagen.loading = "lazy";
+
+        imagen.addEventListener("error", () => {
+            imagen.style.display = "none";
+        });
+
+        const nombre = document.createElement("div");
+
+        nombre.className = "producto-nombre";
+        nombre.textContent = oferta.nombre;
+
+        const precio = document.createElement("div");
+        precio.className = "producto-precio";
+
+        const estado = document.createElement("div");
+        estado.className = "producto-estado";
+
+        if (productoComprable(productoLocal)) {
+            precio.textContent = mostrarPrecio(
+                Number(productoLocal.price_gvr)
+            );
+        } else {
+            precio.textContent = "Precio pendiente";
+        }
+
+        if (comprable) {
+            estado.textContent = "Seleccionar oferta";
+        } else if (!productoProveedor) {
+            estado.textContent = "Producto no encontrado en el catálogo";
+        } else if (productoProveedor.available === false) {
+            estado.textContent = "No disponible en el proveedor";
+        } else if (!productoLocal) {
+            estado.textContent = "Falta configurar el producto en Supabase";
+        } else if (productoLocal.active !== true) {
+            estado.textContent = "Oferta temporalmente inactiva";
+        } else {
+            estado.textContent = "Revisar el precio GVR";
+        }
+
+        tarjeta.append(
+            imagen,
+            nombre,
+            precio,
+            estado
+        );
+
+        if (comprable) {
+            tarjeta.addEventListener("click", () => {
+                seleccionarProducto(
+                    productoParaCompra,
+                    productoLocal,
+                    "oferta",
+                    tarjeta
+                );
+
+                estado.textContent = "Oferta seleccionada";
+            });
+        }
+
+        catalogoOfertas.appendChild(tarjeta);
+    });
+}
+
+/* =========================================================
+   CARGAR CATÁLOGO Y OFERTAS EN UNA SOLA PETICIÓN.
+   ========================================================= */
 
 async function cargarCatalogo() {
     productoSeleccionado = null;
     productosDisponibles = [];
+    productosProveedor = [];
+
     catalogo.replaceChildren();
+    catalogoOfertas.replaceChildren();
 
     reiniciarValidacionJugador();
 
@@ -1418,13 +1789,16 @@ async function cargarCatalogo() {
         const [respuestaCatalogo] = await Promise.all([
             fetch(URL_CATALOGO + "?game=free-fire", {
                 method: "GET",
+
                 headers: {
                     apikey: SUPABASE_KEY,
                     Authorization: "Bearer " + SUPABASE_KEY,
                     Accept: "application/json"
                 },
+
                 cache: "no-store"
             }),
+
             cargarProductosLocales()
         ]);
 
@@ -1433,7 +1807,9 @@ async function cargarCatalogo() {
         try {
             resultado = await respuestaCatalogo.json();
         } catch {
-            throw new Error("El catálogo devolvió una respuesta no válida.");
+            throw new Error(
+                "El catálogo devolvió una respuesta no válida."
+            );
         }
 
         if (!respuestaCatalogo.ok) {
@@ -1447,58 +1823,88 @@ async function cargarCatalogo() {
         const productos = extraerProductos(resultado);
 
         if (!productos.length) {
-            throw new Error("Next Level no devolvió productos.");
+            throw new Error(
+                "Next Level no devolvió productos."
+            );
         }
 
-        productosDisponibles = productos.filter(producto =>
+        productosProveedor = productos.filter(producto =>
             producto &&
+            obtenerProductId(producto) !== ""
+        );
+
+        /*
+         * El filtro de diamantes sigue siendo el original.
+         * Las ofertas se procesan por sus IDs exactos aparte.
+         */
+        productosDisponibles = productosProveedor.filter(producto =>
             producto.available === true &&
             esOfertaLATAM(producto) &&
-            obtenerProductId(producto) !== "" &&
             esPaqueteDiamantes(producto)
         );
 
-        if (!productosDisponibles.length) {
-            mostrarEstado(
-                "No se encontraron paquetes disponibles para LATAM & USA.",
-                "error"
-            );
-            return;
-        }
-
         renderizarCatalogo();
+        renderizarOfertas();
 
-        const comprables = productosDisponibles.filter(producto =>
-            productoComprable(buscarProductoLocal(producto))
-        ).length;
+        const diamantesComprables =
+            productosDisponibles.filter(producto =>
+                productoComprable(buscarProductoLocal(producto))
+            ).length;
+
+        const ofertasComprables =
+            OFERTAS_FREE_FIRE.filter(oferta => {
+                const proveedor =
+                    buscarProductoProveedorPorId(oferta.id);
+
+                const local = productosLocales.find(producto =>
+                    String(producto.provider_product_id || "").trim() === oferta.id
+                );
+
+                return proveedor &&
+                    proveedor.available !== false &&
+                    productoComprable(local);
+            }).length;
 
         mostrarEstado(
-            productosDisponibles.length +
-            " paquetes del catálogo encontrados. " +
-            comprables + " disponibles para comprar."
+            "Diamantes disponibles: " + diamantesComprables +
+            " · Ofertas disponibles: " + ofertasComprables
         );
 
     } catch (error) {
-        console.error("Error cargando Free Fire:", error);
+        console.error(
+            "Error cargando catálogo de Free Fire:",
+            error
+        );
+
         catalogo.replaceChildren();
+        catalogoOfertas.replaceChildren();
 
         mostrarEstado(
-            mensajeError(error, "No se pudo cargar el catálogo."),
+            mensajeError(
+                error,
+                "No se pudo cargar el catálogo."
+            ),
             "error"
         );
     }
+
+    actualizarBoton();
 }
 
-/* FUNCIONES EDGE */
+/* =========================================================
+   FUNCIONES EDGE.
+   ========================================================= */
 
 async function llamarFuncion(url, accessToken, body) {
     const respuesta = await fetch(url, {
         method: "POST",
+
         headers: {
             "Content-Type": "application/json",
             apikey: SUPABASE_KEY,
             Authorization: "Bearer " + accessToken
         },
+
         body: JSON.stringify(body)
     });
 
@@ -1526,29 +1932,45 @@ async function llamarFuncion(url, accessToken, body) {
     return datos;
 }
 
-/* CONSULTAR PEDIDO */
+/* =========================================================
+   CONSULTAR PEDIDO EXISTENTE.
+   ========================================================= */
 
 async function consultarPedido(accessToken) {
     if (!pedidoPendienteId) {
-        throw new Error("No hay ningún pedido guardado para consultar.");
+        throw new Error(
+            "No hay ningún pedido guardado para consultar."
+        );
     }
 
     const datos = await llamarFuncion(
         URL_CONSULTAR_PEDIDO,
         accessToken,
-        { game_order_id: pedidoPendienteId }
+        {
+            game_order_id: pedidoPendienteId
+        }
     );
 
-    const estadoLocal = String(datos.status || "").toLowerCase();
-    const estadoProveedor = String(datos.provider_status || "").toUpperCase();
+    const estadoLocal = String(
+        datos.status || ""
+    ).toLowerCase();
 
-    if (estadoLocal === "completed" || estadoLocal === "refunded") {
-        const mensaje = estadoLocal === "completed"
-            ? "¡Recarga completada por el proveedor!"
-            : "El pedido figura como reembolsado.";
+    const estadoProveedor = String(
+        datos.provider_status || ""
+    ).toUpperCase();
+
+    if (
+        estadoLocal === "completed" ||
+        estadoLocal === "refunded"
+    ) {
+        const mensaje =
+            estadoLocal === "completed"
+                ? "¡Recarga completada por el proveedor!"
+                : "El pedido figura como reembolsado.";
 
         borrarPedidoPendiente();
         actualizarBoton();
+
         mostrarEstado(mensaje, "correcto");
 
         alert(
@@ -1561,11 +1983,12 @@ async function consultarPedido(accessToken) {
 
     if (estadoProveedor === "FAILED") {
         accionPendiente = "consultar";
+
         guardarPedidoPendiente();
         actualizarBoton();
 
         mostrarEstado(
-            "El proveedor informa FAILED. No vuelvas a comprar el mismo paquete. " +
+            "El proveedor informa FAILED. No vuelvas a comprar el mismo producto. " +
             "Hay que verificar el pedido y el reembolso.",
             "error"
         );
@@ -1574,6 +1997,7 @@ async function consultarPedido(accessToken) {
     }
 
     accionPendiente = "consultar";
+
     guardarPedidoPendiente();
     actualizarBoton();
 
@@ -1583,16 +2007,21 @@ async function consultarPedido(accessToken) {
     );
 }
 
-/* ENVIAR PEDIDO Y ABRIR CHECKOUT */
+/* =========================================================
+   ENVIAR PEDIDO EXISTENTE Y ABRIR CHECKOUT.
+   ========================================================= */
 
 async function enviarPedido(accessToken) {
     if (!pedidoPendienteId) {
-        throw new Error("No hay ningún pedido guardado para enviar.");
+        throw new Error(
+            "No hay ningún pedido guardado para enviar."
+        );
     }
 
     const idPedido = pedidoPendienteId;
 
     accionPendiente = "consultar";
+
     guardarPedidoPendiente();
     actualizarBoton();
 
@@ -1600,10 +2029,15 @@ async function enviarPedido(accessToken) {
         const datos = await llamarFuncion(
             URL_CREAR_PEDIDO,
             accessToken,
-            { game_order_id: idPedido }
+            {
+                game_order_id: idPedido
+            }
         );
 
-        console.log("Respuesta de crear pedido:", datos);
+        console.log(
+            "Respuesta de crear pedido:",
+            datos
+        );
 
         mostrarEstado(
             datos.message ||
@@ -1625,31 +2059,32 @@ async function enviarPedido(accessToken) {
         );
     }
 
-    window.location.href =
-        new URL(
-            "checkout.html?id=" + encodeURIComponent(idPedido),
-            window.location.href
-        ).href;
+    window.location.href = new URL(
+        "checkout.html?id=" + encodeURIComponent(idPedido),
+        window.location.href
+    ).href;
 }
 
-/* CREAR COMPRA LOCAL */
+/* =========================================================
+   CREAR COMPRA: DIAMANTES U OFERTA.
+   Se mantiene el mismo RPC y el mismo sistema de pedidos.
+   ========================================================= */
 
 async function crearCompra(accessToken, playerId) {
     if (!productoSeleccionado) {
-        throw new Error("Selecciona primero un paquete disponible.");
+        throw new Error(
+            "Selecciona primero un producto disponible."
+        );
     }
 
-    /*
-     * NUEVO: si el proveedor confirmó que el ID es inválido,
-     * no permitimos crear un pedido nuevo con ese ID.
-     *
-     * Si la validación está temporalmente indisponible,
-     * no la tratamos como un ID incorrecto.
-     */
     const productIdValidacion = obtenerProductId(
         productoSeleccionado.proveedor
     );
 
+    /*
+     * Solo bloqueamos cuando el proveedor confirmó explícitamente
+     * que el ID es inválido para el producto seleccionado.
+     */
     if (
         validacionJugador.status === "INVALID" &&
         validacionJugador.playerId === playerId &&
@@ -1678,14 +2113,18 @@ async function crearCompra(accessToken, playerId) {
 
     const { data: productoActual, error: errorProducto } = await supabase
         .from("game_products")
-        .select("id,game,price_gvr,active,provider,provider_product_id")
+        .select(
+            "id,game,price_gvr,active,provider,provider_product_id"
+        )
         .eq("id", local.id)
         .eq("provider", "nextlevel")
         .eq("active", true)
         .maybeSingle();
 
     if (errorProducto) {
-        throw new Error("No se pudo verificar el producto antes de comprar.");
+        throw new Error(
+            "No se pudo verificar el producto antes de comprar."
+        );
     }
 
     if (
@@ -1701,8 +2140,14 @@ async function crearCompra(accessToken, playerId) {
         );
     }
 
-    const precioConfirmado = Number(productoActual.price_gvr);
+    const precioConfirmado = Number(
+        productoActual.price_gvr
+    );
 
+    /*
+     * El nombre que se muestra en el modal será el de la oferta
+     * o el nombre del paquete de diamantes.
+     */
     const confirmar = await abrirModalConfirmacion(
         productoSeleccionado.proveedor,
         playerId,
@@ -1710,12 +2155,23 @@ async function crearCompra(accessToken, playerId) {
     );
 
     if (!confirmar) {
-        mostrarEstado("Compra cancelada. No se creó ningún pedido.");
+        mostrarEstado(
+            "Compra cancelada. No se creó ningún pedido."
+        );
+
         return;
     }
 
-    mostrarEstado("Creando pedido. No cierres esta página...");
+    mostrarEstado(
+        "Creando pedido. No cierres esta página..."
+    );
 
+    /*
+     * MISMO RPC QUE ANTES.
+     *
+     * No descontamos saldo desde JavaScript.
+     * La operación de compra continúa en Supabase.
+     */
     const { data: orderId, error: errorCompra } = await supabase.rpc(
         "purchase_game_product",
         {
@@ -1725,7 +2181,10 @@ async function crearCompra(accessToken, playerId) {
     );
 
     if (errorCompra) {
-        console.error("Error creando compra local:", errorCompra.message);
+        console.error(
+            "Error creando compra local:",
+            errorCompra.message
+        );
 
         throw new Error(
             errorCompra.message ||
@@ -1744,16 +2203,21 @@ async function crearCompra(accessToken, playerId) {
 
     pedidoPendienteId = orderId;
     accionPendiente = "enviar";
+
     guardarPedidoPendiente();
     actualizarBoton();
 
     await enviarPedido(accessToken);
 }
 
-/* BOTÓN PRINCIPAL */
+/* =========================================================
+   BOTÓN PRINCIPAL: COMPRAR O RECUPERAR PEDIDO.
+   ========================================================= */
 
 botonContinuar.addEventListener("click", async () => {
-    if (procesando) return;
+    if (procesando) {
+        return;
+    }
 
     procesando = true;
     botonContinuar.disabled = true;
@@ -1765,11 +2229,15 @@ botonContinuar.addEventListener("click", async () => {
         } = await supabase.auth.getSession();
 
         if (sessionError) {
-            throw new Error("No se pudo comprobar la sesión.");
+            throw new Error(
+                "No se pudo comprobar la sesión."
+            );
         }
 
         if (!session?.access_token) {
-            throw new Error("Debes iniciar sesión para continuar.");
+            throw new Error(
+                "Debes iniciar sesión para continuar."
+            );
         }
 
         const {
@@ -1788,8 +2256,7 @@ botonContinuar.addEventListener("click", async () => {
         recuperarPedidoPendiente(user.id);
 
         /*
-         * Primero se verifica el pedido anterior.
-         * Nunca se inicia otra compra mientras exista uno sin resolver.
+         * Antes de crear una compra nueva, se comprueba el pedido anterior.
          */
         await verificarPedidoGuardado(user.id);
 
@@ -1801,8 +2268,11 @@ botonContinuar.addEventListener("click", async () => {
                 );
 
                 await enviarPedido(session.access_token);
+
             } else {
-                mostrarEstado("Consultando el estado del pedido anterior...");
+                mostrarEstado(
+                    "Consultando el estado del pedido anterior..."
+                );
 
                 await consultarPedido(session.access_token);
             }
@@ -1813,39 +2283,63 @@ botonContinuar.addEventListener("click", async () => {
         const playerId = campoJugador.value.trim();
 
         if (!playerId) {
-            throw new Error("Introduce tu ID de Free Fire.");
+            throw new Error(
+                "Introduce tu ID de Free Fire."
+            );
         }
 
         if (playerId.length > 50) {
-            throw new Error("El ID del jugador es demasiado largo.");
+            throw new Error(
+                "El ID del jugador es demasiado largo."
+            );
         }
 
         if (!productoSeleccionado) {
-            throw new Error("Selecciona primero un paquete disponible.");
+            throw new Error(
+                vistaActual === "ofertas"
+                    ? "Selecciona primero una oferta disponible."
+                    : "Selecciona primero un paquete disponible."
+            );
         }
 
-        await crearCompra(session.access_token, playerId);
+        await crearCompra(
+            session.access_token,
+            playerId
+        );
 
     } catch (error) {
-        console.error("Error en la compra de Free Fire:", error);
+        console.error(
+            "Error en la compra de Free Fire:",
+            error
+        );
 
         mostrarEstado(
-            mensajeError(error, "No se pudo completar la operación."),
+            mensajeError(
+                error,
+                "No se pudo completar la operación."
+            ),
             "error"
         );
 
         alert(
-            mensajeError(error, "No se pudo completar la operación.")
+            mensajeError(
+                error,
+                "No se pudo completar la operación."
+            )
         );
 
     } finally {
         procesando = false;
+
         botonContinuar.disabled = false;
+
         actualizarBoton();
     }
 });
 
-/* INICIO */
+/* =========================================================
+   INICIO.
+   ========================================================= */
 
 async function iniciar() {
     try {
@@ -1855,19 +2349,27 @@ async function iniciar() {
 
         if (session?.user?.id) {
             usuarioActualId = session.user.id;
+
             recuperarPedidoPendiente(usuarioActualId);
+
             actualizarBoton();
         }
+
     } catch (error) {
-        console.error("No se pudo recuperar la sesión:", error);
+        console.error(
+            "No se pudo recuperar la sesión:",
+            error
+        );
     }
 
     await cargarCatalogo();
+
+    actualizarBoton();
 }
 
 iniciar();
 </script>
 </body>
-            </html>
+    </html>
 
     
