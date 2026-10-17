@@ -168,6 +168,45 @@
             border-color: #8a672f;
         }
 
+        /* PESTAÑAS DE CATEGORÍAS */
+
+        .selector-categorias {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin: 22px 0 18px;
+            padding: 6px;
+            background: #061226;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+        }
+
+        .pestana-categoria {
+            min-width: 0;
+            padding: 12px 5px;
+            background: transparent;
+            color: #8fa5bd;
+            border: 1px solid transparent;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 1.4;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .pestana-categoria.activa {
+            color: #fff;
+            background: linear-gradient(90deg, #087cff, #00baff);
+            border-color: #28a9ff;
+            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+        }
+
+        .pestana-categoria:focus-visible {
+            outline: 2px solid #45c8ff;
+            outline-offset: 2px;
+        }
+
         .catalogo {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -233,12 +272,6 @@
             color: #ffcf8a;
         }
 
-        .separador-ofertas {
-            margin-top: 22px;
-            padding-top: 18px;
-            border-top: 1px solid #164b8f;
-        }
-
         .boton {
             width: 100%;
             padding: 14px;
@@ -257,30 +290,12 @@
         }
 
         .continuar:disabled {
-            cursor: wait;
+            cursor: not-allowed;
             opacity: 0.55;
         }
 
-        .boton-ofertas {
-            background: #07152b;
-            color: #28a9ff;
-            border: 1px solid #168cff;
-            cursor: pointer;
-            transition: background 0.2s, box-shadow 0.2s;
-        }
+        /* IMÁGENES DE LAS OFERTAS */
 
-        .boton-ofertas:hover {
-            background: #0b2040;
-            box-shadow: 0 0 12px rgba(0, 140, 255, 0.16);
-        }
-
-        /* NUEVO: botón para volver al catálogo de diamantes. */
-        .boton-volver-diamantes {
-            margin-top: 8px;
-            margin-bottom: 15px;
-        }
-
-        /* NUEVO: imágenes de las ofertas. */
         .oferta-imagen {
             display: block;
             width: 100%;
@@ -305,9 +320,31 @@
             text-align: center;
         }
 
-        /* NUEVO: alternar vistas sin cambiar de página. */
+        /* CAMBIO DE VISTAS SIN ABRIR OTRA PÁGINA */
+
         .vista-oculta {
             display: none !important;
+        }
+
+        .aviso-proximamente {
+            padding: 25px 18px;
+            margin-top: 12px;
+            background: #061226;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            text-align: center;
+        }
+
+        .aviso-proximamente h2 {
+            margin-bottom: 12px;
+            font-size: 19px;
+            color: #45c8ff;
+        }
+
+        .aviso-proximamente p {
+            color: #8fa5bd;
+            font-size: 13px;
+            line-height: 1.7;
         }
 
         .nota {
@@ -475,6 +512,11 @@
             .oferta-imagen {
                 height: 130px;
             }
+
+            .pestana-categoria {
+                font-size: 11px;
+                padding: 11px 3px;
+            }
         }
     </style>
 </head>
@@ -503,10 +545,10 @@
         <h1>Free Fire</h1>
 
         <p class="descripcion">
-            Selecciona tu paquete de diamantes o una de nuestras ofertas especiales.
+            Selecciona diamantes, ofertas extra o paquetes de nivel.
         </p>
 
-        <!-- EL ID SE COMPARTE ENTRE DIAMANTES Y OFERTAS. -->
+        <!-- EL ID SE COMPARTE ENTRE LAS TRES CATEGORÍAS. -->
         <label class="etiqueta" for="idjugador">
             ID del jugador
         </label>
@@ -530,7 +572,37 @@
             role="status"
         ></div>
 
-        <!-- ESTADO COMPARTIDO DEL CATÁLOGO Y LAS OFERTAS. -->
+        <!-- PESTAÑAS PERMANENTES. -->
+        <nav class="selector-categorias" aria-label="Categorías de Free Fire">
+            <button
+                type="button"
+                class="pestana-categoria activa"
+                id="pestanaDiamantes"
+                aria-selected="true"
+            >
+                Diamantes
+            </button>
+
+            <button
+                type="button"
+                class="pestana-categoria"
+                id="pestanaOfertas"
+                aria-selected="false"
+            >
+                Ofertas extra
+            </button>
+
+            <button
+                type="button"
+                class="pestana-categoria"
+                id="pestanaNivel"
+                aria-selected="false"
+            >
+                Paquete de nivel
+            </button>
+        </nav>
+
+        <!-- ESTADO COMPARTIDO DEL CATÁLOGO. -->
         <div id="estadoCatalogo" class="estado" aria-live="polite">
             Conectando con el catálogo...
         </div>
@@ -544,34 +616,31 @@
 
             <div id="catalogo" class="catalogo"></div>
 
-            <div class="separador-ofertas">
-                <button
-                    class="boton boton-ofertas"
-                    type="button"
-                    id="botonOfertas"
-                >
-                    🎁 Ofertas especiales
-                </button>
-            </div>
-
         </section>
 
-        <!-- VISTA 2: OFERTAS, EN LA MISMA PÁGINA. -->
+        <!-- VISTA 2: OFERTAS EXTRA. -->
         <section id="vistaOfertas" class="vista-oculta">
-
-            <button
-                class="boton boton-ofertas boton-volver-diamantes"
-                type="button"
-                id="botonVolverDiamantes"
-            >
-                ← Volver a diamantes
-            </button>
 
             <label class="etiqueta">
                 Selecciona una oferta especial
             </label>
 
             <div id="catalogoOfertas" class="catalogo"></div>
+
+        </section>
+
+        <!-- VISTA 3: PAQUETE DE NIVEL. -->
+        <section id="vistaNivel" class="vista-oculta">
+
+            <div class="aviso-proximamente">
+                <h2>Paquete de nivel</h2>
+
+                <p>
+                    Esta categoría estará disponible próximamente.
+                    Estamos preparando los productos para que puedas
+                    comprarlos desde Gamers Gold Top-Up.
+                </p>
+            </div>
 
         </section>
 
@@ -700,10 +769,13 @@ const estadoCatalogo = document.getElementById("estadoCatalogo");
 
 const vistaDiamantes = document.getElementById("vistaDiamantes");
 const vistaOfertas = document.getElementById("vistaOfertas");
+const vistaNivel = document.getElementById("vistaNivel");
+
+const pestanaDiamantes = document.getElementById("pestanaDiamantes");
+const pestanaOfertas = document.getElementById("pestanaOfertas");
+const pestanaNivel = document.getElementById("pestanaNivel");
 
 const botonContinuar = document.getElementById("botonContinuar");
-const botonOfertas = document.getElementById("botonOfertas");
-const botonVolverDiamantes = document.getElementById("botonVolverDiamantes");
 
 const campoJugador = document.getElementById("idjugador");
 const estadoValidacion = document.getElementById("estadoValidacion");
@@ -754,9 +826,10 @@ let pedidoPendienteId = null;
 let accionPendiente = "crear";
 
 /*
- * tipo:
+ * Vistas:
  * - diamantes
- * - oferta
+ * - ofertas
+ * - nivel
  */
 let vistaActual = "diamantes";
 
@@ -780,7 +853,11 @@ let claveUltimaValidacion = "";
    ========================================================= */
 
 function cambiarVista(vista) {
-    if (vista !== "diamantes" && vista !== "ofertas") {
+    if (
+        vista !== "diamantes" &&
+        vista !== "ofertas" &&
+        vista !== "nivel"
+    ) {
         return;
     }
 
@@ -796,8 +873,44 @@ function cambiarVista(vista) {
         vista !== "ofertas"
     );
 
+    vistaNivel.classList.toggle(
+        "vista-oculta",
+        vista !== "nivel"
+    );
+
+    pestanaDiamantes.classList.toggle(
+        "activa",
+        vista === "diamantes"
+    );
+
+    pestanaOfertas.classList.toggle(
+        "activa",
+        vista === "ofertas"
+    );
+
+    pestanaNivel.classList.toggle(
+        "activa",
+        vista === "nivel"
+    );
+
+    pestanaDiamantes.setAttribute(
+        "aria-selected",
+        String(vista === "diamantes")
+    );
+
+    pestanaOfertas.setAttribute(
+        "aria-selected",
+        String(vista === "ofertas")
+    );
+
+    pestanaNivel.setAttribute(
+        "aria-selected",
+        String(vista === "nivel")
+    );
+
     productoSeleccionado = null;
 
+    limpiarSeleccionVisual();
     reiniciarValidacionJugador();
 
     if (vista === "diamantes") {
@@ -806,21 +919,29 @@ function cambiarVista(vista) {
                 ? "Selecciona el paquete de diamantes que deseas comprar."
                 : "El catálogo de diamantes todavía no está disponible."
         );
-    } else {
+    } else if (vista === "ofertas") {
         mostrarEstado(
             "Selecciona una oferta especial de Free Fire."
+        );
+    } else {
+        mostrarEstado(
+            "Los paquetes de nivel estarán disponibles próximamente."
         );
     }
 
     actualizarBoton();
 }
 
-botonOfertas.addEventListener("click", () => {
+pestanaDiamantes.addEventListener("click", () => {
+    cambiarVista("diamantes");
+});
+
+pestanaOfertas.addEventListener("click", () => {
     cambiarVista("ofertas");
 });
 
-botonVolverDiamantes.addEventListener("click", () => {
-    cambiarVista("diamantes");
+pestanaNivel.addEventListener("click", () => {
+    cambiarVista("nivel");
 });
 
 /* =========================================================
@@ -1004,8 +1125,8 @@ function actualizarBoton() {
     }
 
     /*
-     * Si hay un pedido pendiente, el botón sirve para recuperarlo
-     * o consultar su estado, independientemente de la vista actual.
+     * Un pedido pendiente siempre tiene prioridad.
+     * Así no se oculta la opción de recuperarlo al cambiar de pestaña.
      */
     if (pedidoPendienteId) {
         botonContinuar.textContent =
@@ -1014,6 +1135,15 @@ function actualizarBoton() {
                 : "CONSULTAR PEDIDO";
 
         botonContinuar.disabled = false;
+        return;
+    }
+
+    /*
+     * El paquete de nivel aún no está habilitado para comprar.
+     */
+    if (vistaActual === "nivel") {
+        botonContinuar.textContent = "PRÓXIMAMENTE";
+        botonContinuar.disabled = true;
         return;
     }
 
@@ -1645,7 +1775,7 @@ function renderizarCatalogo() {
 }
 
 /* =========================================================
-   VISTA DE OFERTAS ESPECIALES.
+   VISTA DE OFERTAS EXTRA.
    ========================================================= */
 
 function buscarProductoProveedorPorId(productId) {
@@ -1666,11 +1796,8 @@ function renderizarOfertas() {
         ) || null;
 
         /*
-         * Para comprar, necesitamos:
-         * 1. Producto devuelto por Next Level.
-         * 2. Producto local de Supabase.
-         * 3. Producto activo con precio GVR válido.
-         * 4. Producto no marcado como no disponible por el proveedor.
+         * Para comprar necesitamos que el producto exista en Next Level
+         * y en Supabase, esté disponible y tenga precio GVR válido.
          */
         const proveedorDisponible =
             productoProveedor !== null &&
@@ -1680,10 +1807,6 @@ function renderizarOfertas() {
             proveedorDisponible &&
             productoComprable(productoLocal);
 
-        /*
-         * Si el producto existe en Next Level, utilizamos sus datos
-         * originales. El nombre visible se adapta a la oferta.
-         */
         const productoParaCompra = productoProveedor
             ? {
                 ...productoProveedor,
@@ -1834,8 +1957,8 @@ async function cargarCatalogo() {
         );
 
         /*
-         * El filtro de diamantes sigue siendo el original.
-         * Las ofertas se procesan por sus IDs exactos aparte.
+         * El filtro de diamantes se conserva.
+         * Las ofertas se identifican por sus IDs exactos.
          */
         productosDisponibles = productosProveedor.filter(producto =>
             producto.available === true &&
@@ -1865,10 +1988,16 @@ async function cargarCatalogo() {
                     productoComprable(local);
             }).length;
 
-        mostrarEstado(
-            "Diamantes disponibles: " + diamantesComprables +
-            " · Ofertas disponibles: " + ofertasComprables
-        );
+        if (vistaActual === "nivel") {
+            mostrarEstado(
+                "Los paquetes de nivel estarán disponibles próximamente."
+            );
+        } else {
+            mostrarEstado(
+                "Diamantes disponibles: " + diamantesComprables +
+                " · Ofertas disponibles: " + ofertasComprables
+            );
+        }
 
     } catch (error) {
         console.error(
@@ -2144,10 +2273,6 @@ async function crearCompra(accessToken, playerId) {
         productoActual.price_gvr
     );
 
-    /*
-     * El nombre que se muestra en el modal será el de la oferta
-     * o el nombre del paquete de diamantes.
-     */
     const confirmar = await abrirModalConfirmacion(
         productoSeleccionado.proveedor,
         playerId,
@@ -2167,10 +2292,8 @@ async function crearCompra(accessToken, playerId) {
     );
 
     /*
-     * MISMO RPC QUE ANTES.
-     *
-     * No descontamos saldo desde JavaScript.
-     * La operación de compra continúa en Supabase.
+     * MISMO RPC ORIGINAL.
+     * El descuento de saldo se realiza en Supabase.
      */
     const { data: orderId, error: errorCompra } = await supabase.rpc(
         "purchase_game_product",
@@ -2280,6 +2403,15 @@ botonContinuar.addEventListener("click", async () => {
             return;
         }
 
+        /*
+         * El paquete de nivel no puede crear compras todavía.
+         */
+        if (vistaActual === "nivel") {
+            throw new Error(
+                "Los paquetes de nivel estarán disponibles próximamente."
+            );
+        }
+
         const playerId = campoJugador.value.trim();
 
         if (!playerId) {
@@ -2330,9 +2462,6 @@ botonContinuar.addEventListener("click", async () => {
 
     } finally {
         procesando = false;
-
-        botonContinuar.disabled = false;
-
         actualizarBoton();
     }
 });
