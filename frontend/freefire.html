@@ -15,114 +15,111 @@
             font-family: Arial, sans-serif;
         }
 
+        :root {
+            color-scheme: dark;
+        }
+
         body {
             background: #050b18;
-            color: white;
+            color: #fff;
             min-height: 100vh;
-            padding: 20px;
+            padding: 12px;
         }
 
         .contenedor {
-            max-width: 650px;
-            margin: auto;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 10px;
+            margin-bottom: 12px;
+            min-height: 34px;
         }
 
         .logo {
-            font-size: 21px;
+            font-size: 18px;
             font-weight: 900;
         }
 
         .rayo {
             color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
+            text-shadow: 0 0 10px #008cff;
         }
 
         .volver {
-            color: #28a9ff;
+            color: #45c8ff;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             white-space: nowrap;
         }
 
         .card {
             background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-        }
-
-        .icono {
-            text-align: center;
-            margin-bottom: 14px;
-        }
-
-        .icono img {
-            width: 200px;
-            height: 200px;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto;
-            border-radius: 16px;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            padding: 16px 13px;
+            box-shadow: 0 0 22px rgba(0, 140, 255, 0.08);
         }
 
         h1 {
-            text-align: center;
-            font-size: 27px;
-            margin-bottom: 10px;
+            font-size: 21px;
+            margin-bottom: 5px;
         }
 
         .descripcion {
-            text-align: center;
             color: #8fa5bd;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 22px;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 14px;
         }
 
         .etiqueta {
             display: block;
-            margin: 18px 0 10px;
+            margin: 12px 0 7px;
             color: #b8c9dc;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
         }
 
         input {
             width: 100%;
-            padding: 13px;
+            min-height: 42px;
+            padding: 10px 12px;
             background: #061226;
             color: white;
             border: 1px solid #204c78;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 7px;
+            font-size: 14px;
             outline: none;
         }
 
         input:focus {
             border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+            box-shadow: 0 0 7px rgba(0, 157, 255, 0.15);
+        }
+
+        .ayuda {
+            margin-top: 6px;
+            color: #8299b4;
+            font-size: 11px;
+            line-height: 1.45;
         }
 
         .estado {
-            padding: 13px;
-            margin: 18px 0;
+            padding: 9px 10px;
+            margin: 12px 0;
             border: 1px solid #204c78;
-            border-radius: 10px;
+            border-radius: 7px;
             background: #061226;
             color: #a9c4df;
-            text-align: center;
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 11px;
+            line-height: 1.45;
             overflow-wrap: anywhere;
         }
 
@@ -138,14 +135,14 @@
 
         .estado-validacion {
             display: none;
-            padding: 13px;
-            margin-top: 12px;
+            padding: 9px 10px;
+            margin-top: 8px;
             border: 1px solid #204c78;
-            border-radius: 10px;
+            border-radius: 7px;
             background: #061226;
             color: #a9c4df;
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 11px;
+            line-height: 1.45;
             overflow-wrap: anywhere;
         }
 
@@ -168,38 +165,52 @@
             border-color: #8a672f;
         }
 
-        /* PESTAÑAS DE CATEGORÍAS */
+        /* CATEGORÍAS FINAS Y RECTANGULARES */
 
         .selector-categorias {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 8px;
-            margin: 22px 0 18px;
-            padding: 6px;
-            background: #061226;
-            border: 1px solid #164b75;
-            border-radius: 13px;
+            gap: 6px;
+            margin: 13px 0;
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
         }
 
         .pestana-categoria {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             min-width: 0;
-            padding: 12px 5px;
-            background: transparent;
+            min-height: 36px;
+            padding: 7px 4px;
+            background: #07152b;
             color: #8fa5bd;
-            border: 1px solid transparent;
-            border-radius: 9px;
-            font-size: 12px;
+            border: 1px solid #204568;
+            border-radius: 5px;
+            font-size: 11px;
             font-weight: bold;
-            line-height: 1.4;
+            line-height: 1.25;
+            text-align: center;
             cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
+            transition:
+                color 0.2s,
+                background 0.2s,
+                border-color 0.2s,
+                box-shadow 0.2s;
+        }
+
+        .pestana-categoria:hover {
+            border-color: #168cff;
+            color: #fff;
         }
 
         .pestana-categoria.activa {
             color: #fff;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            border-color: #28a9ff;
-            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+            background: #0b3157;
+            border-color: #00baff;
+            box-shadow: inset 0 -2px 0 #00baff;
         }
 
         .pestana-categoria:focus-visible {
@@ -207,25 +218,27 @@
             outline-offset: 2px;
         }
 
+        /* CATÁLOGO COMPACTO */
+
         .catalogo {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-            margin-top: 12px;
+            gap: 8px;
+            margin-top: 8px;
         }
 
         .producto {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: 12px;
+            gap: 8px;
             min-width: 0;
-            min-height: 115px;
-            padding: 15px 12px;
+            min-height: 83px;
+            padding: 10px;
             background: #061226;
             color: white;
             border: 1px solid #164b75;
-            border-radius: 13px;
+            border-radius: 7px;
             text-align: left;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
@@ -240,32 +253,33 @@
 
         .producto:disabled {
             cursor: not-allowed;
-            opacity: 0.7;
+            opacity: 0.65;
         }
 
         .producto.seleccionado {
+            background: #09203b;
             border-color: #00baff;
-            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
+            box-shadow: inset 0 -2px 0 #00baff;
         }
 
         .producto-nombre {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
-            line-height: 1.45;
+            line-height: 1.4;
             overflow-wrap: anywhere;
         }
 
         .producto-precio {
-            color: #ffffff;
-            font-size: 15px;
+            color: #fff;
+            font-size: 13px;
             font-weight: bold;
         }
 
         .producto-estado {
             color: #45c8ff;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: bold;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .producto-no-disponible .producto-estado {
@@ -274,35 +288,35 @@
 
         .boton {
             width: 100%;
-            padding: 14px;
+            min-height: 42px;
+            padding: 11px;
             border: none;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 6px;
+            font-size: 13px;
             font-weight: bold;
         }
 
         .continuar {
-            margin-top: 18px;
-            background: linear-gradient(90deg, #087cff, #00baff);
+            margin-top: 13px;
+            background: linear-gradient(90deg, #087cff, #00aaff);
             color: white;
             cursor: pointer;
-            opacity: 1;
         }
 
         .continuar:disabled {
             cursor: not-allowed;
-            opacity: 0.55;
+            opacity: 0.5;
         }
 
-        /* IMÁGENES DE LAS OFERTAS */
+        /* OFERTAS */
 
         .oferta-imagen {
             display: block;
             width: 100%;
-            height: 115px;
+            height: 85px;
             object-fit: contain;
-            margin: 0 auto 5px;
-            border-radius: 9px;
+            margin: 0 auto 3px;
+            border-radius: 5px;
         }
 
         .producto-oferta {
@@ -310,57 +324,46 @@
             align-items: stretch;
         }
 
-        .producto-oferta .producto-nombre {
-            text-align: center;
-            min-height: 40px;
-        }
-
+        .producto-oferta .producto-nombre,
         .producto-oferta .producto-precio,
         .producto-oferta .producto-estado {
             text-align: center;
         }
-
-        /* CAMBIO DE VISTAS SIN ABRIR OTRA PÁGINA */
 
         .vista-oculta {
             display: none !important;
         }
 
         .aviso-proximamente {
-            padding: 25px 18px;
-            margin-top: 12px;
+            padding: 17px 12px;
+            margin-top: 8px;
             background: #061226;
             border: 1px solid #164b75;
-            border-radius: 13px;
+            border-radius: 7px;
             text-align: center;
         }
 
         .aviso-proximamente h2 {
-            margin-bottom: 12px;
-            font-size: 19px;
+            margin-bottom: 7px;
+            font-size: 16px;
             color: #45c8ff;
         }
 
         .aviso-proximamente p {
             color: #8fa5bd;
-            font-size: 13px;
-            line-height: 1.7;
+            font-size: 12px;
+            line-height: 1.55;
         }
 
         .nota {
-            margin-top: 20px;
+            margin-top: 13px;
             text-align: center;
             color: #8299b4;
-            font-size: 11px;
-            line-height: 1.6;
-        }
-
-        .ayuda {
-            margin-top: 8px;
-            color: #8299b4;
-            font-size: 12px;
+            font-size: 10px;
             line-height: 1.5;
         }
+
+        /* MODAL */
 
         body.modal-abierto {
             overflow: hidden;
@@ -373,8 +376,8 @@
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            background: rgba(1, 6, 17, 0.82);
+            padding: 14px;
+            background: rgba(1, 6, 17, 0.85);
             backdrop-filter: blur(5px);
         }
 
@@ -384,19 +387,19 @@
 
         .modal {
             width: 100%;
-            max-width: 390px;
-            padding: 24px 20px;
+            max-width: 360px;
+            padding: 19px 15px;
             background: #091a35;
             border: 1px solid #168cff;
-            border-radius: 18px;
-            box-shadow: 0 0 35px rgba(0, 140, 255, 0.22);
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 140, 255, 0.18);
             animation: modalAparecer 0.18s ease-out;
         }
 
         @keyframes modalAparecer {
             from {
                 opacity: 0;
-                transform: translateY(8px) scale(0.98);
+                transform: translateY(7px) scale(0.98);
             }
 
             to {
@@ -406,35 +409,35 @@
         }
 
         .modal h2 {
-            margin-bottom: 9px;
+            margin-bottom: 7px;
             text-align: center;
-            font-size: 22px;
+            font-size: 19px;
         }
 
         .modal-descripcion {
-            margin-bottom: 18px;
+            margin-bottom: 13px;
             color: #8fa5bd;
             text-align: center;
-            font-size: 13px;
+            font-size: 11px;
             line-height: 1.5;
         }
 
         .modal-detalles {
-            padding: 14px;
-            margin-bottom: 18px;
+            padding: 10px;
+            margin-bottom: 13px;
             background: #061226;
             border: 1px solid #204c78;
-            border-radius: 12px;
+            border-radius: 7px;
         }
 
         .modal-fila {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 14px;
-            padding: 8px 0;
-            font-size: 13px;
-            line-height: 1.45;
+            gap: 12px;
+            padding: 7px 0;
+            font-size: 12px;
+            line-height: 1.4;
         }
 
         .modal-fila + .modal-fila {
@@ -453,20 +456,20 @@
 
         .modal-total {
             color: #45c8ff;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .modal-botones {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 8px;
         }
 
         .modal-boton {
-            min-height: 44px;
-            padding: 12px 10px;
-            border-radius: 10px;
-            font-size: 13px;
+            min-height: 39px;
+            padding: 9px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -488,34 +491,30 @@
             cursor: wait;
         }
 
-        @media (max-width: 380px) {
-            .modal {
-                padding: 22px 15px;
-            }
-
+        @media (max-width: 360px) {
             body {
-                padding: 12px;
+                padding: 8px;
             }
 
             .card {
-                padding: 22px 14px;
-            }
-
-            .catalogo {
-                grid-template-columns: 1fr;
+                padding: 13px 10px;
             }
 
             .logo {
-                font-size: 17px;
-            }
-
-            .oferta-imagen {
-                height: 130px;
+                font-size: 15px;
             }
 
             .pestana-categoria {
-                font-size: 11px;
-                padding: 11px 3px;
+                font-size: 10px;
+                padding: 6px 2px;
+            }
+
+            .catalogo {
+                gap: 6px;
+            }
+
+            .producto {
+                padding: 8px;
             }
         }
     </style>
@@ -533,22 +532,12 @@
     </header>
 
     <main class="card">
-        <div class="icono">
-            <img
-                src="imagenes/file_00000000323881f5b39e628c9a42a0d2.png"
-                alt="Free Fire"
-                width="200"
-                height="200"
-            >
-        </div>
-
         <h1>Free Fire</h1>
 
         <p class="descripcion">
-            Selecciona diamantes, ofertas extra o paquetes de nivel.
+            Selecciona el producto que deseas comprar.
         </p>
 
-        <!-- EL ID SE COMPARTE ENTRE LAS TRES CATEGORÍAS. -->
         <label class="etiqueta" for="idjugador">
             ID del jugador
         </label>
@@ -562,7 +551,7 @@
         >
 
         <p class="ayuda">
-            Escribe tu ID de jugador y selecciona el producto que deseas recibir.
+            Escribe tu ID de jugador para continuar con la compra.
         </p>
 
         <div
@@ -572,7 +561,6 @@
             role="status"
         ></div>
 
-        <!-- PESTAÑAS PERMANENTES. -->
         <nav class="selector-categorias" aria-label="Categorías de Free Fire">
             <button
                 type="button"
@@ -602,36 +590,27 @@
             </button>
         </nav>
 
-        <!-- ESTADO COMPARTIDO DEL CATÁLOGO. -->
         <div id="estadoCatalogo" class="estado" aria-live="polite">
             Conectando con el catálogo...
         </div>
 
-        <!-- VISTA 1: DIAMANTES. -->
         <section id="vistaDiamantes">
-
             <label class="etiqueta">
                 Selecciona una cantidad de diamantes
             </label>
 
             <div id="catalogo" class="catalogo"></div>
-
         </section>
 
-        <!-- VISTA 2: OFERTAS EXTRA. -->
         <section id="vistaOfertas" class="vista-oculta">
-
             <label class="etiqueta">
                 Selecciona una oferta especial
             </label>
 
             <div id="catalogoOfertas" class="catalogo"></div>
-
         </section>
 
-        <!-- VISTA 3: PAQUETE DE NIVEL. -->
         <section id="vistaNivel" class="vista-oculta">
-
             <div class="aviso-proximamente">
                 <h2>Paquete de nivel</h2>
 
@@ -641,10 +620,8 @@
                     comprarlos desde Gamers Gold Top-Up.
                 </p>
             </div>
-
         </section>
 
-        <!-- UN SOLO BOTÓN Y UN SOLO FLUJO DE COMPRA. -->
         <button
             id="botonContinuar"
             class="boton continuar"
@@ -662,7 +639,6 @@
     </main>
 </div>
 
-<!-- MODAL DE CONFIRMACIÓN COMPARTIDO. -->
 <div
     id="modalFondo"
     class="modal-fondo"
@@ -761,7 +737,7 @@ const supabase = createClient(
     }
 );
 
-/* ELEMENTOS GENERALES. */
+/* ELEMENTOS */
 
 const catalogo = document.getElementById("catalogo");
 const catalogoOfertas = document.getElementById("catalogoOfertas");
@@ -787,14 +763,6 @@ const modalTotal = document.getElementById("modalTotal");
 const modalCancelar = document.getElementById("modalCancelar");
 const modalAceptar = document.getElementById("modalAceptar");
 
-/*
- * OFERTAS DE FREE FIRE.
- *
- * Los IDs deben coincidir exactamente con provider_product_id
- * en game_products y con los productos devueltos por Next Level.
- *
- * Las rutas de las imágenes son relativas a frontend/freefire.html.
- */
 const OFERTAS_FREE_FIRE = [
     {
         id: "fz-free_fire_latam-booyah_pass",
@@ -825,15 +793,7 @@ let usuarioActualId = null;
 let pedidoPendienteId = null;
 let accionPendiente = "crear";
 
-/*
- * Vistas:
- * - diamantes
- * - ofertas
- * - nivel
- */
 let vistaActual = "diamantes";
-
-/* ESTADO DE VALIDACIÓN DEL JUGADOR. */
 
 let validacionJugador = {
     status: "UNKNOWN",
@@ -848,16 +808,10 @@ let temporizadorValidacion = null;
 let numeroSolicitudValidacion = 0;
 let claveUltimaValidacion = "";
 
-/* =========================================================
-   CAMBIO DE VISTA: NO ABRE OTRA PÁGINA.
-   ========================================================= */
+/* CAMBIO DE CATEGORÍA */
 
 function cambiarVista(vista) {
-    if (
-        vista !== "diamantes" &&
-        vista !== "ofertas" &&
-        vista !== "nivel"
-    ) {
+    if (!["diamantes", "ofertas", "nivel"].includes(vista)) {
         return;
     }
 
@@ -916,13 +870,11 @@ function cambiarVista(vista) {
     if (vista === "diamantes") {
         mostrarEstado(
             productosDisponibles.length
-                ? "Selecciona el paquete de diamantes que deseas comprar."
+                ? "Selecciona el paquete que deseas comprar."
                 : "El catálogo de diamantes todavía no está disponible."
         );
     } else if (vista === "ofertas") {
-        mostrarEstado(
-            "Selecciona una oferta especial de Free Fire."
-        );
+        mostrarEstado("Selecciona una oferta especial.");
     } else {
         mostrarEstado(
             "Los paquetes de nivel estarán disponibles próximamente."
@@ -932,34 +884,17 @@ function cambiarVista(vista) {
     actualizarBoton();
 }
 
-pestanaDiamantes.addEventListener("click", () => {
-    cambiarVista("diamantes");
-});
+pestanaDiamantes.addEventListener("click", () => cambiarVista("diamantes"));
+pestanaOfertas.addEventListener("click", () => cambiarVista("ofertas"));
+pestanaNivel.addEventListener("click", () => cambiarVista("nivel"));
 
-pestanaOfertas.addEventListener("click", () => {
-    cambiarVista("ofertas");
-});
-
-pestanaNivel.addEventListener("click", () => {
-    cambiarVista("nivel");
-});
-
-/* =========================================================
-   ESTADOS Y PEDIDOS PENDIENTES.
-   ========================================================= */
+/* ESTADOS Y PEDIDOS */
 
 function mostrarEstado(mensaje, tipo = "") {
     estadoCatalogo.textContent = mensaje;
 
-    estadoCatalogo.classList.toggle(
-        "error",
-        tipo === "error"
-    );
-
-    estadoCatalogo.classList.toggle(
-        "correcto",
-        tipo === "correcto"
-    );
+    estadoCatalogo.classList.toggle("error", tipo === "error");
+    estadoCatalogo.classList.toggle("correcto", tipo === "correcto");
 }
 
 function mensajeError(error, alternativo) {
@@ -980,9 +915,7 @@ function clavePedidoPendiente(userId) {
 }
 
 function guardarPedidoPendiente() {
-    if (!usuarioActualId || !pedidoPendienteId) {
-        return;
-    }
+    if (!usuarioActualId || !pedidoPendienteId) return;
 
     localStorage.setItem(
         clavePedidoPendiente(usuarioActualId),
@@ -1022,9 +955,7 @@ function recuperarPedidoPendiente(userId) {
             typeof datos.orderId !== "string" ||
             !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(datos.orderId)
         ) {
-            throw new Error(
-                "La referencia del pedido guardado no es válida."
-            );
+            throw new Error("La referencia del pedido no es válida.");
         }
 
         pedidoPendienteId = datos.orderId;
@@ -1035,20 +966,14 @@ function recuperarPedidoPendiente(userId) {
                 : "enviar";
 
     } catch (error) {
-        console.error(
-            "Error recuperando pedido guardado:",
-            error
-        );
-
+        console.error("Error recuperando pedido:", error);
         pedidoPendienteId = null;
         accionPendiente = "crear";
     }
 }
 
 async function verificarPedidoGuardado(userId) {
-    if (!pedidoPendienteId) {
-        return false;
-    }
+    if (!pedidoPendienteId) return false;
 
     const idVerificado = pedidoPendienteId;
 
@@ -1062,10 +987,7 @@ async function verificarPedidoGuardado(userId) {
         .maybeSingle();
 
     if (error) {
-        console.error(
-            "Error verificando pedido guardado:",
-            error.message
-        );
+        console.error("Error verificando pedido:", error.message);
 
         throw new Error(
             "No se pudo verificar el pedido anterior. " +
@@ -1076,19 +998,13 @@ async function verificarPedidoGuardado(userId) {
     if (!data) {
         throw new Error(
             "No pudimos confirmar el pedido anterior en la base de datos. " +
-            "Conservamos su referencia por seguridad. " +
             "No hagas otra recarga hasta aclarar su estado."
         );
     }
 
-    const estadoLocal = String(
-        data.status || ""
-    ).toLowerCase();
+    const estadoLocal = String(data.status || "").toLowerCase();
 
-    if (
-        estadoLocal === "completed" ||
-        estadoLocal === "refunded"
-    ) {
+    if (estadoLocal === "completed" || estadoLocal === "refunded") {
         if (pedidoPendienteId === idVerificado) {
             borrarPedidoPendiente();
         }
@@ -1114,9 +1030,7 @@ async function verificarPedidoGuardado(userId) {
     return true;
 }
 
-/* =========================================================
-   BOTÓN DE COMPRA COMPARTIDO.
-   ========================================================= */
+/* BOTÓN PRINCIPAL */
 
 function actualizarBoton() {
     if (procesando) {
@@ -1124,10 +1038,6 @@ function actualizarBoton() {
         return;
     }
 
-    /*
-     * Un pedido pendiente siempre tiene prioridad.
-     * Así no se oculta la opción de recuperarlo al cambiar de pestaña.
-     */
     if (pedidoPendienteId) {
         botonContinuar.textContent =
             accionPendiente === "enviar"
@@ -1138,9 +1048,6 @@ function actualizarBoton() {
         return;
     }
 
-    /*
-     * El paquete de nivel aún no está habilitado para comprar.
-     */
     if (vistaActual === "nivel") {
         botonContinuar.textContent = "PRÓXIMAMENTE";
         botonContinuar.disabled = true;
@@ -1157,9 +1064,7 @@ function actualizarBoton() {
         !productoSeleccionado;
 }
 
-/* =========================================================
-   MODAL DE CONFIRMACIÓN.
-   ========================================================= */
+/* MODAL */
 
 function cerrarModalConfirmacion(resultado) {
     modalFondo.classList.remove("visible");
@@ -1180,7 +1085,6 @@ function abrirModalConfirmacion(producto, playerId, precio) {
 
     modalFondo.classList.add("visible");
     modalFondo.setAttribute("aria-hidden", "false");
-
     document.body.classList.add("modal-abierto");
 
     modalCancelar.disabled = false;
@@ -1215,14 +1119,10 @@ document.addEventListener("keydown", event => {
     }
 });
 
-/* =========================================================
-   VALIDACIÓN DEL JUGADOR.
-   Utiliza el ID real del producto seleccionado.
-   ========================================================= */
+/* VALIDACIÓN DEL JUGADOR */
 
 function mostrarEstadoValidacion(mensaje, tipo = "") {
     estadoValidacion.textContent = mensaje;
-
     estadoValidacion.classList.add("visible");
 
     estadoValidacion.classList.remove(
@@ -1231,9 +1131,7 @@ function mostrarEstadoValidacion(mensaje, tipo = "") {
         "aviso"
     );
 
-    if (tipo) {
-        estadoValidacion.classList.add(tipo);
-    }
+    if (tipo) estadoValidacion.classList.add(tipo);
 }
 
 function ocultarEstadoValidacion() {
@@ -1275,19 +1173,8 @@ function normalizarEstadoValidacion(datos) {
         ""
     ).trim().toUpperCase();
 
-    if (
-        estado === "VALID" ||
-        datos?.valid === true
-    ) {
-        return "VALID";
-    }
-
-    if (
-        estado === "INVALID" ||
-        datos?.valid === false
-    ) {
-        return "INVALID";
-    }
+    if (estado === "VALID" || datos?.valid === true) return "VALID";
+    if (estado === "INVALID" || datos?.valid === false) return "INVALID";
 
     return "UNAVAILABLE";
 }
@@ -1326,10 +1213,7 @@ async function validarJugador() {
         return;
     }
 
-    const clave = obtenerClaveValidacion(
-        playerId,
-        productId
-    );
+    const clave = obtenerClaveValidacion(playerId, productId);
 
     if (
         claveUltimaValidacion === clave &&
@@ -1364,9 +1248,7 @@ async function validarJugador() {
             error: sessionError
         } = await supabase.auth.getSession();
 
-        if (numeroSolicitud !== numeroSolicitudValidacion) {
-            return;
-        }
+        if (numeroSolicitud !== numeroSolicitudValidacion) return;
 
         if (sessionError || !session?.access_token) {
             validacionJugador.status = "UNAVAILABLE";
@@ -1391,8 +1273,8 @@ async function validarJugador() {
             },
 
             body: JSON.stringify({
-                playerId: playerId,
-                productId: productId,
+                playerId,
+                productId,
                 game: "free-fire"
             }),
 
@@ -1407,9 +1289,7 @@ async function validarJugador() {
             datos = {};
         }
 
-        if (numeroSolicitud !== numeroSolicitudValidacion) {
-            return;
-        }
+        if (numeroSolicitud !== numeroSolicitudValidacion) return;
 
         if (!respuesta.ok) {
             const mensaje =
@@ -1452,26 +1332,18 @@ async function validarJugador() {
             nickname,
             region,
             message: String(
-                datos.message ||
-                datos.error ||
-                ""
+                datos.message || datos.error || ""
             ).trim()
         };
 
         if (estado === "VALID") {
-            if (nickname) {
-                mostrarEstadoValidacion(
-                    "Cuenta verificada. Nickname: " + nickname +
-                    (region ? " · Región: " + region : ""),
-                    "correcto"
-                );
-            } else {
-                mostrarEstadoValidacion(
-                    "El proveedor confirmó que el jugador es válido, " +
-                    "pero no devolvió un nickname.",
-                    "correcto"
-                );
-            }
+            mostrarEstadoValidacion(
+                nickname
+                    ? "Cuenta verificada. Nickname: " + nickname +
+                      (region ? " · Región: " + region : "")
+                    : "El proveedor confirmó que el jugador es válido.",
+                "correcto"
+            );
 
             return;
         }
@@ -1494,14 +1366,9 @@ async function validarJugador() {
         );
 
     } catch (error) {
-        if (numeroSolicitud !== numeroSolicitudValidacion) {
-            return;
-        }
+        if (numeroSolicitud !== numeroSolicitudValidacion) return;
 
-        console.error(
-            "Error validando jugador de Free Fire:",
-            error
-        );
+        console.error("Error validando jugador:", error);
 
         validacionJugador = {
             status: "UNAVAILABLE",
@@ -1533,9 +1400,7 @@ function programarValidacionJugador() {
         return;
     }
 
-    temporizadorValidacion = setTimeout(() => {
-        validarJugador();
-    }, 650);
+    temporizadorValidacion = setTimeout(validarJugador, 650);
 }
 
 campoJugador.addEventListener("input", () => {
@@ -1543,34 +1408,16 @@ campoJugador.addEventListener("input", () => {
     actualizarBoton();
 });
 
-/* =========================================================
-   PRODUCTOS Y PRECIOS.
-   ========================================================= */
+/* PRODUCTOS Y PRECIOS */
 
 function extraerProductos(respuesta) {
-    if (Array.isArray(respuesta)) {
-        return respuesta;
-    }
+    if (Array.isArray(respuesta)) return respuesta;
+    if (!respuesta || typeof respuesta !== "object") return [];
 
-    if (!respuesta || typeof respuesta !== "object") {
-        return [];
-    }
-
-    if (Array.isArray(respuesta.productos)) {
-        return respuesta.productos;
-    }
-
-    if (Array.isArray(respuesta.products)) {
-        return respuesta.products;
-    }
-
-    if (Array.isArray(respuesta.data)) {
-        return respuesta.data;
-    }
-
-    if (Array.isArray(respuesta.data?.products)) {
-        return respuesta.data.products;
-    }
+    if (Array.isArray(respuesta.productos)) return respuesta.productos;
+    if (Array.isArray(respuesta.products)) return respuesta.products;
+    if (Array.isArray(respuesta.data)) return respuesta.data;
+    if (Array.isArray(respuesta.data?.products)) return respuesta.data.products;
 
     return [];
 }
@@ -1630,10 +1477,7 @@ async function cargarProductosLocales() {
         .eq("provider", "nextlevel");
 
     if (error) {
-        console.error(
-            "Error consultando productos:",
-            error.message
-        );
+        console.error("Error consultando productos:", error.message);
 
         throw new Error(
             "No se pudieron verificar los productos y sus precios GVR."
@@ -1654,9 +1498,7 @@ function buscarProductoLocal(productoProveedor) {
 }
 
 function productoComprable(productoLocal) {
-    if (!productoLocal) {
-        return false;
-    }
+    if (!productoLocal) return false;
 
     const precio = Number(productoLocal.price_gvr);
 
@@ -1669,9 +1511,7 @@ function mostrarPrecio(precio) {
     return Number(precio).toLocaleString("es-ES") + " GVR";
 }
 
-/* =========================================================
-   SELECCIÓN COMPARTIDA.
-   ========================================================= */
+/* SELECCIÓN VISUAL: SIN MENSAJES DE PRODUCTO SELECCIONADO */
 
 function limpiarSeleccionVisual() {
     document
@@ -1682,13 +1522,8 @@ function limpiarSeleccionVisual() {
 }
 
 function seleccionarProducto(productoProveedor, productoLocal, tipo, tarjeta) {
-    if (procesando || pedidoPendienteId) {
-        return;
-    }
-
-    if (!productoComprable(productoLocal)) {
-        return;
-    }
+    if (procesando || pedidoPendienteId) return;
+    if (!productoComprable(productoLocal)) return;
 
     limpiarSeleccionVisual();
 
@@ -1697,25 +1532,19 @@ function seleccionarProducto(productoProveedor, productoLocal, tipo, tarjeta) {
     productoSeleccionado = {
         proveedor: productoProveedor,
         local: productoLocal,
-        tipo: tipo
+        tipo
     };
 
-    const precio = Number(productoLocal.price_gvr);
-
-    mostrarEstado(
-        obtenerNombre(productoProveedor) +
-        " seleccionado · " +
-        mostrarPrecio(precio),
-        "correcto"
-    );
-
+    /*
+     * No mostramos mensajes como "Seleccionaste Diamantes".
+     * La elección se indica visualmente con el borde iluminado.
+     */
+    reiniciarValidacionJugador();
     programarValidacionJugador();
     actualizarBoton();
 }
 
-/* =========================================================
-   VISTA DE DIAMANTES.
-   ========================================================= */
+/* CATÁLOGO DE DIAMANTES */
 
 function renderizarCatalogo() {
     catalogo.replaceChildren();
@@ -1745,11 +1574,8 @@ function renderizarCatalogo() {
         estado.className = "producto-estado";
 
         if (comprable) {
-            precio.textContent = mostrarPrecio(
-                Number(local.price_gvr)
-            );
-
-            estado.textContent = "Seleccionar paquete";
+            precio.textContent = mostrarPrecio(Number(local.price_gvr));
+            estado.textContent = "Disponible";
         } else {
             precio.textContent = "Precio pendiente";
             estado.textContent = "Temporalmente no disponible";
@@ -1765,8 +1591,6 @@ function renderizarCatalogo() {
                     "diamantes",
                     tarjeta
                 );
-
-                estado.textContent = "Paquete seleccionado";
             });
         }
 
@@ -1774,9 +1598,7 @@ function renderizarCatalogo() {
     });
 }
 
-/* =========================================================
-   VISTA DE OFERTAS EXTRA.
-   ========================================================= */
+/* OFERTAS EXTRA */
 
 function buscarProductoProveedorPorId(productId) {
     return productosProveedor.find(producto =>
@@ -1795,10 +1617,6 @@ function renderizarOfertas() {
             String(producto.provider_product_id || "").trim() === oferta.id
         ) || null;
 
-        /*
-         * Para comprar necesitamos que el producto exista en Next Level
-         * y en Supabase, esté disponible y tenga precio GVR válido.
-         */
         const proveedorDisponible =
             productoProveedor !== null &&
             productoProveedor.available !== false;
@@ -1836,7 +1654,6 @@ function renderizarOfertas() {
         });
 
         const nombre = document.createElement("div");
-
         nombre.className = "producto-nombre";
         nombre.textContent = oferta.nombre;
 
@@ -1847,15 +1664,13 @@ function renderizarOfertas() {
         estado.className = "producto-estado";
 
         if (productoComprable(productoLocal)) {
-            precio.textContent = mostrarPrecio(
-                Number(productoLocal.price_gvr)
-            );
+            precio.textContent = mostrarPrecio(Number(productoLocal.price_gvr));
         } else {
             precio.textContent = "Precio pendiente";
         }
 
         if (comprable) {
-            estado.textContent = "Seleccionar oferta";
+            estado.textContent = "Disponible";
         } else if (!productoProveedor) {
             estado.textContent = "Producto no encontrado en el catálogo";
         } else if (productoProveedor.available === false) {
@@ -1868,12 +1683,7 @@ function renderizarOfertas() {
             estado.textContent = "Revisar el precio GVR";
         }
 
-        tarjeta.append(
-            imagen,
-            nombre,
-            precio,
-            estado
-        );
+        tarjeta.append(imagen, nombre, precio, estado);
 
         if (comprable) {
             tarjeta.addEventListener("click", () => {
@@ -1883,8 +1693,6 @@ function renderizarOfertas() {
                     "oferta",
                     tarjeta
                 );
-
-                estado.textContent = "Oferta seleccionada";
             });
         }
 
@@ -1892,9 +1700,7 @@ function renderizarOfertas() {
     });
 }
 
-/* =========================================================
-   CARGAR CATÁLOGO Y OFERTAS EN UNA SOLA PETICIÓN.
-   ========================================================= */
+/* CARGAR CATÁLOGO */
 
 async function cargarCatalogo() {
     productoSeleccionado = null;
@@ -1946,20 +1752,13 @@ async function cargarCatalogo() {
         const productos = extraerProductos(resultado);
 
         if (!productos.length) {
-            throw new Error(
-                "Next Level no devolvió productos."
-            );
+            throw new Error("Next Level no devolvió productos.");
         }
 
         productosProveedor = productos.filter(producto =>
-            producto &&
-            obtenerProductId(producto) !== ""
+            producto && obtenerProductId(producto) !== ""
         );
 
-        /*
-         * El filtro de diamantes se conserva.
-         * Las ofertas se identifican por sus IDs exactos.
-         */
         productosDisponibles = productosProveedor.filter(producto =>
             producto.available === true &&
             esOfertaLATAM(producto) &&
@@ -1976,8 +1775,7 @@ async function cargarCatalogo() {
 
         const ofertasComprables =
             OFERTAS_FREE_FIRE.filter(oferta => {
-                const proveedor =
-                    buscarProductoProveedorPorId(oferta.id);
+                const proveedor = buscarProductoProveedorPorId(oferta.id);
 
                 const local = productosLocales.find(producto =>
                     String(producto.provider_product_id || "").trim() === oferta.id
@@ -1994,25 +1792,19 @@ async function cargarCatalogo() {
             );
         } else {
             mostrarEstado(
-                "Diamantes disponibles: " + diamantesComprables +
-                " · Ofertas disponibles: " + ofertasComprables
+                "Diamantes: " + diamantesComprables +
+                " · Ofertas: " + ofertasComprables
             );
         }
 
     } catch (error) {
-        console.error(
-            "Error cargando catálogo de Free Fire:",
-            error
-        );
+        console.error("Error cargando catálogo:", error);
 
         catalogo.replaceChildren();
         catalogoOfertas.replaceChildren();
 
         mostrarEstado(
-            mensajeError(
-                error,
-                "No se pudo cargar el catálogo."
-            ),
+            mensajeError(error, "No se pudo cargar el catálogo."),
             "error"
         );
     }
@@ -2020,9 +1812,7 @@ async function cargarCatalogo() {
     actualizarBoton();
 }
 
-/* =========================================================
-   FUNCIONES EDGE.
-   ========================================================= */
+/* FUNCIONES EDGE */
 
 async function llamarFuncion(url, accessToken, body) {
     const respuesta = await fetch(url, {
@@ -2061,15 +1851,11 @@ async function llamarFuncion(url, accessToken, body) {
     return datos;
 }
 
-/* =========================================================
-   CONSULTAR PEDIDO EXISTENTE.
-   ========================================================= */
+/* CONSULTAR PEDIDO */
 
 async function consultarPedido(accessToken) {
     if (!pedidoPendienteId) {
-        throw new Error(
-            "No hay ningún pedido guardado para consultar."
-        );
+        throw new Error("No hay ningún pedido guardado para consultar.");
     }
 
     const datos = await llamarFuncion(
@@ -2080,22 +1866,13 @@ async function consultarPedido(accessToken) {
         }
     );
 
-    const estadoLocal = String(
-        datos.status || ""
-    ).toLowerCase();
+    const estadoLocal = String(datos.status || "").toLowerCase();
+    const estadoProveedor = String(datos.provider_status || "").toUpperCase();
 
-    const estadoProveedor = String(
-        datos.provider_status || ""
-    ).toUpperCase();
-
-    if (
-        estadoLocal === "completed" ||
-        estadoLocal === "refunded"
-    ) {
-        const mensaje =
-            estadoLocal === "completed"
-                ? "¡Recarga completada por el proveedor!"
-                : "El pedido figura como reembolsado.";
+    if (estadoLocal === "completed" || estadoLocal === "refunded") {
+        const mensaje = estadoLocal === "completed"
+            ? "¡Recarga completada por el proveedor!"
+            : "El pedido figura como reembolsado.";
 
         borrarPedidoPendiente();
         actualizarBoton();
@@ -2103,8 +1880,8 @@ async function consultarPedido(accessToken) {
         mostrarEstado(mensaje, "correcto");
 
         alert(
-            mensaje + "\n\n" +
-            "Pedido: " + (datos.game_order_id || "consultado")
+            mensaje + "\n\nPedido: " +
+            (datos.game_order_id || "consultado")
         );
 
         return;
@@ -2117,8 +1894,7 @@ async function consultarPedido(accessToken) {
         actualizarBoton();
 
         mostrarEstado(
-            "El proveedor informa FAILED. No vuelvas a comprar el mismo producto. " +
-            "Hay que verificar el pedido y el reembolso.",
+            "El proveedor informa FAILED. Verifica el pedido y el reembolso antes de volver a comprar.",
             "error"
         );
 
@@ -2136,15 +1912,11 @@ async function consultarPedido(accessToken) {
     );
 }
 
-/* =========================================================
-   ENVIAR PEDIDO EXISTENTE Y ABRIR CHECKOUT.
-   ========================================================= */
+/* ENVIAR PEDIDO Y ABRIR CHECKOUT */
 
 async function enviarPedido(accessToken) {
     if (!pedidoPendienteId) {
-        throw new Error(
-            "No hay ningún pedido guardado para enviar."
-        );
+        throw new Error("No hay ningún pedido guardado para enviar.");
     }
 
     const idPedido = pedidoPendienteId;
@@ -2163,10 +1935,7 @@ async function enviarPedido(accessToken) {
             }
         );
 
-        console.log(
-            "Respuesta de crear pedido:",
-            datos
-        );
+        console.log("Respuesta de crear pedido:", datos);
 
         mostrarEstado(
             datos.message ||
@@ -2175,15 +1944,10 @@ async function enviarPedido(accessToken) {
         );
 
     } catch (error) {
-        console.error(
-            "Error al enviar el pedido existente:",
-            error,
-            error.data || ""
-        );
+        console.error("Error enviando pedido:", error, error.data || "");
 
         mostrarEstado(
-            "No se pudo confirmar el envío. Abriendo el seguimiento " +
-            "del pedido existente para verificar su estado.",
+            "No se pudo confirmar el envío. Abriendo el seguimiento del pedido para verificar su estado.",
             "error"
         );
     }
@@ -2194,26 +1958,17 @@ async function enviarPedido(accessToken) {
     ).href;
 }
 
-/* =========================================================
-   CREAR COMPRA: DIAMANTES U OFERTA.
-   Se mantiene el mismo RPC y el mismo sistema de pedidos.
-   ========================================================= */
+/* CREAR COMPRA */
 
 async function crearCompra(accessToken, playerId) {
     if (!productoSeleccionado) {
-        throw new Error(
-            "Selecciona primero un producto disponible."
-        );
+        throw new Error("Selecciona primero un producto disponible.");
     }
 
     const productIdValidacion = obtenerProductId(
         productoSeleccionado.proveedor
     );
 
-    /*
-     * Solo bloqueamos cuando el proveedor confirmó explícitamente
-     * que el ID es inválido para el producto seleccionado.
-     */
     if (
         validacionJugador.status === "INVALID" &&
         validacionJugador.playerId === playerId &&
@@ -2269,9 +2024,7 @@ async function crearCompra(accessToken, playerId) {
         );
     }
 
-    const precioConfirmado = Number(
-        productoActual.price_gvr
-    );
+    const precioConfirmado = Number(productoActual.price_gvr);
 
     const confirmar = await abrirModalConfirmacion(
         productoSeleccionado.proveedor,
@@ -2280,21 +2033,12 @@ async function crearCompra(accessToken, playerId) {
     );
 
     if (!confirmar) {
-        mostrarEstado(
-            "Compra cancelada. No se creó ningún pedido."
-        );
-
+        mostrarEstado("Compra cancelada. No se creó ningún pedido.");
         return;
     }
 
-    mostrarEstado(
-        "Creando pedido. No cierres esta página..."
-    );
+    mostrarEstado("Creando pedido. No cierres esta página...");
 
-    /*
-     * MISMO RPC ORIGINAL.
-     * El descuento de saldo se realiza en Supabase.
-     */
     const { data: orderId, error: errorCompra } = await supabase.rpc(
         "purchase_game_product",
         {
@@ -2304,10 +2048,7 @@ async function crearCompra(accessToken, playerId) {
     );
 
     if (errorCompra) {
-        console.error(
-            "Error creando compra local:",
-            errorCompra.message
-        );
+        console.error("Error creando compra:", errorCompra.message);
 
         throw new Error(
             errorCompra.message ||
@@ -2333,14 +2074,10 @@ async function crearCompra(accessToken, playerId) {
     await enviarPedido(accessToken);
 }
 
-/* =========================================================
-   BOTÓN PRINCIPAL: COMPRAR O RECUPERAR PEDIDO.
-   ========================================================= */
+/* BOTÓN DE COMPRA */
 
 botonContinuar.addEventListener("click", async () => {
-    if (procesando) {
-        return;
-    }
+    if (procesando) return;
 
     procesando = true;
     botonContinuar.disabled = true;
@@ -2352,15 +2089,11 @@ botonContinuar.addEventListener("click", async () => {
         } = await supabase.auth.getSession();
 
         if (sessionError) {
-            throw new Error(
-                "No se pudo comprobar la sesión."
-            );
+            throw new Error("No se pudo comprobar la sesión.");
         }
 
         if (!session?.access_token) {
-            throw new Error(
-                "Debes iniciar sesión para continuar."
-            );
+            throw new Error("Debes iniciar sesión para continuar.");
         }
 
         const {
@@ -2378,16 +2111,12 @@ botonContinuar.addEventListener("click", async () => {
 
         recuperarPedidoPendiente(user.id);
 
-        /*
-         * Antes de crear una compra nueva, se comprueba el pedido anterior.
-         */
         await verificarPedidoGuardado(user.id);
 
         if (pedidoPendienteId) {
             if (accionPendiente === "enviar") {
                 mostrarEstado(
-                    "Retomando el pedido pendiente existente. " +
-                    "No se creará otro pedido..."
+                    "Retomando el pedido pendiente existente. No se creará otro pedido..."
                 );
 
                 await enviarPedido(session.access_token);
@@ -2403,9 +2132,6 @@ botonContinuar.addEventListener("click", async () => {
             return;
         }
 
-        /*
-         * El paquete de nivel no puede crear compras todavía.
-         */
         if (vistaActual === "nivel") {
             throw new Error(
                 "Los paquetes de nivel estarán disponibles próximamente."
@@ -2415,15 +2141,11 @@ botonContinuar.addEventListener("click", async () => {
         const playerId = campoJugador.value.trim();
 
         if (!playerId) {
-            throw new Error(
-                "Introduce tu ID de Free Fire."
-            );
+            throw new Error("Introduce tu ID de Free Fire.");
         }
 
         if (playerId.length > 50) {
-            throw new Error(
-                "El ID del jugador es demasiado largo."
-            );
+            throw new Error("El ID del jugador es demasiado largo.");
         }
 
         if (!productoSeleccionado) {
@@ -2434,30 +2156,18 @@ botonContinuar.addEventListener("click", async () => {
             );
         }
 
-        await crearCompra(
-            session.access_token,
-            playerId
-        );
+        await crearCompra(session.access_token, playerId);
 
     } catch (error) {
-        console.error(
-            "Error en la compra de Free Fire:",
-            error
-        );
+        console.error("Error en compra de Free Fire:", error);
 
         mostrarEstado(
-            mensajeError(
-                error,
-                "No se pudo completar la operación."
-            ),
+            mensajeError(error, "No se pudo completar la operación."),
             "error"
         );
 
         alert(
-            mensajeError(
-                error,
-                "No se pudo completar la operación."
-            )
+            mensajeError(error, "No se pudo completar la operación.")
         );
 
     } finally {
@@ -2466,9 +2176,7 @@ botonContinuar.addEventListener("click", async () => {
     }
 });
 
-/* =========================================================
-   INICIO.
-   ========================================================= */
+/* INICIO */
 
 async function iniciar() {
     try {
@@ -2485,10 +2193,7 @@ async function iniciar() {
         }
 
     } catch (error) {
-        console.error(
-            "No se pudo recuperar la sesión:",
-            error
-        );
+        console.error("No se pudo recuperar la sesión:", error);
     }
 
     await cargarCatalogo();
