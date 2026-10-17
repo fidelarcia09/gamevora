@@ -7,54 +7,258 @@
 <meta name="description" content="Recarga Bonds y compra ofertas de Arena Breakout en Gamers Gold Top-Up.">
 <title>Arena Breakout | Gamers Gold Top-Up</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-:root{color-scheme:dark}
-body{background:#050b18;color:#fff;min-height:100vh;padding:12px}
-.contenedor{width:100%;max-width:520px;margin:0 auto}
-.header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;min-height:34px}
-.logo{font-size:18px;font-weight:900}.rayo{color:#00b7ff;text-shadow:0 0 10px #008cff}
-.volver{color:#45c8ff;text-decoration:none;font-size:13px;font-weight:bold;white-space:nowrap}
-.card{background:#091a35;border:1px solid #164b75;border-radius:13px;padding:16px 13px;box-shadow:0 0 22px rgba(0,140,255,.08)}
-h1{font-size:21px;margin-bottom:5px}.descripcion{color:#8fa5bd;font-size:12px;line-height:1.5;margin-bottom:14px}
-.etiqueta{display:block;margin:12px 0 7px;color:#b8c9dc;font-size:12px;font-weight:bold}
-input{width:100%;min-height:42px;padding:10px 12px;background:#061226;color:white;border:1px solid #204c78;border-radius:7px;font-size:14px;outline:none}
-input:focus{border-color:#159dff;box-shadow:0 0 7px rgba(0,157,255,.15)}
-.ayuda{margin-top:6px;color:#8299b4;font-size:11px;line-height:1.45}
-.estado{padding:9px 10px;margin:12px 0;border:1px solid #204c78;border-radius:7px;background:#061226;color:#a9c4df;font-size:11px;line-height:1.45;overflow-wrap:anywhere}
-.estado.error{color:#ffaaaa;border-color:#843d4b}.estado.correcto{color:#8fffc0;border-color:#267b55}
-.estado-validacion{display:none;padding:9px 10px;margin-top:8px;border:1px solid #204c78;border-radius:7px;background:#061226;color:#a9c4df;font-size:11px;line-height:1.45;overflow-wrap:anywhere}
-.estado-validacion.visible{display:block}.estado-validacion.error{color:#ffaaaa;border-color:#843d4b}.estado-validacion.correcto{color:#8fffc0;border-color:#267b55}.estado-validacion.aviso{color:#ffcf8a;border-color:#8a672f}
-.selector-categorias{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:13px 0;padding:0;background:transparent;border:0;border-radius:0}
-.pestana-categoria{display:flex;align-items:center;justify-content:center;min-width:0;min-height:36px;padding:7px 4px;background:#07152b;color:#8fa5bd;border:1px solid #204568;border-radius:5px;font-size:11px;font-weight:bold;line-height:1.25;text-align:center;cursor:pointer;transition:color .2s,background .2s,border-color .2s,box-shadow .2s}
-.pestana-categoria:hover{border-color:#168cff;color:#fff}.pestana-categoria.activa{color:#fff;background:#0b3157;border-color:#00baff;box-shadow:inset 0 -2px 0 #00baff}.pestana-categoria:focus-visible{outline:2px solid #45c8ff;outline-offset:2px}
-.catalogo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
-.producto{display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-width:0;min-height:83px;padding:10px;background:#061226;color:white;border:1px solid #164b75;border-radius:7px;text-align:left;transition:border-color .2s,box-shadow .2s}
-button.producto{cursor:pointer}.producto:hover:not(:disabled){border-color:#168cff}.producto:disabled{cursor:not-allowed;opacity:.65}.producto.seleccionado{background:#09203b;border-color:#00baff;box-shadow:inset 0 -2px 0 #00baff}
-.producto-nombre{font-size:12px;font-weight:bold;line-height:1.4;overflow-wrap:anywhere}.producto-precio{color:#fff;font-size:13px;font-weight:bold}.producto-estado{color:#45c8ff;font-size:10px;font-weight:bold;line-height:1.4}.producto-no-disponible .producto-estado{color:#ffcf8a}
-.boton{width:100%;min-height:42px;padding:11px;border:0;border-radius:6px;font-size:13px;font-weight:bold}.continuar{margin-top:13px;background:linear-gradient(90deg,#087cff,#00aaff);color:white;cursor:pointer}.continuar:disabled{cursor:not-allowed;opacity:.5}
-.vista-oculta{display:none!important}.vista-oculta.activa{display:block!important}.pantalla-motor{display:none!important}.pantalla-motor.activa{display:block!important}.nota{margin-top:13px;text-align:center;color:#8299b4;font-size:10px;line-height:1.5}
-/* El motor compartido de ofertas usa estos elementos; se les aplica el mismo diseño compacto de Free Fire. */
-#listaOfertas{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
-#listaOfertas .boton-oferta{display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-width:0;min-height:83px;padding:10px!important;background:#061226!important;color:#fff!important;border:1px solid #164b75!important;border-radius:7px!important;text-align:left!important;box-shadow:none!important}
-#listaOfertas .boton-oferta:hover{border-color:#168cff!important}
-#listaOfertas .boton-oferta.seleccionada,#listaOfertas .boton-oferta.seleccionado{background:#09203b!important;border-color:#00baff!important;box-shadow:inset 0 -2px 0 #00baff!important}
-#listaOfertas .foto-oferta{display:none!important}
-#listaOfertas .nombre-oferta{font-size:12px!important;font-weight:bold!important;line-height:1.4!important;color:#fff!important;overflow-wrap:anywhere!important}
-#listaOfertas .boton-oferta div{background:transparent!important;color:#45c8ff!important;font-size:10px!important;line-height:1.4!important;padding:0!important}#listaOfertas .boton-oferta .nombre-oferta{color:#fff!important;font-size:12px!important}#listaOfertas .boton-oferta .detalle-oferta{color:#45c8ff!important;font-size:10px!important}
-#listaOfertas .boton-oferta .precio-oferta{color:#fff!important;font-size:13px!important;font-weight:bold!important}
-#notaOfertas,#descripcionOfertas{color:#8299b4;font-size:11px;line-height:1.45;margin-top:8px}
-#precioSeleccionado{color:#45c8ff;font-size:12px;font-weight:bold;margin-top:8px}
-#pantallaConfirmacion,#pantallaExito{margin-top:12px;padding:12px;background:#061226;border:1px solid #164b75;border-radius:7px}
-#modalConfirmacionCompra{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(1,6,17,.85);backdrop-filter:blur(5px)}
-#modalConfirmacionCompra.visible{display:flex!important}#modalConfirmacionCompra>div{width:100%;max-width:360px;padding:17px;background:#091a35;border:1px solid #168cff;border-radius:12px;box-shadow:0 0 25px rgba(0,140,255,.18)}
-#modalConfirmacionCompra button,#pantallaConfirmacion button,#pantallaExito button{min-height:39px;padding:9px;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer}
-#aceptarCompraBtn,#confirmarBtn{background:linear-gradient(90deg,#087cff,#00baff);color:#fff;border:0}#cancelarCompraBtn,#botonCambiar,#botonVolverOfertas{background:#07152b;color:#c1d0e0;border:1px solid #204c78}
-.modal-fondo{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(1,6,17,.85);backdrop-filter:blur(5px)}.modal-fondo.visible{display:flex}
-.modal{width:100%;max-width:360px;padding:19px 15px;background:#091a35;border:1px solid #168cff;border-radius:12px;box-shadow:0 0 25px rgba(0,140,255,.18)}.modal h2{margin-bottom:7px;text-align:center;font-size:19px}.modal-descripcion{margin-bottom:13px;color:#8fa5bd;text-align:center;font-size:11px;line-height:1.5}
-.modal-detalles{padding:10px;margin-bottom:13px;background:#061226;border:1px solid #204c78;border-radius:7px}.modal-fila{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:7px 0;font-size:12px;line-height:1.4}.modal-fila+.modal-fila{border-top:1px solid rgba(32,76,120,.55)}.modal-fila span:first-child{color:#8fa5bd;flex-shrink:0}.modal-fila strong{text-align:right;overflow-wrap:anywhere}.modal-total{color:#45c8ff;font-size:15px}
-.modal-botones{display:grid;grid-template-columns:1fr 1fr;gap:8px}.modal-boton{min-height:39px;padding:9px;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer}.modal-cancelar{background:#07152b;color:#c1d0e0;border:1px solid #204c78}.modal-aceptar{background:linear-gradient(90deg,#087cff,#00baff);color:white;border:0}.modal-boton:disabled{opacity:.55;cursor:wait}body.modal-abierto{overflow:hidden}
-@media(max-width:360px){body{padding:8px}.card{padding:13px 10px}.logo{font-size:15px}.pestana-categoria{font-size:10px;padding:6px 2px}.catalogo,#listaOfertas{gap:6px}.producto{padding:8px}}
-</style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        :root { color-scheme: dark; }
+
+        body {
+            background: #050b18;
+            color: #fff;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        .contenedor { width: 100%; max-width: 520px; margin: 0 auto; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            min-height: 34px;
+        }
+
+        .logo { font-size: 18px; font-weight: 900; }
+        .rayo { color: #00b7ff; text-shadow: 0 0 10px #008cff; }
+        .volver { color: #45c8ff; text-decoration: none; font-size: 13px; font-weight: bold; white-space: nowrap; }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            padding: 16px 13px;
+            box-shadow: 0 0 22px rgba(0, 140, 255, 0.08);
+        }
+
+        h1 { font-size: 21px; margin-bottom: 5px; }
+        .descripcion { color: #8fa5bd; font-size: 12px; line-height: 1.5; margin-bottom: 14px; }
+        .etiqueta { display: block; margin: 12px 0 7px; color: #b8c9dc; font-size: 12px; font-weight: bold; }
+
+        input {
+            width: 100%;
+            min-height: 42px;
+            padding: 10px 12px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus { border-color: #159dff; box-shadow: 0 0 7px rgba(0, 157, 255, 0.15); }
+        .ayuda { margin-top: 6px; color: #8299b4; font-size: 11px; line-height: 1.45; }
+
+        .estado {
+            padding: 9px 10px;
+            margin: 12px 0;
+            border: 1px solid #204c78;
+            border-radius: 7px;
+            background: #061226;
+            color: #a9c4df;
+            font-size: 11px;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .estado.error { color: #ffaaaa; border-color: #843d4b; }
+        .estado.correcto { color: #8fffc0; border-color: #267b55; }
+
+        .estado-validacion {
+            display: none;
+            padding: 9px 10px;
+            margin-top: 8px;
+            border: 1px solid #204c78;
+            border-radius: 7px;
+            background: #061226;
+            color: #a9c4df;
+            font-size: 11px;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .estado-validacion.visible { display: block; }
+        .estado-validacion.error { color: #ffaaaa; border-color: #843d4b; }
+        .estado-validacion.correcto { color: #8fffc0; border-color: #267b55; }
+        .estado-validacion.aviso { color: #ffcf8a; border-color: #8a672f; }
+
+        /* PESTAÑAS RECTANGULARES: MISMO ESTILO QUE FREE FIRE */
+        .selector-categorias {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 6px;
+            margin: 13px 0;
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+        }
+
+        .pestana-categoria {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            min-height: 36px;
+            padding: 7px 4px;
+            background: #07152b;
+            color: #8fa5bd;
+            border: 1px solid #204568;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            line-height: 1.25;
+            text-align: center;
+            cursor: pointer;
+            transition: color 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .pestana-categoria:hover { border-color: #168cff; color: #fff; }
+        .pestana-categoria.activa { color: #fff; background: #0b3157; border-color: #00baff; box-shadow: inset 0 -2px 0 #00baff; }
+        .pestana-categoria:focus-visible { outline: 2px solid #45c8ff; outline-offset: 2px; }
+
+        /* CATÁLOGO DE BONDS */
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .producto {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+            min-width: 0;
+            min-height: 83px;
+            padding: 10px;
+            background: #061226;
+            color: white;
+            border: 1px solid #164b75;
+            border-radius: 7px;
+            text-align: left;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        button.producto { cursor: pointer; }
+        .producto:hover:not(:disabled) { border-color: #168cff; }
+        .producto:disabled { cursor: not-allowed; opacity: 0.65; }
+        .producto.seleccionado { background: #09203b; border-color: #00baff; box-shadow: inset 0 -2px 0 #00baff; }
+        .producto-nombre { color: #fff; font-size: 12px; font-weight: bold; line-height: 1.4; overflow-wrap: anywhere; }
+        .producto-precio { color: #fff; font-size: 13px; font-weight: bold; }
+        .producto-estado { color: #45c8ff; font-size: 10px; font-weight: bold; line-height: 1.4; }
+        .producto-no-disponible .producto-estado { color: #ffcf8a; }
+
+        .boton { width: 100%; min-height: 42px; padding: 11px; border: none; border-radius: 6px; font-size: 13px; font-weight: bold; }
+        .continuar { margin-top: 13px; background: linear-gradient(90deg, #087cff, #00aaff); color: white; cursor: pointer; }
+        .continuar:disabled { cursor: not-allowed; opacity: 0.5; }
+        .vista-oculta { display: none !important; }
+        .pantalla-motor { display: none !important; }
+        .pantalla-motor.activa { display: block !important; }
+        .nota { margin-top: 13px; text-align: center; color: #8299b4; font-size: 10px; line-height: 1.5; }
+
+        /* OFERTAS EXTRA: MISMA TIPOGRAFÍA, COLOR Y TAMAÑO QUE LOS BONDS */
+        #listaOfertas {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        #listaOfertas .boton-oferta {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: stretch;
+            gap: 8px;
+            min-width: 0;
+            min-height: 83px;
+            padding: 10px !important;
+            background: #061226 !important;
+            color: #fff !important;
+            border: 1px solid #164b75 !important;
+            border-radius: 7px !important;
+            text-align: left !important;
+            box-shadow: none !important;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        #listaOfertas .boton-oferta:hover:not(:disabled) { border-color: #168cff !important; }
+        #listaOfertas .boton-oferta:disabled { cursor: not-allowed; opacity: 0.65; }
+        #listaOfertas .boton-oferta.seleccionada,
+        #listaOfertas .boton-oferta.seleccionado { background: #09203b !important; border-color: #00baff !important; box-shadow: inset 0 -2px 0 #00baff !important; }
+        #listaOfertas .foto-oferta { display: none !important; }
+        #listaOfertas .nombre-oferta { color: #fff !important; font-size: 12px !important; font-weight: bold !important; line-height: 1.4 !important; overflow-wrap: anywhere !important; text-align: left !important; }
+        #listaOfertas .boton-oferta > div:not(.foto-oferta) { width: 100%; padding: 0 !important; background: transparent !important; text-align: left !important; }
+        #listaOfertas .boton-oferta > div:last-child { color: #45c8ff !important; font-size: 10px !important; font-weight: bold !important; line-height: 1.4 !important; }
+        #listaOfertas .boton-oferta .precio-oferta { color: #fff !important; font-size: 13px !important; font-weight: bold !important; }
+        #estadoProductos { margin-top: 8px; }
+        #notaOfertas, #descripcionOfertas { color: #8299b4; font-size: 11px; line-height: 1.45; margin-top: 8px; }
+        #precioSeleccionado { color: #45c8ff; font-size: 12px; font-weight: bold; margin-top: 8px; }
+        #precio { color: #fff; font-size: 13px; font-weight: bold; margin-top: 5px; }
+
+        #pantallaConfirmacion, #pantallaExito { margin-top: 12px; padding: 12px; background: #061226; border: 1px solid #164b75; border-radius: 7px; color: #fff; font-size: 12px; line-height: 1.5; }
+        #pantallaConfirmacion h2, #pantallaExito h2 { color: #fff; }
+        #pantallaConfirmacion button, #pantallaExito button { width: 100%; min-height: 39px; margin-top: 8px; padding: 9px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        #aceptarCompraBtn, #confirmarBtn { background: linear-gradient(90deg, #087cff, #00baff); color: #fff; border: 0; }
+        #cancelarCompraBtn, #botonCambiar, #botonVolverOfertas { background: #07152b; color: #c1d0e0; border: 1px solid #204c78; }
+
+        /* MODALES */
+        body.modal-abierto { overflow: hidden; }
+        .modal-fondo, #modalConfirmacionCompra {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            background: rgba(1, 6, 17, 0.85);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-fondo.visible, #modalConfirmacionCompra.visible, #modalConfirmacionCompra.abierto { display: flex !important; }
+        .modal, #modalConfirmacionCompra > div { width: 100%; max-width: 360px; padding: 19px 15px; background: #091a35; border: 1px solid #168cff; border-radius: 12px; box-shadow: 0 0 25px rgba(0, 140, 255, 0.18); }
+        .modal h2, #modalConfirmacionCompra h2 { margin-bottom: 7px; text-align: center; font-size: 19px; color: #fff; }
+        .modal-descripcion { margin-bottom: 13px; color: #8fa5bd; text-align: center; font-size: 11px; line-height: 1.5; }
+        .modal-detalles { padding: 10px; margin-bottom: 13px; background: #061226; border: 1px solid #204c78; border-radius: 7px; }
+        .modal-fila { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 7px 0; font-size: 12px; line-height: 1.4; }
+        .modal-fila + .modal-fila { border-top: 1px solid rgba(32, 76, 120, 0.55); }
+        .modal-fila span:first-child { color: #8fa5bd; flex-shrink: 0; }
+        .modal-fila strong { text-align: right; overflow-wrap: anywhere; }
+        .modal-total { color: #45c8ff; font-size: 15px; }
+        .modal-botones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .modal-boton { min-height: 39px; padding: 9px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .modal-cancelar { background: #07152b; color: #c1d0e0; border: 1px solid #204c78; }
+        .modal-aceptar { background: linear-gradient(90deg, #087cff, #00baff); color: white; border: 0; }
+        .modal-boton:disabled { opacity: 0.55; cursor: wait; }
+
+        @media (max-width: 360px) {
+            body { padding: 8px; }
+            .card { padding: 13px 10px; }
+            .logo { font-size: 15px; }
+            .pestana-categoria { font-size: 10px; padding: 6px 2px; }
+            .catalogo, #listaOfertas { gap: 6px; }
+            .producto, #listaOfertas .boton-oferta { padding: 8px !important; }
+        }
+    </style>
 </head>
 <body>
 <div class="contenedor">
@@ -193,6 +397,7 @@ iniciar();
 <script type="module" src="ofertas.js"></script>
 </body>
 </html>
+
 
 
 
