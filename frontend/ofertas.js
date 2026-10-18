@@ -1504,12 +1504,6 @@ async function crearCompra(
 
     const precioConfirmado = Number(actual.price_gvr);
 
-    /*
-     * PUBG utiliza la ventana personalizada.
-     * Los demás juegos conservan window.confirm().
-     */
-    let confirmado;
-
         /*
      * Modal personalizado para Free Fire, PUBG Mobile
      * y Arena Breakout.
