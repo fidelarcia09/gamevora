@@ -1317,12 +1317,14 @@ async function enviarPedido(accessToken) {
 
     const idPedido = pedidoPendienteId;
 
-    mostrarResultado(
-        "Pedido enviado",
-        "La solicitud fue recibida por el sistema. Consulta el estado para comprobar cuándo se completa la recarga.",
-        idPedido
-    );
+console.info(
+    "[Gamers Gold] Pedido registrado correctamente."
+);
 
+const destinoCheckout =
+    `checkout.html?id=${encodeURIComponent(idPedido)}`;
+
+window.location.assign(destinoCheckout);
     console.info(
         "[Gamers Gold] Respuesta de creación del pedido:",
         datos
