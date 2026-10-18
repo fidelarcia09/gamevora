@@ -194,8 +194,11 @@ input:focus {
     line-height: 1.25;
     text-align: center;
     cursor: pointer;
-    transition: color 0.2s, background 0.2s,
-                border-color 0.2s, box-shadow 0.2s;
+    transition:
+        color 0.2s,
+        background 0.2s,
+        border-color 0.2s,
+        box-shadow 0.2s;
 }
 
 .pestana-categoria:hover {
@@ -283,6 +286,8 @@ button.producto {
 .producto-no-disponible .producto-estado {
     color: #ffcf8a;
 }
+
+/* BOTONES */
 
 .boton {
     width: 100%;
@@ -389,21 +394,29 @@ button.producto {
     text-align: left !important;
 }
 
-#listaOfertas .boton-oferta > div:last-child {
+/* Precio de la oferta: blanco, 13 px y negrita */
+
+#listaOfertas .precio-oferta {
+    display: block;
+    width: 100%;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: bold !important;
+    line-height: 1.4;
+    text-align: left;
+}
+
+/* Estado de la oferta: cian, 10 px y negrita */
+
+#listaOfertas .estado-oferta {
+    display: block;
+    width: 100%;
     color: #45c8ff !important;
     font-size: 10px !important;
     font-weight: bold !important;
-    line-height: 1.4 !important;
+    line-height: 1.4;
+    text-align: left;
 }
-
-#listaOfertas .boton-oferta .precio-oferta {
-    display: block;
-    color: #ffffff !important;
-    font-size: 13px !important;
-    font-weight: 900 !important;
-    line-height: 1.4 !important;
-    margin-top: 5px;
-        }
 
 #estadoProductos {
     margin-top: 8px;
@@ -430,6 +443,8 @@ button.producto {
     font-weight: bold;
     margin-top: 5px;
 }
+
+/* PANTALLAS DEL MOTOR COMPARTIDO */
 
 #pantallaConfirmacion,
 #pantallaExito {
@@ -460,14 +475,12 @@ button.producto {
     cursor: pointer;
 }
 
-#aceptarCompraBtn,
 #confirmarBtn {
     background: linear-gradient(90deg, #087cff, #00baff);
     color: #fff;
     border: 0;
 }
 
-#cancelarCompraBtn,
 #botonCambiar,
 #botonVolverOfertas {
     background: #07152b;
@@ -475,7 +488,7 @@ button.producto {
     border: 1px solid #204c78;
 }
 
-/* MODAL DE BONDS */
+/* MODAL DE BONDS: SE CONSERVA EL ORIGINAL */
 
 body.modal-abierto {
     overflow: hidden;
@@ -591,170 +604,6 @@ body.modal-abierto {
     cursor: wait;
 }
 
-/* MODAL DE OFERTAS: MISMO DISEÑO QUE BONDS */
-
-#modalConfirmacionCompra {
-position: fixed;
-inset: 0;
-z-index: 10000;
-display: none;
-align-items: center;
-justify-content: center;
-padding: 14px;
-background: rgba(1, 6, 17, 0.85);
-backdrop-filter: blur(5px);
--webkit-backdrop-filter: blur(5px);
-}
-
-#modalConfirmacionCompra.visible,
-#modalConfirmacionCompra.abierto {
-display: flex !important;
-}
-
-#modalConfirmacionCompra > div {
-width: 100%;
-max-width: 360px;
-max-height: calc(100vh - 28px);
-overflow-y: auto;
-padding: 19px 15px;
-background: #091a35;
-border: 1px solid #168cff;
-border-radius: 12px;
-box-shadow: 0 0 25px rgba(0, 140, 255, 0.18);
-}
-
-#modalConfirmacionCompra h2 {
-margin: 0 0 7px !important;
-text-align: center;
-font-size: 19px !important;
-font-weight: 900;
-color: #fff;
-}
-
-#modalConfirmacionCompra .modal-descripcion-oferta {
-margin: 0 0 13px;
-color: #8fa5bd;
-text-align: center;
-font-size: 11px;
-line-height: 1.5;
-}
-
-#modalConfirmacionCompra .detalles-confirmacion-oferta {
-padding: 10px;
-margin-bottom: 13px;
-background: #061226;
-border: 1px solid #204c78;
-border-radius: 7px;
-}
-
-#modalConfirmacionCompra .fila-confirmacion-oferta {
-display: flex;
-justify-content: space-between;
-align-items: flex-start;
-gap: 12px;
-padding: 7px 0;
-font-size: 12px;
-line-height: 1.4;
-}
-
-#modalConfirmacionCompra .fila-confirmacion-oferta + .fila-confirmacion-oferta {
-border-top: 1px solid rgba(32, 76, 120, 0.55);
-}
-
-#modalConfirmacionCompra .fila-confirmacion-oferta span:first-child {
-color: #8fa5bd;
-flex-shrink: 0;
-}
-
-#modalConfirmacionCompra .fila-confirmacion-oferta strong {
-color: #fff;
-text-align: right;
-overflow-wrap: anywhere;
-}
-
-#modalConfirmacionCompra #modalPrecioOfertaVisible {
-color: #45c8ff !important;
-font-size: 15px !important;
-font-weight: 900;
-}
-
-#modalConfirmacionCompra .botones-confirmacion-oferta {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 8px;
-}
-
-#modalConfirmacionCompra .botones-confirmacion-oferta button {
-width: 100%;
-min-height: 39px;
-margin: 0;
-padding: 9px;
-border-radius: 6px;
-font-size: 12px;
-font-weight: bold;
-cursor: pointer;
-}
-
-#modalConfirmacionCompra #cancelarCompraBtn {
-background: #07152b;
-color: #c1d0e0;
-border: 1px solid #204c78;
-}
-
-#modalConfirmacionCompra #aceptarCompraBtn {
-background: linear-gradient(90deg, #087cff, #00baff);
-color: #fff;
-border: 0;
-}
-
-#modalConfirmacionCompra button:focus-visible {
-outline: 2px solid #45c8ff;
-outline-offset: 3px;
-}
-
-#modalConfirmacionCompra button:disabled {
-opacity: 0.55;
-cursor: wait;
-}
-
-@media (max-width: 360px) {
-#modalConfirmacionCompra {
-padding: 8px;
-}
-
-#modalConfirmacionCompra > div {
-    max-height: calc(100vh - 16px);
-    padding: 15px 11px;
-}
-
-}
-
-@media (prefers-reduced-motion: reduce) {
-#modalConfirmacionCompra,
-#modalConfirmacionCompra * {
-scroll-behavior: auto;
-animation: none !important;
-transition: none !important;
-}
-    }
-
-@media (max-width: 360px) {
-    #modalConfirmacionCompra {
-        padding: 8px;
-    }
-
-    #modalConfirmacionCompra > div {
-        max-height: calc(100vh - 16px);
-        padding: 15px 11px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    #modalConfirmacionCompra > div {
-        animation: none;
-    }
-}
- 
 @media (max-width: 360px) {
     body {
         padding: 8px;
@@ -797,7 +646,6 @@ transition: none !important;
 </header>
 
 <main class="card">
-
     <h1>Arena Breakout</h1>
 
     <p class="descripcion">
@@ -846,7 +694,6 @@ transition: none !important;
     </div>
 
     <section id="vistaBonds">
-
         <label class="etiqueta">Selecciona un paquete de Bonds</label>
 
         <div id="catalogo" class="catalogo"></div>
@@ -857,15 +704,13 @@ transition: none !important;
             type="button"
             disabled
         >RECARGAR</button>
-
     </section>
 
     <section id="vistaOfertas" class="vista-oculta">
 
-        <!-- Elementos requeridos por el motor compartido ofertas.js -->
+        <!-- Elementos requeridos por frontend/ofertas.js -->
 
         <div id="pantallaOfertas" class="pantalla-motor activa">
-
             <div id="descripcionOfertas">
                 Selecciona una oferta especial de Arena Breakout.
             </div>
@@ -896,11 +741,9 @@ transition: none !important;
             <div id="notaOfertas">
                 Los precios se muestran en GVR.
             </div>
-
         </div>
 
         <div id="pantallaConfirmacion" class="pantalla-motor">
-
             <h2 style="font-size:16px;margin-bottom:8px">
                 Confirmar oferta
             </h2>
@@ -916,11 +759,9 @@ transition: none !important;
             <button id="botonCambiar" type="button">
                 CAMBIAR OFERTA
             </button>
-
         </div>
 
         <div id="pantallaExito" class="pantalla-motor">
-
             <h2 id="tituloEstadoPedido" style="font-size:16px;margin-bottom:8px">
                 Estado del pedido
             </h2>
@@ -936,10 +777,9 @@ transition: none !important;
             <button id="botonVolverOfertas" type="button">
                 VOLVER A OFERTAS
             </button>
-
         </div>
 
-        <!-- IDs requeridos por el motor compartido -->
+        <!-- Campos que necesita el motor compartido -->
 
         <input id="confirmarOferta" type="hidden">
         <input id="idJugadorMotor" type="hidden">
@@ -953,11 +793,10 @@ transition: none !important;
         Los precios se muestran en GVR. Si un pedido queda pendiente,
         consulta su estado antes de realizar otra compra.
     </p>
-
 </main>
 </div>
 
-<!-- MODAL DE CONFIRMACIÓN DE BONDS -->
+<!-- Modal original de compra de Bonds: NO ELIMINAR -->
 
 <div
     id="modalFondo"
@@ -968,7 +807,6 @@ transition: none !important;
     aria-hidden="true"
 >
     <div class="modal">
-
         <h2 id="modalTitulo">Confirmar compra</h2>
 
         <p class="modal-descripcion">
@@ -976,7 +814,6 @@ transition: none !important;
         </p>
 
         <div class="modal-detalles">
-
             <div class="modal-fila">
                 <span>Juego</span>
                 <strong>Arena Breakout</strong>
@@ -996,16 +833,14 @@ transition: none !important;
                 <span>Total</span>
                 <strong id="modalTotal" class="modal-total">—</strong>
             </div>
-
         </div>
 
         <p class="modal-descripcion">
-            La compra descontará GVR de tu saldo. No cierres la página
-            mientras se crea el pedido.
+            La compra descontará GVR de tu saldo.
+            No cierres la página mientras se crea el pedido.
         </p>
 
         <div class="modal-botones">
-
             <button
                 id="modalCancelar"
                 class="modal-boton modal-cancelar"
@@ -1017,71 +852,8 @@ transition: none !important;
                 class="modal-boton modal-aceptar"
                 type="button"
             >ACEPTAR</button>
-
         </div>
-
     </div>
-</div>
-
-<!-- MODAL DE OFERTAS: DISEÑO IGUAL AL DE BONDS -->
-
-<div id="modalConfirmacionCompra">
-
-    <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="tituloConfirmacionOferta"
-    >
-
-        <h2 id="tituloConfirmacionOferta">Confirmar compra</h2>
-
-        <p class="modal-descripcion-oferta">
-            Comprueba los datos antes de continuar con tu pedido.
-        </p>
-
-        <div class="detalles-confirmacion-oferta">
-
-            <div class="fila-confirmacion-oferta">
-                <span>Juego</span>
-                <strong>Arena Breakout</strong>
-            </div>
-
-            <div class="fila-confirmacion-oferta">
-                <span>Oferta</span>
-                <strong id="modalNombreOfertaVisible">—</strong>
-            </div>
-
-            <div class="fila-confirmacion-oferta">
-                <span>ID de jugador</span>
-                <strong id="modalIdJugadorVisible">—</strong>
-            </div>
-
-            <div class="fila-confirmacion-oferta">
-                <span>Total</span>
-                <strong id="modalPrecioOfertaVisible">—</strong>
-            </div>
-
-        </div>
-
-        <p class="modal-descripcion-oferta">
-            La compra descontará GVR de tu saldo. No cierres la página
-            mientras se crea el pedido.
-        </p>
-
-        <div class="botones-confirmacion-oferta">
-
-            <button id="cancelarCompraBtn" type="button">
-                CANCELAR
-            </button>
-
-            <button id="aceptarCompraBtn" type="button">
-                ACEPTAR
-            </button>
-
-        </div>
-
-    </div>
-
 </div>
 
 <script>
@@ -1214,15 +986,22 @@ function mostrarEstado(m, tipo = "") {
 function extraerProductos(r) {
     if (Array.isArray(r)) return r;
     if (!r || typeof r !== "object") return [];
+
     if (Array.isArray(r.productos)) return r.productos;
     if (Array.isArray(r.products)) return r.products;
     if (Array.isArray(r.data)) return r.data;
     if (Array.isArray(r.data?.products)) return r.data.products;
+
     return [];
 }
 
 function productId(p) {
-    return String(p?.productId || p?.product_id || p?.id || "").trim();
+    return String(
+        p?.productId ||
+        p?.product_id ||
+        p?.id ||
+        ""
+    ).trim();
 }
 
 function nombre(p) {
@@ -1269,11 +1048,12 @@ function actualizarBoton() {
     }
 
     botonContinuar.textContent = pedidoPendienteId
-        ? (accionPendiente === "enviar" ? "RECUPERAR PEDIDO" : "CONSULTAR PEDIDO")
+        ? (accionPendiente === "enviar"
+            ? "RECUPERAR PEDIDO"
+            : "CONSULTAR PEDIDO")
         : "RECARGAR";
 
-    botonContinuar.disabled =
-        !pedidoPendienteId &&
+    botonContinuar.disabled = !pedidoPendienteId &&
         (!campoJugador.value.trim() || !productoSeleccionado);
 }
 
@@ -1340,7 +1120,10 @@ modalFondo.addEventListener("click", e => {
 });
 
 document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && modalFondo.classList.contains("visible")) {
+    if (
+        e.key === "Escape" &&
+        modalFondo.classList.contains("visible")
+    ) {
         cerrarModal(false);
     }
 });
@@ -1390,7 +1173,10 @@ function recuperarPendiente(uid) {
         }
 
         pedidoPendienteId = d.orderId;
-        accionPendiente = d.accion === "consultar" ? "consultar" : "enviar";
+
+        accionPendiente = d.accion === "consultar"
+            ? "consultar"
+            : "enviar";
 
     } catch (e) {
         console.error(e);
@@ -1430,12 +1216,13 @@ async function verificarPendiente(uid) {
         return false;
     }
 
-    accionPendiente =
-        (data.provider_order_id ||
-         data.provider_client_reference ||
-         data.provider_submitted_at)
-            ? "consultar"
-            : (st === "pending" ? "enviar" : "consultar");
+    accionPendiente = (
+        data.provider_order_id ||
+        data.provider_client_reference ||
+        data.provider_submitted_at
+    )
+        ? "consultar"
+        : (st === "pending" ? "enviar" : "consultar");
 
     guardarPendiente();
     actualizarBoton();
@@ -1494,7 +1281,10 @@ async function consultarPedido(token) {
         borrarPendiente();
         mostrarEstado(msg, "correcto");
 
-        alert(msg + "\nPedido: " + (d.game_order_id || "consultado"));
+        alert(
+            msg + "\nPedido: " + (d.game_order_id || "consultado")
+        );
+
         return;
     }
 
@@ -1504,7 +1294,10 @@ async function consultarPedido(token) {
     mostrarEstado(
         prov === "FAILED"
             ? "El proveedor informa FAILED. Verifica el estado y el reembolso antes de comprar otra vez."
-            : (d.message || "El pedido sigue pendiente. Consulta su estado antes de volver a comprar."),
+            : (
+                d.message ||
+                "El pedido sigue pendiente. Consulta su estado antes de volver a comprar."
+            ),
         prov === "FAILED" ? "error" : ""
     );
 }
@@ -1547,7 +1340,9 @@ async function enviarPedido(token) {
 }
 
 function seleccionar(p, local, card) {
-    if (procesando || pedidoPendienteId || !comprable(local)) return;
+    if (procesando || pedidoPendienteId || !comprable(local)) {
+        return;
+    }
 
     limpiarSeleccion();
     card.classList.add("seleccionado");
@@ -1569,14 +1364,17 @@ async function cargarCatalogo() {
 
     try {
         const [r, db] = await Promise.all([
-            fetch(URL_CATALOGO + "?game=arena-breakout", {
-                headers: {
-                    apikey: SUPABASE_KEY,
-                    Authorization: "Bearer " + SUPABASE_KEY,
-                    Accept: "application/json"
-                },
-                cache: "no-store"
-            }),
+            fetch(
+                URL_CATALOGO + "?game=arena-breakout",
+                {
+                    headers: {
+                        apikey: SUPABASE_KEY,
+                        Authorization: "Bearer " + SUPABASE_KEY,
+                        Accept: "application/json"
+                    },
+                    cache: "no-store"
+                }
+            ),
 
             supabase
                 .from("game_products")
@@ -1599,7 +1397,9 @@ async function cargarCatalogo() {
         try {
             resultado = await r.json();
         } catch {
-            throw new Error("El catálogo devolvió una respuesta no válida.");
+            throw new Error(
+                "El catálogo devolvió una respuesta no válida."
+            );
         }
 
         if (!r.ok) {
@@ -1649,6 +1449,7 @@ async function cargarCatalogo() {
             const ok = comprable(local);
 
             const card = document.createElement("button");
+
             card.type = "button";
             card.className = "producto";
             card.disabled = !ok;
@@ -1663,12 +1464,14 @@ async function cargarCatalogo() {
 
             const price = document.createElement("div");
             price.className = "producto-precio";
+
             price.textContent = ok
                 ? precioGVR(Number(local.price_gvr))
                 : "Precio pendiente";
 
             const st = document.createElement("div");
             st.className = "producto-estado";
+
             st.textContent = ok
                 ? "Disponible"
                 : "Temporalmente no disponible";
@@ -1699,9 +1502,10 @@ async function cargarCatalogo() {
             e.message || "No se pudo cargar el catálogo.",
             "error"
         );
-    }
 
-    actualizarBoton();
+    } finally {
+        actualizarBoton();
+    }
 }
 
 async function crearCompra(token, playerId) {
@@ -1745,11 +1549,15 @@ async function crearCompra(token, playerId) {
     );
 
     if (!yes) {
-        mostrarEstado("Compra cancelada. No se creó ningún pedido.");
+        mostrarEstado(
+            "Compra cancelada. No se creó ningún pedido."
+        );
         return;
     }
 
-    mostrarEstado("Creando pedido. No cierres esta página...");
+    mostrarEstado(
+        "Creando pedido. No cierres esta página..."
+    );
 
     const { data: id, error: rpcError } = await supabase.rpc(
         "purchase_game_product",
@@ -1796,11 +1604,15 @@ botonContinuar.addEventListener("click", async () => {
         } = await supabase.auth.getSession();
 
         if (se) {
-            throw new Error("No se pudo comprobar la sesión.");
+            throw new Error(
+                "No se pudo comprobar la sesión."
+            );
         }
 
         if (!session?.access_token) {
-            throw new Error("Debes iniciar sesión para continuar.");
+            throw new Error(
+                "Debes iniciar sesión para continuar."
+            );
         }
 
         const {
@@ -1838,11 +1650,15 @@ botonContinuar.addEventListener("click", async () => {
         const player = campoJugador.value.trim();
 
         if (!player) {
-            throw new Error("Introduce tu ID de Arena Breakout.");
+            throw new Error(
+                "Introduce tu ID de Arena Breakout."
+            );
         }
 
         if (player.length > 50) {
-            throw new Error("El ID del jugador es demasiado largo.");
+            throw new Error(
+                "El ID del jugador es demasiado largo."
+            );
         }
 
         await crearCompra(session.access_token, player);
@@ -1855,7 +1671,9 @@ botonContinuar.addEventListener("click", async () => {
             "error"
         );
 
-        alert(e.message || "No se pudo completar la operación.");
+        alert(
+            e.message || "No se pudo completar la operación."
+        );
 
     } finally {
         procesando = false;
@@ -1865,18 +1683,20 @@ botonContinuar.addEventListener("click", async () => {
 
 campoJugador.addEventListener("input", actualizarBoton);
 
-/*
- * Compatibilidad con el motor compartido.
- * Conserva el ID escrito cuando se abre la confirmación de una oferta.
- */
-const botonContinuarOferta = document.getElementById("continuarBtn");
+/* Conserva el ID que escribió el cliente al interactuar con ofertas. */
+
+const botonContinuarOferta =
+    document.getElementById("continuarBtn");
 
 if (botonContinuarOferta) {
     botonContinuarOferta.addEventListener("click", () => {
         const idEscrito = campoJugador.value;
 
         setTimeout(() => {
-            if (!campoJugador.value.trim() && idEscrito.trim()) {
+            if (
+                !campoJugador.value.trim() &&
+                idEscrito.trim()
+            ) {
                 campoJugador.value = idEscrito;
             }
         }, 0);
@@ -1906,9 +1726,62 @@ async function iniciar() {
 iniciar();
 </script>
 
-<script type="module" src="./ofertas.js?v=3"></script>
+<!-- Motor compartido de ofertas: se mantiene intacto. -->
+<script type="module" src="ofertas.js"></script>
+
+<!--
+Añade el precio visual y el estado a las tarjetas que genera ofertas.js.
+No altera los datos del proveedor ni habilita compras por sí mismo.
+-->
+
+<script>
+"use strict";
+
+(function decorarTarjetasOfertas() {
+    const lista = document.getElementById("listaOfertas");
+
+    if (!lista) return;
+
+    function decorar() {
+        lista.querySelectorAll(".boton-oferta").forEach(card => {
+            /*
+             * Solo añade los elementos si el motor todavía no los creó.
+             * No reemplaza el nombre ni modifica los eventos del botón.
+             */
+
+            if (!card.querySelector(".precio-oferta")) {
+                const precio = document.createElement("span");
+
+                precio.className = "precio-oferta";
+                precio.textContent = "Precio pendiente";
+
+                card.appendChild(precio);
+            }
+
+            if (!card.querySelector(".estado-oferta")) {
+                const estado = document.createElement("span");
+
+                estado.className = "estado-oferta";
+                estado.textContent = "Disponible";
+
+                card.appendChild(estado);
+            }
+        });
+    }
+
+    const observer = new MutationObserver(decorar);
+
+    observer.observe(lista, {
+        childList: true,
+        subtree: true
+    });
+
+    decorar();
+})();
+</script>
+
 </body>
-       </html>
+    </html>
 
 
 
