@@ -588,164 +588,152 @@ body.modal-abierto {
     cursor: wait;
 }
 
-/* CONFIRMACIÓN DE OFERTAS: MISMO DISEÑO QUE BONDS */
+/* MODAL DE OFERTAS: MISMO DISEÑO QUE BONDS */
 
 #modalConfirmacionCompra {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-
-    display: none;
-    align-items: center;
-    justify-content: center;
-
-    padding: 14px;
-    background: rgba(1, 6, 17, 0.85);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+position: fixed;
+inset: 0;
+z-index: 10000;
+display: none;
+align-items: center;
+justify-content: center;
+padding: 14px;
+background: rgba(1, 6, 17, 0.85);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
 }
 
 #modalConfirmacionCompra.visible,
 #modalConfirmacionCompra.abierto {
-    display: flex !important;
+display: flex !important;
 }
 
 #modalConfirmacionCompra > div {
-    width: 100%;
-    max-width: 360px;
-    max-height: calc(100vh - 28px);
-    overflow-y: auto;
-
-    padding: 19px 15px;
-
-    background: #091a35;
-    border: 1px solid #168cff;
-    border-radius: 12px;
-
-    box-shadow: 0 0 25px rgba(0, 140, 255, 0.18);
-    animation: aparecerModalOferta 0.18s ease-out;
+width: 100%;
+max-width: 360px;
+max-height: calc(100vh - 28px);
+overflow-y: auto;
+padding: 19px 15px;
+background: #091a35;
+border: 1px solid #168cff;
+border-radius: 12px;
+box-shadow: 0 0 25px rgba(0, 140, 255, 0.18);
 }
 
 #modalConfirmacionCompra h2 {
-    margin: 0 0 7px !important;
-    text-align: center;
-    font-size: 19px !important;
-    font-weight: 900;
-    color: #fff;
+margin: 0 0 7px !important;
+text-align: center;
+font-size: 19px !important;
+font-weight: 900;
+color: #fff;
 }
 
 #modalConfirmacionCompra .modal-descripcion-oferta {
-    margin: 0 0 13px;
-    color: #8fa5bd;
-    text-align: center;
-    font-size: 11px;
-    line-height: 1.5;
+margin: 0 0 13px;
+color: #8fa5bd;
+text-align: center;
+font-size: 11px;
+line-height: 1.5;
 }
 
 #modalConfirmacionCompra .detalles-confirmacion-oferta {
-    padding: 10px;
-    margin-bottom: 13px;
-
-    background: #061226;
-    border: 1px solid #204c78;
-    border-radius: 7px;
+padding: 10px;
+margin-bottom: 13px;
+background: #061226;
+border: 1px solid #204c78;
+border-radius: 7px;
 }
 
 #modalConfirmacionCompra .fila-confirmacion-oferta {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-
-    padding: 7px 0;
-
-    font-size: 12px;
-    line-height: 1.4;
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+gap: 12px;
+padding: 7px 0;
+font-size: 12px;
+line-height: 1.4;
 }
 
-#modalConfirmacionCompra
-.fila-confirmacion-oferta
-+ .fila-confirmacion-oferta {
-    border-top: 1px solid rgba(32, 76, 120, 0.55);
+#modalConfirmacionCompra .fila-confirmacion-oferta + .fila-confirmacion-oferta {
+border-top: 1px solid rgba(32, 76, 120, 0.55);
 }
 
-#modalConfirmacionCompra
-.fila-confirmacion-oferta
-> span:first-child {
-    color: #8fa5bd;
-    flex-shrink: 0;
+#modalConfirmacionCompra .fila-confirmacion-oferta span:first-child {
+color: #8fa5bd;
+flex-shrink: 0;
 }
 
-#modalConfirmacionCompra
-.fila-confirmacion-oferta strong {
-    color: #fff;
-    text-align: right;
-    overflow-wrap: anywhere;
+#modalConfirmacionCompra .fila-confirmacion-oferta strong {
+color: #fff;
+text-align: right;
+overflow-wrap: anywhere;
 }
 
 #modalConfirmacionCompra #modalPrecioOfertaVisible {
-    color: #45c8ff !important;
-    font-size: 15px !important;
-    font-weight: 900;
+color: #45c8ff !important;
+font-size: 15px !important;
+font-weight: 900;
 }
 
 #modalConfirmacionCompra .botones-confirmacion-oferta {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 8px;
 }
 
 #modalConfirmacionCompra .botones-confirmacion-oferta button {
-    width: 100%;
-    min-height: 39px;
-    margin: 0;
-    padding: 9px;
-
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: bold;
-
-    cursor: pointer;
-    transition: filter 0.2s, border-color 0.2s;
+width: 100%;
+min-height: 39px;
+margin: 0;
+padding: 9px;
+border-radius: 6px;
+font-size: 12px;
+font-weight: bold;
+cursor: pointer;
 }
 
 #modalConfirmacionCompra #cancelarCompraBtn {
-    background: #07152b;
-    color: #c1d0e0;
-    border: 1px solid #204c78;
+background: #07152b;
+color: #c1d0e0;
+border: 1px solid #204c78;
 }
 
 #modalConfirmacionCompra #aceptarCompraBtn {
-    background: linear-gradient(90deg, #087cff, #00baff);
-    color: #fff;
-    border: 0;
-}
-
-#modalConfirmacionCompra .botones-confirmacion-oferta button:hover:not(:disabled) {
-    filter: brightness(1.15);
+background: linear-gradient(90deg, #087cff, #00baff);
+color: #fff;
+border: 0;
 }
 
 #modalConfirmacionCompra button:focus-visible {
-    outline: 2px solid #45c8ff;
-    outline-offset: 3px;
+outline: 2px solid #45c8ff;
+outline-offset: 3px;
 }
 
 #modalConfirmacionCompra button:disabled {
-    opacity: 0.55;
-    cursor: wait;
+opacity: 0.55;
+cursor: wait;
 }
 
-@keyframes aparecerModalOferta {
-    from {
-        opacity: 0;
-        transform: translateY(7px) scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+@media (max-width: 360px) {
+#modalConfirmacionCompra {
+padding: 8px;
 }
+
+#modalConfirmacionCompra > div {
+    max-height: calc(100vh - 16px);
+    padding: 15px 11px;
+}
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+#modalConfirmacionCompra,
+#modalConfirmacionCompra * {
+scroll-behavior: auto;
+animation: none !important;
+transition: none !important;
+}
+    }
 
 @media (max-width: 360px) {
     #modalConfirmacionCompra {
