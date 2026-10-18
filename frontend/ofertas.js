@@ -1510,14 +1510,39 @@ async function crearCompra(
      */
     let confirmado;
 
-    if (ES_PUBG_MOBILE || ES_FREE_FIRE) {
-        confirmado = await confirmarConModalPersonalizado({
-            nombre: productoSeleccionado.oferta.nombre,
-            playerId,
-            precio: precioConfirmado
-        });
-    } else {
-        confirmado = window.confirm(
+    /*
+ * Modal personalizado para Free Fire, PUBG Mobile
+ * y Arena Breakout.
+ * Los demás juegos conservan window.confirm().
+ */
+let confirmado;
+
+if (
+    ES_PUBG_MOBILE ||
+    ES_FREE_FIRE ||
+    ES_ARENA_BREAKOUT
+) {
+    confirmado = await confirmarConModalPersonalizado({
+        nombre: productoSeleccionado.oferta.nombre,
+        playerId,
+        precio: precioConfirmado
+    });
+} else {
+    confirmado = window.confirm(
+        `Confirma tu oferta de ${NOMBRE_JUEGO}:\n\n` +
+        `Oferta: ${productoSeleccionado.oferta.nombre}\n` +
+        `ID de jugador: ${playerId}\n` +
+        (
+            ES_GENSHIN_IMPACT
+                ? `Servidor: ${zoneId}\n`
+                : ES_MOBILE_LEGENDS
+                    ? `Zone ID: ${zoneId}\n`
+                    : ""
+        ) +
+        `Precio: ${mostrarPrecio(precioConfirmado)}\n\n` +
+        "¿Deseas continuar con el pedido?"
+    );
+}
             `Confirma tu oferta de ${NOMBRE_JUEGO}:\n\n` +
             `Oferta: ${productoSeleccionado.oferta.nombre}\n` +
             `ID de jugador: ${playerId}\n` +
