@@ -10,7 +10,17 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 :root{color-scheme:dark}
-body{background:#050b18;color:#fff;min-height:100vh;padding:12px}
+
+body{
+    background:#050b18;
+    color:#fff;
+    min-height:100vh;
+    padding:12px;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-y;
+}
+
 .contenedor{width:100%;max-width:520px;margin:0 auto}
 .header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;min-height:34px}
 .logo{font-size:18px;font-weight:900}
@@ -68,6 +78,7 @@ button.producto{cursor:pointer}
     margin-top:8px;
     align-items:stretch;
 }
+
 #listaOfertas .boton-oferta{
     box-sizing:border-box!important;
     display:flex!important;
@@ -88,15 +99,19 @@ button.producto{cursor:pointer}
     text-align:left!important;
     cursor:pointer;
 }
+
 #listaOfertas .boton-oferta:hover:not(:disabled){border-color:#168cff!important}
 #listaOfertas .boton-oferta:disabled{cursor:not-allowed;opacity:.65}
+
 #listaOfertas .boton-oferta.seleccionada,
 #listaOfertas .boton-oferta.seleccionado{
     background:#09203b!important;
     border-color:#00baff!important;
     box-shadow:inset 0 -2px 0 #00baff!important;
 }
+
 #listaOfertas .foto-oferta{display:none!important}
+
 #listaOfertas .nombre-oferta{
     display:block!important;
     width:100%!important;
@@ -107,6 +122,8 @@ button.producto{cursor:pointer}
     overflow-wrap:anywhere!important;
     text-align:left!important;
 }
+
+/* PRECIO BLANCO Y ALINEADO COMO EN BONDS */
 #listaOfertas .precio-oferta{
     display:block!important;
     width:100%!important;
@@ -117,8 +134,10 @@ button.producto{cursor:pointer}
     font-size:13px!important;
     font-weight:bold!important;
     line-height:1.4!important;
-    text-align:center!important;
+    text-align:left!important;
 }
+
+/* DISPONIBILIDAD DEBAJO DEL PRECIO */
 #listaOfertas .estado-oferta{
     display:block!important;
     width:100%!important;
@@ -129,16 +148,19 @@ button.producto{cursor:pointer}
     font-size:10px!important;
     font-weight:bold!important;
     line-height:1.4!important;
-    text-align:center!important;
+    text-align:left!important;
 }
+
 #listaOfertas .estado-oferta.no-disponible{color:#ffcf8a!important}
 #estadoProductos{margin-top:8px}
+
 #notaOfertas,#descripcionOfertas{
     color:#8299b4;
     font-size:11px;
     line-height:1.45;
     margin-top:8px;
 }
+
 #precioSeleccionado{color:#45c8ff;font-size:12px;font-weight:bold;margin-top:8px}
 #precio{color:#fff;font-size:13px;font-weight:bold;margin-top:5px}
 
@@ -157,7 +179,9 @@ button.producto{cursor:pointer}
     border-radius:0;
     overflow-y:auto;
 }
+
 #pantallaConfirmacion.pantalla-motor.activa{display:flex!important}
+
 #pantallaConfirmacion .confirmacion-oferta-contenido{
     width:100%;
     max-width:360px;
@@ -169,12 +193,14 @@ button.producto{cursor:pointer}
     font-size:12px;
     line-height:1.5;
 }
+
 #pantallaConfirmacion h2{
     margin-bottom:7px;
     text-align:center;
     font-size:19px!important;
     color:#fff;
 }
+
 #pantallaConfirmacion .confirmacion-descripcion{
     margin-bottom:13px;
     color:#8fa5bd;
@@ -182,6 +208,7 @@ button.producto{cursor:pointer}
     font-size:11px;
     line-height:1.5;
 }
+
 #pantallaConfirmacion .confirmacion-detalles{
     padding:10px;
     margin-bottom:13px;
@@ -189,6 +216,7 @@ button.producto{cursor:pointer}
     border:1px solid #204c78;
     border-radius:7px;
 }
+
 #pantallaConfirmacion .confirmacion-fila{
     display:flex;
     justify-content:space-between;
@@ -199,15 +227,18 @@ button.producto{cursor:pointer}
     line-height:1.4;
     overflow-wrap:anywhere;
 }
+
 #pantallaConfirmacion .confirmacion-fila+.confirmacion-fila{border-top:1px solid rgba(32,76,120,.55)}
 #pantallaConfirmacion .confirmacion-fila span:first-child{color:#8fa5bd;flex-shrink:0}
 #pantallaConfirmacion .confirmacion-fila strong{text-align:right;overflow-wrap:anywhere}
+
 #pantallaConfirmacion .confirmacion-botones{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:8px;
     margin-top:13px;
 }
+
 #pantallaConfirmacion .confirmacion-botones button{
     width:100%;
     min-height:39px;
@@ -218,6 +249,7 @@ button.producto{cursor:pointer}
     font-weight:bold;
     cursor:pointer;
 }
+
 #confirmarBtn{grid-column:2;grid-row:1;background:linear-gradient(90deg,#087cff,#00baff);color:#fff;border:0}
 #botonCambiar{grid-column:1;grid-row:1;background:#07152b;color:#c1d0e0;border:1px solid #204c78}
 
@@ -232,7 +264,9 @@ button.producto{cursor:pointer}
     font-size:12px;
     line-height:1.5;
 }
+
 #pantallaExito h2{color:#fff}
+
 #pantallaExito button{
     width:100%;
     min-height:39px;
@@ -243,11 +277,13 @@ button.producto{cursor:pointer}
     font-weight:bold;
     cursor:pointer;
 }
+
 #consultarPedidoBtn{background:linear-gradient(90deg,#087cff,#00baff);color:#fff;border:0}
 #botonVolverOfertas{background:#07152b;color:#c1d0e0;border:1px solid #204c78}
 
 /* MODAL ORIGINAL DE BONDS: CONSERVADO */
 body.modal-abierto{overflow:hidden}
+
 .modal-fondo{
     position:fixed;
     inset:0;
@@ -259,7 +295,9 @@ body.modal-abierto{overflow:hidden}
     background:rgba(1,6,17,.85);
     backdrop-filter:blur(5px);
 }
+
 .modal-fondo.visible{display:flex!important}
+
 .modal{
     width:100%;
     max-width:360px;
@@ -269,6 +307,7 @@ body.modal-abierto{overflow:hidden}
     border-radius:12px;
     box-shadow:0 0 25px rgba(0,140,255,.18);
 }
+
 .modal h2{margin-bottom:7px;text-align:center;font-size:19px;color:#fff}
 .modal-descripcion{margin-bottom:13px;color:#8fa5bd;text-align:center;font-size:11px;line-height:1.5}
 .modal-detalles{padding:10px;margin-bottom:13px;background:#061226;border:1px solid #204c78;border-radius:7px}
@@ -1019,16 +1058,26 @@ function obtenerProductoOferta(nombre) {
     return mapaProductosOferta.get(String(config.id).trim()) || null;
 }
 
+/*
+ * CORRECCIÓN DEL CONGELAMIENTO:
+ * Solo modifica el contenido cuando realmente ha cambiado.
+ * Así se evitan mutaciones innecesarias del DOM.
+ */
 function crearOActualizarElemento(card, clase, texto) {
     let elemento = card.querySelector("." + clase);
 
     if (!elemento) {
         elemento = document.createElement("div");
         elemento.className = clase;
+        elemento.textContent = texto;
         card.appendChild(elemento);
+        return elemento;
     }
 
-    elemento.textContent = texto;
+    if (elemento.textContent !== texto) {
+        elemento.textContent = texto;
+    }
+
     return elemento;
 }
 
@@ -1040,8 +1089,10 @@ function decorarTarjetaOferta(card) {
 
     if (!config) {
         crearOActualizarElemento(card, "precio-oferta", "No disponible");
+
         crearOActualizarElemento(card, "estado-oferta", "No disponible")
             .classList.add("no-disponible");
+
         card.disabled = true;
         return;
     }
@@ -1050,8 +1101,10 @@ function decorarTarjetaOferta(card) {
 
     if (!producto) {
         crearOActualizarElemento(card, "precio-oferta", "No disponible");
+
         crearOActualizarElemento(card, "estado-oferta", "No disponible")
             .classList.add("no-disponible");
+
         card.disabled = true;
         return;
     }
@@ -1079,14 +1132,15 @@ function decorarTarjetaOferta(card) {
     );
 
     estadoElemento.classList.toggle("no-disponible", !disponible);
+
     card.dataset.productId = config.id;
     card.dataset.precioGvr = disponible ? String(Number(producto.price_gvr)) : "";
     card.dataset.disponible = String(disponible);
 
     /*
-     * No se deshabilita aquí una tarjeta activa si el motor de ofertas
-     * ya la gestiona. Solo se bloquea si Supabase confirma que no se puede
-     * comprar, y se respeta el estado del botón cuando el motor lo controla.
+     * Se conserva la gestión de selección del motor ofertas.js.
+     * Si Supabase confirma que el producto no está disponible,
+     * se bloquea para impedir una compra no válida.
      */
     if (!disponible) {
         card.disabled = true;
@@ -1096,6 +1150,7 @@ function decorarTarjetaOferta(card) {
     }
 
     precioElemento.setAttribute("aria-label", "Precio: " + precioTexto);
+
     estadoElemento.setAttribute(
         "aria-label",
         disponible ? "Producto disponible" : "Producto no disponible"
@@ -1126,14 +1181,20 @@ async function cargarPreciosOfertas() {
 
     if (error) {
         console.error("No se pudieron cargar los precios de ofertas:", error);
+
         errorCargaOfertas = true;
-        estadoProductos.textContent = "No se pudieron verificar los precios. Las ofertas no se habilitarán.";
+
+        estadoProductos.textContent =
+            "No se pudieron verificar los precios. Las ofertas no se habilitarán.";
+
         estadoProductos.classList.add("error");
 
         ids.forEach(id => mapaProductosOferta.delete(String(id)));
+
         decorarTodasLasTarjetas();
 
         if (botonComprarOferta) botonComprarOferta.disabled = true;
+
         return;
     }
 
@@ -1143,6 +1204,7 @@ async function cargarPreciosOfertas() {
         if (normalizarOferta(producto.game) !== "arenabreakout") return;
 
         const id = String(producto.provider_product_id || "").trim();
+
         if (id) mapaProductosOferta.set(id, producto);
     });
 
@@ -1153,6 +1215,7 @@ async function cargarPreciosOfertas() {
 
     const disponibles = (window.CONFIG_OFERTAS.ofertas || []).filter(oferta => {
         const producto = mapaProductosOferta.get(String(oferta.id).trim());
+
         return producto &&
             producto.active === true &&
             producto.provider === "nextlevel" &&
@@ -1169,8 +1232,8 @@ async function cargarPreciosOfertas() {
 }
 
 /*
- * Actualiza los datos del cuadro de confirmación sin sustituir los
- * controladores de compra que pertenecen al motor ofertas.js.
+ * Sincroniza la confirmación sin sustituir los controladores
+ * de compra originales de ofertas.js.
  */
 function sincronizarConfirmacionOferta() {
     const cardSeleccionada = listaOfertas.querySelector(
@@ -1188,6 +1251,7 @@ function sincronizarConfirmacionOferta() {
     const nombre = obtenerNombreTarjeta(cardSeleccionada);
     const config = configuracionOfertaPorNombre(nombre);
     const producto = obtenerProductoOferta(nombre);
+
     const disponible = !!producto &&
         producto.active === true &&
         producto.provider === "nextlevel" &&
@@ -1217,6 +1281,7 @@ function sincronizarConfirmacionOferta() {
 function actualizarPanelPrecioOferta() {
     const panelPrecio = document.getElementById("precio");
     const precioSeleccionado = document.getElementById("precioSeleccionado");
+
     const cardSeleccionada = listaOfertas.querySelector(
         ".boton-oferta.seleccionada, .boton-oferta.seleccionado"
     );
@@ -1225,6 +1290,7 @@ function actualizarPanelPrecioOferta() {
 
     const nombre = obtenerNombreTarjeta(cardSeleccionada);
     const producto = obtenerProductoOferta(nombre);
+
     const disponible = !!producto &&
         producto.active === true &&
         producto.provider === "nextlevel" &&
@@ -1249,8 +1315,8 @@ function actualizarPanelPrecioOferta() {
 }
 
 /*
- * El listener de captura actualiza los datos antes de que se ejecuten
- * los listeners de selección que pertenecen al motor original.
+ * Se conserva el listener de captura para actualizar los datos
+ * antes de que se ejecuten los listeners de selección originales.
  */
 listaOfertas.addEventListener("click", event => {
     const card = event.target.closest(".boton-oferta");
@@ -1278,7 +1344,10 @@ if (botonComprarOferta) {
 
         if (!cardSeleccionada) return;
 
-        const producto = obtenerProductoOferta(obtenerNombreTarjeta(cardSeleccionada));
+        const producto = obtenerProductoOferta(
+            obtenerNombreTarjeta(cardSeleccionada)
+        );
+
         const disponible = !!producto &&
             producto.active === true &&
             producto.provider === "nextlevel" &&
@@ -1297,7 +1366,15 @@ if (botonComprarOferta) {
     }, true);
 }
 
-/* Observa las tarjetas que crea dinámicamente ofertas.js. */
+/*
+ * CORRECCIÓN PRINCIPAL:
+ * El observador solo vigila los hijos directos de listaOfertas.
+ *
+ * Así detecta cuando ofertas.js crea o elimina tarjetas,
+ * pero NO observa los precios y estados que añade el decorador.
+ * Esto evita el ciclo de mutaciones que podía congelar
+ * los toques y el desplazamiento de la página.
+ */
 const observadorOfertas = new MutationObserver(() => {
     decorarTodasLasTarjetas();
 
@@ -1309,7 +1386,7 @@ const observadorOfertas = new MutationObserver(() => {
 
 observadorOfertas.observe(listaOfertas, {
     childList: true,
-    subtree: true
+    subtree: false
 });
 
 /* Mantiene sincronizados los datos si el motor abre la confirmación. */
@@ -1335,12 +1412,17 @@ document.getElementById("confirmarBtn")?.addEventListener("click", () => {
 
 cargarPreciosOfertas().catch(error => {
     console.error(error);
+
     errorCargaOfertas = true;
-    estadoProductos.textContent = "Error al consultar el catálogo de ofertas.";
+
+    estadoProductos.textContent =
+        "Error al consultar el catálogo de ofertas.";
+
     estadoProductos.classList.add("error");
+
     if (botonComprarOferta) botonComprarOferta.disabled = true;
 });
 </script>
 
 </body>
-                </html>
+                                                        </html>
