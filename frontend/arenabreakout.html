@@ -60,25 +60,108 @@ button.producto{cursor:pointer}
 .pantalla-motor.activa{display:block!important}
 .nota{margin-top:13px;text-align:center;color:#8299b4;font-size:10px;line-height:1.5}
 
-/* OFERTAS: MISMO DISEÑO DE TARJETAS QUE BONDS */
-#listaOfertas{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
-#listaOfertas .boton-oferta{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;gap:8px!important;width:100%!important;min-width:0!important;min-height:83px!important;padding:10px!important;background:#061226!important;color:#fff!important;border:1px solid #164b75!important;border-radius:7px!important;box-shadow:none!important;text-align:left!important;cursor:pointer}
-#listaOfertas .boton-oferta:hover:not(:disabled){border-color:#168cff!important}
-#listaOfertas .boton-oferta:disabled{cursor:not-allowed;opacity:.65}
-#listaOfertas .boton-oferta.seleccionada,#listaOfertas .boton-oferta.seleccionado{background:#09203b!important;border-color:#00baff!important;box-shadow:inset 0 -2px 0 #00baff!important}
-#listaOfertas .foto-oferta{display:none!important}
-#listaOfertas .nombre-oferta{color:#fff!important;font-size:12px!important;font-weight:bold!important;line-height:1.4!important;overflow-wrap:anywhere!important;text-align:left!important}
-#listaOfertas .boton-oferta>div:not(.foto-oferta){width:100%!important;padding:0!important;background:transparent!important;text-align:left!important}
-#listaOfertas .boton-oferta .precio-oferta,#listaOfertas .precio-oferta{display:block;width:100%;color:#fff!important;font-size:13px!important;font-weight:bold!important;line-height:1.4;text-align:left}
-#listaOfertas .estado-oferta{display:block;width:100%;color:#45c8ff!important;font-size:10px!important;font-weight:bold!important;line-height:1.4;text-align:left}
-#listaOfertas .boton-oferta>div:last-child{color:#45c8ff!important;font-size:10px!important;font-weight:bold!important;line-height:1.4!important}
+/* OFERTAS: MISMAS DIMENSIONES Y ESTILO QUE LAS TARJETAS DE BONDS */
+#listaOfertas{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    margin-top:8px;
+}
+#listaOfertas .boton-oferta{
+    box-sizing:border-box!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:space-between!important;
+    align-items:stretch!important;
+    gap:8px!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:83px!important;
+    padding:10px!important;
+    background:#061226!important;
+    color:#fff!important;
+    border:1px solid #164b75!important;
+    border-radius:7px!important;
+    box-shadow:none!important;
+    text-align:left!important;
+    cursor:pointer;
+}
+#listaOfertas .boton-oferta:hover:not(:disabled){
+    border-color:#168cff!important;
+}
+#listaOfertas .boton-oferta:disabled{
+    cursor:not-allowed;
+    opacity:.65;
+}
+#listaOfertas .boton-oferta.seleccionada,
+#listaOfertas .boton-oferta.seleccionado{
+    background:#09203b!important;
+    border-color:#00baff!important;
+    box-shadow:inset 0 -2px 0 #00baff!important;
+}
+#listaOfertas .foto-oferta{
+    display:none!important;
+}
+#listaOfertas .nombre-oferta{
+    color:#fff!important;
+    font-size:12px!important;
+    font-weight:bold!important;
+    line-height:1.4!important;
+    overflow-wrap:anywhere!important;
+    text-align:left!important;
+}
+#listaOfertas .boton-oferta>div:not(.foto-oferta){
+    width:100%!important;
+    padding:0!important;
+    background:transparent!important;
+    text-align:left!important;
+}
+#listaOfertas .boton-oferta .precio-oferta,
+#listaOfertas .precio-oferta{
+    display:block;
+    width:100%;
+    color:#fff!important;
+    font-size:13px!important;
+    font-weight:bold!important;
+    line-height:1.4;
+    text-align:left;
+}
+#listaOfertas .estado-oferta{
+    display:block;
+    width:100%;
+    color:#45c8ff!important;
+    font-size:10px!important;
+    font-weight:bold!important;
+    line-height:1.4;
+    text-align:left;
+}
+#listaOfertas .boton-oferta>div:last-child{
+    color:#45c8ff!important;
+    font-size:10px!important;
+    font-weight:bold!important;
+    line-height:1.4!important;
+}
 #estadoProductos{margin-top:8px}
-#notaOfertas,#descripcionOfertas{color:#8299b4;font-size:11px;line-height:1.45;margin-top:8px}
-#precioSeleccionado{color:#45c8ff;font-size:12px;font-weight:bold;margin-top:8px}
-#precio{color:#fff;font-size:13px;font-weight:bold;margin-top:5px}
+#notaOfertas,#descripcionOfertas{
+    color:#8299b4;
+    font-size:11px;
+    line-height:1.45;
+    margin-top:8px;
+}
+#precioSeleccionado{
+    color:#45c8ff;
+    font-size:12px;
+    font-weight:bold;
+    margin-top:8px;
+}
+#precio{
+    color:#fff;
+    font-size:13px;
+    font-weight:bold;
+    margin-top:5px;
+}
 
-/* CONFIRMACIÓN DE OFERTAS: MODAL CON EL MISMO TAMAÑO QUE BONDS.
-   Se conservan los IDs que necesita ofertas.js. */
+/* CONFIRMACIÓN DE OFERTAS: MISMO TAMAÑO Y ESTILO QUE BONDS */
 #pantallaConfirmacion.pantalla-motor{
     position:fixed!important;
     inset:0;
@@ -93,7 +176,9 @@ button.producto{cursor:pointer}
     border-radius:0;
     overflow-y:auto;
 }
-#pantallaConfirmacion.pantalla-motor.activa{display:flex!important}
+#pantallaConfirmacion.pantalla-motor.activa{
+    display:flex!important;
+}
 #pantallaConfirmacion .confirmacion-oferta-contenido{
     width:100%;
     max-width:360px;
@@ -105,43 +190,205 @@ button.producto{cursor:pointer}
     font-size:12px;
     line-height:1.5;
 }
-#pantallaConfirmacion h2{margin-bottom:7px;text-align:center;font-size:19px!important;color:#fff}
-#pantallaConfirmacion .confirmacion-descripcion{margin-bottom:13px;color:#8fa5bd;text-align:center;font-size:11px;line-height:1.5}
-#pantallaConfirmacion .confirmacion-detalles{padding:10px;margin-bottom:13px;background:#061226;border:1px solid #204c78;border-radius:7px}
-#pantallaConfirmacion .confirmacion-fila{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:7px 0;font-size:12px;line-height:1.4;overflow-wrap:anywhere}
-#pantallaConfirmacion .confirmacion-fila+.confirmacion-fila{border-top:1px solid rgba(32,76,120,.55)}
-#pantallaConfirmacion .confirmacion-fila span:first-child{color:#8fa5bd;flex-shrink:0}
-#pantallaConfirmacion .confirmacion-fila strong{text-align:right;overflow-wrap:anywhere}
-#pantallaConfirmacion .confirmacion-botones{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}
-#pantallaConfirmacion .confirmacion-botones button{width:100%;min-height:39px;margin:0;padding:9px;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer}
-#confirmarBtn{grid-column:2;grid-row:1;background:linear-gradient(90deg,#087cff,#00baff);color:#fff;border:0}
-#botonCambiar{grid-column:1;grid-row:1;background:#07152b;color:#c1d0e0;border:1px solid #204c78}
+#pantallaConfirmacion h2{
+    margin-bottom:7px;
+    text-align:center;
+    font-size:19px!important;
+    color:#fff;
+}
+#pantallaConfirmacion .confirmacion-descripcion{
+    margin-bottom:13px;
+    color:#8fa5bd;
+    text-align:center;
+    font-size:11px;
+    line-height:1.5;
+}
+#pantallaConfirmacion .confirmacion-detalles{
+    padding:10px;
+    margin-bottom:13px;
+    background:#061226;
+    border:1px solid #204c78;
+    border-radius:7px;
+}
+#pantallaConfirmacion .confirmacion-fila{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    padding:7px 0;
+    font-size:12px;
+    line-height:1.4;
+    overflow-wrap:anywhere;
+}
+#pantallaConfirmacion .confirmacion-fila+.confirmacion-fila{
+    border-top:1px solid rgba(32,76,120,.55);
+}
+#pantallaConfirmacion .confirmacion-fila span:first-child{
+    color:#8fa5bd;
+    flex-shrink:0;
+}
+#pantallaConfirmacion .confirmacion-fila strong{
+    text-align:right;
+    overflow-wrap:anywhere;
+}
+#pantallaConfirmacion .confirmacion-botones{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:13px;
+}
+#pantallaConfirmacion .confirmacion-botones button{
+    width:100%;
+    min-height:39px;
+    margin:0;
+    padding:9px;
+    border-radius:6px;
+    font-size:12px;
+    font-weight:bold;
+    cursor:pointer;
+}
+#confirmarBtn{
+    grid-column:2;
+    grid-row:1;
+    background:linear-gradient(90deg,#087cff,#00baff);
+    color:#fff;
+    border:0;
+}
+#botonCambiar{
+    grid-column:1;
+    grid-row:1;
+    background:#07152b;
+    color:#c1d0e0;
+    border:1px solid #204c78;
+}
 
 /* PANTALLA DE ESTADO DE PEDIDOS */
-#pantallaExito{margin-top:12px;padding:12px;background:#061226;border:1px solid #164b75;border-radius:7px;color:#fff;font-size:12px;line-height:1.5}
+#pantallaExito{
+    margin-top:12px;
+    padding:12px;
+    background:#061226;
+    border:1px solid #164b75;
+    border-radius:7px;
+    color:#fff;
+    font-size:12px;
+    line-height:1.5;
+}
 #pantallaExito h2{color:#fff}
-#pantallaExito button{width:100%;min-height:39px;margin-top:8px;padding:9px;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer}
-#consultarPedidoBtn{background:linear-gradient(90deg,#087cff,#00baff);color:#fff;border:0}
-#botonVolverOfertas{background:#07152b;color:#c1d0e0;border:1px solid #204c78}
+#pantallaExito button{
+    width:100%;
+    min-height:39px;
+    margin-top:8px;
+    padding:9px;
+    border-radius:6px;
+    font-size:12px;
+    font-weight:bold;
+    cursor:pointer;
+}
+#consultarPedidoBtn{
+    background:linear-gradient(90deg,#087cff,#00baff);
+    color:#fff;
+    border:0;
+}
+#botonVolverOfertas{
+    background:#07152b;
+    color:#c1d0e0;
+    border:1px solid #204c78;
+}
 
-/* MODAL ORIGINAL DE BONDS */
+/* MODAL ORIGINAL DE BONDS: NO MODIFICADO */
 body.modal-abierto{overflow:hidden}
-.modal-fondo{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(1,6,17,.85);backdrop-filter:blur(5px)}
+.modal-fondo{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:14px;
+    background:rgba(1,6,17,.85);
+    backdrop-filter:blur(5px);
+}
 .modal-fondo.visible{display:flex!important}
-.modal{width:100%;max-width:360px;padding:19px 15px;background:#091a35;border:1px solid #168cff;border-radius:12px;box-shadow:0 0 25px rgba(0,140,255,.18)}
-.modal h2{margin-bottom:7px;text-align:center;font-size:19px;color:#fff}
-.modal-descripcion{margin-bottom:13px;color:#8fa5bd;text-align:center;font-size:11px;line-height:1.5}
-.modal-detalles{padding:10px;margin-bottom:13px;background:#061226;border:1px solid #204c78;border-radius:7px}
-.modal-fila{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:7px 0;font-size:12px;line-height:1.4}
-.modal-fila+.modal-fila{border-top:1px solid rgba(32,76,120,.55)}
-.modal-fila span:first-child{color:#8fa5bd;flex-shrink:0}
-.modal-fila strong{text-align:right;overflow-wrap:anywhere}
-.modal-total{color:#45c8ff;font-size:15px}
-.modal-botones{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.modal-boton{min-height:39px;padding:9px;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer}
-.modal-cancelar{background:#07152b;color:#c1d0e0;border:1px solid #204c78}
-.modal-aceptar{background:linear-gradient(90deg,#087cff,#00baff);color:white;border:0}
-.modal-boton:disabled{opacity:.55;cursor:wait}
+.modal{
+    width:100%;
+    max-width:360px;
+    padding:19px 15px;
+    background:#091a35;
+    border:1px solid #168cff;
+    border-radius:12px;
+    box-shadow:0 0 25px rgba(0,140,255,.18);
+}
+.modal h2{
+    margin-bottom:7px;
+    text-align:center;
+    font-size:19px;
+    color:#fff;
+}
+.modal-descripcion{
+    margin-bottom:13px;
+    color:#8fa5bd;
+    text-align:center;
+    font-size:11px;
+    line-height:1.5;
+}
+.modal-detalles{
+    padding:10px;
+    margin-bottom:13px;
+    background:#061226;
+    border:1px solid #204c78;
+    border-radius:7px;
+}
+.modal-fila{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    padding:7px 0;
+    font-size:12px;
+    line-height:1.4;
+}
+.modal-fila+.modal-fila{
+    border-top:1px solid rgba(32,76,120,.55);
+}
+.modal-fila span:first-child{
+    color:#8fa5bd;
+    flex-shrink:0;
+}
+.modal-fila strong{
+    text-align:right;
+    overflow-wrap:anywhere;
+}
+.modal-total{
+    color:#45c8ff;
+    font-size:15px;
+}
+.modal-botones{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+.modal-boton{
+    min-height:39px;
+    padding:9px;
+    border-radius:6px;
+    font-size:12px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.modal-cancelar{
+    background:#07152b;
+    color:#c1d0e0;
+    border:1px solid #204c78;
+}
+.modal-aceptar{
+    background:linear-gradient(90deg,#087cff,#00baff);
+    color:white;
+    border:0;
+}
+.modal-boton:disabled{
+    opacity:.55;
+    cursor:wait;
+}
 
 @media(max-width:360px){
     body{padding:8px}
@@ -158,6 +405,7 @@ body.modal-abierto{overflow:hidden}
 
 <body>
 <div class="contenedor">
+
 <header class="header">
     <div class="logo"><span class="rayo">⚡</span> Gamers Gold Top-Up</div>
     <a href="juegos.html" class="volver">← Juegos</a>
@@ -187,36 +435,55 @@ body.modal-abierto{overflow:hidden}
     </section>
 
     <section id="vistaOfertas" class="vista-oculta">
+
         <div id="pantallaOfertas" class="pantalla-motor activa">
             <div id="descripcionOfertas">Selecciona una oferta especial de Arena Breakout.</div>
             <div id="estadoProductos" class="estado" aria-live="polite">Cargando ofertas...</div>
             <div id="listaOfertas" class="catalogo"></div>
             <div id="precioSeleccionado"></div>
+
             <label class="etiqueta" for="precio">Precio de la oferta</label>
             <div id="precio">Selecciona una oferta disponible.</div>
+
             <button id="continuarBtn" class="boton continuar" type="button" disabled>COMPRAR OFERTA</button>
             <div id="notaOfertas">Los precios se muestran en GVR.</div>
         </div>
 
+        <!-- CONFIRMACIÓN DE OFERTAS -->
         <div id="pantallaConfirmacion" class="pantalla-motor" aria-hidden="true">
             <div class="confirmacion-oferta-contenido">
                 <h2>Confirmar compra</h2>
-                <p class="confirmacion-descripcion">Comprueba los datos antes de continuar con tu pedido.</p>
+
+                <p class="confirmacion-descripcion">
+                    Comprueba los datos antes de continuar con tu pedido.
+                </p>
+
                 <div class="confirmacion-detalles">
                     <div class="confirmacion-fila">
                         <span>Juego</span>
                         <strong id="juegoConfirmacion">Arena Breakout</strong>
                     </div>
+
                     <div class="confirmacion-fila">
-                        <span>Producto</span>
-                        <strong id="confirmarPrecio">—</strong>
+                        <span>Oferta</span>
+                        <strong id="nombreOfertaConfirmacion">—</strong>
                     </div>
+
                     <div class="confirmacion-fila">
                         <span>ID de jugador</span>
                         <strong id="idJugadorConfirmacion">—</strong>
                     </div>
+
+                    <div class="confirmacion-fila">
+                        <span>Total</span>
+                        <strong id="confirmarPrecio" class="modal-total">—</strong>
+                    </div>
                 </div>
-                <p class="confirmacion-descripcion">La compra descontará GVR de tu saldo. Comprueba los datos antes de aceptar.</p>
+
+                <p class="confirmacion-descripcion">
+                    La compra descontará GVR de tu saldo. Comprueba los datos antes de aceptar.
+                </p>
+
                 <div class="confirmacion-botones">
                     <button id="botonCambiar" type="button">CANCELAR</button>
                     <button id="confirmarBtn" type="button">ACEPTAR</button>
@@ -224,6 +491,7 @@ body.modal-abierto{overflow:hidden}
             </div>
         </div>
 
+        <!-- ESTADO DEL PEDIDO -->
         <div id="pantallaExito" class="pantalla-motor">
             <h2 id="tituloEstadoPedido" style="font-size:16px;margin-bottom:8px">Estado del pedido</h2>
             <div id="estadoPedido" class="estado" aria-live="polite"></div>
@@ -233,29 +501,56 @@ body.modal-abierto{overflow:hidden}
             <button id="botonVolverOfertas" type="button">VOLVER A OFERTAS</button>
         </div>
 
+        <!-- CAMPOS OCULTOS DEL MOTOR DE OFERTAS: CONSERVADOS -->
         <input id="confirmarOferta" type="hidden">
         <input id="idJugadorMotor" type="hidden">
         <input id="modalNombreOferta" type="hidden">
         <input id="modalIdJugador" type="hidden">
         <input id="modalPrecioOferta" type="hidden">
+
     </section>
 
-    <p class="nota">Los precios se muestran en GVR. Si un pedido queda pendiente, consulta su estado antes de realizar otra compra.</p>
+    <p class="nota">
+        Los precios se muestran en GVR. Si un pedido queda pendiente, consulta su estado antes de realizar otra compra.
+    </p>
 </main>
 </div>
 
-<!-- Modal de Bonds: se conservan los IDs y la lógica original -->
+<!-- MODAL ORIGINAL DE BONDS: CONSERVADO -->
 <div id="modalFondo" class="modal-fondo" role="dialog" aria-modal="true" aria-labelledby="modalTitulo" aria-hidden="true">
     <div class="modal">
         <h2 id="modalTitulo">Confirmar compra</h2>
-        <p class="modal-descripcion">Comprueba los datos antes de continuar con tu pedido.</p>
+
+        <p class="modal-descripcion">
+            Comprueba los datos antes de continuar con tu pedido.
+        </p>
+
         <div class="modal-detalles">
-            <div class="modal-fila"><span>Juego</span><strong>Arena Breakout</strong></div>
-            <div class="modal-fila"><span>Producto</span><strong id="modalPaquete">—</strong></div>
-            <div class="modal-fila"><span>ID de jugador</span><strong id="modalJugador">—</strong></div>
-            <div class="modal-fila"><span>Total</span><strong id="modalTotal" class="modal-total">—</strong></div>
+            <div class="modal-fila">
+                <span>Juego</span>
+                <strong>Arena Breakout</strong>
+            </div>
+
+            <div class="modal-fila">
+                <span>Producto</span>
+                <strong id="modalPaquete">—</strong>
+            </div>
+
+            <div class="modal-fila">
+                <span>ID de jugador</span>
+                <strong id="modalJugador">—</strong>
+            </div>
+
+            <div class="modal-fila">
+                <span>Total</span>
+                <strong id="modalTotal" class="modal-total">—</strong>
+            </div>
         </div>
-        <p class="modal-descripcion">La compra descontará GVR de tu saldo. No cierres la página mientras se crea el pedido.</p>
+
+        <p class="modal-descripcion">
+            La compra descontará GVR de tu saldo. No cierres la página mientras se crea el pedido.
+        </p>
+
         <div class="modal-botones">
             <button id="modalCancelar" class="modal-boton modal-cancelar" type="button">CANCELAR</button>
             <button id="modalAceptar" class="modal-boton modal-aceptar" type="button">ACEPTAR</button>
@@ -263,6 +558,7 @@ body.modal-abierto{overflow:hidden}
     </div>
 </div>
 
+<!-- CONFIGURACIÓN DE OFERTAS -->
 <script>
 "use strict";
 
@@ -285,6 +581,7 @@ window.CONFIG_OFERTAS = {
 };
 </script>
 
+<!-- MOTOR ORIGINAL DE BONDS: CONSERVADO -->
 <script type="module">
 "use strict";
 
@@ -883,40 +1180,8 @@ async function iniciar() {
 iniciar();
 </script>
 
-<!-- Motor de ofertas original: no modificar. -->
+<!-- MOTOR DE OFERTAS ORIGINAL: SE CONSERVA SIN MODIFICACIONES -->
 <script type="module" src="ofertas.js"></script>
 
-<!-- Decoración visual de tarjetas: no modifica los eventos del motor. -->
-<script>
-"use strict";
-
-(function decorarTarjetasOfertas() {
-    const lista = document.getElementById("listaOfertas");
-    if (!lista) return;
-
-    function decorar() {
-        lista.querySelectorAll(".boton-oferta").forEach(card => {
-            if (!card.querySelector(".precio-oferta")) {
-                const precio = document.createElement("span");
-                precio.className = "precio-oferta";
-                precio.textContent = "Precio pendiente";
-                card.appendChild(precio);
-            }
-
-            if (!card.querySelector(".estado-oferta")) {
-                const estado = document.createElement("span");
-                estado.className = "estado-oferta";
-                estado.textContent = "Disponible";
-                card.appendChild(estado);
-            }
-        });
-    }
-
-    const observer = new MutationObserver(decorar);
-    observer.observe(lista,{childList:true,subtree:true});
-    decorar();
-})();
-</script>
-
 </body>
-        </html>
+</html>
