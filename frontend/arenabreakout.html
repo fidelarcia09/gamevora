@@ -71,8 +71,6 @@ button.producto{cursor:pointer}
 #listaOfertas .precio-oferta{display:block!important;width:100%!important;margin:0!important;margin-top:auto!important;padding:0!important;background:transparent!important;border:0!important;color:#fff!important;font-size:19px!important;font-weight:bold!important;line-height:1.4!important;text-align:left!important}
 #listaOfertas .estado-oferta{display:block!important;width:100%!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;color:#45c8ff!important;font-size:14px!important;font-weight:bold!important;line-height:1.4!important;text-align:left!important}
 #listaOfertas .estado-oferta.no-disponible{color:#ffcf8a!important}
-
-/* Oculta precios auxiliares antiguos */
 #listaOfertas .precio-original,
 #listaOfertas .precio-producto,
 #listaOfertas .precio-gvr,
@@ -617,9 +615,6 @@ const n=normalizarOferta(nombre);
 return ofertas.find(o=>normalizarOferta(o.nombre)===n)||null;
 }
 
-/*
- * Identifica el nombre sin depender de los precios auxiliares.
- */
 function obtenerNombreTarjeta(card){
 const elemento=card.querySelector(".nombre-oferta");
 return elemento?elemento.textContent.trim():"";
@@ -641,60 +636,29 @@ return elemento;
 }
 
 /*
- * CORRECCIÓN:
- * elimina los elementos de precio duplicados y los elementos
- * visuales auxiliares. Conserva el nombre y los elementos
- * oficiales de precio y disponibilidad.
+ * CORRECCIÓN DEFINITIVA:
+ * La tarjeta solo conserva tres elementos visuales:
+ * nombre, precio oficial y disponibilidad.
+ * Se eliminan los textos y elementos adicionales que el motor
+ * haya insertado, aunque tengan clases desconocidas.
+ * El botón no se reemplaza; mantiene sus eventos y atributos.
  */
-function limpiarPreciosDuplicados(card){
-const protegidos=["nombre-oferta","precio-oferta","estado-oferta"];
-
-card.querySelectorAll(
-".precio-original,.precio-producto,.precio-gvr,.producto-precio,.precio-duplicado"
-).forEach(elemento=>{
-if(!protegidos.some(clase=>elemento.classList.contains(clase))){
-elemento.remove();
-}
-});
-
-/*
- * El motor puede insertar precios con nombres de clase distintos.
- * Eliminamos los elementos directos que no sean las tres piezas
- * oficiales de la tarjeta. No se reemplaza el botón ni se alteran
- * sus atributos o sus controladores de eventos.
- */
-Array.from(card.childNodes).forEach(nodo=>{
-if(nodo.nodeType===Node.TEXT_NODE&&nodo.textContent.trim()){
-nodo.remove();
-}
-});
-
-Array.from(card.children).forEach(elemento=>{
-const esNombre=elemento.classList.contains("nombre-oferta");
-const esPrecio=elemento.classList.contains("precio-oferta");
-const esEstado=elemento.classList.contains("estado-oferta");
-
-if(esNombre||esPrecio||esEstado)return;
-
-/*
- * Si el nombre está dentro de un contenedor del motor,
- * se conserva para que pueda recuperarse correctamente.
- */
-if(elemento.querySelector(".nombre-oferta")){
-const nombre=elemento.querySelector(".nombre-oferta");
-elemento.replaceWith(nombre);
-return;
+function limpiarContenidoTarjeta(card){
+const nombre=card.querySelector(".nombre-oferta");
+const precio=card.querySelector(".precio-oferta");
+const estado=card.querySelector(".estado-oferta");
+const elementos=[nombre,precio,estado].filter(Boolean);
+card.replaceChildren(...elementos);
 }
 
-/* Retira precios, imágenes y otros elementos auxiliares. */
-elemento.remove();
-});
+function ordenarContenidoTarjeta(card){
+const nombre=card.querySelector(".nombre-oferta");
+const precio=card.querySelector(".precio-oferta");
+const estado=card.querySelector(".estado-oferta");
+const elementos=[nombre,precio,estado].filter(Boolean);
+card.replaceChildren(...elementos);
 }
 
-/*
- * Normaliza cada tarjeta para mostrar:
- * nombre de la oferta, precio oficial de Supabase y disponibilidad.
- */
 function decorarTarjetaOferta(card){
 let nombre=obtenerNombreTarjeta(card);
 
@@ -714,29 +678,29 @@ card.prepend(n);
 
 if(!nombre)return;
 
+/* Elimina el precio extra antes de construir la tarjeta oficial. */
+limpiarContenidoTarjeta(card);
+
 const config=configuracionOfertaPorNombre(nombre);
-let producto=config?obtenerProductoOferta(nombre):null;
+const producto=config?obtenerProductoOferta(nombre):null;
 
-limpiarPreciosDuplicados(card);
-
-/* Garantiza que el nombre sea un elemento directo de la tarjeta. */
 let nombreElemento=card.querySelector(":scope > .nombre-oferta");
 if(!nombreElemento){
 nombreElemento=document.createElement("div");
 nombreElemento.className="nombre-oferta";
 nombreElemento.textContent=nombre;
-card.prepend(nombreElemento);
 }else{
 nombreElemento.textContent=nombre;
 }
 
 if(!config||!producto){
-const precio=crearOActualizarElemento(card,"precio-oferta","No disponible");
-const estado=crearOActualizarElemento(card,"estado-oferta","No disponible");
-estado.classList.add("no-disponible");
+const precioElemento=crearOActualizarElemento(card,"precio-oferta","No disponible");
+const estadoElemento=crearOActualizarElemento(card,"estado-oferta","No disponible");
+estadoElemento.classList.add("no-disponible");
 card.disabled=true;
 card.setAttribute("aria-disabled","true");
 card.dataset.disponible="false";
+ordenarContenidoTarjeta(card);
 return;
 }
 
@@ -760,8 +724,11 @@ if(!disponible){
 card.disabled=true;
 card.setAttribute("aria-disabled","true");
 }else{
+card.disabled=false;
 card.removeAttribute("aria-disabled");
 }
+
+ordenarContenidoTarjeta(card);
 }
 
 function decorarTodasLasTarjetas(){
@@ -889,10 +856,6 @@ pantallaConfirmacion.setAttribute("aria-hidden","true");
 });
 observadorConfirmacion.observe(pantallaConfirmacion,{attributes:true,attributeFilter:["class"]});
 
-/*
- * Solo observa tarjetas agregadas o eliminadas directamente.
- * No observa los cambios internos de precio y estado.
- */
 const observadorOfertas=new MutationObserver(()=>{
 decorarTodasLasTarjetas();
 if(productosOfertasCargados&&!errorCargaOfertas){
