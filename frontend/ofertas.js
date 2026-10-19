@@ -1086,9 +1086,11 @@ function irAConfirmacion() {
             mostrarPrecio(productoSeleccionado.local.price_gvr);
     }
 
-    if (el("idJugador")) {
-        el("idJugador").value = "";
-    }
+    // Arena Breakout conserva el ID al pasar a confirmación.
+// Los demás juegos mantienen su comportamiento actual.
+if (el("idJugador") && !ES_ARENA_BREAKOUT) {
+    el("idJugador").value = "";
+}
 
     /* NUEVO: LIMPIAR EL ZONE ID SOLO EN MOBILE LEGENDS */
     if (ES_MOBILE_LEGENDS && el("zoneId")) {
