@@ -39,9 +39,9 @@ input:focus{border-color:#159dff;box-shadow:0 0 7px rgba(0,157,255,.15)}
 .pestana-categoria.activa{color:#fff;background:#0b3157;border-color:#00baff;box-shadow:inset 0 -2px 0 #00baff}
 .pestana-categoria:focus-visible{outline:2px solid #45c8ff;outline-offset:2px}
 
-/* BONDS */
+/* BONDS: DIMENSIONES IGUALES A FREE FIRE */
 .catalogo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
-.producto{display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-width:0;min-height:100px;padding:10px;background:#061226;color:white;border:1px solid #164b75;border-radius:7px;text-align:left;transition:border-color .2s,box-shadow .2s,background .2s}
+.producto{display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-width:0;min-height:83px;padding:10px;background:#061226;color:white;border:1px solid #164b75;border-radius:7px;text-align:left;transition:border-color .2s,box-shadow .2s,background .2s;overflow-wrap:anywhere}
 button.producto{cursor:pointer}
 .producto:hover:not(:disabled){border-color:#168cff}
 .producto:disabled{cursor:not-allowed;opacity:.65}
@@ -60,9 +60,9 @@ button.producto{cursor:pointer}
 .pantalla-motor.activa{display:block!important}
 .nota{margin-top:13px;text-align:center;color:#8299b4;font-size:10px;line-height:1.5}
 
-/* OFERTAS */
+/* OFERTAS: DIMENSIONES IGUALES A FREE FIRE */
 #listaOfertas{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-top:8px!important;align-items:stretch!important;width:100%!important}
-#listaOfertas .boton-oferta{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;gap:8px!important;width:100%!important;min-width:0!important;min-height:100px!important;padding:10px!important;margin:0!important;background:#061226!important;color:#fff!important;border:1px solid #164b75!important;border-radius:7px!important;box-shadow:none!important;text-align:left!important;cursor:pointer;transition:border-color .2s,box-shadow .2s,background .2s!important;overflow-wrap:anywhere!important}
+#listaOfertas .boton-oferta{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;gap:8px!important;width:100%!important;min-width:0!important;min-height:83px!important;padding:10px!important;margin:0!important;background:#061226!important;color:#fff!important;border:1px solid #164b75!important;border-radius:7px!important;box-shadow:none!important;text-align:left!important;cursor:pointer;transition:border-color .2s,box-shadow .2s,background .2s!important;overflow-wrap:anywhere!important}
 #listaOfertas .boton-oferta:hover:not(:disabled){border-color:#168cff!important}
 #listaOfertas .boton-oferta:disabled{cursor:not-allowed!important;opacity:.65}
 #listaOfertas .boton-oferta.seleccionada,#listaOfertas .boton-oferta.seleccionado{background:#09203b!important;border-color:#00baff!important;box-shadow:inset 0 -2px 0 #00baff!important}
@@ -215,6 +215,8 @@ body{padding:8px}
 <input id="modalNombreOferta" type="hidden">
 <input id="modalIdJugador" type="hidden">
 <input id="modalPrecioOferta" type="hidden">
+<!-- Campo adicional para compatibilidad con motores que usan idjugador -->
+<input id="idjugador" type="hidden">
 </section>
 
 <p class="nota">Los precios se muestran en GVR. Si un pedido queda pendiente, consulta su estado antes de realizar otra compra.</p>
@@ -598,6 +600,7 @@ const supabaseOfertas=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSessi
 const listaOfertas=document.getElementById("listaOfertas");
 const estadoProductos=document.getElementById("estadoProductos");
 const campoJugadorOferta=document.getElementById("idJugador");
+const campoJugadorCompatibilidad=document.getElementById("idjugador");
 const botonComprarOferta=document.getElementById("continuarBtn");
 const pantallaConfirmacion=document.getElementById("pantallaConfirmacion");
 const mapaProductosOferta=new Map();
@@ -635,14 +638,7 @@ if(elemento.textContent!==texto)elemento.textContent=texto;
 return elemento;
 }
 
-/*
- * CORRECCIÓN DEFINITIVA:
- * La tarjeta solo conserva tres elementos visuales:
- * nombre, precio oficial y disponibilidad.
- * Se eliminan los textos y elementos adicionales que el motor
- * haya insertado, aunque tengan clases desconocidas.
- * El botón no se reemplaza; mantiene sus eventos y atributos.
- */
+/* Conserva los tres elementos visuales de cada tarjeta. */
 function limpiarContenidoTarjeta(card){
 const nombre=card.querySelector(".nombre-oferta");
 const precio=card.querySelector(".precio-oferta");
@@ -650,7 +646,6 @@ const estado=card.querySelector(".estado-oferta");
 const elementos=[nombre,precio,estado].filter(Boolean);
 card.replaceChildren(...elementos);
 }
-
 function ordenarContenidoTarjeta(card){
 const nombre=card.querySelector(".nombre-oferta");
 const precio=card.querySelector(".precio-oferta");
@@ -675,10 +670,8 @@ n.textContent=nombre;
 card.prepend(n);
 }
 }
-
 if(!nombre)return;
 
-/* Elimina el precio extra antes de construir la tarjeta oficial. */
 limpiarContenidoTarjeta(card);
 
 const config=configuracionOfertaPorNombre(nombre);
@@ -694,7 +687,7 @@ nombreElemento.textContent=nombre;
 }
 
 if(!config||!producto){
-const precioElemento=crearOActualizarElemento(card,"precio-oferta","No disponible");
+crearOActualizarElemento(card,"precio-oferta","No disponible");
 const estadoElemento=crearOActualizarElemento(card,"estado-oferta","No disponible");
 estadoElemento.classList.add("no-disponible");
 card.disabled=true;
@@ -727,7 +720,6 @@ card.setAttribute("aria-disabled","true");
 card.disabled=false;
 card.removeAttribute("aria-disabled");
 }
-
 ordenarContenidoTarjeta(card);
 }
 
@@ -737,6 +729,23 @@ listaOfertas.querySelectorAll(".boton-oferta").forEach(decorarTarjetaOferta);
 function obtenerTarjetaSeleccionada(){
 return listaOfertas.querySelector(".boton-oferta.seleccionada, .boton-oferta.seleccionado");
 }
+
+function sincronizarCampoJugador(){
+const playerId=campoJugadorOferta.value.trim();
+
+if(campoJugadorCompatibilidad){
+campoJugadorCompatibilidad.value=playerId;
+campoJugadorCompatibilidad.dispatchEvent(new Event("input",{bubbles:true}));
+}
+
+const campoMotor=document.getElementById("idJugadorMotor");
+const campoModal=document.getElementById("modalIdJugador");
+if(campoMotor)campoMotor.value=playerId;
+if(campoModal)campoModal.value=playerId;
+
+return playerId;
+}
+
 function sincronizarConfirmacionOferta(){
 const card=obtenerTarjetaSeleccionada();
 if(!card)return false;
@@ -748,7 +757,7 @@ const producto=obtenerProductoOferta(nombre);
 const disponible=!!producto&&producto.active===true&&producto.provider==="nextlevel"&&Number.isFinite(Number(producto.price_gvr))&&Number(producto.price_gvr)>0;
 if(!config||!disponible)return false;
 
-const playerId=campoJugadorOferta.value.trim();
+const playerId=sincronizarCampoJugador();
 const precio=Number(producto.price_gvr);
 
 const campoOferta=document.getElementById("confirmarOferta");
@@ -773,6 +782,7 @@ if(precioVisible)precioVisible.textContent=formatoPrecioOferta(precio);
 
 return !!playerId;
 }
+
 function actualizarPanelPrecioOferta(){
 const panelPrecio=document.getElementById("precio");
 const precioSeleccionado=document.getElementById("precioSeleccionado");
@@ -806,6 +816,7 @@ sincronizarConfirmacionOferta();
 },true);
 
 campoJugadorOferta.addEventListener("input",()=>{
+sincronizarCampoJugador();
 actualizarPanelPrecioOferta();
 sincronizarConfirmacionOferta();
 });
@@ -821,7 +832,7 @@ alert("Selecciona una oferta disponible.");
 return;
 }
 
-const playerId=campoJugadorOferta.value.trim();
+const playerId=sincronizarCampoJugador();
 if(!playerId){
 event.preventDefault();
 event.stopImmediatePropagation();
@@ -839,16 +850,20 @@ event.stopImmediatePropagation();
 alert("Esta oferta no está disponible para comprar ahora.");
 return;
 }
+
 sincronizarConfirmacionOferta();
 },true);
 }
 
 const observadorConfirmacion=new MutationObserver(()=>{
 if(pantallaConfirmacion.classList.contains("activa")){
+sincronizarCampoJugador();
 sincronizarConfirmacionOferta();
+
 const playerId=campoJugadorOferta.value.trim();
 const jugadorVisible=document.getElementById("idJugadorConfirmacion");
 if(jugadorVisible)jugadorVisible.textContent=playerId||"Falta introducir el ID";
+
 pantallaConfirmacion.setAttribute("aria-hidden","false");
 }else{
 pantallaConfirmacion.setAttribute("aria-hidden","true");
@@ -871,7 +886,7 @@ pantallaConfirmacion.setAttribute("aria-hidden","true");
 });
 
 document.getElementById("confirmarBtn")?.addEventListener("click",event=>{
-const playerId=campoJugadorOferta.value.trim();
+const playerId=sincronizarCampoJugador();
 const card=obtenerTarjetaSeleccionada();
 
 if(!playerId){
@@ -961,5 +976,6 @@ if(botonComprarOferta)botonComprarOferta.disabled=true;
 </script>
 
 </body>
-    </html>
+</html>
+
                                                         </html>
