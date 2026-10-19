@@ -39,97 +39,51 @@ input:focus{border-color:#159dff;box-shadow:0 0 7px rgba(0,157,255,.15)}
 .pestana-categoria.activa{color:#fff;background:#0b3157;border-color:#00baff;box-shadow:inset 0 -2px 0 #00baff}
 .pestana-categoria:focus-visible{outline:2px solid #45c8ff;outline-offset:2px}
 
-/* BONDS: MISMAS DIMENSIONES QUE FREE FIRE */
-.producto-nombre {
-    color: #fff;
-    font-size: 12px;
-    font-weight: bold;
-    line-height: 1.4;
-    overflow-wrap: anywhere;
-}
+/* BONDS: DIMENSIONES IGUALES A FREE FIRE */
+.catalogo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
+.producto{display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-width:0;min-height:83px;padding:10px;background:#061226;color:white;border:1px solid #164b75;border-radius:7px;text-align:left;transition:border-color .2s,box-shadow .2s,background .2s;overflow-wrap:anywhere}
+button.producto{cursor:pointer}
+.producto:hover:not(:disabled){border-color:#168cff}
+.producto:disabled{cursor:not-allowed;opacity:.65}
+.producto.seleccionado{background:#09203b;border-color:#00baff;box-shadow:inset 0 -2px 0 #00baff}
+.producto-nombre{color:#fff;font-size:16px;font-weight:bold;line-height:1.4;overflow-wrap:anywhere}
+.producto-precio{color:#fff;font-size:19px;font-weight:bold;line-height:1.4}
+.producto-estado{color:#45c8ff;font-size:14px;font-weight:bold;line-height:1.4}
+.producto-no-disponible .producto-estado{color:#ffcf8a}
 
-.producto-precio {
-    color: #fff;
-    font-size: 13px;
-    font-weight: bold;
-    line-height: 1.4;
-}
+/* BOTONES */
+.boton{width:100%;min-height:42px;padding:11px;border:none;border-radius:6px;font-size:13px;font-weight:bold}
+.continuar{margin-top:13px;background:linear-gradient(90deg,#087cff,#00aaff);color:white;cursor:pointer}
+.continuar:disabled{cursor:not-allowed;opacity:.5}
+.vista-oculta{display:none!important}
+.pantalla-motor{display:none!important}
+.pantalla-motor.activa{display:block!important}
+.nota{margin-top:13px;text-align:center;color:#8299b4;font-size:10px;line-height:1.5}
 
-.producto-estado {
-    color: #45c8ff;
-    font-size: 10px;
-    font-weight: bold;
-    line-height: 1.4;
-}
+/* OFERTAS: DIMENSIONES IGUALES A FREE FIRE */
+#listaOfertas{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-top:8px!important;align-items:stretch!important;width:100%!important}
+#listaOfertas .boton-oferta{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;align-items:stretch!important;gap:8px!important;width:100%!important;min-width:0!important;min-height:83px!important;padding:10px!important;margin:0!important;background:#061226!important;color:#fff!important;border:1px solid #164b75!important;border-radius:7px!important;box-shadow:none!important;text-align:left!important;cursor:pointer;transition:border-color .2s,box-shadow .2s,background .2s!important;overflow-wrap:anywhere!important}
+#listaOfertas .boton-oferta:hover:not(:disabled){border-color:#168cff!important}
+#listaOfertas .boton-oferta:disabled{cursor:not-allowed!important;opacity:.65}
+#listaOfertas .boton-oferta.seleccionada,#listaOfertas .boton-oferta.seleccionado{background:#09203b!important;border-color:#00baff!important;box-shadow:inset 0 -2px 0 #00baff!important}
+#listaOfertas .foto-oferta,#listaOfertas img{display:none!important}
+#listaOfertas .nombre-oferta{display:block!important;width:100%!important;margin:0!important;padding:0!important;background:transparent!important;color:#fff!important;font-size:16px!important;font-weight:bold!important;line-height:1.4!important;overflow-wrap:anywhere!important;text-align:left!important}
+#listaOfertas .precio-oferta{display:block!important;width:100%!important;margin:0!important;margin-top:auto!important;padding:0!important;background:transparent!important;border:0!important;color:#fff!important;font-size:19px!important;font-weight:bold!important;line-height:1.4!important;text-align:left!important}
+#listaOfertas .estado-oferta{display:block!important;width:100%!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;color:#45c8ff!important;font-size:14px!important;font-weight:bold!important;line-height:1.4!important;text-align:left!important}
+#listaOfertas .estado-oferta.no-disponible{color:#ffcf8a!important}
+#listaOfertas .precio-original,
+#listaOfertas .precio-producto,
+#listaOfertas .precio-gvr,
+#listaOfertas .producto-precio,
+#listaOfertas .precio-duplicado,
+#listaOfertas [class*="precio-original"],
+#listaOfertas [class*="precio-duplicado"]{display:none!important}
 
-.producto-no-disponible .producto-estado {
-    color: #ffcf8a;
-}
+#estadoProductos{margin-top:8px}
+#notaOfertas,#descripcionOfertas{color:#8299b4;font-size:11px;line-height:1.45;margin-top:8px}
+#precioSeleccionado{color:#45c8ff;font-size:12px;font-weight:bold;margin-top:8px}
+#precio{color:#fff;font-size:13px;font-weight:bold;margin-top:5px}
 
-/* OFERTAS: MISMAS DIMENSIONES QUE FREE FIRE */
-#listaOfertas .nombre-oferta {
-    display: block !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-    color: #fff !important;
-    font-size: 12px !important;
-    font-weight: bold !important;
-    line-height: 1.4 !important;
-    overflow-wrap: anywhere !important;
-    text-align: left !important;
-}
-
-#listaOfertas .precio-oferta {
-    display: block !important;
-    width: 100% !important;
-    margin: auto 0 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    color: #fff !important;
-    font-size: 13px !important;
-    font-weight: bold !important;
-    line-height: 1.4 !important;
-    text-align: left !important;
-}
-
-#listaOfertas .estado-oferta {
-    display: block !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    color: #45c8ff !important;
-    font-size: 10px !important;
-    font-weight: bold !important;
-    line-height: 1.4 !important;
-    text-align: left !important;
-}
-
-#listaOfertas .estado-oferta.no-disponible {
-    color: #ffcf8a !important;
-}
-
-/* TAMBIÉN EN PANTALLAS PEQUEÑAS */
-@media (max-width: 360px) {
-    .producto-nombre,
-    #listaOfertas .nombre-oferta {
-        font-size: 12px !important;
-    }
-
-    .producto-precio,
-    #listaOfertas .precio-oferta {
-        font-size: 13px !important;
-    }
-
-    .producto-estado,
-    #listaOfertas .estado-oferta {
-        font-size: 10px !important;
-    }
-}
 /* CONFIRMACIÓN DE OFERTAS */
 #pantallaConfirmacion.pantalla-motor{position:fixed!important;inset:0;z-index:9998;align-items:center;justify-content:center;padding:14px;background:rgba(1,6,17,.85);backdrop-filter:blur(5px);margin:0;border:0;border-radius:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
 #pantallaConfirmacion.pantalla-motor.activa{display:flex!important}
