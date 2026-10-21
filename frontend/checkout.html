@@ -8,720 +8,130 @@
     <title>Estado de tu pedido | Gamers Gold Top-Up</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
         :root {
-            --fondo: #030817;
-            --panel: rgba(5, 15, 35, .97);
-            --azul: #087cff;
-            --cian: #00d9ff;
-            --texto: #f5f9ff;
-            --secundario: #9cb5d9;
-            --verde: #39ff88;
-            --rojo: #ff656f;
-            --dorado: #ffd36a;
+            --fondo: #030817; --panel: rgba(5, 15, 35, .97); --azul: #087cff;
+            --cian: #00d9ff; --texto: #f5f9ff; --secundario: #9cb5d9;
+            --verde: #39ff88; --rojo: #ff656f; --dorado: #ffd36a;
         }
-
         body {
-            min-height: 100vh;
-            color: var(--texto);
-            background:
-                radial-gradient(ellipse at 50% 12%, rgba(0, 100, 255, .19), transparent 42%),
+            min-height: 100vh; color: var(--texto);
+            background: radial-gradient(ellipse at 50% 12%, rgba(0, 100, 255, .19), transparent 42%),
                 radial-gradient(ellipse at 0% 50%, rgba(0, 75, 255, .09), transparent 35%),
-                radial-gradient(ellipse at 100% 75%, rgba(0, 190, 255, .08), transparent 35%),
-                var(--fondo);
+                radial-gradient(ellipse at 100% 75%, rgba(0, 190, 255, .08), transparent 35%), var(--fondo);
             overflow-x: hidden;
         }
-
         body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            opacity: .32;
-            background:
-                linear-gradient(135deg, transparent 47%, rgba(0, 133, 255, .12) 48%, transparent 49%) 0 0 / 110px 110px,
+            content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .32;
+            background: linear-gradient(135deg, transparent 47%, rgba(0, 133, 255, .12) 48%, transparent 49%) 0 0 / 110px 110px,
                 linear-gradient(45deg, transparent 47%, rgba(0, 133, 255, .08) 48%, transparent 49%) 0 0 / 150px 150px;
             mask-image: linear-gradient(to bottom, black, transparent 85%);
         }
-
         header {
-            position: relative;
-            z-index: 1;
-            padding: 19px 16px;
-            border-bottom: 1px solid rgba(0, 190, 255, .32);
-            background: rgba(3, 9, 24, .88);
+            position: relative; z-index: 1; padding: 19px 16px;
+            border-bottom: 1px solid rgba(0, 190, 255, .32); background: rgba(3, 9, 24, .88);
             box-shadow: 0 5px 25px rgba(0, 91, 255, .08);
         }
-
-        .barra {
-            width: 100%;
-            max-width: 850px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .logo {
-            font-size: 18px;
-            font-weight: 900;
-            font-style: italic;
-            letter-spacing: 1px;
-            text-shadow: 0 0 18px rgba(0, 157, 255, .18);
-        }
-
-        .logo span {
-            color: var(--cian);
-        }
-
-        .etiqueta {
-            padding: 8px 12px;
-            border: 1px solid rgba(0, 205, 255, .5);
-            border-radius: 5px;
-            color: var(--cian);
-            background: rgba(0, 120, 255, .08);
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 1.4px;
-            white-space: nowrap;
-        }
-
-        main {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 690px;
-            padding: 24px 16px 20px;
-            margin: auto;
-        }
-
+        .barra { width: 100%; max-width: 850px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .logo { font-size: 18px; font-weight: 900; font-style: italic; letter-spacing: 1px; text-shadow: 0 0 18px rgba(0, 157, 255, .18); }
+        .logo span { color: var(--cian); }
+        .etiqueta { padding: 8px 12px; border: 1px solid rgba(0, 205, 255, .5); border-radius: 5px; color: var(--cian); background: rgba(0, 120, 255, .08); font-size: 10px; font-weight: 800; letter-spacing: 1.4px; white-space: nowrap; }
+        main { position: relative; z-index: 1; width: 100%; max-width: 690px; padding: 24px 16px 20px; margin: auto; }
         .tarjeta {
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(0, 177, 255, .8);
-            border-radius: 15px;
-            background:
-                radial-gradient(ellipse at 50% 0%, rgba(0, 100, 255, .11), transparent 48%),
-                linear-gradient(155deg, rgba(7, 19, 43, .99), rgba(2, 8, 21, .99));
-            box-shadow:
-                0 0 24px rgba(0, 111, 255, .17),
-                0 0 65px rgba(0, 111, 255, .06),
-                inset 0 0 25px rgba(0, 110, 255, .035);
+            position: relative; overflow: hidden; border: 1px solid rgba(0, 177, 255, .8); border-radius: 15px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(0, 100, 255, .11), transparent 48%), linear-gradient(155deg, rgba(7, 19, 43, .99), rgba(2, 8, 21, .99));
+            box-shadow: 0 0 24px rgba(0, 111, 255, .17), 0 0 65px rgba(0, 111, 255, .06), inset 0 0 25px rgba(0, 110, 255, .035);
         }
-
-        .tarjeta::before,
-        .tarjeta::after {
-            content: "";
-            position: absolute;
-            width: 75px;
-            height: 2px;
-            background: var(--cian);
-            box-shadow: 0 0 13px var(--cian);
-            pointer-events: none;
-        }
-
-        .tarjeta::before {
-            top: 0;
-            left: 30px;
-        }
-
-        .tarjeta::after {
-            bottom: 0;
-            right: 30px;
-        }
-
-        .cabecera-tarjeta {
-            position: relative;
-            padding: 25px 20px 19px;
-            text-align: center;
-            border-bottom: 1px solid rgba(0, 185, 255, .18);
-        }
-
-        .marca {
-            margin-bottom: 17px;
-            color: #f6f9ff;
-            font-size: 13px;
-            font-weight: 900;
-            font-style: italic;
-            letter-spacing: 5px;
-        }
-
-        .marca span {
-            display: block;
-            margin-top: 4px;
-            color: var(--cian);
-            font-size: 11px;
-            letter-spacing: 8px;
-        }
-
-        .icono {
-            width: 76px;
-            height: 76px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            border: 2px solid var(--cian);
-            border-radius: 50%;
-            color: var(--cian);
-            background: rgba(0, 145, 255, .08);
-            box-shadow: 0 0 12px rgba(0, 200, 255, .3), inset 0 0 22px rgba(0, 200, 255, .09);
-            font-size: 40px;
-            font-weight: 900;
-            transition: .25s ease;
-        }
-
-        .icono.completado {
-            color: var(--verde);
-            border-color: var(--verde);
-            background: rgba(0, 255, 115, .07);
-            box-shadow: 0 0 16px rgba(0, 255, 115, .35), inset 0 0 22px rgba(0, 255, 115, .1);
-        }
-
-        .icono.error {
-            color: var(--rojo);
-            border-color: var(--rojo);
-            box-shadow: 0 0 16px rgba(255, 65, 90, .25);
-        }
-
-        h1 {
-            margin-bottom: 8px;
-            font-size: clamp(23px, 5.5vw, 34px);
-            font-weight: 900;
-            font-style: italic;
-            line-height: 1.2;
-            text-transform: uppercase;
-            text-shadow: 0 0 24px rgba(0, 122, 255, .18);
-        }
-
-        h1.resaltado {
-            color: var(--cian);
-        }
-
-        .subtitulo {
-            max-width: 440px;
-            margin: auto;
-            color: #bed1ee;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .estado {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 15px;
-            padding: 8px 13px;
-            border: 1px solid rgba(0, 199, 255, .48);
-            border-radius: 4px;
-            background: rgba(0, 145, 255, .08);
-            color: var(--cian);
-            font-size: 10px;
-            font-weight: 900;
-            letter-spacing: 1.3px;
-        }
-
-        .punto {
-            width: 7px;
-            height: 7px;
-            flex-shrink: 0;
-            border-radius: 50%;
-            background: currentColor;
-            box-shadow: 0 0 9px currentColor;
-        }
-
-        .estado.completado {
-            color: var(--verde);
-            border-color: rgba(57, 255, 136, .6);
-            background: rgba(57, 255, 136, .06);
-        }
-
-        .estado.procesando {
-            color: var(--cian);
-        }
-
-        .estado.error {
-            color: var(--rojo);
-            border-color: rgba(255, 101, 111, .55);
-        }
-
-        .separador {
-            width: 70px;
-            height: 2px;
-            margin: 16px auto 0;
-            background: linear-gradient(90deg, transparent, var(--cian), transparent);
-            box-shadow: 0 0 10px rgba(0, 200, 255, .4);
-        }
-
-        /* CONTENIDO COMPACTO */
-
-        .contenido {
-            padding: 18px 18px 20px;
-        }
-
-        .titulo-seccion {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            margin-bottom: 12px;
-            color: #f4f9ff;
-            font-size: 12px;
-            font-weight: 900;
-            letter-spacing: 1.4px;
-            text-transform: uppercase;
-        }
-
-        .titulo-seccion::before {
-            content: "";
-            display: block;
-            width: 3px;
-            height: 18px;
-            flex-shrink: 0;
-            border-radius: 2px;
-            background: var(--cian);
-            box-shadow: 0 0 12px rgba(0, 217, 255, .65);
-        }
-
-        /* RECUADRO COMPACTO CON DOS COLUMNAS */
-
+        .tarjeta::before, .tarjeta::after { content: ""; position: absolute; width: 75px; height: 2px; background: var(--cian); box-shadow: 0 0 13px var(--cian); pointer-events: none; }
+        .tarjeta::before { top: 0; left: 30px; } .tarjeta::after { bottom: 0; right: 30px; }
+        .cabecera-tarjeta { position: relative; padding: 25px 20px 19px; text-align: center; border-bottom: 1px solid rgba(0, 185, 255, .18); }
+        .marca { margin-bottom: 17px; color: #f6f9ff; font-size: 13px; font-weight: 900; font-style: italic; letter-spacing: 5px; }
+        .marca span { display: block; margin-top: 4px; color: var(--cian); font-size: 11px; letter-spacing: 8px; }
+        .icono { width: 76px; height: 76px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; border: 2px solid var(--cian); border-radius: 50%; color: var(--cian); background: rgba(0, 145, 255, .08); box-shadow: 0 0 12px rgba(0, 200, 255, .3), inset 0 0 22px rgba(0, 200, 255, .09); font-size: 40px; font-weight: 900; transition: .25s ease; }
+        .icono.completado { color: var(--verde); border-color: var(--verde); background: rgba(0, 255, 115, .07); box-shadow: 0 0 16px rgba(0, 255, 115, .35), inset 0 0 22px rgba(0, 255, 115, .1); }
+        .icono.error { color: var(--rojo); border-color: var(--rojo); box-shadow: 0 0 16px rgba(255, 65, 90, .25); }
+        h1 { margin-bottom: 8px; font-size: clamp(23px, 5.5vw, 34px); font-weight: 900; font-style: italic; line-height: 1.2; text-transform: uppercase; text-shadow: 0 0 24px rgba(0, 122, 255, .18); }
+        h1.resaltado { color: var(--cian); }
+        .subtitulo { max-width: 440px; margin: auto; color: #bed1ee; font-size: 13px; line-height: 1.6; }
+        .estado { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; padding: 8px 13px; border: 1px solid rgba(0, 199, 255, .48); border-radius: 4px; background: rgba(0, 145, 255, .08); color: var(--cian); font-size: 10px; font-weight: 900; letter-spacing: 1.3px; }
+        .punto { width: 7px; height: 7px; flex-shrink: 0; border-radius: 50%; background: currentColor; box-shadow: 0 0 9px currentColor; }
+        .estado.completado { color: var(--verde); border-color: rgba(57, 255, 136, .6); background: rgba(57, 255, 136, .06); }
+        .estado.procesando { color: var(--cian); } .estado.error { color: var(--rojo); border-color: rgba(255, 101, 111, .55); }
+        .separador { width: 70px; height: 2px; margin: 16px auto 0; background: linear-gradient(90deg, transparent, var(--cian), transparent); box-shadow: 0 0 10px rgba(0, 200, 255, .4); }
+        .contenido { padding: 18px 18px 20px; }
+        .titulo-seccion { display: flex; align-items: center; gap: 9px; margin-bottom: 12px; color: #f4f9ff; font-size: 12px; font-weight: 900; letter-spacing: 1.4px; text-transform: uppercase; }
+        .titulo-seccion::before { content: ""; display: block; width: 3px; height: 18px; flex-shrink: 0; border-radius: 2px; background: var(--cian); box-shadow: 0 0 12px rgba(0, 217, 255, .65); }
         .lista-datos {
-            position: relative;
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            overflow: hidden;
-            border: 1px solid rgba(0, 190, 255, .62);
-            border-radius: 8px;
-            background:
-                linear-gradient(135deg, rgba(0, 105, 255, .07), transparent 42%),
-                linear-gradient(160deg, rgba(4, 17, 39, .98), rgba(2, 8, 22, .99));
-            box-shadow:
-                0 0 18px rgba(0, 125, 255, .09),
-                inset 0 0 20px rgba(0, 135, 255, .035);
+            position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: hidden;
+            border: 1px solid rgba(0, 190, 255, .62); border-radius: 8px;
+            background: linear-gradient(135deg, rgba(0, 105, 255, .07), transparent 42%), linear-gradient(160deg, rgba(4, 17, 39, .98), rgba(2, 8, 22, .99));
+            box-shadow: 0 0 18px rgba(0, 125, 255, .09), inset 0 0 20px rgba(0, 135, 255, .035);
         }
-
-        .lista-datos::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 16px;
-            width: 48px;
-            height: 2px;
-            background: var(--cian);
-            box-shadow: 0 0 12px var(--cian);
-            z-index: 1;
-        }
-
-        .dato {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            min-width: 0;
-            padding: 11px 10px;
-            border-bottom: 1px solid rgba(0, 150, 255, .18);
-            transition: background .2s ease;
-        }
-
-        .dato:nth-child(odd) {
-            border-right: 1px solid rgba(0, 150, 255, .18);
-        }
-
-        .dato:hover {
-            background: rgba(0, 132, 255, .09);
-        }
-
-        .dato-icono {
-            width: 31px;
-            height: 31px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            border: 1px solid rgba(0, 196, 255, .4);
-            border-radius: 6px;
-            color: var(--cian);
-            background: linear-gradient(145deg, rgba(0, 134, 255, .15), rgba(0, 35, 90, .18));
-            font-size: 14px;
-            font-weight: 900;
-        }
-
-        .dato-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .dato span {
-            display: block;
-            margin-bottom: 4px;
-            color: #91afd7;
-            font-size: 9px;
-            font-weight: 800;
-            letter-spacing: .8px;
-            text-transform: uppercase;
-        }
-
-        .dato strong {
-            display: block;
-            color: #f5f9ff;
-            font-size: 12px;
-            font-weight: 700;
-            line-height: 1.35;
-            overflow-wrap: anywhere;
-        }
-
-        .dato .precio {
-            color: var(--dorado);
-            font-size: 15px;
-            font-weight: 900;
-            text-shadow: 0 0 14px rgba(255, 211, 106, .14);
-        }
-
-        /* NOTA Y BOTONES */
-
-        .nota {
-            margin-top: 12px;
-            padding: 11px 12px;
-            border: 1px solid rgba(0, 145, 255, .17);
-            border-left: 3px solid var(--cian);
-            border-radius: 5px;
-            background: rgba(0, 100, 210, .055);
-            color: var(--secundario);
-            font-size: 11px;
-            line-height: 1.6;
-        }
-
-        .nota.completado {
-            border-left-color: var(--verde);
-        }
-
-        .nota.error {
-            border-left-color: var(--rojo);
-        }
-
-        .acciones {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 9px;
-            margin-top: 14px;
-        }
-
-        .boton {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            min-height: 46px;
-            padding: 11px 9px;
-            border: 1px solid var(--cian);
-            border-radius: 6px;
-            text-align: center;
-            text-decoration: none;
-            font-size: 10px;
-            font-weight: 900;
-            letter-spacing: .6px;
-            transition: transform .2s ease, filter .2s ease, box-shadow .2s ease;
-        }
-
-        .boton-principal {
-            color: white;
-            background: linear-gradient(100deg, #006bff, #00bfff);
-            box-shadow: 0 0 19px rgba(0, 142, 255, .19), inset 0 1px rgba(255, 255, 255, .2);
-        }
-
-        .boton-secundario {
-            color: var(--cian);
-            background: rgba(0, 90, 190, .06);
-        }
-
-        .boton:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.12);
-            box-shadow: 0 0 22px rgba(0, 174, 255, .25);
-        }
-
-        .boton-icono {
-            font-size: 17px;
-        }
-
-        .mensaje {
-            margin-top: 11px;
-            color: var(--secundario);
-            font-size: 12px;
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        .mensaje.error {
-            color: var(--rojo);
-        }
-
-        .pie {
-            padding: 22px 5px 10px;
-            color: #8ca5c8;
-            text-align: center;
-        }
-
-        .ventajas {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0;
-            margin-bottom: 20px;
-        }
-
-        .ventaja {
-            padding: 5px 8px;
-            border-right: 1px solid rgba(0, 153, 255, .3);
-            text-align: center;
-        }
-
-        .ventaja:last-child {
-            border-right: none;
-        }
-
-        .ventaja-icono {
-            display: block;
-            margin-bottom: 7px;
-            color: var(--cian);
-            font-size: 20px;
-        }
-
-        .ventaja strong {
-            display: block;
-            color: var(--cian);
-            font-size: 9px;
-            letter-spacing: .5px;
-        }
-
-        .ventaja span {
-            display: block;
-            margin-top: 4px;
-            color: #9db2d0;
-            font-size: 9px;
-        }
-
-        .copyright {
-            padding-top: 16px;
-            border-top: 1px solid rgba(0, 157, 255, .17);
-            color: #8ca4c7;
-            font-size: 10px;
-            letter-spacing: 2px;
-        }
-
-        .oculto {
-            display: none !important;
-        }
-
+        .lista-datos::before { content: ""; position: absolute; top: 0; left: 16px; width: 48px; height: 2px; background: var(--cian); box-shadow: 0 0 12px var(--cian); z-index: 1; }
+        .dato { position: relative; display: flex; align-items: center; gap: 9px; min-width: 0; padding: 11px 10px; border-bottom: 1px solid rgba(0, 150, 255, .18); transition: background .2s ease; }
+        .dato:nth-child(odd) { border-right: 1px solid rgba(0, 150, 255, .18); } .dato:hover { background: rgba(0, 132, 255, .09); }
+        .dato-icono { width: 31px; height: 31px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(0, 196, 255, .4); border-radius: 6px; color: var(--cian); background: linear-gradient(145deg, rgba(0, 134, 255, .15), rgba(0, 35, 90, .18)); font-size: 14px; font-weight: 900; }
+        .dato-info { flex: 1; min-width: 0; }
+        .dato span { display: block; margin-bottom: 4px; color: #91afd7; font-size: 9px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; }
+        .dato strong { display: block; color: #f5f9ff; font-size: 12px; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+        .dato .precio { color: var(--dorado); font-size: 15px; font-weight: 900; text-shadow: 0 0 14px rgba(255, 211, 106, .14); }
+        .nota { margin-top: 12px; padding: 11px 12px; border: 1px solid rgba(0, 145, 255, .17); border-left: 3px solid var(--cian); border-radius: 5px; background: rgba(0, 100, 210, .055); color: var(--secundario); font-size: 11px; line-height: 1.6; }
+        .nota.completado { border-left-color: var(--verde); } .nota.error { border-left-color: var(--rojo); }
+        .acciones { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 14px; }
+        .boton { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 11px 9px; border: 1px solid var(--cian); border-radius: 6px; text-align: center; text-decoration: none; font-size: 10px; font-weight: 900; letter-spacing: .6px; transition: transform .2s ease, filter .2s ease, box-shadow .2s ease; }
+        .boton-principal { color: white; background: linear-gradient(100deg, #006bff, #00bfff); box-shadow: 0 0 19px rgba(0, 142, 255, .19), inset 0 1px rgba(255, 255, 255, .2); }
+        .boton-secundario { color: var(--cian); background: rgba(0, 90, 190, .06); }
+        .boton:hover { transform: translateY(-2px); filter: brightness(1.12); box-shadow: 0 0 22px rgba(0, 174, 255, .25); }
+        .boton-icono { font-size: 17px; }
+        button.boton { width: 100%; font-family: Arial, Helvetica, sans-serif; cursor: pointer; }
+        button.boton:disabled { opacity: .65; cursor: wait; transform: none; }
+        #accionesComprobante { margin-top: 12px; }
+        #accionesComprobante .boton { grid-column: 1 / -1; min-height: 48px; }
+        .mensaje { margin-top: 11px; color: var(--secundario); font-size: 12px; text-align: center; line-height: 1.6; }
+        .mensaje.error { color: var(--rojo); }
+        .pie { padding: 22px 5px 10px; color: #8ca5c8; text-align: center; }
+        .ventajas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-bottom: 20px; }
+        .ventaja { padding: 5px 8px; border-right: 1px solid rgba(0, 153, 255, .3); text-align: center; }
+        .ventaja:last-child { border-right: none; }
+        .ventaja-icono { display: block; margin-bottom: 7px; color: var(--cian); font-size: 20px; }
+        .ventaja strong { display: block; color: var(--cian); font-size: 9px; letter-spacing: .5px; }
+        .ventaja span { display: block; margin-top: 4px; color: #9db2d0; font-size: 9px; }
+        .copyright { padding-top: 16px; border-top: 1px solid rgba(0, 157, 255, .17); color: #8ca4c7; font-size: 10px; letter-spacing: 2px; }
+        .oculto { display: none !important; }
         @media (max-width: 480px) {
-            header {
-                padding: 15px 11px;
-            }
-
-            .logo {
-                font-size: 13px;
-                letter-spacing: .4px;
-            }
-
-            .etiqueta {
-                padding: 7px 7px;
-                font-size: 8px;
-                letter-spacing: .5px;
-            }
-
-            main {
-                padding: 17px 10px 12px;
-            }
-
-            .cabecera-tarjeta {
-                padding: 23px 12px 17px;
-            }
-
-            .marca {
-                margin-bottom: 14px;
-                font-size: 11px;
-            }
-
-            .marca span {
-                font-size: 10px;
-                letter-spacing: 6px;
-            }
-
-            .icono {
-                width: 68px;
-                height: 68px;
-                margin-bottom: 13px;
-                font-size: 36px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            .subtitulo {
-                font-size: 12px;
-            }
-
-            .estado {
-                margin-top: 12px;
-                padding: 7px 10px;
-                font-size: 9px;
-            }
-
-            .contenido {
-                padding: 15px 10px 16px;
-            }
-
-            .titulo-seccion {
-                gap: 8px;
-                margin-bottom: 10px;
-                font-size: 10px;
-                letter-spacing: 1px;
-            }
-
-            /* Filas compactas y legibles en móvil */
-
-            .lista-datos {
-                grid-template-columns: minmax(0, 1fr);
-            }
-
-            .dato {
-                display: grid;
-                grid-template-columns: 30px minmax(78px, .85fr) minmax(0, 1.4fr);
-                align-items: center;
-                gap: 8px;
-                padding: 9px 8px;
-                border-right: none !important;
-                border-bottom: 1px solid rgba(0, 150, 255, .18);
-            }
-
-            .dato:last-child {
-                border-bottom: none;
-            }
-
-            .dato-icono {
-                width: 29px;
-                height: 29px;
-                font-size: 13px;
-            }
-
-            .dato-info {
-                display: contents;
-            }
-
-            .dato span {
-                margin-bottom: 0;
-                font-size: 8px;
-                letter-spacing: .5px;
-                line-height: 1.35;
-            }
-
-            .dato strong {
-                font-size: 11px;
-                line-height: 1.35;
-                text-align: right;
-            }
-
-            .dato .precio {
-                font-size: 14px;
-            }
-
-            .nota {
-                margin-top: 10px;
-                padding: 10px;
-                font-size: 10px;
-            }
-
-            .acciones {
-                grid-template-columns: 1fr 1fr;
-                gap: 7px;
-                margin-top: 12px;
-            }
-
-            .boton {
-                min-height: 43px;
-                padding: 9px 5px;
-                gap: 5px;
-                font-size: 9px;
-                letter-spacing: .2px;
-            }
-
-            .boton-icono {
-                font-size: 15px;
-            }
-
-            .ventaja {
-                padding: 4px 3px;
-            }
-
-            .ventaja-icono {
-                font-size: 18px;
-            }
-
-            .ventaja strong,
-            .ventaja span {
-                font-size: 8px;
-            }
-
-            .copyright {
-                font-size: 9px;
-                letter-spacing: 1.5px;
-            }
+            header { padding: 15px 11px; } .logo { font-size: 13px; letter-spacing: .4px; }
+            .etiqueta { padding: 7px; font-size: 8px; letter-spacing: .5px; }
+            main { padding: 17px 10px 12px; } .cabecera-tarjeta { padding: 23px 12px 17px; }
+            .marca { margin-bottom: 14px; font-size: 11px; } .marca span { font-size: 10px; letter-spacing: 6px; }
+            .icono { width: 68px; height: 68px; margin-bottom: 13px; font-size: 36px; }
+            h1 { font-size: 24px; } .subtitulo { font-size: 12px; }
+            .estado { margin-top: 12px; padding: 7px 10px; font-size: 9px; }
+            .contenido { padding: 15px 10px 16px; }
+            .titulo-seccion { gap: 8px; margin-bottom: 10px; font-size: 10px; letter-spacing: 1px; }
+            .lista-datos { grid-template-columns: minmax(0, 1fr); }
+            .dato { display: grid; grid-template-columns: 30px minmax(78px, .85fr) minmax(0, 1.4fr); align-items: center; gap: 8px; padding: 9px 8px; border-right: none !important; border-bottom: 1px solid rgba(0, 150, 255, .18); }
+            .dato:last-child { border-bottom: none; } .dato-icono { width: 29px; height: 29px; font-size: 13px; }
+            .dato-info { display: contents; } .dato span { margin-bottom: 0; font-size: 8px; letter-spacing: .5px; line-height: 1.35; }
+            .dato strong { font-size: 11px; line-height: 1.35; text-align: right; } .dato .precio { font-size: 14px; }
+            .nota { margin-top: 10px; padding: 10px; font-size: 10px; }
+            .acciones { grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 12px; }
+            .boton { min-height: 43px; padding: 9px 5px; gap: 5px; font-size: 9px; letter-spacing: .2px; }
+            .boton-icono { font-size: 15px; } .ventaja { padding: 4px 3px; }
+            .ventaja-icono { font-size: 18px; } .ventaja strong, .ventaja span { font-size: 8px; }
+            .copyright { font-size: 9px; letter-spacing: 1.5px; }
         }
-
         @media (max-width: 350px) {
-            .acciones {
-                grid-template-columns: 1fr;
-            }
-
-            .dato {
-                grid-template-columns: 27px minmax(68px, .8fr) minmax(0, 1.4fr);
-                gap: 6px;
-                padding: 9px 6px;
-            }
-
-            .dato-icono {
-                width: 26px;
-                height: 26px;
-            }
-
-            .dato span {
-                font-size: 7px;
-            }
-
-            .dato strong {
-                font-size: 10px;
-            }
+            .acciones { grid-template-columns: 1fr; }
+            .dato { grid-template-columns: 27px minmax(68px, .8fr) minmax(0, 1.4fr); gap: 6px; padding: 9px 6px; }
+            .dato-icono { width: 26px; height: 26px; } .dato span { font-size: 7px; } .dato strong { font-size: 10px; }
         }
-
         @media (prefers-reduced-motion: no-preference) {
-            .icono.completado {
-                animation: aparecer .5s ease-out;
-            }
-
-            @keyframes aparecer {
-                from {
-                    transform: scale(.86);
-                    opacity: .5;
-                }
-                to {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-            }
+            .icono.completado { animation: aparecer .5s ease-out; }
+            @keyframes aparecer { from { transform: scale(.86); opacity: .5; } to { transform: scale(1); opacity: 1; } }
         }
     </style>
 </head>
-
 <body>
-
 <header>
     <div class="barra">
         <div class="logo">GAMERS GOLD <span>TOP-UP</span></div>
@@ -730,105 +140,39 @@
 </header>
 
 <main>
-    <section class="tarjeta">
-
+    <section class="tarjeta" id="tarjetaComprobante">
         <div class="cabecera-tarjeta">
-            <div class="marca">
-                GAMERS GOLD
-                <span>TOP-UP</span>
-            </div>
-
+            <div class="marca">GAMERS GOLD<span>TOP-UP</span></div>
             <div class="icono" id="iconoEstado" aria-hidden="true">…</div>
-
             <h1 id="tituloEstado">Consultando tu pedido</h1>
-
-            <p class="subtitulo" id="descripcionEstado">
-                Estamos buscando la información de tu recarga.
-            </p>
-
-            <div class="estado" id="etiquetaEstado">
-                <span class="punto"></span>
-                <span id="textoEstado">CONSULTANDO</span>
-            </div>
-
+            <p class="subtitulo" id="descripcionEstado">Estamos buscando la información de tu recarga.</p>
+            <div class="estado" id="etiquetaEstado"><span class="punto"></span><span id="textoEstado">CONSULTANDO</span></div>
             <div class="separador"></div>
         </div>
 
         <div class="contenido">
             <h2 class="titulo-seccion">Detalles de tu compra</h2>
-
             <div class="lista-datos">
-                <div class="dato">
-                    <div class="dato-icono" aria-hidden="true">▣</div>
-                    <div class="dato-info">
-                        <span>Juego</span>
-                        <strong id="juego">Cargando...</strong>
-                    </div>
-                </div>
-
-                <div class="dato">
-                    <div class="dato-icono" aria-hidden="true">◆</div>
-                    <div class="dato-info">
-                        <span>Producto</span>
-                        <strong id="producto">Cargando...</strong>
-                    </div>
-                </div>
-
-                <div class="dato">
-                    <div class="dato-icono" aria-hidden="true">◈</div>
-                    <div class="dato-info">
-                        <span>Cantidad</span>
-                        <strong id="cantidad">Cargando...</strong>
-                    </div>
-                </div>
-
-                <div class="dato">
-                    <div class="dato-icono" aria-hidden="true">♙</div>
-                    <div class="dato-info">
-                        <span>ID del jugador</span>
-                        <strong id="idJugador">Cargando...</strong>
-                    </div>
-                </div>
-
-                <div class="dato">
-                    <div class="dato-icono" aria-hidden="true">▤</div>
-                    <div class="dato-info">
-                        <span>Total pagado</span>
-                        <strong class="precio" id="precio">Cargando...</strong>
-                    </div>
-                </div>
-
-                <div class="dato">
-                    <div class="dato-icono" aria-hidden="true">▦</div>
-                    <div class="dato-info">
-                        <span>Fecha</span>
-                        <strong id="fecha">Cargando...</strong>
-                    </div>
-                </div>
-
-                <div class="dato">
-                    <div class="dato-icono" aria-hidden="true">#</div>
-                    <div class="dato-info">
-                        <span>Número de pedido</span>
-                        <strong id="numeroPedido">Cargando...</strong>
-                    </div>
-                </div>
+                <div class="dato"><div class="dato-icono" aria-hidden="true">▣</div><div class="dato-info"><span>Juego</span><strong id="juego">Cargando...</strong></div></div>
+                <div class="dato"><div class="dato-icono" aria-hidden="true">◆</div><div class="dato-info"><span>Producto</span><strong id="producto">Cargando...</strong></div></div>
+                <div class="dato"><div class="dato-icono" aria-hidden="true">◈</div><div class="dato-info"><span>Cantidad</span><strong id="cantidad">Cargando...</strong></div></div>
+                <div class="dato"><div class="dato-icono" aria-hidden="true">♙</div><div class="dato-info"><span>ID del jugador</span><strong id="idJugador">Cargando...</strong></div></div>
+                <div class="dato"><div class="dato-icono" aria-hidden="true">▤</div><div class="dato-info"><span>Total pagado</span><strong class="precio" id="precio">Cargando...</strong></div></div>
+                <div class="dato"><div class="dato-icono" aria-hidden="true">▦</div><div class="dato-info"><span>Fecha</span><strong id="fecha">Cargando...</strong></div></div>
+                <div class="dato"><div class="dato-icono" aria-hidden="true">#</div><div class="dato-info"><span>Número de pedido</span><strong id="numeroPedido">Cargando...</strong></div></div>
             </div>
 
-            <div class="nota" id="notaEstado">
-                Estamos consultando la información de tu pedido.
+            <div class="nota" id="notaEstado">Estamos consultando la información de tu pedido.</div>
+
+            <div class="acciones oculto" id="accionesComprobante">
+                <button class="boton boton-principal" type="button" id="guardarComprobante">
+                    <span class="boton-icono" aria-hidden="true">↓</span> GUARDAR COMPROBANTE
+                </button>
             </div>
 
-            <div class="acciones">
-                <a class="boton boton-principal" href="../index.html">
-                    <span class="boton-icono" aria-hidden="true">⌂</span>
-                    VOLVER AL INICIO
-                </a>
-
-                <a class="boton boton-secundario" href="pedidos.html">
-                    <span class="boton-icono" aria-hidden="true">▤</span>
-                    VER MIS PEDIDOS
-                </a>
+            <div class="acciones" id="accionesNavegacion">
+                <a class="boton boton-principal" href="../index.html"><span class="boton-icono" aria-hidden="true">⌂</span> VOLVER AL INICIO</a>
+                <a class="boton boton-secundario" href="pedidos.html"><span class="boton-icono" aria-hidden="true">▤</span> VER MIS PEDIDOS</a>
             </div>
 
             <p class="mensaje error oculto" id="mensajeError"></p>
@@ -838,34 +182,12 @@
 
     <footer class="pie">
         <div class="ventajas">
-            <div class="ventaja">
-                <span class="ventaja-icono" aria-hidden="true">ϟ</span>
-                <strong>ENTREGA</strong>
-                <span>RÁPIDA</span>
-            </div>
-
-            <div class="ventaja">
-                <span class="ventaja-icono" aria-hidden="true">◇</span>
-                <strong>PAGO SEGURO</strong>
-                <span>Y CONFIABLE</span>
-            </div>
-
-            <div class="ventaja">
-                <span class="ventaja-icono" aria-hidden="true">◎</span>
-                <strong>SOPORTE</strong>
-                <span>24/7</span>
-            </div>
-
-            <div class="ventaja">
-                <span class="ventaja-icono" aria-hidden="true">☆</span>
-                <strong>LOS MEJORES</strong>
-                <span>PRECIOS</span>
-            </div>
+            <div class="ventaja"><span class="ventaja-icono" aria-hidden="true">ϟ</span><strong>ENTREGA</strong><span>RÁPIDA</span></div>
+            <div class="ventaja"><span class="ventaja-icono" aria-hidden="true">◇</span><strong>PAGO SEGURO</strong><span>Y CONFIABLE</span></div>
+            <div class="ventaja"><span class="ventaja-icono" aria-hidden="true">◎</span><strong>SOPORTE</strong><span>24/7</span></div>
+            <div class="ventaja"><span class="ventaja-icono" aria-hidden="true">☆</span><strong>LOS MEJORES</strong><span>PRECIOS</span></div>
         </div>
-
-        <div class="copyright">
-            GAMERS GOLD TOP-UP · © 2026
-        </div>
+        <div class="copyright">GAMERS GOLD TOP-UP · © 2026</div>
     </footer>
 </main>
 
@@ -879,37 +201,23 @@ const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 const INTERVALO_ACTUALIZACION = 8000;
 
 const JUEGOS_PERMITIDOS = new Set([
-    "free-fire",
-    "mobile-legends",
-    "pubg-mobile",
-    "arena-breakout",
-    "honor-of-kings",
-    "genshin-impact",
-    "blood-strike"
+    "free-fire", "mobile-legends", "pubg-mobile", "arena-breakout",
+    "honor-of-kings", "genshin-impact", "blood-strike"
 ]);
 
 const parametros = new URLSearchParams(location.search);
-const idPedido =
-    parametros.get("id") ||
-    parametros.get("pedido") ||
-    parametros.get("order");
+const idPedido = parametros.get("id") || parametros.get("pedido") || parametros.get("order");
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-    auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true
-    }
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
 });
 
 const $ = id => document.getElementById(id);
-
 const iconoEstado = $("iconoEstado");
 const tituloEstado = $("tituloEstado");
 const descripcionEstado = $("descripcionEstado");
 const etiquetaEstado = $("etiquetaEstado");
 const textoEstado = $("textoEstado");
-
 const elementoJuego = $("juego");
 const elementoProducto = $("producto");
 const elementoCantidad = $("cantidad");
@@ -917,9 +225,11 @@ const elementoJugador = $("idJugador");
 const elementoPrecio = $("precio");
 const elementoFecha = $("fecha");
 const elementoNumeroPedido = $("numeroPedido");
-
 const notaEstado = $("notaEstado");
 const mensajeError = $("mensajeError");
+const accionesComprobante = $("accionesComprobante");
+const botonGuardarComprobante = $("guardarComprobante");
+const tarjetaComprobante = $("tarjetaComprobante");
 
 let usuarioId = null;
 let pedidoActual = null;
@@ -930,167 +240,112 @@ let detenido = false;
 let productoCargado = null;
 let generacionConsulta = 0;
 let errorSesionMostrado = false;
+let html2canvasPromise = null;
+let descargaEnCurso = false;
+let descargaAutomaticaIntentada = false;
+let idDescargaAutomatica = null;
 
 function mostrarError(mensaje) {
     mensajeError.textContent = mensaje;
     mensajeError.classList.remove("oculto");
 }
-
 function ocultarError() {
     mensajeError.textContent = "";
     mensajeError.classList.add("oculto");
 }
-
 function formatearFecha(fecha) {
     if (!fecha) return "Pendiente";
-
     const valor = new Date(fecha);
-
     if (Number.isNaN(valor.getTime())) return "Pendiente";
-
-    return valor.toLocaleString("es-ES", {
-        dateStyle: "long",
-        timeStyle: "short"
-    });
+    return valor.toLocaleString("es-ES", { dateStyle: "long", timeStyle: "short" });
 }
-
 function normalizarEstado(pedido) {
     const db = String(pedido?.status || "").trim().toLowerCase();
-    const proveedor = String(
-        pedido?.provider_status || ""
-    ).trim().toUpperCase();
-
-    if (db === "completed" || proveedor === "COMPLETED") {
-        return "completed";
-    }
-
-    if (db === "refunded" || proveedor === "REFUNDED") {
-        return "refunded";
-    }
-
-    if (db === "failed" || proveedor === "FAILED") {
-        return "failed";
-    }
-
-    if (db === "processing" || proveedor === "PROCESSING") {
-        return "processing";
-    }
-
+    const proveedor = String(pedido?.provider_status || "").trim().toUpperCase();
+    if (db === "completed" || proveedor === "COMPLETED") return "completed";
+    if (db === "refunded" || proveedor === "REFUNDED") return "refunded";
+    if (db === "failed" || proveedor === "FAILED") return "failed";
+    if (db === "processing" || proveedor === "PROCESSING") return "processing";
     return "pending";
 }
-
 function esEstadoFinal(estado) {
     return ["completed", "failed", "refunded"].includes(estado);
 }
-
 function detenerIntervalo() {
     if (intervalo !== null) {
         clearInterval(intervalo);
         intervalo = null;
     }
 }
-
 async function cerrarCanalRealtime() {
     const canal = canalPedido;
     canalPedido = null;
-
     if (canal) {
-        try {
-            await supabase.removeChannel(canal);
-        } catch (error) {
-            console.warn("No se pudo cerrar la suscripción Realtime.");
-        }
+        try { await supabase.removeChannel(canal); }
+        catch (error) { console.warn("No se pudo cerrar la suscripción Realtime."); }
     }
 }
-
 async function detenerActualizacion() {
     detenido = true;
     detenerIntervalo();
     await cerrarCanalRealtime();
 }
 
-/* ESTADO VISUAL */
-
 function mostrarEstadoPedido(pedido) {
     const estado = normalizarEstado(pedido);
-
     const estados = {
         completed: {
             titulo: "¡Recarga completada!",
             descripcion: "Tu pedido ha sido procesado correctamente.",
-            etiqueta: "RECARGA COMPLETADA",
-            icono: "✓",
+            etiqueta: "RECARGA COMPLETADA", icono: "✓",
             nota: "La recarga figura como completada. Gracias por comprar en Gamers Gold Top-Up."
         },
         failed: {
             titulo: "Pedido no completado",
             descripcion: "No se pudo completar tu recarga.",
-            etiqueta: "PEDIDO FALLIDO",
-            icono: "!",
+            etiqueta: "PEDIDO FALLIDO", icono: "!",
             nota: "Tu pedido figura como fallido. Si corresponde un reembolso, comprueba el saldo de tu cuenta."
         },
         refunded: {
             titulo: "Pedido reembolsado",
             descripcion: "El pedido figura como reembolsado.",
-            etiqueta: "REEMBOLSADO",
-            icono: "↩",
+            etiqueta: "REEMBOLSADO", icono: "↩",
             nota: "Comprueba el saldo de tu cuenta para verificar el reembolso."
         },
         processing: {
             titulo: "Tu recarga está en proceso",
             descripcion: "Estamos gestionando tu pedido.",
-            etiqueta: "EN PROCESO",
-            icono: "…",
+            etiqueta: "EN PROCESO", icono: "…",
             nota: "El estado de tu pedido se actualizará cuando haya novedades."
         },
         pending: {
             titulo: "Pedido recibido",
             descripcion: "Tu pedido está pendiente de procesamiento.",
-            etiqueta: "PENDIENTE",
-            icono: "…",
+            etiqueta: "PENDIENTE", icono: "…",
             nota: "Te mostraremos aquí cualquier cambio en el estado de tu pedido."
         }
     };
-
     const info = estados[estado];
-
     tituloEstado.textContent = info.titulo;
     tituloEstado.classList.toggle("resaltado", estado === "completed");
     descripcionEstado.textContent = info.descripcion;
     textoEstado.textContent = info.etiqueta;
     iconoEstado.textContent = info.icono;
     notaEstado.textContent = info.nota;
-
     iconoEstado.classList.toggle("completado", estado === "completed");
     iconoEstado.classList.toggle("error", estado === "failed" || estado === "refunded");
-
     etiquetaEstado.className = "estado";
-
-    if (estado === "completed") {
-        etiquetaEstado.classList.add("completado");
-    } else if (estado === "processing") {
-        etiquetaEstado.classList.add("procesando");
-    } else if (estado === "failed" || estado === "refunded") {
-        etiquetaEstado.classList.add("error");
-    }
-
+    if (estado === "completed") etiquetaEstado.classList.add("completado");
+    else if (estado === "processing") etiquetaEstado.classList.add("procesando");
+    else if (estado === "failed" || estado === "refunded") etiquetaEstado.classList.add("error");
     notaEstado.className = "nota";
-
-    if (estado === "completed") {
-        notaEstado.classList.add("completado");
-    } else if (estado === "failed" || estado === "refunded") {
-        notaEstado.classList.add("error");
-    }
-
+    if (estado === "completed") notaEstado.classList.add("completado");
+    else if (estado === "failed" || estado === "refunded") notaEstado.classList.add("error");
     return estado;
 }
 
-/* PRODUCTO: ADAPTADO A LOS JUEGOS COMPATIBLES */
-
 async function cargarProducto(pedido, version) {
-    if (!pedido?.product_id) return;
-    if (productoCargado === pedido.product_id) return;
-
+    if (!pedido?.product_id || productoCargado === pedido.product_id) return;
     const { data, error } = await supabase
         .from("game_products")
         .select("game, product_name, game_currency_amount")
@@ -1098,96 +353,144 @@ async function cargarProducto(pedido, version) {
         .maybeSingle();
 
     if (version !== generacionConsulta || detenido) return;
-
     if (error) {
         console.error("Error consultando el producto:", error);
         return;
     }
-
     if (!data) {
         elementoJuego.textContent = "No disponible";
         elementoProducto.textContent = "No disponible";
         elementoCantidad.textContent = "No disponible";
         return;
     }
-
-    const juegoNormalizado = String(data.game || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[\s_]+/g, "-");
-
+    const juegoNormalizado = String(data.game || "").trim().toLowerCase().replace(/[\s_]+/g, "-");
     if (!JUEGOS_PERMITIDOS.has(juegoNormalizado)) {
         elementoJuego.textContent = data.game || "No disponible";
         elementoProducto.textContent = data.product_name || "No disponible";
-        elementoCantidad.textContent =
-            data.game_currency_amount ?? "No disponible";
+        elementoCantidad.textContent = data.game_currency_amount ?? "No disponible";
+        productoCargado = pedido.product_id;
+        return;
+    }
+    productoCargado = pedido.product_id;
+    elementoJuego.textContent = data.game || "No disponible";
+    elementoProducto.textContent = data.product_name || "Producto de juego";
+    elementoCantidad.textContent = data.game_currency_amount ?? "No disponible";
+}
+
+/* GENERACIÓN Y DESCARGA DEL COMPROBANTE */
+function cargarHtml2Canvas() {
+    if (!html2canvasPromise) {
+        html2canvasPromise = import("https://esm.sh/html2canvas@1.4.1")
+            .then(modulo => modulo.default)
+            .catch(error => {
+                html2canvasPromise = null;
+                throw error;
+            });
+    }
+    return html2canvasPromise;
+}
+
+async function descargarComprobante({ automatico = false } = {}) {
+    if (descargaEnCurso || !pedidoActual) return;
+    if (normalizarEstado(pedidoActual) !== "completed") {
+        if (!automatico) mostrarError("El comprobante estará disponible cuando la recarga figure como completada.");
         return;
     }
 
-    productoCargado = pedido.product_id;
+    descargaEnCurso = true;
+    botonGuardarComprobante.disabled = true;
+    botonGuardarComprobante.textContent = "GENERANDO COMPROBANTE...";
+    ocultarError();
 
-    elementoJuego.textContent = data.game || "No disponible";
-    elementoProducto.textContent = data.product_name || "Producto de juego";
-    elementoCantidad.textContent =
-        data.game_currency_amount ?? "No disponible";
+    try {
+        const html2canvas = await cargarHtml2Canvas();
+        if (normalizarEstado(pedidoActual) !== "completed") {
+            throw new Error("El pedido ya no figura como completado.");
+        }
+
+        const canvas = await html2canvas(tarjetaComprobante, {
+            backgroundColor: "#030817",
+            scale: Math.min(2, Math.max(1, window.devicePixelRatio || 1)),
+            useCORS: true,
+            logging: false,
+            onclone(documentoClonado) {
+                ["accionesComprobante", "accionesNavegacion", "mensajeError", "mensajeActualizacion"].forEach(id => {
+                    const elemento = documentoClonado.getElementById(id);
+                    if (elemento) elemento.style.display = "none";
+                });
+                const tarjeta = documentoClonado.getElementById("tarjetaComprobante");
+                if (tarjeta) {
+                    tarjeta.style.boxShadow = "none";
+                    tarjeta.style.width = `${tarjetaComprobante.getBoundingClientRect().width}px`;
+                }
+            }
+        });
+
+        const blob = await new Promise((resolve, reject) => {
+            canvas.toBlob(resultado => resultado ? resolve(resultado) : reject(new Error("No se pudo crear el PNG.")), "image/png");
+        });
+
+        const urlImagen = URL.createObjectURL(blob);
+        const enlace = document.createElement("a");
+        const idSeguro = String(pedidoActual.id || "pedido").replace(/[^a-zA-Z0-9_-]/g, "");
+        enlace.href = urlImagen;
+        enlace.download = `Gamers-Gold-Comprobante-${idSeguro}.png`;
+        enlace.style.display = "none";
+        document.body.appendChild(enlace);
+        enlace.click();
+        enlace.remove();
+        window.setTimeout(() => URL.revokeObjectURL(urlImagen), 60000);
+    } catch (error) {
+        console.error("Error generando el comprobante:", error);
+        if (!automatico) {
+            mostrarError("No pudimos generar la imagen. Comprueba tu conexión e inténtalo de nuevo.");
+        } else {
+            const aviso = $("mensajeActualizacion");
+            aviso.textContent = "Tu recarga está completada. Puedes guardar el comprobante con el botón.";
+            aviso.classList.remove("oculto");
+        }
+    } finally {
+        descargaEnCurso = false;
+        botonGuardarComprobante.disabled = false;
+        botonGuardarComprobante.innerHTML = '<span class="boton-icono" aria-hidden="true">↓</span> GUARDAR COMPROBANTE';
+    }
 }
-
-/* CONSULTA DEL PEDIDO */
+botonGuardarComprobante.addEventListener("click", () => void descargarComprobante());
 
 async function cargarPedido() {
     if (consultando || detenido || !idPedido) return;
-
     consultando = true;
     const version = ++generacionConsulta;
 
     try {
-        const {
-            data: { session },
-            error: errorSesion
-        } = await supabase.auth.getSession();
-
+        const { data: { session }, error: errorSesion } = await supabase.auth.getSession();
         if (version !== generacionConsulta || detenido) return;
         if (errorSesion) throw errorSesion;
 
         if (!session?.user) {
             if (!errorSesionMostrado) {
-                mostrarError(
-                    "Inicia sesión con la cuenta que realizó este pedido para consultar su estado."
-                );
+                mostrarError("Inicia sesión con la cuenta que realizó este pedido para consultar su estado.");
                 errorSesionMostrado = true;
             }
             return;
         }
 
         usuarioId = session.user.id;
-
         const { data: pedido, error } = await supabase
             .from("game_orders")
             .select(`
-                id,
-                user_id,
-                product_id,
-                status,
-                provider_status,
-                player_id,
-                zone_id,
-                price_gvr,
-                created_at,
-                completed_at,
-                provider_order_id,
-                provider_client_reference
+                id, user_id, product_id, status, provider_status, player_id, zone_id,
+                price_gvr, created_at, completed_at, provider_order_id, provider_client_reference
             `)
             .eq("id", idPedido)
             .eq("user_id", usuarioId)
             .maybeSingle();
 
         if (version !== generacionConsulta || detenido) return;
-
         if (error) {
             console.error("Error consultando el pedido:", error);
             return;
         }
-
         if (!pedido) {
             mostrarError("No encontramos este pedido en tu cuenta.");
             detenerIntervalo();
@@ -1197,23 +500,29 @@ async function cargarPedido() {
 
         errorSesionMostrado = false;
         ocultarError();
-
         pedidoActual = pedido;
 
-        // Datos del pedido disponibles inmediatamente.
         elementoJugador.textContent = pedido.player_id || "No disponible";
-
-        elementoPrecio.textContent = pedido.price_gvr != null
-            ? `${pedido.price_gvr} GVR`
-            : "No disponible";
-
+        elementoPrecio.textContent = pedido.price_gvr != null ? `${pedido.price_gvr} GVR` : "No disponible";
         elementoFecha.textContent = formatearFecha(pedido.created_at);
         elementoNumeroPedido.textContent = pedido.id;
 
         const estado = mostrarEstadoPedido(pedido);
+        await cargarProducto(pedido, version);
+        if (version !== generacionConsulta || detenido) return;
 
-        // No bloqueamos la representación del pedido esperando el catálogo.
-        void cargarProducto(pedido, version);
+        if (estado === "completed") {
+            accionesComprobante.classList.remove("oculto");
+
+            // Una sola tentativa automática por pedido durante esta visita.
+            if (!descargaAutomaticaIntentada || idDescargaAutomatica !== String(pedido.id)) {
+                descargaAutomaticaIntentada = true;
+                idDescargaAutomatica = String(pedido.id);
+                void descargarComprobante({ automatico: true });
+            }
+        } else {
+            accionesComprobante.classList.add("oculto");
+        }
 
         if (esEstadoFinal(estado)) {
             detenerIntervalo();
@@ -1226,79 +535,49 @@ async function cargarPedido() {
     }
 }
 
-/* SUPABASE REALTIME */
-
 async function iniciarRealtime() {
     if (!usuarioId || !idPedido || detenido || canalPedido) return;
-
     const canal = supabase
         .channel(`checkout-pedido-${idPedido}`)
-        .on(
-            "postgres_changes",
-            {
-                event: "UPDATE",
-                schema: "public",
-                table: "game_orders",
-                filter: `id=eq.${idPedido}`
-            },
-            payload => {
-                const nuevo = payload.new;
-
-                if (!nuevo || nuevo.user_id !== usuarioId) return;
-
-                pedidoActual = nuevo;
-
-                // Refrescar todos los datos desde la base de datos.
-                void cargarPedido();
-            }
-        )
+        .on("postgres_changes", {
+            event: "UPDATE", schema: "public", table: "game_orders", filter: `id=eq.${idPedido}`
+        }, payload => {
+            const nuevo = payload.new;
+            if (!nuevo || nuevo.user_id !== usuarioId) return;
+            pedidoActual = nuevo;
+            void cargarPedido();
+        })
         .subscribe(estado => {
             if (canalPedido !== canal || detenido) return;
-
-            if (estado === "SUBSCRIBED") {
-                void cargarPedido();
-            }
+            if (estado === "SUBSCRIBED") void cargarPedido();
         });
-
     canalPedido = canal;
 }
-
-/* INICIO Y RESPALDO AUTOMÁTICO */
 
 async function iniciarCheckout() {
     if (!idPedido) {
         tituloEstado.textContent = "Pedido no identificado";
-        descripcionEstado.textContent =
-            "Abre el enlace de tu pedido para consultar su estado.";
+        descripcionEstado.textContent = "Abre el enlace de tu pedido para consultar su estado.";
         iconoEstado.textContent = "!";
         mostrarError("Falta el identificador del pedido en el enlace.");
         return;
     }
 
-    // Respaldo automático mientras el pedido siga pendiente.
     intervalo = setInterval(() => {
         if (!detenido) void cargarPedido();
     }, INTERVALO_ACTUALIZACION);
 
     await cargarPedido();
-
     if (detenido || !usuarioId || !pedidoActual) return;
-
-    if (!esEstadoFinal(normalizarEstado(pedidoActual))) {
-        await iniciarRealtime();
-    }
+    if (!esEstadoFinal(normalizarEstado(pedidoActual))) await iniciarRealtime();
 }
 
 document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible" && !detenido) {
-        void cargarPedido();
-    }
+    if (document.visibilityState === "visible" && !detenido) void cargarPedido();
 });
-
 window.addEventListener("pagehide", () => {
     detenido = true;
     detenerIntervalo();
-
     if (canalPedido) {
         void supabase.removeChannel(canalPedido);
         canalPedido = null;
@@ -1307,6 +586,5 @@ window.addEventListener("pagehide", () => {
 
 void iniciarCheckout();
 </script>
-
 </body>
 </html>
