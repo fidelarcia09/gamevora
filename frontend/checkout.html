@@ -124,6 +124,7 @@
             height: 2px;
             background: var(--cian);
             box-shadow: 0 0 13px var(--cian);
+            pointer-events: none;
         }
 
         .tarjeta::before {
@@ -260,34 +261,71 @@
             box-shadow: 0 0 10px rgba(0, 200, 255, .4);
         }
 
+        /* CONTENIDO: SE MANTIENE FUERA DEL RECUADRO DE DATOS */
+
         .contenido {
-            padding: 24px;
+            padding: 25px 24px 27px;
         }
 
         .titulo-seccion {
-            margin-bottom: 19px;
-            color: var(--cian);
-            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 17px;
+            color: #f4f9ff;
+            font-size: 13px;
             font-weight: 900;
-            letter-spacing: 2.5px;
+            letter-spacing: 1.8px;
             text-transform: uppercase;
         }
 
+        .titulo-seccion::before {
+            content: "";
+            display: block;
+            width: 4px;
+            height: 21px;
+            flex-shrink: 0;
+            border-radius: 2px;
+            background: var(--cian);
+            box-shadow: 0 0 12px rgba(0, 217, 255, .65);
+        }
+
+        /* NUEVO DISEÑO DEL ÚNICO RECUADRO DE INFORMACIÓN */
+
         .lista-datos {
+            position: relative;
             overflow: hidden;
-            border: 1px solid rgba(0, 125, 255, .33);
-            border-radius: 10px;
-            background: rgba(2, 10, 27, .8);
+            border: 1px solid rgba(0, 190, 255, .62);
+            border-radius: 8px;
+            background:
+                linear-gradient(135deg, rgba(0, 105, 255, .07), transparent 42%),
+                linear-gradient(160deg, rgba(4, 17, 39, .98), rgba(2, 8, 22, .99));
+            box-shadow:
+                0 0 18px rgba(0, 125, 255, .09),
+                inset 0 0 20px rgba(0, 135, 255, .035);
+        }
+
+        .lista-datos::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 18px;
+            width: 58px;
+            height: 2px;
+            background: var(--cian);
+            box-shadow: 0 0 12px var(--cian);
+            z-index: 1;
         }
 
         .dato {
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 13px;
+            gap: 14px;
             min-width: 0;
-            padding: 15px;
-            border-bottom: 1px solid rgba(0, 140, 255, .12);
-            transition: background .2s ease;
+            padding: 16px 17px;
+            border-bottom: 1px solid rgba(0, 150, 255, .18);
+            transition: background .2s ease, border-color .2s ease;
         }
 
         .dato:last-child {
@@ -295,20 +333,21 @@
         }
 
         .dato:hover {
-            background: rgba(0, 112, 255, .055);
+            background: rgba(0, 132, 255, .09);
         }
 
         .dato-icono {
-            width: 39px;
-            height: 39px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            border: 1px solid rgba(0, 180, 255, .55);
-            border-radius: 50%;
+            border: 1px solid rgba(0, 196, 255, .48);
+            border-radius: 7px;
             color: var(--cian);
-            background: rgba(0, 125, 255, .07);
+            background: linear-gradient(145deg, rgba(0, 134, 255, .15), rgba(0, 35, 90, .18));
+            box-shadow: inset 0 0 12px rgba(0, 153, 255, .05);
             font-size: 17px;
             font-weight: 900;
         }
@@ -320,17 +359,17 @@
 
         .dato span {
             display: block;
-            margin-bottom: 5px;
-            color: #8daedb;
+            margin-bottom: 6px;
+            color: #91afd7;
             font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 1.3px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
             text-transform: uppercase;
         }
 
         .dato strong {
             display: block;
-            color: #f5f8ff;
+            color: #f5f9ff;
             font-size: 14px;
             font-weight: 700;
             line-height: 1.55;
@@ -339,18 +378,21 @@
 
         .dato .precio {
             color: var(--dorado);
-            font-size: 18px;
-            text-shadow: 0 0 12px rgba(255, 211, 106, .1);
+            font-size: 19px;
+            font-weight: 900;
+            text-shadow: 0 0 14px rgba(255, 211, 106, .14);
         }
 
         .nota {
-            margin-top: 17px;
-            padding: 13px 15px;
-            border-left: 2px solid var(--cian);
-            background: rgba(0, 137, 255, .045);
+            margin-top: 18px;
+            padding: 14px 15px;
+            border: 1px solid rgba(0, 145, 255, .17);
+            border-left: 3px solid var(--cian);
+            border-radius: 5px;
+            background: rgba(0, 100, 210, .055);
             color: var(--secundario);
             font-size: 12px;
-            line-height: 1.7;
+            line-height: 1.8;
         }
 
         .nota.completado {
@@ -377,7 +419,7 @@
             min-height: 57px;
             padding: 15px;
             border: 1px solid var(--cian);
-            border-radius: 8px;
+            border-radius: 6px;
             text-align: center;
             text-decoration: none;
             font-size: 12px;
@@ -518,22 +560,35 @@
             }
 
             .contenido {
-                padding: 17px 13px;
+                padding: 20px 13px 22px;
+            }
+
+            .titulo-seccion {
+                gap: 9px;
+                margin-bottom: 14px;
+                font-size: 11px;
+                letter-spacing: 1.2px;
+            }
+
+            .titulo-seccion::before {
+                height: 19px;
             }
 
             .dato {
-                padding: 13px 10px;
-                gap: 10px;
+                padding: 14px 10px;
+                gap: 11px;
             }
 
             .dato-icono {
                 width: 35px;
                 height: 35px;
+                border-radius: 6px;
                 font-size: 15px;
             }
 
             .dato span {
                 font-size: 9px;
+                letter-spacing: 1px;
             }
 
             .dato strong {
@@ -542,6 +597,11 @@
 
             .dato .precio {
                 font-size: 16px;
+            }
+
+            .nota {
+                padding: 12px;
+                font-size: 11px;
             }
 
             .boton {
@@ -1176,4 +1236,4 @@ void iniciarCheckout();
 </script>
 
 </body>
-                </html>
+</html>
