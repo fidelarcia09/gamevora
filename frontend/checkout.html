@@ -3,54 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="theme-color" content="#030817">
+    <meta name="description" content="Consulta el estado de tu recarga en Gamers Gold Top-Up.">
     <title>Estado de tu pedido | Gamers Gold Top-Up</title>
-
-    <meta
-        name="description"
-        content="Consulta el estado de tu recarga en Gamers Gold Top-Up."
-    >
 
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         :root {
-            --fondo: #050b18;
-            --panel: #0a1428;
-            --panel-secundario: #0d1c35;
+            --fondo: #030817;
+            --panel: rgba(5, 15, 35, .97);
             --azul: #087cff;
-            --cian: #00c8ff;
-            --dorado: #ffc857;
-            --texto: #ffffff;
-            --texto-secundario: #91a7c4;
-            --borde: rgba(0, 174, 255, 0.22);
+            --cian: #00d9ff;
+            --texto: #f5f9ff;
+            --secundario: #9cb5d9;
+            --verde: #39ff88;
+            --rojo: #ff656f;
+            --dorado: #ffd36a;
         }
 
         body {
             min-height: 100vh;
-            background:
-                radial-gradient(
-                    circle at 50% 0%,
-                    rgba(0, 119, 255, 0.14),
-                    transparent 42%
-                ),
-                var(--fondo);
             color: var(--texto);
+            background:
+                radial-gradient(ellipse at 50% 12%, rgba(0, 100, 255, .19), transparent 42%),
+                radial-gradient(ellipse at 0% 50%, rgba(0, 75, 255, .09), transparent 35%),
+                radial-gradient(ellipse at 100% 75%, rgba(0, 190, 255, .08), transparent 35%),
+                var(--fondo);
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .32;
+            background:
+                linear-gradient(135deg, transparent 47%, rgba(0, 133, 255, .12) 48%, transparent 49%) 0 0 / 110px 110px,
+                linear-gradient(45deg, transparent 47%, rgba(0, 133, 255, .08) 48%, transparent 49%) 0 0 / 150px 150px;
+            mask-image: linear-gradient(to bottom, black, transparent 85%);
         }
 
         header {
-            width: 100%;
-            padding: 18px 16px;
-            background: rgba(8, 21, 45, 0.96);
-            border-bottom: 1px solid var(--borde);
+            position: relative;
+            z-index: 1;
+            padding: 19px 16px;
+            border-bottom: 1px solid rgba(0, 190, 255, .32);
+            background: rgba(3, 9, 24, .88);
+            box-shadow: 0 5px 25px rgba(0, 91, 255, .08);
         }
 
         .barra {
+            width: 100%;
             max-width: 850px;
             margin: auto;
             display: flex;
@@ -61,8 +71,10 @@
 
         .logo {
             font-size: 18px;
-            font-weight: 800;
-            letter-spacing: 0.2px;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 1px;
+            text-shadow: 0 0 18px rgba(0, 157, 255, .18);
         }
 
         .logo span {
@@ -70,265 +82,506 @@
         }
 
         .etiqueta {
-            font-size: 11px;
+            padding: 8px 12px;
+            border: 1px solid rgba(0, 205, 255, .5);
+            border-radius: 5px;
             color: var(--cian);
-            border: 1px solid var(--borde);
-            padding: 7px 10px;
-            border-radius: 20px;
+            background: rgba(0, 120, 255, .08);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
             white-space: nowrap;
         }
 
         main {
+            position: relative;
+            z-index: 1;
             width: 100%;
-            max-width: 650px;
-            margin: 0 auto;
-            padding: 30px 16px 45px;
+            max-width: 690px;
+            padding: 32px 16px 24px;
+            margin: auto;
         }
 
         .tarjeta {
+            position: relative;
             overflow: hidden;
-            background: linear-gradient(
-                160deg,
-                rgba(13, 28, 53, 0.98),
-                rgba(7, 16, 33, 0.98)
-            );
-            border: 1px solid var(--borde);
-            border-radius: 22px;
+            border: 1px solid rgba(0, 177, 255, .8);
+            border-radius: 15px;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(0, 100, 255, .11), transparent 48%),
+                linear-gradient(155deg, rgba(7, 19, 43, .99), rgba(2, 8, 21, .99));
             box-shadow:
-                0 0 30px rgba(0, 119, 255, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 0.025);
+                0 0 24px rgba(0, 111, 255, .17),
+                0 0 65px rgba(0, 111, 255, .06),
+                inset 0 0 25px rgba(0, 110, 255, .035);
+        }
+
+        .tarjeta::before,
+        .tarjeta::after {
+            content: "";
+            position: absolute;
+            width: 75px;
+            height: 2px;
+            background: var(--cian);
+            box-shadow: 0 0 13px var(--cian);
+        }
+
+        .tarjeta::before {
+            top: 0;
+            left: 30px;
+        }
+
+        .tarjeta::after {
+            bottom: 0;
+            right: 30px;
         }
 
         .cabecera-tarjeta {
-            padding: 28px 22px 24px;
+            position: relative;
+            padding: 34px 22px 27px;
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(0, 185, 255, .18);
+        }
+
+        .marca {
+            margin-bottom: 24px;
+            color: #f6f9ff;
+            font-size: 13px;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 5px;
+        }
+
+        .marca span {
+            display: block;
+            margin-top: 4px;
+            color: var(--cian);
+            font-size: 11px;
+            letter-spacing: 8px;
         }
 
         .icono {
-            width: 76px;
-            height: 76px;
-            margin: 0 auto 18px;
+            width: 94px;
+            height: 94px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0 auto 23px;
+            border: 2px solid var(--cian);
             border-radius: 50%;
-            background: rgba(0, 174, 255, 0.09);
-            border: 1px solid rgba(0, 200, 255, 0.45);
-            box-shadow: 0 0 24px rgba(0, 174, 255, 0.12);
             color: var(--cian);
-            font-size: 34px;
-            font-weight: bold;
+            background: rgba(0, 145, 255, .08);
+            box-shadow: 0 0 12px rgba(0, 200, 255, .3), inset 0 0 22px rgba(0, 200, 255, .09);
+            font-size: 48px;
+            font-weight: 900;
+            transition: .25s ease;
+        }
+
+        .icono.completado {
+            color: var(--verde);
+            border-color: var(--verde);
+            background: rgba(0, 255, 115, .07);
+            box-shadow: 0 0 16px rgba(0, 255, 115, .35), inset 0 0 22px rgba(0, 255, 115, .1);
+        }
+
+        .icono.error {
+            color: var(--rojo);
+            border-color: var(--rojo);
+            box-shadow: 0 0 16px rgba(255, 65, 90, .25);
         }
 
         h1 {
-            font-size: 25px;
-            line-height: 1.3;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: clamp(25px, 6vw, 39px);
+            font-weight: 900;
+            font-style: italic;
+            line-height: 1.2;
+            text-transform: uppercase;
+            text-shadow: 0 0 24px rgba(0, 122, 255, .18);
+        }
+
+        h1.resaltado {
+            color: var(--cian);
         }
 
         .subtitulo {
-            color: var(--texto-secundario);
+            max-width: 440px;
+            margin: auto;
+            color: #bed1ee;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.8;
         }
 
         .estado {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
-            padding: 10px 15px;
-            border-radius: 30px;
-            background: rgba(255, 200, 87, 0.09);
-            border: 1px solid rgba(255, 200, 87, 0.35);
-            color: var(--dorado);
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 0.4px;
+            gap: 9px;
+            margin-top: 22px;
+            padding: 10px 17px;
+            border: 1px solid rgba(0, 199, 255, .48);
+            border-radius: 4px;
+            background: rgba(0, 145, 255, .08);
+            color: var(--cian);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1.6px;
         }
 
         .punto {
             width: 8px;
             height: 8px;
-            background: currentColor;
-            border-radius: 50%;
             flex-shrink: 0;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 9px currentColor;
         }
 
         .estado.completado {
-            color: #3ce6a0;
-            background: rgba(60, 230, 160, 0.08);
-            border-color: rgba(60, 230, 160, 0.35);
+            color: var(--verde);
+            border-color: rgba(57, 255, 136, .6);
+            background: rgba(57, 255, 136, .06);
         }
 
         .estado.procesando {
             color: var(--cian);
-            background: rgba(0, 200, 255, 0.08);
-            border-color: rgba(0, 200, 255, 0.35);
         }
 
         .estado.error {
-            color: #ff7777;
-            background: rgba(255, 90, 90, 0.08);
-            border-color: rgba(255, 90, 90, 0.35);
+            color: var(--rojo);
+            border-color: rgba(255, 101, 111, .55);
+        }
+
+        .separador {
+            width: 90px;
+            height: 2px;
+            margin: 22px auto 0;
+            background: linear-gradient(90deg, transparent, var(--cian), transparent);
+            box-shadow: 0 0 10px rgba(0, 200, 255, .4);
         }
 
         .contenido {
-            padding: 23px;
+            padding: 24px;
         }
 
         .titulo-seccion {
-            font-size: 15px;
-            margin-bottom: 16px;
+            margin-bottom: 19px;
             color: var(--cian);
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        .lista-datos {
+            overflow: hidden;
+            border: 1px solid rgba(0, 125, 255, .33);
+            border-radius: 10px;
+            background: rgba(2, 10, 27, .8);
         }
 
         .dato {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+            align-items: center;
+            gap: 13px;
+            min-width: 0;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 140, 255, .12);
+            transition: background .2s ease;
         }
 
         .dato:last-child {
             border-bottom: none;
         }
 
-        .dato span {
-            color: var(--texto-secundario);
-            font-size: 13px;
-            line-height: 1.5;
+        .dato:hover {
+            background: rgba(0, 112, 255, .055);
+        }
+
+        .dato-icono {
+            width: 39px;
+            height: 39px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
+            border: 1px solid rgba(0, 180, 255, .55);
+            border-radius: 50%;
+            color: var(--cian);
+            background: rgba(0, 125, 255, .07);
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+        .dato-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .dato span {
+            display: block;
+            margin-bottom: 5px;
+            color: #8daedb;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
         }
 
         .dato strong {
-            max-width: 65%;
-            text-align: right;
-            font-size: 13px;
-            line-height: 1.6;
+            display: block;
+            color: #f5f8ff;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.55;
             overflow-wrap: anywhere;
         }
 
-        .precio {
+        .dato .precio {
             color: var(--dorado);
-            font-size: 17px !important;
+            font-size: 18px;
+            text-shadow: 0 0 12px rgba(255, 211, 106, .1);
         }
 
         .nota {
-            margin-top: 20px;
-            padding: 14px;
-            border: 1px solid rgba(0, 174, 255, 0.13);
-            border-radius: 12px;
-            background: rgba(0, 174, 255, 0.035);
-            color: var(--texto-secundario);
+            margin-top: 17px;
+            padding: 13px 15px;
+            border-left: 2px solid var(--cian);
+            background: rgba(0, 137, 255, .045);
+            color: var(--secundario);
             font-size: 12px;
             line-height: 1.7;
         }
 
+        .nota.completado {
+            border-left-color: var(--verde);
+        }
+
+        .nota.error {
+            border-left-color: var(--rojo);
+        }
+
         .acciones {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 12px;
             margin-top: 22px;
         }
 
         .boton {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 47px;
-            padding: 12px;
-            border-radius: 11px;
-            border: 1px solid transparent;
+            gap: 12px;
+            min-height: 57px;
+            padding: 15px;
+            border: 1px solid var(--cian);
+            border-radius: 8px;
             text-align: center;
             text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s ease;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            transition: transform .2s ease, filter .2s ease, box-shadow .2s ease;
         }
 
         .boton-principal {
-            background: linear-gradient(90deg, var(--azul), var(--cian));
             color: white;
+            background: linear-gradient(100deg, #006bff, #00bfff);
+            box-shadow: 0 0 19px rgba(0, 142, 255, .19), inset 0 1px rgba(255, 255, 255, .2);
         }
 
         .boton-secundario {
-            background: var(--panel-secundario);
-            border-color: var(--borde);
-            color: white;
+            color: var(--cian);
+            background: rgba(0, 90, 190, .06);
         }
 
         .boton:hover {
-            transform: translateY(-1px);
-            filter: brightness(1.08);
+            transform: translateY(-2px);
+            filter: brightness(1.12);
+            box-shadow: 0 0 22px rgba(0, 174, 255, .25);
+        }
+
+        .boton-icono {
+            font-size: 20px;
         }
 
         .mensaje {
-            margin-top: 14px;
-            color: var(--texto-secundario);
+            margin-top: 13px;
+            color: var(--secundario);
             font-size: 12px;
             text-align: center;
             line-height: 1.6;
         }
 
         .mensaje.error {
-            color: #ff8c8c;
+            color: var(--rojo);
         }
 
         .pie {
-            padding: 18px 10px 0;
+            padding: 27px 5px 12px;
+            color: #8ca5c8;
             text-align: center;
-            color: #627b97;
-            font-size: 11px;
-            line-height: 1.7;
+        }
+
+        .ventajas {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            margin-bottom: 25px;
+        }
+
+        .ventaja {
+            padding: 5px 8px;
+            border-right: 1px solid rgba(0, 153, 255, .3);
+            text-align: center;
+        }
+
+        .ventaja:last-child {
+            border-right: none;
+        }
+
+        .ventaja-icono {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--cian);
+            font-size: 22px;
+        }
+
+        .ventaja strong {
+            display: block;
+            color: var(--cian);
+            font-size: 9px;
+            letter-spacing: .5px;
+        }
+
+        .ventaja span {
+            display: block;
+            margin-top: 4px;
+            color: #9db2d0;
+            font-size: 9px;
+        }
+
+        .copyright {
+            padding-top: 19px;
+            border-top: 1px solid rgba(0, 157, 255, .17);
+            color: #8ca4c7;
+            font-size: 10px;
+            letter-spacing: 3px;
         }
 
         .oculto {
             display: none !important;
         }
 
-        @media (max-width: 420px) {
+        @media (max-width: 480px) {
+            header {
+                padding: 16px 12px;
+            }
+
             .logo {
-                font-size: 15px;
+                font-size: 14px;
+                letter-spacing: .5px;
             }
 
             .etiqueta {
-                font-size: 10px;
-                padding: 6px 8px;
+                padding: 7px 8px;
+                font-size: 9px;
+                letter-spacing: .6px;
             }
 
             main {
-                padding: 22px 12px 35px;
+                padding: 23px 12px 15px;
             }
 
             .cabecera-tarjeta {
-                padding: 24px 16px;
+                padding: 28px 15px 23px;
             }
 
-            .contenido {
-                padding: 18px 16px;
+            .marca {
+                font-size: 12px;
+            }
+
+            .icono {
+                width: 82px;
+                height: 82px;
+                font-size: 41px;
             }
 
             h1 {
-                font-size: 22px;
+                font-size: 27px;
+            }
+
+            .subtitulo {
+                font-size: 13px;
+            }
+
+            .contenido {
+                padding: 17px 13px;
             }
 
             .dato {
+                padding: 13px 10px;
                 gap: 10px;
             }
 
-            .dato span,
+            .dato-icono {
+                width: 35px;
+                height: 35px;
+                font-size: 15px;
+            }
+
+            .dato span {
+                font-size: 9px;
+            }
+
             .dato strong {
                 font-size: 12px;
             }
 
-            .acciones {
-                grid-template-columns: 1fr;
+            .dato .precio {
+                font-size: 16px;
+            }
+
+            .boton {
+                min-height: 53px;
+                font-size: 11px;
+            }
+
+            .ventaja {
+                padding: 4px 3px;
+            }
+
+            .ventaja-icono {
+                font-size: 19px;
+            }
+
+            .ventaja strong,
+            .ventaja span {
+                font-size: 8px;
+            }
+
+            .copyright {
+                font-size: 9px;
+                letter-spacing: 2px;
+            }
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .icono.completado {
+                animation: aparecer .5s ease-out;
+            }
+
+            @keyframes aparecer {
+                from {
+                    transform: scale(.86);
+                    opacity: .5;
+                }
+                to {
+                    transform: scale(1);
+                    opacity: 1;
+                }
             }
         }
     </style>
@@ -344,12 +597,15 @@
 </header>
 
 <main>
-
     <section class="tarjeta">
 
         <div class="cabecera-tarjeta">
+            <div class="marca">
+                GAMERS GOLD
+                <span>TOP-UP</span>
+            </div>
 
-            <div class="icono" id="iconoEstado">...</div>
+            <div class="icono" id="iconoEstado" aria-hidden="true">…</div>
 
             <h1 id="tituloEstado">Consultando tu pedido</h1>
 
@@ -362,87 +618,124 @@
                 <span id="textoEstado">CONSULTANDO</span>
             </div>
 
+            <div class="separador"></div>
         </div>
 
         <div class="contenido">
+            <h2 class="titulo-seccion">Detalles de tu compra</h2>
 
-            <h2 class="titulo-seccion">Detalles de la compra</h2>
+            <div class="lista-datos">
+                <div class="dato">
+                    <div class="dato-icono" aria-hidden="true">▣</div>
+                    <div class="dato-info">
+                        <span>Juego</span>
+                        <strong id="juego">Cargando...</strong>
+                    </div>
+                </div>
 
-            <div class="dato">
-                <span>Juego</span>
-                <strong id="juego">Cargando...</strong>
-            </div>
+                <div class="dato">
+                    <div class="dato-icono" aria-hidden="true">◆</div>
+                    <div class="dato-info">
+                        <span>Producto</span>
+                        <strong id="producto">Cargando...</strong>
+                    </div>
+                </div>
 
-            <div class="dato">
-                <span>Producto</span>
-                <strong id="producto">Cargando...</strong>
-            </div>
+                <div class="dato">
+                    <div class="dato-icono" aria-hidden="true">◈</div>
+                    <div class="dato-info">
+                        <span>Cantidad</span>
+                        <strong id="cantidad">Cargando...</strong>
+                    </div>
+                </div>
 
-            <div class="dato">
-                <span>Cantidad</span>
-                <strong id="cantidad">Cargando...</strong>
-            </div>
+                <div class="dato">
+                    <div class="dato-icono" aria-hidden="true">♙</div>
+                    <div class="dato-info">
+                        <span>ID del jugador</span>
+                        <strong id="idJugador">Cargando...</strong>
+                    </div>
+                </div>
 
-            <div class="dato">
-                <span>ID del jugador</span>
-                <strong id="idJugador">Cargando...</strong>
-            </div>
+                <div class="dato">
+                    <div class="dato-icono" aria-hidden="true">▤</div>
+                    <div class="dato-info">
+                        <span>Total pagado</span>
+                        <strong class="precio" id="precio">Cargando...</strong>
+                    </div>
+                </div>
 
-            <div class="dato">
-                <span>Total pagado</span>
-                <strong class="precio" id="precio">Cargando...</strong>
-            </div>
+                <div class="dato">
+                    <div class="dato-icono" aria-hidden="true">▦</div>
+                    <div class="dato-info">
+                        <span>Fecha</span>
+                        <strong id="fecha">Cargando...</strong>
+                    </div>
+                </div>
 
-            <div class="dato">
-                <span>Fecha del pedido</span>
-                <strong id="fecha">Cargando...</strong>
-            </div>
-
-            <div class="dato">
-                <span>Número de pedido</span>
-                <strong id="numeroPedido">Cargando...</strong>
+                <div class="dato">
+                    <div class="dato-icono" aria-hidden="true">#</div>
+                    <div class="dato-info">
+                        <span>Número de pedido</span>
+                        <strong id="numeroPedido">Cargando...</strong>
+                    </div>
+                </div>
             </div>
 
             <div class="nota" id="notaEstado">
-                Estamos consultando la información guardada de tu pedido.
-                Mantén esta página abierta para ver las actualizaciones.
+                Estamos consultando la información de tu pedido.
             </div>
 
             <div class="acciones">
-
-                <a
-                    class="boton boton-principal"
-                    href="../index.html"
-                >
-                    Ir al inicio
+                <a class="boton boton-principal" href="../index.html">
+                    <span class="boton-icono" aria-hidden="true">⌂</span>
+                    VOLVER AL INICIO
                 </a>
 
-                <a
-                    class="boton boton-secundario"
-                    href="pedidos.html"
-                >
-                    Ver mis pedidos
+                <a class="boton boton-secundario" href="pedidos.html">
+                    <span class="boton-icono" aria-hidden="true">▤</span>
+                    VER MIS PEDIDOS
                 </a>
-
             </div>
 
-            <p class="mensaje" id="mensajeActualizacion">
-                Actualización automática activada.
-            </p>
-
             <p class="mensaje error oculto" id="mensajeError"></p>
-
+            <p class="mensaje oculto" id="mensajeActualizacion"></p>
         </div>
-
     </section>
 
-    <div class="pie">
-        Gamers Gold Top-Up<br>
-        Consulta aquí el estado de tu recarga.
-    </div>
+    <footer class="pie">
+        <div class="ventajas">
+            <div class="ventaja">
+                <span class="ventaja-icono" aria-hidden="true">ϟ</span>
+                <strong>ENTREGA</strong>
+                <span>RÁPIDA</span>
+            </div>
 
+            <div class="ventaja">
+                <span class="ventaja-icono" aria-hidden="true">◇</span>
+                <strong>PAGO SEGURO</strong>
+                <span>Y CONFIABLE</span>
+            </div>
+
+            <div class="ventaja">
+                <span class="ventaja-icono" aria-hidden="true">◎</span>
+                <strong>SOPORTE</strong>
+                <span>24/7</span>
+            </div>
+
+            <div class="ventaja">
+                <span class="ventaja-icono" aria-hidden="true">☆</span>
+                <strong>LOS MEJORES</strong>
+                <span>PRECIOS</span>
+            </div>
+        </div>
+
+        <div class="copyright">
+            GAMERS GOLD TOP-UP · © 2026
+        </div>
+    </footer>
 </main>
- 
+
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -450,9 +743,6 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-
-// Realtime actualiza al instante; la consulta de respaldo
-// comprueba el estado cada 8 segundos.
 const INTERVALO_ACTUALIZACION = 8000;
 
 const JUEGOS_PERMITIDOS = new Set([
@@ -496,13 +786,7 @@ const elementoFecha = $("fecha");
 const elementoNumeroPedido = $("numeroPedido");
 
 const notaEstado = $("notaEstado");
-const mensajeActualizacion = $("mensajeActualizacion");
 const mensajeError = $("mensajeError");
-
-// Ocultamos los mensajes técnicos de conexión.
-if (mensajeActualizacion) {
-    mensajeActualizacion.classList.add("oculto");
-}
 
 let usuarioId = null;
 let pedidoActual = null;
@@ -510,20 +794,16 @@ let intervalo = null;
 let canalPedido = null;
 let consultando = false;
 let detenido = false;
-let canalActivo = false;
 let productoCargado = null;
-let ultimaConsulta = 0;
 let generacionConsulta = 0;
 let errorSesionMostrado = false;
 
 function mostrarError(mensaje) {
-    if (!mensajeError) return;
     mensajeError.textContent = mensaje;
     mensajeError.classList.remove("oculto");
 }
 
 function ocultarError() {
-    if (!mensajeError) return;
     mensajeError.textContent = "";
     mensajeError.classList.add("oculto");
 }
@@ -533,24 +813,41 @@ function formatearFecha(fecha) {
 
     const valor = new Date(fecha);
 
-    if (Number.isNaN(valor.getTime())) {
-        return "Pendiente";
-    }
+    if (Number.isNaN(valor.getTime())) return "Pendiente";
 
     return valor.toLocaleString("es-ES", {
-        dateStyle: "medium",
+        dateStyle: "long",
         timeStyle: "short"
     });
 }
 
-function estadoFinal(pedido) {
-    const db = String(pedido?.status || "").toLowerCase();
+function normalizarEstado(pedido) {
+    const db = String(pedido?.status || "").trim().toLowerCase();
     const proveedor = String(
         pedido?.provider_status || ""
-    ).toUpperCase();
+    ).trim().toUpperCase();
 
-    return ["completed", "failed", "refunded"].includes(db) ||
-        ["COMPLETED", "FAILED", "REFUNDED"].includes(proveedor);
+    if (db === "completed" || proveedor === "COMPLETED") {
+        return "completed";
+    }
+
+    if (db === "refunded" || proveedor === "REFUNDED") {
+        return "refunded";
+    }
+
+    if (db === "failed" || proveedor === "FAILED") {
+        return "failed";
+    }
+
+    if (db === "processing" || proveedor === "PROCESSING") {
+        return "processing";
+    }
+
+    return "pending";
+}
+
+function esEstadoFinal(estado) {
+    return ["completed", "failed", "refunded"].includes(estado);
 }
 
 function detenerIntervalo() {
@@ -562,15 +859,13 @@ function detenerIntervalo() {
 
 async function cerrarCanalRealtime() {
     const canal = canalPedido;
-
     canalPedido = null;
-    canalActivo = false;
 
     if (canal) {
         try {
             await supabase.removeChannel(canal);
         } catch (error) {
-            console.warn("No se pudo cerrar la suscripción.");
+            console.warn("No se pudo cerrar la suscripción Realtime.");
         }
     }
 }
@@ -581,88 +876,86 @@ async function detenerActualizacion() {
     await cerrarCanalRealtime();
 }
 
-/* =========================================
-   MOSTRAR ESTADO AL CLIENTE
-========================================= */
+/* ESTADO VISUAL */
 
 function mostrarEstadoPedido(pedido) {
-    if (!pedido) return;
+    const estado = normalizarEstado(pedido);
 
-    const db = String(pedido.status || "").toLowerCase();
-    const proveedor = String(
-        pedido.provider_status || ""
-    ).toUpperCase();
+    const estados = {
+        completed: {
+            titulo: "¡Recarga completada!",
+            descripcion: "Tu pedido ha sido procesado correctamente.",
+            etiqueta: "RECARGA COMPLETADA",
+            icono: "✓",
+            nota: "La recarga figura como completada. Gracias por comprar en Gamers Gold Top-Up."
+        },
+        failed: {
+            titulo: "Pedido no completado",
+            descripcion: "No se pudo completar tu recarga.",
+            etiqueta: "PEDIDO FALLIDO",
+            icono: "!",
+            nota: "Tu pedido figura como fallido. Si corresponde un reembolso, comprueba el saldo de tu cuenta."
+        },
+        refunded: {
+            titulo: "Pedido reembolsado",
+            descripcion: "El pedido figura como reembolsado.",
+            etiqueta: "REEMBOLSADO",
+            icono: "↩",
+            nota: "Comprueba el saldo de tu cuenta para verificar el reembolso."
+        },
+        processing: {
+            titulo: "Tu recarga está en proceso",
+            descripcion: "Estamos gestionando tu pedido.",
+            etiqueta: "EN PROCESO",
+            icono: "…",
+            nota: "El estado de tu pedido se actualizará cuando haya novedades."
+        },
+        pending: {
+            titulo: "Pedido recibido",
+            descripcion: "Tu pedido está pendiente de procesamiento.",
+            etiqueta: "PENDIENTE",
+            icono: "…",
+            nota: "Te mostraremos aquí cualquier cambio en el estado de tu pedido."
+        }
+    };
 
-    let titulo = "Tu pedido está en proceso";
-    let descripcion = "Estamos gestionando tu recarga.";
-    let etiqueta = "EN PROCESO";
-    let icono = "…";
-    let nota = "Puedes volver a consultar esta página para ver el estado actualizado.";
+    const info = estados[estado];
 
-    if (db === "completed" || proveedor === "COMPLETED") {
-        titulo = "¡Recarga completada!";
-        descripcion = "Tu recarga figura como completada.";
-        etiqueta = "COMPLETADO";
-        icono = "✓";
-        nota = "Tu pedido aparece como completado.";
-    } else if (db === "failed" || proveedor === "FAILED") {
-        titulo = "No se pudo completar la recarga";
-        descripcion = "Tu pedido figura como fallido.";
-        etiqueta = "FALLIDO";
-        icono = "!";
-        nota = "Si corresponde un reembolso, comprueba el saldo de tu cuenta.";
-    } else if (db === "refunded" || proveedor === "REFUNDED") {
-        titulo = "Pedido reembolsado";
-        descripcion = "El pedido figura como reembolsado.";
-        etiqueta = "REEMBOLSADO";
-        icono = "↩";
-        nota = "Comprueba el saldo de tu cuenta para verificar el reembolso.";
-    } else if (db === "processing" || proveedor === "PROCESSING") {
-        titulo = "Tu recarga está en proceso";
-        descripcion = "Estamos gestionando tu pedido.";
-        etiqueta = "PROCESANDO";
-        icono = "…";
-        nota = "El estado de tu pedido se actualizará cuando haya novedades.";
-    } else if (db === "pending" || proveedor === "PENDING") {
-        titulo = "Pedido recibido";
-        descripcion = "Tu pedido está pendiente de procesamiento.";
-        etiqueta = "PENDIENTE";
-        icono = "…";
-        nota = "Te mostraremos aquí cualquier cambio en el estado de tu pedido.";
-    }
+    tituloEstado.textContent = info.titulo;
+    tituloEstado.classList.toggle("resaltado", estado === "completed");
+    descripcionEstado.textContent = info.descripcion;
+    textoEstado.textContent = info.etiqueta;
+    iconoEstado.textContent = info.icono;
+    notaEstado.textContent = info.nota;
 
-    tituloEstado.textContent = titulo;
-    descripcionEstado.textContent = descripcion;
+    iconoEstado.classList.toggle("completado", estado === "completed");
+    iconoEstado.classList.toggle("error", estado === "failed" || estado === "refunded");
+
     etiquetaEstado.className = "estado";
 
-    if (db === "completed" || proveedor === "COMPLETED") {
+    if (estado === "completed") {
         etiquetaEstado.classList.add("completado");
-    } else if (db === "failed" || proveedor === "FAILED") {
-        etiquetaEstado.classList.add("error");
-    } else if (db === "processing" || proveedor === "PROCESSING") {
+    } else if (estado === "processing") {
         etiquetaEstado.classList.add("procesando");
+    } else if (estado === "failed" || estado === "refunded") {
+        etiquetaEstado.classList.add("error");
     }
 
-    textoEstado.textContent = etiqueta;
-    iconoEstado.textContent = icono;
-    notaEstado.textContent = nota;
+    notaEstado.className = "nota";
 
-    // No detener la consulta si solo cambió provider_status:
-    // seguimos verificando hasta que la base de datos
-    // refleje el estado final del pedido.
-    if (["completed", "failed", "refunded"].includes(db)) {
-        detenerIntervalo();
-        void cerrarCanalRealtime();
+    if (estado === "completed") {
+        notaEstado.classList.add("completado");
+    } else if (estado === "failed" || estado === "refunded") {
+        notaEstado.classList.add("error");
     }
+
+    return estado;
 }
 
-/* =========================================
-   CARGAR PRODUCTO SIN BLOQUEAR EL PEDIDO
-========================================= */
+/* PRODUCTO: ADAPTADO A LOS JUEGOS COMPATIBLES */
 
 async function cargarProducto(pedido, version) {
     if (!pedido?.product_id) return;
-
     if (productoCargado === pedido.product_id) return;
 
     const { data, error } = await supabase
@@ -671,12 +964,10 @@ async function cargarProducto(pedido, version) {
         .eq("id", pedido.product_id)
         .maybeSingle();
 
-    // Ignorar respuestas antiguas si ya se consultó
-    // otro pedido o cambió la página.
     if (version !== generacionConsulta || detenido) return;
 
     if (error) {
-        console.warn("No se pudo cargar el producto.");
+        console.error("Error consultando el producto:", error);
         return;
     }
 
@@ -687,30 +978,28 @@ async function cargarProducto(pedido, version) {
         return;
     }
 
-    const juego = String(data.game || "")
-    .trim()
-    .toLowerCase()
-    .replace(/[\s_]+/g, "-");
+    const juegoNormalizado = String(data.game || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s_]+/g, "-");
 
-    if (!JUEGOS_PERMITIDOS.has(juego)) {
-        elementoJuego.textContent = "No disponible";
-        elementoProducto.textContent = "No disponible";
-        elementoCantidad.textContent = "No disponible";
+    if (!JUEGOS_PERMITIDOS.has(juegoNormalizado)) {
+        elementoJuego.textContent = data.game || "No disponible";
+        elementoProducto.textContent = data.product_name || "No disponible";
+        elementoCantidad.textContent =
+            data.game_currency_amount ?? "No disponible";
         return;
     }
 
     productoCargado = pedido.product_id;
 
     elementoJuego.textContent = data.game || "No disponible";
-    elementoProducto.textContent =
-        data.product_name || "Producto de juego";
+    elementoProducto.textContent = data.product_name || "Producto de juego";
     elementoCantidad.textContent =
         data.game_currency_amount ?? "No disponible";
 }
 
-/* =========================================
-   CONSULTAR PEDIDO
-========================================= */
+/* CONSULTA DEL PEDIDO */
 
 async function cargarPedido() {
     if (consultando || detenido || !idPedido) return;
@@ -719,16 +1008,15 @@ async function cargarPedido() {
     const version = ++generacionConsulta;
 
     try {
-        const { data: { session }, error: errorSesion } =
-            await supabase.auth.getSession();
+        const {
+            data: { session },
+            error: errorSesion
+        } = await supabase.auth.getSession();
 
         if (version !== generacionConsulta || detenido) return;
-
         if (errorSesion) throw errorSesion;
 
         if (!session?.user) {
-            // No detener las consultas: la sesión puede
-            // tardar en restaurarse al abrir el checkout.
             if (!errorSesionMostrado) {
                 mostrarError(
                     "Inicia sesión con la cuenta que realizó este pedido para consultar su estado."
@@ -763,7 +1051,7 @@ async function cargarPedido() {
         if (version !== generacionConsulta || detenido) return;
 
         if (error) {
-            console.warn("No se pudo consultar el pedido.");
+            console.error("Error consultando el pedido:", error);
             return;
         }
 
@@ -778,52 +1066,44 @@ async function cargarPedido() {
         ocultarError();
 
         pedidoActual = pedido;
-        ultimaConsulta = Date.now();
 
-        // Mostrar primero los datos que ya están en game_orders.
-        elementoJugador.textContent =
-            pedido.player_id || "No disponible";
+        // Datos del pedido disponibles inmediatamente.
+        elementoJugador.textContent = pedido.player_id || "No disponible";
 
-        elementoPrecio.textContent =
-            pedido.price_gvr != null
-                ? `${pedido.price_gvr} GVR`
-                : "No disponible";
+        elementoPrecio.textContent = pedido.price_gvr != null
+            ? `${pedido.price_gvr} GVR`
+            : "No disponible";
 
         elementoFecha.textContent = formatearFecha(pedido.created_at);
         elementoNumeroPedido.textContent = pedido.id;
 
-        mostrarEstadoPedido(pedido);
+        const estado = mostrarEstadoPedido(pedido);
 
-        // La consulta del catálogo se ejecuta sin bloquear
-        // el ciclo principal ni las próximas actualizaciones.
+        // No bloqueamos la representación del pedido esperando el catálogo.
         void cargarProducto(pedido, version);
 
-        if (["completed", "failed", "refunded"].includes(
-            String(pedido.status || "").toLowerCase()
-        )) {
+        if (esEstadoFinal(estado)) {
             detenerIntervalo();
             await cerrarCanalRealtime();
         }
     } catch (error) {
-        console.error("Error consultando el pedido:", error);
+        console.error("Error inesperado consultando el pedido:", error);
     } finally {
         consultando = false;
     }
 }
 
-/* =========================================
-   ACTUALIZACIONES EN TIEMPO REAL
-========================================= */
+/* SUPABASE REALTIME */
 
 async function iniciarRealtime() {
     if (!usuarioId || !idPedido || detenido || canalPedido) return;
 
     const canal = supabase
-        .channel(`pedido-${idPedido}`)
+        .channel(`checkout-pedido-${idPedido}`)
         .on(
             "postgres_changes",
             {
-                event: "*",
+                event: "UPDATE",
                 schema: "public",
                 table: "game_orders",
                 filter: `id=eq.${idPedido}`
@@ -833,21 +1113,16 @@ async function iniciarRealtime() {
 
                 if (!nuevo || nuevo.user_id !== usuarioId) return;
 
-                // Evitar aplicar estados de otro usuario.
                 pedidoActual = nuevo;
 
-                // La consulta autenticada vuelve a confirmar
-                // todos los datos y el estado persistido.
+                // Refrescar todos los datos desde la base de datos.
                 void cargarPedido();
             }
         )
         .subscribe(estado => {
             if (canalPedido !== canal || detenido) return;
 
-            canalActivo = estado === "SUBSCRIBED";
-
-            if (canalActivo) {
-                // Comprobación inmediata al establecer Realtime.
+            if (estado === "SUBSCRIBED") {
                 void cargarPedido();
             }
         });
@@ -855,22 +1130,19 @@ async function iniciarRealtime() {
     canalPedido = canal;
 }
 
-/* =========================================
-   INICIO Y CONSULTA DE RESPALDO
-========================================= */
+/* INICIO Y RESPALDO AUTOMÁTICO */
 
 async function iniciarCheckout() {
     if (!idPedido) {
-        mostrarError("Falta el identificador del pedido.");
         tituloEstado.textContent = "Pedido no identificado";
         descripcionEstado.textContent =
             "Abre el enlace de tu pedido para consultar su estado.";
-        detenerIntervalo();
+        iconoEstado.textContent = "!";
+        mostrarError("Falta el identificador del pedido en el enlace.");
         return;
     }
 
-    // Iniciar el respaldo desde el principio para que un
-    // retraso inicial de sesión no deje la página bloqueada.
+    // Respaldo automático mientras el pedido siga pendiente.
     intervalo = setInterval(() => {
         if (!detenido) void cargarPedido();
     }, INTERVALO_ACTUALIZACION);
@@ -879,7 +1151,9 @@ async function iniciarCheckout() {
 
     if (detenido || !usuarioId || !pedidoActual) return;
 
-    await iniciarRealtime();
+    if (!esEstadoFinal(normalizarEstado(pedidoActual))) {
+        await iniciarRealtime();
+    }
 }
 
 document.addEventListener("visibilitychange", () => {
@@ -900,5 +1174,6 @@ window.addEventListener("pagehide", () => {
 
 void iniciarCheckout();
 </script>
+
 </body>
-    </html>
+                </html>
