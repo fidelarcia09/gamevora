@@ -242,8 +242,6 @@ let generacionConsulta = 0;
 let errorSesionMostrado = false;
 let html2canvasPromise = null;
 let descargaEnCurso = false;
-let descargaAutomaticaIntentada = false;
-let idDescargaAutomatica = null;
 
 function mostrarError(mensaje) {
     mensajeError.textContent = mensaje;
@@ -390,10 +388,10 @@ function cargarHtml2Canvas() {
     return html2canvasPromise;
 }
 
-async function descargarComprobante({ automatico = false } = {}) {
+async function descargarComprobante() {
     if (descargaEnCurso || !pedidoActual) return;
     if (normalizarEstado(pedidoActual) !== "completed") {
-        if (!automatico) mostrarError("El comprobante estará disponible cuando la recarga figure como completada.");
+        mostrarError("El comprobante estará disponible cuando la recarga figure como completada.");
         return;
     }
 
@@ -442,13 +440,7 @@ async function descargarComprobante({ automatico = false } = {}) {
         window.setTimeout(() => URL.revokeObjectURL(urlImagen), 60000);
     } catch (error) {
         console.error("Error generando el comprobante:", error);
-        if (!automatico) {
-            mostrarError("No pudimos generar la imagen. Comprueba tu conexión e inténtalo de nuevo.");
-        } else {
-            const aviso = $("mensajeActualizacion");
-            aviso.textContent = "Tu recarga está completada. Puedes guardar el comprobante con el botón.";
-            aviso.classList.remove("oculto");
-        }
+        mostrarError("No pudimos generar la imagen. Comprueba tu conexión e inténtalo de nuevo.");
     } finally {
         descargaEnCurso = false;
         botonGuardarComprobante.disabled = false;
@@ -512,14 +504,8 @@ async function cargarPedido() {
         if (version !== generacionConsulta || detenido) return;
 
         if (estado === "completed") {
+            // Mostrar el botón únicamente; la imagen se genera al pulsarlo.
             accionesComprobante.classList.remove("oculto");
-
-            // Una sola tentativa automática por pedido durante esta visita.
-            if (!descargaAutomaticaIntentada || idDescargaAutomatica !== String(pedido.id)) {
-                descargaAutomaticaIntentada = true;
-                idDescargaAutomatica = String(pedido.id);
-                void descargarComprobante({ automatico: true });
-            }
         } else {
             accionesComprobante.classList.add("oculto");
         }
