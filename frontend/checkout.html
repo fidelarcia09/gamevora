@@ -687,7 +687,10 @@ async function cargarProducto(pedido, version) {
         return;
     }
 
-    const juego = String(data.game || "").toLowerCase().trim();
+    const juego = String(data.game || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_]+/g, "-");
 
     if (!JUEGOS_PERMITIDOS.has(juego)) {
         elementoJuego.textContent = "No disponible";
