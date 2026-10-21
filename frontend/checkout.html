@@ -442,19 +442,18 @@
     </div>
 
 </main>
-
-        <script type="module">
+ 
+<script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 "use strict";
 
-const SUPABASE_URL =
-    "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const SUPABASE_KEY =
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-
-const INTERVALO_ACTUALIZACION = 30000;
+// Realtime actualiza al instante; la consulta de respaldo
+// comprueba el estado cada 8 segundos.
+const INTERVALO_ACTUALIZACION = 8000;
 
 const JUEGOS_PERMITIDOS = new Set([
     "free-fire",
@@ -466,94 +465,92 @@ const JUEGOS_PERMITIDOS = new Set([
     "blood-strike"
 ]);
 
-const parametros = new URLSearchParams(window.location.search);
-
+const parametros = new URLSearchParams(location.search);
 const idPedido =
     parametros.get("id") ||
     parametros.get("pedido") ||
     parametros.get("order");
 
-const supabase = createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-        auth: {
-            persistSession: true,
-            autoRefreshToken: true,
-            detectSessionInUrl: true
-        }
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
     }
-);
+});
+
+const $ = id => document.getElementById(id);
+
+const iconoEstado = $("iconoEstado");
+const tituloEstado = $("tituloEstado");
+const descripcionEstado = $("descripcionEstado");
+const etiquetaEstado = $("etiquetaEstado");
+const textoEstado = $("textoEstado");
+
+const elementoJuego = $("juego");
+const elementoProducto = $("producto");
+const elementoCantidad = $("cantidad");
+const elementoJugador = $("idJugador");
+const elementoPrecio = $("precio");
+const elementoFecha = $("fecha");
+const elementoNumeroPedido = $("numeroPedido");
+
+const notaEstado = $("notaEstado");
+const mensajeActualizacion = $("mensajeActualizacion");
+const mensajeError = $("mensajeError");
+
+// Ocultamos los mensajes técnicos de conexión.
+if (mensajeActualizacion) {
+    mensajeActualizacion.classList.add("oculto");
+}
 
 let usuarioId = null;
+let pedidoActual = null;
 let intervalo = null;
 let canalPedido = null;
 let consultando = false;
 let detenido = false;
-let pedidoActual = null;
-let ultimaConsulta = 0;
-let productoCargado = null;
 let canalActivo = false;
-
-/* =========================================
-   ELEMENTOS DE LA PÁGINA
-========================================= */
-
-const iconoEstado = document.getElementById("iconoEstado");
-const tituloEstado = document.getElementById("tituloEstado");
-const descripcionEstado = document.getElementById("descripcionEstado");
-const etiquetaEstado = document.getElementById("etiquetaEstado");
-const textoEstado = document.getElementById("textoEstado");
-
-const elementoJuego = document.getElementById("juego");
-const elementoProducto = document.getElementById("producto");
-const elementoCantidad = document.getElementById("cantidad");
-const elementoJugador = document.getElementById("idJugador");
-const elementoPrecio = document.getElementById("precio");
-const elementoFecha = document.getElementById("fecha");
-const elementoNumeroPedido = document.getElementById("numeroPedido");
-
-const notaEstado = document.getElementById("notaEstado");
-const mensajeActualizacion = document.getElementById("mensajeActualizacion");
-const mensajeError = document.getElementById("mensajeError");
-
-/* =========================================
-   UTILIDADES
-========================================= */
+let productoCargado = null;
+let ultimaConsulta = 0;
+let generacionConsulta = 0;
+let errorSesionMostrado = false;
 
 function mostrarError(mensaje) {
-    if (mensajeError) {
-        mensajeError.textContent = mensaje;
-        mensajeError.style.display = "block";
-    }
+    if (!mensajeError) return;
+    mensajeError.textContent = mensaje;
+    mensajeError.classList.remove("oculto");
 }
 
 function ocultarError() {
-    if (mensajeError) {
-        mensajeError.textContent = "";
-        mensajeError.style.display = "none";
-    }
-}
-
-function mostrarMensajeActualizacion(mensaje) {
-    if (mensajeActualizacion) {
-        mensajeActualizacion.textContent = mensaje;
-    }
+    if (!mensajeError) return;
+    mensajeError.textContent = "";
+    mensajeError.classList.add("oculto");
 }
 
 function formatearFecha(fecha) {
     if (!fecha) return "Pendiente";
 
-    const fechaValida = new Date(fecha);
+    const valor = new Date(fecha);
 
-    if (Number.isNaN(fechaValida.getTime())) {
+    if (Number.isNaN(valor.getTime())) {
         return "Pendiente";
     }
 
-    return fechaValida.toLocaleString("es-ES", {
+    return valor.toLocaleString("es-ES", {
         dateStyle: "medium",
         timeStyle: "short"
     });
+}
+
+function estadoFinal(pedido) {
+    const db = String(pedido?.status || "").toLowerCase();
+    const proveedor = String(
+        pedido?.provider_status || ""
+    ).toUpperCase();
+
+    return ["completed", "failed", "refunded"].includes(db) ||
+        ["COMPLETED", "FAILED", "REFUNDED"].includes(proveedor);
 }
 
 function detenerIntervalo() {
@@ -564,19 +561,16 @@ function detenerIntervalo() {
 }
 
 async function cerrarCanalRealtime() {
-    if (canalPedido) {
-        const canalAnterior = canalPedido;
+    const canal = canalPedido;
 
-        canalPedido = null;
-        canalActivo = false;
+    canalPedido = null;
+    canalActivo = false;
 
+    if (canal) {
         try {
-            await supabase.removeChannel(canalAnterior);
+            await supabase.removeChannel(canal);
         } catch (error) {
-            console.warn(
-                "No se pudo cerrar el canal Realtime:",
-                error
-            );
+            console.warn("No se pudo cerrar la suscripción.");
         }
     }
 }
@@ -588,168 +582,156 @@ async function detenerActualizacion() {
 }
 
 /* =========================================
-   ESTADO DEL PEDIDO
+   MOSTRAR ESTADO AL CLIENTE
 ========================================= */
 
 function mostrarEstadoPedido(pedido) {
     if (!pedido) return;
 
-    const estadoDB = String(pedido.status || "")
-        .trim()
-        .toLowerCase();
+    const db = String(pedido.status || "").toLowerCase();
+    const proveedor = String(
+        pedido.provider_status || ""
+    ).toUpperCase();
 
-    const estadoProveedor = String(pedido.provider_status || "")
-        .trim()
-        .toUpperCase();
-
-    const estado = estadoDB || estadoProveedor.toLowerCase();
-
-    let titulo = "Estamos procesando tu pedido";
-    let descripcion = "Estamos comprobando el estado de tu recarga.";
+    let titulo = "Tu pedido está en proceso";
+    let descripcion = "Estamos gestionando tu recarga.";
     let etiqueta = "EN PROCESO";
     let icono = "…";
-    let nota = "No cierres esta página si quieres seguir viendo las actualizaciones.";
+    let nota = "Puedes volver a consultar esta página para ver el estado actualizado.";
 
-    if (estado === "completed" || estadoProveedor === "COMPLETED") {
+    if (db === "completed" || proveedor === "COMPLETED") {
         titulo = "¡Recarga completada!";
-        descripcion = "Tu pedido aparece como completado.";
+        descripcion = "Tu recarga figura como completada.";
         etiqueta = "COMPLETADO";
         icono = "✓";
-        nota = "La recarga se ha marcado como completada.";
-    } else if (estado === "failed" || estadoProveedor === "FAILED") {
+        nota = "Tu pedido aparece como completado.";
+    } else if (db === "failed" || proveedor === "FAILED") {
         titulo = "No se pudo completar la recarga";
-        descripcion = "El pedido aparece como fallido.";
+        descripcion = "Tu pedido figura como fallido.";
         etiqueta = "FALLIDO";
         icono = "!";
         nota = "Si corresponde un reembolso, comprueba el saldo de tu cuenta.";
-    } else if (estado === "refunded" || estadoProveedor === "REFUNDED") {
+    } else if (db === "refunded" || proveedor === "REFUNDED") {
         titulo = "Pedido reembolsado";
-        descripcion = "El pedido aparece como reembolsado.";
+        descripcion = "El pedido figura como reembolsado.";
         etiqueta = "REEMBOLSADO";
         icono = "↩";
         nota = "Comprueba el saldo de tu cuenta para verificar el reembolso.";
-    } else if (
-        estado === "processing" ||
-        estadoProveedor === "PROCESSING"
-    ) {
+    } else if (db === "processing" || proveedor === "PROCESSING") {
         titulo = "Tu recarga está en proceso";
-        descripcion = "El proveedor está procesando tu pedido.";
+        descripcion = "Estamos gestionando tu pedido.";
         etiqueta = "PROCESANDO";
         icono = "…";
-        nota = "Estamos esperando la confirmación del proveedor.";
-    } else if (
-        estado === "pending" ||
-        estadoProveedor === "PENDING"
-    ) {
-        titulo = "Pedido pendiente";
-        descripcion = "Estamos esperando que avance el procesamiento.";
+        nota = "El estado de tu pedido se actualizará cuando haya novedades.";
+    } else if (db === "pending" || proveedor === "PENDING") {
+        titulo = "Pedido recibido";
+        descripcion = "Tu pedido está pendiente de procesamiento.";
         etiqueta = "PENDIENTE";
         icono = "…";
-        nota = "El estado cambiará cuando recibamos una actualización.";
+        nota = "Te mostraremos aquí cualquier cambio en el estado de tu pedido.";
     }
 
-    if (tituloEstado) tituloEstado.textContent = titulo;
-    if (descripcionEstado) descripcionEstado.textContent = descripcion;
-    if (etiquetaEstado) etiquetaEstado.textContent = etiqueta;
-    if (iconoEstado) iconoEstado.textContent = icono;
-    if (textoEstado) textoEstado.textContent = etiqueta;
-    if (notaEstado) notaEstado.textContent = nota;
+    tituloEstado.textContent = titulo;
+    descripcionEstado.textContent = descripcion;
+    etiquetaEstado.className = "estado";
 
-    const estadoFinal = [
-        "completed",
-        "failed",
-        "refunded"
-    ].includes(estadoDB);
+    if (db === "completed" || proveedor === "COMPLETED") {
+        etiquetaEstado.classList.add("completado");
+    } else if (db === "failed" || proveedor === "FAILED") {
+        etiquetaEstado.classList.add("error");
+    } else if (db === "processing" || proveedor === "PROCESSING") {
+        etiquetaEstado.classList.add("procesando");
+    }
 
-    if (estadoFinal) {
+    textoEstado.textContent = etiqueta;
+    iconoEstado.textContent = icono;
+    notaEstado.textContent = nota;
+
+    // No detener la consulta si solo cambió provider_status:
+    // seguimos verificando hasta que la base de datos
+    // refleje el estado final del pedido.
+    if (["completed", "failed", "refunded"].includes(db)) {
         detenerIntervalo();
-        mostrarMensajeActualizacion(
-            "Estado final recibido. Ya no es necesario consultar este pedido."
-        );
-
-        cerrarCanalRealtime();
+        void cerrarCanalRealtime();
     }
 }
 
 /* =========================================
-   DATOS DEL PRODUCTO
+   CARGAR PRODUCTO SIN BLOQUEAR EL PEDIDO
 ========================================= */
 
-async function cargarProducto(pedido) {
-    if (!pedido || !pedido.product_id) return;
+async function cargarProducto(pedido, version) {
+    if (!pedido?.product_id) return;
 
     if (productoCargado === pedido.product_id) return;
 
-    const { data: producto, error } = await supabase
+    const { data, error } = await supabase
         .from("game_products")
         .select("game, product_name, game_currency_amount")
         .eq("id", pedido.product_id)
         .maybeSingle();
 
+    // Ignorar respuestas antiguas si ya se consultó
+    // otro pedido o cambió la página.
+    if (version !== generacionConsulta || detenido) return;
+
     if (error) {
-        console.error("Error consultando el producto:", error);
+        console.warn("No se pudo cargar el producto.");
         return;
     }
 
-    if (!producto) return;
+    if (!data) {
+        elementoJuego.textContent = "No disponible";
+        elementoProducto.textContent = "No disponible";
+        elementoCantidad.textContent = "No disponible";
+        return;
+    }
 
-    const juego = String(producto.game || "")
-        .trim()
-        .toLowerCase();
+    const juego = String(data.game || "").toLowerCase().trim();
 
     if (!JUEGOS_PERMITIDOS.has(juego)) {
-        mostrarError(
-            "No se pudo verificar el juego asociado a este pedido."
-        );
-
-        await detenerActualizacion();
+        elementoJuego.textContent = "No disponible";
+        elementoProducto.textContent = "No disponible";
+        elementoCantidad.textContent = "No disponible";
         return;
     }
 
     productoCargado = pedido.product_id;
 
-    if (elementoJuego) {
-        elementoJuego.textContent = producto.game || "No disponible";
-    }
-
-    if (elementoProducto) {
-        elementoProducto.textContent =
-            producto.product_name || "Producto de juego";
-    }
-
-    if (elementoCantidad) {
-        elementoCantidad.textContent =
-            producto.game_currency_amount ?? "No disponible";
-    }
+    elementoJuego.textContent = data.game || "No disponible";
+    elementoProducto.textContent =
+        data.product_name || "Producto de juego";
+    elementoCantidad.textContent =
+        data.game_currency_amount ?? "No disponible";
 }
 
 /* =========================================
-   CONSULTAR PEDIDO EN LA BASE DE DATOS
+   CONSULTAR PEDIDO
 ========================================= */
 
 async function cargarPedido() {
     if (consultando || detenido || !idPedido) return;
 
     consultando = true;
+    const version = ++generacionConsulta;
 
     try {
-        ocultarError();
+        const { data: { session }, error: errorSesion } =
+            await supabase.auth.getSession();
 
-        const {
-            data: { session },
-            error: errorSesion
-        } = await supabase.auth.getSession();
+        if (version !== generacionConsulta || detenido) return;
 
-        if (errorSesion) {
-            throw errorSesion;
-        }
+        if (errorSesion) throw errorSesion;
 
-        if (!session || !session.user) {
-            mostrarError(
-                "Inicia sesión con la cuenta que realizó este pedido para consultar su estado."
-            );
-
-            detenerIntervalo();
+        if (!session?.user) {
+            // No detener las consultas: la sesión puede
+            // tardar en restaurarse al abrir el checkout.
+            if (!errorSesionMostrado) {
+                mostrarError(
+                    "Inicia sesión con la cuenta que realizó este pedido para consultar su estado."
+                );
+                errorSesionMostrado = true;
+            }
             return;
         }
 
@@ -775,233 +757,145 @@ async function cargarPedido() {
             .eq("user_id", usuarioId)
             .maybeSingle();
 
+        if (version !== generacionConsulta || detenido) return;
+
         if (error) {
-            console.error("Error consultando el pedido:", error);
-
-            mostrarError(
-                "No pudimos consultar el pedido. Volveremos a intentarlo."
-            );
-
-            mostrarMensajeActualizacion(
-                "Esperando una nueva consulta..."
-            );
-
+            console.warn("No se pudo consultar el pedido.");
             return;
         }
 
         if (!pedido) {
-            mostrarError(
-                "No encontramos este pedido en tu cuenta."
-            );
-
+            mostrarError("No encontramos este pedido en tu cuenta.");
             detenerIntervalo();
+            await cerrarCanalRealtime();
             return;
         }
+
+        errorSesionMostrado = false;
+        ocultarError();
 
         pedidoActual = pedido;
         ultimaConsulta = Date.now();
 
-        if (elementoJugador) {
-            elementoJugador.textContent =
-                pedido.player_id || "No disponible";
-        }
+        // Mostrar primero los datos que ya están en game_orders.
+        elementoJugador.textContent =
+            pedido.player_id || "No disponible";
 
-        if (elementoPrecio) {
-            elementoPrecio.textContent =
-                pedido.price_gvr != null
-                    ? `${pedido.price_gvr} GVR`
-                    : "No disponible";
-        }
+        elementoPrecio.textContent =
+            pedido.price_gvr != null
+                ? `${pedido.price_gvr} GVR`
+                : "No disponible";
 
-        if (elementoFecha) {
-            elementoFecha.textContent =
-                formatearFecha(pedido.created_at);
-        }
-
-        if (elementoNumeroPedido) {
-            elementoNumeroPedido.textContent = pedido.id;
-        }
+        elementoFecha.textContent = formatearFecha(pedido.created_at);
+        elementoNumeroPedido.textContent = pedido.id;
 
         mostrarEstadoPedido(pedido);
 
-        await cargarProducto(pedido);
+        // La consulta del catálogo se ejecuta sin bloquear
+        // el ciclo principal ni las próximas actualizaciones.
+        void cargarProducto(pedido, version);
 
-        if (!detenido) {
-            mostrarMensajeActualizacion(
-                canalActivo
-                    ? "Conectado: recibirás actualizaciones en tiempo real."
-                    : "Pedido actualizado. Comprobación automática activada."
-            );
-        }
-
-        if (
-            ["completed", "failed", "refunded"].includes(
-                String(pedido.status || "").toLowerCase()
-            )
-        ) {
+        if (["completed", "failed", "refunded"].includes(
+            String(pedido.status || "").toLowerCase()
+        )) {
             detenerIntervalo();
             await cerrarCanalRealtime();
         }
     } catch (error) {
-        console.error("Error inesperado consultando el pedido:", error);
-
-        mostrarError(
-            "Ocurrió un problema al consultar el pedido. Inténtalo nuevamente."
-        );
+        console.error("Error consultando el pedido:", error);
     } finally {
         consultando = false;
     }
 }
 
 /* =========================================
-   SUPABASE REALTIME
+   ACTUALIZACIONES EN TIEMPO REAL
 ========================================= */
 
 async function iniciarRealtime() {
-    if (!usuarioId || !idPedido || detenido || canalPedido) {
-        return;
-    }
+    if (!usuarioId || !idPedido || detenido || canalPedido) return;
 
-    canalPedido = supabase
-        .channel(`checkout-pedido-${idPedido}`)
+    const canal = supabase
+        .channel(`pedido-${idPedido}`)
         .on(
             "postgres_changes",
             {
-                event: "UPDATE",
+                event: "*",
                 schema: "public",
                 table: "game_orders",
                 filter: `id=eq.${idPedido}`
             },
-            async (payload) => {
-                const pedidoNuevo = payload.new;
+            payload => {
+                const nuevo = payload.new;
 
-                if (!pedidoNuevo) return;
+                if (!nuevo || nuevo.user_id !== usuarioId) return;
 
-                // Comprobamos que la actualización corresponda
-                // al usuario autenticado.
-                if (pedidoNuevo.user_id !== usuarioId) return;
+                // Evitar aplicar estados de otro usuario.
+                pedidoActual = nuevo;
 
-                console.log(
-                    "Actualización Realtime recibida:",
-                    pedidoNuevo.status
-                );
-
-                pedidoActual = pedidoNuevo;
-
-                mostrarMensajeActualizacion(
-                    "¡Actualización recibida! Sincronizando pedido..."
-                );
-
-                // Consultamos de nuevo la base de datos usando
-                // el usuario autenticado y su ID de pedido.
-                await cargarPedido();
+                // La consulta autenticada vuelve a confirmar
+                // todos los datos y el estado persistido.
+                void cargarPedido();
             }
         )
-        .subscribe((estado, error) => {
-            console.log("Estado de Supabase Realtime:", estado);
+        .subscribe(estado => {
+            if (canalPedido !== canal || detenido) return;
 
-            if (estado === "SUBSCRIBED") {
-                canalActivo = true;
+            canalActivo = estado === "SUBSCRIBED";
 
-                mostrarMensajeActualizacion(
-                    "Conectado: recibirás actualizaciones en tiempo real."
-                );
-
-                // Sincronizamos una vez al establecer la conexión.
-                cargarPedido();
-            } else {
-                canalActivo = false;
-
-                if (
-                    estado === "CHANNEL_ERROR" ||
-                    estado === "TIMED_OUT" ||
-                    estado === "CLOSED"
-                ) {
-                    console.warn(
-                        "Realtime no está disponible; se mantiene la consulta de respaldo.",
-                        error || ""
-                    );
-
-                    mostrarMensajeActualizacion(
-                        "Conexión en tiempo real no disponible. Seguimos comprobando el pedido automáticamente."
-                    );
-                }
+            if (canalActivo) {
+                // Comprobación inmediata al establecer Realtime.
+                void cargarPedido();
             }
         });
+
+    canalPedido = canal;
 }
 
 /* =========================================
-   INICIO DEL CHECKOUT
+   INICIO Y CONSULTA DE RESPALDO
 ========================================= */
 
 async function iniciarCheckout() {
     if (!idPedido) {
-        mostrarError(
-            "Falta el identificador del pedido en la dirección de esta página."
-        );
-
-        await detenerActualizacion();
+        mostrarError("Falta el identificador del pedido.");
+        tituloEstado.textContent = "Pedido no identificado";
+        descripcionEstado.textContent =
+            "Abre el enlace de tu pedido para consultar su estado.";
+        detenerIntervalo();
         return;
     }
 
-    mostrarMensajeActualizacion(
-        "Conectando con la base de datos..."
-    );
+    // Iniciar el respaldo desde el principio para que un
+    // retraso inicial de sesión no deje la página bloqueada.
+    intervalo = setInterval(() => {
+        if (!detenido) void cargarPedido();
+    }, INTERVALO_ACTUALIZACION);
 
-    // Primero verificamos sesión y pedido.
     await cargarPedido();
 
-    if (detenido || !usuarioId || !pedidoActual) {
-        return;
-    }
+    if (detenido || !usuarioId || !pedidoActual) return;
 
-    // Después activamos las actualizaciones en tiempo real.
     await iniciarRealtime();
-
-    // Consulta de respaldo por si se pierde la conexión Realtime.
-    if (!intervalo && !detenido) {
-        intervalo = setInterval(async () => {
-            if (detenido) {
-                detenerIntervalo();
-                return;
-            }
-
-            await cargarPedido();
-        }, INTERVALO_ACTUALIZACION);
-    }
 }
 
-/* =========================================
-   ACTUALIZAR AL VOLVER A LA PÁGINA
-========================================= */
-
 document.addEventListener("visibilitychange", () => {
-    if (
-        document.visibilityState === "visible" &&
-        !detenido
-    ) {
-        cargarPedido();
+    if (document.visibilityState === "visible" && !detenido) {
+        void cargarPedido();
     }
 });
 
-/* =========================================
-   LIMPIEZA AL SALIR
-========================================= */
-
 window.addEventListener("pagehide", () => {
+    detenido = true;
     detenerIntervalo();
 
     if (canalPedido) {
-        supabase.removeChannel(canalPedido);
+        void supabase.removeChannel(canalPedido);
         canalPedido = null;
     }
 });
 
-/* =========================================
-   EJECUCIÓN
-========================================= */
-
-iniciarCheckout();
-    </script>
+void iniciarCheckout();
+</script>
 </body>
     </html>
