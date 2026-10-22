@@ -705,161 +705,52 @@ async function cargarHistorialSalud() {
         );
     }
 }
-
-
-/*
-   Cada pulsación ejecuta dos acciones independientes:
-   1. Revisa los tres componentes existentes.
-   2. Solicita la notificación push de prueba al propietario.
-
-   Si una acción falla, la otra se intenta igualmente.
-   No se crean pedidos ni se modifican saldos GVR.
-*/
-
+    
 async function revisarSaludSistema() {
     if (revisionSaludEnCurso) return;
 
     revisionSaludEnCurso = true;
     botonComprobarSalud.disabled = true;
-    botonComprobarSalud.textContent =
-        "Revisando y probando notificación...";
+    botonComprobarSalud.textContent = "Revisando sistema...";
 
     mostrarResumenSalud(
-        "Comprobando catálogo, pedidos, registro de ventas y notificación push..."
+        "Comprobando catálogo, pedidos y registro de ventas..."
     );
 
-    let resultadoRevision = null;
-    let errorRevision = null;
-    let notificacionAceptada = false;
-    let errorNotificacion = null;
-
     try {
-        /* PRUEBA 1: SALUD DE LOS COMPONENTES */
+        const resultado = await llamarFuncionSalud("check");
 
-        try {
-            resultadoRevision =
-                await llamarFuncionSalud("check");
+        const componentes = Array.isArray(resultado.results)
+            ? resultado.results
+            : [];
 
-            const componentes =
-                Array.isArray(resultadoRevision.results)
-                    ? resultadoRevision.results
-                    : [];
-
-            const fallos = componentes.filter(
-                componente => componente.ok !== true
-            );
-
-            mostrarIncidentesSalud(
-                resultadoRevision.incidents || []
-            );
-
-            if (fallos.length === 0) {
-                mostrarResumenSalud(
-                    "Los tres componentes respondieron correctamente. Última revisión: " +
-                    formatearFechaSalud(
-                        resultadoRevision.checkedAt
-                    ),
-                    "operativo"
-                );
-            } else {
-                mostrarResumenSalud(
-                    "Se detectaron " + fallos.length +
-                    " componente(s) que requieren revisión. Consulta el historial de incidentes.",
-                    "error"
-                );
-            }
-
-        } catch (error) {
-            errorRevision = error;
-
-            console.error(
-                "Error en la revisión de salud:",
-                error
-            );
-        }
-
-        /* PRUEBA 2: NOTIFICACIÓN PUSH DEL PROPIETARIO */
-
-        try {
-            const resultadoPush =
-                await llamarFuncionSalud("test_notification");
-
-            notificacionAceptada =
-                resultadoPush.ok === true;
-
-        } catch (error) {
-            errorNotificacion = error;
-
-            console.error(
-                "No se pudo enviar la notificación de prueba:",
-                error
-            );
-        }
-
-        /* RESULTADO COMBINADO */
-
-        const mensajes = [];
-
-        if (resultadoRevision) {
-            const componentes =
-                Array.isArray(resultadoRevision.results)
-                    ? resultadoRevision.results
-                    : [];
-
-            const fallos = componentes.filter(
-                componente => componente.ok !== true
-            );
-
-            if (fallos.length === 0) {
-                mensajes.push(
-                    "Salud: los tres componentes respondieron correctamente."
-                );
-            } else {
-                mensajes.push(
-                    "Salud: " + fallos.length +
-                    " componente(s) requieren revisión."
-                );
-            }
-        } else {
-            mensajes.push(
-                "Salud: no se pudo completar la revisión. " +
-                (errorRevision?.message || "")
-            );
-        }
-
-        if (notificacionAceptada) {
-            mensajes.push(
-                "Push: Supabase aceptó la notificación de prueba. Comprueba si aparece en tu teléfono."
-            );
-        } else {
-            mensajes.push(
-                "Push: no se pudo confirmar el envío. " +
-                (errorNotificacion?.message ||
-                    "Revisa la configuración y los registros de la función.")
-            );
-        }
-
-        let tipoResumen = "operativo";
-
-        if (errorRevision || errorNotificacion) {
-            tipoResumen = "advertencia";
-        }
-
-        if (
-            resultadoRevision &&
-            Array.isArray(resultadoRevision.results) &&
-            resultadoRevision.results.some(
-                componente => componente.ok !== true
-            )
-        ) {
-            tipoResumen = "error";
-        }
-
-        mostrarResumenSalud(
-            mensajes.join(" "),
-            tipoResumen
+        const fallos = componentes.filter(
+            componente => componente.ok !== true
         );
 
+        mostrarIncidentesSalud(resultado.incidents || []);
+
+        if (fallos.length === 0) {
+            mostrarResumenSalud(
+                "Los tres componentes respondieron correctamente. Última revisión: " +
+                formatearFechaSalud(resultado.checkedAt),
+                "operativo"
+            );
+        } else {
+            mostrarResumenSalud(
+                "Se detectaron " + fallos.length +
+                " componente(s) que requieren revisión. Consulta el historial de incidentes.",
+                "error"
+            );
+        }
+    } catch (error) {
+        console.error("Error revisando la salud del sistema:", error);
+
+        mostrarResumenSalud(
+            "No se pudo completar la revisión: " +
+            (error.message || "Error desconocido."),
+            "advertencia"
+        );
     } finally {
         revisionSaludEnCurso = false;
         botonComprobarSalud.disabled = false;
@@ -867,7 +758,6 @@ async function revisarSaludSistema() {
             "Revisar salud del sistema";
     }
 }
-
 
 botonComprobarSalud.addEventListener(
     "click",
