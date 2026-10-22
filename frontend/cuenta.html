@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -204,13 +205,155 @@
         box-shadow: 0 0 15px rgba(255, 64, 87, 0.25);
     }
 
-    #panelAdministracion {
+    #panelAdministracion,
+    #panelSaludSistema {
         display: none;
+    }
+
+    /* SALUD DEL SISTEMA */
+
+    .salud-panel {
+        margin-top: 22px;
+        padding: 17px;
+        border-radius: 15px;
+        border: 1px solid #087cff;
+        background: linear-gradient(
+            145deg,
+            #071b36,
+            #061226
+        );
+        box-shadow: 0 0 22px rgba(0, 140, 255, 0.10);
+    }
+
+    .salud-titulo {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 7px;
+    }
+
+    .salud-descripcion {
+        color: #91a8c3;
+        font-size: 12px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .salud-resumen {
+        padding: 12px;
+        border-radius: 10px;
+        background: #030d1d;
+        border: 1px solid #173d63;
+        font-size: 13px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    .salud-resumen.operativo {
+        border-color: #247342;
+        color: #68df8c;
+    }
+
+    .salud-resumen.advertencia {
+        border-color: #8a6724;
+        color: #ffd477;
+    }
+
+    .salud-resumen.error {
+        border-color: #87394a;
+        color: #ff8195;
+    }
+
+    .salud-lista {
+        display: grid;
+        gap: 9px;
+        margin-top: 12px;
+    }
+
+    .salud-elemento {
+        padding: 12px;
+        border-radius: 10px;
+        background: #09152a;
+        border: 1px solid #173d63;
+    }
+
+    .salud-elemento-cabecera {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+
+    .salud-elemento-titulo {
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .salud-etiqueta {
+        flex-shrink: 0;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 4px 7px;
+        border-radius: 6px;
+        background: #173d63;
+        color: #a9d9ff;
+    }
+
+    .salud-etiqueta.error {
+        background: #481c2a;
+        color: #ff8195;
+    }
+
+    .salud-etiqueta.resuelto {
+        background: #143c2b;
+        color: #68df8c;
+    }
+
+    .salud-elemento-mensaje {
+        color: #9ab0c9;
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .salud-elemento-fecha {
+        color: #607995;
+        font-size: 10px;
+        margin-top: 8px;
+    }
+
+    .salud-vacio {
+        color: #8195ad;
+        font-size: 12px;
+        line-height: 1.6;
+        padding: 12px 0;
+    }
+
+    .boton-salud {
+        cursor: pointer;
+        background: linear-gradient(90deg, #07539b, #008fc9);
+        border: 1px solid #18baff;
+    }
+
+    .boton-salud:disabled {
+        opacity: 0.65;
+        cursor: wait;
+    }
+
+    .salud-nota {
+        color: #607995;
+        font-size: 10px;
+        line-height: 1.5;
+        margin-top: 12px;
     }
 
     @media (max-width: 400px) {
         .header {
             align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .salud-elemento-cabecera {
             flex-direction: column;
         }
     }
@@ -270,6 +413,58 @@
                 Panel de ventas
             </a>
         </div>
+
+        <!-- PANEL PRIVADO DEL PROPIETARIO -->
+
+        <section id="panelSaludSistema" class="salud-panel">
+
+            <h2 class="salud-titulo">
+                Salud del sistema
+            </h2>
+
+            <p class="salud-descripcion">
+                Comprueba el acceso al catálogo, los pedidos
+                y el registro de ventas. Este panel es privado
+                y no aparece en las cuentas de los clientes.
+            </p>
+
+            <div
+                id="saludResumen"
+                class="salud-resumen"
+                role="status"
+                aria-live="polite"
+            >
+                Preparando comprobación...
+            </div>
+
+            <button
+                id="comprobarSaludSistema"
+                class="boton boton-salud"
+                type="button"
+            >
+                Revisar salud del sistema
+            </button>
+
+            <h3 style="font-size:14px; margin-top:20px;">
+                Historial de incidentes
+            </h3>
+
+            <div
+                id="saludListaIncidentes"
+                class="salud-lista"
+                aria-live="polite"
+            >
+                <p class="salud-vacio">
+                    Cargando historial...
+                </p>
+            </div>
+
+            <p class="salud-nota">
+                Las revisiones se ejecutan al solicitarlas.
+                Esta pantalla no modifica pedidos ni saldos GVR.
+            </p>
+
+        </section>
 
         <a href="soporte.html" class="boton boton-soporte">
             Soporte
@@ -337,6 +532,248 @@ async function comprobarAdministrador() {
 
 
 /* ==========================================
+   SALUD DEL SISTEMA
+========================================== */
+
+const panelSaludSistema =
+    document.getElementById("panelSaludSistema");
+
+const saludResumen =
+    document.getElementById("saludResumen");
+
+const saludListaIncidentes =
+    document.getElementById("saludListaIncidentes");
+
+const botonComprobarSalud =
+    document.getElementById("comprobarSaludSistema");
+
+let revisionSaludEnCurso = false;
+
+
+function mostrarResumenSalud(mensaje, tipo = "") {
+    saludResumen.textContent = mensaje;
+    saludResumen.className =
+        "salud-resumen" + (tipo ? " " + tipo : "");
+}
+
+
+function formatearFechaSalud(fecha) {
+    if (!fecha) return "Fecha no disponible";
+
+    const fechaValida = new Date(fecha);
+
+    if (Number.isNaN(fechaValida.getTime())) {
+        return "Fecha no disponible";
+    }
+
+    return fechaValida.toLocaleString("es", {
+        dateStyle: "medium",
+        timeStyle: "short"
+    });
+}
+
+
+function crearElementoSalud(etiqueta, clase, texto) {
+    const elemento = document.createElement(etiqueta);
+
+    if (clase) elemento.className = clase;
+
+    elemento.textContent = texto;
+
+    return elemento;
+}
+
+
+function mostrarIncidentesSalud(incidentes) {
+    saludListaIncidentes.replaceChildren();
+
+    if (!Array.isArray(incidentes) || incidentes.length === 0) {
+        saludListaIncidentes.appendChild(
+            crearElementoSalud(
+                "p",
+                "salud-vacio",
+                "Todavía no hay incidentes registrados."
+            )
+        );
+
+        return;
+    }
+
+    incidentes.forEach((incidente) => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "salud-elemento";
+
+        const cabecera = document.createElement("div");
+        cabecera.className = "salud-elemento-cabecera";
+
+        const titulo = crearElementoSalud(
+            "div",
+            "salud-elemento-titulo",
+            incidente.component || "Componente del sistema"
+        );
+
+        const resuelto = incidente.status === "resolved";
+
+        const etiqueta = crearElementoSalud(
+            "span",
+            "salud-etiqueta" + (
+                resuelto ? " resuelto" : " error"
+            ),
+            resuelto
+                ? "RESUELTO"
+                : String(incidente.severity || "error").toUpperCase()
+        );
+
+        cabecera.append(titulo, etiqueta);
+
+        const mensaje = crearElementoSalud(
+            "p",
+            "salud-elemento-mensaje",
+            incidente.message || "Sin detalles disponibles."
+        );
+
+        const fecha = crearElementoSalud(
+            "p",
+            "salud-elemento-fecha",
+            "Última detección: " +
+            formatearFechaSalud(incidente.last_seen) +
+            " · Ocurrencias: " +
+            String(incidente.occurrence_count || 1)
+        );
+
+        tarjeta.append(cabecera, mensaje, fecha);
+
+        saludListaIncidentes.appendChild(tarjeta);
+    });
+}
+
+
+async function llamarFuncionSalud(accion) {
+    const { data, error } =
+        await supabaseClient.functions.invoke(
+            "gamers-gold-salud",
+            {
+                body: { action: accion }
+            }
+        );
+
+    if (error) {
+        let mensaje =
+            "No se pudo contactar con el sistema de salud.";
+
+        if (error.context) {
+            try {
+                const respuesta = await error.context.json();
+
+                if (respuesta?.error) {
+                    mensaje = respuesta.error;
+                }
+            } catch (_) {
+                // Mantener mensaje seguro si la respuesta no es JSON.
+            }
+        }
+
+        throw new Error(mensaje);
+    }
+
+    if (!data || data.ok !== true) {
+        throw new Error(
+            data?.error ||
+            "La comprobación no pudo completarse."
+        );
+    }
+
+    return data;
+}
+
+
+async function cargarHistorialSalud() {
+    try {
+        const resultado = await llamarFuncionSalud("list");
+
+        mostrarIncidentesSalud(resultado.incidents || []);
+
+    } catch (error) {
+        console.error(
+            "No se pudo cargar el historial de salud:",
+            error
+        );
+
+        mostrarIncidentesSalud([]);
+
+        mostrarResumenSalud(
+            "No se pudo cargar el historial. Comprueba tu sesión y la configuración de la función.",
+            "advertencia"
+        );
+    }
+}
+
+
+async function revisarSaludSistema() {
+    if (revisionSaludEnCurso) return;
+
+    revisionSaludEnCurso = true;
+    botonComprobarSalud.disabled = true;
+    botonComprobarSalud.textContent = "Revisando componentes...";
+
+    mostrarResumenSalud(
+        "Comprobando acceso al catálogo, pedidos y registro de ventas..."
+    );
+
+    try {
+        const resultado = await llamarFuncionSalud("check");
+
+        const componentes = Array.isArray(resultado.results)
+            ? resultado.results
+            : [];
+
+        const fallos = componentes.filter(
+            componente => componente.ok !== true
+        );
+
+        if (fallos.length === 0) {
+            mostrarResumenSalud(
+                "Comprobación terminada: los tres componentes respondieron correctamente. Última revisión: " +
+                formatearFechaSalud(resultado.checkedAt),
+                "operativo"
+            );
+        } else {
+            mostrarResumenSalud(
+                "Se detectaron " + fallos.length +
+                " componente(s) que requieren revisión. Consulta el historial de incidentes.",
+                "error"
+            );
+        }
+
+        mostrarIncidentesSalud(resultado.incidents || []);
+
+    } catch (error) {
+        console.error(
+            "Error en la revisión de salud:",
+            error
+        );
+
+        mostrarResumenSalud(
+            error.message ||
+            "No se pudo completar la revisión del sistema.",
+            "advertencia"
+        );
+    } finally {
+        revisionSaludEnCurso = false;
+        botonComprobarSalud.disabled = false;
+        botonComprobarSalud.textContent =
+            "Revisar salud del sistema";
+    }
+}
+
+
+botonComprobarSalud.addEventListener(
+    "click",
+    revisarSaludSistema
+);
+
+
+/* ==========================================
    CARGAR CUENTA
 ========================================== */
 
@@ -367,6 +804,21 @@ async function cargarCuenta() {
         document.getElementById(
             "panelAdministracion"
         ).style.display = "block";
+    }
+
+    /*
+       La visibilidad no se basa en el correo ni en
+       datos editables del perfil. Supabase comprueba
+       el propietario mediante la función existente.
+    */
+
+    const { data: esPropietario, error: errorPropietario } =
+        await supabaseClient.rpc("is_gamevora_owner");
+
+    if (!errorPropietario && esPropietario === true) {
+        panelSaludSistema.style.display = "block";
+
+        await cargarHistorialSalud();
     }
 }
 
