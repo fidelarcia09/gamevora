@@ -370,9 +370,7 @@
 
         <div class="navegacion">
             <a href="reseñas.html" class="volver">Reseñas</a>
-
             <span class="separador">|</span>
-
             <a href="../index.html" class="volver">Inicio</a>
         </div>
     </div>
@@ -532,7 +530,7 @@ async function comprobarAdministrador() {
 
 
 /* ==========================================
-   SALUD DEL SISTEMA
+   SALUD DEL SISTEMA Y PRUEBA PUSH
 ========================================== */
 
 const panelSaludSistema =
@@ -709,55 +707,159 @@ async function cargarHistorialSalud() {
 }
 
 
+/*
+   Cada pulsación ejecuta dos acciones independientes:
+   1. Revisa los tres componentes existentes.
+   2. Solicita la notificación push de prueba al propietario.
+
+   Si una acción falla, la otra se intenta igualmente.
+   No se crean pedidos ni se modifican saldos GVR.
+*/
+
 async function revisarSaludSistema() {
     if (revisionSaludEnCurso) return;
 
     revisionSaludEnCurso = true;
     botonComprobarSalud.disabled = true;
-    botonComprobarSalud.textContent = "Revisando componentes...";
+    botonComprobarSalud.textContent =
+        "Revisando y probando notificación...";
 
     mostrarResumenSalud(
-        "Comprobando acceso al catálogo, pedidos y registro de ventas..."
+        "Comprobando catálogo, pedidos, registro de ventas y notificación push..."
     );
 
+    let resultadoRevision = null;
+    let errorRevision = null;
+    let notificacionAceptada = false;
+    let errorNotificacion = null;
+
     try {
-        const resultado = await llamarFuncionSalud("check");
+        /* PRUEBA 1: SALUD DE LOS COMPONENTES */
 
-        const componentes = Array.isArray(resultado.results)
-            ? resultado.results
-            : [];
+        try {
+            resultadoRevision =
+                await llamarFuncionSalud("check");
 
-        const fallos = componentes.filter(
-            componente => componente.ok !== true
-        );
+            const componentes =
+                Array.isArray(resultadoRevision.results)
+                    ? resultadoRevision.results
+                    : [];
 
-        if (fallos.length === 0) {
-            mostrarResumenSalud(
-                "Comprobación terminada: los tres componentes respondieron correctamente. Última revisión: " +
-                formatearFechaSalud(resultado.checkedAt),
-                "operativo"
+            const fallos = componentes.filter(
+                componente => componente.ok !== true
             );
-        } else {
-            mostrarResumenSalud(
-                "Se detectaron " + fallos.length +
-                " componente(s) que requieren revisión. Consulta el historial de incidentes.",
-                "error"
+
+            mostrarIncidentesSalud(
+                resultadoRevision.incidents || []
+            );
+
+            if (fallos.length === 0) {
+                mostrarResumenSalud(
+                    "Los tres componentes respondieron correctamente. Última revisión: " +
+                    formatearFechaSalud(
+                        resultadoRevision.checkedAt
+                    ),
+                    "operativo"
+                );
+            } else {
+                mostrarResumenSalud(
+                    "Se detectaron " + fallos.length +
+                    " componente(s) que requieren revisión. Consulta el historial de incidentes.",
+                    "error"
+                );
+            }
+
+        } catch (error) {
+            errorRevision = error;
+
+            console.error(
+                "Error en la revisión de salud:",
+                error
             );
         }
 
-        mostrarIncidentesSalud(resultado.incidents || []);
+        /* PRUEBA 2: NOTIFICACIÓN PUSH DEL PROPIETARIO */
 
-    } catch (error) {
-        console.error(
-            "Error en la revisión de salud:",
-            error
-        );
+        try {
+            const resultadoPush =
+                await llamarFuncionSalud("test_notification");
+
+            notificacionAceptada =
+                resultadoPush.ok === true;
+
+        } catch (error) {
+            errorNotificacion = error;
+
+            console.error(
+                "No se pudo enviar la notificación de prueba:",
+                error
+            );
+        }
+
+        /* RESULTADO COMBINADO */
+
+        const mensajes = [];
+
+        if (resultadoRevision) {
+            const componentes =
+                Array.isArray(resultadoRevision.results)
+                    ? resultadoRevision.results
+                    : [];
+
+            const fallos = componentes.filter(
+                componente => componente.ok !== true
+            );
+
+            if (fallos.length === 0) {
+                mensajes.push(
+                    "Salud: los tres componentes respondieron correctamente."
+                );
+            } else {
+                mensajes.push(
+                    "Salud: " + fallos.length +
+                    " componente(s) requieren revisión."
+                );
+            }
+        } else {
+            mensajes.push(
+                "Salud: no se pudo completar la revisión. " +
+                (errorRevision?.message || "")
+            );
+        }
+
+        if (notificacionAceptada) {
+            mensajes.push(
+                "Push: Supabase aceptó la notificación de prueba. Comprueba si aparece en tu teléfono."
+            );
+        } else {
+            mensajes.push(
+                "Push: no se pudo confirmar el envío. " +
+                (errorNotificacion?.message ||
+                    "Revisa la configuración y los registros de la función.")
+            );
+        }
+
+        let tipoResumen = "operativo";
+
+        if (errorRevision || errorNotificacion) {
+            tipoResumen = "advertencia";
+        }
+
+        if (
+            resultadoRevision &&
+            Array.isArray(resultadoRevision.results) &&
+            resultadoRevision.results.some(
+                componente => componente.ok !== true
+            )
+        ) {
+            tipoResumen = "error";
+        }
 
         mostrarResumenSalud(
-            error.message ||
-            "No se pudo completar la revisión del sistema.",
-            "advertencia"
+            mensajes.join(" "),
+            tipoResumen
         );
+
     } finally {
         revisionSaludEnCurso = false;
         botonComprobarSalud.disabled = false;
@@ -1027,3 +1129,4 @@ document
 </script>
 </body>
 </html>
+
