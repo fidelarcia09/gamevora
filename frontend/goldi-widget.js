@@ -158,6 +158,9 @@
       return { text: "Puedo ayudarte con las funciones de la web para clientes, pero no comparto claves, datos internos ni información privada de integraciones. Sí puedo explicarte cómo hacer una recarga, comprar GVR, enviar un comprobante o revisar un pedido." };
     }
 
+    if (/\b(comprobante|solicitud)\b/.test(q) && /\b(pendiente|sin revisar|no aprobado|no se acredita|no se acredito|no se acreditó|demora)\b/.test(q)) {
+      return direct("Si tu comprobante o solicitud sigue pendiente: 1) inicia sesión; 2) abre Mis pedidos; 3) revisa el filtro Pendientes o Revisión; 4) abre la solicitud y guarda su identificador. El saldo se acredita cuando el pago se revisa y aprueba. No envíes otro pago ni crees otra solicitud mientras la anterior esté registrada. Si lleva demasiado tiempo o muestra un error, contacta Soporte e incluye el ID de solicitud.", links.orders, "Revisar solicitud");
+    }
     if (/\b(comprobante|captura del pago|captura de pago|enviar prueba|subir prueba|subir imagen|enviar recibo|recibo de pago|justificante|prueba de pago)\b/.test(q)) {
       if (/\b(juego|free fire|freefire|pubg|mobile legends|arena breakout|blood strike|genshin|honor of kings|cod mobile)\b/.test(q) && !/\b(gvr|saldo|wallet|comprar gvr)\b/.test(q)) {
         return direct("Si la página del juego te pide confirmar una compra, sigue el proceso que aparece en pantalla y revisa el pedido en Mis pedidos. No subas el comprobante de una compra de GVR en una recarga de juego ni al revés. Si el sitio no te muestra dónde adjuntarlo, abre Soporte e incluye el ID del pedido.", links.support, "Contactar soporte");
