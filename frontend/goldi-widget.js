@@ -129,7 +129,7 @@
       return { text: "Soy Goldi, el asistente de orientación de Gamers Gold Top-Up. Puedo guiarte paso a paso para comprar GVR, enviar un comprobante, hacer una recarga de juego, revisar pedidos, gestionar tu cuenta o contactar soporte. No puedo ver ni cambiar tu cuenta por ti." };
     }
 
-    if (/\b(comprobante|captura del pago|captura de pago|enviar prueba|subir prueba|subir imagen|enviar recibo|recibo de pago)\b/.test(q) && /\b(gvr|saldo|wallet|dinero|pago|transferencia|usdt|movil|móvil|cup)\b/.test(q)) {
+    if (/\b(comprobante|captura del pago|captura de pago|enviar prueba|subir prueba|subir imagen|enviar recibo|recibo de pago)\b/.test(q) && /\b(gvr|saldo|wallet|dinero|pago|transferencia|usdt|movil|móvil|cup|recarga|pedido|compra)?\b/.test(q)) {
       return direct("Para enviar el comprobante de una compra de GVR: 1) inicia sesión; 2) entra en Comprar GVR y elige la cantidad; 3) selecciona el método de pago; 4) revisa el importe y pulsa Continuar en los pasos siguientes; 5) en la página de confirmación realiza el pago siguiendo las instrucciones que estén habilitadas; 6) selecciona la captura del pago en JPG, PNG o WEBP (máximo 5 MB); 7) pulsa Enviar comprobante y espera la confirmación con el identificador de solicitud. Guarda ese identificador. La solicitud queda pendiente de revisión: subir una imagen no acredita automáticamente los GVR. No envíes otra solicitud ni pagues otra vez si ya aparece una solicitud registrada.", proofLink, "Abrir confirmación de GVR");
     }
     if (/\b(como añadir gvr|como anadir gvr|añadir gvr|anadir gvr|comprar gvr|recargar gvr|comprar saldo|añadir saldo|anadir saldo|agregar saldo|meter saldo|depositar gvr|conseguir gvr|como recargo mi wallet|como recargar mi saldo)\b/.test(q)) {
@@ -175,7 +175,7 @@
       if (/\b(contraseña|contrasena|olvide|olvidé|recuperar)\b/.test(q)) return direct("Si olvidaste la contraseña, abre Recuperar contraseña y sigue las instrucciones de la página. No compartas contraseñas ni códigos de acceso.", base + "recuperar-contrasena.html", "Recuperar contraseña");
       return direct("Abre Iniciar sesión e introduce los datos de tu cuenta. Si no tienes cuenta, puedes registrarte. Para consultar tus pedidos y saldo personales debes entrar con la cuenta correspondiente.", accountLink, "Iniciar sesión");
     }
-    if (/\b(pago|pagos|pagar|metodo de pago|metodos de pago|confirmar pago|pago rechazado)\b/.test(q)) {
+    if (/\b(comprobante|captura del pago|captura de pago|enviar prueba|subir prueba|subir imagen|enviar recibo|recibo de pago)\b/.test(q)) {\n      return direct("Para adjuntar un comprobante de pago de GVR: entra en el proceso de compra y llega a Confirmar compra; selecciona la captura del pago en JPG, PNG o WEBP, con un tamaño máximo de 5 MB; pulsa Enviar comprobante y espera el mensaje de confirmación. Guarda el identificador de solicitud y consulta su estado. La solicitud queda pendiente hasta que se revise y apruebe el pago. Si ya aparece registrada, no crees otra solicitud ni vuelvas a pagar; contacta Soporte con el identificador si aparece un error.", proofLink, "Abrir confirmación de GVR");\n    }\n    if (/\b(pago|pagos|pagar|metodo de pago|metodos de pago|confirmar pago|pago rechazado)\b/.test(q)) {
       return direct("Utiliza únicamente los métodos que estén habilitados y las instrucciones que aparezcan en la página de pago. Antes de enviar dinero, comprueba el importe y el receptor. Si ya pagaste y no se refleja, conserva el comprobante y abre un caso en Soporte; no vuelvas a pagar sin revisar la solicitud.", links.support, "Contactar soporte");
     }
     if (/\b(resena|reseña|resenas|reseñas|opinion|opiniones|experiencia)\b/.test(q)) {
@@ -188,7 +188,7 @@
       return direct("Las opciones disponibles son las que muestra la web durante el proceso de compra. Revisa los métodos y sus instrucciones antes de pagar. Si no aparece una opción válida para ti, consulta soporte.", links.support, "Consultar soporte");
     }
     if (game) return direct("Puedo orientarte sobre " + game.name + ". Abre su página para consultar los paquetes, precios e instrucciones disponibles en ese momento.", game.href, "Abrir " + game.name);
-    return direct("Quiero darte una respuesta exacta y no inventar datos. Puedo guiarte paso a paso con comprar GVR, elegir el método de pago, enviar el comprobante, recargar un juego, consultar pedidos, usar tu cuenta o contactar soporte. Dime qué proceso quieres hacer y te doy los pasos y el enlace directo.", links.games, "Ver juegos y precios");
+    return direct("Puedo explicarte paso a paso cómo comprar GVR, pagar y enviar el comprobante, recargar cualquiera de los juegos, validar tu ID, revisar el saldo y los movimientos, consultar un pedido, crear o recuperar tu cuenta y contactar soporte. Escribe qué quieres hacer y, si se trata de una recarga, dime también el juego para darte las instrucciones correspondientes.", links.games, "Ver juegos y precios");
   }
 
   var dragState = null;
