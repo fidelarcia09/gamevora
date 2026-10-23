@@ -72,3 +72,44 @@
 @media (prefers-reduced-motion: reduce) { #gg-goldi-root *, #gg-goldi-root *::before, #gg-goldi-root *::after { animation:none !important; transition:none !important; } }
 
 #gg-goldi-root.gg-goldi-left #gg-goldi-panel { left: 0; right: auto; }
+
+
+/* Goldi FAQ: compact, clickable, and isolated to the assistant panel. */
+#gg-goldi-faq {
+  padding: 2px 12px 8px;
+  border-bottom: 1px solid rgba(105,158,215,.14);
+}
+#gg-goldi-faq h3 {
+  margin: 0 0 7px;
+  color: #8ddfff;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: left;
+}
+#gg-goldi-faq-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  max-height: 112px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 2px;
+}
+#gg-goldi-faq-list button {
+  min-height: 31px;
+  padding: 6px 7px;
+  border: 1px solid rgba(105,158,215,.2);
+  border-radius: 8px;
+  color: #dcefff;
+  background: #0b1c32;
+  font-size: 10px;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+}
+#gg-goldi-faq-list button:hover,
+#gg-goldi-faq-list button:focus-visible {
+  border-color: rgba(32,197,255,.75);
+  background: #102b49;
+  outline: none;
+}
