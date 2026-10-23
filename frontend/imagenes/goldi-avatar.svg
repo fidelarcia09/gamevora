@@ -14,12 +14,12 @@
   <g>
     <ellipse cx="48" cy="65" rx="6" ry="8" fill="#087cff"/>
     <circle cx="50" cy="62" r="2" fill="#fff"/>
-    <animateTransform attributeName="transform" type="translate" values="0 0;3 0;-3 0;0 0" keyTimes="0;0.35;0.7;1" dur="2.8s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform" type="translate" values="0 0;8 0;-8 0;0 0" keyTimes="0;0.3;0.65;1" dur="1.8s" repeatCount="indefinite"/>
   </g>
   <g>
     <ellipse cx="80" cy="65" rx="6" ry="8" fill="#087cff"/>
     <circle cx="82" cy="62" r="2" fill="#fff"/>
-    <animateTransform attributeName="transform" type="translate" values="0 0;3 0;-3 0;0 0" keyTimes="0;0.35;0.7;1" dur="2.8s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform" type="translate" values="0 0;8 0;-8 0;0 0" keyTimes="0;0.3;0.65;1" dur="1.8s" repeatCount="indefinite"/>
   </g>
   <path d="M48 81 Q64 95 80 81" fill="none" stroke="#087cff" stroke-width="4" stroke-linecap="round"/>
   <path d="M42 48 Q64 39 86 48" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9"/>
