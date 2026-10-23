@@ -1,528 +1,292 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de pedidos | Gamers Gold Top-Up</title><style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050b18">
+  <title>Pedidos | Gamers Gold Top-Up</title>
+  <style>
+    :root{color-scheme:dark;--fondo:#050b18;--texto:#f4f8ff;--suave:#91a4bd;--cian:#58dcff;--linea:#1a2a40;--panel:#0a1425}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+    body{min-height:100vh;background:var(--fondo);color:var(--texto);padding:22px 18px 38px}
+    .contenedor{width:100%;max-width:620px;margin:0 auto}
+    .header{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:2px 0 38px}
+    .marca{display:flex;align-items:center;gap:10px;min-width:0}
+    .svj{font-size:13px;letter-spacing:2px;font-weight:900;color:var(--cian);white-space:nowrap}
+    .marca-nombre{font-size:16px;font-weight:800;letter-spacing:.1px}
+    .volver{color:var(--cian);text-decoration:none;font-size:14px;font-weight:700;white-space:nowrap}
+    .volver:hover{color:#fff}
+    .encabezado{margin-bottom:26px}
+    h1{font-size:clamp(25px,6vw,32px);line-height:1.15;letter-spacing:-.7px;margin-bottom:9px}
+    .descripcion{color:var(--suave);font-size:13px;line-height:1.6}
+    .filtros{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;margin-bottom:15px;scrollbar-width:none}
+    .filtros::-webkit-scrollbar{display:none}
+    .filtro{flex:0 0 auto;border:1px solid transparent;border-radius:999px;background:#0d1728;color:#a9b8cc;padding:11px 15px;font-size:13px;font-weight:700;cursor:pointer;transition:background .18s,color .18s,border-color .18s}
+    .filtro:hover{color:#fff}
+    .filtro.activo{background:#102c42;border-color:#1e6686;color:var(--cian)}
+    .lista{display:flex;flex-direction:column}
+    .pedido{padding:16px 2px;border-bottom:1px solid var(--linea);overflow-wrap:anywhere}
+    .pedido:first-child{border-top:1px solid var(--linea)}
+    .pedido summary{list-style:none;display:flex;align-items:center;gap:13px;cursor:pointer;min-height:42px}
+    .pedido summary::-webkit-details-marker{display:none}
+    .icono-juego{width:40px;height:40px;flex:0 0 40px;border-radius:12px;background:#10263b;display:flex;align-items:center;justify-content:center;color:var(--cian)}
+    .icono-juego svg{width:21px;height:21px}
+    .pedido-titulo{flex:1;min-width:0;font-size:14px;font-weight:750;line-height:1.5;color:#f4f8ff}
+    .prefijo{font-size:10px;font-weight:900;letter-spacing:1.3px;color:var(--cian);margin-right:6px;white-space:nowrap}
+    .flecha{width:19px;height:19px;flex:0 0 19px;color:#8ca6c1;transition:transform .2s}
+    details[open] .flecha{transform:rotate(180deg);color:var(--cian)}
+    .detalles{padding:15px 0 2px 53px;color:#b0bfd2;font-size:12px;line-height:1.8}
+    .detalle-fila{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:4px 0}
+    .detalle-etiqueta{color:#7f94ad;flex:0 0 auto}
+    .detalle-valor{text-align:right;color:#e4edf8;overflow-wrap:anywhere}
+    .estado{font-weight:800;color:#5be2a3}
+    .estado.pendiente{color:#ffd166}
+    .estado.revision{color:#ffb86b}
+    .estado.error{color:#ff8585}
+    .vacio{padding:28px 2px;color:var(--suave);font-size:13px;line-height:1.6}
+    .vacio.error{color:#ff9292}
+    .boton-reintentar{margin-top:14px;border:1px solid #1c8ac0;border-radius:10px;background:#0b2137;color:#eaf8ff;padding:10px 15px;font-weight:700;cursor:pointer}
+    .nota{margin-top:30px;color:#61758f;font-size:11px;line-height:1.6}
+    @media(max-width:420px){body{padding:18px 15px 30px}.header{margin-bottom:32px}.marca-nombre{font-size:14px}.svj{font-size:12px}.filtro{padding:10px 13px}.detalles{padding-left:0}.pedido-titulo{font-size:13px}}
+  </style>
+</head>
+<body>
+  <main class="contenedor">
+    <header class="header">
+      <div class="marca"><span class="svj">SVJ</span><span class="marca-nombre">Gamers Gold Top-Up</span></div>
+      <a href="../index.html" class="volver">Inicio</a>
+    </header>
 
-    body {
-        background: #050b18;
-        color: white;
-        min-height: 100vh;
-        padding: 20px;
-    }
+    <section class="encabezado" aria-labelledby="titulo-pedidos">
+      <h1 id="titulo-pedidos">Historial de pedidos</h1>
+      <p class="descripcion">Consulta tus recargas y solicitudes cuando lo necesites.</p>
+    </section>
 
-    .contenedor {
-        max-width: 500px;
-        margin: auto;
-    }
+    <nav class="filtros" aria-label="Filtrar pedidos">
+      <button class="filtro activo" type="button" data-filtro="todos" aria-pressed="true">Todos</button>
+      <button class="filtro" type="button" data-filtro="completados" aria-pressed="false">Completados</button>
+      <button class="filtro" type="button" data-filtro="pendientes" aria-pressed="false">Pendientes</button>
+      <button class="filtro" type="button" data-filtro="revision" aria-pressed="false">Revisión</button>
+    </nav>
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-        gap: 10px;
-    }
+    <div id="estadoCarga" class="vacio" role="status" aria-live="polite">Cargando pedidos...</div>
+    <section id="listaPedidos" class="lista" aria-label="Tus pedidos"></section>
+    <p class="nota">La información se muestra según los registros disponibles en tu cuenta.</p>
+  </main>
 
-    .logo {
-        font-size: 24px;
-        font-weight: 900;
-    }
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  "use strict";
 
-    .rayo {
-        color: #00b7ff;
-        text-shadow: 0 0 12px #008cff;
-    }
-
-    .volver {
-        color: #28a9ff;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .card {
-        background: #091a35;
-        border: 1px solid #15518c;
-        border-radius: 20px;
-        padding: 25px 20px;
-        box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-    }
-
-    h1 {
-        text-align: center;
-        font-size: 25px;
-        margin-bottom: 8px;
-    }
-
-    .descripcion {
-        text-align: center;
-        color: #8195ad;
-        font-size: 13px;
-        margin-bottom: 25px;
-    }
-
-    .pedido {
-        background: #061226;
-        border: 1px solid #173d63;
-        border-radius: 13px;
-        padding: 16px;
-        margin-bottom: 12px;
-        overflow-wrap: anywhere;
-    }
-
-    .fila {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .juego {
-        font-size: 15px;
-        font-weight: bold;
-    }
-
-    .estado {
-        color: #38d996;
-        font-size: 12px;
-        font-weight: bold;
-        text-align: right;
-    }
-
-    .estado.pendiente {
-        color: #ffc857;
-    }
-
-    .estado.rechazado,
-    .estado.fallido {
-        color: #ff7373;
-    }
-
-    .detalle {
-        color: #8195ad;
-        font-size: 12px;
-        margin-top: 7px;
-        line-height: 1.7;
-    }
-
-    .vacio {
-        text-align: center;
-        color: #7188a0;
-        font-size: 13px;
-        padding: 25px 10px;
-    }
-
-    .nota {
-        margin-top: 20px;
-        text-align: center;
-        color: #627b97;
-        font-size: 11px;
-        line-height: 1.5;
-    }
-
-    .error {
-        color: #ff9292;
-    }
-
-    .boton-reintentar {
-        display: block;
-        margin: 15px auto 0;
-        border: 1px solid #168be0;
-        border-radius: 10px;
-        background: #0b2850;
-        color: white;
-        padding: 10px 16px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-</style>
-
-</head><body>
-<div class="contenedor"><div class="header">
-    <div class="logo">
-        <span class="rayo">⚡</span> Gamers Gold Top-Up
-    </div>
-
-    <a href="../index.html" class="volver">Inicio</a>
-</div>
-
-<div class="card">
-    <h1>Historial de pedidos</h1>
-
-    <p class="descripcion">
-        Aquí aparecerán tus compras y recargas.
-    </p>
-
-    <div class="vacio" id="estadoCarga">
-        Cargando pedidos...
-    </div>
-</div>
-
-</div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-"use strict";
-
-const supabaseClient = window.supabase.createClient(
+  const supabaseClient = window.supabase.createClient(
     "https://gsuhzcavghsiolmipnzi.supabase.co",
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
-);
+  );
 
-const contenedorCard = document.querySelector(".card");
-const estadoCarga = document.getElementById("estadoCarga");
+  const listaPedidos = document.getElementById("listaPedidos");
+  const estadoCarga = document.getElementById("estadoCarga");
+  const botonesFiltro = [...document.querySelectorAll(".filtro")];
+  let historialCompleto = [];
+  let filtroActual = "todos";
 
-function escaparHTML(valor) {
+  function escaparHTML(valor) {
     return String(valor ?? "").replace(/[&<>"']/g, caracter => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
     })[caracter]);
-}
+  }
 
-function fechaLegible(fecha) {
+  function fechaLegible(fecha) {
     if (!fecha) return "No disponible";
+    const convertida = new Date(fecha);
+    return Number.isNaN(convertida.getTime()) ? "No disponible" : convertida.toLocaleString("es-ES");
+  }
 
-    const fechaConvertida = new Date(fecha);
+  function normalizarEstado(estado) {
+    return String(estado ?? "pending").trim().toLowerCase();
+  }
 
-    if (Number.isNaN(fechaConvertida.getTime())) {
-        return "No disponible";
-    }
-
-    return fechaConvertida.toLocaleString("es-ES");
-}
-
-function traducirEstado(estado) {
+  function traducirEstado(estado) {
+    const clave = normalizarEstado(estado);
     const estados = {
-        pending: "Pendiente",
-        processing: "Procesando",
-        completed: "Completado",
-        failed: "Fallido",
-        refunded: "Reembolsado",
-        approved: "Aprobada",
-        rejected: "Rechazada",
-        pendiente: "Pendiente",
-        completado: "Completado",
-        completada: "Completada",
-        rechazado: "Rechazado",
-        rechazada: "Rechazada"
+      pending:"Pendiente", processing:"Procesando", completed:"Completado",
+      failed:"Fallido", refunded:"Reembolsado", approved:"Aprobada",
+      rejected:"Rechazada", pendiente:"Pendiente", completado:"Completado",
+      completada:"Completada", rechazado:"Rechazado", rechazada:"Rechazada",
+      review:"En revisión", under_review:"En revisión", manual_review:"En revisión",
+      revision:"En revisión", en_revision:"En revisión", reviewing:"En revisión"
     };
+    return estados[clave] || (estado ? String(estado) : "Pendiente");
+  }
 
-    return estados[String(estado || "").toLowerCase()] ||
-        estado ||
-        "Pendiente";
-}
+  function categoriaEstado(estado) {
+    const clave = normalizarEstado(estado);
+    if (["completed","completado","completada","approved","aprobado","aprobada"].includes(clave)) return "completados";
+    if (["pending","processing","pendiente","procesando","queued","submitted"].includes(clave)) return "pendientes";
+    return "revision";
+  }
 
-function claseEstado(estado) {
-    const valor = String(estado || "").toLowerCase();
-
-    if (["pending", "processing", "pendiente"].includes(valor)) {
-        return "pendiente";
+  function claseEstado(estado) {
+    const categoria = categoriaEstado(estado);
+    if (categoria === "pendientes") return "pendiente";
+    if (categoria === "revision") {
+      const clave = normalizarEstado(estado);
+      if (["failed","fallido","rejected","rechazado","rechazada","refunded","reembolsado"].includes(clave)) return "error";
+      return "revision";
     }
-
-    if (["rejected", "rechazado", "rechazada"].includes(valor)) {
-        return "rechazado";
-    }
-
-    if (["failed", "fallido"].includes(valor)) {
-        return "fallido";
-    }
-
     return "";
-}
+  }
 
-function crearTarjeta(titulo, estado, detalles) {
-    const tarjeta = document.createElement("div");
-    tarjeta.className = "pedido";
+  function iconoJuego() {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9h12a4 4 0 0 1 3.8 5.2l-1 3a2 2 0 0 1-3.3.8L15 15H9l-2.5 3a2 2 0 0 1-3.3-.8l-1-3A4 4 0 0 1 6 9Z"/><path d="M7 11v4M5 13h4M16.5 12.5h.01M18.5 14.5h.01"/></svg>';
+  }
 
-    const fila = document.createElement("div");
-    fila.className = "fila";
+  function campo(etiqueta, valor, clase="") {
+    return `<div class="detalle-fila"><span class="detalle-etiqueta">${escaparHTML(etiqueta)}</span><span class="detalle-valor ${clase}">${escaparHTML(valor ?? "No disponible")}</span></div>`;
+  }
 
-    const nombre = document.createElement("div");
-    nombre.className = "juego";
-    nombre.textContent = titulo;
+  function prepararPedido(tipo, datos, fecha, titulo, estado, detalles) {
+    return { tipo, datos, fecha, titulo, estado, detalles, categoria: categoriaEstado(estado) };
+  }
 
-    const etiquetaEstado = document.createElement("div");
-    etiquetaEstado.className =
-        "estado " + claseEstado(estado);
-    etiquetaEstado.textContent = traducirEstado(estado);
+  function crearElementoPedido(item) {
+    const detalles = document.createElement("details");
+    detalles.className = "pedido";
+    detalles.dataset.categoria = item.categoria;
 
-    fila.append(nombre, etiquetaEstado);
-    tarjeta.appendChild(fila);
+    const resumen = document.createElement("summary");
+    resumen.innerHTML = `<span class="icono-juego">${iconoJuego()}</span><span class="pedido-titulo"><span class="prefijo">SVJ</span>${escaparHTML(item.titulo)}</span><svg class="flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
+    detalles.appendChild(resumen);
 
-    const detalle = document.createElement("div");
-    detalle.className = "detalle";
-    detalle.innerHTML = detalles;
+    const panel = document.createElement("div");
+    panel.className = "detalles";
+    panel.innerHTML = item.detalles;
+    detalles.appendChild(panel);
+    return detalles;
+  }
 
-    tarjeta.appendChild(detalle);
-    contenedorCard.insertBefore(tarjeta, estadoCarga);
-}
+  function renderizarHistorial() {
+    listaPedidos.replaceChildren();
+    const filtrados = historialCompleto.filter(item => filtroActual === "todos" || item.categoria === filtroActual);
+    if (!filtrados.length) {
+      estadoCarga.style.display = "block";
+      estadoCarga.className = "vacio";
+      estadoCarga.textContent = filtroActual === "todos" ? "Todavía no tienes pedidos." : "No hay pedidos en esta categoría.";
+      return;
+    }
+    estadoCarga.style.display = "none";
+    const fragmento = document.createDocumentFragment();
+    filtrados.forEach(item => fragmento.appendChild(crearElementoPedido(item)));
+    listaPedidos.appendChild(fragmento);
+  }
 
-async function cargarPedidos() {
+  botonesFiltro.forEach(boton => {
+    boton.addEventListener("click", () => {
+      filtroActual = boton.dataset.filtro;
+      botonesFiltro.forEach(otro => {
+        const activo = otro === boton;
+        otro.classList.toggle("activo", activo);
+        otro.setAttribute("aria-pressed", String(activo));
+      });
+      renderizarHistorial();
+    });
+  });
+
+  async function cargarPedidos() {
     estadoCarga.style.display = "block";
     estadoCarga.className = "vacio";
     estadoCarga.textContent = "Cargando pedidos...";
+    listaPedidos.replaceChildren();
 
-    document.querySelectorAll(".pedido").forEach(elemento => {
-        elemento.remove();
-    });
-
-    const {
-        data: { session },
-        error: errorSesion
-    } = await supabaseClient.auth.getSession();
-
+    const { data: { session }, error: errorSesion } = await supabaseClient.auth.getSession();
     if (errorSesion || !session) {
-        alert("Debes iniciar sesión primero.");
-        window.location.href = "login.html";
-        return;
+      alert("Debes iniciar sesión primero.");
+      window.location.href = "login.html";
+      return;
     }
 
     const userId = session.user.id;
+    const [resultadoJuegos, resultadoVentas, resultadoSolicitudes] = await Promise.all([
+      supabaseClient.from("game_orders").select(`id,price_gvr,status,player_id,created_at,completed_at,game_products(game,product_name,game_currency_amount)`).eq("user_id", userId).order("created_at", { ascending: false }),
+      supabaseClient.from("ventas").select(`id,tipo,usuario_id,nombre_usuario,correo_usuario,juego,id_jugador,producto,cantidad,gvr_comprado,precio,moneda,metodo_pago,estado,proveedor,id_orden_proveedor,created_at,updated_at`).eq("usuario_id", userId).order("created_at", { ascending: false }),
+      supabaseClient.from("gvr_purchase_requests").select(`id,gvr_amount,payment_method,payment_amount,payment_currency,status,created_at,reviewed_at,review_note`).eq("user_id", userId).order("created_at", { ascending: false })
+    ]);
 
-    /*
-     * 1. Recargas de juegos.
-     * Se conserva la consulta existente.
-     */
-    const resultadoJuegos = await supabaseClient
-        .from("game_orders")
-        .select(`
-            id,
-            price_gvr,
-            status,
-            player_id,
-            created_at,
-            completed_at,
-            game_products (
-                game,
-                product_name,
-                game_currency_amount
-            )
-        `)
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false });
+    console.error("Resultado historial game_orders:", resultadoJuegos.error || "OK");
+    console.error("Resultado historial ventas:", resultadoVentas.error || "OK");
+    console.error("Resultado historial solicitudes GVR:", resultadoSolicitudes.error || "OK");
 
-    if (resultadoJuegos.error) {
-        console.error(
-            "Error cargando pedidos de juegos:",
-            resultadoJuegos.error
-        );
-    }
-
-    /*
-     * 2. Compras GVR del sistema anterior.
-     * Se conserva para no perder registros históricos.
-     */
-    const resultadoVentas = await supabaseClient
-        .from("ventas")
-        .select(`
-            id,
-            tipo,
-            usuario_id,
-            nombre_usuario,
-            correo_usuario,
-            juego,
-            id_jugador,
-            producto,
-            cantidad,
-            gvr_comprado,
-            precio,
-            moneda,
-            metodo_pago,
-            estado,
-            proveedor,
-            id_orden_proveedor,
-            created_at,
-            updated_at
-        `)
-        .eq("usuario_id", userId)
-        .order("created_at", { ascending: false });
-
-    if (resultadoVentas.error) {
-        console.error(
-            "Error cargando ventas anteriores:",
-            resultadoVentas.error
-        );
-    }
-
-    /*
-     * 3. NUEVO: solicitudes GVR del sistema actual.
-     * Solo lectura: no modifica saldos ni aprueba solicitudes.
-     */
-    const resultadoSolicitudes = await supabaseClient
-        .from("gvr_purchase_requests")
-        .select(`
-            id,
-            gvr_amount,
-            payment_method,
-            payment_amount,
-            payment_currency,
-            status,
-            created_at,
-            reviewed_at,
-            review_note
-        `)
-        .eq("user_id", userId)
-        .order("created_at", { ascending: false });
-
-    if (resultadoSolicitudes.error) {
-        console.error(
-            "Error cargando solicitudes GVR:",
-            resultadoSolicitudes.error
-        );
+    const todoFallo = resultadoJuegos.error && resultadoVentas.error && resultadoSolicitudes.error;
+    if (todoFallo) {
+      estadoCarga.className = "vacio error";
+      estadoCarga.textContent = "No se pudo cargar el historial. Inténtalo de nuevo.";
+      const boton = document.createElement("button");
+      boton.type = "button";
+      boton.className = "boton-reintentar";
+      boton.textContent = "Reintentar";
+      boton.addEventListener("click", () => cargarPedidos().catch(mostrarError));
+      estadoCarga.appendChild(document.createElement("br"));
+      estadoCarga.appendChild(boton);
+      return;
     }
 
     const historial = [];
-
-    if (resultadoJuegos.data) {
-        resultadoJuegos.data.forEach(pedido => {
-            historial.push({
-                tipo: "juego",
-                fecha: pedido.created_at,
-                datos: pedido
-            });
-        });
-    }
-
-    if (resultadoVentas.data) {
-        resultadoVentas.data.forEach(venta => {
-            if (venta.tipo === "gvr") {
-                historial.push({
-                    tipo: "gvr_anterior",
-                    fecha: venta.created_at,
-                    datos: venta
-                });
-            }
-        });
-    }
-
-    if (resultadoSolicitudes.data) {
-        resultadoSolicitudes.data.forEach(solicitud => {
-            historial.push({
-                tipo: "gvr_solicitud",
-                fecha: solicitud.created_at,
-                datos: solicitud
-            });
-        });
-    }
-
-    historial.sort((a, b) => {
-        return new Date(b.fecha || 0) - new Date(a.fecha || 0);
+    (resultadoJuegos.data || []).forEach(pedido => {
+      const producto = Array.isArray(pedido.game_products) ? pedido.game_products[0] : pedido.game_products;
+      const juego = producto?.game || "Recarga de juego";
+      const nombreProducto = producto?.product_name || (producto?.game_currency_amount != null ? `${producto.game_currency_amount} unidades` : "Producto");
+      const detalles = [
+        campo("Estado", traducirEstado(pedido.status), `estado ${claseEstado(pedido.status)}`),
+        campo("Producto", nombreProducto),
+        campo("ID del jugador", pedido.player_id || "No disponible"),
+        campo("Precio", `${pedido.price_gvr ?? 0} GVR`),
+        campo("Pedido", pedido.id),
+        campo("Fecha", fechaLegible(pedido.created_at)),
+        ...(pedido.completed_at ? [campo("Completado", fechaLegible(pedido.completed_at))] : [])
+      ].join("");
+      historial.push(prepararPedido("juego", pedido, pedido.created_at, `${juego} · ${nombreProducto}`, pedido.status, detalles));
     });
 
-    if (historial.length === 0) {
-        estadoCarga.textContent = "Todavía no tienes pedidos.";
-        return;
-    }
-
-    estadoCarga.style.display = "none";
-
-    historial.forEach(item => {
-        const datos = item.datos;
-
-        if (item.tipo === "juego") {
-            const producto = Array.isArray(datos.game_products)
-                ? datos.game_products[0]
-                : datos.game_products;
-
-            crearTarjeta(
-                producto?.game || "Recarga de juego",
-                datos.status,
-                `
-                    Producto: ${escaparHTML(producto?.product_name || "Producto")}
-                    <br>
-                    ID del jugador: ${escaparHTML(datos.player_id || "No disponible")}
-                    <br>
-                    Precio: ${escaparHTML(datos.price_gvr ?? 0)} GVR
-                    <br>
-                    Pedido: ${escaparHTML(datos.id)}
-                    <br>
-                    Fecha: ${escaparHTML(fechaLegible(datos.created_at))}
-                    ${datos.completed_at
-                        ? `<br>Completado: ${escaparHTML(fechaLegible(datos.completed_at))}`
-                        : ""}
-                `
-            );
-        }
-
-        if (item.tipo === "gvr_anterior") {
-            crearTarjeta(
-                "Compra de GVR",
-                datos.estado,
-                `
-                    GVR comprado: ${escaparHTML(datos.gvr_comprado || 0)} GVR
-                    <br>
-                    Precio: ${escaparHTML(datos.precio || 0)}
-                    ${escaparHTML(datos.moneda || "")}
-                    <br>
-                    Método de pago: ${escaparHTML(datos.metodo_pago || "No especificado")}
-                    <br>
-                    Pedido: ${escaparHTML(datos.id)}
-                    <br>
-                    Fecha: ${escaparHTML(fechaLegible(datos.created_at))}
-                `
-            );
-        }
-
-        if (item.tipo === "gvr_solicitud") {
-            const estado = datos.status;
-            const notaRevision = datos.review_note
-                ? `<br>Nota del administrador: ${escaparHTML(datos.review_note)}`
-                : "";
-
-            crearTarjeta(
-                "Solicitud de compra GVR",
-                estado,
-                `
-                    Cantidad solicitada: ${escaparHTML(datos.gvr_amount)} GVR
-                    <br>
-                    Importe: ${escaparHTML(datos.payment_amount)}
-                    ${escaparHTML(datos.payment_currency || "")}
-                    <br>
-                    Método de pago: ${escaparHTML(datos.payment_method || "No especificado")}
-                    <br>
-                    Número de solicitud: ${escaparHTML(datos.id)}
-                    <br>
-                    Fecha: ${escaparHTML(fechaLegible(datos.created_at))}
-                    ${datos.reviewed_at
-                        ? `<br>Revisada: ${escaparHTML(fechaLegible(datos.reviewed_at))}`
-                        : ""}
-                    ${notaRevision}
-                `
-            );
-        }
+    (resultadoVentas.data || []).forEach(venta => {
+      if (String(venta.tipo || "").toLowerCase() !== "gvr") return;
+      const detalles = [
+        campo("Estado", traducirEstado(venta.estado), `estado ${claseEstado(venta.estado)}`),
+        campo("Cantidad", `${venta.gvr_comprado || 0} GVR`),
+        campo("Precio", `${venta.precio || 0} ${venta.moneda || ""}`.trim()),
+        campo("Método de pago", venta.metodo_pago || "No especificado"),
+        campo("Pedido", venta.id),
+        campo("Fecha", fechaLegible(venta.created_at))
+      ].join("");
+      historial.push(prepararPedido("gvr_anterior", venta, venta.created_at, `Compra de GVR · ${venta.gvr_comprado || 0} GVR`, venta.estado, detalles));
     });
 
-    if (
-        resultadoJuegos.error &&
-        resultadoVentas.error &&
-        resultadoSolicitudes.error
-    ) {
-        estadoCarga.style.display = "block";
-        estadoCarga.className = "vacio error";
-        estadoCarga.textContent =
-            "No se pudo cargar el historial. Inténtalo de nuevo.";
+    (resultadoSolicitudes.data || []).forEach(solicitud => {
+      const detalles = [
+        campo("Estado", traducirEstado(solicitud.status), `estado ${claseEstado(solicitud.status)}`),
+        campo("Cantidad solicitada", `${solicitud.gvr_amount ?? 0} GVR`),
+        campo("Importe", `${solicitud.payment_amount ?? "No disponible"} ${solicitud.payment_currency || ""}`.trim()),
+        campo("Método de pago", solicitud.payment_method || "No especificado"),
+        campo("Solicitud", solicitud.id),
+        campo("Fecha", fechaLegible(solicitud.created_at)),
+        ...(solicitud.reviewed_at ? [campo("Revisada", fechaLegible(solicitud.reviewed_at))] : []),
+        ...(solicitud.review_note ? [campo("Nota de revisión", solicitud.review_note)] : [])
+      ].join("");
+      historial.push(prepararPedido("gvr_solicitud", solicitud, solicitud.created_at, `Solicitud de GVR · ${solicitud.gvr_amount ?? 0} GVR`, solicitud.status, detalles));
+    });
 
-        const boton = document.createElement("button");
-        boton.className = "boton-reintentar";
-        boton.textContent = "Reintentar";
-        boton.addEventListener("click", cargarPedidos);
-        contenedorCard.appendChild(boton);
-    }
-}
+    historial.sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0));
+    historialCompleto = historial;
+    renderizarHistorial();
+  }
 
-cargarPedidos().catch(error => {
+  function mostrarError(error) {
     console.error("Error inesperado en el historial:", error);
     estadoCarga.style.display = "block";
     estadoCarga.className = "vacio error";
-    estadoCarga.textContent =
-        "Ocurrió un error al cargar los pedidos. Recarga la página.";
-});
-</script></body>
+    estadoCarga.textContent = "Ocurrió un error al cargar el historial. Recarga la página.";
+  }
+
+  cargarPedidos().catch(mostrarError);
+  </script>
+</body>
 </html>
+
