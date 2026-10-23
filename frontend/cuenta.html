@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -62,12 +61,14 @@
         font-size: 14px;
     }
 
+    /* Sin tarjeta exterior que rodee toda la página */
+
     .card {
-        background: #091a35;
-        border: 1px solid #15518c;
-        border-radius: 20px;
-        padding: 25px 22px;
-        box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
     }
 
     .avatar {
@@ -81,6 +82,7 @@
         align-items: center;
         justify-content: center;
         font-size: 35px;
+        box-shadow: 0 0 18px rgba(0, 140, 255, 0.12);
     }
 
     h1 {
@@ -93,7 +95,33 @@
         text-align: center;
         color: #8195ad;
         font-size: 13px;
-        margin-bottom: 25px;
+        margin-bottom: 28px;
+    }
+
+    /* Títulos de las secciones */
+
+    .seccion {
+        margin-top: 25px;
+    }
+
+    .seccion-titulo {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 17px;
+        font-weight: 800;
+        margin-bottom: 14px;
+        padding-bottom: 11px;
+        border-bottom: 1px solid #173d63;
+    }
+
+    .svj-marca {
+        color: #00baff;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        text-shadow: 0 0 10px rgba(0, 186, 255, 0.45);
+        flex-shrink: 0;
     }
 
     .dato {
@@ -130,32 +158,25 @@
         font-size: 14px;
         font-weight: bold;
         border: none;
+        cursor: pointer;
+        transition: box-shadow 0.2s, background 0.2s;
     }
 
-    .boton-admin {
-        background: linear-gradient(90deg, #063c72, #087cff);
-        border: 1px solid #159dff;
-        box-shadow: 0 0 15px rgba(0, 140, 255, 0.18);
-    }
-
-    .boton-admin:hover {
-        box-shadow: 0 0 20px rgba(0, 170, 255, 0.35);
-    }
-
+    .boton-admin,
     .boton-soporte {
         background: linear-gradient(90deg, #063c72, #087cff);
         border: 1px solid #159dff;
-        box-shadow: 0 0 15px rgba(0, 140, 255, 0.18);
+        box-shadow: 0 0 15px rgba(0, 140, 255, 0.12);
     }
 
+    .boton-admin:hover,
     .boton-soporte:hover {
-        box-shadow: 0 0 20px rgba(0, 170, 255, 0.35);
+        box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
     }
 
     .boton-notificaciones {
         background: linear-gradient(90deg, #064c64, #087cff);
         border: 1px solid #18c9ff;
-        cursor: pointer;
     }
 
     .boton-notificaciones:hover {
@@ -197,7 +218,6 @@
     .boton-cerrar {
         background: #8b1e2d;
         border: 1px solid #ff4057;
-        cursor: pointer;
     }
 
     .boton-cerrar:hover {
@@ -210,25 +230,21 @@
         display: none;
     }
 
-    /* SALUD DEL SISTEMA */
+    /* Salud del sistema */
 
     .salud-panel {
-        margin-top: 22px;
+        margin-top: 25px;
         padding: 17px;
         border-radius: 15px;
         border: 1px solid #087cff;
-        background: linear-gradient(
-            145deg,
-            #071b36,
-            #061226
-        );
+        background: linear-gradient(145deg, #071b36, #061226);
         box-shadow: 0 0 22px rgba(0, 140, 255, 0.10);
     }
 
     .salud-titulo {
-        font-size: 18px;
+        font-size: 17px;
         font-weight: bold;
-        margin-bottom: 7px;
+        margin-bottom: 12px;
     }
 
     .salud-descripcion {
@@ -330,7 +346,6 @@
     }
 
     .boton-salud {
-        cursor: pointer;
         background: linear-gradient(90deg, #07539b, #008fc9);
         border: 1px solid #18baff;
     }
@@ -348,6 +363,10 @@
     }
 
     @media (max-width: 400px) {
+        body {
+            padding: 16px;
+        }
+
         .header {
             align-items: flex-start;
             flex-direction: column;
@@ -375,7 +394,7 @@
         </div>
     </div>
 
-    <div class="card">
+    <main class="card">
 
         <div class="avatar">👤</div>
 
@@ -385,39 +404,127 @@
             Información de tu cuenta Gamers Gold Top-Up
         </p>
 
-        <div class="dato">
-            <div class="dato-titulo">Nombre de usuario</div>
-            <div class="dato-valor" id="nombreUsuario">
-                Cargando...
-            </div>
-        </div>
+        <!-- DATOS PERSONALES -->
 
-        <div class="dato">
-            <div class="dato-titulo">Correo electrónico</div>
-            <div class="dato-valor" id="correoUsuario">
-                Cargando...
-            </div>
-        </div>
+        <section class="seccion">
+            <h2 class="seccion-titulo">
+                <span class="svj-marca">SVJ</span>
+                Datos personales
+            </h2>
 
-        <div class="dato">
-            <div class="dato-titulo">ID de cuenta</div>
-            <div class="dato-valor" id="idUsuario">
-                Cargando...
+            <div class="dato">
+                <div class="dato-titulo">Nombre de usuario</div>
+                <div class="dato-valor" id="nombreUsuario">
+                    Cargando...
+                </div>
             </div>
-        </div>
 
-        <div id="panelAdministracion">
-            <a href="admin-ventas.html" class="boton boton-admin">
-                Panel de ventas
+            <div class="dato">
+                <div class="dato-titulo">Correo electrónico</div>
+                <div class="dato-valor" id="correoUsuario">
+                    Cargando...
+                </div>
+            </div>
+
+            <div class="dato">
+                <div class="dato-titulo">ID de cuenta</div>
+                <div class="dato-valor" id="idUsuario">
+                    Cargando...
+                </div>
+            </div>
+        </section>
+
+        <!-- SEGURIDAD -->
+
+        <section class="seccion">
+            <h2 class="seccion-titulo">
+                <span class="svj-marca">SVJ</span>
+                Seguridad
+            </h2>
+
+            <div class="dato">
+                <div class="dato-titulo">Estado de la cuenta</div>
+                <div class="dato-valor">
+                    Sesión protegida por Supabase
+                </div>
+            </div>
+
+            <p style="color:#8195ad;font-size:12px;line-height:1.6;">
+                Cierra la sesión cuando termines de usar tu cuenta,
+                especialmente si estás en un dispositivo compartido.
+            </p>
+        </section>
+
+        <!-- SOPORTE -->
+
+        <section class="seccion">
+            <h2 class="seccion-titulo">
+                <span class="svj-marca">SVJ</span>
+                Soporte
+            </h2>
+
+            <a href="soporte.html" class="boton boton-soporte">
+                Contactar con soporte
             </a>
-        </div>
+        </section>
 
-        <!-- PANEL PRIVADO DEL PROPIETARIO -->
+        <!-- PANEL DE VENTAS: SOLO ADMINISTRADORES -->
+
+        <section id="panelAdministracion" class="seccion">
+            <h2 class="seccion-titulo">
+                <span class="svj-marca">SVJ</span>
+                Panel de ventas
+            </h2>
+
+            <a href="admin-ventas.html" class="boton boton-admin">
+                Abrir panel de ventas
+            </a>
+        </section>
+
+        <!-- CERRAR SESIÓN -->
+
+        <section class="seccion">
+            <h2 class="seccion-titulo">
+                <span class="svj-marca">SVJ</span>
+                Cerrar sesión
+            </h2>
+
+            <button id="cerrarSesion" class="boton boton-cerrar" type="button">
+                Cerrar sesión de mi cuenta
+            </button>
+        </section>
+
+        <!-- NOTIFICACIONES GVR -->
+
+        <section class="seccion">
+            <h2 class="seccion-titulo">
+                <span class="svj-marca">SVJ</span>
+                Notificaciones
+            </h2>
+
+            <button
+                id="activarNotificacionesGVR"
+                class="boton boton-notificaciones"
+                type="button"
+            >
+                Activar notificaciones de compras GVR
+            </button>
+
+            <div
+                id="estadoNotificacionesGVR"
+                class="estado-notificaciones"
+                role="status"
+                aria-live="polite"
+            ></div>
+        </section>
+
+        <!-- SALUD DEL SISTEMA: SOLO PROPIETARIO -->
 
         <section id="panelSaludSistema" class="salud-panel">
 
             <h2 class="salud-titulo">
-                Salud del sistema
+                <span class="svj-marca">SVJ</span>
+                Sistema de salud
             </h2>
 
             <p class="salud-descripcion">
@@ -464,30 +571,7 @@
 
         </section>
 
-        <a href="soporte.html" class="boton boton-soporte">
-            Soporte
-        </a>
-
-        <button
-            id="activarNotificacionesGVR"
-            class="boton boton-notificaciones"
-            type="button"
-        >
-            Activar notificaciones de compras GVR
-        </button>
-
-        <div
-            id="estadoNotificacionesGVR"
-            class="estado-notificaciones"
-            role="status"
-            aria-live="polite"
-        ></div>
-
-        <button id="cerrarSesion" class="boton boton-cerrar">
-            Cerrar sesión
-        </button>
-
-    </div>
+    </main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -530,7 +614,7 @@ async function comprobarAdministrador() {
 
 
 /* ==========================================
-   SALUD DEL SISTEMA Y PRUEBA PUSH
+   SALUD DEL SISTEMA
 ========================================== */
 
 const panelSaludSistema =
@@ -705,7 +789,8 @@ async function cargarHistorialSalud() {
         );
     }
 }
-    
+
+
 async function revisarSaludSistema() {
     if (revisionSaludEnCurso) return;
 
@@ -797,12 +882,6 @@ async function cargarCuenta() {
             "panelAdministracion"
         ).style.display = "block";
     }
-
-    /*
-       La visibilidad no se basa en el correo ni en
-       datos editables del perfil. Supabase comprueba
-       el propietario mediante la función existente.
-    */
 
     const { data: esPropietario, error: errorPropietario } =
         await supabaseClient.rpc("is_gamevora_owner");
@@ -1018,5 +1097,5 @@ document
     });
 </script>
 </body>
-</html>
+                </html>
 
