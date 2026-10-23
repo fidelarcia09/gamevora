@@ -54,6 +54,7 @@
   function addMessage(text, isUser, link) {
     var item = document.createElement("div");
     item.className = "gg-goldi-message" + (isUser ? " gg-user" : "");
+    if (!isUser) text = text.replace(/ (\d+)\) /g, function (_, n) { return "\nPaso " + n + ": "; }).replace(/^(\d+)\) /, function (_, n) { return "Paso " + n + ": "; });
     item.textContent = text;
     if (link) {
       item.appendChild(document.createTextNode(" "));
