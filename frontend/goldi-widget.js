@@ -14,14 +14,14 @@
 
   var style = document.createElement("link");
   style.rel = "stylesheet";
-  style.href = base + "goldi-widget.css?v=20261023-6";
+  style.href = base + "goldi-widget.css?v=20261023-7";
   document.head.appendChild(style);
 
   var root = document.createElement("div");
   root.id = "gg-goldi-root";
   root.innerHTML =
     '<button id="gg-goldi-launcher" type="button" aria-label="Abrir Goldi" aria-expanded="false" aria-controls="gg-goldi-panel" title="Abrir Goldi">' +
-      '<span id="gg-goldi-avatar" aria-hidden="true">G</span>' +
+      '<span id="gg-goldi-avatar" aria-hidden="true"><img src="' + base + 'imagenes/goldi-avatar.svg" alt="" /></span>' +
     '</button>' +
     '<section id="gg-goldi-panel" aria-label="Asistente Goldi" hidden>' +
       '<header id="gg-goldi-header">' +
