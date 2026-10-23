@@ -569,3 +569,16 @@ if (item.id === "perfil") {
     }
 })();
 </script>
+
+
+<!-- Goldi: carga global sin modificar la navegación existente. -->
+<script>
+(function () {
+  if (document.getElementById("gg-goldi-loader")) return;
+  var loader = document.createElement("script");
+  loader.id = "gg-goldi-loader";
+  loader.src = (/\/frontend\//i.test(window.location.pathname) ? "./" : "frontend/") + "goldi-widget.js?v=20261023-2";
+  loader.defer = true;
+  document.body.appendChild(loader);
+})();
+</script>
