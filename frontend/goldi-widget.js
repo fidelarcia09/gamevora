@@ -14,7 +14,7 @@
 
   var style = document.createElement("link");
   style.rel = "stylesheet";
-  style.href = base + "goldi-widget.css?v=20261023-4";
+  style.href = base + "goldi-widget.css?v=20261023-5";
   document.head.appendChild(style);
 
   var root = document.createElement("div");
@@ -47,6 +47,14 @@
           '<button type="button" data-goldi-faq="¿Cómo valido mi ID de jugador?">¿Cómo valido mi ID?</button>' +
           '<button type="button" data-goldi-faq="¿Cómo creo una cuenta?">¿Cómo creo una cuenta?</button>' +
           '<button type="button" data-goldi-faq="¿Cómo contacto soporte?">¿Cómo contacto soporte?</button>' +
+          '<button type="button" data-goldi-faq="¿Qué métodos de pago puedo usar para GVR?">¿Qué métodos de pago hay?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo pago con USDT?">¿Cómo pago con USDT?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo pago con Saldo móvil para GVR?">¿Cómo pago con Saldo móvil?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo recupero mi contraseña?">¿Olvidé mi contraseña?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo veo los movimientos GVR?">¿Cómo veo movimientos?</button>' +
+          '<button type="button" data-goldi-faq="¿Dónde veo los precios de los juegos?">¿Dónde veo los precios?</button>' +
+          '<button type="button" data-goldi-faq="¿Qué hago si mi comprobante sigue pendiente?">¿Comprobante pendiente?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo hago un reclamo?">¿Cómo hago un reclamo?</button>' +
         '</div>' +
       '</section>' +
       '<div id="gg-goldi-messages" role="log" aria-live="polite" aria-relevant="additions"></div>' +
