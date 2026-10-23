@@ -3,7 +3,7 @@
   "use strict";
   if (document.getElementById("gg-goldi-root")) return;
 
-  var inFrontend = /\/frontend\/(?:index\.html)?$/i.test(window.location.pathname);
+  var inFrontend = /\/frontend\//i.test(window.location.pathname);
   var base = inFrontend ? "./" : "frontend/";
   var links = {
     games: base + "juegos.html",
@@ -20,9 +20,8 @@
   var root = document.createElement("div");
   root.id = "gg-goldi-root";
   root.innerHTML =
-    '<button id="gg-goldi-launcher" type="button" aria-label="Abrir Goldi" aria-expanded="false" aria-controls="gg-goldi-panel">' +
+    '<button id="gg-goldi-launcher" type="button" aria-label="Abrir Goldi" aria-expanded="false" aria-controls="gg-goldi-panel" title="Abrir Goldi">' +
       '<span id="gg-goldi-avatar" aria-hidden="true">G</span>' +
-      '<span id="gg-goldi-launcher-copy"><strong>Goldi</strong><small>Asistente IA Disponible 24/7</small></span>' +
     '</button>' +
     '<section id="gg-goldi-panel" aria-label="Asistente Goldi" hidden>' +
       '<header id="gg-goldi-header">' +
@@ -125,9 +124,54 @@
     return { text: "Puedo orientarte con juegos y precios, saldo GVR, pedidos o soporte. Prueba una de esas opciones o abre el acceso rápido correspondiente." };
   }
 
-  launcher.addEventListener("click", function () {
+  var dragState = null;
+  var dragged = false;
+  launcher.addEventListener("pointerdown", function (event) {
+    if (event.button !== undefined && event.button !== 0) return;
+    var rect = root.getBoundingClientRect();
+    dragState = { startX: event.clientX, startY: event.clientY, left: rect.left, top: rect.top, moved: false };
+    dragged = false;
+    if (launcher.setPointerCapture && event.pointerId !== undefined) {
+      try { launcher.setPointerCapture(event.pointerId); } catch (error) {}
+    }
+  });
+  launcher.addEventListener("pointermove", function (event) {
+    if (!dragState) return;
+    var dx = event.clientX - dragState.startX;
+    var dy = event.clientY - dragState.startY;
+    if (!dragState.moved && Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+    dragState.moved = true;
+    dragged = true;
+    var nextLeft = Math.max(4, Math.min(window.innerWidth - root.offsetWidth - 4, dragState.left + dx));
+    var nextTop = Math.max(4, Math.min(window.innerHeight - root.offsetHeight - 4, dragState.top + dy));
+    root.style.left = nextLeft + "px";
+    root.style.right = "auto";
+    root.style.top = nextTop + "px";
+    root.style.bottom = "auto";
+    try { localStorage.setItem("ggGoldiPosition", JSON.stringify({ left: nextLeft, top: nextTop })); } catch (error) {}
+  });
+  function finishDrag() { dragState = null; if (dragged) window.setTimeout(function () { dragged = false; }, 80); }
+  launcher.addEventListener("pointerup", finishDrag);
+  launcher.addEventListener("pointercancel", finishDrag);
+  launcher.addEventListener("click", function (event) {
+    if (dragged) { event.preventDefault(); event.stopPropagation(); dragged = false; return; }
     if (panel.hidden) openPanel();
     else closePanel();
+  });
+  try {
+    var savedPosition = JSON.parse(localStorage.getItem("ggGoldiPosition") || "null");
+    if (savedPosition && Number.isFinite(savedPosition.left) && Number.isFinite(savedPosition.top)) {
+      root.style.left = Math.max(4, Math.min(window.innerWidth - 58, savedPosition.left)) + "px";
+      root.style.right = "auto";
+      root.style.top = Math.max(4, Math.min(window.innerHeight - 58, savedPosition.top)) + "px";
+      root.style.bottom = "auto";
+    }
+  } catch (error) {}
+  window.addEventListener("resize", function () {
+    if (root.style.left && root.style.top) {
+      root.style.left = Math.max(4, Math.min(window.innerWidth - root.offsetWidth - 4, parseFloat(root.style.left) || 4)) + "px";
+      root.style.top = Math.max(4, Math.min(window.innerHeight - root.offsetHeight - 4, parseFloat(root.style.top) || 4)) + "px";
+    }
   });
   close.addEventListener("click", closePanel);
   root.querySelectorAll("[data-goldi-link]").forEach(function (button) {
