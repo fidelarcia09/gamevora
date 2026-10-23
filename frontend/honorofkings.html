@@ -165,6 +165,7 @@ let resolverConfirmacionModal = null;
 const CLAVE_PEDIDO_BASE = "ggt_honor_of_kings_pedido_";
 
 function mostrarEstado(mensaje, tipo = "") {
+    mensaje = typeof mensaje === "string" ? mensaje.replace(/pedido aceptado por next level/gi, "Pedido aceptado por Gamers Gold Top-Up") : mensaje;
   estadoCatalogo.textContent = mensaje;
   estadoCatalogo.classList.toggle("error", tipo === "error");
   estadoCatalogo.classList.toggle("correcto", tipo === "correcto");
