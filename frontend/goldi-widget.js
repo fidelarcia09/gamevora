@@ -129,7 +129,7 @@
   launcher.addEventListener("pointerdown", function (event) {
     if (event.button !== undefined && event.button !== 0) return;
     var rect = root.getBoundingClientRect();
-    dragState = { startX: event.clientX, startY: event.clientY, left: rect.left, top: rect.top, moved: false };
+    dragState = { startX: event.clientX, left: rect.left, moved: false };
     dragged = false;
     if (launcher.setPointerCapture && event.pointerId !== undefined) {
       try { launcher.setPointerCapture(event.pointerId); } catch (error) {}
@@ -138,18 +138,14 @@
   launcher.addEventListener("pointermove", function (event) {
     if (!dragState) return;
     var dx = event.clientX - dragState.startX;
-    var dy = event.clientY - dragState.startY;
-    if (!dragState.moved && Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+    if (!dragState.moved && Math.abs(dx) < 5) return;
     dragState.moved = true;
     dragged = true;
     var nextLeft = Math.max(4, Math.min(window.innerWidth - root.offsetWidth - 4, dragState.left + dx));
-    var nextTop = Math.max(4, Math.min(window.innerHeight - root.offsetHeight - 4, dragState.top + dy));
     root.style.left = nextLeft + "px";
     root.style.right = "auto";
     root.classList.toggle("gg-goldi-left", nextLeft < window.innerWidth / 2);
-    root.style.top = nextTop + "px";
-    root.style.bottom = "auto";
-    try { localStorage.setItem("ggGoldiPosition", JSON.stringify({ left: nextLeft, top: nextTop })); } catch (error) {}
+    try { localStorage.setItem("ggGoldiPosition", JSON.stringify({ left: nextLeft })); } catch (error) {}
   });
   function finishDrag() { dragState = null; if (dragged) window.setTimeout(function () { dragged = false; }, 80); }
   launcher.addEventListener("pointerup", finishDrag);
@@ -161,19 +157,18 @@
   });
   try {
     var savedPosition = JSON.parse(localStorage.getItem("ggGoldiPosition") || "null");
-    if (savedPosition && Number.isFinite(savedPosition.left) && Number.isFinite(savedPosition.top)) {
+    if (savedPosition && Number.isFinite(savedPosition.left)) {
       var restoredLeft = Math.max(4, Math.min(window.innerWidth - 58, savedPosition.left));
       root.style.left = restoredLeft + "px";
       root.style.right = "auto";
       root.classList.toggle("gg-goldi-left", restoredLeft < window.innerWidth / 2);
-      root.style.top = Math.max(4, Math.min(window.innerHeight - 58, savedPosition.top)) + "px";
-      root.style.bottom = "auto";
     }
   } catch (error) {}
   window.addEventListener("resize", function () {
-    if (root.style.left && root.style.top) {
-      root.style.left = Math.max(4, Math.min(window.innerWidth - root.offsetWidth - 4, parseFloat(root.style.left) || 4)) + "px";
-      root.style.top = Math.max(4, Math.min(window.innerHeight - root.offsetHeight - 4, parseFloat(root.style.top) || 4)) + "px";
+    if (root.style.left) {
+      var resizedLeft = Math.max(4, Math.min(window.innerWidth - root.offsetWidth - 4, parseFloat(root.style.left) || 4));
+      root.style.left = resizedLeft + "px";
+      root.classList.toggle("gg-goldi-left", resizedLeft < window.innerWidth / 2);
     }
   });
   close.addEventListener("click", closePanel);
