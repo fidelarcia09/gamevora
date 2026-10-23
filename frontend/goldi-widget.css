@@ -70,3 +70,5 @@
   #gg-goldi-panel { width:min(350px,calc(100vw - 24px)); max-height:calc(100dvh - 155px); }
 }
 @media (prefers-reduced-motion: reduce) { #gg-goldi-root *, #gg-goldi-root *::before, #gg-goldi-root *::after { animation:none !important; transition:none !important; } }
+
+#gg-goldi-root.gg-goldi-left #gg-goldi-panel { left: 0; right: auto; }
