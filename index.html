@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,6 +7,7 @@
 <title>Gamers Gold Top-Up | Recargas Gaming</title>
 <meta name="theme-color" content="#050b18">
 <link rel="manifest" href="frontend/manifest.json">
+
 <style>
 :root{
   color-scheme:dark;
@@ -16,19 +18,25 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
 html,body{width:100%;max-width:100%;overflow-x:hidden;scroll-behavior:smooth}
 body{min-height:100vh;background:var(--fondo);color:var(--texto);line-height:1.5}
-a{color:inherit}button{font:inherit}
+a{color:inherit}
+button{font:inherit}
+
 #splash-screen{position:fixed;inset:0;width:100%;height:100vh;background:#020611;display:flex;align-items:center;justify-content:center;z-index:999999;opacity:1;transition:opacity .8s ease;pointer-events:auto}
 #splash-screen img{display:block!important;width:min(75vw,360px);max-width:360px;height:auto;object-fit:contain;filter:drop-shadow(0 0 8px #00bfff) drop-shadow(0 0 20px #008cff);animation:aparecerLogo 1s ease-out}
 @keyframes aparecerLogo{from{opacity:0;transform:scale(.75)}to{opacity:1;transform:scale(1)}}
 .splash-oculto{opacity:0!important;pointer-events:none!important}
+
 header{width:100%;min-height:70px;padding:10px max(18px,calc((100% - var(--ancho))/2));background:rgba(5,11,24,.96);border-bottom:1px solid var(--borde);display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:100;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .logo{display:flex;align-items:center;height:46px;min-width:0;text-decoration:none;flex-shrink:1}
 .logo-g{position:relative;width:42px;height:43px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:41px;font-weight:900;font-style:italic;line-height:1;color:var(--cian);transform:skewX(-8deg);text-shadow:0 0 10px rgba(0,170,255,.28)}
 .logo-g:before{content:"";position:absolute;width:25px;height:7px;right:0;top:8px;background:linear-gradient(90deg,#5eeaff,#00aaff,#006cff);transform:skewX(-25deg) rotate(-4deg);clip-path:polygon(0 35%,100% 0,72% 45%,100% 45%,0 100%,28% 55%,0 55%)}
 .logo-resto{margin-left:2px;color:#f5f8ff;font-size:20px;font-weight:900;font-style:italic;letter-spacing:-1.1px;line-height:1;white-space:nowrap}
-.navegacion{display:flex;align-items:center;gap:8px;flex-shrink:0}.boton-cuenta{display:none}
+.navegacion{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.boton-cuenta{display:none}
+
 main{width:100%}
 .contenedor{width:min(calc(100% - 36px),var(--ancho));margin-inline:auto}
+
 .hero{position:relative;isolation:isolate;overflow:hidden;width:min(calc(100% - 36px),var(--ancho));min-height:285px;margin:22px auto 0;padding:clamp(28px,5vw,54px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;border:1px solid var(--borde);border-radius:20px;background:linear-gradient(112deg,#0d1d35 0%,#09172b 58%,#081326 100%)}
 .hero:after{content:"";position:absolute;z-index:-1;width:330px;height:330px;right:-105px;top:-135px;border-radius:50%;background:radial-gradient(circle,rgba(8,124,255,.20),rgba(32,197,255,.05) 45%,transparent 70%)}
 .hero-etiqueta{display:inline-flex;align-items:center;gap:8px;color:#83dfff;font-size:11px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:13px}
@@ -38,6 +46,7 @@ main{width:100%}
 .hero p{max-width:490px;color:var(--suave);font-size:clamp(14px,2vw,16px);line-height:1.7;margin-bottom:23px}
 .hero-button{min-height:46px;display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;text-decoration:none;color:#fff;background:linear-gradient(105deg,#087cff,#079fe9);border:0;border-radius:9px;font-size:13px;font-weight:800;letter-spacing:.3px;transition:filter .2s ease,transform .2s ease}
 .hero-button:hover{transform:translateY(-1px);filter:brightness(1.08)}
+
 .seccion{padding-top:37px}
 .seccion-cabecera{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:17px}
 .seccion-kicker{color:var(--cian);font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:5px}
@@ -45,6 +54,7 @@ main{width:100%}
 .seccion-cabecera p{color:var(--suave);font-size:13px;margin-top:5px}
 .enlace-seccion{color:#7fdfff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
 .enlace-seccion:hover{text-decoration:underline}
+
 .juegos-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .juego-card{display:block;min-width:0;overflow:hidden;text-decoration:none;background:var(--superficie);border:1px solid var(--borde);border-radius:12px;transition:border-color .2s ease,transform .2s ease,background .2s ease}
 .juego-card:hover{transform:translateY(-3px);border-color:rgba(32,197,255,.42);background:#0b1930}
@@ -52,17 +62,21 @@ main{width:100%}
 .juego-info{padding:11px 12px 13px;display:flex;align-items:center;justify-content:space-between;gap:7px}
 .juego-info h3{font-size:13px;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
 .juego-flecha{color:var(--cian);font-size:18px;line-height:1;flex-shrink:0}
+
 .bloque-informativo{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-top:34px}
 .banner-info{min-width:0;padding:23px 24px;border:1px solid var(--borde);border-radius:14px;background:linear-gradient(120deg,#0d1c33,#091528)}
 .banner-info .etiqueta{font-size:10px;color:var(--cian);font-weight:800;letter-spacing:1.5px;margin-bottom:7px}
 .banner-info h3{font-size:20px;line-height:1.25;margin-bottom:7px}
 .banner-info p{font-size:13px;line-height:1.65;color:var(--suave)}
 .banner-info a{display:inline-flex;margin-top:13px;color:#83dfff;text-decoration:none;font-size:12px;font-weight:700}
+
 .mini-ventajas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mini-ventaja{display:flex;align-items:flex-start;gap:10px;padding:15px 13px;border:1px solid var(--borde);border-radius:12px;background:var(--superficie)}
-.mini-icono{width:30px;height:30px;display:grid;place-items:center;flex-shrink:0;border-radius:8px;background:rgba(32,197,255,.08);color:var(--cian);font-size:16px}
+.mini-icono{width:30px;height:30px;display:grid;place-items:center;flex-shrink:0;border-radius:8px;background:rgba(32,197,255,.08);color:var(--cian);border:1px solid rgba(32,197,255,.10)}
+.mini-icono svg{display:block;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .mini-ventaja h4{font-size:11px;line-height:1.4;margin-bottom:4px}
 .mini-ventaja p{font-size:11px;color:var(--suave);line-height:1.5}
+
 .carrusel-seccion{margin-top:35px;padding:0 0 8px}
 .gamevora-carrusel{width:100%;overflow:hidden;border:1px solid var(--borde);border-radius:14px;background:linear-gradient(115deg,#0b1a30,#0a172a);text-align:left}
 .gamevora-track{width:100%;display:flex;transition:transform .6s ease}
@@ -76,30 +90,87 @@ main{width:100%}
 .gamevora-dots{display:flex;justify-content:center;align-items:center;gap:7px;margin-top:11px}
 .gamevora-dot{width:6px;height:6px;border:0;border-radius:99px;background:#34445c;padding:0;cursor:pointer;transition:width .2s ease,background .2s ease}
 .gamevora-dot.activo{width:18px;background:var(--cian)}
+
 footer{width:100%;margin-top:38px;padding:25px 18px 85px;text-align:center;color:#8294aa;font-size:11px;border-top:1px solid rgba(112,157,205,.10);background:#040916}
-footer p+p{margin-top:4px}footer strong{color:var(--cian);letter-spacing:.6px}
-@media(max-width:850px){.juegos-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.bloque-informativo{grid-template-columns:1fr}.mini-ventajas{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){
- header{min-height:62px;padding:9px 13px}.logo{height:40px}.logo-g{width:36px;height:39px;font-size:37px}.logo-resto{font-size:clamp(14px,4vw,18px);letter-spacing:-.9px}
- .contenedor{width:calc(100% - 28px)}.hero{width:calc(100% - 28px);min-height:0;margin-top:14px;padding:26px 20px;border-radius:15px}
- .hero-etiqueta{font-size:9px;letter-spacing:1.4px;margin-bottom:11px}.hero h1{font-size:clamp(29px,8vw,38px);letter-spacing:-.9px;margin-bottom:12px}.hero p{font-size:13px;line-height:1.65;margin-bottom:19px}.hero-button{width:100%;max-width:230px;min-height:43px;font-size:12px}
- .seccion{padding-top:29px}.seccion-cabecera{align-items:flex-end;margin-bottom:13px}.seccion-cabecera h2{font-size:22px}.seccion-cabecera p{font-size:12px}.enlace-seccion{font-size:11px}
- .juegos-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.juego-card{border-radius:10px}.juego-imagen{aspect-ratio:4/3}.juego-info{padding:9px 10px 11px}.juego-info h3{font-size:12px}
- .bloque-informativo{margin-top:25px;gap:10px}.banner-info{padding:19px 18px}.banner-info h3{font-size:18px}.banner-info p{font-size:12px}
- .mini-ventajas{gap:8px}.mini-ventaja{padding:12px 10px;gap:8px}.mini-icono{width:27px;height:27px;font-size:14px}.mini-ventaja h4{font-size:10px}.mini-ventaja p{font-size:10px}
- .carrusel-seccion{margin-top:26px}.gamevora-slide{min-height:125px;padding:19px 16px;gap:10px}.gamevora-slide-label{font-size:9px}.gamevora-slide h3{font-size:16px}.gamevora-slide p{font-size:11px}.gamevora-slide-icon{width:30px;min-width:30px;height:30px}
- footer{margin-top:28px;padding:22px 15px 88px}
+footer p+p{margin-top:4px}
+footer strong{color:var(--cian);letter-spacing:.6px}
+
+@media(max-width:850px){
+  .juegos-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .bloque-informativo{grid-template-columns:1fr}
+  .mini-ventajas{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:360px){.logo-resto{font-size:13px}.logo-g{width:32px;font-size:33px}.hero{padding:24px 17px}.gamevora-slide-icon{display:none}.mini-ventaja{display:block}.mini-icono{margin-bottom:7px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+@media(max-width:600px){
+  header{min-height:62px;padding:9px 13px}
+  .logo{height:40px}
+  .logo-g{width:36px;height:39px;font-size:37px}
+  .logo-resto{font-size:clamp(14px,4vw,18px);letter-spacing:-.9px}
+  .contenedor{width:calc(100% - 28px)}
+  .hero{width:calc(100% - 28px);min-height:0;margin-top:14px;padding:26px 20px;border-radius:15px}
+  .hero-etiqueta{font-size:9px;letter-spacing:1.4px;margin-bottom:11px}
+  .hero h1{font-size:clamp(29px,8vw,38px);letter-spacing:-.9px;margin-bottom:12px}
+  .hero p{font-size:13px;line-height:1.65;margin-bottom:19px}
+  .hero-button{width:100%;max-width:230px;min-height:43px;font-size:12px}
+  .seccion{padding-top:29px}
+  .seccion-cabecera{align-items:flex-end;margin-bottom:13px}
+  .seccion-cabecera h2{font-size:22px}
+  .seccion-cabecera p{font-size:12px}
+  .enlace-seccion{font-size:11px}
+  .juegos-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .juego-card{border-radius:10px}
+  .juego-imagen{aspect-ratio:4/3}
+  .juego-info{padding:9px 10px 11px}
+  .juego-info h3{font-size:12px}
+  .bloque-informativo{margin-top:25px;gap:10px}
+  .banner-info{padding:19px 18px}
+  .banner-info h3{font-size:18px}
+  .banner-info p{font-size:12px}
+  .mini-ventajas{gap:8px}
+  .mini-ventaja{padding:12px 10px;gap:8px}
+  .mini-icono{width:27px;height:27px}
+  .mini-icono svg{width:16px;height:16px}
+  .mini-ventaja h4{font-size:10px}
+  .mini-ventaja p{font-size:10px}
+  .carrusel-seccion{margin-top:26px}
+  .gamevora-slide{min-height:125px;padding:19px 16px;gap:10px}
+  .gamevora-slide-label{font-size:9px}
+  .gamevora-slide h3{font-size:16px}
+  .gamevora-slide p{font-size:11px}
+  .gamevora-slide-icon{width:30px;min-width:30px;height:30px}
+  footer{margin-top:28px;padding:22px 15px 88px}
+}
+
+@media(max-width:360px){
+  .logo-resto{font-size:13px}
+  .logo-g{width:32px;font-size:33px}
+  .hero{padding:24px 17px}
+  .gamevora-slide-icon{display:none}
+  .mini-ventaja{display:block}
+  .mini-icono{margin-bottom:7px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
+
 <body>
-<div id="splash-screen"><img src="./frontend/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png" alt="Gamers Gold Top-Up" loading="eager"></div>
+<div id="splash-screen">
+  <img src="./frontend/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png" alt="Gamers Gold Top-Up" loading="eager">
+</div>
+
 <header>
-  <a class="logo" href="./index.html" aria-label="Gamers Gold Top-Up, inicio"><span class="logo-g">G</span><span class="logo-resto">AMERS GOLD TOP-UP</span></a>
-  <div class="navegacion"><div id="botonesCuenta" class="boton-cuenta"></div></div>
+  <a class="logo" href="./index.html" aria-label="Gamers Gold Top-Up, inicio">
+    <span class="logo-g">G</span>
+    <span class="logo-resto">AMERS GOLD TOP-UP</span>
+  </a>
+  <div class="navegacion">
+    <div id="botonesCuenta" class="boton-cuenta"></div>
+  </div>
 </header>
+
 <main>
   <section class="hero">
     <div class="hero-etiqueta">TU TIENDA GAMING</div>
@@ -110,23 +181,31 @@ footer p+p{margin-top:4px}footer strong{color:var(--cian);letter-spacing:.6px}
 
   <section class="seccion contenedor" aria-labelledby="juegosTitulo">
     <div class="seccion-cabecera">
-      <div><div class="seccion-kicker">ELIGE TU JUEGO</div><h2 id="juegosTitulo">Juegos populares</h2><p>Accede directamente a tus favoritos.</p></div>
+      <div>
+        <div class="seccion-kicker">ELIGE TU JUEGO</div>
+        <h2 id="juegosTitulo">Juegos populares</h2>
+        <p>Accede directamente a tus favoritos.</p>
+      </div>
       <a class="enlace-seccion" href="frontend/juegos.html">Ver todos →</a>
     </div>
+
     <div class="juegos-grid">
       <a class="juego-card" href="frontend/freefire.html">
         <img class="juego-imagen" src="./frontend/imagenes/file_00000000323881f5b39e628c9a42a0d2.png" alt="Free Fire" loading="lazy">
         <div class="juego-info"><h3>Free Fire</h3><span class="juego-flecha" aria-hidden="true">→</span></div>
       </a>
-      <a class="juego-card" href="frontend/mobile-legends.html">
+
+      <a class="juego-card" href="frontend/mobilelegends.html">
         <img class="juego-imagen" src="./frontend/imagenes/file_00000000a7e081f9b4b5577efa5f6066.png" alt="Mobile Legends" loading="lazy">
         <div class="juego-info"><h3>Mobile Legends</h3><span class="juego-flecha" aria-hidden="true">→</span></div>
       </a>
-      <a class="juego-card" href="frontend/pubg-mobile.html">
+
+      <a class="juego-card" href="frontend/pubgmobile.html">
         <img class="juego-imagen" src="./frontend/imagenes/file_00000000cde881f6a366f4dbeb1a5fd0.png" alt="PUBG Mobile" loading="lazy">
         <div class="juego-info"><h3>PUBG Mobile</h3><span class="juego-flecha" aria-hidden="true">→</span></div>
       </a>
-      <a class="juego-card" href="frontend/blood-strike.html">
+
+      <a class="juego-card" href="frontend/bloodstrike.html">
         <img class="juego-imagen" src="./frontend/imagenes/file_00000000da8481f980717bbfaf5b7888.png" alt="Blood Strike" loading="lazy">
         <div class="juego-info"><h3>Blood Strike</h3><span class="juego-flecha" aria-hidden="true">→</span></div>
       </a>
@@ -140,11 +219,61 @@ footer p+p{margin-top:4px}footer strong{color:var(--cian);letter-spacing:.6px}
       <p>Consulta qué es GVR y cómo funciona el saldo virtual de Gamers Gold Top-Up.</p>
       <a href="frontend/informacion-gvr.html">Información sobre GVR&nbsp; →</a>
     </article>
+
     <div class="mini-ventajas">
-      <article class="mini-ventaja"><div class="mini-icono" aria-hidden="true">↗</div><div><h4>PROCESO DIGITAL</h4><p>Consulta las opciones de recarga de cada juego.</p></div></article>
-      <article class="mini-ventaja"><div class="mini-icono" aria-hidden="true">✓</div><div><h4>PRECIOS CLAROS</h4><p>Revisa los precios disponibles antes de comprar.</p></div></article>
-      <article class="mini-ventaja"><div class="mini-icono" aria-hidden="true">◎</div><div><h4>TUS PEDIDOS</h4><p>Accede a las opciones disponibles en tu cuenta.</p></div></article>
-      <article class="mini-ventaja"><div class="mini-icono" aria-hidden="true">?</div><div><h4>¿NECESITAS AYUDA?</h4><p>Encuentra la información de soporte de la tienda.</p></div></article>
+      <article class="mini-ventaja">
+        <div class="mini-icono" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M13 2 4.5 13h6L10 22l9.5-12h-6L13 2Z"/>
+          </svg>
+        </div>
+        <div>
+          <h4>PROCESO DIGITAL</h4>
+          <p>Consulta las opciones de recarga de cada juego.</p>
+        </div>
+      </article>
+
+      <article class="mini-ventaja">
+        <div class="mini-icono" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3 3.5 7v5c0 5 3.5 8 8.5 9 5-1 8.5-4 8.5-9V7L12 3Z"/>
+            <path d="m8.5 12 2.2 2.2 4.8-5"/>
+          </svg>
+        </div>
+        <div>
+          <h4>PRECIOS CLAROS</h4>
+          <p>Revisa los precios disponibles antes de comprar.</p>
+        </div>
+      </article>
+
+      <article class="mini-ventaja">
+        <div class="mini-icono" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 3h10l3 4v14H4V7l3-4Z"/>
+            <path d="M8 3v5h8V3"/>
+            <path d="M8 13h8M8 17h5"/>
+          </svg>
+        </div>
+        <div>
+          <h4>TUS PEDIDOS</h4>
+          <p>Accede a las opciones disponibles en tu cuenta.</p>
+        </div>
+      </article>
+
+      <article class="mini-ventaja">
+        <div class="mini-icono" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 13v-2a8 8 0 0 1 16 0v2"/>
+            <path d="M4 13H3a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h3v-6H4Z"/>
+            <path d="M20 13h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-3v-6h2Z"/>
+            <path d="M17 20c-.8 1-2 1.5-4 1.5"/>
+          </svg>
+        </div>
+        <div>
+          <h4>¿NECESITAS AYUDA?</h4>
+          <p>Encuentra la información de soporte de la tienda.</p>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -152,27 +281,65 @@ footer p+p{margin-top:4px}footer strong{color:var(--cian);letter-spacing:.6px}
     <div class="gamevora-carrusel">
       <div class="gamevora-track" id="gamevoraTrack">
         <a href="frontend/reseñas.html" class="gamevora-slide gamevora-slide-link">
-          <div class="gamevora-slide-text"><div class="gamevora-slide-label">COMUNIDAD</div><h3>¿Ya dejaste tu reseña?</h3><p>Tu opinión ayuda a mejorar Gamers Gold Top-Up.</p></div><div class="gamevora-slide-icon" aria-hidden="true"></div>
+          <div class="gamevora-slide-text">
+            <div class="gamevora-slide-label">COMUNIDAD</div>
+            <h3>¿Ya dejaste tu reseña?</h3>
+            <p>Tu opinión ayuda a mejorar Gamers Gold Top-Up.</p>
+          </div>
+          <div class="gamevora-slide-icon" aria-hidden="true"></div>
         </a>
-        <div class="gamevora-slide"><div class="gamevora-slide-text"><div class="gamevora-slide-label">NOVEDADES</div><h3>Nuevas actualizaciones</h3><p>Descubre las novedades que estamos preparando.</p></div><div class="gamevora-slide-icon" aria-hidden="true"></div></div>
+
+        <div class="gamevora-slide">
+          <div class="gamevora-slide-text">
+            <div class="gamevora-slide-label">NOVEDADES</div>
+            <h3>Nuevas actualizaciones</h3>
+            <p>Descubre las novedades que estamos preparando.</p>
+          </div>
+          <div class="gamevora-slide-icon" aria-hidden="true"></div>
+        </div>
+
         <a href="frontend/informacion-gvr.html" class="gamevora-slide gamevora-slide-link">
-          <div class="gamevora-slide-text"><div class="gamevora-slide-label">GVR</div><h3>Información sobre GVR</h3><p>Conoce cómo funciona nuestro saldo virtual.</p></div><div class="gamevora-slide-icon" aria-hidden="true"></div>
+          <div class="gamevora-slide-text">
+            <div class="gamevora-slide-label">GVR</div>
+            <h3>Información sobre GVR</h3>
+            <p>Conoce cómo funciona nuestro saldo virtual.</p>
+          </div>
+          <div class="gamevora-slide-icon" aria-hidden="true"></div>
         </a>
       </div>
     </div>
-    <div class="gamevora-dots"><button class="gamevora-dot activo" type="button" aria-label="Banner 1"></button><button class="gamevora-dot" type="button" aria-label="Banner 2"></button><button class="gamevora-dot" type="button" aria-label="Banner 3"></button></div>
+
+    <div class="gamevora-dots">
+      <button class="gamevora-dot activo" type="button" aria-label="Banner 1"></button>
+      <button class="gamevora-dot" type="button" aria-label="Banner 2"></button>
+      <button class="gamevora-dot" type="button" aria-label="Banner 3"></button>
+    </div>
   </section>
 </main>
-<footer><p><strong>GAMERS GOLD TOP-UP</strong></p><p>Plataforma de recargas digitales para gamers.</p><p style="margin-top:12px">© 2026 Gamers Gold Top-Up</p></footer>
+
+<footer>
+  <p><strong>GAMERS GOLD TOP-UP</strong></p>
+  <p>Plataforma de recargas digitales para gamers.</p>
+  <p style="margin-top:12px">© 2026 Gamers Gold Top-Up</p>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const splash = document.getElementById("splash-screen");
   const splashYaVisto = sessionStorage.getItem("gamersGoldSplashVisto");
-  if (splashYaVisto === "true") { if (splash) splash.remove(); }
-  else {
+
+  if (splashYaVisto === "true") {
+    if (splash) splash.remove();
+  } else {
     sessionStorage.setItem("gamersGoldSplashVisto", "true");
-    setTimeout(() => { if (splash) { splash.classList.add("splash-oculto"); setTimeout(() => { if (splash) splash.remove(); }, 800); } }, 3700);
+    setTimeout(() => {
+      if (splash) {
+        splash.classList.add("splash-oculto");
+        setTimeout(() => {
+          if (splash) splash.remove();
+        }, 800);
+      }
+    }, 3700);
   }
 
   const supabaseClient = window.supabase.createClient(
@@ -182,36 +349,62 @@ footer p+p{margin-top:4px}footer strong{color:var(--cian);letter-spacing:.6px}
 
   function actualizarMenu() {
     const botones = document.getElementById("botonesCuenta");
-    if (botones) { botones.innerHTML = ""; botones.style.display = "none"; }
+    if (botones) {
+      botones.innerHTML = "";
+      botones.style.display = "none";
+    }
   }
+
   actualizarMenu();
 
   const gamevoraTrack = document.getElementById("gamevoraTrack");
   const gamevoraDots = document.querySelectorAll(".gamevora-dot");
   let gamevoraActual = 0;
+
   function cambiarBannerGamevora(numero) {
     if (!gamevoraTrack) return;
     gamevoraActual = numero;
     gamevoraTrack.style.transform = "translateX(-" + (numero * 100) + "%)";
-    gamevoraDots.forEach((dot, index) => dot.classList.toggle("activo", index === numero));
+    gamevoraDots.forEach((dot, index) => {
+      dot.classList.toggle("activo", index === numero);
+    });
   }
-  gamevoraDots.forEach((dot, index) => dot.addEventListener("click", () => cambiarBannerGamevora(index)));
-  setInterval(() => { let siguiente = gamevoraActual + 1; if (siguiente >= 3) siguiente = 0; cambiarBannerGamevora(siguiente); }, 4500);
+
+  gamevoraDots.forEach((dot, index) => {
+    dot.addEventListener("click", () => cambiarBannerGamevora(index));
+  });
+
+  setInterval(() => {
+    let siguiente = gamevoraActual + 1;
+    if (siguiente >= 3) siguiente = 0;
+    cambiarBannerGamevora(siguiente);
+  }, 4500);
 </script>
+
 <script>
 (async function () {
   try {
     const respuesta = await fetch("frontend/nav-inferior.html?v=20261012-v3");
     if (!respuesta.ok) throw new Error("No se pudo cargar nav-inferior.html");
+
     const contenido = await respuesta.text();
     const documento = new DOMParser().parseFromString(contenido, "text/html");
-    documento.querySelectorAll("style").forEach(function (estilo) { document.head.appendChild(estilo.cloneNode(true)); });
-    documento.querySelectorAll("script").forEach(function (original) {
-      const nuevo = document.createElement("script"); nuevo.textContent = original.textContent; document.body.appendChild(nuevo);
+
+    documento.querySelectorAll("style").forEach(function (estilo) {
+      document.head.appendChild(estilo.cloneNode(true));
     });
-  } catch (error) { console.error("Error al cargar la navegación:", error); }
+
+    documento.querySelectorAll("script").forEach(function (original) {
+      const nuevo = document.createElement("script");
+      nuevo.textContent = original.textContent;
+      document.body.appendChild(nuevo);
+    });
+  } catch (error) {
+    console.error("Error al cargar la navegación:", error);
+  }
 })();
 </script>
 </body>
 </html>
+
 
