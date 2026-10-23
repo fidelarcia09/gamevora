@@ -90,6 +90,7 @@ campoRegion.addEventListener("change",()=>{productoSeleccionado=null;limpiarSele
 async function iniciar(){try{const {data:{session}}=await supabase.auth.getSession();if(session?.user?.id){usuarioActualId=session.user.id;recuperarPedidoPendiente(usuarioActualId)}}catch(e){console.error("No se pudo recuperar la sesión:",e)}await cargarCatalogo();actualizarBoton()}
 iniciar();
 </script>
+    <script src="./goldi-widget.js?v=20261023-2" defer></script>
 </body>
 </html>
 
