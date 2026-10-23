@@ -79,13 +79,31 @@
   padding: 2px 12px 8px;
   border-bottom: 1px solid rgba(105,158,215,.14);
 }
-#gg-goldi-faq h3 {
-  margin: 0 0 7px;
+#gg-goldi-faq-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 9px;
+  border: 1px solid rgba(32,197,255,.28);
+  border-radius: 9px;
   color: #8ddfff;
+  background: #0b1c32;
   font-size: 11px;
   font-weight: 800;
   text-align: left;
+  cursor: pointer;
 }
+#gg-goldi-faq-toggle:hover,
+#gg-goldi-faq-toggle:focus-visible {
+  border-color: rgba(32,197,255,.75);
+  background: #102b49;
+  outline: none;
+}
+#gg-goldi-faq-toggle #gg-goldi-faq-chevron { font-size: 16px; line-height: 1; }
+#gg-goldi-faq-list[hidden] { display: none !important; }
+#gg-goldi-faq-list:not([hidden]) { margin-top: 7px; }
 #gg-goldi-faq-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
