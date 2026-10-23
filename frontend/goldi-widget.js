@@ -146,6 +146,7 @@
     var nextTop = Math.max(4, Math.min(window.innerHeight - root.offsetHeight - 4, dragState.top + dy));
     root.style.left = nextLeft + "px";
     root.style.right = "auto";
+    root.classList.toggle("gg-goldi-left", nextLeft < window.innerWidth / 2);
     root.style.top = nextTop + "px";
     root.style.bottom = "auto";
     try { localStorage.setItem("ggGoldiPosition", JSON.stringify({ left: nextLeft, top: nextTop })); } catch (error) {}
@@ -161,8 +162,10 @@
   try {
     var savedPosition = JSON.parse(localStorage.getItem("ggGoldiPosition") || "null");
     if (savedPosition && Number.isFinite(savedPosition.left) && Number.isFinite(savedPosition.top)) {
-      root.style.left = Math.max(4, Math.min(window.innerWidth - 58, savedPosition.left)) + "px";
+      var restoredLeft = Math.max(4, Math.min(window.innerWidth - 58, savedPosition.left));
+      root.style.left = restoredLeft + "px";
       root.style.right = "auto";
+      root.classList.toggle("gg-goldi-left", restoredLeft < window.innerWidth / 2);
       root.style.top = Math.max(4, Math.min(window.innerHeight - 58, savedPosition.top)) + "px";
       root.style.bottom = "auto";
     }
