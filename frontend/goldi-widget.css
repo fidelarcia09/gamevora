@@ -10,6 +10,7 @@
   right: max(16px, env(safe-area-inset-right));
   bottom: max(86px, calc(env(safe-area-inset-bottom) + 78px));
   z-index: 99990;
+  touch-action: none;
   color: var(--gg-goldi-text);
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.4;
@@ -17,8 +18,8 @@
 #gg-goldi-root * { box-sizing: border-box; }
 #gg-goldi-root button, #gg-goldi-root input { font: inherit; }
 #gg-goldi-launcher {
-  display: flex; align-items: center; gap: 10px;
-  min-height: 54px; padding: 9px 15px 9px 10px;
+  display: grid; place-items: center;
+  width: 58px; height: 58px; min-height: 58px; padding: 0;
   border: 1px solid rgba(32,197,255,.75); border-radius: 999px;
   color: #fff; background: linear-gradient(135deg,#087cff,#0750b7);
   box-shadow: 0 5px 24px rgba(0,124,255,.35), 0 0 0 1px rgba(32,197,255,.12);
@@ -26,15 +27,13 @@
 }
 #gg-goldi-launcher:hover { filter: brightness(1.08); }
 #gg-goldi-avatar {
-  display: grid; place-items: center; width: 35px; height: 35px; flex: 0 0 35px;
-  border-radius: 50%; color: #061329; background: #b5efff;
-  font-weight: 800; font-size: 17px; box-shadow: 0 0 14px rgba(32,197,255,.35);
+  display: grid; place-items: center; width: 46px; height: 46px; flex: 0 0 46px;
+  border: 2px solid rgba(255,255,255,.78); border-radius: 50%; color: #061329;
+  background: linear-gradient(135deg,#d8f8ff,#20c5ff 55%,#087cff);
+  font-weight: 900; font-size: 22px; box-shadow: 0 0 15px rgba(32,197,255,.48);
 }
-#gg-goldi-launcher-copy { display: flex; flex-direction: column; text-align: left; }
-#gg-goldi-launcher-copy strong { font-size: 14px; letter-spacing: .1px; }
-#gg-goldi-launcher-copy small { font-size: 10px; color: #d6f6ff; }
 #gg-goldi-panel {
-  position: absolute; right: 0; bottom: 66px;
+  position: absolute; right: 0; bottom: 70px;
   display: flex; flex-direction: column; width: min(350px, calc(100vw - 28px));
   max-height: min(560px, calc(100dvh - 170px)); min-height: 360px;
   overflow: hidden; border: 1px solid rgba(32,197,255,.38); border-radius: 19px;
