@@ -34,6 +34,21 @@
         '<button type="button" data-goldi-link="orders">Mis pedidos</button>' +
         '<button type="button" data-goldi-link="support">Soporte</button>' +
       '</nav>' +
+      '<section id="gg-goldi-faq" aria-label="Preguntas frecuentes">' +
+        '<h3>Preguntas frecuentes</h3>' +
+        '<div id="gg-goldi-faq-list">' +
+          '<button type="button" data-goldi-faq="¿Cómo añado saldo GVR?">¿Cómo añado saldo GVR?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo envío el comprobante de pago?">¿Cómo envío el comprobante?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo recargo un juego?">¿Cómo recargo un juego?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo recargo Free Fire?">¿Cómo recargo Free Fire?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo consulto mi saldo GVR?">¿Cómo consulto mi saldo?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo reviso mis pedidos?">¿Cómo reviso mis pedidos?</button>' +
+          '<button type="button" data-goldi-faq="¿Qué hago si mi recarga no llega?">¿Qué hago si mi recarga no llega?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo valido mi ID de jugador?">¿Cómo valido mi ID?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo creo una cuenta?">¿Cómo creo una cuenta?</button>' +
+          '<button type="button" data-goldi-faq="¿Cómo contacto soporte?">¿Cómo contacto soporte?</button>' +
+        '</div>' +
+      '</section>' +
       '<div id="gg-goldi-messages" role="log" aria-live="polite" aria-relevant="additions"></div>' +
       '<form id="gg-goldi-form">' +
         '<input id="gg-goldi-input" type="text" maxlength="500" autocomplete="off" placeholder="Escribe tu pregunta…" aria-label="Escribe tu pregunta" />' +
@@ -252,6 +267,17 @@
   close.addEventListener("click", closePanel);
   root.querySelectorAll("[data-goldi-link]").forEach(function (button) {
     button.addEventListener("click", function () { navigate(button.getAttribute("data-goldi-link")); });
+  });
+  root.querySelectorAll("[data-goldi-faq]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var question = button.getAttribute("data-goldi-faq");
+      addMessage(question, true);
+      var result = answer(question);
+      addMessage(result.text, false, result.href ? { href: result.href, label: result.label } : null);
+      var normalized = question.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+      conversationHistory.push({ role: "user", text: question, topic: normalized }, { role: "model", text: result.text, topic: normalized });
+      if (conversationHistory.length > 8) conversationHistory = conversationHistory.slice(-8);
+    });
   });
   form.addEventListener("submit", function (event) {
     event.preventDefault();
