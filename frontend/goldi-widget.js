@@ -375,16 +375,22 @@
     return faq[key] || null;
   }
 
-  root.querySelectorAll("[data-goldi-faq]").forEach(function (button) {
-    button.addEventListener("click", function () {
-      var question = button.getAttribute("data-goldi-faq");
-      addMessage(question, true);
-      var result = answerFAQ(question) || answer(question);
-      addMessage(result.text, false, result.href ? { href: result.href, label: result.label } : null);
-      var normalized = question.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
-      conversationHistory.push({ role: "user", text: question, topic: normalized }, { role: "model", text: result.text, topic: normalized });
-      if (conversationHistory.length > 8) conversationHistory = conversationHistory.slice(-8);
-    });
+  root.addEventListener("click", function (event) {
+    var button = event.target && event.target.closest ? event.target.closest("[data-goldi-faq]") : null;
+    if (!button || !root.contains(button)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    var question = button.getAttribute("data-goldi-faq");
+    var result = answerFAQ(question);
+    if (!result) {
+      result = { text: "Para ayudarte con esta pregunta, abre Soporte y describe lo que necesitas. También puedes escribir tu pregunta en el chat de Goldi.", href: links.support, label: "Abrir Soporte" };
+    }
+    addMessage(question, true);
+    addMessage(result.text, false, result.href ? { href: result.href, label: result.label } : null);
+    var normalized = question.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+    conversationHistory.push({ role: "user", text: question, topic: normalized }, { role: "model", text: result.text, topic: normalized });
+    if (conversationHistory.length > 8) conversationHistory = conversationHistory.slice(-8);
+    messages.scrollTop = messages.scrollHeight;
   });
   form.addEventListener("submit", function (event) {
     event.preventDefault();
