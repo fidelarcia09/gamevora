@@ -297,6 +297,8 @@
     button.addEventListener("click", function () { navigate(button.getAttribute("data-goldi-link")); });
   });
   function answerFAQ(question) {
+    var moneyLink = base + "recargar-gvr.html";
+    var proofLink = base + "confirmar-gvr.html";
     var key = question.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
     var faq = {
       "como anado saldo gvr": {
