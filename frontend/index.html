@@ -1,1061 +1,1344 @@
-<!DOCTYPE html><html lang="es"><head>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Gamers Gold Top-Up | Recargas Gaming</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050b18">
+    <meta name="description" content="Gamers Gold Top-Up: recargas digitales para tus juegos favoritos.">
+    <title>Gamers Gold Top-Up | Recargas Gaming</title>
+    <link rel="manifest" href="./manifest.json">
 
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
-
-    html,
-    body {
-        width: 100%;
-        max-width: 100%;
-        overflow-x: hidden;
-    }
-
-    body {
-        background: #050b18;
-        color: white;
-        min-height: 100vh;
-    }
-
-    /* PANTALLA DE INICIO */
-
-    #splash-screen {
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100vh;
-        background: #020611;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 999999;
-        opacity: 1;
-        transition: opacity 0.8s ease;
-        pointer-events: auto;
-    }
-
-    #splash-screen img {
-        display: block;
-        width: min(75vw, 360px);
-        max-width: 360px;
-        height: auto;
-        object-fit: contain;
-        filter:
-            drop-shadow(0 0 8px #00bfff)
-            drop-shadow(0 0 20px #008cff)
-            drop-shadow(0 0 40px rgba(0, 140, 255, 0.6));
-        animation: aparecerLogo 1s ease-out;
-    }
-
-    @keyframes aparecerLogo {
-        0% {
-            opacity: 0;
-            transform: scale(0.75);
+    <style>
+        :root {
+            --fondo: #050b18;
+            --superficie: #0a1426;
+            --superficie-2: #0d1b31;
+            --azul: #087cff;
+            --cian: #20c5ff;
+            --texto: #f4f8ff;
+            --texto-secundario: #9aadc4;
+            --borde: rgba(105, 158, 215, .15);
         }
 
-        100% {
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        html {
+            width: 100%;
+            max-width: 100%;
+            scroll-behavior: smooth;
+            overflow-x: clip;
+        }
+
+        body {
+            width: 100%;
+            max-width: 100%;
+            min-height: 100vh;
+            overflow-x: clip;
+            color: var(--texto);
+            background: var(--fondo);
+        }
+
+        a {
+            color: inherit;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        /* SPLASH */
+
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #020611;
             opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    .splash-oculto {
-        opacity: 0 !important;
-        pointer-events: none !important;
-    }
-
-    /* BARRA SUPERIOR */
-
-    header {
-        width: 100%;
-        background: #08152d;
-        border-bottom: 1px solid #123b70;
-        padding: 14px 18px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-
-    /* LOGO */
-
-    .logo {
-        display: flex;
-        align-items: center;
-        height: 48px;
-        min-width: 0;
-        text-decoration: none;
-        flex-shrink: 1;
-    }
-
-    .logo-g {
-        position: relative;
-        width: 48px;
-        height: 48px;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 45px;
-        font-weight: 900;
-        font-style: italic;
-        line-height: 1;
-        color: #18c8ff;
-        transform: skewX(-8deg);
-        text-shadow:
-            0 0 4px #ffffff,
-            0 0 8px #00c8ff,
-            0 0 18px #008cff,
-            0 0 30px rgba(0, 115, 255, 0.9);
-    }
-
-    .logo-g::before {
-        content: "";
-        position: absolute;
-        width: 30px;
-        height: 9px;
-        right: -2px;
-        top: 9px;
-        background: linear-gradient(
-            90deg,
-            #5eeaff,
-            #00aaff,
-            #006cff
-        );
-        transform: skewX(-25deg) rotate(-4deg);
-        clip-path: polygon(
-            0 35%,
-            100% 0,
-            72% 45%,
-            100% 45%,
-            0 100%,
-            28% 55%,
-            0 55%
-        );
-        filter:
-            drop-shadow(0 0 5px #00c8ff)
-            drop-shadow(0 0 12px #0077ff);
-    }
-
-    .logo-resto {
-        margin-left: 2px;
-        color: #f5f8ff;
-        font-size: 23px;
-        font-weight: 900;
-        font-style: italic;
-        letter-spacing: -1.4px;
-        line-height: 1;
-        white-space: nowrap;
-        text-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
-    }
-
-    /* NAVEGACIÓN */
-
-    .navegacion {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-shrink: 0;
-    }
-
-    .boton-cuenta {
-        display: none;
-    }
-
-    /* HERO */
-
-    .hero {
-        width: auto;
-        max-width: 100%;
-        margin: 18px;
-        padding: 28px 20px;
-        border-radius: 20px;
-        background:
-            radial-gradient(
-                circle at 90% 20%,
-                #0b68c9 0%,
-                transparent 35%
-            ),
-            linear-gradient(135deg, #071a38, #061022);
-        border: 1px solid #145ca3;
-        box-shadow: 0 0 25px rgba(0, 128, 255, 0.15);
-    }
-
-    .hero h1 {
-        font-size: 32px;
-        line-height: 1.1;
-        margin-bottom: 12px;
-    }
-
-    .hero h1 span {
-        color: #20a7ff;
-    }
-
-    .hero p {
-        color: #a9bad0;
-        margin-bottom: 22px;
-        line-height: 1.5;
-    }
-
-    .hero-button {
-        display: inline-block;
-        text-decoration: none;
-        background: linear-gradient(90deg, #087cff, #00baff);
-        color: white;
-        border: none;
-        padding: 13px 20px;
-        border-radius: 11px;
-        font-weight: bold;
-        font-size: 15px;
-        box-shadow: 0 0 18px rgba(0, 153, 255, 0.3);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .hero-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0 24px rgba(0, 153, 255, 0.45);
-    }
-
-    /* UNIVERSO GAMING */
-
-    .universo {
-        width: 100%;
-        max-width: 100%;
-        margin: 35px 0;
-        padding: 45px 20px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        border-top: 1px solid rgba(0, 153, 255, 0.25);
-        border-bottom: 1px solid rgba(0, 153, 255, 0.25);
-        background:
-            radial-gradient(
-                circle at center,
-                rgba(0, 119, 255, 0.18),
-                transparent 60%
-            ),
-            linear-gradient(180deg, #06142b, #020916);
-    }
-
-    .universo-label {
-        font-size: 14px;
-        letter-spacing: 6px;
-        color: #19bfff;
-        font-weight: 700;
-        margin-bottom: 12px;
-        text-transform: uppercase;
-    }
-
-    .universo-titulo {
-        font-size: clamp(42px, 11vw, 76px);
-        font-weight: 900;
-        letter-spacing: 2px;
-        line-height: 1;
-        font-family: Arial, Helvetica, sans-serif;
-        background: linear-gradient(90deg, #ffffff, #18bfff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 25px rgba(0, 174, 255, 0.25);
-    }
-
-    /* CARRUSEL */
-
-    .gamevora-carrusel {
-        width: 100%;
-        max-width: 650px;
-        margin: 25px auto 0;
-        overflow: hidden;
-        border: 1px solid #176ab2;
-        border-radius: 16px;
-        background: #07172f;
-        box-shadow: 0 0 20px rgba(0, 153, 255, 0.15);
-    }
-
-    .gamevora-track {
-        width: 100%;
-        display: flex;
-        transition: transform 0.6s ease;
-    }
-
-    .gamevora-slide {
-        min-width: 100%;
-        max-width: 100%;
-        padding: 18px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 15px;
-        text-align: left;
-    }
-
-    .gamevora-slide-link,
-    .gamevora-slide-link:hover,
-    .gamevora-slide-link:visited,
-    .gamevora-slide-link:active {
-        text-decoration: none !important;
-        color: inherit !important;
-    }
-
-    .gamevora-slide-text {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .gamevora-slide-label {
-        color: #19bfff;
-        font-size: 11px;
-        font-weight: bold;
-        letter-spacing: 1.5px;
-        margin-bottom: 6px;
-    }
-
-    .gamevora-slide h3 {
-        font-size: 18px;
-        margin-bottom: 5px;
-        overflow-wrap: break-word;
-    }
-
-    .gamevora-slide p {
-        color: #9db2c9;
-        font-size: 13px;
-        line-height: 1.4;
-        overflow-wrap: break-word;
-    }
-
-    .gamevora-slide-icon {
-        width: 4px;
-        height: 42px;
-        flex-shrink: 0;
-        border-radius: 10px;
-        background: linear-gradient(180deg, #00d4ff, #087cff);
-        box-shadow: 0 0 14px rgba(0, 183, 255, 0.45);
-    }
-
-    .gamevora-dots {
-        display: flex;
-        justify-content: center;
-        gap: 6px;
-        margin-top: 10px;
-    }
-
-    .gamevora-dot {
-        width: 7px;
-        height: 7px;
-        border: none;
-        border-radius: 50%;
-        background: #29415c;
-        padding: 0;
-        cursor: pointer;
-    }
-
-    .gamevora-dot.activo {
-        width: 20px;
-        border-radius: 8px;
-        background: #00b7ff;
-        box-shadow: 0 0 8px #008cff;
-    }
-
-    .mejor-opcion {
-        margin-top: 18px;
-        font-size: 17px;
-        letter-spacing: 5px;
-        font-weight: 700;
-        color: #ffffff;
-        text-transform: uppercase;
-    }
-
-    .linea-azul {
-        width: 90px;
-        height: 3px;
-        margin: 24px auto 0;
-        border-radius: 10px;
-        background: linear-gradient(
-            90deg,
-            transparent,
-            #00bfff,
-            transparent
-        );
-        box-shadow: 0 0 12px #00bfff;
-    }
-
-    /* TARJETAS: POR QUÉ ELEGIRNOS */
-
-    .ventajas {
-        width: 100%;
-        padding: 24px 18px 32px;
-        margin: 8px auto 25px;
-    }
-
-    .ventajas-encabezado {
-        max-width: 900px;
-        margin: 0 auto 22px;
-        text-align: center;
-    }
-
-    .ventajas-kicker {
-        color: #20bfff;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 2.5px;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-    }
-
-    .ventajas-encabezado h2 {
-        color: #f4f8ff;
-        font-size: clamp(23px, 5vw, 30px);
-        font-weight: 800;
-        line-height: 1.2;
-    }
-
-    .ventajas-encabezado p {
-        color: #91a8c2;
-        font-size: 13px;
-        line-height: 1.5;
-        margin-top: 8px;
-    }
-
-    .ventajas-grid {
-        width: 100%;
-        max-width: 1050px;
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-    }
-
-    .ventaja-card {
-        position: relative;
-        min-width: 0;
-        min-height: 150px;
-        padding: 15px 13px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        overflow: hidden;
-        border: 1px solid #153c65;
-        border-radius: 10px;
-        background: linear-gradient(145deg, #0c2040, #071326);
-        transition:
-            border-color 0.25s ease,
-            transform 0.25s ease;
-    }
-
-    .ventaja-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 13px;
-        width: 32px;
-        height: 2px;
-        background: linear-gradient(90deg, #00d5ff, #087cff);
-        box-shadow: 0 0 8px rgba(0, 191, 255, 0.4);
-    }
-
-    .ventaja-card:hover {
-        transform: translateY(-3px);
-        border-color: #168bca;
-    }
-
-    /* ICONOS SVG */
-
-    .ventaja-icono {
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 10px;
-        color: #25c8ff;
-        background: rgba(0, 153, 255, 0.1);
-        border: 1px solid rgba(0, 191, 255, 0.25);
-        border-radius: 8px;
-        flex-shrink: 0;
-    }
-
-    .ventaja-icono svg {
-        width: 18px;
-        height: 18px;
-        stroke: currentColor;
-        fill: none;
-        stroke-width: 1.8;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
-
-    .ventaja-card h3 {
-        color: #f4f8ff;
-        font-size: 12px;
-        font-weight: 800;
-        line-height: 1.4;
-        margin-bottom: 5px;
-    }
-
-    .ventaja-card p {
-        color: #9aadc4;
-        font-size: 11px;
-        line-height: 1.45;
-    }
-
-    /* PIE DE PÁGINA */
-
-    footer {
-        width: 100%;
-        text-align: center;
-        padding: 30px 18px;
-        color: #647890;
-        font-size: 12px;
-        line-height: 1.8;
-        border-top: 1px solid #102a49;
-        margin-top: 15px;
-    }
-
-    footer strong {
-        color: #279fff;
-    }
-
-    /* TABLET */
-
-    @media (max-width: 850px) {
-        .ventajas-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            transition: opacity .8s ease;
         }
 
-        .ventaja-card {
-            min-height: 150px;
+        #splash-screen img {
+            display: block;
+            width: min(75vw, 360px);
+            max-width: 360px;
+            height: auto;
+            object-fit: contain;
+            filter:
+                drop-shadow(0 0 8px #00bfff)
+                drop-shadow(0 0 20px #008cff)
+                drop-shadow(0 0 35px rgba(0, 140, 255, .45));
+            animation: aparecerLogo 1s ease-out;
         }
-    }
 
-    /* MÓVIL */
+        .splash-oculto {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
 
-    @media (max-width: 600px) {
+        @keyframes aparecerLogo {
+            from {
+                opacity: 0;
+                transform: scale(.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* CABECERA */
+
         header {
-            padding: 12px 14px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            min-height: 70px;
+            padding: 11px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: rgba(5, 11, 24, .94);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(105, 158, 215, .1);
         }
 
         .logo {
-            height: 44px;
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            height: 46px;
+            text-decoration: none;
+            flex-shrink: 1;
         }
 
         .logo-g {
+            position: relative;
             width: 44px;
             height: 44px;
-            font-size: 41px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cian);
+            font-size: 42px;
+            font-weight: 900;
+            font-style: italic;
+            line-height: 1;
+            transform: skewX(-8deg);
+            text-shadow:
+                0 0 5px rgba(255,255,255,.6),
+                0 0 12px rgba(0,200,255,.7);
+        }
+
+        .logo-g::before {
+            content: "";
+            position: absolute;
+            width: 27px;
+            height: 8px;
+            top: 8px;
+            right: -1px;
+            background: linear-gradient(90deg, #5eeaff, #00aaff, #006cff);
+            transform: skewX(-25deg) rotate(-4deg);
+            clip-path: polygon(0 35%,100% 0,72% 45%,100% 45%,0 100%,28% 55%,0 55%);
         }
 
         .logo-resto {
+            margin-left: 3px;
+            color: #f5f8ff;
             font-size: 20px;
-            letter-spacing: -1.2px;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: -1.1px;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .navegacion {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .boton-cuenta {
+            display: none;
+        }
+
+        /* CONTENIDO PRINCIPAL */
+
+        main {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
         }
 
         .hero {
-            margin: 14px;
-            padding: 25px 18px;
+            position: relative;
+            isolation: isolate;
+            margin: 24px 22px 36px;
+            padding: clamp(28px, 5vw, 54px);
+            overflow: hidden;
+            border-radius: 22px;
+            background:
+                radial-gradient(ellipse at 88% 15%, rgba(0, 119, 255, .2), transparent 40%),
+                linear-gradient(135deg, #0b1b34, #081121 75%);
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            right: -70px;
+            bottom: -140px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(0, 119, 255, .09);
+            filter: blur(30px);
+        }
+
+        .hero-etiqueta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            color: var(--cian);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero-etiqueta::before {
+            content: "";
+            width: 22px;
+            height: 2px;
+            background: var(--cian);
+            box-shadow: 0 0 9px rgba(32, 197, 255, .6);
         }
 
         .hero h1 {
-            font-size: 30px;
+            max-width: 650px;
+            margin-bottom: 16px;
+            color: #f6f9ff;
+            font-size: clamp(32px, 5.2vw, 54px);
+            font-weight: 900;
+            letter-spacing: -1.6px;
+            line-height: 1.08;
+        }
+
+        .hero h1 span {
+            color: var(--cian);
         }
 
         .hero p {
-            font-size: 16px;
+            max-width: 540px;
+            margin-bottom: 25px;
+            color: #a9bad0;
+            font-size: 15px;
+            line-height: 1.75;
         }
 
-        .universo {
-            padding: 42px 12px 45px;
+        .hero-button {
+            display: inline-flex;
+            min-height: 47px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 13px 20px;
+            border-radius: 9px;
+            background: linear-gradient(100deg, #087cff, #00aeea);
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 800;
+            box-shadow: 0 7px 22px rgba(0, 119, 255, .18);
+            transition: transform .2s ease, filter .2s ease;
         }
 
-        .universo-label {
+        .hero-button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .hero-button svg {
+            width: 17px;
+            height: 17px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* SECCIONES */
+
+        .seccion {
+            padding: 0 22px;
+            margin: 0 auto 42px;
+        }
+
+        .seccion-encabezado {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .seccion-kicker {
+            margin-bottom: 8px;
+            color: var(--cian);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2.2px;
+            text-transform: uppercase;
+        }
+
+        .seccion-encabezado h2 {
+            color: var(--texto);
+            font-size: clamp(23px, 4vw, 30px);
+            font-weight: 850;
+            letter-spacing: -.5px;
+            line-height: 1.2;
+        }
+
+        .seccion-descripcion {
+            margin-top: 8px;
+            color: var(--texto-secundario);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .ver-todos {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            flex-shrink: 0;
+            color: var(--cian);
+            text-decoration: none;
             font-size: 12px;
-            letter-spacing: 4px;
+            font-weight: 800;
         }
 
-        .universo-titulo {
-            font-size: 48px;
-            letter-spacing: 1px;
+        .ver-todos svg {
+            width: 15px;
+            height: 15px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
+
+        /* JUEGOS DESTACADOS */
+
+        .juegos-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .juego-card {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--borde);
+            border-radius: 13px;
+            background: linear-gradient(155deg, #0b192d, #07101e);
+            text-decoration: none;
+            transition: border-color .22s ease, transform .22s ease;
+        }
+
+        .juego-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(32, 197, 255, .55);
+        }
+
+        .juego-imagen {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            background: #0a1730;
+        }
+
+        .juego-imagen img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform .3s ease;
+        }
+
+        .juego-card:hover .juego-imagen img {
+            transform: scale(1.045);
+        }
+
+        .juego-imagen::after {
+            content: "";
+            position: absolute;
+            inset: 45% 0 0;
+            background: linear-gradient(180deg, transparent, rgba(5, 11, 24, .38));
+            pointer-events: none;
+        }
+
+        .juego-info {
+            display: flex;
+            min-height: 57px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 7px;
+            padding: 12px;
+        }
+
+        .juego-info h3 {
+            min-width: 0;
+            color: #f1f6ff;
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+        }
+
+        .juego-flecha {
+            width: 23px;
+            height: 23px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 7px;
+            background: rgba(0, 153, 255, .1);
+            color: var(--cian);
+        }
+
+        .juego-flecha svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* BLOQUE GVR */
+
+        .gvr-panel {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 22px;
+            padding: 27px;
+            overflow: hidden;
+            border-radius: 16px;
+            background:
+                radial-gradient(circle at 90% 50%, rgba(0, 135, 255, .15), transparent 35%),
+                linear-gradient(125deg, #0c1e38, #091326);
+        }
+
+        .gvr-panel h2 {
+            margin-bottom: 10px;
+            color: #f5f8ff;
+            font-size: clamp(21px, 3.5vw, 29px);
+            font-weight: 850;
+        }
+
+        .gvr-panel p {
+            max-width: 570px;
+            color: var(--texto-secundario);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .gvr-icono {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(32, 197, 255, .23);
+            border-radius: 17px;
+            background: rgba(0, 119, 255, .12);
+            color: var(--cian);
+        }
+
+        .gvr-icono svg {
+            width: 33px;
+            height: 33px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.7;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .gvr-enlace {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            color: var(--cian);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .gvr-enlace svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* CARRUSEL */
 
         .gamevora-carrusel {
-            margin-top: 25px;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 14px;
+            background: linear-gradient(110deg, #0b1b32, #081225);
+        }
+
+        .gamevora-track {
+            display: flex;
+            width: 100%;
+            transition: transform .55s ease;
         }
 
         .gamevora-slide {
-            padding: 18px 20px;
+            display: flex;
+            min-width: 100%;
+            max-width: 100%;
+            min-height: 132px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 24px 26px;
+            text-align: left;
+        }
+
+        .gamevora-slide-link,
+        .gamevora-slide-link:hover,
+        .gamevora-slide-link:visited,
+        .gamevora-slide-link:active {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .gamevora-slide-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .gamevora-slide-label {
+            margin-bottom: 8px;
+            color: var(--cian);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.7px;
         }
 
         .gamevora-slide h3 {
+            margin-bottom: 7px;
+            color: #f4f8ff;
             font-size: 18px;
+            font-weight: 800;
+            line-height: 1.3;
         }
 
         .gamevora-slide p {
+            color: var(--texto-secundario);
             font-size: 13px;
+            line-height: 1.6;
         }
 
-        .mejor-opcion {
-            font-size: 16px;
-            letter-spacing: 4px;
+        .gamevora-slide-icon {
+            width: 3px;
+            height: 56px;
+            flex-shrink: 0;
+            border-radius: 5px;
+            background: linear-gradient(180deg, var(--cian), var(--azul));
         }
 
-        .ventajas {
-            padding: 20px 14px 28px;
+        .gamevora-dots {
+            display: flex;
+            justify-content: center;
+            gap: 7px;
+            margin-top: 13px;
         }
 
-        .ventajas-encabezado {
-            margin-bottom: 18px;
+        .gamevora-dot {
+            width: 7px;
+            height: 7px;
+            padding: 0;
+            border: 0;
+            border-radius: 10px;
+            background: #33445d;
+            cursor: pointer;
+            transition: width .2s ease, background .2s ease;
         }
 
-        .ventajas-encabezado h2 {
-            font-size: 24px;
+        .gamevora-dot.activo {
+            width: 21px;
+            background: var(--cian);
+        }
+
+        /* VENTAJAS */
+
+        .ventajas-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 13px;
         }
 
         .ventaja-card {
-            min-height: 135px;
-            padding: 14px 12px;
+            min-width: 0;
+            min-height: 155px;
+            padding: 17px;
+            border: 1px solid var(--borde);
+            border-radius: 11px;
+            background: linear-gradient(145deg, #0b192d, #07101e);
+            transition: border-color .2s ease, transform .2s ease;
+        }
+
+        .ventaja-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(32, 197, 255, .4);
         }
 
         .ventaja-icono {
-            width: 28px;
-            height: 28px;
-            margin-bottom: 9px;
-        }
-    }
-
-    @media (max-width: 400px) {
-        .logo-resto {
-            font-size: 18px;
-        }
-
-        .logo-g {
-            width: 40px;
-            height: 40px;
-            font-size: 37px;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 13px;
+            border: 1px solid rgba(32, 197, 255, .18);
+            border-radius: 9px;
+            background: rgba(0, 153, 255, .08);
+            color: var(--cian);
         }
 
-        .logo {
-            height: 40px;
-        }
-
-        .hero h1 {
-            font-size: 27px;
-        }
-
-        .universo-titulo {
-            font-size: 42px;
-        }
-
-        .gamevora-slide {
-            gap: 8px;
-            padding: 16px;
-        }
-
-        .ventajas {
-            padding: 18px 12px 25px;
-        }
-
-        .ventajas-grid {
-            gap: 8px;
-        }
-
-        .ventaja-card {
-            min-height: 140px;
-            padding: 12px 10px;
+        .ventaja-icono svg {
+            width: 19px;
+            height: 19px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .ventaja-card h3 {
-            font-size: 11px;
+            margin-bottom: 7px;
+            color: #f2f6ff;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.4;
         }
 
         .ventaja-card p {
-            font-size: 10px;
-        }
-    }
-</style>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#050b18">
-
-</head><body><!-- PANTALLA DE INICIO -->
-
-<div id="splash-screen">
-    <img
-        src="../imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
-        alt="Gamers Gold Top-Up"
-        loading="eager"
-    >
-</div>
-
-<!-- ENCABEZADO -->
-
-<header>
-    <div class="logo">
-        <span class="logo-g">G</span>
-        <span class="logo-resto">AMERS GOLD TOP-UP</span>
-    </div>
-
-    <div class="navegacion">
-        <div id="botonesCuenta" class="boton-cuenta"></div>
-    </div>
-</header>
-
-<!-- PRESENTACIÓN -->
-
-<section class="hero">
-    <h1>
-        Tu mundo gaming.<br>
-        <span>Un solo lugar.</span>
-    </h1>
-
-    <p>
-        Recargas digitales, ofertas y productos
-        para tus juegos favoritos.
-    </p>
-
-    <a href="juegos.html" class="hero-button">
-        Explorar juegos
-    </a>
-</section>
-
-<!-- UNIVERSO GAMING -->
-
-<section class="universo">
-
-    <div class="universo-label">
-        EL UNIVERSO GAMING
-    </div>
-
-    <div class="universo-titulo">
-        GAMERS GOLD TOP-UP
-    </div>
-
-    <!-- CARRUSEL -->
-
-    <div class="gamevora-carrusel">
-        <div class="gamevora-track" id="gamevoraTrack">
-
-            <a
-                href="reseñas.html"
-                class="gamevora-slide gamevora-slide-link"
-            >
-                <div class="gamevora-slide-text">
-                    <div class="gamevora-slide-label">
-                        GAMERS GOLD TOP-UP COMMUNITY
-                    </div>
-
-                    <h3>¿Ya dejaste tu reseña?</h3>
-
-                    <p>
-                        Tu opinión ayuda a mejorar
-                        Gamers Gold Top-Up.
-                    </p>
-                </div>
-
-                <div class="gamevora-slide-icon"></div>
-            </a>
-
-            <div class="gamevora-slide">
-                <div class="gamevora-slide-text">
-                    <div class="gamevora-slide-label">
-                        NOVEDADES
-                    </div>
-
-                    <h3>Nuevas actualizaciones</h3>
-
-                    <p>
-                        Descubre las novedades
-                        que estamos preparando.
-                    </p>
-                </div>
-
-                <div class="gamevora-slide-icon"></div>
-            </div>
-
-            <a
-                href="informacion-gvr.html"
-                class="gamevora-slide gamevora-slide-link"
-            >
-                <div class="gamevora-slide-text">
-                    <div class="gamevora-slide-label">
-                        GVR
-                    </div>
-
-                    <h3>Información sobre GVR</h3>
-
-                    <p>
-                        Conoce cómo funciona
-                        nuestro saldo virtual.
-                    </p>
-                </div>
-
-                <div class="gamevora-slide-icon"></div>
-            </a>
-
-        </div>
-    </div>
-
-    <div class="gamevora-dots">
-        <button
-            class="gamevora-dot activo"
-            type="button"
-            aria-label="Banner 1"
-        ></button>
-
-        <button
-            class="gamevora-dot"
-            type="button"
-            aria-label="Banner 2"
-        ></button>
-
-        <button
-            class="gamevora-dot"
-            type="button"
-            aria-label="Banner 3"
-        ></button>
-    </div>
-
-    <div class="mejor-opcion">
-        TU MEJOR OPCIÓN
-    </div>
-
-    <div class="linea-azul"></div>
-</section>
-
-<!-- POR QUÉ ELEGIRNOS -->
-
-<section class="ventajas">
-
-    <div class="ventajas-encabezado">
-        <div class="ventajas-kicker">
-            GAMERS GOLD TOP-UP
-        </div>
-
-        <h2>¿Por qué elegirnos?</h2>
-
-        <p>
-            Una experiencia de recargas pensada para tu mundo gaming.
-        </p>
-    </div>
-
-    <div class="ventajas-grid">
-
-        <!-- ENTREGA RÁPIDA -->
-
-        <article class="ventaja-card">
-            <div class="ventaja-icono" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                    <path d="M13 2 4.5 13h6L10 22l9.5-12h-6L13 2Z"/>
-                </svg>
-            </div>
-
-            <h3>ENTREGA RÁPIDA</h3>
-
-            <p>
-                Recargas digitales procesadas de forma ágil.
-            </p>
-        </article>
-
-        <!-- PAGO SEGURO -->
-
-        <article class="ventaja-card">
-            <div class="ventaja-icono" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/>
-                    <path d="m9 12 2 2 4-4"/>
-                </svg>
-            </div>
-
-            <h3>PAGO SEGURO</h3>
-
-            <p>
-                Protección de tus datos durante el proceso de compra.
-            </p>
-        </article>
-
-        <!-- PRECIOS COMPETITIVOS -->
-
-        <article class="ventaja-card">
-            <div class="ventaja-icono" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M2 12h20"/>
-                    <path d="M12 2a15 15 0 0 1 0 20"/>
-                    <path d="M12 2a15 15 0 0 0 0 20"/>
-                </svg>
-            </div>
-
-            <h3>PRECIOS COMPETITIVOS</h3>
-
-            <p>
-                Opciones para recargar tus juegos favoritos.
-            </p>
-        </article>
-
-        <!-- ATENCIÓN AL CLIENTE -->
-
-        <article class="ventaja-card">
-            <div class="ventaja-icono" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                    <path d="M4 13v-2a8 8 0 0 1 16 0v2"/>
-                    <path d="M4 13H3a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h3v-6H4Z"/>
-                    <path d="M20 13h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-3v-6h2Z"/>
-                    <path d="M17 20c-.8 1-2 1.5-4 1.5"/>
-                </svg>
-            </div>
-
-            <h3>ATENCIÓN AL CLIENTE</h3>
-
-            <p>
-                Estamos aquí para ayudarte con tus consultas.
-            </p>
-        </article>
-
-    </div>
-</section>
-
-<!-- PIE DE PÁGINA -->
-
-<footer>
-    <p>
-        <strong>GAMERS GOLD TOP-UP</strong>
-    </p>
-
-    <p>
-        Plataforma de recargas digitales
-        para gamers.
-    </p>
-
-    <br>
-
-    <p>© 2026 Gamers Gold Top-Up</p>
-</footer>
-
-<!-- SUPABASE: CONEXIÓN CONSERVADA -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-    /* PANTALLA DE INICIO */
-
-    const splash = document.getElementById("splash-screen");
-    const splashYaVisto = sessionStorage.getItem("gamersGoldSplashVisto");
-
-    if (splash) {
-        if (splashYaVisto === "true") {
-            splash.remove();
-        } else {
-            sessionStorage.setItem("gamersGoldSplashVisto", "true");
-
-            setTimeout(() => {
-                splash.classList.add("splash-oculto");
-
-                setTimeout(() => {
-                    splash.remove();
-                }, 800);
-            }, 3700);
-        }
-    }
-
-    /* SUPABASE */
-
-    const supabaseClient = window.supabase.createClient(
-        "https://gsuhzcavghsiolmipnzi.supabase.co",
-        "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
-    );
-
-    function actualizarMenu() {
-        const botones = document.getElementById("botonesCuenta");
-
-        if (botones) {
-            botones.innerHTML = "";
-            botones.style.display = "none";
-        }
-    }
-
-    actualizarMenu();
-
-    /* CARRUSEL */
-
-    const gamevoraTrack = document.getElementById("gamevoraTrack");
-    const gamevoraDots = document.querySelectorAll(".gamevora-dot");
-
-    let gamevoraActual = 0;
-
-    function cambiarBannerGamevora(numero) {
-        if (!gamevoraTrack) {
-            return;
+            color: var(--texto-secundario);
+            font-size: 11px;
+            line-height: 1.65;
         }
 
-        gamevoraActual = numero;
+        /* PIE DE PÁGINA */
 
-        gamevoraTrack.style.transform =
-            "translateX(-" + (numero * 100) + "%)";
-
-        gamevoraDots.forEach((dot, index) => {
-            dot.classList.toggle("activo", index === numero);
-        });
-    }
-
-    setInterval(() => {
-        let siguiente = gamevoraActual + 1;
-
-        if (siguiente >= 3) {
-            siguiente = 0;
+        footer {
+            width: 100%;
+            margin-top: 12px;
+            padding: 27px 20px 35px;
+            border-top: 1px solid rgba(105, 158, 215, .1);
+            color: #72849b;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.9;
         }
 
-        cambiarBannerGamevora(siguiente);
-    }, 4500);
+        footer strong {
+            color: #c8d8ed;
+            letter-spacing: .7px;
+        }
 
-    gamevoraDots.forEach((dot, index) => {
-        dot.addEventListener("click", () => {
-            cambiarBannerGamevora(index);
-        });
-    });
-</script>
+        /* RESPONSIVE */
 
-<!-- NAVEGACIÓN INFERIOR GAMERS GOLD -->
-
-<script>
-    (async function () {
-        try {
-            const respuesta = await fetch(
-                "nav-inferior.html?v=20261012-v3"
-            );
-
-            if (!respuesta.ok) {
-                throw new Error("No se pudo cargar nav-inferior.html");
+        @media (min-width: 900px) {
+            .juegos-grid {
+                gap: 20px;
             }
 
-            const contenido = await respuesta.text();
+            .juego-info {
+                padding: 14px;
+            }
 
-            const documento = new DOMParser().parseFromString(
-                contenido,
-                "text/html"
-            );
-
-            documento.querySelectorAll("style").forEach(function (estilo) {
-                document.head.appendChild(estilo.cloneNode(true));
-            });
-
-            documento.querySelectorAll("script").forEach(function (original) {
-                const nuevo = document.createElement("script");
-                nuevo.textContent = original.textContent;
-                document.body.appendChild(nuevo);
-            });
-
-        } catch (error) {
-            console.error("Error al cargar la navegación:", error);
+            .juego-info h3 {
+                font-size: 14px;
+            }
         }
-    })();
-</script>
 
+        @media (max-width: 760px) {
+            .juegos-grid,
+            .ventajas-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .juego-info h3 {
+                font-size: 12px;
+            }
+
+            .ventaja-card {
+                min-height: 140px;
+            }
+
+            .seccion {
+                margin-bottom: 35px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                min-height: 64px;
+                padding: 10px 13px;
+            }
+
+            .logo {
+                height: 42px;
+            }
+
+            .logo-g {
+                width: 39px;
+                height: 42px;
+                font-size: 38px;
+            }
+
+            .logo-resto {
+                font-size: clamp(15px, 4.1vw, 19px);
+                letter-spacing: -1px;
+            }
+
+            .hero {
+                margin: 17px 14px 30px;
+                padding: 27px 21px;
+                border-radius: 17px;
+            }
+
+            .hero h1 {
+                font-size: clamp(30px, 8vw, 39px);
+                letter-spacing: -1px;
+            }
+
+            .hero p {
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+            .hero-button {
+                width: 100%;
+            }
+
+            .seccion {
+                padding: 0 14px;
+                margin-bottom: 31px;
+            }
+
+            .seccion-encabezado {
+                align-items: flex-end;
+                margin-bottom: 16px;
+                gap: 8px;
+            }
+
+            .seccion-encabezado h2 {
+                font-size: 23px;
+            }
+
+            .seccion-descripcion {
+                font-size: 12px;
+            }
+
+            .ver-todos {
+                font-size: 11px;
+            }
+
+            .juegos-grid {
+                gap: 10px;
+            }
+
+            .juego-card {
+                border-radius: 10px;
+            }
+
+            .juego-info {
+                min-height: 49px;
+                padding: 9px;
+            }
+
+            .juego-info h3 {
+                font-size: 11px;
+            }
+
+            .juego-flecha {
+                width: 21px;
+                height: 21px;
+            }
+
+            .gvr-panel {
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 12px;
+                padding: 20px 17px;
+                border-radius: 13px;
+            }
+
+            .gvr-panel h2 {
+                font-size: 21px;
+            }
+
+            .gvr-panel p {
+                font-size: 12px;
+            }
+
+            .gvr-icono {
+                width: 46px;
+                height: 46px;
+                border-radius: 12px;
+            }
+
+            .gvr-icono svg {
+                width: 25px;
+                height: 25px;
+            }
+
+            .gamevora-slide {
+                min-height: 128px;
+                padding: 20px 18px;
+                gap: 12px;
+            }
+
+            .gamevora-slide h3 {
+                font-size: 16px;
+            }
+
+            .gamevora-slide p {
+                font-size: 12px;
+            }
+
+            .ventajas-grid {
+                gap: 10px;
+            }
+
+            .ventaja-card {
+                min-height: 140px;
+                padding: 13px;
+            }
+
+            .ventaja-icono {
+                width: 31px;
+                height: 31px;
+                margin-bottom: 10px;
+            }
+
+            .ventaja-card h3 {
+                font-size: 11px;
+            }
+
+            .ventaja-card p {
+                font-size: 10px;
+            }
+
+            footer {
+                padding: 25px 15px 32px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .logo-resto {
+                font-size: 14px;
+                letter-spacing: -.8px;
+            }
+
+            .logo-g {
+                width: 34px;
+                font-size: 34px;
+            }
+
+            .seccion-encabezado h2 {
+                font-size: 21px;
+            }
+
+            .juegos-grid {
+                gap: 8px;
+            }
+
+            .juego-info {
+                padding: 8px;
+            }
+
+            .juego-info h3 {
+                font-size: 10px;
+            }
+
+            .ventaja-card {
+                padding: 11px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- PANTALLA DE INICIO -->
+
+    <div id="splash-screen">
+        <img
+            src="./imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
+            alt="Gamers Gold Top-Up"
+            loading="eager"
+        >
+    </div>
+
+    <!-- CABECERA -->
+
+    <header>
+        <a class="logo" href="./index.html" aria-label="Gamers Gold Top-Up, inicio">
+            <span class="logo-g">G</span>
+            <span class="logo-resto">AMERS GOLD TOP-UP</span>
+        </a>
+
+        <div class="navegacion">
+            <div id="botonesCuenta" class="boton-cuenta"></div>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO -->
+
+        <section class="hero">
+            <div class="hero-etiqueta">Tu tienda gaming</div>
+
+            <h1>
+                Tu mundo gaming.<br>
+                <span>Un solo lugar.</span>
+            </h1>
+
+            <p>
+                Recargas digitales, ofertas y productos
+                para tus juegos favoritos. Encuentra tu juego
+                y descubre las opciones disponibles.
+            </p>
+
+            <a href="./juegos.html" class="hero-button">
+                Explorar juegos
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </section>
+
+        <!-- JUEGOS DESTACADOS -->
+
+        <section class="seccion" id="juegos">
+            <div class="seccion-encabezado">
+                <div>
+                    <div class="seccion-kicker">Elige tu próximo nivel</div>
+                    <h2>Juegos destacados</h2>
+                    <p class="seccion-descripcion">
+                        Accede a tus juegos favoritos.
+                    </p>
+                </div>
+
+                <a class="ver-todos" href="./juegos.html">
+                    Ver todos
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="juegos-grid">
+                <a class="juego-card" href="./freefire.html">
+                    <div class="juego-imagen">
+                        <img
+                            src="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png"
+                            alt="Free Fire"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="juego-info">
+                        <h3>Free Fire</h3>
+                        <span class="juego-flecha" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a class="juego-card" href="./mobilelegends.html">
+                    <div class="juego-imagen">
+                        <img
+                            src="./imagenes/file_00000000a7e081f9b4b5577efa5f6066.png"
+                            alt="Mobile Legends"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="juego-info">
+                        <h3>Mobile Legends</h3>
+                        <span class="juego-flecha" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a class="juego-card" href="./pubgmobile.html">
+                    <div class="juego-imagen">
+                        <img
+                            src="./imagenes/file_00000000cde881f6a366f4dbeb1a5fd0.png"
+                            alt="PUBG Mobile"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="juego-info">
+                        <h3>PUBG Mobile</h3>
+                        <span class="juego-flecha" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+
+                <a class="juego-card" href="./bloodstrike.html">
+                    <div class="juego-imagen">
+                        <img
+                            src="./imagenes/file_00000000da8481f980717bbfaf5b7888.png"
+                            alt="Blood Strike"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="juego-info">
+                        <h3>Blood Strike</h3>
+                        <span class="juego-flecha" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- INFORMACIÓN GVR -->
+
+        <section class="seccion">
+            <div class="gvr-panel">
+                <div>
+                    <div class="seccion-kicker">Saldo virtual</div>
+                    <h2>Conoce GVR</h2>
+                    <p>
+                        Descubre cómo funciona nuestro saldo virtual
+                        y consulta la información disponible antes
+                        de realizar tus compras.
+                    </p>
+
+                    <a href="./informacion-gvr.html" class="gvr-enlace">
+                        Información sobre GVR
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="gvr-icono" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <ellipse cx="12" cy="5" rx="8" ry="3"/>
+                        <path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/>
+                        <path d="M4 11v6c0 1.7 3.6 3 8 3 1.5 0 2.9-.2 4-.6"/>
+                        <path d="M20 11v3"/>
+                        <path d="m16 17 2 2 4-4"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOVEDADES Y COMUNIDAD -->
+
+        <section class="seccion">
+            <div class="seccion-encabezado">
+                <div>
+                    <div class="seccion-kicker">Mantente al día</div>
+                    <h2>Comunidad y novedades</h2>
+                </div>
+            </div>
+
+            <div class="gamevora-carrusel">
+                <div class="gamevora-track" id="gamevoraTrack">
+                    <a href="./reseñas.html" class="gamevora-slide gamevora-slide-link">
+                        <div class="gamevora-slide-text">
+                            <div class="gamevora-slide-label">
+                                GAMERS GOLD TOP-UP COMMUNITY
+                            </div>
+                            <h3>Tu opinión cuenta</h3>
+                            <p>
+                                Comparte tu experiencia y ayúdanos
+                                a seguir mejorando.
+                            </p>
+                        </div>
+                        <div class="gamevora-slide-icon"></div>
+                    </a>
+
+                    <div class="gamevora-slide">
+                        <div class="gamevora-slide-text">
+                            <div class="gamevora-slide-label">NOVEDADES</div>
+                            <h3>Nuevas actualizaciones</h3>
+                            <p>
+                                Mantente atento a las novedades
+                                de Gamers Gold Top-Up.
+                            </p>
+                        </div>
+                        <div class="gamevora-slide-icon"></div>
+                    </div>
+
+                    <a href="./informacion-gvr.html" class="gamevora-slide gamevora-slide-link">
+                        <div class="gamevora-slide-text">
+                            <div class="gamevora-slide-label">GVR</div>
+                            <h3>Conoce nuestro saldo virtual</h3>
+                            <p>
+                                Consulta la información de GVR
+                                y cómo funciona.
+                            </p>
+                        </div>
+                        <div class="gamevora-slide-icon"></div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="gamevora-dots" aria-label="Controles del carrusel">
+                <button class="gamevora-dot activo" type="button" aria-label="Banner 1"></button>
+                <button class="gamevora-dot" type="button" aria-label="Banner 2"></button>
+                <button class="gamevora-dot" type="button" aria-label="Banner 3"></button>
+            </div>
+        </section>
+
+        <!-- VENTAJAS -->
+
+        <section class="seccion">
+            <div class="seccion-encabezado">
+                <div>
+                    <div class="seccion-kicker">Gamers Gold Top-Up</div>
+                    <h2>¿Por qué elegirnos?</h2>
+                    <p class="seccion-descripcion">
+                        Una experiencia de recargas pensada para gamers.
+                    </p>
+                </div>
+            </div>
+
+            <div class="ventajas-grid">
+                <article class="ventaja-card">
+                    <div class="ventaja-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M13 2 4.5 13h6L10 22l9.5-12h-6L13 2Z"/>
+                        </svg>
+                    </div>
+                    <h3>ENTREGA RÁPIDA</h3>
+                    <p>Recargas digitales procesadas de forma ágil.</p>
+                </article>
+
+                <article class="ventaja-card">
+                    <div class="ventaja-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/>
+                            <path d="m9 12 2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <h3>PROCESO CLARO</h3>
+                    <p>Información de compra presentada de forma sencilla.</p>
+                </article>
+
+                <article class="ventaja-card">
+                    <div class="ventaja-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 3h8l4 4v14H7z"/>
+                            <path d="M15 3v5h4M10 13h6M10 17h6"/>
+                            <path d="M4 7v14"/>
+                        </svg>
+                    </div>
+                    <h3>PEDIDOS ORGANIZADOS</h3>
+                    <p>Consulta la información de tus compras desde la plataforma.</p>
+                </article>
+
+                <article class="ventaja-card">
+                    <div class="ventaja-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 13v-2a8 8 0 0 1 16 0v2"/>
+                            <path d="M4 13H3a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h3v-6H4Z"/>
+                            <path d="M20 13h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-3v-6h2Z"/>
+                            <path d="M17 20c-.8 1-2 1.5-4 1.5"/>
+                        </svg>
+                    </div>
+                    <h3>ATENCIÓN AL CLIENTE</h3>
+                    <p>Estamos aquí para ayudarte con tus consultas.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer>
+        <p><strong>GAMERS GOLD TOP-UP</strong></p>
+        <p>Plataforma de recargas digitales para gamers.</p>
+        <p>© 2026 Gamers Gold Top-Up</p>
+    </footer>
+
+    <!-- SUPABASE: CONEXIÓN CONSERVADA -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        /* PANTALLA DE INICIO */
+
+        const splash = document.getElementById("splash-screen");
+        const splashYaVisto = sessionStorage.getItem("gamersGoldSplashVisto");
+
+        if (splash) {
+            if (splashYaVisto === "true") {
+                splash.remove();
+            } else {
+                sessionStorage.setItem("gamersGoldSplashVisto", "true");
+
+                setTimeout(() => {
+                    splash.classList.add("splash-oculto");
+
+                    setTimeout(() => {
+                        splash.remove();
+                    }, 800);
+                }, 3700);
+            }
+        }
+
+        /* SUPABASE: MISMA CONFIGURACIÓN */
+
+        const supabaseClient = window.supabase.createClient(
+            "https://gsuhzcavghsiolmipnzi.supabase.co",
+            "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+        );
+
+        function actualizarMenu() {
+            const botones = document.getElementById("botonesCuenta");
+
+            if (botones) {
+                botones.innerHTML = "";
+                botones.style.display = "none";
+            }
+        }
+
+        actualizarMenu();
+
+        /* CARRUSEL */
+
+        const gamevoraTrack = document.getElementById("gamevoraTrack");
+        const gamevoraDots = document.querySelectorAll(".gamevora-dot");
+
+        let gamevoraActual = 0;
+
+        function cambiarBannerGamevora(numero) {
+            if (!gamevoraTrack || numero < 0 || numero >= gamevoraDots.length) {
+                return;
+            }
+
+            gamevoraActual = numero;
+
+            gamevoraTrack.style.transform =
+                "translateX(-" + (numero * 100) + "%)";
+
+            gamevoraDots.forEach((dot, index) => {
+                dot.classList.toggle("activo", index === numero);
+            });
+        }
+
+        gamevoraDots.forEach((dot, index) => {
+            dot.addEventListener("click", () => {
+                cambiarBannerGamevora(index);
+            });
+        });
+
+        setInterval(() => {
+            const siguiente = (gamevoraActual + 1) % gamevoraDots.length;
+            cambiarBannerGamevora(siguiente);
+        }, 4500);
+    </script>
+
+    <!-- NAVEGACIÓN INFERIOR: RUTA DENTRO DE FRONTEND -->
+
+    <script>
+        (async function () {
+            try {
+                const respuesta = await fetch(
+                    "./nav-inferior.html?v=20261012-v3"
+                );
+
+                if (!respuesta.ok) {
+                    throw new Error("No se pudo cargar nav-inferior.html");
+                }
+
+                const contenido = await respuesta.text();
+
+                const documento = new DOMParser().parseFromString(
+                    contenido,
+                    "text/html"
+                );
+
+                documento.querySelectorAll("style").forEach(function (estilo) {
+                    document.head.appendChild(estilo.cloneNode(true));
+                });
+
+                documento.querySelectorAll("script").forEach(function (original) {
+                    const nuevo = document.createElement("script");
+
+                    if (original.src) {
+                        nuevo.src = original.src;
+                    } else {
+                        nuevo.textContent = original.textContent;
+                    }
+
+                    nuevo.async = false;
+                    document.body.appendChild(nuevo);
+                });
+            } catch (error) {
+                console.error("Error al cargar la navegación:", error);
+            }
+        })();
+    </script>
 </body>
 </html>
+
