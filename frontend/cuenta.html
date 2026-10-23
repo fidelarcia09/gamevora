@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050b18">
     <title>Mi cuenta | Gamers Gold Top-Up</title>
 
 <style>
@@ -15,7 +17,7 @@
 
     body {
         background: #050b18;
-        color: white;
+        color: #fff;
         min-height: 100vh;
         padding: 20px;
     }
@@ -29,25 +31,20 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 25px;
         gap: 12px;
+        margin-bottom: 30px;
     }
 
     .logo {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 900;
+        letter-spacing: -0.5px;
+        white-space: nowrap;
     }
 
     .rayo {
-        color: #00b7ff;
+        color: #00baff;
         text-shadow: 0 0 12px #008cff;
-    }
-
-    .volver {
-        color: #28a9ff;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
     }
 
     .navegacion {
@@ -56,72 +53,95 @@
         gap: 8px;
     }
 
-    .separador {
-        color: #31506f;
-        font-size: 14px;
+    .volver {
+        color: #28a9ff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: bold;
     }
 
-    /* Sin tarjeta exterior que rodee toda la página */
+    .volver:hover {
+        color: #75d7ff;
+    }
+
+    .separador {
+        color: #31506f;
+        font-size: 13px;
+    }
 
     .card {
         background: transparent;
         border: none;
-        border-radius: 0;
         padding: 0;
         box-shadow: none;
     }
 
     .avatar {
-        width: 75px;
-        height: 75px;
-        margin: 0 auto 15px;
+        width: 76px;
+        height: 76px;
+        margin: 0 auto 16px;
         border-radius: 50%;
-        background: #061226;
-        border: 2px solid #159dff;
+        background: linear-gradient(145deg, #0b2444, #061226);
+        border: 1px solid #159dff;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 35px;
-        box-shadow: 0 0 18px rgba(0, 140, 255, 0.12);
+        color: #00baff;
+        box-shadow: 0 0 22px rgba(0, 140, 255, 0.15);
+    }
+
+    .avatar svg {
+        width: 35px;
+        height: 35px;
+        stroke: currentColor;
+        stroke-width: 1.7;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
 
     h1 {
         text-align: center;
         font-size: 25px;
-        margin-bottom: 5px;
+        margin-bottom: 7px;
     }
 
     .subtitulo {
         text-align: center;
         color: #8195ad;
         font-size: 13px;
-        margin-bottom: 28px;
+        line-height: 1.6;
+        margin-bottom: 30px;
     }
 
-    /* Títulos de las secciones */
-
     .seccion {
-        margin-top: 25px;
+        margin-top: 27px;
     }
 
     .seccion-titulo {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: 10px;
         font-size: 17px;
         font-weight: 800;
-        margin-bottom: 14px;
-        padding-bottom: 11px;
+        margin-bottom: 15px;
+        padding-bottom: 12px;
         border-bottom: 1px solid #173d63;
     }
 
-    .svj-marca {
+    /* Iconos SVG uniformes para todas las secciones */
+
+    .icono-seccion {
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
         color: #00baff;
-        font-size: 12px;
-        font-weight: 900;
-        letter-spacing: 1px;
-        text-shadow: 0 0 10px rgba(0, 186, 255, 0.45);
-        flex-shrink: 0;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        filter: drop-shadow(0 0 4px rgba(0, 186, 255, 0.25));
     }
 
     .dato {
@@ -135,43 +155,88 @@
     .dato-titulo {
         color: #7891aa;
         font-size: 12px;
-        margin-bottom: 5px;
+        margin-bottom: 6px;
     }
 
     .dato-valor {
-        color: white;
+        color: #fff;
         font-size: 15px;
         font-weight: bold;
         word-break: break-word;
     }
 
+    .estado-proximamente {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #00baff;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .punto-proximamente {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #00baff;
+        box-shadow: 0 0 9px rgba(0, 186, 255, 0.65);
+    }
+
+    .texto-ayuda {
+        color: #8195ad;
+        font-size: 12px;
+        line-height: 1.7;
+        margin-top: 5px;
+    }
+
     .boton {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
         width: 100%;
-        padding: 13px;
+        min-height: 48px;
+        padding: 13px 15px;
         margin-top: 10px;
         border-radius: 10px;
         text-align: center;
         text-decoration: none;
         background: linear-gradient(90deg, #087cff, #00baff);
-        color: white;
+        color: #fff;
         font-size: 14px;
         font-weight: bold;
-        border: none;
+        border: 1px solid #159dff;
         cursor: pointer;
-        transition: box-shadow 0.2s, background 0.2s;
+        transition: box-shadow 0.2s, filter 0.2s;
+    }
+
+    .boton:hover {
+        filter: brightness(1.08);
+        box-shadow: 0 0 17px rgba(0, 140, 255, 0.2);
+    }
+
+    .boton:focus-visible,
+    .volver:focus-visible {
+        outline: 2px solid #75d7ff;
+        outline-offset: 3px;
+    }
+
+    .icono-boton {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
 
     .boton-admin,
     .boton-soporte {
         background: linear-gradient(90deg, #063c72, #087cff);
         border: 1px solid #159dff;
-        box-shadow: 0 0 15px rgba(0, 140, 255, 0.12);
-    }
-
-    .boton-admin:hover,
-    .boton-soporte:hover {
-        box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
+        box-shadow: 0 0 12px rgba(0, 140, 255, 0.08);
     }
 
     .boton-notificaciones {
@@ -179,11 +244,8 @@
         border: 1px solid #18c9ff;
     }
 
-    .boton-notificaciones:hover {
-        box-shadow: 0 0 18px rgba(0, 200, 255, 0.25);
-    }
-
-    .boton-notificaciones:disabled {
+    .boton-notificaciones:disabled,
+    .boton-salud:disabled {
         opacity: 0.65;
         cursor: wait;
     }
@@ -216,13 +278,12 @@
     }
 
     .boton-cerrar {
-        background: #8b1e2d;
+        background: linear-gradient(90deg, #701b30, #a5223a);
         border: 1px solid #ff4057;
     }
 
     .boton-cerrar:hover {
-        background: #b42338;
-        box-shadow: 0 0 15px rgba(255, 64, 87, 0.25);
+        box-shadow: 0 0 15px rgba(255, 64, 87, 0.2);
     }
 
     #panelAdministracion,
@@ -230,27 +291,32 @@
         display: none;
     }
 
-    /* Salud del sistema */
+    /* Sistema de salud: permanece al final */
 
     .salud-panel {
-        margin-top: 25px;
+        margin-top: 30px;
         padding: 17px;
-        border-radius: 15px;
-        border: 1px solid #087cff;
+        border-radius: 14px;
+        border: 1px solid #173d63;
         background: linear-gradient(145deg, #071b36, #061226);
-        box-shadow: 0 0 22px rgba(0, 140, 255, 0.10);
+        box-shadow: 0 0 20px rgba(0, 140, 255, 0.07);
     }
 
     .salud-titulo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
         font-size: 17px;
-        font-weight: bold;
-        margin-bottom: 12px;
+        font-weight: 800;
+        margin-bottom: 13px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #173d63;
     }
 
     .salud-descripcion {
         color: #91a8c3;
         font-size: 12px;
-        line-height: 1.6;
+        line-height: 1.7;
         margin-bottom: 15px;
     }
 
@@ -259,9 +325,11 @@
         border-radius: 10px;
         background: #030d1d;
         border: 1px solid #173d63;
+        color: #9ab0c9;
         font-size: 13px;
-        line-height: 1.6;
+        line-height: 1.7;
         overflow-wrap: anywhere;
+        margin-bottom: 12px;
     }
 
     .salud-resumen.operativo {
@@ -328,20 +396,21 @@
     .salud-elemento-mensaje {
         color: #9ab0c9;
         font-size: 12px;
-        line-height: 1.5;
+        line-height: 1.6;
         overflow-wrap: anywhere;
     }
 
     .salud-elemento-fecha {
         color: #607995;
         font-size: 10px;
+        line-height: 1.5;
         margin-top: 8px;
     }
 
     .salud-vacio {
         color: #8195ad;
         font-size: 12px;
-        line-height: 1.6;
+        line-height: 1.7;
         padding: 12px 0;
     }
 
@@ -350,15 +419,15 @@
         border: 1px solid #18baff;
     }
 
-    .boton-salud:disabled {
-        opacity: 0.65;
-        cursor: wait;
+    .salud-subtitulo {
+        font-size: 14px;
+        margin-top: 20px;
     }
 
     .salud-nota {
         color: #607995;
         font-size: 10px;
-        line-height: 1.5;
+        line-height: 1.6;
         margin-top: 12px;
     }
 
@@ -376,27 +445,40 @@
             flex-direction: column;
         }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            transition: none !important;
+        }
+    }
 </style>
 </head>
 
 <body>
 <div class="contenedor">
 
-    <div class="header">
+    <header class="header">
         <div class="logo">
             <span class="rayo">⚡</span> GAMERS GOLD
         </div>
 
-        <div class="navegacion">
+        <nav class="navegacion" aria-label="Navegación principal">
             <a href="reseñas.html" class="volver">Reseñas</a>
             <span class="separador">|</span>
             <a href="../index.html" class="volver">Inicio</a>
-        </div>
-    </div>
+        </nav>
+    </header>
 
     <main class="card">
 
-        <div class="avatar">👤</div>
+        <div class="avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+            </svg>
+        </div>
 
         <h1>Mi cuenta</h1>
 
@@ -408,29 +490,26 @@
 
         <section class="seccion">
             <h2 class="seccion-titulo">
-                <span class="svj-marca">SVJ</span>
+                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+                </svg>
                 Datos personales
             </h2>
 
             <div class="dato">
                 <div class="dato-titulo">Nombre de usuario</div>
-                <div class="dato-valor" id="nombreUsuario">
-                    Cargando...
-                </div>
+                <div class="dato-valor" id="nombreUsuario">Cargando...</div>
             </div>
 
             <div class="dato">
                 <div class="dato-titulo">Correo electrónico</div>
-                <div class="dato-valor" id="correoUsuario">
-                    Cargando...
-                </div>
+                <div class="dato-valor" id="correoUsuario">Cargando...</div>
             </div>
 
             <div class="dato">
                 <div class="dato-titulo">ID de cuenta</div>
-                <div class="dato-valor" id="idUsuario">
-                    Cargando...
-                </div>
+                <div class="dato-valor" id="idUsuario">Cargando...</div>
             </div>
         </section>
 
@@ -438,20 +517,23 @@
 
         <section class="seccion">
             <h2 class="seccion-titulo">
-                <span class="svj-marca">SVJ</span>
+                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"></path>
+                    <path d="m9 12 2 2 4-4"></path>
+                </svg>
                 Seguridad
             </h2>
 
             <div class="dato">
-                <div class="dato-titulo">Estado de la cuenta</div>
-                <div class="dato-valor">
-                    Sesión protegida por Supabase
+                <div class="dato-titulo">Opciones de seguridad de la cuenta</div>
+                <div class="estado-proximamente">
+                    <span class="punto-proximamente"></span>
+                    Próximamente
                 </div>
             </div>
 
-            <p style="color:#8195ad;font-size:12px;line-height:1.6;">
-                Cierra la sesión cuando termines de usar tu cuenta,
-                especialmente si estás en un dispositivo compartido.
+            <p class="texto-ayuda">
+                Las opciones adicionales de seguridad estarán disponibles próximamente.
             </p>
         </section>
 
@@ -459,11 +541,22 @@
 
         <section class="seccion">
             <h2 class="seccion-titulo">
-                <span class="svj-marca">SVJ</span>
+                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
+                    <path d="M5 14h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3v-1a2 2 0 0 1 2-2z"></path>
+                    <path d="M19 14h-2a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-1a2 2 0 0 0-2-2z"></path>
+                </svg>
                 Soporte
             </h2>
 
+            <p class="texto-ayuda">Acceso a la asistencia.</p>
+
             <a href="soporte.html" class="boton boton-soporte">
+                <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
+                    <path d="M5 14h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3v-1a2 2 0 0 1 2-2z"></path>
+                    <path d="M19 14h-2a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-1a2 2 0 0 0-2-2z"></path>
+                </svg>
                 Contactar con soporte
             </a>
         </section>
@@ -472,11 +565,26 @@
 
         <section id="panelAdministracion" class="seccion">
             <h2 class="seccion-titulo">
-                <span class="svj-marca">SVJ</span>
+                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 3v18h18"></path>
+                    <path d="M18 17V9"></path>
+                    <path d="M13 17V5"></path>
+                    <path d="M8 17v-3"></path>
+                </svg>
                 Panel de ventas
             </h2>
 
+            <p class="texto-ayuda">
+                Visible únicamente para administradores.
+            </p>
+
             <a href="admin-ventas.html" class="boton boton-admin">
+                <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 3v18h18"></path>
+                    <path d="M18 17V9"></path>
+                    <path d="M13 17V5"></path>
+                    <path d="M8 17v-3"></path>
+                </svg>
                 Abrir panel de ventas
             </a>
         </section>
@@ -485,28 +593,50 @@
 
         <section class="seccion">
             <h2 class="seccion-titulo">
-                <span class="svj-marca">SVJ</span>
+                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 17l5-5-5-5"></path>
+                    <path d="M15 12H3"></path>
+                    <path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"></path>
+                </svg>
                 Cerrar sesión
             </h2>
 
+            <p class="texto-ayuda">Cierra la sesión de forma segura.</p>
+
             <button id="cerrarSesion" class="boton boton-cerrar" type="button">
+                <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 17l5-5-5-5"></path>
+                    <path d="M15 12H3"></path>
+                    <path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"></path>
+                </svg>
                 Cerrar sesión de mi cuenta
             </button>
         </section>
 
-        <!-- NOTIFICACIONES GVR -->
+        <!-- NOTIFICACIONES PUSH -->
 
         <section class="seccion">
             <h2 class="seccion-titulo">
-                <span class="svj-marca">SVJ</span>
+                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                    <path d="M10 21h4"></path>
+                </svg>
                 Notificaciones
             </h2>
+
+            <p class="texto-ayuda">
+                Recibe avisos sobre tus solicitudes de compra de GVR.
+            </p>
 
             <button
                 id="activarNotificacionesGVR"
                 class="boton boton-notificaciones"
                 type="button"
             >
+                <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                    <path d="M10 21h4"></path>
+                </svg>
                 Activar notificaciones de compras GVR
             </button>
 
@@ -518,19 +648,20 @@
             ></div>
         </section>
 
-        <!-- SALUD DEL SISTEMA: SOLO PROPIETARIO -->
+        <!-- SISTEMA DE SALUD: SOLO PROPIETARIO Y AL FINAL -->
 
         <section id="panelSaludSistema" class="salud-panel">
 
             <h2 class="salud-titulo">
-                <span class="svj-marca">SVJ</span>
+                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
                 Sistema de salud
             </h2>
 
             <p class="salud-descripcion">
-                Comprueba el acceso al catálogo, los pedidos
-                y el registro de ventas. Este panel es privado
-                y no aparece en las cuentas de los clientes.
+                Comprueba el acceso al catálogo, los pedidos y el registro de ventas.
+                Este panel es privado y solo aparece para el propietario.
             </p>
 
             <div
@@ -547,28 +678,26 @@
                 class="boton boton-salud"
                 type="button"
             >
+                <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
                 Revisar salud del sistema
             </button>
 
-            <h3 style="font-size:14px; margin-top:20px;">
-                Historial de incidentes
-            </h3>
+            <h3 class="salud-subtitulo">Historial de incidentes</h3>
 
             <div
                 id="saludListaIncidentes"
                 class="salud-lista"
                 aria-live="polite"
             >
-                <p class="salud-vacio">
-                    Cargando historial...
-                </p>
+                <p class="salud-vacio">Cargando historial...</p>
             </div>
 
             <p class="salud-nota">
                 Las revisiones se ejecutan al solicitarlas.
                 Esta pantalla no modifica pedidos ni saldos GVR.
             </p>
-
         </section>
 
     </main>
@@ -724,7 +853,6 @@ function mostrarIncidentesSalud(incidentes) {
         );
 
         tarjeta.append(cabecera, mensaje, fecha);
-
         saludListaIncidentes.appendChild(tarjeta);
     });
 }
@@ -1097,5 +1225,6 @@ document
     });
 </script>
 </body>
-                </html>
+</html>
+
 
