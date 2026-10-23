@@ -1,0 +1,73 @@
+/* Goldi floating assistant — isolated styles; does not alter existing site styles. */
+#gg-goldi-root {
+  --gg-goldi-bg: #071224;
+  --gg-goldi-panel: #0a172b;
+  --gg-goldi-blue: #087cff;
+  --gg-goldi-cyan: #20c5ff;
+  --gg-goldi-text: #f4f8ff;
+  --gg-goldi-muted: #a5b6ca;
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(86px, calc(env(safe-area-inset-bottom) + 78px));
+  z-index: 99990;
+  color: var(--gg-goldi-text);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.4;
+}
+#gg-goldi-root * { box-sizing: border-box; }
+#gg-goldi-root button, #gg-goldi-root input { font: inherit; }
+#gg-goldi-launcher {
+  display: flex; align-items: center; gap: 10px;
+  min-height: 54px; padding: 9px 15px 9px 10px;
+  border: 1px solid rgba(32,197,255,.75); border-radius: 999px;
+  color: #fff; background: linear-gradient(135deg,#087cff,#0750b7);
+  box-shadow: 0 5px 24px rgba(0,124,255,.35), 0 0 0 1px rgba(32,197,255,.12);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+#gg-goldi-launcher:hover { filter: brightness(1.08); }
+#gg-goldi-avatar {
+  display: grid; place-items: center; width: 35px; height: 35px; flex: 0 0 35px;
+  border-radius: 50%; color: #061329; background: #b5efff;
+  font-weight: 800; font-size: 17px; box-shadow: 0 0 14px rgba(32,197,255,.35);
+}
+#gg-goldi-launcher-copy { display: flex; flex-direction: column; text-align: left; }
+#gg-goldi-launcher-copy strong { font-size: 14px; letter-spacing: .1px; }
+#gg-goldi-launcher-copy small { font-size: 10px; color: #d6f6ff; }
+#gg-goldi-panel {
+  position: absolute; right: 0; bottom: 66px;
+  display: flex; flex-direction: column; width: min(350px, calc(100vw - 28px));
+  max-height: min(560px, calc(100dvh - 170px)); min-height: 360px;
+  overflow: hidden; border: 1px solid rgba(32,197,255,.38); border-radius: 19px;
+  background: var(--gg-goldi-bg); box-shadow: 0 18px 55px rgba(0,0,0,.48), 0 0 25px rgba(8,124,255,.12);
+}
+#gg-goldi-panel[hidden] { display: none !important; }
+#gg-goldi-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 15px 15px 13px; border-bottom: 1px solid rgba(105,158,215,.16);
+  background: linear-gradient(120deg,rgba(8,124,255,.17),rgba(32,197,255,.04));
+}
+#gg-goldi-heading { display: flex; align-items: center; gap: 10px; min-width: 0; }
+#gg-goldi-mark { display:grid; place-items:center; width:39px; height:39px; flex:0 0 39px; border-radius:13px; color:#061329; background:linear-gradient(135deg,#20c5ff,#8ce9ff); font-weight:900; font-size:20px; }
+#gg-goldi-title { margin:0; color:#fff; font-size:17px; font-weight:800; }
+#gg-goldi-subtitle { display:block; margin-top:2px; color:#8ddfff; font-size:11px; }
+#gg-goldi-close { display:grid; place-items:center; width:34px; height:34px; flex:0 0 34px; border:1px solid rgba(255,255,255,.12); border-radius:10px; color:#dce9f8; background:rgba(255,255,255,.04); font-size:21px; cursor:pointer; }
+#gg-goldi-shortcuts { display:grid; grid-template-columns:1fr 1fr; gap:7px; padding:11px 12px 8px; }
+#gg-goldi-shortcuts button {
+  min-height:38px; padding:8px 6px; border:1px solid rgba(105,158,215,.22); border-radius:10px;
+  color:#dff7ff; background:#0d2039; font-size:11px; font-weight:700; cursor:pointer;
+}
+#gg-goldi-shortcuts button:hover { border-color:rgba(32,197,255,.75); background:#102b49; }
+#gg-goldi-messages { display:flex; flex:1; flex-direction:column; gap:9px; overflow-y:auto; padding:9px 12px 12px; overscroll-behavior:contain; }
+.gg-goldi-message { max-width:92%; padding:10px 11px; border:1px solid rgba(105,158,215,.14); border-radius:12px 12px 12px 4px; color:#e9f2ff; background:#0c1a2e; font-size:12px; overflow-wrap:anywhere; }
+.gg-goldi-message.gg-user { align-self:flex-end; border-color:rgba(8,124,255,.3); border-radius:12px 12px 4px 12px; background:#10305a; }
+.gg-goldi-message a { color:#6bdcff; text-decoration:underline; }
+#gg-goldi-form { display:flex; align-items:center; gap:7px; padding:10px; border-top:1px solid rgba(105,158,215,.16); background:#081426; }
+#gg-goldi-input { min-width:0; flex:1; height:41px; padding:0 12px; outline:none; border:1px solid rgba(105,158,215,.25); border-radius:11px; color:#fff; background:#0b1b30; font-size:12px; }
+#gg-goldi-input:focus { border-color:#20c5ff; }
+#gg-goldi-send { width:42px; height:41px; flex:0 0 42px; border:0; border-radius:11px; color:#031326; background:linear-gradient(135deg,#20c5ff,#087cff); font-weight:900; cursor:pointer; }
+#gg-goldi-disclaimer { padding:0 12px 9px; color:#7890ac; background:#081426; font-size:9px; text-align:center; }
+@media (max-width:480px) {
+  #gg-goldi-root { right:12px; bottom:max(80px,calc(env(safe-area-inset-bottom) + 72px)); }
+  #gg-goldi-panel { width:min(350px,calc(100vw - 24px)); max-height:calc(100dvh - 155px); }
+}
+@media (prefers-reduced-motion: reduce) { #gg-goldi-root *, #gg-goldi-root *::before, #gg-goldi-root *::after { animation:none !important; transition:none !important; } }
