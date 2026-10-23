@@ -69,13 +69,6 @@
         font-size: 13px;
     }
 
-    .card {
-        background: transparent;
-        border: none;
-        padding: 0;
-        box-shadow: none;
-    }
-
     .avatar {
         width: 76px;
         height: 76px;
@@ -114,42 +107,102 @@
         margin-bottom: 30px;
     }
 
-    .seccion {
-        margin-top: 27px;
+    /* DESPLEGABLES PRINCIPALES */
+
+    .lista-opciones {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
     }
 
-    .seccion-titulo {
+    .acordeon {
+        border-bottom: 1px solid #173047;
+    }
+
+    .acordeon[open] {
+        padding-bottom: 15px;
+    }
+
+    .acordeon summary {
         display: flex;
         align-items: center;
-        gap: 10px;
-        font-size: 17px;
-        font-weight: 800;
-        margin-bottom: 15px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #173d63;
+        gap: 13px;
+        list-style: none;
+        cursor: pointer;
+        min-height: 65px;
+        padding: 12px 5px;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
     }
 
-    /* Iconos SVG uniformes para todas las secciones */
+    .acordeon summary::-webkit-details-marker {
+        display: none;
+    }
 
-    .icono-seccion {
-        width: 20px;
-        height: 20px;
-        min-width: 20px;
+    .acordeon summary:focus-visible {
+        outline: 2px solid #75d7ff;
+        outline-offset: 3px;
+        border-radius: 8px;
+    }
+
+    .icono-opcion {
+        width: 23px;
+        height: 23px;
+        min-width: 23px;
         color: #00baff;
         stroke: currentColor;
         stroke-width: 1.8;
         fill: none;
         stroke-linecap: round;
         stroke-linejoin: round;
-        filter: drop-shadow(0 0 4px rgba(0, 186, 255, 0.25));
+        filter: drop-shadow(0 0 4px rgba(0, 186, 255, 0.2));
+    }
+
+    .opcion-texto {
+        flex: 1;
+        font-size: 15px;
+        font-weight: 700;
+        color: #f4f8ff;
+    }
+
+    .icono-flecha {
+        width: 18px;
+        height: 18px;
+        color: #00baff;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: transform 0.2s ease;
+    }
+
+    .acordeon[open] .icono-flecha {
+        transform: rotate(180deg);
+    }
+
+    .contenido-acordeon {
+        padding: 4px 5px 0 41px;
+        animation: aparecer 0.18s ease;
+    }
+
+    @keyframes aparecer {
+        from {
+            opacity: 0;
+            transform: translateY(-4px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .dato {
         background: #061226;
         border: 1px solid #173d63;
-        border-radius: 12px;
-        padding: 14px;
-        margin-bottom: 12px;
+        border-radius: 10px;
+        padding: 13px;
+        margin-bottom: 10px;
     }
 
     .dato-titulo {
@@ -160,7 +213,7 @@
 
     .dato-valor {
         color: #fff;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: bold;
         word-break: break-word;
     }
@@ -186,7 +239,7 @@
         color: #8195ad;
         font-size: 12px;
         line-height: 1.7;
-        margin-top: 5px;
+        margin: 4px 0 12px;
     }
 
     .boton {
@@ -195,15 +248,15 @@
         justify-content: center;
         gap: 10px;
         width: 100%;
-        min-height: 48px;
-        padding: 13px 15px;
+        min-height: 46px;
+        padding: 12px 14px;
         margin-top: 10px;
-        border-radius: 10px;
+        border-radius: 9px;
         text-align: center;
         text-decoration: none;
         background: linear-gradient(90deg, #087cff, #00baff);
         color: #fff;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: bold;
         border: 1px solid #159dff;
         cursor: pointer;
@@ -215,8 +268,7 @@
         box-shadow: 0 0 17px rgba(0, 140, 255, 0.2);
     }
 
-    .boton:focus-visible,
-    .volver:focus-visible {
+    .boton:focus-visible {
         outline: 2px solid #75d7ff;
         outline-offset: 3px;
     }
@@ -236,7 +288,48 @@
     .boton-soporte {
         background: linear-gradient(90deg, #063c72, #087cff);
         border: 1px solid #159dff;
-        box-shadow: 0 0 12px rgba(0, 140, 255, 0.08);
+    }
+
+    .boton-cerrar {
+        background: linear-gradient(90deg, #701b30, #a5223a);
+        border: 1px solid #ff4057;
+    }
+
+    .boton-cerrar:hover {
+        box-shadow: 0 0 15px rgba(255, 64, 87, 0.2);
+    }
+
+    #panelAdministracion {
+        display: none;
+    }
+
+    /* NOTIFICACIONES */
+
+    .seccion-extra {
+        margin-top: 27px;
+        padding-top: 18px;
+        border-top: 1px solid #173047;
+    }
+
+    .seccion-titulo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 16px;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .icono-seccion {
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        color: #00baff;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
 
     .boton-notificaciones {
@@ -277,40 +370,25 @@
         color: #68df8c;
     }
 
-    .boton-cerrar {
-        background: linear-gradient(90deg, #701b30, #a5223a);
-        border: 1px solid #ff4057;
-    }
+    /* SISTEMA DE SALUD: SOLO PROPIETARIO Y AL FINAL */
 
-    .boton-cerrar:hover {
-        box-shadow: 0 0 15px rgba(255, 64, 87, 0.2);
-    }
-
-    #panelAdministracion,
     #panelSaludSistema {
         display: none;
     }
 
-    /* Sistema de salud: permanece al final */
-
     .salud-panel {
-        margin-top: 30px;
-        padding: 17px;
-        border-radius: 14px;
-        border: 1px solid #173d63;
-        background: linear-gradient(145deg, #071b36, #061226);
-        box-shadow: 0 0 20px rgba(0, 140, 255, 0.07);
+        margin-top: 28px;
+        padding-top: 20px;
+        border-top: 1px solid #173047;
     }
 
     .salud-titulo {
         display: flex;
         align-items: center;
         gap: 10px;
-        font-size: 17px;
+        font-size: 16px;
         font-weight: 800;
         margin-bottom: 13px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #173d63;
     }
 
     .salud-descripcion {
@@ -322,11 +400,11 @@
 
     .salud-resumen {
         padding: 12px;
-        border-radius: 10px;
+        border-radius: 9px;
         background: #030d1d;
         border: 1px solid #173d63;
         color: #9ab0c9;
-        font-size: 13px;
+        font-size: 12px;
         line-height: 1.7;
         overflow-wrap: anywhere;
         margin-bottom: 12px;
@@ -355,7 +433,7 @@
 
     .salud-elemento {
         padding: 12px;
-        border-radius: 10px;
+        border-radius: 9px;
         background: #09152a;
         border: 1px solid #173d63;
     }
@@ -441,6 +519,10 @@
             flex-direction: column;
         }
 
+        .contenido-acordeon {
+            padding-left: 36px;
+        }
+
         .salud-elemento-cabecera {
             flex-direction: column;
         }
@@ -450,6 +532,7 @@
         *,
         *::before,
         *::after {
+            animation: none !important;
             transition: none !important;
         }
     }
@@ -471,7 +554,7 @@
         </nav>
     </header>
 
-    <main class="card">
+    <main>
 
         <div class="avatar" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -486,136 +569,169 @@
             Información de tu cuenta Gamers Gold Top-Up
         </p>
 
-        <!-- DATOS PERSONALES -->
+        <div class="lista-opciones">
 
-        <section class="seccion">
-            <h2 class="seccion-titulo">
-                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="12" cy="8" r="4"></circle>
-                    <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
-                </svg>
-                Datos personales
-            </h2>
+            <!-- DATOS PERSONALES -->
 
-            <div class="dato">
-                <div class="dato-titulo">Nombre de usuario</div>
-                <div class="dato-valor" id="nombreUsuario">Cargando...</div>
-            </div>
+            <details class="acordeon">
+                <summary>
+                    <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="8" r="4"></circle>
+                        <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+                    </svg>
+                    <span class="opcion-texto">Datos personales</span>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6"></path>
+                    </svg>
+                </summary>
 
-            <div class="dato">
-                <div class="dato-titulo">Correo electrónico</div>
-                <div class="dato-valor" id="correoUsuario">Cargando...</div>
-            </div>
+                <div class="contenido-acordeon">
+                    <div class="dato">
+                        <div class="dato-titulo">Nombre de usuario</div>
+                        <div class="dato-valor" id="nombreUsuario">Cargando...</div>
+                    </div>
 
-            <div class="dato">
-                <div class="dato-titulo">ID de cuenta</div>
-                <div class="dato-valor" id="idUsuario">Cargando...</div>
-            </div>
-        </section>
+                    <div class="dato">
+                        <div class="dato-titulo">Correo electrónico</div>
+                        <div class="dato-valor" id="correoUsuario">Cargando...</div>
+                    </div>
 
-        <!-- SEGURIDAD -->
-
-        <section class="seccion">
-            <h2 class="seccion-titulo">
-                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"></path>
-                    <path d="m9 12 2 2 4-4"></path>
-                </svg>
-                Seguridad
-            </h2>
-
-            <div class="dato">
-                <div class="dato-titulo">Opciones de seguridad de la cuenta</div>
-                <div class="estado-proximamente">
-                    <span class="punto-proximamente"></span>
-                    Próximamente
+                    <div class="dato">
+                        <div class="dato-titulo">ID de cuenta</div>
+                        <div class="dato-valor" id="idUsuario">Cargando...</div>
+                    </div>
                 </div>
-            </div>
+            </details>
 
-            <p class="texto-ayuda">
-                Las opciones adicionales de seguridad estarán disponibles próximamente.
-            </p>
-        </section>
+            <!-- SEGURIDAD -->
 
-        <!-- SOPORTE -->
+            <details class="acordeon">
+                <summary>
+                    <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"></path>
+                        <path d="m9 12 2 2 4-4"></path>
+                    </svg>
+                    <span class="opcion-texto">Seguridad</span>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6"></path>
+                    </svg>
+                </summary>
 
-        <section class="seccion">
-            <h2 class="seccion-titulo">
-                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
-                    <path d="M5 14h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3v-1a2 2 0 0 1 2-2z"></path>
-                    <path d="M19 14h-2a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-1a2 2 0 0 0-2-2z"></path>
-                </svg>
-                Soporte
-            </h2>
+                <div class="contenido-acordeon">
+                    <div class="dato">
+                        <div class="dato-titulo">Opciones de seguridad de la cuenta</div>
+                        <div class="estado-proximamente">
+                            <span class="punto-proximamente"></span>
+                            Próximamente
+                        </div>
+                    </div>
 
-            <p class="texto-ayuda">Acceso a la asistencia.</p>
+                    <p class="texto-ayuda">
+                        Las opciones adicionales de seguridad estarán disponibles próximamente.
+                    </p>
+                </div>
+            </details>
 
-            <a href="soporte.html" class="boton boton-soporte">
-                <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
-                    <path d="M5 14h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3v-1a2 2 0 0 1 2-2z"></path>
-                    <path d="M19 14h-2a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-1a2 2 0 0 0-2-2z"></path>
-                </svg>
-                Contactar con soporte
-            </a>
-        </section>
+            <!-- SOPORTE -->
 
-        <!-- PANEL DE VENTAS: SOLO ADMINISTRADORES -->
+            <details class="acordeon">
+                <summary>
+                    <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
+                        <path d="M5 14h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3v-1a2 2 0 0 1 2-2z"></path>
+                        <path d="M19 14h-2a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-1a2 2 0 0 0-2-2z"></path>
+                    </svg>
+                    <span class="opcion-texto">Soporte</span>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6"></path>
+                    </svg>
+                </summary>
 
-        <section id="panelAdministracion" class="seccion">
-            <h2 class="seccion-titulo">
-                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M3 3v18h18"></path>
-                    <path d="M18 17V9"></path>
-                    <path d="M13 17V5"></path>
-                    <path d="M8 17v-3"></path>
-                </svg>
-                Panel de ventas
-            </h2>
+                <div class="contenido-acordeon">
+                    <p class="texto-ayuda">
+                        ¿Necesitas ayuda? Accede a nuestro espacio de soporte.
+                    </p>
 
-            <p class="texto-ayuda">
-                Visible únicamente para administradores.
-            </p>
+                    <a href="soporte.html" class="boton boton-soporte">
+                        <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
+                            <path d="M5 14h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3v-1a2 2 0 0 1 2-2z"></path>
+                            <path d="M19 14h-2a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-1a2 2 0 0 0-2-2z"></path>
+                        </svg>
+                        Contactar con soporte
+                    </a>
+                </div>
+            </details>
 
-            <a href="admin-ventas.html" class="boton boton-admin">
-                <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M3 3v18h18"></path>
-                    <path d="M18 17V9"></path>
-                    <path d="M13 17V5"></path>
-                    <path d="M8 17v-3"></path>
-                </svg>
-                Abrir panel de ventas
-            </a>
-        </section>
+            <!-- PANEL DE VENTAS: SOLO ADMINISTRADORES -->
 
-        <!-- CERRAR SESIÓN -->
+            <details id="panelAdministracion" class="acordeon">
+                <summary>
+                    <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 3v18h18"></path>
+                        <path d="M18 17V9"></path>
+                        <path d="M13 17V5"></path>
+                        <path d="M8 17v-3"></path>
+                    </svg>
+                    <span class="opcion-texto">Panel de ventas</span>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6"></path>
+                    </svg>
+                </summary>
 
-        <section class="seccion">
-            <h2 class="seccion-titulo">
-                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M10 17l5-5-5-5"></path>
-                    <path d="M15 12H3"></path>
-                    <path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"></path>
-                </svg>
-                Cerrar sesión
-            </h2>
+                <div class="contenido-acordeon">
+                    <p class="texto-ayuda">
+                        Acceso al panel de administración de ventas.
+                    </p>
 
-            <p class="texto-ayuda">Cierra la sesión de forma segura.</p>
+                    <a href="admin-ventas.html" class="boton boton-admin">
+                        <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 3v18h18"></path>
+                            <path d="M18 17V9"></path>
+                            <path d="M13 17V5"></path>
+                            <path d="M8 17v-3"></path>
+                        </svg>
+                        Abrir panel de ventas
+                    </a>
+                </div>
+            </details>
 
-            <button id="cerrarSesion" class="boton boton-cerrar" type="button">
-                <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M10 17l5-5-5-5"></path>
-                    <path d="M15 12H3"></path>
-                    <path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"></path>
-                </svg>
-                Cerrar sesión de mi cuenta
-            </button>
-        </section>
+            <!-- CERRAR SESIÓN -->
 
-        <!-- NOTIFICACIONES PUSH -->
+            <details class="acordeon">
+                <summary>
+                    <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M10 17l5-5-5-5"></path>
+                        <path d="M15 12H3"></path>
+                        <path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"></path>
+                    </svg>
+                    <span class="opcion-texto">Cerrar sesión</span>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6"></path>
+                    </svg>
+                </summary>
 
-        <section class="seccion">
+                <div class="contenido-acordeon">
+                    <p class="texto-ayuda">
+                        Cierra la sesión de tu cuenta en este dispositivo.
+                    </p>
+
+                    <button id="cerrarSesion" class="boton boton-cerrar" type="button">
+                        <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M10 17l5-5-5-5"></path>
+                            <path d="M15 12H3"></path>
+                            <path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"></path>
+                        </svg>
+                        <span id="textoCerrarSesion">Cerrar sesión de mi cuenta</span>
+                    </button>
+                </div>
+            </details>
+
+        </div>
+
+        <!-- NOTIFICACIONES: SE CONSERVA SU FUNCIONALIDAD -->
+
+        <section class="seccion-extra">
             <h2 class="seccion-titulo">
                 <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
@@ -637,7 +753,7 @@
                     <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
                     <path d="M10 21h4"></path>
                 </svg>
-                Activar notificaciones de compras GVR
+                <span id="textoNotificacionesGVR">Activar notificaciones de compras GVR</span>
             </button>
 
             <div
@@ -651,7 +767,6 @@
         <!-- SISTEMA DE SALUD: SOLO PROPIETARIO Y AL FINAL -->
 
         <section id="panelSaludSistema" class="salud-panel">
-
             <h2 class="salud-titulo">
                 <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
@@ -681,7 +796,7 @@
                 <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                 </svg>
-                Revisar salud del sistema
+                <span id="textoComprobarSalud">Revisar salud del sistema</span>
             </button>
 
             <h3 class="salud-subtitulo">Historial de incidentes</h3>
@@ -714,11 +829,27 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* ==========================================
+   DESPLEGABLES: SOLO UNO ABIERTO A LA VEZ
+========================================== */
+
+document.querySelectorAll(".acordeon").forEach((actual) => {
+    actual.addEventListener("toggle", () => {
+        if (!actual.open) return;
+
+        document.querySelectorAll(".acordeon").forEach((otro) => {
+            if (otro !== actual) {
+                otro.open = false;
+            }
+        });
+    });
+});
 
 
 /* ==========================================
@@ -757,6 +888,9 @@ const saludListaIncidentes =
 
 const botonComprobarSalud =
     document.getElementById("comprobarSaludSistema");
+
+const textoComprobarSalud =
+    document.getElementById("textoComprobarSalud");
 
 let revisionSaludEnCurso = false;
 
@@ -827,9 +961,7 @@ function mostrarIncidentesSalud(incidentes) {
 
         const etiqueta = crearElementoSalud(
             "span",
-            "salud-etiqueta" + (
-                resuelto ? " resuelto" : " error"
-            ),
+            "salud-etiqueta" + (resuelto ? " resuelto" : " error"),
             resuelto
                 ? "RESUELTO"
                 : String(incidente.severity || "error").toUpperCase()
@@ -879,7 +1011,7 @@ async function llamarFuncionSalud(accion) {
                     mensaje = respuesta.error;
                 }
             } catch (_) {
-                // Mantener mensaje seguro si la respuesta no es JSON.
+                // Mantener el mensaje seguro si la respuesta no es JSON.
             }
         }
 
@@ -924,7 +1056,7 @@ async function revisarSaludSistema() {
 
     revisionSaludEnCurso = true;
     botonComprobarSalud.disabled = true;
-    botonComprobarSalud.textContent = "Revisando sistema...";
+    textoComprobarSalud.textContent = "Revisando sistema...";
 
     mostrarResumenSalud(
         "Comprobando catálogo, pedidos y registro de ventas..."
@@ -957,7 +1089,10 @@ async function revisarSaludSistema() {
             );
         }
     } catch (error) {
-        console.error("Error revisando la salud del sistema:", error);
+        console.error(
+            "Error revisando la salud del sistema:",
+            error
+        );
 
         mostrarResumenSalud(
             "No se pudo completar la revisión: " +
@@ -967,7 +1102,7 @@ async function revisarSaludSistema() {
     } finally {
         revisionSaludEnCurso = false;
         botonComprobarSalud.disabled = false;
-        botonComprobarSalud.textContent =
+        textoComprobarSalud.textContent =
             "Revisar salud del sistema";
     }
 }
@@ -979,7 +1114,7 @@ botonComprobarSalud.addEventListener(
 
 
 /* ==========================================
-   CARGAR CUENTA
+   CARGAR CUENTA Y PERMISOS
 ========================================== */
 
 async function cargarCuenta() {
@@ -1011,8 +1146,10 @@ async function cargarCuenta() {
         ).style.display = "block";
     }
 
-    const { data: esPropietario, error: errorPropietario } =
-        await supabaseClient.rpc("is_gamevora_owner");
+    const {
+        data: esPropietario,
+        error: errorPropietario
+    } = await supabaseClient.rpc("is_gamevora_owner");
 
     if (!errorPropietario && esPropietario === true) {
         panelSaludSistema.style.display = "block";
@@ -1067,8 +1204,12 @@ async function activarNotificacionesGVR() {
         "activarNotificacionesGVR"
     );
 
+    const textoBoton = document.getElementById(
+        "textoNotificacionesGVR"
+    );
+
     boton.disabled = true;
-    boton.textContent = "Activando notificaciones...";
+    textoBoton.textContent = "Activando notificaciones...";
 
     try {
         if (!window.isSecureContext) {
@@ -1087,8 +1228,10 @@ async function activarNotificacionesGVR() {
             );
         }
 
-        const { data: sesion, error: errorSesion } =
-            await supabaseClient.auth.getUser();
+        const {
+            data: sesion,
+            error: errorSesion
+        } = await supabaseClient.auth.getUser();
 
         if (errorSesion || !sesion.user) {
             throw new Error(
@@ -1163,7 +1306,7 @@ async function activarNotificacionesGVR() {
             "exito"
         );
 
-        boton.textContent =
+        textoBoton.textContent =
             "Notificaciones de GVR activadas";
 
     } catch (error) {
@@ -1178,7 +1321,7 @@ async function activarNotificacionesGVR() {
             "error"
         );
 
-        boton.textContent =
+        textoBoton.textContent =
             "Activar notificaciones de compras GVR";
 
         boton.disabled = false;
@@ -1208,6 +1351,11 @@ cargarCuenta();
 document
     .getElementById("cerrarSesion")
     .addEventListener("click", async function() {
+        const boton = this;
+        const texto = document.getElementById("textoCerrarSesion");
+
+        boton.disabled = true;
+        texto.textContent = "Cerrando sesión...";
 
         const { error } =
             await supabaseClient.auth.signOut();
@@ -1218,6 +1366,8 @@ document
                 error.message
             );
 
+            boton.disabled = false;
+            texto.textContent = "Cerrar sesión de mi cuenta";
             return;
         }
 
@@ -1226,5 +1376,6 @@ document
 </script>
 </body>
 </html>
+
 
 
