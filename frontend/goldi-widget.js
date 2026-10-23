@@ -14,7 +14,7 @@
 
   var style = document.createElement("link");
   style.rel = "stylesheet";
-  style.href = base + "goldi-widget.css?v=20261023-5";
+  style.href = base + "goldi-widget.css?v=20261023-6";
   document.head.appendChild(style);
 
   var root = document.createElement("div");
@@ -35,8 +35,8 @@
         '<button type="button" data-goldi-link="support">Soporte</button>' +
       '</nav>' +
       '<section id="gg-goldi-faq" aria-label="Preguntas frecuentes">' +
-        '<h3>Preguntas frecuentes</h3>' +
-        '<div id="gg-goldi-faq-list">' +
+        '<button id="gg-goldi-faq-toggle" type="button" aria-expanded="false" aria-controls="gg-goldi-faq-list"><span>Preguntas frecuentes</span><span id="gg-goldi-faq-chevron" aria-hidden="true">⌄</span></button>' +
+        '<div id="gg-goldi-faq-list" hidden>' +
           '<button type="button" data-goldi-faq="¿Cómo añado saldo GVR?">¿Cómo añado saldo GVR?</button>' +
           '<button type="button" data-goldi-faq="¿Cómo envío el comprobante de pago?">¿Cómo envío el comprobante?</button>' +
           '<button type="button" data-goldi-faq="¿Cómo recargo un juego?">¿Cómo recargo un juego?</button>' +
@@ -72,6 +72,8 @@
   var messages = root.querySelector("#gg-goldi-messages");
   var input = root.querySelector("#gg-goldi-input");
   var form = root.querySelector("#gg-goldi-form");
+  var faqToggle = root.querySelector("#gg-goldi-faq-toggle");
+  var faqList = root.querySelector("#gg-goldi-faq-list");
   var welcomed = false;
   var conversationHistory = [];
   
@@ -276,6 +278,12 @@
     }
   });
   close.addEventListener("click", closePanel);
+  faqToggle.addEventListener("click", function () {
+    var expanded = faqToggle.getAttribute("aria-expanded") === "true";
+    faqToggle.setAttribute("aria-expanded", String(!expanded));
+    faqList.hidden = expanded;
+    root.querySelector("#gg-goldi-faq-chevron").textContent = expanded ? "⌄" : "⌃";
+  });
   root.querySelectorAll("[data-goldi-link]").forEach(function (button) {
     button.addEventListener("click", function () { navigate(button.getAttribute("data-goldi-link")); });
   });
