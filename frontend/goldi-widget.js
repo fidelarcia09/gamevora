@@ -50,6 +50,8 @@
   var input = root.querySelector("#gg-goldi-input");
   var form = root.querySelector("#gg-goldi-form");
   var welcomed = false;
+  var conversationHistory = [];
+  var waitingForAnswer = false;
 
   function addMessage(text, isUser, link) {
     var item = document.createElement("div");
@@ -246,14 +248,43 @@
   root.querySelectorAll("[data-goldi-link]").forEach(function (button) {
     button.addEventListener("click", function () { navigate(button.getAttribute("data-goldi-link")); });
   });
-  form.addEventListener("submit", function (event) {
+  form.addEventListener("submit", async function (event) {
     event.preventDefault();
     var question = input.value.trim();
-    if (!question) return;
+    if (!question || waitingForAnswer) return;
     addMessage(question, true);
     input.value = "";
-    var result = answer(question);
-    addMessage(result.text, false, result.href ? { href: result.href, label: result.label } : null);
+    waitingForAnswer = true;
+
+    var localResult = answer(question);
+    var waiting = document.createElement("div");
+    waiting.className = "gg-goldi-message";
+    waiting.textContent = "Estoy revisando los pasos para darte una respuesta clara…";
+    messages.appendChild(waiting);
+    messages.scrollTop = messages.scrollHeight;
+
+    try {
+      var response = await fetch("https://gsuhzcavghsiolmipnzi.supabase.co/functions/v1/goldi-ai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+        },
+        body: JSON.stringify({ question: question, history: conversationHistory.slice(-6) })
+      });
+      var data = await response.json();
+      if (!response.ok || !data || !data.answer) throw new Error((data && data.error) || "Goldi AI unavailable");
+      waiting.remove();
+      addMessage(data.answer, false, localResult.href ? { href: localResult.href, label: localResult.label } : null);
+      conversationHistory.push({ role: "user", text: question }, { role: "model", text: data.answer });
+      if (conversationHistory.length > 8) conversationHistory = conversationHistory.slice(-8);
+    } catch (error) {
+      waiting.remove();
+      addMessage(localResult.text, false, localResult.href ? { href: localResult.href, label: localResult.label } : null);
+    } finally {
+      waitingForAnswer = false;
+      input.focus();
+    }
   });
   document.addEventListener("keydown", function (event) {
     if (event.key === "Escape" && !panel.hidden) closePanel();
