@@ -116,7 +116,20 @@
         transform 0.25s ease,
         filter 0.25s ease;
 }
+   
+/* FOTO DE PERFIL EN LA NAVEGACIÓN */
 
+.gg-bottom-nav .gg-nav-avatar {
+    display: block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid rgba(53, 213, 255, 0.8);
+    box-shadow: 0 0 8px rgba(0, 174, 255, 0.25);
+    flex-shrink: 0;
+}
+   
 /* BOTÓN ACTIVO */
 
 .gg-bottom-nav .gg-nav-item.gg-active {
@@ -345,8 +358,12 @@ body.gg-nav-enabled {
         }
 
         const icon = document.createElement("span");
-        icon.className = "gg-nav-icon";
-        icon.innerHTML = icons[item.id];
+icon.className = "gg-nav-icon";
+icon.innerHTML = icons[item.id];
+
+if (item.id === "perfil") {
+    cargarAvatarPerfil(icon);
+                              }
 
         const label = document.createElement("span");
         label.textContent = item.label;
@@ -355,7 +372,145 @@ body.gg-nav-enabled {
         link.appendChild(label);
         nav.appendChild(link);
     });
+    async function cargarAvatarPerfil(icon) {
+    const SUPABASE_URL =
+        "https://gsuhzcavghsiolmipnzi.supabase.co";
 
+    const SUPABASE_KEY =
+        "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+    const iconoPredeterminado = icons.perfil;
+
+    function mostrarPredeterminado() {
+        icon.innerHTML = iconoPredeterminado;
+    }
+
+    function mostrarFoto(url) {
+        if (!url) {
+            mostrarPredeterminado();
+            return;
+        }
+
+        const foto = document.createElement("img");
+
+        foto.className = "gg-nav-avatar";
+        foto.alt = "Foto de perfil";
+        foto.referrerPolicy = "no-referrer";
+
+        foto.onerror = function () {
+            mostrarPredeterminado();
+        };
+
+        foto.onload = function () {
+            icon.replaceChildren(foto);
+        };
+
+        foto.src = url;
+    }
+
+    try {
+        // Cargar Supabase si esta página todavía no lo tiene.
+        if (!window.supabase?.createClient) {
+            let script = document.querySelector(
+                "script[data-gg-supabase-sdk]"
+            );
+
+            if (!script) {
+                script = document.createElement("script");
+                script.src =
+                    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+                script.dataset.ggSupabaseSdk = "true";
+
+                document.head.appendChild(script);
+            }
+
+            await new Promise((resolve, reject) => {
+                if (window.supabase?.createClient) {
+                    resolve();
+                    return;
+                }
+
+                script.addEventListener("load", resolve, {
+                    once: true
+                });
+
+                script.addEventListener("error", reject, {
+                    once: true
+                });
+            });
+        }
+
+        if (!window.supabase?.createClient) {
+            mostrarPredeterminado();
+            return;
+        }
+
+        // Reutilizar el cliente de la navegación.
+        if (!window.ggNavSupabaseClient) {
+            window.ggNavSupabaseClient =
+                window.supabase.createClient(
+                    SUPABASE_URL,
+                    SUPABASE_KEY
+                );
+        }
+
+        const supabase = window.ggNavSupabaseClient;
+
+        const { data, error } = await supabase.auth.getUser();
+
+        if (error || !data?.user) {
+            mostrarPredeterminado();
+            return;
+        }
+
+        const usuario = data.user;
+
+        // Primero comprobar la foto guardada en el perfil.
+        let urlFoto = usuario.user_metadata?.avatar_url || "";
+
+        // Si no existe en los metadatos, buscarla en su carpeta.
+        if (!urlFoto) {
+            const { data: archivos, error: errorArchivos } =
+                await supabase.storage
+                    .from("avatars")
+                    .list(usuario.id, {
+                        limit: 20
+                    });
+
+            if (!errorArchivos && archivos?.length) {
+                const archivo = archivos.find((item) =>
+                    /^avatar\.(jpg|jpeg|png|webp)$/i.test(
+                        item.name
+                    )
+                );
+
+                if (archivo) {
+                    const ruta = `${usuario.id}/${archivo.name}`;
+
+                    const resultado = supabase.storage
+                        .from("avatars")
+                        .getPublicUrl(ruta);
+
+                    urlFoto = resultado.data?.publicUrl || "";
+                }
+            }
+        }
+
+        if (urlFoto) {
+            mostrarFoto(urlFoto);
+        } else {
+            mostrarPredeterminado();
+        }
+    } catch (error) {
+        console.error(
+            "No se pudo cargar la foto de Perfil:",
+            error
+        );
+
+        mostrarPredeterminado();
+    }
+           }
+   
     function insertNavigation() {
         if (!document.body || document.querySelector(".gg-bottom-nav")) {
             return;
