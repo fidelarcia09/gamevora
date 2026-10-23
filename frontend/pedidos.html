@@ -9,14 +9,11 @@
     :root{color-scheme:dark;--fondo:#050b18;--texto:#f4f8ff;--suave:#91a4bd;--cian:#58dcff;--linea:#1a2a40;--panel:#0a1425}
     *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
     body{min-height:100vh;background:var(--fondo);color:var(--texto);padding:22px 18px 38px}
-    .contenedor{width:100%;max-width:620px;margin:0 auto}
-    .header{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:2px 0 38px}
-    .marca{display:flex;align-items:center;gap:10px;min-width:0}
-    .svj{font-size:13px;letter-spacing:2px;font-weight:900;color:var(--cian);white-space:nowrap}
-    .marca-nombre{font-size:16px;font-weight:800;letter-spacing:.1px}
+    .contenedor{width:100%;max-width:760px;margin:0 auto;padding:0 8px}
+    .header{display:flex;justify-content:flex-end;align-items:center;gap:14px;margin:2px 0 30px}
     .volver{color:var(--cian);text-decoration:none;font-size:14px;font-weight:700;white-space:nowrap}
     .volver:hover{color:#fff}
-    .encabezado{margin-bottom:26px}
+    .encabezado{margin-bottom:26px;padding-left:15px;border-left:3px solid var(--cian);box-shadow:-5px 0 18px rgba(0,183,255,.10)}
     h1{font-size:clamp(25px,6vw,32px);line-height:1.15;letter-spacing:-.7px;margin-bottom:9px}
     .descripcion{color:var(--suave);font-size:13px;line-height:1.6}
     .filtros{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;margin-bottom:15px;scrollbar-width:none}
@@ -24,18 +21,17 @@
     .filtro{flex:0 0 auto;border:1px solid transparent;border-radius:999px;background:#0d1728;color:#a9b8cc;padding:11px 15px;font-size:13px;font-weight:700;cursor:pointer;transition:background .18s,color .18s,border-color .18s}
     .filtro:hover{color:#fff}
     .filtro.activo{background:#102c42;border-color:#1e6686;color:var(--cian)}
-    .lista{display:flex;flex-direction:column}
-    .pedido{padding:16px 2px;border-bottom:1px solid var(--linea);overflow-wrap:anywhere}
-    .pedido:first-child{border-top:1px solid var(--linea)}
-    .pedido summary{list-style:none;display:flex;align-items:center;gap:13px;cursor:pointer;min-height:42px}
+    .lista{display:flex;flex-direction:column;gap:12px;padding:0 5px}
+    .pedido{position:relative;padding:15px 17px 15px 19px;margin:0 2px;background:linear-gradient(105deg,rgba(10,25,44,.72),rgba(6,16,31,.35));border:0;border-radius:12px;overflow:hidden;overflow-wrap:anywhere;box-shadow:0 7px 20px rgba(0,0,0,.10)}
+    .pedido::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:8px;background:linear-gradient(180deg,#65e6ff,#087dce);box-shadow:0 0 12px rgba(0,183,255,.42)}
+    .pedido summary{list-style:none;display:flex;align-items:center;gap:15px;cursor:pointer;min-height:48px}
     .pedido summary::-webkit-details-marker{display:none}
-    .icono-juego{width:40px;height:40px;flex:0 0 40px;border-radius:12px;background:#10263b;display:flex;align-items:center;justify-content:center;color:var(--cian)}
-    .icono-juego svg{width:21px;height:21px}
-    .pedido-titulo{flex:1;min-width:0;font-size:14px;font-weight:750;line-height:1.5;color:#f4f8ff}
-    .prefijo{font-size:10px;font-weight:900;letter-spacing:1.3px;color:var(--cian);margin-right:6px;white-space:nowrap}
+    .icono-juego{width:60px;height:54px;flex:0 0 60px;border-radius:16px;background:radial-gradient(circle at 30% 20%,#194a69,#0a1b30 72%);display:flex;align-items:center;justify-content:center;color:var(--cian);border:1px solid rgba(88,220,255,.26);box-shadow:inset 0 0 15px rgba(0,183,255,.12),0 0 13px rgba(0,183,255,.06)}
+    .icono-juego svg{width:48px;height:39px;filter:drop-shadow(0 0 5px rgba(88,220,255,.32))}
+    .pedido-titulo{flex:1;min-width:0;font-size:15px;font-weight:750;line-height:1.5;color:#f4f8ff}
     .flecha{width:19px;height:19px;flex:0 0 19px;color:#8ca6c1;transition:transform .2s}
     details[open] .flecha{transform:rotate(180deg);color:var(--cian)}
-    .detalles{padding:15px 0 2px 53px;color:#b0bfd2;font-size:12px;line-height:1.8}
+    .detalles{padding:15px 2px 2px 65px;color:#b0bfd2;font-size:12px;line-height:1.8;border-top:1px solid rgba(45,83,117,.35);margin-top:12px}
     .detalle-fila{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;padding:4px 0}
     .detalle-etiqueta{color:#7f94ad;flex:0 0 auto}
     .detalle-valor{text-align:right;color:#e4edf8;overflow-wrap:anywhere}
@@ -47,13 +43,12 @@
     .vacio.error{color:#ff9292}
     .boton-reintentar{margin-top:14px;border:1px solid #1c8ac0;border-radius:10px;background:#0b2137;color:#eaf8ff;padding:10px 15px;font-weight:700;cursor:pointer}
     .nota{margin-top:30px;color:#61758f;font-size:11px;line-height:1.6}
-    @media(max-width:420px){body{padding:18px 15px 30px}.header{margin-bottom:32px}.marca-nombre{font-size:14px}.svj{font-size:12px}.filtro{padding:10px 13px}.detalles{padding-left:0}.pedido-titulo{font-size:13px}}
+    @media(max-width:520px){body{padding:18px 13px 30px}.contenedor{padding:0 1px}.header{margin-bottom:28px}.filtro{padding:10px 13px}.lista{padding:0;gap:10px}.pedido{padding:13px 12px 13px 15px;margin:0}.pedido summary{gap:11px}.icono-juego{width:54px;height:49px;flex-basis:54px}.icono-juego svg{width:43px;height:35px}.pedido-titulo{font-size:13px}.detalles{padding-left:0}.detalle-fila{gap:10px}}
   </style>
 </head>
 <body>
   <main class="contenedor">
     <header class="header">
-      <div class="marca"><span class="svj">SVJ</span><span class="marca-nombre">Gamers Gold Top-Up</span></div>
       <a href="../index.html" class="volver">Inicio</a>
     </header>
 
@@ -137,7 +132,7 @@
   }
 
   function iconoJuego() {
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9h12a4 4 0 0 1 3.8 5.2l-1 3a2 2 0 0 1-3.3.8L15 15H9l-2.5 3a2 2 0 0 1-3.3-.8l-1-3A4 4 0 0 1 6 9Z"/><path d="M7 11v4M5 13h4M16.5 12.5h.01M18.5 14.5h.01"/></svg>';
+    return '<svg viewBox="0 0 64 44" fill="none" aria-hidden="true"><path d="M16 7.5h32c5.4 0 9.4 3.3 11 9l3 12.1c1.3 5.2-4.6 9-8.7 5.7l-8.1-6.6H18.8l-8.1 6.6C6.6 37.6.7 33.8 2 28.6L5 16.5c1.6-5.7 5.6-9 11-9Z" fill="#0b1d31" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/><path d="M13 15v10M8 20h10" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/><circle cx="49" cy="17" r="2" fill="currentColor"/><circle cx="54" cy="22" r="2" fill="currentColor"/><text x="32" y="23.5" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11.5" font-weight="900" letter-spacing=".5" fill="#f4f8ff">SVJ</text><path d="M24 29.2h16" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".8"/></svg>';
   }
 
   function campo(etiqueta, valor, clase="") {
@@ -154,7 +149,7 @@
     detalles.dataset.categoria = item.categoria;
 
     const resumen = document.createElement("summary");
-    resumen.innerHTML = `<span class="icono-juego">${iconoJuego()}</span><span class="pedido-titulo"><span class="prefijo">SVJ</span>${escaparHTML(item.titulo)}</span><svg class="flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
+    resumen.innerHTML = `<span class="icono-juego">${iconoJuego()}</span><span class="pedido-titulo">${escaparHTML(item.titulo)}</span><svg class="flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
     detalles.appendChild(resumen);
 
     const panel = document.createElement("div");
@@ -289,4 +284,3 @@
   </script>
 </body>
 </html>
-
