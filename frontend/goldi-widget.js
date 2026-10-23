@@ -370,7 +370,7 @@
     button.addEventListener("click", function () {
       var question = button.getAttribute("data-goldi-faq");
       addMessage(question, true);
-      var result = answer(question);
+      var result = answerFAQ(question) || answer(question);
       addMessage(result.text, false, result.href ? { href: result.href, label: result.label } : null);
       var normalized = question.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
       conversationHistory.push({ role: "user", text: question, topic: normalized }, { role: "model", text: result.text, topic: normalized });
