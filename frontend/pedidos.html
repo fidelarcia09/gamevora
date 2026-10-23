@@ -10,7 +10,9 @@
     *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
     body{min-height:100vh;background:var(--fondo);color:var(--texto);padding:22px 18px 38px}
     .contenedor{width:100%;max-width:760px;margin:0 auto;padding:0 8px}
-    .header{display:flex;justify-content:flex-end;align-items:center;gap:14px;margin:2px 0 30px}
+    .header{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:2px 0 30px}
+    .marca{font-size:clamp(15px,3.8vw,19px);font-weight:900;letter-spacing:-.35px;color:#f4f8ff;white-space:nowrap}
+    .marca-acento{color:var(--cian);text-shadow:0 0 14px rgba(88,220,255,.18)}
     .volver{color:var(--cian);text-decoration:none;font-size:14px;font-weight:700;white-space:nowrap}
     .volver:hover{color:#fff}
     .encabezado{margin-bottom:26px;padding-left:15px;border-left:3px solid var(--cian);box-shadow:-5px 0 18px rgba(0,183,255,.10)}
@@ -49,6 +51,7 @@
 <body>
   <main class="contenedor">
     <header class="header">
+      <div class="marca"><span class="marca-acento">Gamers Gold</span> Top-Up</div>
       <a href="../index.html" class="volver">Inicio</a>
     </header>
 
@@ -132,7 +135,7 @@
   }
 
   function iconoJuego() {
-    return '<svg viewBox="0 0 64 44" fill="none" aria-hidden="true"><path d="M16 7.5h32c5.4 0 9.4 3.3 11 9l3 12.1c1.3 5.2-4.6 9-8.7 5.7l-8.1-6.6H18.8l-8.1 6.6C6.6 37.6.7 33.8 2 28.6L5 16.5c1.6-5.7 5.6-9 11-9Z" fill="#0b1d31" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/><path d="M13 15v10M8 20h10" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/><circle cx="49" cy="17" r="2" fill="currentColor"/><circle cx="54" cy="22" r="2" fill="currentColor"/><text x="32" y="23.5" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="11.5" font-weight="900" letter-spacing=".5" fill="#f4f8ff">SVJ</text><path d="M24 29.2h16" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".8"/></svg>';
+    return '<svg viewBox="0 0 64 44" fill="none" aria-hidden="true"><path d="M16 7.5h32c5.4 0 9.4 3.3 11 9l3 12.1c1.3 5.2-4.6 9-8.7 5.7l-8.1-6.6H18.8l-8.1 6.6C6.6 37.6.7 33.8 2 28.6L5 16.5c1.6-5.7 5.6-9 11-9Z" fill="#0b1d31" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/><path d="M13 15v10M8 20h10" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/><circle cx="49" cy="17" r="2" fill="currentColor"/><circle cx="54" cy="22" r="2" fill="currentColor"/><path d="M24 29.2h16" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".8"/></svg>';
   }
 
   function campo(etiqueta, valor, clase="") {
