@@ -287,6 +287,85 @@
   root.querySelectorAll("[data-goldi-link]").forEach(function (button) {
     button.addEventListener("click", function () { navigate(button.getAttribute("data-goldi-link")); });
   });
+  function answerFAQ(question) {
+    var key = question.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\\s+/g, " ").trim();
+    var faq = {
+      "como anado saldo gvr": {
+        text: "Para añadir saldo GVR, sigue estos pasos: 1) inicia sesión en tu cuenta; 2) abre Comprar GVR; 3) elige uno de los paquetes disponibles o introduce una cantidad personalizada entera; 4) continúa y selecciona un método de pago que esté habilitado; 5) revisa la cantidad y el importe; 6) sigue las instrucciones que aparezcan en Confirmar compra y utiliza únicamente el receptor que muestre esa página; 7) realiza el pago y guarda el comprobante; 8) sube una imagen JPG, PNG o WEBP de máximo 5 MB; 9) pulsa Enviar comprobante; 10) guarda el ID de solicitud y revisa su estado en Mis pedidos. Importante: el saldo se añade después de que el pago sea revisado y aprobado. Si ya registraste una solicitud, no pagues ni crees otra para el mismo pago.",
+        href: base + "recargar-gvr.html", label: "Comprar GVR"
+      },
+      "como envio el comprobante de pago": {
+        text: "Para enviar tu comprobante de pago de GVR: 1) inicia sesión; 2) comienza una compra desde Comprar GVR; 3) elige un método habilitado y continúa hasta Confirmar compra; 4) realiza el pago siguiendo los datos que aparecen en pantalla; 5) selecciona la imagen del comprobante en JPG, PNG o WEBP (máximo 5 MB); 6) pulsa Enviar comprobante; 7) espera la confirmación y guarda el ID de solicitud; 8) consulta el estado en Mis pedidos. El comprobante no acredita el saldo automáticamente: primero debe revisarse y aprobarse. Si la solicitud ya aparece registrada, no la envíes de nuevo; usa su ID para pedir ayuda si algo falla.",
+        href: base + "confirmar-gvr.html", label: "Enviar comprobante"
+      },
+      "como recargo un juego": {
+        text: "Para recargar un juego: 1) abre Juegos y selecciona el juego correcto; 2) introduce el ID de jugador y la zona o servidor si se solicitan; 3) utiliza la validación disponible en la página; 4) elige el paquete; 5) comprueba el nombre del juego, paquete, ID y total; 6) confirma solo si todos los datos son correctos; 7) abre Mis pedidos para seguir el estado. Si el pedido ya está pendiente, revisa ese pedido antes de intentar otra compra. Dime qué juego quieres recargar y te indico los pasos específicos.",
+        href: links.games, label: "Ver juegos"
+      },
+      "como recargo free fire": {
+        text: "Para recargar Free Fire: 1) abre la página de Free Fire; 2) escribe tu ID de jugador exactamente como aparece en el juego; 3) pulsa la opción de validar si está disponible y revisa el resultado; 4) selecciona el paquete de diamantes; 5) comprueba cuidadosamente el ID, el paquete y el total; 6) confirma la recarga solo si los datos son correctos; 7) después, revisa el estado en Mis pedidos. Si la validación no está disponible o no puede confirmar el ID, no significa necesariamente que el ID sea incorrecto: revisa los datos y contacta Soporte si persiste. No repitas una compra que ya esté pendiente.",
+        href: base + "freefire.html", label: "Abrir Free Fire"
+      },
+      "como consulto mi saldo gvr": {
+        text: "Para consultar tu saldo GVR: 1) inicia sesión con la cuenta correcta; 2) abre Wallet; 3) revisa el saldo disponible que aparece en tu cuenta. Si acabas de pagar GVR, recuerda que el saldo solo se actualiza después de que la solicitud y el comprobante sean revisados y aprobados. Goldi no puede ver ni confirmar el saldo privado de tu cuenta desde este chat.",
+        href: links.wallet, label: "Abrir Wallet"
+      },
+      "como reviso mis pedidos": {
+        text: "Para revisar tus pedidos: 1) inicia sesión con la misma cuenta con la que realizaste la compra; 2) abre Mis pedidos; 3) selecciona el filtro que necesites: Todos, Completados, Pendientes o Revisión; 4) abre el pedido para ver sus detalles y estado. Si necesitas ayuda, guarda el ID del pedido y envíalo a Soporte junto con una descripción del problema. Si está pendiente, no repitas la compra sin revisar primero el estado.",
+        href: links.orders, label: "Abrir Mis pedidos"
+      },
+      "que hago si mi recarga no llega": {
+        text: "Si tu recarga no llega: 1) inicia sesión; 2) abre Mis pedidos; 3) localiza la compra y revisa su estado y el ID; 4) si está pendiente, espera la actualización del pedido y no crees otra compra igual; 5) si aparece fallida, completada pero no recibida, o lleva demasiado tiempo sin cambiar, abre Soporte; 6) incluye el ID del pedido, el juego y una explicación breve. No compartas tu contraseña ni códigos de acceso.",
+        href: links.orders, label: "Revisar mis pedidos"
+      },
+      "como valido mi id de jugador": {
+        text: "Para validar tu ID de jugador: 1) abre la página del juego; 2) copia el ID directamente desde el juego, sin espacios adicionales ni números cambiados; 3) completa la zona o servidor si el formulario lo pide; 4) pulsa Validar y espera el resultado; 5) confirma la compra solo si los datos mostrados son correctos. Si la validación no está disponible, no siempre significa que el ID sea incorrecto. No continúes con una compra si tienes dudas; contacta Soporte e indica el juego y el mensaje que aparece.",
+        href: links.games, label: "Elegir juego"
+      },
+      "como creo una cuenta": {
+        text: "Para crear una cuenta: 1) abre Registro; 2) completa los datos que solicita el formulario; 3) utiliza un correo al que tengas acceso y crea una contraseña segura; 4) sigue las instrucciones que aparezcan para completar el registro; 5) después, inicia sesión. Nunca compartas tu contraseña ni los códigos de acceso con otras personas.",
+        href: base + "registro.html", label: "Crear cuenta"
+      },
+      "como contacto soporte": {
+        text: "Para contactar Soporte: 1) inicia sesión; 2) abre Soporte; 3) selecciona la categoría relacionada con tu problema; 4) escribe un asunto claro; 5) explica qué ocurrió e incluye el ID del pedido o de la solicitud si lo tienes; 6) abre la conversación y vuelve a ella para revisar las respuestas. No envíes tu contraseña ni códigos de acceso.",
+        href: links.support, label: "Abrir Soporte"
+      },
+      "que metodos de pago puedo usar para gvr": {
+        text: "Los métodos disponibles para comprar GVR son los que aparezcan habilitados durante el proceso de compra. 1) abre Comprar GVR; 2) selecciona la cantidad; 3) revisa los métodos que se muestran; 4) elige uno habilitado y sigue las instrucciones de Confirmar compra. Si CUP/transferencia aparece deshabilitado o no muestra un receptor, no envíes dinero por ese método. Comprueba siempre los datos y el importe que aparecen en la web en ese momento.",
+        href: moneyLink, label: "Ver opciones de GVR"
+      },
+      "como pago con usdt": {
+        text: "Para pagar con USDT: 1) abre Comprar GVR y elige una cantidad; 2) selecciona USDT si aparece habilitado; 3) continúa hasta Confirmar compra; 4) verifica cuidadosamente la red y la dirección que muestre la página (cuando esté disponible, se indicará BNB Smart Chain/BEP20); 5) comprueba el importe antes de enviar; 6) guarda el comprobante; 7) súbelo en la misma página y pulsa Enviar comprobante; 8) guarda el ID de solicitud. Utiliza siempre la dirección y los datos actuales de la web, nunca datos antiguos copiados de un chat.",
+        href: proofLink, label: "Ver confirmación de GVR"
+      },
+      "como pago con saldo movil para gvr": {
+        text: "Para pagar con Saldo móvil: 1) abre Comprar GVR y selecciona una cantidad; 2) elige Saldo móvil solo si está habilitado; 3) continúa hasta Confirmar compra; 4) verifica el número receptor y el importe exacto que aparecen en esa página; 5) realiza la operación; 6) guarda una captura del pago; 7) súbela en la misma página y pulsa Enviar comprobante; 8) guarda el ID de solicitud y revisa Mis pedidos. Confirma siempre el número que aparece en pantalla en ese momento.",
+        href: proofLink, label: "Ver confirmación de GVR"
+      },
+      "como recupero mi contrasena": {
+        text: "Si olvidaste tu contraseña: 1) abre Recuperar contraseña; 2) introduce los datos que te solicite el formulario; 3) revisa el correo asociado a tu cuenta y sigue las instrucciones recibidas; 4) crea una contraseña nueva y segura. Si no recibes el correo, revisa la carpeta de spam y confirma que escribiste el correo correcto. No compartas enlaces privados ni códigos de recuperación.",
+        href: base + "recuperar-contrasena.html", label: "Recuperar contraseña"
+      },
+      "como veo los movimientos gvr": {
+        text: "Para consultar tus movimientos GVR: 1) inicia sesión; 2) abre la sección Movimientos desde la web o tu cuenta; 3) revisa las operaciones que aparezcan registradas. Si no ves un movimiento esperado, comprueba primero el estado de la solicitud en Mis pedidos. Si sigue sin aparecer, contacta Soporte e incluye el ID de la solicitud. Goldi no puede consultar los movimientos privados de tu cuenta desde el chat.",
+        href: base + "movimientos.html", label: "Ver movimientos"
+      },
+      "donde veo los precios de los juegos": {
+        text: "Para consultar los precios: 1) abre Juegos; 2) selecciona el juego que te interesa; 3) revisa los paquetes y sus precios en la página del juego; 4) antes de confirmar, comprueba el paquete elegido y el total que muestra la web. Los precios válidos son los que aparecen en el catálogo en ese momento.",
+        href: links.games, label: "Ver juegos y precios"
+      },
+      "que hago si mi comprobante sigue pendiente": {
+        text: "Si tu comprobante sigue pendiente: 1) inicia sesión; 2) abre Mis pedidos; 3) selecciona Pendientes o Revisión; 4) abre la solicitud y guarda su ID; 5) espera a que el pago sea revisado. El saldo GVR se acredita cuando la solicitud es aprobada. No envíes otro pago ni crees una segunda solicitud para el mismo pago. Si lleva demasiado tiempo o muestra un error, contacta Soporte e incluye el ID.",
+        href: links.orders, label: "Revisar solicitud"
+      },
+      "como hago un reclamo": {
+        text: "Para presentar un reclamo: 1) inicia sesión; 2) abre Soporte; 3) selecciona la categoría que más se ajuste al problema; 4) escribe un asunto breve; 5) describe qué pasó, cuándo ocurrió y qué esperabas que sucediera; 6) incluye el ID del pedido o solicitud y adjunta la evidencia si el formulario lo permite; 7) envía el mensaje y vuelve a la conversación para revisar la respuesta. No compartas contraseñas ni códigos de acceso.",
+        href: links.support, label: "Presentar reclamo"
+      }
+    };
+    return faq[key] || null;
+  }
+
   root.querySelectorAll("[data-goldi-faq]").forEach(function (button) {
     button.addEventListener("click", function () {
       var question = button.getAttribute("data-goldi-faq");
