@@ -320,7 +320,7 @@ let vistaActual="bonds";
 function normalizarTexto(v){
 return String(v??"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[\s_-]/g,"");
 }
-function mostrarEstado(m,tipo=""){
+function mostrarEstado(m,tipo=""){m=typeof m==="string"?m.replace(/pedido aceptado por next level/gi,"Pedido aceptado por Gamers Gold Top-Up"):m;
 estadoCatalogo.textContent=m;
 estadoCatalogo.classList.toggle("error",tipo==="error");
 estadoCatalogo.classList.toggle("correcto",tipo==="correcto");
