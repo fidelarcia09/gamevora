@@ -14,7 +14,7 @@
 
   var style = document.createElement("link");
   style.rel = "stylesheet";
-  style.href = base + "goldi-widget.css?v=20261023-7";
+  style.href = base + "goldi-widget.css?v=20261023-8";
   document.head.appendChild(style);
 
   var root = document.createElement("div");
@@ -235,7 +235,7 @@
   launcher.addEventListener("pointerdown", function (event) {
     if (event.button !== undefined && event.button !== 0) return;
     var rect = root.getBoundingClientRect();
-    dragState = { startX: event.clientX, left: rect.left, moved: false };
+    dragState = { startX: event.clientX, startY: event.clientY, left: rect.left, top: rect.top, moved: false };
     dragged = false;
     if (launcher.setPointerCapture && event.pointerId !== undefined) {
       try { launcher.setPointerCapture(event.pointerId); } catch (error) {}
@@ -244,14 +244,18 @@
   launcher.addEventListener("pointermove", function (event) {
     if (!dragState) return;
     var dx = event.clientX - dragState.startX;
-    if (!dragState.moved && Math.abs(dx) < 5) return;
+    var dy = event.clientY - dragState.startY;
+    if (!dragState.moved && Math.max(Math.abs(dx), Math.abs(dy)) < 5) return;
     dragState.moved = true;
     dragged = true;
     var nextLeft = Math.max(4, Math.min(window.innerWidth - root.offsetWidth - 4, dragState.left + dx));
+    var nextTop = Math.max(4, Math.min(window.innerHeight - root.offsetHeight - 4, dragState.top + dy));
     root.style.left = nextLeft + "px";
+    root.style.top = nextTop + "px";
     root.style.right = "auto";
+    root.style.bottom = "auto";
     root.classList.toggle("gg-goldi-left", nextLeft < window.innerWidth / 2);
-    try { localStorage.setItem("ggGoldiPosition", JSON.stringify({ left: nextLeft })); } catch (error) {}
+    try { localStorage.setItem("ggGoldiPosition", JSON.stringify({ left: nextLeft, top: nextTop })); } catch (error) {}
   });
   function finishDrag() { dragState = null; if (dragged) window.setTimeout(function () { dragged = false; }, 80); }
   launcher.addEventListener("pointerup", finishDrag);
@@ -267,6 +271,11 @@
       var restoredLeft = Math.max(4, Math.min(window.innerWidth - 58, savedPosition.left));
       root.style.left = restoredLeft + "px";
       root.style.right = "auto";
+      if (Number.isFinite(savedPosition.top)) {
+        var restoredTop = Math.max(4, Math.min(window.innerHeight - 58, savedPosition.top));
+        root.style.top = restoredTop + "px";
+        root.style.bottom = "auto";
+      }
       root.classList.toggle("gg-goldi-left", restoredLeft < window.innerWidth / 2);
     }
   } catch (error) {}
@@ -288,7 +297,7 @@
     button.addEventListener("click", function () { navigate(button.getAttribute("data-goldi-link")); });
   });
   function answerFAQ(question) {
-    var key = question.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\\s+/g, " ").trim();
+    var key = question.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
     var faq = {
       "como anado saldo gvr": {
         text: "Para añadir saldo GVR, sigue estos pasos: 1) inicia sesión en tu cuenta; 2) abre Comprar GVR; 3) elige uno de los paquetes disponibles o introduce una cantidad personalizada entera; 4) continúa y selecciona un método de pago que esté habilitado; 5) revisa la cantidad y el importe; 6) sigue las instrucciones que aparezcan en Confirmar compra y utiliza únicamente el receptor que muestre esa página; 7) realiza el pago y guarda el comprobante; 8) sube una imagen JPG, PNG o WEBP de máximo 5 MB; 9) pulsa Enviar comprobante; 10) guarda el ID de solicitud y revisa su estado en Mis pedidos. Importante: el saldo se añade después de que el pago sea revisado y aprobado. Si ya registraste una solicitud, no pagues ni crees otra para el mismo pago.",
