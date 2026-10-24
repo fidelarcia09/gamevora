@@ -613,6 +613,34 @@
             transition: none !important;
         }
     }
+
+/* APARIENCIA CLARA OPCIONAL */
+body.tema-claro{background:#f4f7fb;color:#172033}
+body.tema-claro .rayo{color:#087cff;text-shadow:none}
+body.tema-claro .volver{color:#0876d1}
+body.tema-claro .volver:hover{color:#0059a8}
+body.tema-claro .separador{color:#a6b3c4}
+body.tema-claro .subtitulo,body.tema-claro .texto-ayuda,body.tema-claro .dato-titulo,body.tema-claro .salud-descripcion,body.tema-claro .salud-vacio{color:#617086}
+body.tema-claro .acordeon{border-bottom-color:#dce3ec}
+body.tema-claro .opcion-texto,body.tema-claro h1,body.tema-claro .seccion-titulo,body.tema-claro .salud-titulo,body.tema-claro .salud-subtitulo{color:#172033}
+body.tema-claro .icono-opcion,body.tema-claro .icono-flecha,body.tema-claro .icono-seccion{color:#087cff;filter:none}
+body.tema-claro .dato,body.tema-claro .estado-notificaciones,body.tema-claro .salud-elemento{background:#fff;border-color:#d8e1ec;color:#344256}
+body.tema-claro .dato-valor{color:#172033}
+body.tema-claro .seccion-extra,body.tema-claro .salud-panel{border-top-color:#dce3ec}
+body.tema-claro .salud-resumen{background:#fff;border-color:#d8e1ec;color:#344256}
+body.tema-claro .salud-elemento-mensaje{color:#475569}
+body.tema-claro .salud-elemento-fecha,body.tema-claro .salud-nota{color:#718096}
+body.tema-claro .salud-etiqueta{background:#e4efff;color:#185ca8}
+body.tema-claro .salud-etiqueta.error{background:#ffe8ec;color:#a91d39}
+body.tema-claro .salud-etiqueta.resuelto{background:#e1f8e9;color:#176b39}
+body.tema-claro .avatar{background:linear-gradient(145deg,#eaf3ff,#fff);border-color:#168cff;color:#087cff;box-shadow:0 0 18px rgba(0,100,220,.08)}
+body.tema-claro .avatar-camara{border-color:#f4f7fb}
+.opcion-tema{flex:1;min-width:110px;min-height:42px;border:1px solid #31506f;border-radius:9px;padding:10px 12px;background:transparent;color:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.selector-tema{display:flex;gap:10px;flex-wrap:wrap}
+.opcion-tema[aria-pressed="true"]{border-color:#00baff;box-shadow:0 0 0 1px #00baff}
+body.tema-claro .opcion-tema{border-color:#cbd5e1;color:#172033}
+body.tema-claro .opcion-tema[aria-pressed="true"]{border-color:#087cff;box-shadow:0 0 0 1px #087cff;background:#eaf3ff}
+
 </style>
 </head>
 
@@ -675,6 +703,24 @@
         </p>
 
         <div class="lista-opciones">
+
+            <!-- APARIENCIA -->
+            <details class="acordeon">
+                <summary>
+                    <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v18"></path><path d="M12 12h9"></path></svg>
+                    <span class="opcion-texto">Apariencia</span>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                </summary>
+                <div class="contenido-acordeon">
+                    <p class="texto-ayuda">Elige cómo quieres ver tu cuenta. Tu elección se guardará en este dispositivo.</p>
+                    <div class="selector-tema" role="group" aria-label="Elegir apariencia">
+                        <button type="button" class="opcion-tema" id="temaOscuro" aria-pressed="true">Oscuro original</button>
+                        <button type="button" class="opcion-tema" id="temaClaro" aria-pressed="false">Blanco</button>
+                    </div>
+                </div>
+            </details>
+
+
 
             <!-- DATOS PERSONALES -->
 
@@ -941,7 +987,32 @@ const supabaseClient = window.supabase.createClient(
 
 
 /* ==========================================
-   FOTO DE PERFIL: SUPABASE STORAGE
+   
+/* APARIENCIA: SOLO CAMBIA LOS COLORES */
+(function configurarApariencia() {
+    const claveTema = "gamersGoldApariencia";
+    const botonOscuro = document.getElementById("temaOscuro");
+    const botonClaro = document.getElementById("temaClaro");
+    function aplicarTema(tema) {
+        const claro = tema === "claro";
+        document.body.classList.toggle("tema-claro", claro);
+        botonOscuro.setAttribute("aria-pressed", String(!claro));
+        botonClaro.setAttribute("aria-pressed", String(claro));
+    }
+    let guardado = "oscuro";
+    try { guardado = localStorage.getItem(claveTema) || "oscuro"; } catch (_) {}
+    aplicarTema(guardado === "claro" ? "claro" : "oscuro");
+    botonOscuro.addEventListener("click", () => {
+        aplicarTema("oscuro");
+        try { localStorage.setItem(claveTema, "oscuro"); } catch (_) {}
+    });
+    botonClaro.addEventListener("click", () => {
+        aplicarTema("claro");
+        try { localStorage.setItem(claveTema, "claro"); } catch (_) {}
+    });
+})();
+
+FOTO DE PERFIL: SUPABASE STORAGE
 ========================================== */
 
 const BUCKET_AVATARES = "avatars";
