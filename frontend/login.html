@@ -244,9 +244,10 @@ document.getElementById("formLogin").addEventListener("submit", async function(e
     const { data, error } =
         await supabaseClient.auth.signInWithPassword({
             email: correo,
-            password: contrasena
-        }, {
-            captchaToken: window.ggTurnstileToken
+            password: contrasena,
+            options: {
+                captchaToken: window.ggTurnstileToken
+            }
         });
 
     if (error) {
