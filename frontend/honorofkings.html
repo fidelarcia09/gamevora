@@ -206,7 +206,34 @@ function buscarLocalPorId(id) {
   return productosLocales.find(p => String(p.provider_product_id || "").trim() === String(id).trim()) || null;
 }
 function buscarProveedorPorId(id) {
-  return productosProveedor.find(p => obtenerProductId(p) === id) || null;
+  const exacto = productosProveedor.find(p => obtenerProductId(p) === id);
+  if (exacto) return exacto;
+
+  const objetivo = normalizarTexto(id);
+  return productosProveedor.find(p => {
+    const idProveedor = normalizarTexto(obtenerProductId(p));
+    return idProveedor === objetivo ||
+      (idProveedor.includes("honorofkings") && objetivo.includes("honorofkings") &&
+       idProveedor.endsWith(objetivo.replace(/^fzhonorofkings/, "")));
+  }) || null;
+}
+function buscarProveedorOferta(oferta) {
+  const exacto = buscarProveedorPorId(oferta.id);
+  if (exacto) return exacto;
+
+  const claves = {
+    standard_purchase_rebate_pack: ["standardpurchaserebatepack", "standardrebatepack"],
+    weekly_card: ["weeklycard"],
+    premium_purchase_rebate_pack: ["premiumpurchaserebatepack", "premiumrebatepack"],
+    weekly_card_plus: ["weeklycardplus"]
+  };
+  const idBase = oferta.id.replace("fz-honor_of_kings-", "");
+  const candidatas = claves[idBase] || [normalizarTexto(oferta.nombre)];
+  return productosProveedor.find(p => {
+    const id = normalizarTexto(obtenerProductId(p));
+    const nombre = normalizarTexto(obtenerNombre(p));
+    return candidatas.some(clave => id.includes(clave) || nombre.includes(clave));
+  }) || null;
 }
 function clavePedidoPendiente(userId) {
   return CLAVE_PEDIDO_BASE + userId;
@@ -356,8 +383,9 @@ function renderizarTokens() {
 function renderizarOfertas() {
   catalogoOfertas.replaceChildren();
   OFERTAS_HONOR.forEach(oferta => {
-    const proveedor = buscarProveedorPorId(oferta.id);
-    const local = buscarLocalPorId(oferta.id);
+    const proveedor = buscarProveedorOferta(oferta);
+    const idProveedor = proveedor ? obtenerProductId(proveedor) : oferta.id;
+    const local = buscarLocalPorId(idProveedor);
     const comprable = !!proveedor && proveedor.available === true && productoComprable(local);
     const tarjeta = document.createElement("button");
     tarjeta.type = "button"; tarjeta.className = "producto producto-oferta";
@@ -412,8 +440,9 @@ async function cargarCatalogo() {
     renderizarOfertas();
     const tokensActivos = productosTokens.filter(p => p.available === true && productoComprable(buscarLocalPorId(obtenerProductId(p)))).length;
     const ofertasActivas = OFERTAS_HONOR.filter(o => {
-      const p = buscarProveedorPorId(o.id);
-      return p && p.available === true && productoComprable(buscarLocalPorId(o.id));
+      const p = buscarProveedorOferta(o);
+      return p && p.available === true &&
+        productoComprable(buscarLocalPorId(obtenerProductId(p)));
     }).length;
     mostrarEstado("Tokens disponibles: " + tokensActivos + " · Ofertas disponibles: " + ofertasActivas);
   } catch (error) {
