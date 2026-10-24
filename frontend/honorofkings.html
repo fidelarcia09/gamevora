@@ -232,7 +232,10 @@ function buscarProveedorOferta(oferta) {
   return productosProveedor.find(p => {
     const id = normalizarTexto(obtenerProductId(p));
     const nombre = normalizarTexto(obtenerNombre(p));
-    return candidatas.some(clave => id.includes(clave) || nombre.includes(clave));
+    return candidatas.some(clave => {
+      const normalizada = normalizarTexto(clave);
+      return id.includes(normalizada) || nombre.includes(normalizada);
+    });
   }) || null;
 }
 function clavePedidoPendiente(userId) {
