@@ -144,12 +144,8 @@ const modalTotal = $("modalTotal");
 const modalCancelar = $("modalCancelar");
 const modalAceptar = $("modalAceptar");
 
-const OFERTAS_HONOR = [
-  { id: "fz-honor_of_kings-standard_purchase_rebate_pack", nombre: "Standard Purchase Rebate Pack", icono: "🎁" },
-  { id: "fz-honor_of_kings-weekly_card", nombre: "Weekly Card", icono: "📅" },
-  { id: "fz-honor_of_kings-premium_purchase_rebate_pack", nombre: "Premium Purchase Rebate Pack", icono: "👑" },
-  { id: "fz-honor_of_kings-weekly_card_plus", nombre: "Weekly Card Plus", icono: "⭐" }
-];
+// Se conserva la integración de ofertas; no hay ofertas especiales activas configuradas.
+const OFERTAS_HONOR = [];
 
 let productosProveedor = [];
 let productosTokens = [];
@@ -385,6 +381,13 @@ function renderizarTokens() {
 }
 function renderizarOfertas() {
   catalogoOfertas.replaceChildren();
+  if (OFERTAS_HONOR.length === 0) {
+    const vacio = document.createElement("div");
+    vacio.className = "estado";
+    vacio.textContent = "No hay ofertas especiales disponibles actualmente.";
+    catalogoOfertas.appendChild(vacio);
+    return;
+  }
   OFERTAS_HONOR.forEach(oferta => {
     const proveedor = buscarProveedorOferta(oferta);
     const idProveedor = proveedor ? obtenerProductId(proveedor) : oferta.id;
