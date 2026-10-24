@@ -492,7 +492,7 @@ async function cargarCatalogo() {
    .eq("game","PUBG Mobile").eq("provider","nextlevel");
   if (error) throw new Error("No se pudieron cargar los productos. Inténtalo más tarde.");
   const filas = data || [];
-  productosDisponibles = filas.filter(p => p.active === true && p.provider_region === "Global" && Boolean(p.provider_product_id) && /\\bUC\\b/i.test(String(p.product_name || "")) && Number(p.game_currency_amount) > 0 && Number.isFinite(Number(p.price_gvr)) && Number(p.price_gvr) > 0)
+  productosDisponibles = filas.filter(p => p.active === true && p.provider_region === "Global" && Boolean(p.provider_product_id) && /\bUC\b/i.test(String(p.product_name || "")) && Number(p.game_currency_amount) > 0 && Number.isFinite(Number(p.price_gvr)) && Number(p.price_gvr) > 0)
    .sort((a,b) => Number(a.game_currency_amount)-Number(b.game_currency_amount));
   const ids = new Set(OFERTAS_PUBG.map(o => o.id));
   productosOfertas = filas.filter(p => ids.has(String(p.provider_product_id || "").trim()));
