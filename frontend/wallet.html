@@ -815,6 +815,73 @@
             }
         }
 
+
+        /* Resumen mensual de la wallet */
+        .saldo {
+            flex-wrap: wrap;
+        }
+
+        .estadisticas-mes {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid rgba(155, 190, 230, .14);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, .045);
+        }
+
+        .estadistica-mes {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 13px 7px 12px;
+            text-align: center;
+        }
+
+        .estadistica-mes + .estadistica-mes {
+            border-left: 1px solid rgba(155, 190, 230, .13);
+        }
+
+        .estadistica-valor {
+            color: #f4f8ff;
+            font-size: clamp(16px, 3.8vw, 23px);
+            line-height: 1.15;
+            font-weight: 900;
+            overflow-wrap: anywhere;
+        }
+
+        .estadistica-valor.entrada-mes {
+            color: #39dda0;
+        }
+
+        .estadistica-valor.salida-mes {
+            color: #ff8585;
+        }
+
+        .estadistica-etiqueta {
+            color: #9aadc4;
+            font-size: clamp(10px, 2.6vw, 12px);
+            line-height: 1.3;
+        }
+
+        @media (max-width: 380px) {
+            .estadistica-mes {
+                padding: 11px 4px;
+            }
+
+            .estadistica-valor {
+                font-size: 15px;
+            }
+
+            .estadistica-etiqueta {
+                font-size: 10px;
+            }
+        }
+
     </style>
 </head>
 
@@ -857,6 +924,21 @@
                     aria-label="GVR"
                     role="img">
                     <span class="saldo-letra">G</span>
+                </div>
+
+                <div class="estadisticas-mes" aria-label="Resumen del mes">
+                    <div class="estadistica-mes">
+                        <strong class="estadistica-valor entrada-mes" id="entradasMes">Cargando...</strong>
+                        <span class="estadistica-etiqueta" id="etiquetaEntradasMes">Entró este mes</span>
+                    </div>
+                    <div class="estadistica-mes">
+                        <strong class="estadistica-valor salida-mes" id="gastosMes">Cargando...</strong>
+                        <span class="estadistica-etiqueta" id="etiquetaGastosMes">Gastado este mes</span>
+                    </div>
+                    <div class="estadistica-mes">
+                        <strong class="estadistica-valor" id="movimientosMes">—</strong>
+                        <span class="estadistica-etiqueta">Movimientos</span>
+                    </div>
                 </div>
 
             </section>
@@ -1143,6 +1225,68 @@
             return elemento;
         }
 
+        async function cargarEstadisticasMes(usuarioId) {
+            const entradasElemento = document.getElementById("entradasMes");
+            const gastosElemento = document.getElementById("gastosMes");
+            const movimientosElemento = document.getElementById("movimientosMes");
+            const etiquetaEntradas = document.getElementById("etiquetaEntradasMes");
+            const etiquetaGastos = document.getElementById("etiquetaGastosMes");
+
+            const ahora = new Date();
+            const inicioMes = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+            const inicioMesSiguiente = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 1);
+            const nombreMes = ahora.toLocaleDateString("es-ES", { month: "long" });
+
+            etiquetaEntradas.textContent = `Entró en ${nombreMes}`;
+            etiquetaGastos.textContent = `Gastado en ${nombreMes}`;
+
+            const { data: movimientosMes, error } = await supabaseClient
+                .from("transactions")
+                .select("type, amount, balance_before, balance_after, created_at")
+                .eq("user_id", usuarioId)
+                .gte("created_at", inicioMes.toISOString())
+                .lt("created_at", inicioMesSiguiente.toISOString());
+
+            if (error) {
+                console.error("Error cargando estadísticas mensuales:", error);
+                entradasElemento.textContent = "—";
+                gastosElemento.textContent = "—";
+                movimientosElemento.textContent = "—";
+                return;
+            }
+
+            let totalEntradas = 0;
+            let totalGastos = 0;
+            const registros = movimientosMes || [];
+
+            registros.forEach(movimiento => {
+                const antes = Number(movimiento.balance_before);
+                const despues = Number(movimiento.balance_after);
+                const diferenciaDisponible =
+                    Number.isFinite(antes) &&
+                    Number.isFinite(despues) &&
+                    despues !== antes;
+
+                const esIngreso = diferenciaDisponible
+                    ? despues > antes
+                    : esEntrada(movimiento);
+
+                const diferencia = diferenciaDisponible
+                    ? Math.abs(despues - antes)
+                    : Math.abs(Number(movimiento.amount) || 0);
+
+                if (esIngreso) {
+                    totalEntradas += diferencia;
+                } else {
+                    totalGastos += diferencia;
+                }
+            });
+
+            entradasElemento.textContent = `+${formatoCantidad(totalEntradas)} GVR`;
+            gastosElemento.textContent = `−${formatoCantidad(totalGastos)} GVR`;
+            movimientosElemento.textContent = String(registros.length);
+        }
+
         async function cargarWallet() {
             const saldoElemento =
                 document.getElementById("saldoGVR");
@@ -1176,6 +1320,9 @@
             }
 
             const usuario = data.user;
+
+            // Estadísticas del mes actual; no altera saldo ni movimientos.
+            await cargarEstadisticasMes(usuario.id);
 
             // Consultar el saldo real de la wallet.
             const {
