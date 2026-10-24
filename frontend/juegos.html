@@ -118,9 +118,8 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            column-gap: 16px;
-            row-gap: 16px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
             align-items: stretch;
         }
 
@@ -131,19 +130,21 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
             text-decoration: none;
             color: white;
-            background: transparent;
-            border: none;
+            background: linear-gradient(155deg, #0b192d, #07101e);
+            border: 1px solid rgba(105, 158, 215, .15);
             border-radius: 13px;
             padding: 0;
-            text-align: center;
+            text-align: left;
             isolation: isolate;
-            transition: transform 0.22s ease;
+            transition: border-color .22s ease, transform .22s ease;
         }
 
         .juego:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
+            border-color: rgba(32, 197, 255, .55);
         }
 
         .juego-proximamente {
@@ -160,6 +161,7 @@
         }
 
         .juego-proximamente .juego-info p {
+            display: block;
             color: #ffd166;
             font-size: 11px;
             font-weight: 800;
@@ -177,12 +179,12 @@
         .juego-imagen {
             position: relative;
             width: 100%;
-            height: 180px;
+            aspect-ratio: 4 / 3;
+            height: auto;
             flex-shrink: 0;
 
-            border: 1px solid rgba(0, 153, 255, 0.9);
-            border-bottom: none;
-            border-radius: 13px 13px 0 0;
+            border: none;
+            border-radius: 0;
 
             background:
                 radial-gradient(
@@ -265,16 +267,16 @@
         .juego-info {
             position: relative;
             width: 100%;
-            min-height: 60px;
+            min-height: 57px;
             flex: 1;
 
-            padding: 12px 5px 10px;
+            padding: 12px;
 
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: row;
+            justify-content: space-between;
             align-items: center;
-            gap: 5px;
+            gap: 7px;
 
             background: linear-gradient(
                 180deg,
@@ -282,10 +284,8 @@
                 #081326
             );
 
-            border: 1px solid rgba(0, 153, 255, 0.9);
-            border-top: 1px solid rgba(0, 217, 255, 0.65);
-
-            border-radius: 0 0 13px 13px;
+            border: none;
+            border-radius: 0;
 
             box-shadow:
                 0 5px 16px rgba(0, 0, 0, 0.28),
@@ -295,8 +295,9 @@
         }
 
         .juego-info h3 {
+            min-width: 0;
             font-size: 13px;
-            line-height: 1.25;
+            line-height: 1.35;
             font-weight: 800;
             color: #ffffff;
             text-align: center;
@@ -304,6 +305,7 @@
         }
 
         .juego-info p {
+            display: none;
             color: #6fcaff;
             font-size: 10px;
             line-height: 1.2;
@@ -314,11 +316,29 @@
 
         .juego:hover .juego-imagen,
         .juego:hover .juego-info {
-            border-color: var(--cian);
+            box-shadow: none;
+        }
 
-            box-shadow:
-                0 0 14px rgba(0, 153, 255, 0.30),
-                0 0 24px rgba(0, 153, 255, 0.15);
+        .juego-flecha {
+            width: 23px;
+            height: 23px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 7px;
+            background: rgba(0, 153, 255, .1);
+            color: var(--cian);
+        }
+
+        .juego-flecha svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         /* PIE DE PÁGINA */
@@ -345,21 +365,22 @@
             }
 
             .grid {
-                column-gap: 10px;
-                row-gap: 16px;
-            }
-
-            .juego-imagen {
-                height: 155px;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
             }
 
             .juego-info {
-                min-height: 56px;
-                padding: 10px 4px;
+                min-height: 49px;
+                padding: 9px;
             }
 
             .juego-info h3 {
-                font-size: 12px;
+                font-size: 11px;
+            }
+
+            .juego-flecha {
+                width: 21px;
+                height: 21px;
             }
 
             .logo {
@@ -369,39 +390,21 @@
 
         /* TABLETS */
 
-        @media (min-width: 600px) {
+        @media (min-width: 761px) and (max-width: 949px) {
             .grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 16px;
-            }
-
-            .juego-imagen {
-                height: 210px;
-            }
-
-            .juego-info {
-                min-height: 64px;
-            }
-
-            .juego-info h3 {
-                font-size: 15px;
-            }
-
-            .juego-info p {
-                font-size: 11px;
             }
         }
 
         /* ORDENADORES */
 
-        @media (min-width: 950px) {
-            .grid {
-                grid-template-columns: repeat(4, minmax(0, 1fr));
-                gap: 20px;
+        @media (min-width: 900px) {
+            .juego-info {
+                padding: 14px;
             }
 
-            .juego-imagen {
-                height: 220px;
+            .juego-info h3 {
+                font-size: 14px;
             }
         }
 
