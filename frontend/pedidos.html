@@ -118,9 +118,33 @@
 
   function categoriaEstado(estado) {
     const clave = normalizarEstado(estado);
-    if (["completed","completado","completada","approved","aprobado","aprobada"].includes(clave)) return "completados";
-    if (["pending","processing","pendiente","procesando","queued","submitted"].includes(clave)) return "pendientes";
-    return "revision";
+
+    // Los pedidos finalizados no deben permanecer en el filtro "Revisión".
+    if ([
+      "completed", "completado", "completada", "approved", "aprobado", "aprobada"
+    ].includes(clave)) return "completados";
+
+    if ([
+      "pending", "processing", "pendiente", "procesando", "queued", "submitted"
+    ].includes(clave)) return "pendientes";
+
+    // Solo los estados que indican revisión explícitamente aparecen en ese filtro.
+    if ([
+      "review", "under_review", "manual_review", "revision", "en_revision",
+      "reviewing", "pending_review", "in_review", "en_revision_manual"
+    ].includes(clave)) return "revision";
+
+    // Cancelados, rechazados, fallidos y reembolsados siguen en "Todos",
+    // pero salen de "Revisión" porque ya no requieren revisión.
+    if ([
+      "cancelled", "canceled", "cancelado", "cancelada",
+      "rejected", "rechazado", "rechazada",
+      "failed", "fallido", "fallida", "error",
+      "refunded", "reembolsado", "reembolsada"
+    ].includes(clave)) return "finalizados";
+
+    // No clasificar automáticamente estados desconocidos como "En revisión".
+    return "otros";
   }
 
   function claseEstado(estado) {
