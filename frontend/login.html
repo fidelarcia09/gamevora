@@ -142,6 +142,13 @@
             font-size: 11px;
             line-height: 1.5;
         }
+    
+        .captcha-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 12px 0 16px;
+            min-height: 65px;
+        }
     </style>
 </head>
 
@@ -183,6 +190,10 @@
             ¿Olvidaste tu contraseña?
         </a>
 
+        <div class="captcha-wrap">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAAFkQPUoJGVxIGYNB" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileExpired"></div>
+        </div>
+
         <button class="entrar" id="botonEntrar" type="submit">
             Iniciar sesión ⚡
         </button>
@@ -196,6 +207,7 @@
 
 </div>
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -203,6 +215,10 @@ const supabaseClient = window.supabase.createClient(
     "https://gsuhzcavghsiolmipnzi.supabase.co",
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
 );
+
+window.ggTurnstileToken = "";
+window.onTurnstileSuccess = function(token) { window.ggTurnstileToken = token; };
+window.onTurnstileExpired = function() { window.ggTurnstileToken = ""; };
 
 document.getElementById("formLogin").addEventListener("submit", async function(event) {
 
@@ -217,6 +233,11 @@ document.getElementById("formLogin").addEventListener("submit", async function(e
     const boton =
         document.getElementById("botonEntrar");
 
+    if (!window.ggTurnstileToken) {
+        alert("Completa la verificación de seguridad antes de iniciar sesión.");
+        return;
+    }
+
     boton.disabled = true;
     boton.textContent = "Iniciando sesión...";
 
@@ -224,9 +245,14 @@ document.getElementById("formLogin").addEventListener("submit", async function(e
         await supabaseClient.auth.signInWithPassword({
             email: correo,
             password: contrasena
+        }, {
+            captchaToken: window.ggTurnstileToken
         });
 
     if (error) {
+
+        window.ggTurnstileToken = "";
+        if (window.turnstile) window.turnstile.reset();
 
         boton.disabled = false;
         boton.textContent = "Iniciar sesión ⚡";
