@@ -9,412 +9,35 @@
     <title>PUBG Mobile | Gamers Gold Top-Up</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        body.modal-abierto {
-            overflow: hidden;
-        }
-
-        .contenedor {
-            max-width: 650px;
-            margin: auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .logo {
-            font-size: 21px;
-            font-weight: 900;
-        }
-
-        .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
-        }
-
-        .volver {
-            color: #28a9ff;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .card {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-        }
-
-        .icono {
-text-align: center;
-margin-bottom: 14px;
-}
-
-.icono img {
-width: 130px;
-height: 130px;
-object-fit: contain;
-display: block;
-margin: 0 auto;
-border-radius: 16px;
-}
-
-        h1 {
-            text-align: center;
-            font-size: 27px;
-            margin-bottom: 10px;
-        }
-
-        .descripcion {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 22px;
-        }
-
-        .etiqueta {
-            display: block;
-            margin: 18px 0 10px;
-            color: #b8c9dc;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
-
-        .ayuda {
-            margin-top: 7px;
-            color: #8299b4;
-            font-size: 11px;
-            line-height: 1.5;
-        }
-
-        .estado {
-            padding: 13px;
-            margin: 18px 0;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            background: #061226;
-            color: #a9c4df;
-            text-align: center;
-            font-size: 13px;
-            line-height: 1.5;
-            overflow-wrap: anywhere;
-            white-space: pre-line;
-        }
-
-        .estado.error {
-            color: #ffaaaa;
-            border-color: #843d4b;
-        }
-
-        .estado.correcto {
-            color: #8fffc0;
-            border-color: #267b55;
-        }
-
-        .catalogo {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .producto {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 12px;
-            min-width: 0;
-            min-height: 115px;
-            padding: 15px 12px;
-            background: #061226;
-            color: white;
-            border: 1px solid #164b75;
-            border-radius: 13px;
-            text-align: left;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        button.producto {
-            cursor: pointer;
-        }
-
-        .producto:hover:not(:disabled) {
-            border-color: #168cff;
-        }
-
-        .producto:disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .producto.seleccionado {
-            border-color: #00baff;
-            box-shadow: 0 0 12px rgba(0, 186, 255, 0.15);
-        }
-
-        .producto-nombre {
-            font-size: 14px;
-            font-weight: bold;
-            line-height: 1.45;
-            overflow-wrap: anywhere;
-        }
-
-        .producto-precio {
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        .producto-estado {
-            color: #45c8ff;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .separador-ofertas {
-            margin-top: 22px;
-            padding-top: 18px;
-            border-top: 1px solid #164b8f;
-        }
-
-        .boton {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        .continuar {
-            margin-top: 18px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            cursor: pointer;
-            opacity: 1;
-        }
-
-        .continuar:disabled {
-            cursor: not-allowed;
-            opacity: 0.55;
-        }
-
-        .boton-ofertas {
-            background: #07152b;
-            color: #28a9ff;
-            border: 1px solid #168cff;
-            cursor: pointer;
-        }
-
-        .boton-ofertas:hover {
-            background: #0a2345;
-            border-color: #38a8ff;
-        }
-
-        .nota {
-            margin-top: 20px;
-            text-align: center;
-            color: #8299b4;
-            font-size: 11px;
-            line-height: 1.6;
-        }
-
-        /* VENTANA DE CONFIRMACIÓN */
-
-        .modal-fondo {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: rgba(1, 6, 17, 0.82);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-fondo.visible {
-            display: flex;
-        }
-
-        .modal {
-            width: 100%;
-            max-width: 390px;
-            padding: 24px 20px;
-            background: #091a35;
-            border: 1px solid #168cff;
-            border-radius: 18px;
-            box-shadow: 0 0 35px rgba(0, 140, 255, 0.2);
-            animation: aparecer 0.18s ease-out;
-        }
-
-        @keyframes aparecer {
-            from {
-                opacity: 0;
-                transform: translateY(8px) scale(0.98);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .modal-titulo {
-            margin-bottom: 10px;
-            color: white;
-            font-size: 21px;
-            font-weight: 800;
-            text-align: center;
-        }
-
-        .modal-descripcion {
-            margin-bottom: 18px;
-            color: #9fb4cc;
-            font-size: 13px;
-            line-height: 1.6;
-            text-align: center;
-        }
-
-        .modal-detalles {
-            padding: 14px;
-            margin-bottom: 20px;
-            background: #061226;
-            border: 1px solid #204c78;
-            border-radius: 11px;
-        }
-
-        .modal-fila {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 7px 0;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .modal-fila + .modal-fila {
-            border-top: 1px solid #173451;
-        }
-
-        .modal-etiqueta {
-            color: #8fa5bd;
-            flex-shrink: 0;
-        }
-
-        .modal-valor {
-            color: white;
-            font-weight: bold;
-            text-align: right;
-            overflow-wrap: anywhere;
-        }
-
-        .modal-precio {
-            color: #43c5ff;
-            font-size: 16px;
-        }
-
-        .modal-botones {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .modal-boton {
-            min-height: 45px;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .modal-cancelar {
-            color: #c6d4e4;
-            background: #07152b;
-            border: 1px solid #31506f;
-        }
-
-        .modal-cancelar:hover {
-            background: #10233c;
-        }
-
-        .modal-aceptar {
-            color: white;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            border: 1px solid #168cff;
-        }
-
-        .modal-aceptar:hover {
-            filter: brightness(1.1);
-        }
-
-        .modal-boton:disabled {
-            opacity: 0.55;
-            cursor: wait;
-        }
-
-        @media (max-width: 380px) {
-            body {
-                padding: 12px;
-            }
-
-            .card {
-                padding: 22px 14px;
-            }
-
-            .catalogo {
-                grid-template-columns: 1fr;
-            }
-
-            .logo {
-                font-size: 17px;
-            }
-
-            .modal {
-                padding: 21px 15px;
-            }
-        }
-    </style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif} :root{color-scheme:dark}
+body{background:#050b18;color:#fff;min-height:100vh;padding:12px}body.modal-abierto{overflow:hidden}
+.contenedor{width:100%;max-width:520px;margin:0 auto}.header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;min-height:34px}
+.logo{font-size:18px;font-weight:900}.rayo{color:#00b7ff;text-shadow:0 0 10px #008cff}.volver{color:#45c8ff;text-decoration:none;font-size:13px;font-weight:bold;white-space:nowrap}
+.card{background:#091a35;border:1px solid #164b75;border-radius:13px;padding:16px 13px;box-shadow:0 0 22px rgba(0,140,255,.08)}
+.icono{text-align:center;margin-bottom:10px}.icono img{width:76px;height:76px;object-fit:contain;display:block;margin:0 auto;border-radius:10px}
+h1{font-size:21px;margin-bottom:5px}.descripcion{color:#8fa5bd;font-size:12px;line-height:1.5;margin-bottom:14px}
+.etiqueta{display:block;margin:12px 0 7px;color:#b8c9dc;font-size:12px;font-weight:bold}
+input{width:100%;min-height:42px;padding:10px 12px;background:#061226;color:white;border:1px solid #204c78;border-radius:7px;font-size:14px;outline:none}input:focus{border-color:#159dff;box-shadow:0 0 7px rgba(0,157,255,.15)}
+.ayuda{margin-top:6px;color:#8299b4;font-size:11px;line-height:1.45}.estado{padding:9px 10px;margin:12px 0;border:1px solid #204c78;border-radius:7px;background:#061226;color:#a9c4df;font-size:11px;line-height:1.45;overflow-wrap:anywhere;white-space:pre-line}
+.estado.error{color:#ffaaaa;border-color:#843d4b}.estado.correcto{color:#8fffc0;border-color:#267b55}
+.selector-categorias{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:13px 0;padding:0}
+.pestana-categoria{display:flex;align-items:center;justify-content:center;min-width:0;min-height:36px;padding:7px 4px;background:#07152b;color:#8fa5bd;border:1px solid #204568;border-radius:5px;font-size:11px;font-weight:bold;line-height:1.25;text-align:center;cursor:pointer}
+.pestana-categoria.activa{color:#fff;background:#0b3157;border-color:#00baff;box-shadow:inset 0 -2px 0 #00baff}.vista-oculta{display:none!important}
+.catalogo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
+.producto{display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-width:0;min-height:83px;padding:10px;background:#061226;color:white;border:1px solid #164b75;border-radius:7px;text-align:left;transition:border-color .2s,box-shadow .2s}
+button.producto{cursor:pointer}.producto:hover:not(:disabled){border-color:#168cff}.producto:disabled{cursor:not-allowed;opacity:.65}.producto.seleccionado{background:#09203b;border-color:#00baff;box-shadow:inset 0 -2px 0 #00baff}
+.producto-nombre{font-size:12px;font-weight:bold;line-height:1.4;overflow-wrap:anywhere}.producto-precio{color:#fff;font-size:13px;font-weight:bold}.producto-estado{color:#45c8ff;font-size:10px;font-weight:bold;line-height:1.4}
+.boton{width:100%;min-height:42px;padding:11px;border:none;border-radius:6px;font-size:13px;font-weight:bold}.continuar{margin-top:13px;background:linear-gradient(90deg,#087cff,#00aaff);color:white;cursor:pointer}.continuar:disabled{cursor:not-allowed;opacity:.5}
+.nota{margin-top:13px;text-align:center;color:#8299b4;font-size:10px;line-height:1.5}.ofertas-marco{display:block;width:100%;height:1050px;border:1px solid #164b75;border-radius:7px;background:#050b18}
+.modal-fondo{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(1,6,17,.85);backdrop-filter:blur(5px)}.modal-fondo.visible{display:flex}
+.modal{width:100%;max-width:360px;padding:19px 15px;background:#091a35;border:1px solid #168cff;border-radius:12px;box-shadow:0 0 25px rgba(0,140,255,.18);animation:aparecer .18s ease-out}
+@keyframes aparecer{from{opacity:0;transform:translateY(7px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal-titulo{margin-bottom:7px;text-align:center;font-size:19px}.modal-descripcion{margin-bottom:13px;color:#8fa5bd;text-align:center;font-size:11px;line-height:1.5}
+.modal-detalles{padding:10px;margin-bottom:13px;background:#061226;border:1px solid #204c78;border-radius:7px}.modal-fila{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:7px 0;font-size:12px;line-height:1.4}.modal-fila+.modal-fila{border-top:1px solid rgba(32,76,120,.55)}
+.modal-etiqueta{color:#8fa5bd;flex-shrink:0}.modal-valor{color:#fff;font-weight:bold;text-align:right;overflow-wrap:anywhere}.modal-precio{color:#45c8ff;font-size:15px}
+.modal-botones{display:grid;grid-template-columns:1fr 1fr;gap:8px}.modal-boton{min-height:39px;padding:9px;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer}.modal-cancelar{background:#07152b;color:#c1d0e0;border:1px solid #204c78}.modal-aceptar{background:linear-gradient(90deg,#087cff,#00baff);color:white;border:0}.modal-boton:disabled{opacity:.55;cursor:wait}
+@media(max-width:360px){body{padding:8px}.card{padding:13px 10px}.logo{font-size:15px}.catalogo{gap:6px}.producto{padding:8px}.ofertas-marco{height:1150px}}
+</style>
 </head>
 
 <body>
@@ -460,36 +83,21 @@ border-radius: 16px;
             Comprueba tu ID antes de confirmar la recarga.
         </p>
 
-        <label class="etiqueta">
-            Selecciona una cantidad de UC
-        </label>
+        <nav class="selector-categorias" aria-label="Categorías PUBG Mobile">
+<button type="button" class="pestana-categoria activa" id="pestanaUC" aria-selected="true">UC</button>
+<button type="button" class="pestana-categoria" id="pestanaOfertas" aria-selected="false">Ofertas especiales</button>
+</nav>
+<section id="vistaUC">
+<label class="etiqueta">Selecciona una cantidad de UC</label>
+<div id="estadoCatalogo" class="estado" aria-live="polite">Cargando paquetes de PUBG Mobile...</div>
+<div id="catalogo" class="catalogo"></div>
+<button id="botonContinuar" class="boton continuar" type="button" disabled>RECARGAR</button>
+</section>
+<section id="vistaOfertas" class="vista-oculta">
+<iframe class="ofertas-marco" src="ofertas-pubg.html" title="Ofertas especiales de PUBG Mobile" loading="lazy"></iframe>
+</section>
 
-        <div id="estadoCatalogo" class="estado" aria-live="polite">
-            Cargando paquetes de PUBG Mobile...
-        </div>
-
-        <div id="catalogo" class="catalogo"></div>
-
-        <button
-            id="botonContinuar"
-            class="boton continuar"
-            type="button"
-            disabled
-        >
-            RECARGAR
-        </button>
-
-        <div class="separador-ofertas">
-            <button
-                class="boton boton-ofertas"
-                type="button"
-                id="botonOfertas"
-            >
-                🎁 Ofertas especiales
-            </button>
-        </div>
-
-        <p class="nota">
+<p class="nota">
             Los precios se muestran en GVR. Comprueba tu ID antes
             de confirmar la recarga. No crees otro pedido mientras
             haya uno pendiente de confirmación.
@@ -598,7 +206,10 @@ const supabase = createClient(
 const catalogo = document.getElementById("catalogo");
 const estadoCatalogo = document.getElementById("estadoCatalogo");
 const botonContinuar = document.getElementById("botonContinuar");
-const botonOfertas = document.getElementById("botonOfertas");
+const pestanaOfertas = document.getElementById("pestanaOfertas");
+const pestanaUC = document.getElementById("pestanaUC");
+const vistaUC = document.getElementById("vistaUC");
+const vistaOfertas = document.getElementById("vistaOfertas");
 const campoJugador = document.getElementById("idjugador");
 
 const modalFondo = document.getElementById("modalFondo");
@@ -617,9 +228,17 @@ let resolverConfirmacion = null;
 
 /* NAVEGACIÓN */
 
-botonOfertas.addEventListener("click", () => {
-    window.location.href = "ofertas-pubg.html";
-});
+function cambiarCategoria(categoria) {
+    const verOfertas = categoria === "ofertas";
+    vistaUC.classList.toggle("vista-oculta", verOfertas);
+    vistaOfertas.classList.toggle("vista-oculta", !verOfertas);
+    pestanaUC.classList.toggle("activa", !verOfertas);
+    pestanaOfertas.classList.toggle("activa", verOfertas);
+    pestanaUC.setAttribute("aria-selected", String(!verOfertas));
+    pestanaOfertas.setAttribute("aria-selected", String(verOfertas));
+}
+pestanaUC.addEventListener("click", () => cambiarCategoria("uc"));
+pestanaOfertas.addEventListener("click", () => cambiarCategoria("ofertas"));
 
 /* MENSAJES */
 
