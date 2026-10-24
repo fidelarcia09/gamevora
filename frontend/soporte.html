@@ -18,7 +18,7 @@
             background: #050b18;
             color: white;
             min-height: 100vh;
-            padding: 20px;
+            padding: 20px 22px;
         }
 
         .contenedor {
@@ -30,8 +30,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            gap: 10px;
+            margin-bottom: 30px;
+            gap: 12px;
         }
 
         .logo {
@@ -65,12 +65,150 @@
             font-size: 13px;
         }
 
-        .card {
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 25px 22px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
+        .contenido {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .intro {
+            margin: 8px 0 24px;
+        }
+
+        .intro h1 {
+            text-align: left;
+            font-size: 27px;
+            line-height: 1.2;
+            letter-spacing: -.5px;
+            margin-bottom: 8px;
+        }
+
+        .intro p {
+            color: #8195ad;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .lista-opciones {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .acordeon {
+            border-bottom: 1px solid #173047;
+        }
+
+        .acordeon:first-child {
+            border-top: 1px solid #173047;
+        }
+
+        .acordeon[open] {
+            padding-bottom: 16px;
+        }
+
+        .acordeon summary {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-height: 62px;
+            padding: 12px 5px;
+            list-style: none;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .acordeon summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .acordeon summary:focus-visible {
+            outline: 2px solid #75d7ff;
+            outline-offset: 3px;
+            border-radius: 8px;
+        }
+
+        .icono-opcion {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            color: #00baff;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .opcion-texto {
+            flex: 1;
+            color: #f4f8ff;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .icono-flecha {
+            width: 18px;
+            height: 18px;
+            color: #00baff;
+            transition: transform .2s ease;
+        }
+
+        .acordeon[open] .icono-flecha {
+            transform: rotate(180deg);
+        }
+
+        .contenido-acordeon {
+            padding: 4px 5px 0 40px;
+            animation: aparecer .18s ease;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .enlace-soporte {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 1px solid #173d63;
+            border-radius: 10px;
+            background: #061226;
+            color: #f4f8ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            transition: border-color .2s, background .2s;
+        }
+
+        .enlace-soporte:hover {
+            border-color: #159dff;
+            background: #081a32;
+        }
+
+        .enlace-soporte span {
+            color: #00baff;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .texto-ayuda {
+            color: #8195ad;
+            font-size: 12px;
+            line-height: 1.7;
+            margin: 3px 0 12px;
+        }
+
+        .nota {
+            margin-top: 24px;
+            text-align: left;
+            color: #627b97;
+            font-size: 11px;
+            line-height: 1.6;
         }
 
         .icono {
@@ -295,82 +433,79 @@
 
     </div>
 
-    <div class="card">
+    <main class="contenido">
+        <section class="intro">
+            <h1>Centro de soporte</h1>
+            <p>Elige cómo quieres contactar con el equipo de Gamers Gold Top-Up.</p>
+        </section>
 
-        <div class="icono">
-            🎧
+        <div class="lista-opciones">
+            <details class="acordeon" id="soporteWeb">
+                <summary>
+                    <span class="icono-opcion" aria-hidden="true">⌘</span>
+                    <span class="opcion-texto">Soporte en Web</span>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </summary>
+                <div class="contenido-acordeon">
+                    <p class="texto-ayuda">Abre una conversación privada y consulta tus solicitudes anteriores desde tu cuenta.</p>
+                    <div id="formularioSoporte">
+                        <div class="campo-titulo">Categoría</div>
+                        <select id="categoria">
+                            <option value="gvr">GVR y saldo</option>
+                            <option value="game_topup">Recargas de juegos</option>
+                            <option value="orders">Pedidos</option>
+                            <option value="payments">Pagos</option>
+                            <option value="account">Cuenta</option>
+                            <option value="other">Otro</option>
+                        </select>
+
+                        <div class="campo-titulo">Asunto</div>
+                        <input type="text" id="asunto" maxlength="120" placeholder="¿En qué necesitas ayuda?">
+
+                        <div class="campo-titulo">Mensaje</div>
+                        <textarea id="mensaje" maxlength="1000" placeholder="Explícanos tu problema..."></textarea>
+
+                        <button id="crearTicket" class="boton">Abrir conversación</button>
+                        <p id="mensajeResultado" class="mensaje"></p>
+                    </div>
+
+                    <div class="lista-tickets">
+                        <div class="campo-titulo">Mis conversaciones</div>
+                        <div id="listaTickets">
+                            <p class="mensaje">Abre esta sección para cargar tus conversaciones.</p>
+                        </div>
+                    </div>
+                    <p class="nota">Tus conversaciones son privadas. Solo tú y el equipo autorizado de Gamers Gold Top-Up pueden acceder a ellas.</p>
+                </div>
+            </details>
+
+            <details class="acordeon">
+                <summary>
+                    <span class="icono-opcion" aria-hidden="true">↗</span>
+                    <span class="opcion-texto">Habla con una persona</span>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </summary>
+                <div class="contenido-acordeon">
+                    <p class="texto-ayuda">Contacta directamente con soporte por tu aplicación preferida.</p>
+                    <a class="enlace-soporte" href="https://wa.me/5363638032" target="_blank" rel="noopener noreferrer">WhatsApp de soporte <span>Abrir ↗</span></a>
+                    <a class="enlace-soporte" href="https://t.me/fidel0908" target="_blank" rel="noopener noreferrer">Telegram de soporte <span>Abrir ↗</span></a>
+                </div>
+            </details>
+
+            <details class="acordeon">
+                <summary>
+                    <span class="icono-opcion" aria-hidden="true">◎</span>
+                    <span class="opcion-texto">Comunidad Oficial</span>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </summary>
+                <div class="contenido-acordeon">
+                    <p class="texto-ayuda">Únete a nuestros canales oficiales para recibir novedades y anuncios.</p>
+                    <a class="enlace-soporte" href="https://whatsapp.com/channel/0029Vb9Ts5E0wajmawAiVo0K" target="_blank" rel="noopener noreferrer">Canal de WhatsApp <span>Unirme ↗</span></a>
+                    <a class="enlace-soporte" href="https://t.me/gamersgoldtopup" target="_blank" rel="noopener noreferrer">Canal de Telegram <span>Unirme ↗</span></a>
+                </div>
+            </details>
         </div>
-
-        <h1>Soporte Gamers Gold</h1>
-
-        <p class="subtitulo">
-            Estamos aquí para ayudarte
-        </p>
-
-        <div id="formularioSoporte">
-
-            <div class="campo-titulo">
-                Categoría
-            </div>
-
-            <select id="categoria">
-                <option value="gvr">⚡ GVR y saldo</option>
-                <option value="game_topup">🎮 Recargas de juegos</option>
-                <option value="orders">📦 Pedidos</option>
-                <option value="payments">💳 Pagos</option>
-                <option value="account">👤 Cuenta</option>
-                <option value="other">❓ Otro</option>
-            </select>
-
-            <div class="campo-titulo">
-                Asunto
-            </div>
-
-            <input
-                type="text"
-                id="asunto"
-                maxlength="120"
-                placeholder="¿En qué necesitas ayuda?"
-            >
-
-            <div class="campo-titulo">
-                Mensaje
-            </div>
-
-            <textarea
-                id="mensaje"
-                maxlength="1000"
-                placeholder="Explícanos tu problema..."
-            ></textarea>
-
-            <button id="crearTicket" class="boton">
-                ⚡ Abrir conversación
-            </button>
-
-            <p id="mensajeResultado" class="mensaje"></p>
-
-        </div>
-
-        <div class="lista-tickets">
-
-            <div class="campo-titulo">
-                Mis conversaciones
-            </div>
-
-            <div id="listaTickets">
-                <p class="mensaje">
-                    Cargando conversaciones...
-                </p>
-            </div>
-
-        </div>
-
-        <p class="nota">
-            Tus conversaciones son privadas.
-            Solo tú y el equipo autorizado de Gamers Gold Top-Up pueden acceder a ellas.
-        </p>
-
-    </div>
+    </main>
 
 </div>
 
@@ -718,25 +853,29 @@ function escapeHtml(text) {
 
 
 /* ==============================
-   INICIAR
+   INICIAR SOPORTE WEB AL ABRIR
 ============================== */
 
-async function iniciar() {
+let soporteWebInicializado = false;
 
-    const conectado =
-        await cargarUsuario();
+async function iniciar() {
+    if (soporteWebInicializado) return;
+    soporteWebInicializado = true;
+
+    const conectado = await cargarUsuario();
 
     if (!conectado) {
+        soporteWebInicializado = false;
         return;
     }
 
     await comprobarAdministrador();
-
     await cargarTickets();
 }
 
-
-iniciar();
+document.getElementById("soporteWeb").addEventListener("toggle", function () {
+    if (this.open) iniciar();
+});
 
 </script>
 
