@@ -160,8 +160,22 @@
             display: none;
         }
 
+        .juego-proximamente .juego-info {
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .juego-proximamente .juego-info h3 {
+            text-align: center;
+            overflow-wrap: normal;
+            word-break: normal;
+        }
+
         .juego-proximamente .juego-info p {
             display: block;
+            flex-basis: 100%;
+            text-align: center;
             color: #ffd166;
             font-size: 11px;
             font-weight: 800;
@@ -268,7 +282,7 @@
             position: relative;
             width: 100%;
             min-height: 57px;
-            flex: 1;
+            flex: 0 0 auto;
 
             padding: 12px;
 
@@ -358,10 +372,10 @@
 
         /* TELÉFONOS PEQUEÑOS */
 
-        @media (max-width: 360px) {
+        @media (max-width: 760px) {
             .juegos {
-                padding-left: 12px;
-                padding-right: 12px;
+                padding-left: 14px;
+                padding-right: 14px;
             }
 
             .grid {
@@ -385,26 +399,6 @@
 
             .logo {
                 font-size: 18px;
-            }
-        }
-
-        /* TABLETS */
-
-        @media (min-width: 761px) and (max-width: 949px) {
-            .grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-            }
-        }
-
-        /* ORDENADORES */
-
-        @media (min-width: 900px) {
-            .juego-info {
-                padding: 14px;
-            }
-
-            .juego-info h3 {
-                font-size: 14px;
             }
         }
 
