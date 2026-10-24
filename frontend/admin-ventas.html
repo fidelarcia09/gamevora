@@ -157,7 +157,7 @@ async function guardarSuscripcionPush(suscripcion) {
  * mostrarMensajes=true: se muestran mensajes cuando el administrador pulsa el botón.
  * mostrarMensajes=false: comprobación automática silenciosa al entrar al panel.
  */
-async function configurarNotificacionesPush(solicitarPermiso = false, mostrarMensajes = true) {
+async function configurarNotificacionesPush(solicitarPermiso = false, mostrarMensajes = true, renovarSuscripcion = false) {
     const boton = document.getElementById("botonActivarPush");
     let temporizador;
 
@@ -200,6 +200,15 @@ async function configurarNotificacionesPush(solicitarPermiso = false, mostrarMen
         temporizador = null;
 
         let suscripcion = await registro.pushManager.getSubscription();
+
+        // Si el administrador pulsa el botón, renovar la suscripción local:
+        // una suscripción caducada puede seguir guardada en el navegador aunque
+        // el servidor Push ya la haya rechazado con HTTP 404/410.
+        if (suscripcion && renovarSuscripcion) {
+            await suscripcion.unsubscribe();
+            suscripcion = null;
+        }
+
         if (!suscripcion) {
             suscripcion = await registro.pushManager.subscribe({
                 userVisibleOnly: true,
@@ -559,7 +568,9 @@ document.querySelectorAll(".filtro").forEach(boton => {
 });
 
 document.getElementById("botonActivarPush").addEventListener("click", async () => {
-    await configurarNotificacionesPush(true, true);
+    // Renovación explícita para sustituir cualquier suscripción caducada
+    // que el navegador todavía conserve.
+    await configurarNotificacionesPush(true, true, true);
 });
 
 async function iniciar() {
@@ -570,14 +581,13 @@ async function iniciar() {
 
     const boton = document.getElementById("botonActivarPush");
     boton.hidden = false;
+    ocultarEstadoPush();
 
-    // Si ya tiene permiso, verificar/renovar la suscripción en silencio.
-    // No se muestra el mensaje de "suscripción registrada" al entrar.
+    // No volver a guardar automáticamente una suscripción posiblemente caducada.
+    // El administrador puede renovarla desde el botón cuando lo necesite.
     if ("Notification" in window && Notification.permission === "granted") {
-        await configurarNotificacionesPush(false, false);
+        boton.textContent = "Renovar notificaciones";
     } else {
-        // No mostrar aviso automáticamente al entrar.
-        ocultarEstadoPush();
         boton.textContent = "Activar notificaciones";
     }
 }
