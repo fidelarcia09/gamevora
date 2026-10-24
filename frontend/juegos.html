@@ -98,7 +98,10 @@
         /* CATÁLOGO */
 
         .juegos {
-            padding: 10px 16px 35px;
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 22px 35px;
         }
 
         .titulo {
@@ -116,8 +119,8 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            column-gap: 15px;
-            row-gap: 35px;
+            column-gap: 16px;
+            row-gap: 16px;
             align-items: stretch;
         }
 
@@ -141,6 +144,32 @@
 
         .juego:hover {
             transform: translateY(-3px);
+        }
+
+        .juego-proximamente {
+            cursor: not-allowed;
+            opacity: .78;
+        }
+
+        .juego-proximamente:hover {
+            transform: none;
+        }
+
+        .juego-proximamente .juego-imagen::before {
+            display: none;
+        }
+
+        .juego-proximamente .juego-info p {
+            color: #ffd166;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .4px;
+        }
+
+        .juego-proximamente:hover .juego-imagen,
+        .juego-proximamente:hover .juego-info {
+            border-color: rgba(0, 153, 255, 0.9);
+            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.28), 0 0 13px rgba(0, 140, 255, 0.16);
         }
 
         /* MARCO DE LA FOTO */
@@ -316,8 +345,8 @@
             }
 
             .grid {
-                column-gap: 11px;
-                row-gap: 30px;
+                column-gap: 10px;
+                row-gap: 16px;
             }
 
             .juego-imagen {
@@ -341,14 +370,9 @@
         /* TABLETS */
 
         @media (min-width: 600px) {
-            .juegos {
-                max-width: 900px;
-                margin: 0 auto;
-            }
-
             .grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 38px 22px;
+                gap: 16px;
             }
 
             .juego-imagen {
@@ -373,7 +397,7 @@
         @media (min-width: 950px) {
             .grid {
                 grid-template-columns: repeat(4, minmax(0, 1fr));
-                gap: 42px 24px;
+                gap: 20px;
             }
 
             .juego-imagen {
@@ -446,7 +470,7 @@
 
         <!-- CALL OF DUTY MOBILE -->
 
-        <a href="codmobile.html" class="juego juego-cod">
+        <article class="juego juego-cod juego-proximamente" aria-disabled="true" aria-label="Call of Duty Mobile, próximamente. No disponible para seleccionar">
 
             <div class="juego-imagen">
                 <img
@@ -458,10 +482,10 @@
 
             <div class="juego-info">
                 <h3>Call of Duty Mobile</h3>
-                <p>CP</p>
+                <p>PRÓXIMAMENTE</p>
             </div>
 
-        </a>
+        </article>
 
         <!-- MOBILE LEGENDS -->
 
