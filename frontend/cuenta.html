@@ -314,6 +314,77 @@
         margin: 4px 0 12px;
     }
 
+    /* CAMBIO DE CONTRASEÑA */
+    .campo-seguridad {
+        display: grid;
+        gap: 7px;
+        margin: 14px 0;
+    }
+
+    .campo-seguridad label {
+        color: #dceaff;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .campo-seguridad input {
+        width: 100%;
+        min-height: 45px;
+        padding: 12px;
+        border-radius: 9px;
+        border: 1px solid #214b70;
+        background: #061226;
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .campo-seguridad input::placeholder {
+        color: #607995;
+    }
+
+    .campo-seguridad input:focus {
+        border-color: #00baff;
+        box-shadow: 0 0 0 2px rgba(0, 186, 255, 0.12);
+    }
+
+    .campo-seguridad input:focus-visible {
+        outline: 2px solid #75d7ff;
+        outline-offset: 2px;
+    }
+
+    .ayuda-campo {
+        color: #607995;
+        font-size: 11px;
+    }
+
+    .estado-seguridad {
+        display: none;
+        padding: 11px 12px;
+        margin-top: 12px;
+        border: 1px solid #173d63;
+        border-radius: 9px;
+        background: #061226;
+        color: #9ab0c9;
+        font-size: 12px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    .estado-seguridad.visible {
+        display: block;
+    }
+
+    .estado-seguridad.error {
+        border-color: #87394a;
+        color: #ff8195;
+    }
+
+    .estado-seguridad.exito {
+        border-color: #247342;
+        color: #68df8c;
+    }
+
     .boton {
         display: flex;
         align-items: center;
@@ -729,17 +800,60 @@
                 </summary>
 
                 <div class="contenido-acordeon">
-                    <div class="dato">
-                        <div class="dato-titulo">Opciones de seguridad de la cuenta</div>
-                        <div class="estado-proximamente">
-                            <span class="punto-proximamente"></span>
-                            Próximamente
-                        </div>
-                    </div>
+                    <form id="formCambiarContrasena" novalidate>
+                        <p class="texto-ayuda">
+                            Para cambiar la contraseña, confirma primero la contraseña actual de esta misma cuenta.
+                        </p>
 
-                    <p class="texto-ayuda">
-                        Las opciones adicionales de seguridad estarán disponibles próximamente.
-                    </p>
+                        <div class="campo-seguridad">
+                            <label for="contrasenaActual">Contraseña actual</label>
+                            <input
+                                type="password"
+                                id="contrasenaActual"
+                                name="current-password"
+                                autocomplete="current-password"
+                                placeholder="Introduce tu contraseña actual"
+                                required
+                            >
+                        </div>
+
+                        <div class="campo-seguridad">
+                            <label for="nuevaContrasena">Nueva contraseña</label>
+                            <input
+                                type="password"
+                                id="nuevaContrasena"
+                                name="new-password"
+                                autocomplete="new-password"
+                                minlength="8"
+                                placeholder="Crea una nueva contraseña"
+                                required
+                            >
+                            <p class="ayuda-campo">Usa al menos 8 caracteres.</p>
+                        </div>
+
+                        <div class="campo-seguridad">
+                            <label for="confirmarContrasena">Confirmar contraseña</label>
+                            <input
+                                type="password"
+                                id="confirmarContrasena"
+                                name="confirm-new-password"
+                                autocomplete="new-password"
+                                minlength="8"
+                                placeholder="Repite la nueva contraseña"
+                                required
+                            >
+                        </div>
+
+                        <p id="estadoCambiarContrasena" class="estado-seguridad" role="status" aria-live="polite"></p>
+
+                        <button type="submit" id="botonCambiarContrasena" class="boton">
+                            <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                                <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <span id="textoCambiarContrasena">Actualizar contraseña</span>
+                        </button>
+                    </form>
                 </div>
             </details>
 
@@ -1387,6 +1501,146 @@ botonComprobarSalud.addEventListener(
     "click",
     revisarSaludSistema
 );
+
+
+/* ==========================================
+   CAMBIAR CONTRASEÑA: VERIFICAR CUENTA ACTUAL
+========================================== */
+
+const formCambiarContrasena =
+    document.getElementById("formCambiarContrasena");
+
+const estadoCambiarContrasena =
+    document.getElementById("estadoCambiarContrasena");
+
+const botonCambiarContrasena =
+    document.getElementById("botonCambiarContrasena");
+
+const textoCambiarContrasena =
+    document.getElementById("textoCambiarContrasena");
+
+
+function mostrarEstadoCambiarContrasena(mensaje, tipo = "") {
+    estadoCambiarContrasena.textContent = mensaje;
+    estadoCambiarContrasena.className =
+        "estado-seguridad visible" + (tipo ? " " + tipo : "");
+}
+
+
+formCambiarContrasena.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+
+    const contrasenaActual =
+        document.getElementById("contrasenaActual").value;
+
+    const nuevaContrasena =
+        document.getElementById("nuevaContrasena").value;
+
+    const confirmarContrasena =
+        document.getElementById("confirmarContrasena").value;
+
+    if (!contrasenaActual || !nuevaContrasena || !confirmarContrasena) {
+        mostrarEstadoCambiarContrasena(
+            "Completa los tres campos para continuar.",
+            "error"
+        );
+        return;
+    }
+
+    if (nuevaContrasena.length < 8) {
+        mostrarEstadoCambiarContrasena(
+            "La nueva contraseña debe tener al menos 8 caracteres.",
+            "error"
+        );
+        return;
+    }
+
+    if (nuevaContrasena !== confirmarContrasena) {
+        mostrarEstadoCambiarContrasena(
+            "La nueva contraseña y la confirmación no coinciden.",
+            "error"
+        );
+        return;
+    }
+
+    if (contrasenaActual === nuevaContrasena) {
+        mostrarEstadoCambiarContrasena(
+            "La nueva contraseña debe ser diferente de la actual.",
+            "error"
+        );
+        return;
+    }
+
+    botonCambiarContrasena.disabled = true;
+    textoCambiarContrasena.textContent = "Verificando cuenta...";
+    mostrarEstadoCambiarContrasena("Comprobando la contraseña actual...");
+
+    try {
+        const {
+            data: datosUsuario,
+            error: errorUsuario
+        } = await supabaseClient.auth.getUser();
+
+        if (errorUsuario || !datosUsuario.user || !datosUsuario.user.email) {
+            throw new Error(
+                "Tu sesión no está disponible. Inicia sesión nuevamente."
+            );
+        }
+
+        const usuarioActual = datosUsuario.user;
+
+        // Verifica la contraseña contra el correo de la cuenta que está abierta.
+        const {
+            data: datosVerificados,
+            error: errorVerificacion
+        } = await supabaseClient.auth.signInWithPassword({
+            email: usuarioActual.email,
+            password: contrasenaActual
+        });
+
+        if (errorVerificacion || !datosVerificados.user) {
+            throw new Error("La contraseña actual es incorrecta.");
+        }
+
+        // Evita cambiar la contraseña si la autenticación no corresponde a la misma cuenta.
+        if (datosVerificados.user.id !== usuarioActual.id) {
+            throw new Error(
+                "No se pudo confirmar la identidad de esta cuenta. Vuelve a iniciar sesión."
+            );
+        }
+
+        textoCambiarContrasena.textContent = "Actualizando contraseña...";
+        mostrarEstadoCambiarContrasena("Contraseña actual verificada. Guardando los cambios...");
+
+        const { error: errorActualizacion } =
+            await supabaseClient.auth.updateUser({
+                password: nuevaContrasena
+            });
+
+        if (errorActualizacion) {
+            throw new Error(
+                errorActualizacion.message ||
+                "No se pudo actualizar la contraseña."
+            );
+        }
+
+        formCambiarContrasena.reset();
+        mostrarEstadoCambiarContrasena(
+            "Contraseña actualizada correctamente.",
+            "exito"
+        );
+
+    } catch (error) {
+        console.error("Error al cambiar la contraseña:", error);
+        mostrarEstadoCambiarContrasena(
+            error.message || "No se pudo cambiar la contraseña. Inténtalo nuevamente.",
+            "error"
+        );
+    } finally {
+        botonCambiarContrasena.disabled = false;
+        textoCambiarContrasena.textContent = "Actualizar contraseña";
+    }
+});
 
 
 /* ==========================================
