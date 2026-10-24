@@ -58,58 +58,53 @@
             white-space: nowrap;
         }
 
-        .tarjeta {
+        .card {
             background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-        }
-
-        .icono {
-            text-align: center;
-            font-size: 52px;
-            margin-bottom: 10px;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            padding: 16px 13px;
+            box-shadow: 0 0 22px rgba(0, 140, 255, 0.08);
         }
 
         h1 {
-            text-align: center;
-            font-size: 27px;
-            margin-bottom: 10px;
+            font-size: 21px;
+            margin-bottom: 5px;
         }
 
         .descripcion {
-            text-align: center;
             color: #8fa5bd;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 22px;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 14px;
         }
+
+        .icono { display: none; }
 
         .etiqueta {
             display: block;
-            margin: 18px 0 10px;
+            margin: 12px 0 7px;
             color: #b8c9dc;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
         }
 
         input,
         select {
             width: 100%;
-            padding: 13px;
+            min-height: 42px;
+            padding: 10px 12px;
             background: #061226;
-            color: white;
+            color: #fff;
             border: 1px solid #204c78;
-            border-radius: 10px;
-            font-size: 15px;
+            border-radius: 7px;
+            font-size: 14px;
             outline: none;
         }
 
         input:focus,
         select:focus {
             border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
+            box-shadow: 0 0 7px rgba(0, 157, 255, 0.15);
         }
 
         .ayuda {
@@ -120,15 +115,16 @@
         }
 
         .estado {
-            padding: 13px;
-            margin: 18px 0;
+            padding: 9px 10px;
+            margin: 12px 0;
             border: 1px solid #204c78;
-            border-radius: 10px;
+            border-radius: 7px;
             background: #061226;
             color: #a9c4df;
-            text-align: center;
-            font-size: 13px;
-            line-height: 1.5;
+            text-align: left;
+            font-size: 11px;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
         }
 
         .estado.error {
@@ -312,7 +308,7 @@
 
         @media (max-width: 360px) {
             body { padding: 8px; }
-            .tarjeta { padding: 13px 10px; }
+            .card { padding: 13px 10px; }
             .logo { font-size: 15px; }
             .pestana-categoria { font-size: 10px; padding: 6px 2px; }
             .catalogo { gap: 6px; }
@@ -333,7 +329,7 @@
         <a href="juegos.html" class="volver">← Juegos</a>
     </header>
 
-    <main class="tarjeta">
+    <main class="card">
         <h1>Genshin Impact</h1>
         <p class="descripcion">Selecciona Genesis Crystals o una oferta especial.</p>
 
