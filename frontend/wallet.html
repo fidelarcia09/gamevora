@@ -517,6 +517,304 @@
                 transition: none;
             }
         }
+    
+        /* REDISEÑO VISUAL WALLET — conserva intactas las conexiones */
+        html {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: clip;
+        }
+
+        body {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+            overflow-x: clip;
+            background:
+                radial-gradient(ellipse at 85% 8%, rgba(0, 119, 255, .10), transparent 34%),
+                #050b18;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding-bottom: 30px;
+        }
+
+        .header {
+            position: relative;
+            width: 100%;
+            min-height: 70px;
+            margin: 0 0 24px;
+            padding: 11px 22px;
+            background: rgba(5, 11, 24, .94);
+            border-bottom: 1px solid rgba(105, 158, 215, .1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .logo {
+            font-size: 20px;
+            letter-spacing: -.5px;
+        }
+
+        .volver {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 0 14px;
+            border: 1px solid rgba(32, 197, 255, .22);
+            border-radius: 9px;
+            background: rgba(8, 124, 255, .08);
+        }
+
+        /* Se elimina la tarjeta exterior: el contenido queda alineado como en Inicio. */
+        main.card {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 0 22px;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        main.card > h1 {
+            margin: 0 0 8px;
+            text-align: left;
+            font-size: clamp(30px, 5vw, 42px);
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1.12;
+        }
+
+        .subtitulo {
+            max-width: 560px;
+            margin: 0 0 24px;
+            text-align: left;
+            color: #9aadc4;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .saldo {
+            min-height: 190px;
+            margin-bottom: 20px;
+            padding: 25px 24px;
+            align-items: flex-start;
+            background:
+                linear-gradient(120deg, rgba(8, 124, 255, .09), transparent 52%),
+                radial-gradient(circle at 88% 30%, rgba(0, 183, 255, .22), transparent 38%),
+                linear-gradient(135deg, #0d1b31, #071329 68%, #062b38);
+            border: 1px solid rgba(105, 158, 215, .18);
+            border-radius: 20px;
+            box-shadow: 0 14px 38px rgba(0, 0, 0, .20), inset 0 1px rgba(255,255,255,.025);
+        }
+
+        .saldo::before {
+            display: none;
+        }
+
+        .saldo-titulo {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 15px;
+            padding: 7px 12px;
+            color: #8fe5ce;
+            font-size: 12px;
+            font-weight: 800;
+            background: rgba(57, 221, 160, .09);
+            border: 1px solid rgba(57, 221, 160, .18);
+            border-radius: 24px;
+        }
+
+        .saldo-valor {
+            font-size: clamp(30px, 6vw, 44px);
+            line-height: 1.15;
+            letter-spacing: -1.1px;
+            overflow-wrap: anywhere;
+        }
+
+        .saldo-valor::after {
+            content: "";
+        }
+
+        .saldo-emblema {
+            width: 82px;
+            height: 82px;
+            margin-top: 32px;
+            background: linear-gradient(145deg, rgba(0, 183, 255, .23), rgba(8, 124, 255, .04));
+            border: 1px solid rgba(32, 197, 255, .32);
+            box-shadow: 0 0 28px rgba(0, 140, 255, .16), inset 0 0 18px rgba(0, 183, 255, .08);
+        }
+
+        .saldo-emblema::before {
+            border-color: rgba(120, 210, 255, .28);
+        }
+
+        .saldo-letra {
+            color: #bceeff;
+            -webkit-text-stroke: 0;
+            text-shadow: 0 0 12px rgba(0, 200, 255, .75);
+        }
+
+        .boton {
+            min-height: 54px;
+            margin-top: 0;
+            border-radius: 12px;
+            font-size: 14px;
+            background: linear-gradient(100deg, #087cff, #00aeea);
+            box-shadow: 0 7px 22px rgba(0, 119, 255, .18);
+        }
+
+        .movimientos {
+            margin-top: 34px;
+        }
+
+        .movimientos-cabecera {
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .movimientos-cabecera h2 {
+            position: relative;
+            padding-left: 13px;
+            font-size: clamp(20px, 4vw, 27px);
+            font-weight: 900;
+            letter-spacing: -.5px;
+        }
+
+        .movimientos-cabecera h2::before {
+            content: "";
+            position: absolute;
+            top: 3px;
+            bottom: 3px;
+            left: 0;
+            width: 4px;
+            border-radius: 5px;
+            background: linear-gradient(#20c5ff, #087cff);
+            box-shadow: 0 0 10px rgba(32, 197, 255, .3);
+        }
+
+        .etiqueta {
+            color: #20c5ff;
+            background: rgba(8, 124, 255, .08);
+            border-color: rgba(32, 197, 255, .17);
+        }
+
+        .lista-movimientos {
+            gap: 11px;
+        }
+
+        .movimiento {
+            padding: 16px;
+            background: linear-gradient(120deg, #0a1426, #0b192e);
+            border: 1px solid rgba(105, 158, 215, .17);
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, .10);
+        }
+
+        .movimiento-icono {
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+            background: rgba(8, 124, 255, .10);
+            color: #54baff;
+            border: 1px solid rgba(8, 124, 255, .15);
+        }
+
+        .movimiento-titulo {
+            color: #f4f8ff;
+            font-size: 14px;
+        }
+
+        .movimiento-fecha {
+            color: #9aadc4;
+            font-size: 12px;
+        }
+
+        .movimiento-monto {
+            font-size: 14px;
+        }
+
+        .positivo {
+            color: #39dda0;
+        }
+
+        .negativo {
+            color: #ff8585;
+        }
+
+        .boton-movimientos {
+            background: #0a1426;
+            color: #20c5ff;
+            border-color: rgba(32, 197, 255, .22);
+            border-radius: 12px;
+        }
+
+        .vacio,
+        .cargando-movimientos {
+            background: #0a1426;
+            border-color: rgba(105, 158, 215, .17);
+            border-radius: 15px;
+        }
+
+        .estado {
+            text-align: left;
+        }
+
+        .pie {
+            margin: 28px 22px 0;
+            padding-bottom: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                margin-bottom: 24px;
+                padding-right: 20px;
+                padding-left: 20px;
+            }
+
+            main.card {
+                padding-right: 20px;
+                padding-left: 20px;
+            }
+
+            .saldo {
+                min-height: 180px;
+                padding: 22px 18px;
+                gap: 10px;
+            }
+
+            .saldo-emblema {
+                width: 64px;
+                height: 64px;
+                margin-top: 40px;
+            }
+
+            .saldo-letra {
+                font-size: 39px;
+            }
+
+            .movimiento {
+                padding: 13px 11px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .saldo-emblema {
+                display: none;
+            }
+
+            .movimiento-monto {
+                font-size: 12px;
+            }
+        }
+
     </style>
 </head>
 
