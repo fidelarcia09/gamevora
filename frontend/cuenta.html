@@ -704,21 +704,7 @@ body.tema-claro .opcion-tema[aria-pressed="true"]{border-color:#087cff;box-shado
 
         <div class="lista-opciones">
 
-            <!-- APARIENCIA -->
-            <details class="acordeon">
-                <summary>
-                    <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v18"></path><path d="M12 12h9"></path></svg>
-                    <span class="opcion-texto">Apariencia</span>
-                    <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-                </summary>
-                <div class="contenido-acordeon">
-                    <p class="texto-ayuda">Elige cómo quieres ver tu cuenta. Tu elección se guardará en este dispositivo.</p>
-                    <div class="selector-tema" role="group" aria-label="Elegir apariencia">
-                        <button type="button" class="opcion-tema" id="temaOscuro" aria-pressed="true">Oscuro original</button>
-                        <button type="button" class="opcion-tema" id="temaClaro" aria-pressed="false">Blanco</button>
-                    </div>
-                </div>
-            </details>
+            
 
 
 
@@ -813,6 +799,23 @@ body.tema-claro .opcion-tema[aria-pressed="true"]{border-color:#087cff;box-shado
                     </a>
                 </div>
             </details>
+
+            <!-- APARIENCIA -->
+            <details class="acordeon">
+                <summary>
+                    <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v18"></path><path d="M12 12h9"></path></svg>
+                    <span class="opcion-texto">Apariencia</span>
+                    <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                </summary>
+                <div class="contenido-acordeon">
+                    <p class="texto-ayuda">Elige cómo quieres ver tu cuenta. Tu elección se guardará en este dispositivo.</p>
+                    <div class="selector-tema" role="group" aria-label="Elegir apariencia">
+                        <button type="button" class="opcion-tema" id="temaOscuro" aria-pressed="true">Oscuro original</button>
+                        <button type="button" class="opcion-tema" id="temaClaro" aria-pressed="false">Blanco</button>
+                    </div>
+                </div>
+            </details>
+
 
             <!-- PANEL DE VENTAS: SOLO ADMINISTRADORES -->
 
@@ -986,8 +989,6 @@ const supabaseClient = window.supabase.createClient(
 );
 
 
-/* ==========================================
-   
 /* APARIENCIA: SOLO CAMBIA LOS COLORES */
 (function configurarApariencia() {
     const claveTema = "gamersGoldApariencia";
@@ -1012,7 +1013,8 @@ const supabaseClient = window.supabase.createClient(
     });
 })();
 
-FOTO DE PERFIL: SUPABASE STORAGE
+/* ==========================================
+   FOTO DE PERFIL: SUPABASE STORAGE
 ========================================== */
 
 const BUCKET_AVATARES = "avatars";
