@@ -137,6 +137,13 @@
         .exito {
             color: #6fd8ff;
         }
+    
+        .captcha-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 12px 0 16px;
+            min-height: 65px;
+        }
     </style>
 </head>
 
@@ -169,6 +176,10 @@
             required
         >
 
+        <div class="captcha-wrap">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAAFkQPUoJGVxIGYNB" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileExpired"></div>
+        </div>
+
         <button
             class="enviar"
             id="botonEnviar"
@@ -192,6 +203,7 @@
 
 </div>
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -200,6 +212,10 @@ const supabaseClient = window.supabase.createClient(
     "https://gsuhzcavghsiolmipnzi.supabase.co",
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
 );
+
+window.ggTurnstileToken = "";
+window.onTurnstileSuccess = function(token) { window.ggTurnstileToken = token; };
+window.onTurnstileExpired = function() { window.ggTurnstileToken = ""; };
 
 document
     .getElementById("formRecuperar")
@@ -219,6 +235,11 @@ document
         const mensaje =
             document.getElementById("mensaje");
 
+        if (!window.ggTurnstileToken) {
+            alert("Completa la verificación de seguridad antes de recuperar la contraseña.");
+            return;
+        }
+
         boton.disabled = true;
         boton.textContent = "Enviando...";
 
@@ -231,11 +252,15 @@ document
                 {
                     redirectTo:
                         window.location.origin +
-                        "/gamevora/frontend/nueva-contrasena.html"
+                        "/gamevora/frontend/nueva-contrasena.html",
+                    captchaToken: window.ggTurnstileToken
                 }
             );
 
         if (error) {
+
+            window.ggTurnstileToken = "";
+            if (window.turnstile) window.turnstile.reset();
 
             boton.disabled = false;
             boton.textContent = "Enviar enlace 🔐";
