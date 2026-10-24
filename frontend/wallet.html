@@ -1240,11 +1240,46 @@
             etiquetaEntradas.textContent = `Entró en ${nombreMes}`;
             etiquetaGastos.textContent = `Gastado en ${nombreMes}`;
 
+            // El reinicio queda guardado en Supabase y no borra el historial.
+            let { data: base, error: errorBase } = await supabaseClient
+                .from("wallet_stats_baselines")
+                .select("reset_at")
+                .eq("user_id", usuarioId)
+                .maybeSingle();
+
+            if (errorBase) {
+                console.error("Error consultando el reinicio de estadísticas:", errorBase);
+                entradasElemento.textContent = "—";
+                gastosElemento.textContent = "—";
+                movimientosElemento.textContent = "—";
+                return;
+            }
+
+            if (!base) {
+                const { data: nuevaBase, error: errorCrearBase } = await supabaseClient
+                    .from("wallet_stats_baselines")
+                    .insert({ user_id: usuarioId, reset_at: ahora.toISOString() })
+                    .select("reset_at")
+                    .single();
+
+                if (errorCrearBase) {
+                    console.error("Error guardando el inicio de estadísticas:", errorCrearBase);
+                    entradasElemento.textContent = "—";
+                    gastosElemento.textContent = "—";
+                    movimientosElemento.textContent = "—";
+                    return;
+                }
+                base = nuevaBase;
+            }
+
+            const fechaReinicio = new Date(base.reset_at);
+            const desde = fechaReinicio > inicioMes ? fechaReinicio : inicioMes;
+
             const { data: movimientosMes, error } = await supabaseClient
                 .from("transactions")
                 .select("type, amount, balance_before, balance_after, created_at")
                 .eq("user_id", usuarioId)
-                .gte("created_at", inicioMes.toISOString())
+                .gte("created_at", desde.toISOString())
                 .lt("created_at", inicioMesSiguiente.toISOString());
 
             if (error) {
