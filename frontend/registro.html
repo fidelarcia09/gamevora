@@ -166,6 +166,13 @@
             font-size: 14px;
             font-weight: bold;
         }
+    
+        .captcha-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 12px 0 16px;
+            min-height: 65px;
+        }
     </style>
 </head>
 
@@ -225,7 +232,11 @@
                 required
             >
 
-            <button
+            <div class="captcha-wrap">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAAFkQPUoJGVxIGYNB" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileExpired"></div>
+        </div>
+
+        <button
                 class="crear"
                 id="botonCrear"
                 type="submit"
@@ -279,6 +290,7 @@
 
 </div>
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -294,6 +306,10 @@ const supabaseClient =
         SUPABASE_URL,
         SUPABASE_PUBLISHABLE_KEY
     );
+
+window.ggTurnstileToken = "";
+window.onTurnstileSuccess = function(token) { window.ggTurnstileToken = token; };
+window.onTurnstileExpired = function() { window.ggTurnstileToken = ""; };
 
 
 document
@@ -370,6 +386,11 @@ document
             }
 
 
+            if (!window.ggTurnstileToken) {
+                alert("Completa la verificación de seguridad antes de crear la cuenta.");
+                return;
+            }
+
             boton.disabled = true;
 
             boton.textContent =
@@ -389,17 +410,19 @@ document
                         password: contrasena,
 
                         options: {
-
+                            captchaToken: window.ggTurnstileToken,
                             data: {
                                 username: usuario
                             }
-
                         }
 
                     });
 
 
                 if (error) {
+
+                    window.ggTurnstileToken = "";
+                    if (window.turnstile) window.turnstile.reset();
 
                     console.error(error);
 
@@ -445,6 +468,9 @@ document
 
 
             } catch (error) {
+
+                window.ggTurnstileToken = "";
+                if (window.turnstile) window.turnstile.reset();
 
                 console.error(error);
 
