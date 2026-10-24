@@ -1260,25 +1260,41 @@
             const registros = movimientosMes || [];
 
             registros.forEach(movimiento => {
-                const antes = Number(movimiento.balance_before);
-                const despues = Number(movimiento.balance_after);
-                const diferenciaDisponible =
-                    Number.isFinite(antes) &&
-                    Number.isFinite(despues) &&
-                    despues !== antes;
+                // En transactions.amount está el importe real del movimiento.
+                // No usar balance_after - balance_before para sumar gastos:
+                // los registros antiguos pueden tener diferencias inconsistentes.
+                const importe = Number(movimiento.amount) || 0;
+                const tipo = String(movimiento.type || "").toLowerCase();
 
-                const esIngreso = diferenciaDisponible
-                    ? despues > antes
-                    : esEntrada(movimiento);
+                const esGasto = (
+                    tipo.includes("game_purchase") ||
+                    tipo.includes("purchase") ||
+                    tipo.includes("debit") ||
+                    tipo.includes("withdraw") ||
+                    tipo.includes("compra")
+                );
 
-                const diferencia = diferenciaDisponible
-                    ? Math.abs(despues - antes)
-                    : Math.abs(Number(movimiento.amount) || 0);
+                const esIngreso = (
+                    tipo.includes("game_refund") ||
+                    tipo.includes("refund") ||
+                    tipo.includes("reembolso") ||
+                    tipo.includes("gvr_purchase") ||
+                    tipo.includes("deposit") ||
+                    tipo.includes("topup") ||
+                    tipo.includes("top_up") ||
+                    tipo.includes("recarga") ||
+                    tipo.includes("credit") ||
+                    tipo.includes("add")
+                );
 
-                if (esIngreso) {
-                    totalEntradas += diferencia;
-                } else {
-                    totalGastos += diferencia;
+                if (esGasto) {
+                    totalGastos += Math.abs(importe);
+                } else if (esIngreso) {
+                    totalEntradas += Math.abs(importe);
+                } else if (importe < 0) {
+                    totalGastos += Math.abs(importe);
+                } else if (importe > 0) {
+                    totalEntradas += importe;
                 }
             });
 
