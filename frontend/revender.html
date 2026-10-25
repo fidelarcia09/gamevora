@@ -19,7 +19,7 @@ h1{font-size:clamp(28px,6vw,38px);margin:0 0 8px;letter-spacing:-.8px}.sub{margi
 .progress-meta{display:flex;justify-content:space-between;gap:12px;margin-top:9px;color:var(--muted);font-size:12px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:16px 0}.card{min-width:0;background:linear-gradient(150deg,rgba(14,29,50,.96),rgba(8,18,33,.96));border:1px solid var(--line);border-radius:16px;padding:17px}.card h2{font-size:15px;margin:0 0 7px}.card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}.metric{font-size:27px;font-weight:900;margin:10px 0 4px}.section{margin:25px 0}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.section h2{font-size:19px;margin:0}.pill{border:1px solid rgba(88,220,255,.25);background:rgba(8,124,255,.1);color:var(--cyan);border-radius:99px;padding:6px 10px;font-size:11px;font-weight:800}
 .button{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:51px;border:1px solid #1c9cdd;border-radius:13px;background:linear-gradient(110deg,#087cff,#075bb5);color:white;text-decoration:none;font-size:14px;font-weight:900;box-shadow:0 8px 25px rgba(0,124,255,.18);cursor:pointer}.button.secondary{background:#0b1b30;border-color:#234662;color:#dff6ff;box-shadow:none}.button-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:15px}
-.levels{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.level{padding:12px 7px;text-align:center;border:1px solid var(--line);border-radius:13px;background:#091426;opacity:.7}.level.current{opacity:1;border-color:#39caff;background:rgba(8,124,255,.12);box-shadow:inset 0 0 18px rgba(8,124,255,.08)}.level-emoji{font-size:21px}.level strong{display:block;font-size:11px;margin:7px 0 5px}.level small{font-size:11px;color:var(--muted)}
+.levels{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.rank-benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}.rank-benefit-card{padding:14px;border:1px solid var(--line);border-radius:13px;background:rgba(9,20,38,.85)}.rank-benefit-card.current{border-color:rgba(88,220,255,.65);background:linear-gradient(145deg,rgba(8,124,255,.13),rgba(9,20,38,.92))}.rank-benefit-title{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:900;margin-bottom:10px}.rank-benefit-title svg{width:25px;height:25px;flex-shrink:0}.rank-benefit-card ul{margin:0;padding-left:17px;color:var(--muted);font-size:12px;line-height:1.65}.rank-benefit-card li+li{margin-top:4px}.level{padding:12px 7px;text-align:center;border:1px solid var(--line);border-radius:13px;background:#091426;opacity:.7}.level.current{opacity:1;border-color:#39caff;background:rgba(8,124,255,.12);box-shadow:inset 0 0 18px rgba(8,124,255,.08)}.level-emoji{font-size:21px}.level strong{display:block;font-size:11px;margin:7px 0 5px}.level small{font-size:11px;color:var(--muted)}
 .list{display:flex;flex-direction:column;gap:9px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border-radius:12px;background:rgba(12,26,45,.72);border:1px solid rgba(42,75,107,.55)}.row-main{min-width:0}.row-title{font-size:13px;font-weight:800;overflow-wrap:anywhere}.row-sub{color:var(--muted);font-size:11px;margin-top:5px;line-height:1.5}.row-side{text-align:right;flex-shrink:0;font-size:12px;font-weight:800}.status{color:var(--green)}.status.pending{color:#ffd166}.empty{padding:20px 12px;text-align:center;color:var(--muted);border:1px dashed #29415a;border-radius:13px;font-size:13px;line-height:1.6}.error{color:#ff9c9c}.note{color:#647a95;font-size:11px;line-height:1.6;margin-top:18px}
 @media(max-width:600px){main{width:calc(100% - 26px)}header{margin-bottom:20px}.hero{padding:17px}.rank-name{font-size:23px}.discount{font-size:21px}.grid{gap:9px}.card{padding:13px}.levels{gap:5px}.level{padding:10px 3px}.level strong{font-size:10px}.level small{font-size:10px}.button-row{grid-template-columns:1fr}.section{margin:22px 0}}
 
@@ -56,6 +56,7 @@ h1{font-size:clamp(28px,6vw,38px);margin:0 0 8px;letter-spacing:-.8px}.sub{margi
 <section class="section" id="levelsSection" hidden>
 <div class="section-head"><h2>Proceso para subir de nivel</h2><span class="pill">Progreso acumulativo</span></div>
 <div class="levels" id="levelsList"></div>
+<div class="rank-benefits" id="rankBenefits"></div>
 <p class="note">Las recargas pendientes o canceladas no cuentan. Solo cuentan las recargas creadas desde que recibiste el rol de Revendedor; las anteriores no cuentan para tus niveles.</p>
 </section>
 <details class="section sales-dropdown" id="salesDropdown" open>
@@ -99,8 +100,16 @@ function emblemaSvg(name){
 }
 function nivelPara(total){let actual=LEVELS[0];for(const l of LEVELS){if(total>=l.min)actual=l;}return actual;}
 function siguienteNivel(total){return LEVELS.find(l=>l.min>total)||null;}
+const BENEFICIOS_RANGO = {
+ Bronce:["Panel de revendedor personalizado","Estadísticas de recargas y clientes frecuentes","Misiones para progresar al siguiente rango","Insignia exclusiva Bronce"],
+ Plata:["Acceso a promociones exclusivas","Historial avanzado de actividad","Insignia Plata y perfil destacado","Misiones especiales de crecimiento"],
+ Oro:["Ofertas VIP antes que los rangos inferiores","Aparición destacada en el ranking de vendedores","Acceso a campañas de recompensas","Insignia Oro animada en futuras mejoras"],
+ Diamante:["Acceso anticipado a promociones seleccionadas","Prioridad en eventos exclusivos para revendedores","Distintivo Diamante de élite","Recompensas adicionales por retos completados"],
+ Leyenda:["Acceso a un club privado de revendedores élite","Insignia legendaria y perfil VIP","Acceso prioritario a campañas especiales","Recompensas exclusivas por temporadas","Posibilidad de aparecer en el Salón de la Fama GGT"]
+};
 function renderizarNiveles(total,actual){
  $("levelsList").innerHTML=LEVELS.map(l=>'<div class="level '+(l.name===actual.name?'current':'')+'"><div class="level-emoji">'+emblemaSvg(l.name)+'</div><strong>'+l.name+'</strong><small>'+l.min+'+ · '+l.discount+'%</small></div>').join("");
+ $("rankBenefits").innerHTML=LEVELS.map(l=>'<article class="rank-benefit-card '+(l.name===actual.name?'current':'')+'"><div class="rank-benefit-title">'+emblemaSvg(l.name)+'<span>'+l.name+' · '+l.discount+'% de descuento</span></div><ul>'+BENEFICIOS_RANGO[l.name].map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul></article>').join("");
  const next=siguienteNivel(total);
  $("progressText").textContent=total+" recargas completadas";
  $("nextLevelText").textContent=next?("Siguiente nivel: "+next.name+" · faltan "+(next.min-total)):"¡Nivel máximo alcanzado!";
