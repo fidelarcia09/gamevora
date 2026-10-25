@@ -58,6 +58,12 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 .row{background:rgba(12,26,45,.72);border:1px solid rgba(42,75,107,.55);border-radius:12px;box-shadow:none}.row-title{color:#f4f8ff}.row-sub{color:#9aadc4}
 .empty{background:rgba(10,20,38,.75);border:1px dashed #29415a;color:#9aadc4;border-radius:13px}.note{color:#647b96}.sales-dropdown .sales-chevron{border-color:#20c5ff}
 @media(max-width:600px){main{width:calc(100% - 26px)}header{margin-bottom:19px}.brand{font-size:13px}.hero{padding:18px 15px 15px;border-radius:20px}.rank-name{font-size:23px}.discount{font-size:22px}.button-row{grid-template-columns:1fr}.grid{gap:10px}.card{padding:14px;min-height:125px}.metric{font-size:25px}.levels{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.level{padding:10px 4px}.level strong{font-size:10px}.level small{font-size:10px}.row{padding:12px}}
+
+/* Botones compactos, rectangulares e iconos SVG */
+.action-button{display:inline-flex;width:auto;max-width:100%;min-height:42px;align-self:flex-start;justify-content:flex-start;gap:9px;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.25;white-space:normal;text-align:left}
+.action-button .action-icon{display:block;width:17px;height:17px;flex:0 0 17px}
+.card .action-button{margin-top:13px}
+@media(max-width:600px){.action-button{min-height:40px;padding:9px 12px;font-size:12px;gap:8px}.card .action-button{margin-top:11px}}
 </style>
 </head>
 <body>
@@ -76,7 +82,7 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 </div>
 <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 <div class="progress-meta"><span id="progressText">0 recargas completadas</span><span id="nextLevelText">Siguiente nivel: Plata</span></div>
-<div class="button-row"><button class="button secondary" id="showLevels" type="button">Ver proceso para subir de nivel</button><a class="button" href="juegos.html"><svg class="button-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5v17M3.5 12h17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="9.2" stroke="currentColor" stroke-width="1.6" opacity=".8"/></svg>Nueva Recarga</a></div>
+<div class="button-row"><button class="button secondary action-button" id="showLevels" type="button"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver proceso para subir de nivel</button><a class="button" href="juegos.html"><svg class="button-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5v17M3.5 12h17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="9.2" stroke="currentColor" stroke-width="1.6" opacity=".8"/></svg>Nueva Recarga</a></div>
 </section>
 <div class="grid">
 <article class="card"><h2>Recargas hechas</h2><div class="metric" id="completedCount">0</div><p></p></article>
@@ -85,10 +91,10 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 <section class="section">
 <div class="section-head"><h2>Tu negocio</h2><span class="pill">Revendedor</span></div>
 <div class="grid">
-<article class="card"><h2>Mis ventas</h2><p></p><button class="button secondary" type="button" data-scroll="salesDropdown" style="margin-top:13px">Ver mis ventas ›</button></article>
-<article class="card"><h2>Progreso de nivel</h2><p></p><button class="button secondary" type="button" data-scroll="levelsSection" style="margin-top:13px">Ver niveles ›</button></article>
-<article class="card"><h2>Clientes frecuentes</h2><p></p><button class="button secondary" type="button" data-scroll="clientsSection" style="margin-top:13px">Ver clientes ›</button></article>
-<article class="card"><h2>Nueva recarga</h2><p></p><a class="button" href="juegos.html" style="margin-top:13px">Hacer una recarga ›</a></article>
+<article class="card"><h2>Mis ventas</h2><p></p><button class="button secondary action-button" type="button" data-scroll="salesDropdown" style="margin-top:13px"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver mis ventas</button></article>
+<article class="card"><h2>Progreso de nivel</h2><p></p><button class="button secondary action-button" type="button" data-scroll="levelsSection" style="margin-top:13px"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 19 6v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6zM9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver niveles</button></article>
+<article class="card"><h2>Clientes frecuentes</h2><p></p><button class="button secondary action-button" type="button" data-scroll="clientsSection" style="margin-top:13px"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20m6-9a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm5-6.5a3.5 3.5 0 0 1 0 6.8M17 15h.5a3.5 3.5 0 0 1 3.5 3.5V20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver clientes</button></article>
+<article class="card"><h2>Nueva recarga</h2><p></p><a class="button action-button" href="juegos.html" style="margin-top:13px"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Hacer una recarga</a></article>
 </div>
 </section>
 <section class="section" id="levelsSection" hidden>
