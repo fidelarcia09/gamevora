@@ -1781,6 +1781,13 @@ async function cargarCuenta() {
     // Cargar la foto guardada para este usuario.
     mostrarFotoPerfil(usuario.user_metadata?.avatar_url || "");
 
+    // Ocultar por defecto: solo se mostrarán si Supabase confirma que es revendedor activo.
+    const etiquetaRevendedor = document.getElementById("etiquetaRevendedor");
+    const rangoPerfil = document.getElementById("rangoPerfilResumen");
+    etiquetaRevendedor.hidden = true;
+    rangoPerfil.hidden = true;
+    rangoPerfil.textContent = "";
+
     // El rol y el rango se muestran únicamente si el perfil de revendedor está activo.
     try {
         const { data: perfilRevendedor, error: errorPerfilRevendedor } =
@@ -1793,7 +1800,7 @@ async function cargarCuenta() {
 
         if (!errorPerfilRevendedor && perfilRevendedor?.active &&
             perfilRevendedor.role === "Revendedor") {
-            document.getElementById("etiquetaRevendedor").hidden = false;
+            etiquetaRevendedor.hidden = false;
 
             const { data: stats, error: errorStats } =
                 await supabaseClient.rpc("get_reseller_dashboard_stats");
