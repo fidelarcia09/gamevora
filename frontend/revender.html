@@ -29,6 +29,47 @@ h1{font-size:clamp(28px,6vw,38px);margin:0 0 8px;letter-spacing:-.8px}.sub{margi
 .sales-dropdown .sales-chevron{margin-left:auto;width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .18s ease;opacity:.75;flex-shrink:0}
 .sales-dropdown:not([open]) > summary .sales-chevron{transform:rotate(-45deg)}
 .sales-dropdown[open] > .list{margin-top:12px}
+
+/* Diseño inspirado en la referencia, adaptado a la identidad Gamers Gold */
+:root{--gold:#d8a83e;--gold-soft:#ffe5a0}
+body{background:radial-gradient(ellipse at 8% 0,rgba(8,124,255,.17),transparent 34%),radial-gradient(ellipse at 100% 15%,rgba(216,168,62,.07),transparent 26%),var(--bg)}
+header{padding:18px 0 16px;border-bottom-color:rgba(88,220,255,.2)}
+.brand{letter-spacing:.1px;text-transform:uppercase;font-size:15px}
+.brand span{color:var(--gold-soft);text-shadow:0 0 14px rgba(216,168,62,.18)}
+.back{border:1px solid rgba(88,220,255,.28);background:rgba(8,124,255,.08);padding:9px 12px;border-radius:10px}
+h1{background:linear-gradient(95deg,#f4f8ff 20%,#58dcff 72%,#ffe5a0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{max-width:620px}
+.hero{border-color:rgba(88,220,255,.35);background:linear-gradient(125deg,rgba(8,124,255,.2),rgba(11,22,40,.97) 58%,rgba(35,29,20,.48));box-shadow:0 14px 36px rgba(0,0,0,.16)}
+.rank-icon{background:linear-gradient(145deg,rgba(216,168,62,.12),rgba(8,124,255,.13));border-color:rgba(216,168,62,.38);box-shadow:inset 0 0 18px rgba(216,168,62,.04)}
+.discount{color:var(--gold-soft);text-shadow:0 0 18px rgba(216,168,62,.15)}
+.progress-track{height:9px;background:#14253a;border:1px solid rgba(88,220,255,.08)}
+.progress-fill{background:linear-gradient(90deg,#087cff 0%,#58dcff 68%,#ffe5a0 100%);box-shadow:0 0 14px rgba(88,220,255,.25)}
+.card{box-shadow:0 8px 24px rgba(0,0,0,.1);transition:border-color .18s ease,transform .18s ease}
+.card h2{color:#eaf7ff}
+.metric{color:#f4f8ff}
+.grid .card:first-child .metric{color:var(--cyan)}
+.grid .card:nth-child(2) .metric{color:var(--gold-soft)}
+.button{background:linear-gradient(110deg,#087cff,#075bb5);border-color:rgba(88,220,255,.55)}
+.button.secondary{background:linear-gradient(145deg,#0e1d32,#091426);border-color:rgba(88,220,255,.24)}
+.button:focus-visible,.back:focus-visible,.sales-dropdown summary:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
+.pill{border-color:rgba(216,168,62,.28);background:rgba(216,168,62,.08);color:var(--gold-soft)}
+.level{background:linear-gradient(160deg,#0b1729,#081222);border-color:rgba(44,75,107,.7)}
+.level.current{border-color:var(--cyan);box-shadow:inset 0 0 20px rgba(8,124,255,.12),0 0 16px rgba(8,124,255,.08)}
+.level.current strong{color:var(--gold-soft)}
+.row{background:linear-gradient(110deg,rgba(12,26,45,.92),rgba(8,18,33,.92));border-color:rgba(42,75,107,.62)}
+.row-title{color:#f4f8ff}
+.status{color:var(--green)}
+.status.pending{color:var(--gold-soft)}
+.empty{background:rgba(8,18,33,.42)}
+.note{color:#8298b2}
+@media(max-width:600px){
+  header{padding-top:16px}
+  .brand{font-size:13px}
+  .hero{border-radius:18px}
+  .grid .card{min-height:128px}
+  .metric{font-size:25px}
+}
+
 </style>
 </head>
 <body>
