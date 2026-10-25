@@ -93,7 +93,7 @@ function emblemaSvg(name){
 function nivelPara(total){let actual=LEVELS[0];for(const l of LEVELS){if(total>=l.min)actual=l;}return actual;}
 function siguienteNivel(total){return LEVELS.find(l=>l.min>total)||null;}
 function renderizarNiveles(total,actual){
- $("levelsList").innerHTML=LEVELS.map(l=>'<div class="level '+(l.name===actual.name?'current':'')+'"><div class="level-emoji">'+l.icon+'</div><strong>'+l.name+'</strong><small>'+l.min+'+ · '+l.discount+'%</small></div>').join("");
+ $("levelsList").innerHTML=LEVELS.map(l=>'<div class="level '+(l.name===actual.name?'current':'')+'"><div class="level-emoji">'+emblemaSvg(l.name)+'</div><strong>'+l.name+'</strong><small>'+l.min+'+ · '+l.discount+'%</small></div>').join("");
  const next=siguienteNivel(total);
  $("progressText").textContent=total+" recargas completadas";
  $("nextLevelText").textContent=next?("Siguiente nivel: "+next.name+" · faltan "+(next.min-total)):"¡Nivel máximo alcanzado!";
