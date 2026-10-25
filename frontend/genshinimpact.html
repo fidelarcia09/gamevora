@@ -699,7 +699,7 @@ async function crearCompra(token, jugador, zona) {
   if (!actual || !PRODUCTOS_PERMITIDOS.includes(idProductoActual) || !precioProducto(actual)) throw new Error("El producto ya no está disponible o su precio no es válido. Actualiza el catálogo.");
   if (String(actual.provider_product_id) !== String(seleccionado.provider_product_id)) throw new Error("El paquete cambió. Actualiza el catálogo antes de comprar.");
   const productoModal = { ...actual, product_name: nombreProducto(seleccionado) || nombreProducto(actual) };
-  if (!await abrirModal(productoModal, jugador, zona, Number(actual.price_gvr))) { mostrarEstado("Compra cancelada. No se creó ningún pedido."); return; }
+  if (!await abrirModal(productoModal, jugador, zona, await window.ggGetResellerDiscountedPrice(Number(actual.price_gvr)))) { mostrarEstado("Compra cancelada. No se creó ningún pedido."); return; }
   mostrarEstado("Registrando el pedido y verificando tu saldo GVR...");
   const { data: orderId, error: purchaseError } = await supabase.rpc("purchase_game_product", {
     p_product_id: actual.id, p_player_id: jugador, p_zone_id: zona
@@ -751,7 +751,7 @@ iniciar();
     <script src="./goldi-widget.js?v=20261023-2" defer></script>
 
 
-<script type="module" src="./reseller-product-discount.js?v=20261024-1"></script>
+<script type="module" src="./reseller-product-discount.js?v=20261024-2"></script>
 </body>
         </html>
 
