@@ -12,49 +12,81 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     { min: 300, discount: 5 }
   ];
 
+  let discountPercent = 0;
+  let initialized = false;
+  let initPromise;
+
+  function formatPrice(price) {
+    return Number(price).toLocaleString("es-ES", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    }) + " GVR";
+  }
+
+  function discountedPrice(price) {
+    const value = Number(price);
+    if (!Number.isFinite(value) || value <= 0 || discountPercent <= 0) return value;
+    return Math.max(0.01, Math.round((value * (100 - discountPercent) / 100 + Number.EPSILON) * 100) / 100);
+  }
+
+  window.ggGetResellerDiscountedPrice = async function(price) {
+    if (initPromise) await initPromise;
+    return discountedPrice(price);
+  };
+
   function addStyles() {
     if (document.getElementById("gg-reseller-discount-styles")) return;
     const style = document.createElement("style");
     style.id = "gg-reseller-discount-styles";
     style.textContent = `
-      .gg-reseller-discount {
+      .gg-reseller-original-price {
         display: block;
-        width: 100%;
-        margin-top: 2px;
-        padding: 5px 7px;
-        border: 1px solid rgba(78, 224, 161, .32);
-        border-radius: 5px;
-        background: rgba(25, 151, 99, .12);
-        color: #70f0b6;
-        font-size: 10px;
-        font-weight: 800;
-        line-height: 1.35;
-        text-align: center;
-        overflow-wrap: anywhere;
+        margin-top: 4px;
+        color: #91a6c0;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.3;
+        text-decoration: line-through;
+        text-decoration-thickness: 1.5px;
+        opacity: .9;
       }
-      .producto .gg-reseller-discount { flex-shrink: 0; }
+      .producto .producto-precio { display: block; }
+      .producto .gg-reseller-original-price + .producto-precio { margin-top: 2px; }
     `;
     document.head.appendChild(style);
   }
 
-  function showDiscount(discount) {
+  function showDiscount() {
+    if (!initialized || discountPercent <= 0) return;
     addStyles();
     document.querySelectorAll(".producto").forEach(card => {
       if (card.matches(":disabled") || card.classList.contains("producto-no-disponible")) return;
-      let badge = card.querySelector(".gg-reseller-discount");
-      if (!badge) {
-        badge = document.createElement("span");
-        badge.className = "gg-reseller-discount";
-        badge.setAttribute("aria-label", "Descuento de revendedor de " + discount + " por ciento");
-        const price = card.querySelector(".producto-precio");
-        if (price && price.parentNode === card) {
-          price.insertAdjacentElement("afterend", badge);
-        } else {
-          card.appendChild(badge);
-        }
+      const price = card.querySelector(".producto-precio");
+      if (!price || price.parentNode !== card) return;
+
+      if (!price.dataset.ggOriginalPrice) {
+        const match = price.textContent.trim().match(/^([\d.,]+)\s*GVR$/i);
+        if (!match) return;
+        const normalized = match[1].replace(/\./g, "").replace(",", ".");
+        const original = Number(normalized);
+        if (!Number.isFinite(original) || original <= 0) return;
+        price.dataset.ggOriginalPrice = String(original);
       }
-      const label = "Tu descuento de revendedor: " + discount + "%";
-      if (badge.textContent !== label) badge.textContent = label;
+
+      const original = Number(price.dataset.ggOriginalPrice);
+      const finalPrice = discountedPrice(original);
+      let oldPrice = card.querySelector(".gg-reseller-original-price");
+      if (!oldPrice) {
+        oldPrice = document.createElement("div");
+        oldPrice.className = "gg-reseller-original-price";
+        oldPrice.setAttribute("aria-label", "Precio original sin descuento");
+        price.insertAdjacentElement("beforebegin", oldPrice);
+      }
+      const oldLabel = formatPrice(original);
+      const finalLabel = formatPrice(finalPrice);
+      if (oldPrice.textContent !== oldLabel) oldPrice.textContent = oldLabel;
+      if (price.textContent !== finalLabel) price.textContent = finalLabel;
+      price.setAttribute("aria-label", "Precio final con descuento de revendedor");
     });
   }
 
@@ -80,22 +112,30 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
         console.warn("No se pudo consultar el nivel del revendedor.", error);
         return;
       }
+
       const stats = Array.isArray(data) ? data[0] : data;
       const completed = Number(stats?.completed_count || 0);
       let current = LEVELS[0];
       for (const level of LEVELS) if (completed >= level.min) current = level;
 
-      showDiscount(current.discount);
-      const observer = new MutationObserver(() => showDiscount(current.discount));
-      observer.observe(document.body, { childList: true, subtree: true });
+      discountPercent = current.discount;
+      initialized = true;
+      window.ggResellerDiscountPercent = discountPercent;
+      showDiscount();
+
+      const observer = new MutationObserver(showDiscount);
+      observer.observe(document.body, { childList: true, subtree: true, characterData: true });
     } catch (error) {
-      console.warn("No se pudo mostrar el descuento de revendedor.", error);
+      console.warn("No se pudo aplicar el descuento de revendedor en el catálogo.", error);
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
-  } else {
-    init();
-  }
+  initPromise = new Promise(resolve => {
+    const run = () => init().finally(resolve);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", run, { once: true });
+    } else {
+      run();
+    }
+  });
 })();
