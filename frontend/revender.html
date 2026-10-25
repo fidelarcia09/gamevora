@@ -161,6 +161,20 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  .level strong{font-size:11px}
 }
 
+
+/* Efecto 3D: insignia flotante, perspectiva y plataforma de luz */
+.hero{isolation:isolate;min-height:170px}
+.hero:after{content:"♛";position:absolute;z-index:0;right:7%;top:50%;width:clamp(88px,22vw,145px);aspect-ratio:.82;display:grid;place-items:center;clip-path:polygon(50% 0,92% 19%,92% 61%,50% 100%,8% 61%,8% 19%);background:linear-gradient(135deg,#fff 0%,#8deaff 13%,#167cff 34%,#071b71 66%,#58dfff 83%,#fff 100%);color:#fff;font-size:clamp(42px,10vw,72px);text-shadow:0 3px 0 #477ed8,0 6px 0 #12317d,0 9px 14px #020b35,0 0 14px #fff;filter:drop-shadow(0 12px 2px rgba(0,5,40,.75)) drop-shadow(0 0 16px rgba(62,213,255,.8));transform:translateY(-50%) perspective(600px) rotateY(-24deg) rotateZ(4deg);animation:heroBadgeFloat 4.8s ease-in-out infinite;pointer-events:none}
+.hero:before{content:"";position:absolute;z-index:0;right:-8%;top:53%;width:60%;height:60%;border:3px solid rgba(133,238,255,.95);border-radius:50%;box-shadow:0 0 0 7px rgba(19,132,255,.23),0 0 22px rgba(50,220,255,.95),inset 0 0 16px rgba(57,196,255,.55);transform:translateY(-50%) perspective(450px) rotateX(67deg) rotateZ(-8deg);pointer-events:none}
+.hero .hero-top,.hero .progress-track,.hero .progress-meta,.hero .button-row{z-index:2}
+.hero .hero-top>div:first-child{max-width:67%}
+@keyframes heroBadgeFloat{0%,100%{margin-top:0;transform:translateY(-50%) perspective(600px) rotateY(-24deg) rotateZ(4deg)}50%{margin-top:-7px;transform:translateY(-50%) perspective(600px) rotateY(-16deg) rotateZ(1deg)}}
+.level{transition:transform .2s ease,box-shadow .2s ease}
+.level.current{transform:perspective(500px) translateY(-3px) rotateX(2deg);box-shadow:inset 0 0 22px rgba(0,153,255,.2),0 8px 0 rgba(0,5,30,.36),0 12px 20px rgba(0,91,255,.2)}
+.level .level-emoji svg{filter:drop-shadow(0 3px 0 rgba(0,0,0,.45)) drop-shadow(0 0 5px rgba(74,184,255,.28))}
+@media(max-width:600px){.hero{min-height:158px}.hero:after{right:4%;width:clamp(80px,24vw,112px);font-size:clamp(40px,10vw,58px)}.hero:before{right:-12%;width:58%}.hero .hero-top>div:first-child{max-width:70%}.hero .rank-name{font-size:18px}.hero .discount{font-size:19px}}
+@media(prefers-reduced-motion:reduce){.hero:after{animation:none}.level{transition:none}}
+
 </style>
 </head>
 <body>
