@@ -101,12 +101,10 @@ function renderizarVentas(orders,products){
    return '<article class="row"><div class="row-main"><div class="row-title">'+esc(title)+'</div><div class="row-sub">ID cliente/jugador: '+esc(o.player_id||"No disponible")+'<br>'+esc(fecha(o.created_at))+'</div></div><div class="row-side">'+esc(o.price_gvr??0)+' GVR<br><span class="status '+(o.status==="pending"?'pending':'')+'">'+esc(status)+'</span></div></article>';
  }).join("");
 }
-function renderizarClientes(orders){
- const conteo=new Map();
- for(const o of orders){const id=String(o.player_id||"").trim();if(!id||o.status!=="completed")continue;const v=conteo.get(id)||{count:0,last:o.completed_at||o.created_at};v.count++;if(new Date(o.completed_at||o.created_at)>new Date(v.last))v.last=o.completed_at||o.created_at;conteo.set(id,v);}
- const top=[...conteo.entries()].sort((a,b)=>b[1].count-a[1].count||new Date(b[1].last)-new Date(a[1].last)).slice(0,5);
+function renderizarClientes(clients){
+ const top=Array.isArray(clients)?clients:[];
  if(!top.length){$("clientsList").innerHTML='<div class="empty">Aún no hay clientes con recargas completadas.</div>';return;}
- $("clientsList").innerHTML=top.map(([id,v],i)=>'<article class="row"><div class="row-main"><div class="row-title">#'+(i+1)+' · ID '+esc(id)+'</div><div class="row-sub">Última recarga: '+esc(fecha(v.last))+'</div></div><div class="row-side">'+v.count+' recarga'+(v.count===1?'':'s')+'</div></article>').join("");
+ $("clientsList").innerHTML=top.map((v,i)=>'<article class="row"><div class="row-main"><div class="row-title">#'+(i+1)+' · ID '+esc(v.player_id||"No disponible")+'</div><div class="row-sub">Última recarga: '+esc(fecha(v.last_topup))+'</div></div><div class="row-side">'+Number(v.completed_count||0)+' recarga'+(Number(v.completed_count||0)===1?'':'s')+'</div></article>').join("");
 }
 async function iniciar(){
  try{
@@ -114,15 +112,23 @@ async function iniciar(){
   if(authError||!user){window.location.replace("login.html");return;}
   const {data:profile,error:profileError}=await db.from("reseller_profiles").select("user_id,role,active").eq("user_id",user.id).eq("active",true).maybeSingle();
   if(profileError||!profile||profile.role!=="Revendedor"){window.location.replace("cuenta.html");return;}
-  const {data:orders,error:ordersError}=await db.from("game_orders").select("id,product_id,price_gvr,status,player_id,created_at,completed_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1000);
-  if(ordersError)throw ordersError;
-  const ids=[...new Set((orders||[]).map(o=>o.product_id).filter(Boolean))];
+  const [ordersResult,statsResult]=await Promise.all([
+   db.from("game_orders").select("id,product_id,price_gvr,status,player_id,created_at,completed_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1000),
+   db.rpc("get_reseller_dashboard_stats")
+  ]);
+  if(ordersResult.error)throw ordersResult.error;
+  if(statsResult.error)throw statsResult.error;
+  const orders=ordersResult.data||[];
+  const stats=Array.isArray(statsResult.data)?statsResult.data[0]:statsResult.data;
+  if(!stats)throw new Error("No se pudieron calcular las estadísticas del revendedor.");
+  const ids=[...new Set(orders.map(o=>o.product_id).filter(Boolean))];
   let products={};
   if(ids.length){const {data:ps,error:pe}=await db.from("game_products").select("id,game,product_name").in("id",ids);if(!pe)for(const p of ps||[])products[p.id]=p;}
-  const completed=(orders||[]).filter(o=>o.status==="completed").length;
+  const completed=Number(stats.completed_count||0);
   const level=nivelPara(completed);
   $("rankIcon").textContent=level.icon;$("rankName").textContent=level.name;$("rankDiscount").textContent=level.discount+"%";$("discountMetric").textContent=level.discount+"%";$("completedCount").textContent=completed.toLocaleString("es-ES");
-  renderizarNiveles(completed,level);renderizarVentas(orders||[],products);renderizarClientes(orders||[]);
+  renderizarNiveles(completed,level);renderizarVentas(orders,products);renderizarClientes(stats.top_clients||[]);
+  $("salesCount").textContent=Number(stats.total_orders||0).toLocaleString("es-ES")+" pedidos";
   $("loading").hidden=true;$("dashboard").hidden=false;
  }catch(error){console.error("Error al cargar Revender:",error);$("loading").className="empty error";$("loading").textContent="No se pudo cargar tu panel. Comprueba tu conexión e inténtalo de nuevo.";}
 }
