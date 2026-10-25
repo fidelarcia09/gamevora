@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050b18">
+<title>Revender | Gamers Gold Top-Up</title>
+<style>
+:root{color-scheme:dark;--bg:#050b18;--panel:#0b1628;--panel2:#0e1d32;--line:#1b3550;--text:#f4f8ff;--muted:#91a6c0;--cyan:#58dcff;--blue:#087cff;--green:#4ee0a1}
+*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% 0,rgba(0,124,255,.13),transparent 35%),var(--bg);color:var(--text);padding:0 0 110px}
+main{width:min(100% - 30px,900px);margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 0;border-bottom:1px solid rgba(105,158,215,.12);margin-bottom:24px}
+.brand{font-size:18px;font-weight:900;letter-spacing:-.3px}.brand span{color:var(--cyan)}.back{color:var(--cyan);text-decoration:none;font-weight:700;font-size:13px}
+h1{font-size:clamp(28px,6vw,38px);margin:0 0 8px;letter-spacing:-.8px}.sub{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+.hero{position:relative;overflow:hidden;padding:22px;border:1px solid rgba(88,220,255,.23);border-radius:20px;background:linear-gradient(130deg,rgba(8,124,255,.16),rgba(11,22,40,.96) 65%);margin:24px 0 16px}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:14px}.rank-icon{width:54px;height:54px;display:grid;place-items:center;border-radius:16px;background:rgba(88,220,255,.1);border:1px solid rgba(88,220,255,.25);font-size:26px}
+.eyebrow{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1.4px;font-weight:800;margin-bottom:7px}.rank-name{font-size:27px;font-weight:900}.discount{font-size:24px;font-weight:900;color:var(--green);white-space:nowrap}.progress-track{height:8px;background:#14253a;border-radius:99px;overflow:hidden;margin-top:20px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#087cff,#58dcff);border-radius:99px;transition:width .3s}
+.progress-meta{display:flex;justify-content:space-between;gap:12px;margin-top:9px;color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:16px 0}.card{min-width:0;background:linear-gradient(150deg,rgba(14,29,50,.96),rgba(8,18,33,.96));border:1px solid var(--line);border-radius:16px;padding:17px}.card h2{font-size:15px;margin:0 0 7px}.card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}.metric{font-size:27px;font-weight:900;margin:10px 0 4px}.section{margin:25px 0}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.section h2{font-size:19px;margin:0}.pill{border:1px solid rgba(88,220,255,.25);background:rgba(8,124,255,.1);color:var(--cyan);border-radius:99px;padding:6px 10px;font-size:11px;font-weight:800}
+.button{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:51px;border:1px solid #1c9cdd;border-radius:13px;background:linear-gradient(110deg,#087cff,#075bb5);color:white;text-decoration:none;font-size:14px;font-weight:900;box-shadow:0 8px 25px rgba(0,124,255,.18);cursor:pointer}.button.secondary{background:#0b1b30;border-color:#234662;color:#dff6ff;box-shadow:none}.button-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:15px}
+.levels{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.level{padding:12px 7px;text-align:center;border:1px solid var(--line);border-radius:13px;background:#091426;opacity:.7}.level.current{opacity:1;border-color:#39caff;background:rgba(8,124,255,.12);box-shadow:inset 0 0 18px rgba(8,124,255,.08)}.level-emoji{font-size:21px}.level strong{display:block;font-size:11px;margin:7px 0 5px}.level small{font-size:11px;color:var(--muted)}
+.list{display:flex;flex-direction:column;gap:9px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border-radius:12px;background:rgba(12,26,45,.72);border:1px solid rgba(42,75,107,.55)}.row-main{min-width:0}.row-title{font-size:13px;font-weight:800;overflow-wrap:anywhere}.row-sub{color:var(--muted);font-size:11px;margin-top:5px;line-height:1.5}.row-side{text-align:right;flex-shrink:0;font-size:12px;font-weight:800}.status{color:var(--green)}.status.pending{color:#ffd166}.empty{padding:20px 12px;text-align:center;color:var(--muted);border:1px dashed #29415a;border-radius:13px;font-size:13px;line-height:1.6}.error{color:#ff9c9c}.note{color:#647a95;font-size:11px;line-height:1.6;margin-top:18px}
+@media(max-width:600px){main{width:calc(100% - 26px)}header{margin-bottom:20px}.hero{padding:17px}.rank-name{font-size:23px}.discount{font-size:21px}.grid{gap:9px}.card{padding:13px}.levels{gap:5px}.level{padding:10px 3px}.level strong{font-size:10px}.level small{font-size:10px}.button-row{grid-template-columns:1fr}.section{margin:22px 0}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="brand"><span>Gamers Gold</span> Top-Up</div><a class="back" href="cuenta.html">Mi cuenta</a></header>
+<section>
+<h1>Panel de Revendedor</h1>
+<p class="sub">Administra tus recargas, consulta tu nivel y conoce a tus clientes más frecuentes.</p>
+</section>
+<div id="loading" class="empty" style="margin-top:20px">Verificando acceso de revendedor…</div>
+<div id="dashboard" hidden>
+<section class="hero">
+<div class="hero-top">
+<div style="display:flex;align-items:center;gap:13px"><div class="rank-icon" id="rankIcon">🥉</div><div><div class="eyebrow">Tu plan actual</div><div class="rank-name" id="rankName">Bronce</div></div></div>
+<div style="text-align:right"><div class="eyebrow">Tu descuento</div><div class="discount" id="rankDiscount">1%</div></div>
+</div>
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+<div class="progress-meta"><span id="progressText">0 recargas completadas</span><span id="nextLevelText">Siguiente nivel: Plata</span></div>
+<div class="button-row"><button class="button secondary" id="showLevels" type="button">Ver proceso para subir de nivel</button><a class="button" href="juegos.html">＋ Hacer una recarga</a></div>
+</section>
+<div class="grid">
+<article class="card"><h2>Recargas hechas</h2><div class="metric" id="completedCount">0</div><p>Solo cuentan las recargas completadas.</p></article>
+<article class="card"><h2>Descuento de tu nivel</h2><div class="metric" id="discountMetric">1%</div><p>El descuento mostrado corresponde a tu nivel actual.</p></article>
+</div>
+<section class="section" id="levelsSection" hidden>
+<div class="section-head"><h2>Proceso para subir de nivel</h2><span class="pill">Progreso acumulativo</span></div>
+<div class="levels" id="levelsList"></div>
+<p class="note">Las recargas pendientes o canceladas no cuentan. Los niveles se calculan usando las recargas completadas asociadas a tu cuenta.</p>
+</section>
+<section class="section">
+<div class="section-head"><h2>Mis ventas</h2><span class="pill" id="salesCount">0 pedidos</span></div>
+<div class="list" id="salesList"><div class="empty">Cargando tus ventas…</div></div>
+</section>
+<section class="section">
+<div class="section-head"><h2>Clientes frecuentes</h2><span class="pill">Top 5</span></div>
+<div class="list" id="clientsList"><div class="empty">Buscando clientes frecuentes…</div></div>
+</section>
+<p class="note">El contador se calcula desde los pedidos de recarga registrados en tu cuenta. Los precios finales y la aplicación efectiva de descuentos en el checkout deben validarse también en el proceso de compra, no solo en esta pantalla.</p>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const LEVELS = [
+ {name:"Bronce",min:0,discount:1,icon:"🥉"},
+ {name:"Plata",min:25,discount:2,icon:"🥈"},
+ {name:"Oro",min:75,discount:3,icon:"🥇"},
+ {name:"Diamante",min:150,discount:4,icon:"💎"},
+ {name:"Leyenda",min:300,discount:5,icon:"👑"}
+];
+const $ = id => document.getElementById(id);
+function esc(value){return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function fecha(value){if(!value)return "Fecha no disponible";return new Date(value).toLocaleString("es-ES",{dateStyle:"medium",timeStyle:"short"});}
+function estado(value){const v=String(value||"").toLowerCase();if(v==="completed")return "Completada";if(v==="pending")return "Pendiente";if(v==="failed")return "Fallida";if(v==="refunded")return "Reembolsada";return v||"Desconocido";}
+function nivelPara(total){let actual=LEVELS[0];for(const l of LEVELS){if(total>=l.min)actual=l;}return actual;}
+function siguienteNivel(total){return LEVELS.find(l=>l.min>total)||null;}
+function renderizarNiveles(total,actual){
+ $("levelsList").innerHTML=LEVELS.map(l=>'<div class="level '+(l.name===actual.name?'current':'')+'"><div class="level-emoji">'+l.icon+'</div><strong>'+l.name+'</strong><small>'+l.min+'+ · '+l.discount+'%</small></div>').join("");
+ const next=siguienteNivel(total);
+ $("progressText").textContent=total+" recargas completadas";
+ $("nextLevelText").textContent=next?("Siguiente nivel: "+next.name+" · faltan "+(next.min-total)):"¡Nivel máximo alcanzado!";
+ const floor=actual.min;
+ const nextMin=next?next.min:actual.min;
+ const progress=next?Math.max(0,Math.min(100,((total-floor)/(nextMin-floor))*100)):100;
+ $("progressFill").style.width=progress+"%";
+}
+function renderizarVentas(orders,products){
+ $("salesCount").textContent=orders.length+" pedidos";
+ if(!orders.length){$("salesList").innerHTML='<div class="empty">Todavía no tienes ventas registradas. Cuando hagas recargas desde tu cuenta, aparecerán aquí.</div>';return;}
+ $("salesList").innerHTML=orders.slice(0,12).map(o=>{
+   const p=products[o.product_id]||{};
+   const title=[p.game,p.product_name].filter(Boolean).join(" · ")||"Recarga de juego";
+   const status=estado(o.status);
+   return '<article class="row"><div class="row-main"><div class="row-title">'+esc(title)+'</div><div class="row-sub">ID cliente/jugador: '+esc(o.player_id||"No disponible")+'<br>'+esc(fecha(o.created_at))+'</div></div><div class="row-side">'+esc(o.price_gvr??0)+' GVR<br><span class="status '+(o.status==="pending"?'pending':'')+'">'+esc(status)+'</span></div></article>';
+ }).join("");
+}
+function renderizarClientes(orders){
+ const conteo=new Map();
+ for(const o of orders){const id=String(o.player_id||"").trim();if(!id||o.status!=="completed")continue;const v=conteo.get(id)||{count:0,last:o.completed_at||o.created_at};v.count++;if(new Date(o.completed_at||o.created_at)>new Date(v.last))v.last=o.completed_at||o.created_at;conteo.set(id,v);}
+ const top=[...conteo.entries()].sort((a,b)=>b[1].count-a[1].count||new Date(b[1].last)-new Date(a[1].last)).slice(0,5);
+ if(!top.length){$("clientsList").innerHTML='<div class="empty">Aún no hay clientes con recargas completadas.</div>';return;}
+ $("clientsList").innerHTML=top.map(([id,v],i)=>'<article class="row"><div class="row-main"><div class="row-title">#'+(i+1)+' · ID '+esc(id)+'</div><div class="row-sub">Última recarga: '+esc(fecha(v.last))+'</div></div><div class="row-side">'+v.count+' recarga'+(v.count===1?'':'s')+'</div></article>').join("");
+}
+async function iniciar(){
+ try{
+  const {data:{user},error:authError}=await db.auth.getUser();
+  if(authError||!user){window.location.replace("login.html");return;}
+  const {data:profile,error:profileError}=await db.from("reseller_profiles").select("user_id,role,active").eq("user_id",user.id).eq("active",true).maybeSingle();
+  if(profileError||!profile||profile.role!=="Revendedor"){window.location.replace("cuenta.html");return;}
+  const {data:orders,error:ordersError}=await db.from("game_orders").select("id,product_id,price_gvr,status,player_id,created_at,completed_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1000);
+  if(ordersError)throw ordersError;
+  const ids=[...new Set((orders||[]).map(o=>o.product_id).filter(Boolean))];
+  let products={};
+  if(ids.length){const {data:ps,error:pe}=await db.from("game_products").select("id,game,product_name").in("id",ids);if(!pe)for(const p of ps||[])products[p.id]=p;}
+  const completed=(orders||[]).filter(o=>o.status==="completed").length;
+  const level=nivelPara(completed);
+  $("rankIcon").textContent=level.icon;$("rankName").textContent=level.name;$("rankDiscount").textContent=level.discount+"%";$("discountMetric").textContent=level.discount+"%";$("completedCount").textContent=completed.toLocaleString("es-ES");
+  renderizarNiveles(completed,level);renderizarVentas(orders||[],products);renderizarClientes(orders||[]);
+  $("loading").hidden=true;$("dashboard").hidden=false;
+ }catch(error){console.error("Error al cargar Revender:",error);$("loading").className="empty error";$("loading").textContent="No se pudo cargar tu panel. Comprueba tu conexión e inténtalo de nuevo.";}
+}
+$("showLevels").addEventListener("click",()=>{const section=$("levelsSection");section.hidden=!section.hidden;$("showLevels").textContent=section.hidden?"Ver proceso para subir de nivel":"Ocultar proceso";if(!section.hidden)section.scrollIntoView({behavior:"smooth",block:"start"});});
+iniciar();
+</script>
+<script>
+(async function cargarNav(){
+ try{
+  const response=await fetch("./nav-inferior.html",{cache:"no-cache"});
+  if(!response.ok)return;
+  const html=await response.text();
+  const doc=new DOMParser().parseFromString(html,"text/html");
+  doc.querySelectorAll("style").forEach(old=>{const el=document.createElement("style");el.textContent=old.textContent;document.head.appendChild(el);});
+  doc.querySelectorAll("script").forEach(old=>{const el=document.createElement("script");if(old.src)el.src=old.src;else el.textContent=old.textContent;document.body.appendChild(el);});
+ }catch(e){console.warn("No se pudo cargar la navegación inferior.",e);}
+})();
+</script>
+</body>
+</html>
