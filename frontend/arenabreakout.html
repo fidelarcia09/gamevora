@@ -536,7 +536,7 @@ const l=productoSeleccionado.local;
 const {data:actual,error:rpcError}=await supabase.from("game_products").select("id,game,price_gvr,active,provider,provider_product_id").eq("id",l.id).eq("provider","nextlevel").eq("active",true).maybeSingle();
 if(rpcError)throw new Error("No se pudo verificar el producto antes de comprar.");
 if(!actual||normalizarTexto(actual.game)!=="arenabreakout"||String(actual.provider_product_id||"").trim()!==productId(productoSeleccionado.proveedor)||!Number.isFinite(Number(actual.price_gvr))||Number(actual.price_gvr)<=0)throw new Error("El producto o el precio cambió. Actualiza el catálogo antes de comprar.");
-const yes=await abrirModal(productoSeleccionado.proveedor,playerId,Number(actual.price_gvr));
+const precioFinal=await window.ggGetResellerDiscountedPrice(Number(actual.price_gvr));const yes=await abrirModal(productoSeleccionado.proveedor,playerId,precioFinal);
 if(!yes){mostrarEstado("Compra cancelada. No se creó ningún pedido.");return;}
 mostrarEstado("Creando pedido. No cierres esta página...");
 const {data:id,error}=await supabase.rpc("purchase_game_product",{p_product_id:actual.id,p_player_id:playerId});
@@ -982,7 +982,7 @@ if(botonComprarOferta)botonComprarOferta.disabled=true;
     <script src="./goldi-widget.js?v=20261023-2" defer></script>
 
 
-<script type="module" src="./reseller-product-discount.js?v=20261024-1"></script>
+<script type="module" src="./reseller-product-discount.js?v=20261024-2"></script>
 </body>
 </html>
 
