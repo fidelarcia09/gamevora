@@ -45,6 +45,21 @@
         visibility 0.32s ease;
 }
 
+/* MANTENER LOS CINCO ACCESOS EN UNA SOLA HILERA PARA REVENDEDORES */
+.gg-bottom-nav.gg-has-reseller {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.gg-bottom-nav.gg-has-reseller .gg-nav-item {
+    padding-left: 1px;
+    padding-right: 1px;
+    font-size: 9px;
+    letter-spacing: 0;
+}
+
 /* OCULTAR AL BAJAR */
 
 .gg-bottom-nav.gg-nav-hidden {
