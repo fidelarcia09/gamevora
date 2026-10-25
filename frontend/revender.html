@@ -30,46 +30,34 @@ h1{font-size:clamp(28px,6vw,38px);margin:0 0 8px;letter-spacing:-.8px}.sub{margi
 .sales-dropdown:not([open]) > summary .sales-chevron{transform:rotate(-45deg)}
 .sales-dropdown[open] > .list{margin-top:12px}
 
-/* Diseño inspirado en la referencia, adaptado a la identidad Gamers Gold */
-:root{--gold:#d8a83e;--gold-soft:#ffe5a0}
-body{background:radial-gradient(ellipse at 8% 0,rgba(8,124,255,.17),transparent 34%),radial-gradient(ellipse at 100% 15%,rgba(216,168,62,.07),transparent 26%),var(--bg)}
-header{padding:18px 0 16px;border-bottom-color:rgba(88,220,255,.2)}
-.brand{letter-spacing:.1px;text-transform:uppercase;font-size:15px}
-.brand span{color:var(--gold-soft);text-shadow:0 0 14px rgba(216,168,62,.18)}
-.back{border:1px solid rgba(88,220,255,.28);background:rgba(8,124,255,.08);padding:9px 12px;border-radius:10px}
-h1{background:linear-gradient(95deg,#f4f8ff 20%,#58dcff 72%,#ffe5a0);-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{max-width:620px}
-.hero{border-color:rgba(88,220,255,.35);background:linear-gradient(125deg,rgba(8,124,255,.2),rgba(11,22,40,.97) 58%,rgba(35,29,20,.48));box-shadow:0 14px 36px rgba(0,0,0,.16)}
-.rank-icon{background:linear-gradient(145deg,rgba(216,168,62,.12),rgba(8,124,255,.13));border-color:rgba(216,168,62,.38);box-shadow:inset 0 0 18px rgba(216,168,62,.04)}
-.discount{color:var(--gold-soft);text-shadow:0 0 18px rgba(216,168,62,.15)}
-.progress-track{height:9px;background:#14253a;border:1px solid rgba(88,220,255,.08)}
-.progress-fill{background:linear-gradient(90deg,#087cff 0%,#58dcff 68%,#ffe5a0 100%);box-shadow:0 0 14px rgba(88,220,255,.25)}
-.card{box-shadow:0 8px 24px rgba(0,0,0,.1);transition:border-color .18s ease,transform .18s ease}
-.card h2{color:#eaf7ff}
-.metric{color:#f4f8ff}
-.grid .card:first-child .metric{color:var(--cyan)}
-.grid .card:nth-child(2) .metric{color:var(--gold-soft)}
-.button{background:linear-gradient(110deg,#087cff,#075bb5);border-color:rgba(88,220,255,.55)}
-.button.secondary{background:linear-gradient(145deg,#0e1d32,#091426);border-color:rgba(88,220,255,.24)}
-.button:focus-visible,.back:focus-visible,.sales-dropdown summary:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
-.pill{border-color:rgba(216,168,62,.28);background:rgba(216,168,62,.08);color:var(--gold-soft)}
-.level{background:linear-gradient(160deg,#0b1729,#081222);border-color:rgba(44,75,107,.7)}
-.level.current{border-color:var(--cyan);box-shadow:inset 0 0 20px rgba(8,124,255,.12),0 0 16px rgba(8,124,255,.08)}
-.level.current strong{color:var(--gold-soft)}
-.row{background:linear-gradient(110deg,rgba(12,26,45,.92),rgba(8,18,33,.92));border-color:rgba(42,75,107,.62)}
-.row-title{color:#f4f8ff}
-.status{color:var(--green)}
-.status.pending{color:var(--gold-soft)}
-.empty{background:rgba(8,18,33,.42)}
-.note{color:#8298b2}
-@media(max-width:600px){
-  header{padding-top:16px}
-  .brand{font-size:13px}
-  .hero{border-radius:18px}
-  .grid .card{min-height:128px}
-  .metric{font-size:25px}
-}
 
+/* Diseño inspirado en la referencia con identidad Gamers Gold, sin dorado */
+:root{--gold:#58dcff;--gold-soft:#dff9ff}
+body{background:linear-gradient(180deg,#f2f6ff 0%,#e7efff 100%);color:#101a36;color-scheme:light}
+main{width:min(100% - 30px,900px)}
+header{padding:18px 0 16px;border-bottom:1px solid rgba(17,64,145,.12);margin-bottom:22px}
+.brand{font-size:16px;font-weight:900;color:#111b39;text-transform:uppercase;letter-spacing:.1px}.brand span{color:#087cff;text-shadow:none}
+.back{color:#064fc4;text-decoration:none;font-weight:800;font-size:13px;background:#fff;border:1px solid #d7e2f5;border-radius:12px;padding:9px 12px}
+h1{font-size:clamp(25px,6vw,34px);color:#101a36;letter-spacing:-.6px;margin:0 0 5px}.sub{color:#687594;max-width:650px}
+.hero{position:relative;overflow:hidden;padding:21px 20px 18px;border:1px solid rgba(8,124,255,.32);border-radius:24px;background:linear-gradient(125deg,#061b69 0%,#0759df 56%,#087cff 100%);box-shadow:0 14px 28px rgba(19,79,180,.18);margin:20px 0 15px;color:#fff}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 38%,rgba(88,220,255,.13) 38.2%,transparent 38.8%,transparent 58%,rgba(88,220,255,.1) 58.2%,transparent 58.8%);pointer-events:none}
+.hero-top,.progress-track,.progress-meta,.button-row{position:relative;z-index:1}
+.eyebrow{color:#c7ddff;font-size:11px;letter-spacing:1px}.rank-name{font-size:clamp(24px,5vw,30px);color:#fff}
+.rank-icon{width:58px;height:58px;border-radius:17px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.32)}.rank-icon svg{width:40px;height:40px}
+.discount{color:#fff;font-size:25px;text-shadow:none}.progress-track{height:8px;background:rgba(0,16,65,.4);margin-top:18px}
+.progress-fill{background:linear-gradient(90deg,#58dcff,#fff);box-shadow:0 0 12px rgba(88,220,255,.4)}.progress-meta{color:#d9e9ff}
+.button-row{grid-template-columns:1fr 1fr}
+.button{min-height:50px;border-radius:13px;background:linear-gradient(110deg,#087cff,#0758df);border:1px solid rgba(255,255,255,.6);box-shadow:0 7px 16px rgba(0,87,220,.17);color:white}
+.button.secondary{background:rgba(2,20,75,.38);border-color:rgba(255,255,255,.35);color:white;box-shadow:none}
+.grid{gap:12px;margin:15px 0}.card{background:rgba(255,255,255,.94);border:1px solid #e0e8f7;border-radius:18px;padding:17px;box-shadow:0 8px 20px rgba(35,72,135,.06)}
+.card h2{color:#596784;font-size:14px}.card p{color:#7885a0}.metric{color:#101a36;font-size:27px}.grid .card:first-child .metric,.grid .card:nth-child(2) .metric{color:#101a36}
+.section{margin:24px 0}.section h2{color:#101a36}.section-head{margin-bottom:12px}
+.pill{border:1px solid #d8e6ff;background:#edf4ff;color:#075bd6;border-radius:99px}
+.levels{grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.level{background:#fff;border:1px solid #dce5f5;opacity:1;border-radius:13px;padding:11px 5px;color:#253252}
+.level.current{border-color:#087cff;background:#f1f7ff;box-shadow:inset 0 0 0 1px rgba(8,124,255,.12)}.level.current strong{color:#075bd6}.level strong{color:#253252}.level small{color:#6e7b97}
+.row{background:#fff;border:1px solid #e0e8f7;border-radius:14px;box-shadow:0 4px 12px rgba(35,72,135,.04)}.row-title{color:#172342}.row-sub{color:#73809b}
+.empty{background:rgba(255,255,255,.75);border:1px dashed #cbd8ee;color:#72809d;border-radius:15px}.note{color:#7b87a0}.sales-dropdown .sales-chevron{border-color:#075bd6}
+@media(max-width:600px){main{width:calc(100% - 26px)}header{margin-bottom:19px}.brand{font-size:13px}.hero{padding:18px 15px 15px;border-radius:22px}.rank-name{font-size:23px}.discount{font-size:22px}.button-row{grid-template-columns:1fr}.grid{gap:10px}.card{padding:14px;min-height:125px}.metric{font-size:25px}.levels{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.level{padding:10px 4px}.level strong{font-size:10px}.level small{font-size:10px}.row{padding:12px}}
 </style>
 </head>
 <body>
@@ -94,6 +82,15 @@ h1{background:linear-gradient(95deg,#f4f8ff 20%,#58dcff 72%,#ffe5a0);-webkit-bac
 <article class="card"><h2>Recargas hechas</h2><div class="metric" id="completedCount">0</div><p>Solo cuentan las recargas completadas.</p></article>
 <article class="card"><h2>Descuento de tu nivel</h2><div class="metric" id="discountMetric">1%</div><p>El descuento mostrado corresponde a tu nivel actual.</p></article>
 </div>
+<section class="section">
+<div class="section-head"><h2>Tu negocio</h2><span class="pill">Revendedor</span></div>
+<div class="grid">
+<article class="card"><h2>Mis ventas</h2><p>Consulta la actividad e historial de tus pedidos.</p><button class="button secondary" type="button" data-scroll="salesDropdown" style="margin-top:13px">Ver mis ventas ›</button></article>
+<article class="card"><h2>Progreso de nivel</h2><p>Revisa los rangos y cuántas recargas necesitas para avanzar.</p><button class="button secondary" type="button" data-scroll="levelsSection" style="margin-top:13px">Ver niveles ›</button></article>
+<article class="card"><h2>Clientes frecuentes</h2><p>Encuentra los clientes con más recargas completadas.</p><button class="button secondary" type="button" data-scroll="clientsSection" style="margin-top:13px">Ver clientes ›</button></article>
+<article class="card"><h2>Nueva recarga</h2><p>Continúa a los juegos para realizar una recarga.</p><a class="button" href="juegos.html" style="margin-top:13px">Hacer una recarga ›</a></article>
+</div>
+</section>
 <section class="section" id="levelsSection" hidden>
 <div class="section-head"><h2>Proceso para subir de nivel</h2><span class="pill">Progreso acumulativo</span></div>
 <div class="levels" id="levelsList"></div>
@@ -103,7 +100,7 @@ h1{background:linear-gradient(95deg,#f4f8ff 20%,#58dcff 72%,#ffe5a0);-webkit-bac
 <summary class="section-head"><h2>Mis ventas</h2><span class="pill" id="salesCount">0 pedidos</span><span class="sales-chevron" aria-hidden="true"></span></summary>
 <div class="list" id="salesList"><div class="empty">Cargando tus ventas…</div></div>
 </details>
-<section class="section">
+<section class="section" id="clientsSection">
 <div class="section-head"><h2>Clientes frecuentes</h2><span class="pill">Top 5</span></div>
 <div class="list" id="clientsList"><div class="empty">Buscando clientes frecuentes…</div></div>
 </section>
@@ -128,15 +125,9 @@ function esc(value){return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp
 function fecha(value){if(!value)return "Fecha no disponible";return new Date(value).toLocaleString("es-ES",{dateStyle:"medium",timeStyle:"short"});}
 function estado(value){const v=String(value||"").toLowerCase();if(v==="completed")return "Completada";if(v==="pending")return "Pendiente";if(v==="failed")return "Fallida";if(v==="refunded")return "Reembolsada";return v||"Desconocido";}
 function emblemaSvg(name){
- const common='viewBox="0 0 64 64" role="img" aria-label="'+name+'" xmlns="http://www.w3.org/2000/svg"';
- const icons={
-  Bronce:'<svg '+common+'><defs><linearGradient id="brMetal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe0b3"/><stop offset=".35" stop-color="#c87b43"/><stop offset=".7" stop-color="#8b4727"/><stop offset="1" stop-color="#f1b878"/></linearGradient><linearGradient id="brInner" x1="0" y1="0" x2="0.9" y2="1"><stop stop-color="#482719"/><stop offset="1" stop-color="#a65b31"/></linearGradient></defs><path d="M32 3 52 12 59 30 48 51 32 61 16 51 5 30 12 12Z" fill="#26160f" stroke="url(#brMetal)" stroke-width="3"/><path d="M32 8 48 15 54 30 44 46 32 54 20 46 10 30 16 15Z" fill="url(#brInner)" stroke="#e6a16a" stroke-width="1.5"/><path d="m32 16 5.2 10.5 11.6 1.7-8.4 8.2 2 11.5L32 42.5l-10.4 5.4 2-11.5-8.4-8.2 11.6-1.7Z" fill="url(#brMetal)" stroke="#ffe2bb" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 18 9 30l7 13M50 18l5 12-7 13" fill="none" stroke="#f7c28c" stroke-width="2" opacity=".85"/><circle cx="32" cy="5" r="2" fill="#fff0d4"/></svg>',
-  Plata:'<svg '+common+'><defs><linearGradient id="agMetal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".25" stop-color="#c8d9e8"/><stop offset=".55" stop-color="#728ba4"/><stop offset=".8" stop-color="#e9f4ff"/><stop offset="1" stop-color="#8da5bb"/></linearGradient><linearGradient id="agInner" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#182e46"/><stop offset="1" stop-color="#43617e"/></linearGradient></defs><path d="M32 3 52 12 59 30 48 51 32 61 16 51 5 30 12 12Z" fill="#101e2c" stroke="url(#agMetal)" stroke-width="3"/><path d="M32 8 48 15 54 30 44 46 32 54 20 46 10 30 16 15Z" fill="url(#agInner)" stroke="#d7e7f6" stroke-width="1.5"/><path d="m32 15 5.5 11 12 1.8-8.7 8.5 2.1 12L32 42.6l-10.9 5.7 2.1-12-8.7-8.5 12-1.8Z" fill="url(#agMetal)" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><path d="m21 13 11 7 11-7M14 34l9 5m27-5-9 5" fill="none" stroke="#fff" stroke-width="1.5" opacity=".9"/><circle cx="32" cy="5" r="2" fill="#fff"/></svg>',
-  Oro:'<svg '+common+'><defs><linearGradient id="auMetal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff4b4"/><stop offset=".22" stop-color="#f9cf55"/><stop offset=".5" stop-color="#b97812"/><stop offset=".72" stop-color="#ffe78b"/><stop offset="1" stop-color="#d18a16"/></linearGradient><linearGradient id="auInner" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4b2c05"/><stop offset="1" stop-color="#9a5b08"/></linearGradient></defs><path d="M32 3 52 12 59 30 48 51 32 61 16 51 5 30 12 12Z" fill="#281804" stroke="url(#auMetal)" stroke-width="3"/><path d="M32 8 48 15 54 30 44 46 32 54 20 46 10 30 16 15Z" fill="url(#auInner)" stroke="#ffe68a" stroke-width="1.5"/><path d="m32 14 5.8 11.8 13 1.9-9.4 9.1 2.2 13L32 45.7l-11.6 6.1 2.2-13-9.4-9.1 13-1.9Z" fill="url(#auMetal)" stroke="#fff3bd" stroke-width="1.5" stroke-linejoin="round"/><path d="m19 14 13 7 13-7M13 32l10 6m28-6-10 6" fill="none" stroke="#fff7d3" stroke-width="1.6"/><circle cx="32" cy="5" r="2" fill="#fff9d8"/></svg>',
-  Diamante:'<svg '+common+'><defs><linearGradient id="diMetal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0ffff"/><stop offset=".25" stop-color="#8cf2ff"/><stop offset=".52" stop-color="#3285e8"/><stop offset=".76" stop-color="#c6fcff"/><stop offset="1" stop-color="#536bff"/></linearGradient><linearGradient id="diInner" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#082b5d"/><stop offset="1" stop-color="#1359a8"/></linearGradient></defs><path d="M32 3 52 12 59 30 48 51 32 61 16 51 5 30 12 12Z" fill="#06162c" stroke="url(#diMetal)" stroke-width="3"/><path d="M32 8 48 15 54 30 44 46 32 54 20 46 10 30 16 15Z" fill="url(#diInner)" stroke="#a6f6ff" stroke-width="1.5"/><path d="M19 19 32 13 45 19 49 29 32 49 15 29Z" fill="url(#diMetal)" stroke="#e8ffff" stroke-width="1.5" stroke-linejoin="round"/><path d="m19 19 13 30 13-30M15 29h34M25 16l-3 13 10 20 10-20-3-13" fill="none" stroke="#f2ffff" stroke-width="1.4"/><path d="m8 13 3 4m42-4-3 4M6 43l5-2m47 2-5-2" stroke="#8cf2ff" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="5" r="2" fill="#fff"/></svg>',
-  Leyenda:'<svg '+common+'><defs><linearGradient id="leMetal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff4c5"/><stop offset=".22" stop-color="#ffce59"/><stop offset=".48" stop-color="#c47a20"/><stop offset=".7" stop-color="#ffed9c"/><stop offset="1" stop-color="#9d3d64"/></linearGradient><linearGradient id="leInner" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#241038"/><stop offset=".55" stop-color="#52204f"/><stop offset="1" stop-color="#17214b"/></linearGradient></defs><path d="M32 3 52 12 59 30 48 51 32 61 16 51 5 30 12 12Z" fill="#160c27" stroke="url(#leMetal)" stroke-width="3"/><path d="M32 8 48 15 54 30 44 46 32 54 20 46 10 30 16 15Z" fill="url(#leInner)" stroke="#e5b9ff" stroke-width="1.5"/><path d="M14 24 12 13 24 20 32 8 40 20 52 13 50 24 46 43 32 51 18 43Z" fill="url(#leMetal)" stroke="#fff0bc" stroke-width="1.5" stroke-linejoin="round"/><path d="m22 29 10-6 10 6-3 12-7 4-7-4Z" fill="#28143c" stroke="#ffdf82" stroke-width="1.5"/><path d="m32 25 2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.5-.8Z" fill="#fff0ae" stroke="#ffcf5d" stroke-width="1"/><circle cx="12" cy="12" r="2.5" fill="#fff0bd"/><circle cx="32" cy="7" r="2.5" fill="#fff0bd"/><circle cx="52" cy="12" r="2.5" fill="#fff0bd"/></svg>'
- };
- return icons[name]||icons.Bronce;
+ const label=esc(name);
+ const symbol=name==="Bronce"?"M32 10 38 24 53 26 42 36 45 51 32 43 19 51 22 36 11 26 26 24Z":name==="Plata"?"M32 8 38 23 54 24 42 35 45 51 32 43 19 51 22 35 10 24 26 23Z":name==="Oro"?"M32 7 48 16 48 34 32 53 16 34 16 16Z":name==="Diamante"?"M12 23 22 12 42 12 52 23 32 53Z":"M32 7 39 19 53 21 43 32 45 47 32 40 19 47 21 32 11 21 25 19Z";
+ return '<svg viewBox="0 0 64 64" role="img" aria-label="'+label+'" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="rankBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset=".48" stop-color="#58dcff"/><stop offset="1" stop-color="#087cff"/></linearGradient></defs><path d="'+symbol+'" fill="url(#rankBlue)" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/><path d="M32 15v29M20 29h24" stroke="#0754bd" stroke-width="2" stroke-linecap="round" opacity=".8"/></svg>';
 }
 function nivelPara(total){let actual=LEVELS[0];for(const l of LEVELS){if(total>=l.min)actual=l;}return actual;}
 function siguienteNivel(total){return LEVELS.find(l=>l.min>total)||null;}
@@ -191,6 +182,7 @@ async function iniciar(){
   $("loading").hidden=true;$("dashboard").hidden=false;
  }catch(error){console.error("Error al cargar Revender:",error);$("loading").className="empty error";$("loading").textContent="No se pudo cargar tu panel. Comprueba tu conexión e inténtalo de nuevo.";}
 }
+document.querySelectorAll("[data-scroll]").forEach(button=>button.addEventListener("click",()=>{const target=$(button.dataset.scroll);if(target){target.hidden=false;target.scrollIntoView({behavior:"smooth",block:"start"});}}));
 $("showLevels").addEventListener("click",()=>{const section=$("levelsSection");section.hidden=!section.hidden;$("showLevels").textContent=section.hidden?"Ver proceso para subir de nivel":"Ocultar proceso";if(!section.hidden)section.scrollIntoView({behavior:"smooth",block:"start"});});
 iniciar();
 </script>
