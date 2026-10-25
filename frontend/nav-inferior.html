@@ -238,6 +238,10 @@ body.gg-nav-enabled {
         padding: 10px;
     }
 
+    .gg-bottom-nav.gg-has-reseller {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
     .gg-bottom-nav .gg-nav-item {
         font-size: 11px;
         padding: 10px 3px;
@@ -268,11 +272,14 @@ body.gg-nav-enabled {
     const isAccountPage = /\/cuenta\.html$/i.test(currentPath);
     const isOrdersPage = /\/pedidos\.html$/i.test(currentPath);
     const isWalletPage = /\/wallet\.html$/i.test(currentPath);
+    const isResellerPage = /\/revender\.html$/i.test(currentPath);
 
     let activeSection = "inicio";
 
     if (isOrdersPage) {
         activeSection = "pedidos";
+    } else if (isResellerPage) {
+        activeSection = "revender";
     } else if (isWalletPage) {
         activeSection = "wallet";
     } else if (isAccountPage) {
@@ -310,6 +317,12 @@ body.gg-nav-enabled {
             </svg>
         `,
 
+        revender: `
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z"/>
+                <path d="m8 12 2.5 2.5L16 9"/>
+            </svg>
+        `,
         perfil: `
             <svg viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="12" cy="8" r="3.5"/>
@@ -520,6 +533,9 @@ if (item.id === "perfil") {
         document.body.classList.add("gg-nav-enabled");
 
         nav.classList.remove("gg-nav-hidden");
+        agregarNavegacionRevender().catch(function (error) {
+            console.error("No se pudo verificar el acceso de Revender:", error);
+        });
 
         let lastScrollY = Math.max(
             0,
@@ -556,6 +572,76 @@ if (item.id === "perfil") {
                 ticking = true;
             }
         }, { passive: true });
+    }
+
+    async function agregarNavegacionRevender() {
+        const pagePrefixLocal = /\/frontend\//i.test(window.location.pathname) ? "" : "frontend/";
+        const loginHref = pagePrefixLocal + "login.html";
+        const resellerHref = pagePrefixLocal + "revender.html";
+        let supabase = window.ggNavSupabaseClient;
+
+        if (!window.supabase?.createClient) {
+            let script = document.querySelector("script[data-gg-supabase-sdk]");
+            if (!script) {
+                script = document.createElement("script");
+                script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+                script.dataset.ggSupabaseSdk = "true";
+                document.head.appendChild(script);
+            }
+            await new Promise(function (resolve, reject) {
+                if (window.supabase?.createClient) return resolve();
+                script.addEventListener("load", resolve, { once: true });
+                script.addEventListener("error", reject, { once: true });
+            });
+        }
+
+        if (!supabase) {
+            supabase = window.supabase.createClient(
+                "https://gsuhzcavghsiolmipnzi.supabase.co",
+                "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+            );
+            window.ggNavSupabaseClient = supabase;
+        }
+
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        if (authError || !authData?.user) {
+            if (isResellerPage) window.location.replace(loginHref);
+            return;
+        }
+
+        const { data: profile, error } = await supabase
+            .from("reseller_profiles")
+            .select("user_id")
+            .eq("user_id", authData.user.id)
+            .eq("active", true)
+            .maybeSingle();
+
+        if (error || !profile) {
+            if (isResellerPage) window.location.replace(pagePrefixLocal + "cuenta.html");
+            return;
+        }
+
+        if (!nav.querySelector('[data-gg-reseller-link="true"]')) {
+            const link = document.createElement("a");
+            link.className = "gg-nav-item";
+            link.href = resellerHref;
+            link.dataset.ggResellerLink = "true";
+            if (isResellerPage) {
+                link.classList.add("gg-active");
+                link.setAttribute("aria-current", "page");
+            }
+            const icon = document.createElement("span");
+            icon.className = "gg-nav-icon";
+            icon.innerHTML = icons.revender;
+            const label = document.createElement("span");
+            label.textContent = "Revender";
+            link.appendChild(icon);
+            link.appendChild(label);
+            const walletLink = nav.querySelector('a[href$="wallet.html"]');
+            if (walletLink) nav.insertBefore(link, walletLink);
+            else nav.appendChild(link);
+            nav.classList.add("gg-has-reseller");
+        }
     }
 
     if (document.readyState === "loading") {
