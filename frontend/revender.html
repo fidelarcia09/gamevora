@@ -70,6 +70,11 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 .business-copy small{font-size:12px;line-height:1.35;color:#9aadc4}
 .business-chevron{width:17px;height:17px;flex:0 0 17px;color:#20c5ff}
 @media(max-width:600px){.business-actions{gap:9px}.business-action{min-height:78px;gap:10px;padding:10px;border-radius:15px}.business-icon{width:42px;height:42px;flex-basis:42px}.business-icon svg{width:22px;height:22px}.business-copy strong{font-size:12px}.business-copy small{font-size:11px}.business-chevron{width:15px;height:15px;flex-basis:15px}}
+/* Ajuste de ancho del resumen de plan */
+.hero{max-width:720px;margin-left:auto;margin-right:auto}
+.hero .button-row{grid-template-columns:minmax(0,1fr);justify-content:start}
+.hero .button-row .action-button{width:auto;max-width:100%}
+@media(max-width:600px){.hero{width:100%;max-width:100%;padding:16px 13px 14px}.hero .progress-meta{font-size:11px;flex-wrap:wrap}.hero .button-row{margin-top:13px}}
 </style>
 </head>
 <body>
@@ -88,7 +93,7 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 </div>
 <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 <div class="progress-meta"><span id="progressText">0 recargas completadas</span><span id="nextLevelText">Siguiente nivel: Plata</span></div>
-<div class="button-row"><button class="button secondary action-button" id="showLevels" type="button"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver proceso para subir de nivel</button><a class="button" href="juegos.html"><svg class="button-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5v17M3.5 12h17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="9.2" stroke="currentColor" stroke-width="1.6" opacity=".8"/></svg>Nueva Recarga</a></div>
+<div class="button-row"><button class="button secondary action-button" id="showLevels" type="button"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver proceso para subir de nivel</button></div>
 </section>
 <div class="grid">
 <article class="card"><h2>Recargas hechas</h2><div class="metric" id="completedCount">0</div><p></p></article>
