@@ -222,6 +222,11 @@
         gap: 7px;
     }
 
+    /* Respetar el atributo hidden incluso cuando otra regla define display. */
+    [hidden] {
+        display: none !important;
+    }
+
     .perfil-etiqueta {
         display: inline-flex;
         align-items: center;
