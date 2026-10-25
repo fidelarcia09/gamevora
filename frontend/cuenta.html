@@ -179,6 +179,81 @@
         margin-bottom: 30px;
     }
 
+    /* TARJETA RESUMIDA DE PERFIL */
+    .perfil-resumen {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 15px;
+        margin-bottom: 26px;
+        border: 1px solid #173d63;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #0a1930, #061020);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, .18);
+    }
+
+    .perfil-resumen .avatar-contenedor {
+        flex: 0 0 90px;
+        margin: 0;
+    }
+
+    .perfil-resumen-info {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .perfil-resumen-info h1 {
+        margin: 0 0 9px;
+        text-align: left;
+        font-size: 20px;
+        overflow-wrap: anywhere;
+    }
+
+    .perfil-resumen-info .subtitulo {
+        margin: 9px 0 0;
+        text-align: left;
+        font-size: 12px;
+    }
+
+    .perfil-etiquetas {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+
+    .perfil-etiqueta {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 8px;
+        border: 1px solid #247342;
+        border-radius: 7px;
+        background: #143c2b;
+        color: #76e59a;
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .perfil-etiqueta.revendedor {
+        border-color: #1b72b9;
+        background: #0a2b4a;
+        color: #8bd5ff;
+    }
+
+    .perfil-etiqueta.no-verificado {
+        border-color: #8a6724;
+        background: #3a2b10;
+        color: #ffd477;
+    }
+
+    .perfil-rango {
+        margin-top: 7px;
+        color: #f5ce72;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
     /* DESPLEGABLES PRINCIPALES */
 
     .lista-opciones {
@@ -667,6 +742,22 @@
             flex-direction: column;
         }
 
+        .perfil-resumen {
+            gap: 10px;
+            padding: 14px 10px;
+        }
+
+        .perfil-resumen .avatar-contenedor {
+            flex-basis: 80px;
+            width: 80px;
+            transform: scale(.9);
+            transform-origin: left center;
+        }
+
+        .perfil-resumen-info h1 {
+            font-size: 18px;
+        }
+
         .contenido-acordeon {
             padding-left: 36px;
         }
@@ -706,46 +797,37 @@
 
     <main>
 
-        <!-- AVATAR CON BOTÓN DE CÁMARA -->
-
-        <div class="avatar-contenedor">
-            <div class="avatar">
-                <svg id="iconoAvatarPredeterminado" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="12" cy="8" r="4"></circle>
-                    <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
-                </svg>
-
-                <img id="fotoPerfil" alt="Foto de perfil">
+        <!-- TARJETA DE PERFIL -->
+        <section class="perfil-resumen" aria-label="Resumen del perfil">
+            <div class="avatar-contenedor">
+                <div class="avatar">
+                    <svg id="iconoAvatarPredeterminado" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="8" r="4"></circle>
+                        <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+                    </svg>
+                    <img id="fotoPerfil" alt="Foto de perfil">
+                </div>
+                <button type="button" id="botonCambiarFoto" class="avatar-camara"
+                    aria-label="Cambiar foto de perfil" title="Cambiar foto de perfil">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M14 4h-4L8 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-4z"></path>
+                        <circle cx="12" cy="13" r="3"></circle>
+                    </svg>
+                </button>
+                <input type="file" id="selectorFotoPerfil"
+                    accept="image/jpeg,image/png,image/webp" hidden>
             </div>
-
-            <button
-                type="button"
-                id="botonCambiarFoto"
-                class="avatar-camara"
-                aria-label="Cambiar foto de perfil"
-                title="Cambiar foto de perfil"
-            >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M14 4h-4L8 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-4z"></path>
-                    <circle cx="12" cy="13" r="3"></circle>
-                </svg>
-            </button>
-
-            <input
-                type="file"
-                id="selectorFotoPerfil"
-                accept="image/jpeg,image/png,image/webp"
-                hidden
-            >
-        </div>
-
+            <div class="perfil-resumen-info">
+                <h1 id="nombrePerfilResumen">Mi cuenta</h1>
+                <div class="perfil-etiquetas">
+                    <span id="etiquetaRevendedor" class="perfil-etiqueta revendedor" hidden>Revendedor</span>
+                    <span id="etiquetaVerificacion" class="perfil-etiqueta no-verificado">No verificado</span>
+                </div>
+                <div id="rangoPerfilResumen" class="perfil-rango" hidden></div>
+                <p class="subtitulo">Información de tu cuenta Gamers Gold Top-Up</p>
+            </div>
+        </section>
         <p id="estadoFotoPerfil" class="avatar-estado" role="status" aria-live="polite"></p>
-
-        <h1>Mi cuenta</h1>
-
-        <p class="subtitulo">
-            Información de tu cuenta Gamers Gold Top-Up
-        </p>
 
         <div class="lista-opciones">
 
@@ -1684,8 +1766,57 @@ async function cargarCuenta() {
     document.getElementById("nombreUsuario").textContent =
         usuario.user_metadata?.username || "Usuario";
 
+    // Actualizar la tarjeta resumida del perfil sin mostrar el correo.
+    const nombreVisible = usuario.user_metadata?.username ||
+        usuario.user_metadata?.full_name ||
+        usuario.user_metadata?.name ||
+        "Usuario";
+    document.getElementById("nombrePerfilResumen").textContent = nombreVisible;
+
+    const verificado = Boolean(usuario.email_confirmed_at || usuario.confirmed_at);
+    const etiquetaVerificacion = document.getElementById("etiquetaVerificacion");
+    etiquetaVerificacion.textContent = verificado ? "✓ Verificado" : "No verificado";
+    etiquetaVerificacion.classList.toggle("no-verificado", !verificado);
+
     // Cargar la foto guardada para este usuario.
     mostrarFotoPerfil(usuario.user_metadata?.avatar_url || "");
+
+    // El rol y el rango se muestran únicamente si el perfil de revendedor está activo.
+    try {
+        const { data: perfilRevendedor, error: errorPerfilRevendedor } =
+            await supabaseClient
+                .from("reseller_profiles")
+                .select("role,active")
+                .eq("user_id", usuario.id)
+                .eq("active", true)
+                .maybeSingle();
+
+        if (!errorPerfilRevendedor && perfilRevendedor?.active &&
+            perfilRevendedor.role === "Revendedor") {
+            document.getElementById("etiquetaRevendedor").hidden = false;
+
+            const { data: stats, error: errorStats } =
+                await supabaseClient.rpc("get_reseller_dashboard_stats");
+
+            if (!errorStats && stats) {
+                const datosStats = Array.isArray(stats) ? stats[0] : stats;
+                const total = Number(datosStats?.completed_count || 0);
+                const niveles = [
+                    { nombre: "Bronce", minimo: 0 },
+                    { nombre: "Plata", minimo: 25 },
+                    { nombre: "Oro", minimo: 75 },
+                    { nombre: "Diamante", minimo: 150 },
+                    { nombre: "Leyenda", minimo: 300 }
+                ];
+                const nivelActual = niveles.filter(n => total >= n.minimo).pop() || niveles[0];
+                const rango = document.getElementById("rangoPerfilResumen");
+                rango.textContent = "Rango: " + nivelActual.nombre;
+                rango.hidden = false;
+            }
+        }
+    } catch (error) {
+        console.warn("No se pudo cargar el rango del perfil:", error);
+    }
 
     const esAdmin = await comprobarAdministrador();
 
