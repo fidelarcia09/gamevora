@@ -53,7 +53,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
           card.appendChild(badge);
         }
       }
-      badge.textContent = "Tu descuento de revendedor: " + discount + "%";
+      const label = "Tu descuento de revendedor: " + discount + "%";
+      if (badge.textContent !== label) badge.textContent = label;
     });
   }
 
