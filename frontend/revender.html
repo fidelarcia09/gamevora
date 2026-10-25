@@ -70,11 +70,21 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 .business-copy small{font-size:12px;line-height:1.35;color:#9aadc4}
 .business-chevron{width:17px;height:17px;flex:0 0 17px;color:#20c5ff}
 @media(max-width:600px){.business-actions{gap:9px}.business-action{min-height:78px;gap:10px;padding:10px;border-radius:15px}.business-icon{width:42px;height:42px;flex-basis:42px}.business-icon svg{width:22px;height:22px}.business-copy strong{font-size:12px}.business-copy small{font-size:11px}.business-chevron{width:15px;height:15px;flex-basis:15px}}
-/* Ajuste de ancho del resumen de plan */
-.hero{max-width:720px;margin-left:auto;margin-right:auto}
-.hero .button-row{grid-template-columns:minmax(0,1fr);justify-content:start}
-.hero .button-row .action-button{width:auto;max-width:100%}
-@media(max-width:600px){.hero{width:100%;max-width:100%;padding:16px 13px 14px}.hero .progress-meta{font-size:11px;flex-wrap:wrap}.hero .button-row{margin-top:13px}}
+/* Resumen de plan ultra compacto, siguiendo la referencia */
+.hero{width:100%;max-width:590px;margin:16px auto 12px;padding:14px 15px 12px;border-radius:14px}
+.hero-top{gap:9px}
+.hero-top>div:first-child{gap:9px!important}
+.hero .rank-icon{width:42px;height:42px;flex:0 0 42px;border-radius:12px}
+.hero .rank-icon svg{width:31px;height:31px}
+.hero .eyebrow{font-size:9px;letter-spacing:.8px;margin-bottom:4px}
+.hero .rank-name{font-size:21px;line-height:1.1}
+.hero .discount{font-size:21px}
+.hero .progress-track{height:6px;margin-top:12px}
+.hero .progress-meta{margin-top:7px;font-size:10px;gap:5px}
+.hero .button-row{grid-template-columns:minmax(0,1fr);margin-top:10px;justify-content:start}
+.hero .button-row .action-button{width:auto;max-width:100%;min-height:34px;padding:7px 10px;font-size:11px;gap:7px;border-radius:7px}
+.hero .button-row .action-icon{width:14px;height:14px;flex-basis:14px}
+@media(max-width:600px){.hero{width:100%;max-width:100%;padding:13px 12px 11px;margin:14px auto 11px;border-radius:13px}.hero .rank-name{font-size:19px}.hero .discount{font-size:19px}.hero .progress-meta{font-size:9px;flex-wrap:wrap}.hero .button-row{margin-top:9px}.hero .button-row .action-button{min-height:32px;padding:7px 9px;font-size:10px}}
 </style>
 </head>
 <body>
