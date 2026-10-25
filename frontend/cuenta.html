@@ -1778,7 +1778,8 @@ async function cargarCuenta() {
         "Usuario";
     document.getElementById("nombrePerfilResumen").textContent = nombreVisible;
 
-    const verificado = Boolean(usuario.email_confirmed_at || usuario.confirmed_at);
+    // Solo considerar verificado si Supabase Auth confirma específicamente el correo.
+    const verificado = Boolean(usuario.email_confirmed_at);
     const etiquetaVerificacion = document.getElementById("etiquetaVerificacion");
     etiquetaVerificacion.textContent = verificado ? "✓ Verificado" : "No verificado";
     etiquetaVerificacion.classList.toggle("no-verificado", !verificado);
