@@ -14,7 +14,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:14px;pa
 .brand{font-size:18px;font-weight:900;letter-spacing:-.3px}.brand span{color:var(--cyan)}.back{color:var(--cyan);text-decoration:none;font-weight:700;font-size:13px}
 h1{font-size:clamp(28px,6vw,38px);margin:0 0 8px;letter-spacing:-.8px}.sub{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
 .hero{position:relative;overflow:hidden;padding:22px;border:1px solid rgba(88,220,255,.23);border-radius:20px;background:linear-gradient(130deg,rgba(8,124,255,.16),rgba(11,22,40,.96) 65%);margin:24px 0 16px}
-.hero-top{display:flex;align-items:center;justify-content:space-between;gap:14px}.rank-icon{width:54px;height:54px;display:grid;place-items:center;border-radius:16px;background:rgba(88,220,255,.1);border:1px solid rgba(88,220,255,.25);font-size:26px}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:14px}.rank-icon{width:54px;height:54px;display:grid;place-items:center;border-radius:16px;background:rgba(88,220,255,.1);border:1px solid rgba(88,220,255,.25)}.rank-icon svg{width:39px;height:39px;display:block}.level-emoji{height:34px;display:grid;place-items:center}.level-emoji svg{width:31px;height:31px;display:block}.button-icon{width:21px;height:21px;flex:0 0 21px;display:block}
 .eyebrow{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1.4px;font-weight:800;margin-bottom:7px}.rank-name{font-size:27px;font-weight:900}.discount{font-size:24px;font-weight:900;color:var(--green);white-space:nowrap}.progress-track{height:8px;background:#14253a;border-radius:99px;overflow:hidden;margin-top:20px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#087cff,#58dcff);border-radius:99px;transition:width .3s}
 .progress-meta{display:flex;justify-content:space-between;gap:12px;margin-top:9px;color:var(--muted);font-size:12px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:16px 0}.card{min-width:0;background:linear-gradient(150deg,rgba(14,29,50,.96),rgba(8,18,33,.96));border:1px solid var(--line);border-radius:16px;padding:17px}.card h2{font-size:15px;margin:0 0 7px}.card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}.metric{font-size:27px;font-weight:900;margin:10px 0 4px}.section{margin:25px 0}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.section h2{font-size:19px;margin:0}.pill{border:1px solid rgba(88,220,255,.25);background:rgba(8,124,255,.1);color:var(--cyan);border-radius:99px;padding:6px 10px;font-size:11px;font-weight:800}
@@ -35,12 +35,12 @@ h1{font-size:clamp(28px,6vw,38px);margin:0 0 8px;letter-spacing:-.8px}.sub{margi
 <div id="dashboard" hidden>
 <section class="hero">
 <div class="hero-top">
-<div style="display:flex;align-items:center;gap:13px"><div class="rank-icon" id="rankIcon">🥉</div><div><div class="eyebrow">Tu plan actual</div><div class="rank-name" id="rankName">Bronce</div></div></div>
+<div style="display:flex;align-items:center;gap:13px"><div class="rank-icon" id="rankIcon" aria-label="Emblema del nivel"></div><div><div class="eyebrow">Tu plan actual</div><div class="rank-name" id="rankName">Bronce</div></div></div>
 <div style="text-align:right"><div class="eyebrow">Tu descuento</div><div class="discount" id="rankDiscount">1%</div></div>
 </div>
 <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 <div class="progress-meta"><span id="progressText">0 recargas completadas</span><span id="nextLevelText">Siguiente nivel: Plata</span></div>
-<div class="button-row"><button class="button secondary" id="showLevels" type="button">Ver proceso para subir de nivel</button><a class="button" href="juegos.html">＋ Hacer una recarga</a></div>
+<div class="button-row"><button class="button secondary" id="showLevels" type="button">Ver proceso para subir de nivel</button><a class="button" href="juegos.html"><svg class="button-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5v17M3.5 12h17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="9.2" stroke="currentColor" stroke-width="1.6" opacity=".8"/></svg>Nueva Recarga</a></div>
 </section>
 <div class="grid">
 <article class="card"><h2>Recargas hechas</h2><div class="metric" id="completedCount">0</div><p>Solo cuentan las recargas completadas.</p></article>
@@ -69,16 +69,27 @@ const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const LEVELS = [
- {name:"Bronce",min:0,discount:1,icon:"🥉"},
- {name:"Plata",min:25,discount:2,icon:"🥈"},
- {name:"Oro",min:75,discount:3,icon:"🥇"},
- {name:"Diamante",min:150,discount:4,icon:"💎"},
- {name:"Leyenda",min:300,discount:5,icon:"👑"}
+ {name:"Bronce",min:0,discount:1},
+ {name:"Plata",min:25,discount:2},
+ {name:"Oro",min:75,discount:3},
+ {name:"Diamante",min:150,discount:4},
+ {name:"Leyenda",min:300,discount:5}
 ];
 const $ = id => document.getElementById(id);
 function esc(value){return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function fecha(value){if(!value)return "Fecha no disponible";return new Date(value).toLocaleString("es-ES",{dateStyle:"medium",timeStyle:"short"});}
 function estado(value){const v=String(value||"").toLowerCase();if(v==="completed")return "Completada";if(v==="pending")return "Pendiente";if(v==="failed")return "Fallida";if(v==="refunded")return "Reembolsada";return v||"Desconocido";}
+function emblemaSvg(name){
+ const common='viewBox="0 0 48 48" role="img" aria-label="'+name+'" xmlns="http://www.w3.org/2000/svg"';
+ const icons={
+  Bronce:'<svg '+common+'><defs><linearGradient id="bronzeG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4c18b"/><stop offset="1" stop-color="#8c4827"/></linearGradient></defs><path d="M24 3 39 11v17L24 45 9 28V11Z" fill="url(#bronzeG)" stroke="#ffd5a8" stroke-width="1.5"/><path d="m24 11 3.8 8 8.7 1.2-6.3 6.1 1.5 8.6-7.7-4.1-7.7 4.1 1.5-8.6-6.3-6.1 8.7-1.2Z" fill="#fff0d8" stroke="#8c4827" stroke-width="1.2"/></svg>',
+  Plata:'<svg '+common+'><defs><linearGradient id="silverG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".5" stop-color="#a9c4da"/><stop offset="1" stop-color="#617c98"/></linearGradient></defs><path d="M24 3 40 12v17L24 45 8 29V12Z" fill="url(#silverG)" stroke="#e9f5ff" stroke-width="1.5"/><path d="m24 11 3.8 8 8.7 1.2-6.3 6.1 1.5 8.6-7.7-4.1-7.7 4.1 1.5-8.6-6.3-6.1 8.7-1.2Z" fill="#f8fcff" stroke="#617c98" stroke-width="1.2"/></svg>',
+  Oro:'<svg '+common+'><defs><linearGradient id="goldG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0a2"/><stop offset=".48" stop-color="#f4bd36"/><stop offset="1" stop-color="#a96808"/></linearGradient></defs><path d="M24 3 40 12v17L24 45 8 29V12Z" fill="url(#goldG)" stroke="#fff0a2" stroke-width="1.5"/><path d="m24 11 3.8 8 8.7 1.2-6.3 6.1 1.5 8.6-7.7-4.1-7.7 4.1 1.5-8.6-6.3-6.1 8.7-1.2Z" fill="#fff9d7" stroke="#b7790c" stroke-width="1.2"/></svg>',
+  Diamante:'<svg '+common+'><defs><linearGradient id="diamondG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e7ffff"/><stop offset=".45" stop-color="#65e4ff"/><stop offset="1" stop-color="#3975ff"/></linearGradient></defs><path d="M24 3 42 18 24 45 6 18 14 7Z" fill="url(#diamondG)" stroke="#c8fbff" stroke-width="1.5"/><path d="m14 7 10 38L6 18M34 7 24 45l18-27M6 18h36M14 7h20" fill="none" stroke="#f2ffff" stroke-width="1.4" opacity=".9"/></svg>',
+  Leyenda:'<svg '+common+'><defs><linearGradient id="legendG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe9a6"/><stop offset=".5" stop-color="#ffb72e"/><stop offset="1" stop-color="#d45c12"/></linearGradient></defs><path d="M6 13 15 20 24 7 33 20 42 13 38 38H10Z" fill="url(#legendG)" stroke="#fff0b5" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 32h28M15 25l9 4 9-4" fill="none" stroke="#fff5d6" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="10" r="3" fill="#ffe9a6"/><circle cx="24" cy="5" r="3" fill="#ffe9a6"/><circle cx="42" cy="10" r="3" fill="#ffe9a6"/></svg>'
+ };
+ return icons[name]||icons.Bronce;
+}
 function nivelPara(total){let actual=LEVELS[0];for(const l of LEVELS){if(total>=l.min)actual=l;}return actual;}
 function siguienteNivel(total){return LEVELS.find(l=>l.min>total)||null;}
 function renderizarNiveles(total,actual){
@@ -126,7 +137,7 @@ async function iniciar(){
   if(ids.length){const {data:ps,error:pe}=await db.from("game_products").select("id,game,product_name").in("id",ids);if(!pe)for(const p of ps||[])products[p.id]=p;}
   const completed=Number(stats.completed_count||0);
   const level=nivelPara(completed);
-  $("rankIcon").textContent=level.icon;$("rankName").textContent=level.name;$("rankDiscount").textContent=level.discount+"%";$("discountMetric").textContent=level.discount+"%";$("completedCount").textContent=completed.toLocaleString("es-ES");
+  $("rankIcon").innerHTML=emblemaSvg(level.name);$("rankName").textContent=level.name;$("rankDiscount").textContent=level.discount+"%";$("discountMetric").textContent=level.discount+"%";$("completedCount").textContent=completed.toLocaleString("es-ES");
   renderizarNiveles(completed,level);renderizarVentas(orders,products);renderizarClientes(stats.top_clients||[]);
   $("salesCount").textContent=Number(stats.total_orders||0).toLocaleString("es-ES")+" pedidos";
   $("loading").hidden=true;$("dashboard").hidden=false;
