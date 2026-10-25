@@ -85,6 +85,82 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 .hero .button-row .action-button{width:auto;max-width:100%;min-height:34px;padding:7px 10px;font-size:11px;gap:7px;border-radius:7px}
 .hero .button-row .action-icon{width:14px;height:14px;flex-basis:14px}
 @media(max-width:600px){.hero{width:100%;max-width:100%;padding:13px 12px 11px;margin:14px auto 11px;border-radius:13px}.hero .rank-name{font-size:19px}.hero .discount{font-size:19px}.hero .progress-meta{font-size:9px;flex-wrap:wrap}.hero .button-row{margin-top:9px}.hero .button-row .action-button{min-height:32px;padding:7px 9px;font-size:10px}}
+
+/* Rangos y plan actual: acabado azul futurista inspirado en la referencia */
+.hero{
+  max-width:100%;
+  padding:22px 20px 17px;
+  border:1px solid rgba(91,177,255,.65);
+  border-radius:22px;
+  background:
+    radial-gradient(ellipse at 88% 105%,rgba(0,210,255,.42),transparent 27%),
+    radial-gradient(ellipse at 82% 12%,rgba(0,102,255,.65),transparent 38%),
+    linear-gradient(128deg,#061b65 0%,#073bc1 44%,#03144c 72%,#087fe8 100%);
+  box-shadow:0 12px 30px rgba(0,74,255,.22),inset 0 0 28px rgba(22,140,255,.2);
+}
+.hero:before{
+  background:
+    linear-gradient(132deg,transparent 0 28%,rgba(86,196,255,.24) 28.2%,transparent 28.8% 48%,rgba(116,220,255,.23) 48.2%,transparent 48.8%),
+    linear-gradient(48deg,transparent 0 61%,rgba(104,205,255,.22) 61.2%,transparent 61.8%),
+    repeating-linear-gradient(135deg,transparent 0 44px,rgba(75,167,255,.08) 45px 47px,transparent 48px 83px);
+  opacity:.95;
+}
+.hero .eyebrow,.hero .progress-meta{color:#d3e9ff}
+.hero .rank-name{color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.18)}
+.hero .discount{color:#fff;text-shadow:0 0 16px rgba(120,225,255,.45)}
+.hero .rank-icon{
+  border-radius:15px;
+  border:1px solid rgba(210,239,255,.7);
+  background:linear-gradient(145deg,rgba(255,255,255,.24),rgba(0,67,220,.42));
+  box-shadow:inset 0 0 15px rgba(255,255,255,.1),0 5px 15px rgba(0,0,0,.18);
+}
+.hero .progress-track{background:rgba(0,15,65,.65);border:1px solid rgba(180,220,255,.22)}
+.hero .progress-fill{background:linear-gradient(90deg,#58c7ff,#fff);box-shadow:0 0 12px rgba(112,220,255,.6)}
+.hero .button.secondary{background:rgba(0,24,91,.55);border-color:rgba(178,223,255,.42);color:#fff}
+.levels{max-width:100%;gap:9px}
+.level{
+  position:relative;overflow:hidden;
+  border-radius:16px;padding:13px 7px;
+  background:linear-gradient(150deg,rgba(11,31,74,.98),rgba(5,14,37,.98));
+  border:1px solid rgba(108,154,215,.35);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  opacity:.9;
+}
+.level:before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg,transparent 35%,rgba(255,255,255,.07) 35.3%,transparent 36%,transparent 62%,rgba(255,255,255,.05) 62.3%,transparent 63%);
+}
+.level>*{position:relative;z-index:1}
+.level .level-emoji{height:40px;margin-bottom:4px}
+.level .level-emoji svg{width:36px;height:36px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.25))}
+.level strong{font-size:12px;margin:6px 0;color:#fff}
+.level small{color:#c5d5ed}
+.level:nth-child(1){border-color:rgba(205,129,74,.55);background:linear-gradient(145deg,#4a281c,#17101a)}
+.level:nth-child(1) strong{color:#e9a778}
+.level:nth-child(2){border-color:rgba(204,220,240,.55);background:linear-gradient(145deg,#34465f,#121b2c)}
+.level:nth-child(2) strong{color:#dbe8f8}
+.level:nth-child(3){border-color:rgba(255,201,71,.62);background:linear-gradient(145deg,#5a4211,#171526)}
+.level:nth-child(3) strong{color:#ffd86a}
+.level:nth-child(4){border-color:rgba(91,201,255,.65);background:linear-gradient(145deg,#103e71,#10172e)}
+.level:nth-child(4) strong{color:#81dcff}
+.level:nth-child(5){border-color:rgba(255,203,84,.72);background:linear-gradient(145deg,#594012,#171529)}
+.level:nth-child(5) strong{color:#ffe08a}
+.level.current{
+  opacity:1;
+  border-color:#56caff;
+  background:linear-gradient(145deg,rgba(0,101,255,.42),rgba(5,23,68,.98));
+  box-shadow:inset 0 0 22px rgba(0,153,255,.18),0 0 0 1px rgba(86,202,255,.16),0 8px 18px rgba(0,91,255,.12);
+}
+.level.current strong{color:#fff}
+@media(max-width:600px){
+ .hero{padding:18px 15px 15px}
+ .levels{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .level{padding:11px 5px}
+ .level .level-emoji{height:36px}
+ .level .level-emoji svg{width:32px;height:32px}
+ .level strong{font-size:11px}
+}
+
 </style>
 </head>
 <body>
