@@ -733,8 +733,9 @@ async function crearCompra(accessToken, playerId) {
         throw new Error("Selecciona un paquete de UC.");
     }
 
+    const productoConDescuento = { ...productoSeleccionado, price_gvr: await window.ggGetResellerDiscountedPrice(Number(productoSeleccionado.price_gvr)) };
     const confirmado = await abrirModalConfirmacion(
-        productoSeleccionado,
+        productoConDescuento,
         playerId
     );
 
@@ -961,6 +962,6 @@ iniciar();
     <script src="./goldi-widget.js?v=20261023-2" defer></script>
 
 
-<script type="module" src="./reseller-product-discount.js?v=20261024-1"></script>
+<script type="module" src="./reseller-product-discount.js?v=20261024-2"></script>
 </body>
     </html>
