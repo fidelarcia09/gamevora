@@ -49,7 +49,7 @@ h1{font-size:clamp(28px,6vw,38px);margin:0 0 8px;letter-spacing:-.8px}.sub{margi
 <section class="section" id="levelsSection" hidden>
 <div class="section-head"><h2>Proceso para subir de nivel</h2><span class="pill">Progreso acumulativo</span></div>
 <div class="levels" id="levelsList"></div>
-<p class="note">Las recargas pendientes o canceladas no cuentan. Los niveles se calculan usando las recargas completadas asociadas a tu cuenta.</p>
+<p class="note">Las recargas pendientes o canceladas no cuentan. Solo cuentan las recargas creadas desde que recibiste el rol de Revendedor; las anteriores no cuentan para tus niveles.</p>
 </section>
 <section class="section">
 <div class="section-head"><h2>Mis ventas</h2><span class="pill" id="salesCount">0 pedidos</span></div>
@@ -121,10 +121,10 @@ async function iniciar(){
  try{
   const {data:{user},error:authError}=await db.auth.getUser();
   if(authError||!user){window.location.replace("login.html");return;}
-  const {data:profile,error:profileError}=await db.from("reseller_profiles").select("user_id,role,active").eq("user_id",user.id).eq("active",true).maybeSingle();
+  const {data:profile,error:profileError}=await db.from("reseller_profiles").select("user_id,role,active,created_at").eq("user_id",user.id).eq("active",true).maybeSingle();
   if(profileError||!profile||profile.role!=="Revendedor"){window.location.replace("cuenta.html");return;}
   const [ordersResult,statsResult]=await Promise.all([
-   db.from("game_orders").select("id,product_id,price_gvr,status,player_id,created_at,completed_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1000),
+   db.from("game_orders").select("id,product_id,price_gvr,status,player_id,created_at,completed_at").eq("user_id",user.id).gte("created_at",profile.created_at).order("created_at",{ascending:false}).limit(1000),
    db.rpc("get_reseller_dashboard_stats")
   ]);
   if(ordersResult.error)throw ordersResult.error;
