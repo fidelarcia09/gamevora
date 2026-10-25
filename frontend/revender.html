@@ -59,11 +59,17 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 .empty{background:rgba(10,20,38,.75);border:1px dashed #29415a;color:#9aadc4;border-radius:13px}.note{color:#647b96}.sales-dropdown .sales-chevron{border-color:#20c5ff}
 @media(max-width:600px){main{width:calc(100% - 26px)}header{margin-bottom:19px}.brand{font-size:13px}.hero{padding:18px 15px 15px;border-radius:20px}.rank-name{font-size:23px}.discount{font-size:22px}.button-row{grid-template-columns:1fr}.grid{gap:10px}.card{padding:14px;min-height:125px}.metric{font-size:25px}.levels{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.level{padding:10px 4px}.level strong{font-size:10px}.level small{font-size:10px}.row{padding:12px}}
 
-/* Botones compactos, rectangulares e iconos SVG */
-.action-button{display:inline-flex;width:auto;max-width:100%;min-height:42px;align-self:flex-start;justify-content:flex-start;gap:9px;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.25;white-space:normal;text-align:left}
-.action-button .action-icon{display:block;width:17px;height:17px;flex:0 0 17px}
-.card .action-button{margin-top:13px}
-@media(max-width:600px){.action-button{min-height:40px;padding:9px 12px;font-size:12px;gap:8px}.card .action-button{margin-top:11px}}
+/* Accesos del negocio inspirados en las tarjetas de la referencia */
+.business-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.business-action{min-width:0;min-height:82px;display:flex;align-items:center;gap:13px;padding:13px 15px;border:1px solid rgba(105,158,215,.17);border-radius:16px;background:linear-gradient(145deg,#0d1b31,#091426);color:#f4f8ff;text-decoration:none;text-align:left;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.12);font:inherit}
+.business-action:hover{border-color:rgba(32,197,255,.5);background:linear-gradient(145deg,#102746,#0a172a)}
+.business-icon{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#087cff,#123bd7);border:1px solid rgba(255,255,255,.3);box-shadow:0 4px 12px rgba(0,91,255,.3);color:#fff}
+.business-icon svg{width:25px;height:25px;display:block}
+.business-copy{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1}
+.business-copy strong{font-size:14px;line-height:1.25;font-weight:800;overflow-wrap:anywhere}
+.business-copy small{font-size:12px;line-height:1.35;color:#9aadc4}
+.business-chevron{width:17px;height:17px;flex:0 0 17px;color:#20c5ff}
+@media(max-width:600px){.business-actions{gap:9px}.business-action{min-height:78px;gap:10px;padding:10px;border-radius:15px}.business-icon{width:42px;height:42px;flex-basis:42px}.business-icon svg{width:22px;height:22px}.business-copy strong{font-size:12px}.business-copy small{font-size:11px}.business-chevron{width:15px;height:15px;flex-basis:15px}}
 </style>
 </head>
 <body>
@@ -90,11 +96,11 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 </div>
 <section class="section">
 <div class="section-head"><h2>Tu negocio</h2><span class="pill">Revendedor</span></div>
-<div class="grid">
-<article class="card"><h2>Mis ventas</h2><p></p><button class="button secondary action-button" type="button" data-scroll="salesDropdown" style="margin-top:13px"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver mis ventas</button></article>
-<article class="card"><h2>Progreso de nivel</h2><p></p><button class="button secondary action-button" type="button" data-scroll="levelsSection" style="margin-top:13px"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 19 6v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6zM9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver niveles</button></article>
-<article class="card"><h2>Clientes frecuentes</h2><p></p><button class="button secondary action-button" type="button" data-scroll="clientsSection" style="margin-top:13px"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20m6-9a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm5-6.5a3.5 3.5 0 0 1 0 6.8M17 15h.5a3.5 3.5 0 0 1 3.5 3.5V20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver clientes</button></article>
-<article class="card"><h2>Nueva recarga</h2><p></p><a class="button action-button" href="juegos.html" style="margin-top:13px"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Hacer una recarga</a></article>
+<div class="business-actions">
+<button class="business-action" type="button" data-scroll="salesDropdown"><span class="business-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3 17 6-6 4 3 8-9M15 5h6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="business-copy"><strong>Mis ventas</strong><small>Actividad e historial</small></span><svg class="business-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<button class="business-action" type="button" data-scroll="levelsSection"><span class="business-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 19 6v5c0 4.5-3 7.5-7 10-4-2.5-7-5.5-7-10V6zM9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="business-copy"><strong>Progreso de nivel</strong><small>Revisa tus rangos</small></span><svg class="business-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<button class="business-action" type="button" data-scroll="clientsSection"><span class="business-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20m6-9a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm5-6.5a3.5 3.5 0 0 1 0 6.8M17 15h.5a3.5 3.5 0 0 1 3.5 3.5V20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="business-copy"><strong>Clientes frecuentes</strong><small>Tus clientes principales</small></span><svg class="business-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<a class="business-action" href="juegos.html"><span class="business-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="business-copy"><strong>Hacer una recarga</strong><small>Ir a los juegos disponibles</small></span><svg class="business-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 </div>
 </section>
 <section class="section" id="levelsSection" hidden>
