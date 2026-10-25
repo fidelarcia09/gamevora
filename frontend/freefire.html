@@ -2025,7 +2025,7 @@ async function crearCompra(accessToken, playerId) {
         );
     }
 
-    const precioConfirmado = Number(productoActual.price_gvr);
+    const precioConfirmado = await window.ggGetResellerDiscountedPrice(Number(productoActual.price_gvr));
 
     const confirmar = await abrirModalConfirmacion(
         productoSeleccionado.proveedor,
@@ -2207,7 +2207,7 @@ iniciar();
     <script src="./goldi-widget.js?v=20261023-16" defer></script>
 
 
-<script type="module" src="./reseller-product-discount.js?v=20261024-1"></script>
+<script type="module" src="./reseller-product-discount.js?v=20261024-2"></script>
 </body>
     </html>
 
