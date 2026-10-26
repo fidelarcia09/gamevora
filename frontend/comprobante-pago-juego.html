@@ -36,10 +36,10 @@ async function init(){
  const {data,error}=await supabase.auth.getSession(); user=data?.session?.user;
  if(error||!user){message("Inicia sesión con la cuenta que creó este pedido y vuelve a abrir el enlace.","error");$("send").disabled=true;return}
  $("order").textContent=orderId;
- const {data:payment,error:payError}=await supabase.from("manual_game_payments").select("status,proof_path,payment_method,amount,game_order_id").eq("game_order_id",orderId).maybeSingle();
+ const {data:payment,error:payError}=await supabase.from("manual_game_payments").select("status,proof_path,payment_method,payment_amount,payment_currency,game_order_id").eq("game_order_id",orderId).maybeSingle();
  if(payError||!payment){message("No pudimos verificar este pedido. Comprueba que has iniciado sesión con la cuenta correcta.","error");$("send").disabled=true;return}
  $("method").textContent=methodLabel(payment.payment_method);
- $("amount").textContent=payment.payment_method==="USDT"?Number(payment.amount).toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" USDT":Number(payment.amount).toLocaleString("es-ES")+" CUP";
+ $("amount").textContent=payment.payment_method==="USDT"?Number(payment.payment_amount).toLocaleString("es-ES",{minimumFractionDigits:payment.payment_currency==="USDT"?2:0,maximumFractionDigits:payment.payment_currency==="USDT"?2:0})+" "+(payment.payment_currency==="SALDO_MOVIL"?"CUP de saldo móvil":payment.payment_currency);
  const info=$("instructions");
  if(payment.payment_method==="USDT") info.innerHTML='Envía USDT únicamente por la red <b>BNB Smart Chain (BEP20)</b>.<br><br>Dirección receptora:<div class="address">0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C</div><button id="copyAddress" type="button" style="margin-top:10px">Copiar dirección USDT</button>';
  else if(payment.payment_method==="SALDO_MOVIL") info.innerHTML='Envía el importe indicado al número de saldo móvil cubano:<div class="address">63638032</div><button id="copyPhone" type="button" style="margin-top:10px">Copiar número</button>';
