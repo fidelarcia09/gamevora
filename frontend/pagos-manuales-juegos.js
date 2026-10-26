@@ -25,12 +25,16 @@ function iniciar(){
  panel.innerHTML='<div class="gg-titulo">Método de pago</div><div class="gg-opciones" role="group" aria-label="Método de pago"><button type="button" class="gg-opcion" data-metodo="CUP" disabled>CUP</button><button type="button" class="gg-opcion" data-metodo="USDT">₮ USDT</button><button type="button" class="gg-opcion" data-metodo="GVR">◆ GVR</button><button type="button" class="gg-opcion" data-metodo="SALDO_MOVIL">▣ Saldo móvil</button></div><input id="ggMetodoPago" type="hidden" value="GVR">';
  const playerField=document.getElementById("idjugador")||document.getElementById("idJugador");
  const playerLabel=playerField?document.querySelector('label[for="'+playerField.id+'"]'):null;
- const anchor=playerField?.closest(".campo, .form-group, .formulario-campo")||playerField;
- const afterAnchor=anchor?.nextElementSibling;
- const nextSection=document.querySelector(".selector-categorias, #catalogo, #catalogoProductos, #botonContinuar");
- if(afterAnchor && (afterAnchor.classList.contains("ayuda")||afterAnchor.classList.contains("hint"))){afterAnchor.insertAdjacentElement("afterend",panel);}
- else if(nextSection) nextSection.insertAdjacentElement("beforebegin",panel);
- else (playerField?.parentNode||boton.parentNode).insertBefore(panel,playerField?.nextSibling||boton);
+ const playerCard=playerField?.closest(".player-id-card, .player-card, .campo, .form-group, .formulario-campo")||playerField?.parentElement;
+ if(playerCard && playerField){
+  playerCard.insertAdjacentElement("afterend",panel);
+ }else{
+  const region=document.querySelector(".selector-region, #region, .region-selector");
+  const nextSection=document.querySelector(".selector-categorias, #catalogo, #catalogoProductos");
+  if(region) region.insertAdjacentElement("afterend",panel);
+  else if(nextSection) nextSection.insertAdjacentElement("beforebegin",panel);
+  else (playerField?.parentNode||boton.parentNode).insertBefore(panel,playerField?.nextSibling||boton);
+ }
  const select=panel.querySelector("#ggMetodoPago");
  panel.querySelectorAll("[data-metodo]").forEach(btn=>btn.addEventListener("click",()=>{select.value=btn.dataset.metodo;panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b===btn));pintar();actualizarImporte();}));
  panel.querySelector('[data-metodo="GVR"]').classList.add("activo");
