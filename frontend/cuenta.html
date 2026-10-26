@@ -1842,7 +1842,7 @@ async function cargarCuenta() {
         const { data: perfilRevendedor, error: errorPerfilRevendedor } =
             await supabaseClient
                 .from("reseller_profiles")
-                .select("role,active")
+                .select("role,active,rank_override")
                 .eq("user_id", usuario.id)
                 .eq("active", true)
                 .maybeSingle();
@@ -1864,7 +1864,8 @@ async function cargarCuenta() {
                     { nombre: "Diamante", minimo: 150 },
                     { nombre: "Leyenda", minimo: 300 }
                 ];
-                const nivelActual = niveles.filter(n => total >= n.minimo).pop() || niveles[0];
+                const nivelCalculado = niveles.filter(n => total >= n.minimo).pop() || niveles[0];
+                const nivelActual = niveles.find(n => n.nombre === perfilRevendedor.rank_override) || nivelCalculado;
                 rangoPerfil.innerHTML = emblemaSvgPerfil(nivelActual.nombre) +
                     "<span>" + nivelActual.nombre + "</span>";
                 rangoPerfil.setAttribute("aria-label", "Rango de revendedor: " + nivelActual.nombre);
