@@ -47,7 +47,7 @@ function iniciar(){
  let tarifasCache=null, productosCache=null, cargandoTarifas=null;
  const preciosGVRPorNombre=new Map();
  function claveTarjeta(card){return normalizarNombre(card.querySelector(".producto-nombre")?.textContent);}
- function guardarPrecioGVR(card,price){const key=claveTarjeta(card);const value=String(price?.textContent||"").trim();if(key&&value&&!/^(cargando tarifa|tarifa pendiente)/i.test(value)){preciosGVRPorNombre.set(key,value);price.dataset.ggOriginalPrice=value;}}
+ function precioGVRValido(value){const text=String(value||"").trim();return !!text&&!/^(cargando tarifa|tarifa pendiente)/i.test(text)&&!/(^|\\s)NaN(\\s|$)/i.test(text)&&!/^undefined(?:\\s|$)/i.test(text);}\n function guardarPrecioGVR(card,price){const key=claveTarjeta(card);const value=String(price?.textContent||"").trim();if(key&&precioGVRValido(value)){preciosGVRPorNombre.set(key,value);price.dataset.ggOriginalPrice=value;}else if(price?.dataset.ggOriginalPrice&&!precioGVRValido(price.dataset.ggOriginalPrice)){delete price.dataset.ggOriginalPrice;}}
  const clientePago=import("https://esm.sh/@supabase/supabase-js@2").then(({createClient})=>createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}));
  function normalizarNombre(valor){return String(valor||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();}
  async function cargarTarifas(){
@@ -96,7 +96,7 @@ function iniciar(){
     else guardarPrecioGVR(card,price);
     price.dataset.ggManualMethod="";
    }else{
-    if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod)guardarPrecioGVR(card,price);
+    if(!precioGVRValido(price.dataset.ggOriginalPrice))delete price.dataset.ggOriginalPrice;\n    if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod)guardarPrecioGVR(card,price);
     price.textContent="Cargando tarifa…";
     price.dataset.ggManualMethod=method;
    }
@@ -110,7 +110,7 @@ function iniciar(){
    currentCards.forEach(card=>{
     const price=card.querySelector(".producto-precio, .precio-oferta");
     if(!price)return;
-    if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod)price.dataset.ggOriginalPrice=price.textContent;
+    if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod && precioGVRValido(price.textContent))guardarPrecioGVR(card,price);
     const product=productoParaTarjeta(card);
     const row=product&&tarifasCache.get(product.id+"|"+method);
     price.textContent=row?formatoTarifa(row,method):"Tarifa pendiente";
