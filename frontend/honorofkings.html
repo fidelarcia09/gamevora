@@ -366,7 +366,7 @@ function renderizarTokens() {
     const local = buscarLocalPorId(id);
     const comprable = producto.available === true && productoComprable(local);
     const tarjeta = document.createElement("button");
-    tarjeta.type = "button"; tarjeta.className = "producto";
+    tarjeta.type = "button"; tarjeta.className = "producto"; if (local?.id) tarjeta.dataset.ggProductId = String(local.id);
     tarjeta.disabled = !comprable;
     if (!comprable) tarjeta.classList.add("producto-no-disponible");
     const nombre = document.createElement("div"); nombre.className = "producto-nombre"; nombre.textContent = obtenerNombre(producto);
@@ -394,7 +394,7 @@ function renderizarOfertas() {
     const local = buscarLocalPorId(idProveedor);
     const comprable = !!proveedor && proveedor.available === true && productoComprable(local);
     const tarjeta = document.createElement("button");
-    tarjeta.type = "button"; tarjeta.className = "producto producto-oferta";
+    tarjeta.type = "button"; tarjeta.className = "producto producto-oferta"; if (local?.id) tarjeta.dataset.ggProductId = String(local.id);
     tarjeta.disabled = !comprable;
     if (!comprable) tarjeta.classList.add("producto-no-disponible");
     const icono = document.createElement("div"); icono.className = "oferta-icono"; icono.textContent = oferta.icono;
