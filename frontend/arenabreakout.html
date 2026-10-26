@@ -338,7 +338,7 @@ function productId(p){return String(p?.productId||p?.product_id||p?.id||"").trim
 function nombre(p){
 return String(p?.nombreMostrar||p?.name||p?.productName||p?.product_name||p?.title||productId(p)||"Producto Arena Breakout").trim();
 }
-function precioGVR(n){return Number(n).toLocaleString("es-ES")+" GVR";}
+function precioGVR(n){return Number(n).toLocaleString("es-ES",{maximumFractionDigits:4})+" GVR";}
 function localDe(p){
 return productosLocales.find(x=>String(x.provider_product_id||"").trim()===productId(p))||null;
 }
@@ -615,7 +615,7 @@ let errorCargaOfertas=false;
 function normalizarOferta(texto){
 return String(texto||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[\s_-]/g,"");
 }
-function formatoPrecioOferta(valor){return Number(valor).toLocaleString("es-ES")+" GVR";}
+function formatoPrecioOferta(valor){return Number(valor).toLocaleString("es-ES",{maximumFractionDigits:4})+" GVR";}
 function configuracionOfertaPorNombre(nombre){
 const ofertas=window.CONFIG_OFERTAS?.ofertas||[];
 const n=normalizarOferta(nombre);
@@ -982,7 +982,7 @@ if(botonComprarOferta)botonComprarOferta.disabled=true;
     <script src="./goldi-widget.js?v=20261023-2" defer></script>
 
 
-<script type="module" src="./reseller-product-discount.js?v=20261025-1"></script>
+<script type="module" src="./reseller-product-discount.js?v=20261025-2"></script>
 </body>
 </html>
 
