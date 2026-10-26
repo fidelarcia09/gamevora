@@ -197,6 +197,16 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  .hero:before{right:-13%;top:47%;width:55%}
 }
 
+
+/* Insignias de rango premium con borde metálico y relieve */
+.level{position:relative;overflow:hidden;background:linear-gradient(150deg,#10213a,#070f20 78%);border-color:rgba(111,169,224,.25);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 5px 0 rgba(0,0,0,.28),0 9px 16px rgba(0,0,0,.2);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.level:before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);opacity:.65}
+.level .level-emoji{height:54px;position:relative;filter:drop-shadow(0 4px 3px rgba(0,0,0,.5))}
+.level .level-emoji svg{width:49px;height:49px;filter:drop-shadow(0 0 7px rgba(64,185,255,.22))}
+.level strong{font-size:11px;letter-spacing:.2px}
+.level.current{transform:translateY(-3px);border-color:#75eaff;background:linear-gradient(150deg,rgba(18,99,169,.48),rgba(8,18,33,.98));box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),inset 0 0 22px rgba(32,197,255,.17),0 7px 0 rgba(0,0,0,.35),0 12px 22px rgba(0,124,255,.24)}
+@media(max-width:600px){.level .level-emoji{height:45px}.level .level-emoji svg{width:42px;height:42px}.level strong{font-size:10px}}
+
 </style>
 </head>
 <body>
@@ -265,8 +275,25 @@ function fecha(value){if(!value)return "Fecha no disponible";return new Date(val
 function estado(value){const v=String(value||"").toLowerCase();if(v==="completed")return "Completada";if(v==="pending")return "Pendiente";if(v==="failed")return "Fallida";if(v==="refunded")return "Reembolsada";return v||"Desconocido";}
 function emblemaSvg(name){
  const label=esc(name);
- const symbol=name==="Bronce"?"M32 10 38 24 53 26 42 36 45 51 32 43 19 51 22 36 11 26 26 24Z":name==="Plata"?"M32 8 38 23 54 24 42 35 45 51 32 43 19 51 22 35 10 24 26 23Z":name==="Oro"?"M32 7 48 16 48 34 32 53 16 34 16 16Z":name==="Diamante"?"M12 23 22 12 42 12 52 23 32 53Z":"M32 7 39 19 53 21 43 32 45 47 32 40 19 47 21 32 11 21 25 19Z";
- return '<svg viewBox="0 0 64 64" role="img" aria-label="'+label+'" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="rankBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset=".48" stop-color="#58dcff"/><stop offset="1" stop-color="#087cff"/></linearGradient></defs><path d="'+symbol+'" fill="url(#rankBlue)" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/><path d="M32 15v29M20 29h24" stroke="#0754bd" stroke-width="2" stroke-linecap="round" opacity=".8"/></svg>';
+ const themes={
+  Bronce:{a:"#fff0c2",b:"#d99545",c:"#713b1e",d:"#ffcc78"},
+  Plata:{a:"#ffffff",b:"#b9d4e8",c:"#536c8c",d:"#e5f6ff"},
+  Oro:{a:"#fffbd0",b:"#ffc928",c:"#a85b00",d:"#fff1a0"},
+  Diamante:{a:"#ffffff",b:"#57e8ff",c:"#1764e8",d:"#b8fbff"},
+  Leyenda:{a:"#fff2ff",b:"#d77bff",c:"#6424bf",d:"#ffcbfb"}
+ };
+ const t=themes[name]||themes.Bronce;
+ const id="rank"+({Bronce:"Bronce",Plata:"Plata",Oro:"Oro",Diamante:"Diamante",Leyenda:"Leyenda"}[name]||"Base");
+ const crest=name==="Diamante"
+  ?'<path d="M32 13 45 24 39 43 32 49 25 43 19 24Z" fill="url(#'+id+'Gem)" stroke="#fff" stroke-opacity=".9" stroke-width="1.4"/><path d="m19 24 13 5 13-5M32 29v20M25 43l7-14 7 14" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.5"/>'
+  :name==="Leyenda"
+  ?'<path d="M19 39 15 21 25 27 32 15 39 27 49 21 45 39Z" fill="url(#'+id+'Gem)" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><path d="M20 43h24M24 47h16" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="15" cy="19" r="2.5" fill="#fff"/><circle cx="32" cy="13" r="2.5" fill="#fff"/><circle cx="49" cy="19" r="2.5" fill="#fff"/>'
+  :name==="Oro"
+  ?'<path d="m32 13 5 10 11 1-8 8 2 12-10-5-10 5 2-12-8-8 11-1Z" fill="url(#'+id+'Gem)" stroke="#fff4b0" stroke-width="1.6" stroke-linejoin="round"/><path d="m32 20 2.5 6 6.5.5-5 4.5 1.5 6-5.5-3-5.5 3 1.5-6-5-4.5 6.5-.5Z" fill="#fff5c5" opacity=".85"/>'
+  :name==="Plata"
+  ?'<path d="M32 12 45 19 45 34 32 47 19 34 19 19Z" fill="url(#'+id+'Gem)" stroke="#fff" stroke-width="1.5"/><path d="m32 17 8 5v10l-8 8-8-8V22Z" fill="none" stroke="#fff" stroke-width="1.4" opacity=".9"/><path d="M32 17v23M24 22l16 10M40 22 24 32" stroke="#fff" stroke-width="1.1" opacity=".75"/>'
+  :'<path d="M18 27 22 17 29 23 32 13 35 23 42 17 46 27 42 42 32 48 22 42Z" fill="url(#'+id+'Gem)" stroke="#ffe1ad" stroke-width="1.5" stroke-linejoin="round"/><path d="m22 29 10 5 10-5M32 34v10" stroke="#fff4d6" stroke-width="1.5" fill="none"/><circle cx="22" cy="16" r="2" fill="#fff4d6"/><circle cx="32" cy="12" r="2" fill="#fff4d6"/><circle cx="42" cy="16" r="2" fill="#fff4d6"/>';
+ return '<svg viewBox="0 0 64 64" role="img" aria-label="'+label+' — emblema de rango" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="'+id+'Bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+t.a+'"/><stop offset=".42" stop-color="'+t.b+'"/><stop offset="1" stop-color="'+t.c+'"/></linearGradient><linearGradient id="'+id+'Gem" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="'+t.a+'"/><stop offset=".45" stop-color="'+t.b+'"/><stop offset="1" stop-color="'+t.c+'"/></linearGradient><linearGradient id="'+id+'Edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".5" stop-color="'+t.d+'"/><stop offset="1" stop-color="'+t.c+'"/></linearGradient><filter id="'+id+'Shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="2" stdDeviation="1.7" flood-color="#000" flood-opacity=".65"/></filter></defs><path d="M32 3 53 14 57 35 45 54 32 61 19 54 7 35 11 14Z" fill="#020817" opacity=".8"/><path d="M32 4 52 15 55 34 44 52 32 59 20 52 9 34 12 15Z" fill="url(#'+id+'Bg)" stroke="url(#'+id+'Edge)" stroke-width="2" filter="url(#'+id+'Shadow)"/><path d="M32 8 48 17 50 33 41 48 32 54 23 48 14 33 16 17Z" fill="none" stroke="#fff" stroke-opacity=".65" stroke-width="1"/><path d="M14 16 32 25 50 16M14 34 32 25 50 34" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="1"/>'+crest+'<path d="M13 14 18 17M46 48 51 45" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".9"/></svg>';
 }
 function nivelPara(total){let actual=LEVELS[0];for(const l of LEVELS){if(total>=l.min)actual=l;}return actual;}
 function siguienteNivel(total){return LEVELS.find(l=>l.min>total)||null;}
