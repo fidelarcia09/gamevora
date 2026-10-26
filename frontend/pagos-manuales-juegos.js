@@ -27,8 +27,8 @@ function iniciar(){
  }
  async function actualizarImporte(){
  const node=info.querySelector("#ggImporte"); if(!node)return;
- if(!productoSeleccionado||!productoSeleccionado.local){node.textContent="Selecciona primero un paquete para ver el importe.";return;}
- let price=Number(productoSeleccionado.local.price_gvr);
+ const selected=productoSeleccionado&&(productoSeleccionado.local||productoSeleccionado); if(!selected||!selected.id){node.textContent="Selecciona primero un paquete para ver el importe.";return;}
+ let price=Number(selected.price_gvr);
  if(typeof window.ggGetResellerDiscountedPrice==="function") price=await window.ggGetResellerDiscountedPrice(price);
  if(!Number.isFinite(price)||price<=0){node.textContent="No se pudo calcular el importe.";return;}
  node.textContent=select.value==="USDT" ? "Importe a enviar: "+price.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" USDT" : "Importe a enviar: "+Math.round(price*250).toLocaleString("es-ES")+" CUP de saldo móvil";
@@ -63,7 +63,8 @@ document.addEventListener("click",event=>{if(event.target.closest(".producto"))s
   if(!file){alert("Adjunta el comprobante del pago antes de continuar.");return;}
   if(file.size>6*1024*1024){alert("El comprobante no puede superar 6 MB.");return;}
   if(!["image/jpeg","image/png","image/webp","application/pdf"].includes(file.type)){alert("Formato no admitido. Usa JPG, PNG, WEBP o PDF.");return;}
-  if(!productoSeleccionado || !productoSeleccionado.local?.id){alert("Selecciona primero un producto disponible.");return;}
+  const selectedProduct=productoSeleccionado&&(productoSeleccionado.local||productoSeleccionado);
+  if(!selectedProduct || !selectedProduct.id){alert("Selecciona primero un producto disponible.");return;}
   const playerField=document.getElementById("idjugador")||document.getElementById("idJugador");
   const zoneField=document.getElementById("zonaJugador");
   const regionField=document.getElementById("regionJugador");
@@ -71,7 +72,7 @@ document.addEventListener("click",event=>{if(event.target.closest(".producto"))s
   const playerId=playerField.value.trim();
   const zoneId=zoneField ? zoneField.value.trim() : null;
   if(zoneField && !zoneId){alert("Selecciona o introduce el servidor/Zone ID.");return;}
-  if(regionField && typeof productoDeRegion==="function" && productoSeleccionado && productoSeleccionado.local && !productoDeRegion(productoSeleccionado.local,regionField.value) && !productoDeRegion(productoSeleccionado.proveedor,regionField.value)){alert("Este paquete no corresponde a la región seleccionada.");return;}
+  if(regionField && typeof productoDeRegion==="function" && productoSeleccionado && productoSeleccionado.local && !productoDeRegion(selectedProduct,regionField.value) && !productoDeRegion(productoSeleccionado.proveedor,regionField.value)){alert("Este paquete no corresponde a la región seleccionada.");return;}
   if(!playerId){alert("Introduce tu ID de jugador.");return;}
   if(typeof validacionJugador!=="undefined" && validacionJugador.status==="INVALID" && validacionJugador.playerId===playerId){alert("El ID del jugador no es válido. Compruébalo antes de pagar.");return;}
   const {data:{session},error:sessionError}=await supabase.auth.getSession();
@@ -80,7 +81,7 @@ document.addEventListener("click",event=>{if(event.target.closest(".producto"))s
   try{
    if(typeof procesando!=="undefined") procesando=true;
    mostrarEstado("Registrando el pago manual… No cierres esta página.");
-   const {data:orderId,error:createError}=await supabase.rpc("create_manual_game_order",{p_product_id:productoSeleccionado.local.id,p_player_id:playerId,p_payment_method:select.value,p_zone_id:zoneId});
+   const {data:orderId,error:createError}=await supabase.rpc("create_manual_game_order",{p_product_id:selectedProduct.id,p_player_id:playerId,p_payment_method:select.value,p_zone_id:zoneId});
    if(createError) throw new Error(createError.message||"No se pudo crear la solicitud de pago.");
    if(typeof orderId!=="string" || !/^[0-9a-f-]{36}$/i.test(orderId)) throw new Error("El servidor no devolvió un pedido válido.");
    pedidoPendienteId=orderId; accionPendiente="enviar"; localStorage.setItem("gg_manual_game_payment_pending",orderId); guardarPedidoPendiente(); actualizarBoton();
