@@ -258,6 +258,16 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 .level.current{border-color:#8beeff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),inset 0 0 20px rgba(31,180,255,.14),0 5px 0 rgba(0,0,0,.42),0 10px 20px rgba(0,137,255,.2)}
 @media(max-width:600px){.level .level-emoji{height:47px}.level .level-emoji svg{width:44px;height:44px}}
 
+
+/* Ajuste final: panel 3D más compacto y progreso en una sola línea */
+.hero{width:100%;max-width:590px;margin-left:auto;margin-right:auto}
+.hero .progress-meta{width:73%;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:8px;white-space:nowrap;font-size:11px}
+.hero .progress-meta span{min-width:0}
+@media(max-width:600px){
+ .hero{max-width:100%}
+ .hero .progress-meta{width:74%;flex-direction:row;align-items:center;justify-content:space-between;gap:5px;white-space:normal;font-size:9px}
+ .hero .progress-meta span{max-width:49%;overflow-wrap:anywhere}
+}
 </style>
 </head>
 <body>
