@@ -15,6 +15,47 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   let discountPercent = 0;
   let initialized = false;
   let initPromise;
+  let catalogPrices = [];
+
+  function normalizeName(value) {
+    return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  }
+
+  function originalPriceForCard(card, price) {
+    const productId = String(card.dataset.ggProductId || "").trim();
+    if (productId) {
+      const byId = catalogPrices.find(product => String(product.id) === productId);
+      const amount = Number(byId?.price_gvr);
+      if (Number.isFinite(amount) && amount > 0) return amount;
+    }
+
+    const name = normalizeName(card.querySelector(".producto-nombre")?.textContent);
+    if (name && catalogPrices.length) {
+      const exact = catalogPrices.filter(product => normalizeName(product.product_name) === name);
+      const matches = exact.length === 1 ? exact : catalogPrices.filter(product => {
+        const productName = normalizeName(product.product_name);
+        return productName && (name.includes(productName) || productName.includes(name));
+      });
+      if (matches.length === 1) {
+        const amount = Number(matches[0].price_gvr);
+        if (Number.isFinite(amount) && amount > 0) return amount;
+      }
+    }
+
+    const saved = parsePrice(price.dataset.ggResellerBasePrice || price.dataset.ggOriginalPrice);
+    if (Number.isFinite(saved) && saved > 0) return saved;
+    const visible = parsePrice(price.textContent);
+    return Number.isFinite(visible) && visible > 0 ? visible : NaN;
+  }
+
+  async function loadCatalogPrices(db) {
+    const { data, error } = await db.from("game_products")
+      .select("id,game,product_name,price_gvr,active,provider")
+      .eq("active", true)
+      .eq("provider", "nextlevel");
+    if (error) throw error;
+    catalogPrices = data || [];
+  }
 
   function parsePrice(value) {
     if (typeof value === "number") return Number.isFinite(value) ? value : NaN;
@@ -37,7 +78,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     if (!Number.isFinite(value) || value <= 0) return "Precio pendiente";
     return value.toLocaleString("es-ES", {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 4
     }) + " GVR";
   }
 
@@ -82,21 +123,16 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       const price = card.querySelector(".producto-precio");
       if (!price || price.parentNode !== card) return;
 
-      if (!price.dataset.ggOriginalPrice) {
-        const match = price.textContent.trim().match(/^([\d.,]+)\s*GVR$/i);
-        if (!match) return;
-        const normalized = match[1].replace(/\./g, "").replace(",", ".");
-        const original = Number(normalized);
-        if (!Number.isFinite(original) || original <= 0) return;
-        price.dataset.ggOriginalPrice = String(original);
-      }
-
-      const original = parsePrice(price.dataset.ggOriginalPrice);
+      /* Use the unmodified Supabase price first: the payment selector can rewrite
+         ggOriginalPrice when switching between GVR and manual payment methods. */
+      const original = originalPriceForCard(card, price);
       if (!Number.isFinite(original) || original <= 0) {
         delete price.dataset.ggOriginalPrice;
+        delete price.dataset.ggResellerBasePrice;
         return;
       }
       price.dataset.ggOriginalPrice = String(original);
+      price.dataset.ggResellerBasePrice = String(original);
       const finalPrice = discountedPrice(original);
       if (!Number.isFinite(finalPrice) || finalPrice <= 0) return;
       let oldPrice = card.querySelector(".gg-reseller-original-price");
@@ -138,6 +174,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       }
 
       const stats = Array.isArray(data) ? data[0] : data;
+      await loadCatalogPrices(db);
       const completed = Number(stats?.completed_count || 0);
       let current = LEVELS[0];
       for (const level of LEVELS) if (completed >= level.min) current = level;
