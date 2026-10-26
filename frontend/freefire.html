@@ -1558,6 +1558,7 @@ function renderizarCatalogo() {
 
         tarjeta.type = "button";
         tarjeta.className = "producto";
+        if (local?.id) tarjeta.dataset.ggProductId = String(local.id);
 
         if (!comprable) {
             tarjeta.classList.add("producto-no-disponible");
@@ -1637,6 +1638,7 @@ function renderizarOfertas() {
 
         tarjeta.type = "button";
         tarjeta.className = "producto producto-oferta";
+        if (local?.id) tarjeta.dataset.ggProductId = String(local.id);
 
         if (!comprable) {
             tarjeta.classList.add("producto-no-disponible");
