@@ -453,14 +453,14 @@ function emblemaSvg(name){
 }
 function nivelPara(total){let actual=LEVELS[0];for(const l of LEVELS){if(total>=l.min)actual=l;}return actual;}
 function siguienteNivel(total){return LEVELS.find(l=>l.min>total)||null;}
-function renderizarNiveles(total,actual){
+function renderizarNiveles(total,actual,asignadoManualmente=false){
  $("levelsList").innerHTML=LEVELS.map(l=>'<div class="level '+(l.name===actual.name?'current':'')+'"><div class="level-emoji">'+emblemaSvg(l.name)+'</div><strong>'+l.name+'</strong><small>'+l.min+'+ · '+l.discount+'%</small></div>').join("");
-  const next=siguienteNivel(total);
- $("progressText").textContent=total+" recargas completadas";
- $("nextLevelText").textContent=next?("Siguiente nivel: "+next.name+" · faltan "+(next.min-total)):"¡Nivel máximo alcanzado!";
+  const next=asignadoManualmente?null:siguienteNivel(total);
+ $("progressText").textContent=asignadoManualmente?(total+" recargas completadas · rango especial asignado"):total+" recargas completadas";
+ $("nextLevelText").textContent=asignadoManualmente?("Rango asignado manualmente: "+actual.name):(next?("Siguiente nivel: "+next.name+" · faltan "+(next.min-total)):"¡Nivel máximo alcanzado!");
  const floor=actual.min;
  const nextMin=next?next.min:actual.min;
- const progress=next?Math.max(0,Math.min(100,((total-floor)/(nextMin-floor))*100)):100;
+ const progress=asignadoManualmente?100:(next?Math.max(0,Math.min(100,((total-floor)/(nextMin-floor))*100)):100);
  $("progressFill").style.width=progress+"%";
 }
 function renderizarVentas(orders,products){
@@ -483,7 +483,7 @@ async function iniciar(){
   const authResult = await conTiempoLimite(db.auth.getUser(), "verificar tu sesión");
   const {data:{user},error:authError}=authResult;
   if(authError||!user){window.location.replace("login.html");return;}
-  const profileResult = await conTiempoLimite(db.from("reseller_profiles").select("user_id,role,active,created_at").eq("user_id",user.id).eq("active",true).maybeSingle(), "comprobar tu rol de revendedor");
+  const profileResult = await conTiempoLimite(db.from("reseller_profiles").select("user_id,role,active,created_at,rank_override").eq("user_id",user.id).eq("active",true).maybeSingle(), "comprobar tu rol de revendedor");
   const {data:profile,error:profileError}=profileResult;
   if(profileError||!profile||profile.role!=="Revendedor"){window.location.replace("cuenta.html");return;}
   const [ordersResult,statsResult]=await conTiempoLimite(Promise.all([
@@ -499,9 +499,11 @@ async function iniciar(){
   let products={};
   if(ids.length){const {data:ps,error:pe}=await db.from("game_products").select("id,game,product_name").in("id",ids);if(!pe)for(const p of ps||[])products[p.id]=p;}
   const completed=Number(stats.completed_count||0);
-  const level=nivelPara(completed);
+  const nivelCalculado=nivelPara(completed);
+  const rangoManual=LEVELS.find(l=>l.name===profile.rank_override)||null;
+  const level=rangoManual||nivelCalculado;
   $("rankIcon").innerHTML=emblemaSvg(level.name);$("rankName").textContent=level.name;$("rankDiscount").textContent=level.discount+"%";$("discountMetric").textContent=level.discount+"%";$("completedCount").textContent=completed.toLocaleString("es-ES");
-  renderizarNiveles(completed,level);renderizarVentas(orders,products);renderizarClientes(stats.top_clients||[]);
+  renderizarNiveles(completed,level,Boolean(rangoManual));renderizarVentas(orders,products);renderizarClientes(stats.top_clients||[]);
   $("salesCount").textContent=Number(stats.total_orders||0).toLocaleString("es-ES")+" pedidos";
   $("loading").hidden=true;$("dashboard").hidden=false;
  }catch(error){console.error("Error al cargar Revender:",error);$("loading").className="empty error";$("loading").textContent=error?.message?.includes("Tiempo de espera agotado")?"La verificación está tardando demasiado. Comprueba tu conexión y recarga la página.":"No se pudo verificar tu acceso o cargar el panel. Comprueba tu conexión y vuelve a intentarlo.";}
