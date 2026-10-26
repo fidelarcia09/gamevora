@@ -269,6 +269,25 @@ function normalizarEstado(pedido) {
 function esEstadoFinal(estado) {
     return ["completed", "failed", "refunded"].includes(estado);
 }
+
+function esErrorIdJugador(pedido) {
+    const error = String(pedido?.provider_error || "").toLowerCase();
+
+    if (!error) return false;
+
+    const codigoInvalido =
+        /player_id_invalid|invalid_player_id|player_not_found|invalid_uid|uid_invalid|invalid_user_id|user_not_found|account_not_found|invalid_account/.test(error);
+
+    if (codigoInvalido) return true;
+
+    const mencionaCuenta =
+        /player|jugador|user|usuario|uid|account|cuenta|character|personaje|role|rol/.test(error);
+
+    const indicaInvalido =
+        /invalid|not found|does not exist|incorrect|no existe|inv[aá]lido|incorrecto|no encontrado/.test(error);
+
+    return mencionaCuenta && indicaInvalido;
+}
 function detenerIntervalo() {
     if (intervalo !== null) {
         clearInterval(intervalo);
@@ -323,22 +342,32 @@ function mostrarEstadoPedido(pedido) {
             nota: "Te mostraremos aquí cualquier cambio en el estado de tu pedido."
         }
     };
-    const info = estados[estado];
+    const idJugadorInvalido = esErrorIdJugador(pedido);
+    const info = idJugadorInvalido
+        ? {
+            titulo: "ID del jugador inválido",
+            descripcion: "Gamers Gold Top-Up indica que este ID no es válido. Por favor, compruébalo de nuevo.",
+            etiqueta: "COMPROBAR ID",
+            icono: "!",
+            nota: "Comprueba el ID del jugador y la zona o servidor, si corresponde. Si este pedido sigue pendiente, consulta su estado antes de intentar otra recarga."
+        }
+        : estados[estado];
+
     tituloEstado.textContent = info.titulo;
-    tituloEstado.classList.toggle("resaltado", estado === "completed");
+    tituloEstado.classList.toggle("resaltado", estado === "completed" && !idJugadorInvalido);
     descripcionEstado.textContent = info.descripcion;
     textoEstado.textContent = info.etiqueta;
     iconoEstado.textContent = info.icono;
     notaEstado.textContent = info.nota;
-    iconoEstado.classList.toggle("completado", estado === "completed");
-    iconoEstado.classList.toggle("error", estado === "failed" || estado === "refunded");
+    iconoEstado.classList.toggle("completado", estado === "completed" && !idJugadorInvalido);
+    iconoEstado.classList.toggle("error", idJugadorInvalido || estado === "failed" || estado === "refunded");
     etiquetaEstado.className = "estado";
-    if (estado === "completed") etiquetaEstado.classList.add("completado");
-    else if (estado === "processing") etiquetaEstado.classList.add("procesando");
-    else if (estado === "failed" || estado === "refunded") etiquetaEstado.classList.add("error");
+    if (estado === "completed" && !idJugadorInvalido) etiquetaEstado.classList.add("completado");
+    else if (estado === "processing" && !idJugadorInvalido) etiquetaEstado.classList.add("procesando");
+    else if (idJugadorInvalido || estado === "failed" || estado === "refunded") etiquetaEstado.classList.add("error");
     notaEstado.className = "nota";
-    if (estado === "completed") notaEstado.classList.add("completado");
-    else if (estado === "failed" || estado === "refunded") notaEstado.classList.add("error");
+    if (estado === "completed" && !idJugadorInvalido) notaEstado.classList.add("completado");
+    else if (idJugadorInvalido || estado === "failed" || estado === "refunded") notaEstado.classList.add("error");
     return estado;
 }
 
@@ -471,7 +500,7 @@ async function cargarPedido() {
         const { data: pedido, error } = await supabase
             .from("game_orders")
             .select(`
-                id, user_id, product_id, status, provider_status, player_id, zone_id,
+                id, user_id, product_id, status, provider_status, provider_error, player_id, zone_id,
                 price_gvr, created_at, completed_at, provider_order_id, provider_client_reference
             `)
             .eq("id", idPedido)
