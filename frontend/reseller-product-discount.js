@@ -29,7 +29,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       if (Number.isFinite(amount) && amount > 0) return amount;
     }
 
-    const name = normalizeName(card.querySelector(".producto-nombre")?.textContent);
+    const name = normalizeName(card.querySelector(".producto-nombre, .nombre-oferta")?.textContent);
     if (name && catalogPrices.length) {
       const exact = catalogPrices.filter(product => normalizeName(product.product_name) === name);
       const matches = exact.length === 1 ? exact : catalogPrices.filter(product => {
@@ -109,8 +109,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
         text-decoration-thickness: 1.5px;
         opacity: .9;
       }
-      .producto .producto-precio { display: block; }
-      .producto .gg-reseller-original-price + .producto-precio { margin-top: 2px; }
+      .producto .producto-precio, .boton-oferta .precio-oferta { display: block; }
+      .producto .gg-reseller-original-price + .producto-precio, .boton-oferta .gg-reseller-original-price + .precio-oferta { margin-top: 2px; }
     `;
     document.head.appendChild(style);
   }
@@ -118,10 +118,10 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   function showDiscount() {
     if (!initialized || discountPercent <= 0) return;
     addStyles();
-    document.querySelectorAll(".producto").forEach(card => {
+    document.querySelectorAll(".producto, .boton-oferta").forEach(card => {
       if (card.matches(":disabled") || card.classList.contains("producto-no-disponible")) return;
-      const price = card.querySelector(".producto-precio");
-      if (!price || price.parentNode !== card) return;
+      const price = card.querySelector(".producto-precio, .precio-oferta");
+      if (!price) return;
 
       /* Use the unmodified Supabase price first: the payment selector can rewrite
          ggOriginalPrice when switching between GVR and manual payment methods. */
