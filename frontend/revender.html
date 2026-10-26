@@ -347,6 +347,23 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
   }
 }
 
+
+/* Progreso compacto con contador visible y llenado verde intenso */
+.hero{min-height:0;padding-bottom:15px}
+.hero .progress-count{width:73%;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;margin-top:8px;margin-bottom:-7px;font-size:12px;font-weight:800;color:#e5ffe9}
+.hero .progress-track{width:73%;height:8px;margin-top:10px}
+.hero .progress-fill{background:linear-gradient(90deg,#00a82d 0%,#00e640 55%,#39ff63 100%);box-shadow:0 0 12px rgba(0,255,64,.48),inset 0 1px 0 rgba(255,255,255,.28)}
+.hero .progress-meta:not(.progress-count){width:73%;margin-top:7px;font-size:11px}
+.hero .button-row{width:73%;margin-top:10px}
+@media(max-width:600px){
+ .hero{min-height:0;padding-bottom:13px}
+ .hero .progress-count,.hero .progress-track,.hero .progress-meta:not(.progress-count),.hero .button-row{width:74%}
+ .hero .progress-count{font-size:10px;margin-top:6px;margin-bottom:-6px}
+ .hero .progress-track{margin-top:9px}
+ .hero .progress-meta:not(.progress-count){font-size:10px}
+ .hero .button-row{margin-top:8px}
+}
+
 </style>
 </head>
 <body>
@@ -363,6 +380,7 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 <div style="display:flex;align-items:center;gap:13px"><div class="rank-icon" id="rankIcon" aria-label="Emblema del nivel"></div><div><div class="eyebrow">Tu plan actual</div><div class="rank-name" id="rankName">Bronce</div></div></div>
 <div style="text-align:right"><div class="eyebrow">Tu descuento</div><div class="discount" id="rankDiscount">1%</div></div>
 </div>
+<div class="progress-meta progress-count"><span id="progressCompletedCount">Recargas hechas: 0</span></div>
 <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 <div class="progress-meta" id="progressMeta"><span id="nextLevelText">Siguiente nivel: Plata</span></div>
 <div class="button-row"><button class="button secondary action-button" id="showLevels" type="button"><svg class="action-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Ver proceso para subir de nivel</button></div>
@@ -454,6 +472,7 @@ function emblemaSvg(name){
 function nivelPara(total){let actual=LEVELS[0];for(const l of LEVELS){if(total>=l.min)actual=l;}return actual;}
 function siguienteNivel(total){return LEVELS.find(l=>l.min>total)||null;}
 function renderizarNiveles(total,actual,asignadoManualmente=false){
+ $("progressCompletedCount").textContent="Recargas hechas: "+Number(total||0).toLocaleString("es-ES");
  $("levelsList").innerHTML=LEVELS.map(l=>'<div class="level '+(l.name===actual.name?'current':'')+'"><div class="level-emoji">'+emblemaSvg(l.name)+'</div><strong>'+l.name+'</strong><small>'+l.min+'+ · '+l.discount+'%</small></div>').join("");
   const next=asignadoManualmente?null:siguienteNivel(total);
  $("progressMeta").hidden=asignadoManualmente;
