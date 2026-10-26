@@ -82,7 +82,7 @@ const modalFondo=$("modalFondo"),modalProducto=$("modalProducto"),modalJugador=$
 const OFERTAS=[{id:"fz-blood_strike-lucky_bag_week",nombre:"Semana de Bolsa de la Suerte"},{id:"fz-blood_strike-level_up_pass",nombre:"Level Up Pass"},{id:"fz-blood_strike-strike_pass_elite",nombre:"Strike Pass Elite"},{id:"fz-blood_strike-strike_pass_premium",nombre:"Strike Pass Premium"}];
 let tipoActual="bc",productoSeleccionado=null,productosDisponibles=[],productosLocales=[],procesando=false,usuarioActualId=null,pedidoPendienteId=null,accionPendiente="crear",resolverConfirmacion=null;
 function mostrarEstado(mensaje,tipo=""){mensaje=typeof mensaje==="string"?mensaje.replace(/pedido aceptado por next level/gi,"Pedido aceptado por Gamers Gold Top-Up"):mensaje;estadoCatalogo.textContent=mensaje;estadoCatalogo.classList.toggle("error",tipo==="error");estadoCatalogo.classList.toggle("correcto",tipo==="correcto");}
-function mostrarPrecio(precio){return Number(precio).toLocaleString("es-ES",{maximumFractionDigits:4})+" GVR";}
+function mostrarPrecio(precio){return Number(precio).toLocaleString("es-ES",{maximumFractionDigits:2})+" GVR";}
 function normalizarTexto(v){return String(v??"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[\s_-]/g,"");}
 function extraerProductos(r){if(Array.isArray(r))return r;if(!r||typeof r!=="object")return[];if(Array.isArray(r.productos))return r.productos;if(Array.isArray(r.products))return r.products;if(Array.isArray(r.data))return r.data;if(Array.isArray(r.data?.products))return r.data.products;return[];}
 function obtenerProductId(p){return String(p.productId||p.product_id||p.id||"").trim();}function obtenerNombre(p){return String(p.name||p.productName||p.product_name||p.title||obtenerProductId(p)||"Paquete de Blood Strike").trim();}
@@ -116,7 +116,7 @@ async function iniciar(){try{const {data:{session}}=await supabase.auth.getSessi
 </script>    <script src="./goldi-widget.js?v=20261023-2" defer></script>
 
 
-<script type="module" src="./reseller-product-discount.js?v=20261025-2"></script>
+<script type="module" src="./reseller-product-discount.js?v=20261025-3"></script>
 </body></html>
 
 
