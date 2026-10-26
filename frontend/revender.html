@@ -175,6 +175,28 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 @media(max-width:600px){.hero{min-height:158px}.hero:after{right:4%;width:clamp(80px,24vw,112px);font-size:clamp(40px,10vw,58px)}.hero:before{right:-12%;width:58%}.hero .hero-top>div:first-child{max-width:70%}.hero .rank-name{font-size:18px}.hero .discount{font-size:19px}}
 @media(prefers-reduced-motion:reduce){.hero:after{animation:none}.level{transition:none}}
 
+
+/* Más aire vertical para que destaque la insignia 3D */
+.hero{padding:20px 22px 18px;min-height:228px}
+.hero .hero-top{min-height:92px;align-items:flex-start}
+.hero .progress-track{position:relative;width:73%;margin-top:24px}
+.hero .progress-meta{position:relative;width:73%;display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:11px;font-size:12px}
+.hero .button-row{position:relative;width:73%;display:block;margin-top:17px}
+.hero .button-row .action-button{min-height:44px;padding:10px 12px;font-size:12px;line-height:1.35}
+.hero:after{right:5%;top:43%}
+.hero:before{right:-9%;top:49%}
+@media(max-width:600px){
+ .hero{padding:17px 15px 16px;min-height:220px}
+ .hero .hero-top{min-height:84px}
+ .hero .progress-track,.hero .progress-meta,.hero .button-row{width:74%}
+ .hero .progress-track{margin-top:21px}
+ .hero .progress-meta{font-size:11px;gap:5px}
+ .hero .button-row{margin-top:14px}
+ .hero .button-row .action-button{font-size:11px;padding:9px 8px;min-height:42px}
+ .hero:after{right:3%;top:41%;width:clamp(75px,22vw,100px)}
+ .hero:before{right:-13%;top:47%;width:55%}
+}
+
 </style>
 </head>
 <body>
