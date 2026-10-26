@@ -25,7 +25,16 @@ function iniciar(){
   else if(method==="SALDO_MOVIL") info.innerHTML='Envía el importe indicado al número de saldo móvil cubano <b>63638032</b> y guarda la captura del pago. <div id="ggImporte" class="gg-importe">El importe se confirma al crear el pedido.</div><p>La recarga queda pendiente hasta que administración lo apruebe.</p>';
   else if(method==="CUP") info.innerHTML='<span class="gg-aviso">No disponible todavía. Se habilitará cuando configures la tarjeta.</span>';
  }
- select.addEventListener("change",pintar); pintar();
+ async function actualizarImporte(){
+ const node=info.querySelector("#ggImporte"); if(!node)return;
+ if(!productoSeleccionado||!productoSeleccionado.local){node.textContent="Selecciona primero un paquete para ver el importe.";return;}
+ let price=Number(productoSeleccionado.local.price_gvr);
+ if(typeof window.ggGetResellerDiscountedPrice==="function") price=await window.ggGetResellerDiscountedPrice(price);
+ if(!Number.isFinite(price)||price<=0){node.textContent="No se pudo calcular el importe.";return;}
+ node.textContent=select.value==="USDT" ? "Importe a enviar: "+price.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" USDT" : "Importe a enviar: "+Math.round(price*250).toLocaleString("es-ES")+" CUP de saldo móvil";
+}
+select.addEventListener("change",()=>{pintar();actualizarImporte();}); pintar();
+document.addEventListener("click",event=>{if(event.target.closest(".producto"))setTimeout(actualizarImporte,0);});
  boton.addEventListener("click",async function(event){
   if(select.value==="GVR" || typeof pedidoPendienteId!=="undefined" && pedidoPendienteId) return;
   event.preventDefault(); event.stopImmediatePropagation();
