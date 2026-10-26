@@ -11,9 +11,6 @@ style.textContent = `
 .gg-metodos .gg-opcion:disabled{opacity:.45;cursor:not-allowed}
 .gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid rgba(0,183,255,.4);background:#07152a;color:#fff}
 @media(max-width:360px){.gg-metodos .gg-opciones{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.gg-metodos .gg-instrucciones{margin-top:12px;padding:12px;border-radius:10px;background:rgba(0,110,220,.10);line-height:1.55;font-size:13px;overflow-wrap:anywhere}
-.gg-metodos .gg-importe{color:#00d0ff;font-weight:800;font-size:18px}
-.gg-metodos .gg-aviso{color:#ffd66b}
 `;
 document.head.appendChild(style);
 function iniciar(){
@@ -21,10 +18,16 @@ function iniciar(){
  if(!boton || document.getElementById("ggMetodoPago")) return;
  const panel=document.createElement("section");
  panel.className="gg-metodos";
- panel.innerHTML='<div class="gg-titulo">Método de pago</div><div class="gg-opciones" role="group" aria-label="Método de pago"><button type="button" class="gg-opcion" data-metodo="CUP" disabled>CUP</button><button type="button" class="gg-opcion" data-metodo="USDT">₮ USDT</button><button type="button" class="gg-opcion" data-metodo="GVR">◆ GVR</button><button type="button" class="gg-opcion" data-metodo="SALDO_MOVIL">▣ Saldo</button></div><input id="ggMetodoPago" type="hidden" value="GVR"><div id="ggPagoInfo" class="gg-instrucciones" hidden></div>';
- const playerLabel=document.querySelector('label[for="idjugador"],label[for="idJugador"]');
- (playerLabel?.parentNode||boton.parentNode).insertBefore(panel,playerLabel||boton);
- const select=panel.querySelector("#ggMetodoPago"), info=panel.querySelector("#ggPagoInfo");
+ panel.innerHTML='<div class="gg-titulo">Método de pago</div><div class="gg-opciones" role="group" aria-label="Método de pago"><button type="button" class="gg-opcion" data-metodo="CUP" disabled>CUP</button><button type="button" class="gg-opcion" data-metodo="USDT">₮ USDT</button><button type="button" class="gg-opcion" data-metodo="GVR">◆ GVR</button><button type="button" class="gg-opcion" data-metodo="SALDO_MOVIL">▣ Saldo móvil</button></div><input id="ggMetodoPago" type="hidden" value="GVR">';
+ const playerField=document.getElementById("idjugador")||document.getElementById("idJugador");
+ const playerLabel=playerField?document.querySelector('label[for="'+playerField.id+'"]'):null;
+ const anchor=playerField?.closest(".campo, .form-group, .formulario-campo")||playerField;
+ const afterAnchor=anchor?.nextElementSibling;
+ const nextSection=document.querySelector(".selector-categorias, #catalogo, #catalogoProductos, #botonContinuar");
+ if(afterAnchor && (afterAnchor.classList.contains("ayuda")||afterAnchor.classList.contains("hint"))){afterAnchor.insertAdjacentElement("afterend",panel);}
+ else if(nextSection) nextSection.insertAdjacentElement("beforebegin",panel);
+ else (playerField?.parentNode||boton.parentNode).insertBefore(panel,playerField?.nextSibling||boton);
+ const select=panel.querySelector("#ggMetodoPago");
  panel.querySelectorAll("[data-metodo]").forEach(btn=>btn.addEventListener("click",()=>{select.value=btn.dataset.metodo;panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b===btn));pintar();actualizarImporte();}));
  panel.querySelector('[data-metodo="GVR"]').classList.add("activo");
  function pintar(){
