@@ -19,14 +19,14 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   function formatPrice(price) {
     return Number(price).toLocaleString("es-ES", {
       minimumFractionDigits: 0,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 4
     }) + " GVR";
   }
 
   function discountedPrice(price) {
     const value = Number(price);
     if (!Number.isFinite(value) || value <= 0 || discountPercent <= 0) return value;
-    return Math.max(0.01, Math.round((value * (100 - discountPercent) / 100 + Number.EPSILON) * 100) / 100);
+    return Math.round((value * (100 - discountPercent) / 100 + Number.EPSILON) * 10000) / 10000;
   }
 
   window.ggGetResellerDiscountedPrice = async function(price) {
