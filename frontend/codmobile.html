@@ -474,7 +474,7 @@ async function continuarRecarga() {
             "\n" +
 
             "Precio: " +
-            (await window.ggGetResellerDiscountedPrice(Number(producto.price_gvr))).toLocaleString("es-ES", { maximumFractionDigits: 4 }) +
+            (await window.ggGetResellerDiscountedPrice(Number(producto.price_gvr))).toLocaleString("es-ES", { maximumFractionDigits: 2 }) +
             " GVR\n\n" +
 
             "ID del pedido:\n" +
@@ -513,6 +513,6 @@ async function continuarRecarga() {
 
     <script src="./goldi-widget.js?v=20261023-2" defer></script>
 
-<script type="module" src="./reseller-product-discount.js?v=20261025-2"></script>
+<script type="module" src="./reseller-product-discount.js?v=20261025-3"></script>
 </body>
     </html>
