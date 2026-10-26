@@ -9,6 +9,10 @@ style.textContent = `
 .gg-metodos .gg-opcion{min-width:0;padding:11px 4px;border:1px solid rgba(105,158,215,.18);border-radius:12px;background:#0d1b31;color:#dceaff;font-size:13px;font-weight:700;cursor:pointer}
 .gg-metodos .gg-opcion.activo{border-color:#20c5ff;background:linear-gradient(120deg,#087cff,#005de8);color:#fff;box-shadow:0 4px 12px rgba(0,124,255,.24)}
 .gg-metodos .gg-opcion:disabled{opacity:.45;cursor:not-allowed}
+label[for="idjugador"],label[for="idJugador"]{display:flex;align-items:center;gap:8px;margin-top:14px;color:#eef7ff;font-size:14px;font-weight:800}
+label[for="idjugador"]::before,label[for="idJugador"]::before{content:"♙";display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid rgba(32,197,255,.35);border-radius:9px;background:rgba(0,124,255,.15);color:#20c5ff;font-size:17px}
+input#idjugador,input#idJugador{width:100%;min-height:44px;padding:12px;border:1px solid rgba(0,183,255,.4);border-radius:10px;background:#061226;color:#fff;outline:none}
+input#idjugador:focus,input#idJugador:focus{border-color:#20c5ff;box-shadow:0 0 0 3px rgba(32,197,255,.10)}
 .gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid rgba(0,183,255,.4);background:#07152a;color:#fff}
 @media(max-width:360px){.gg-metodos .gg-opciones{grid-template-columns:repeat(2,minmax(0,1fr))}}
 `;
