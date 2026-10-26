@@ -42,10 +42,55 @@ function iniciar(){
  const select=panel.querySelector("#ggMetodoPago");
  panel.querySelectorAll("[data-metodo]").forEach(btn=>btn.addEventListener("click",()=>{select.value=btn.dataset.metodo;panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b===btn));pintar();actualizarImporte();}));
  panel.querySelector('[data-metodo="GVR"]').classList.add("activo");
- function pintar(){ /* Los detalles de pago solo se muestran en la página del comprobante. */ }
- async function actualizarImporte(){ /* El importe definitivo se calcula en el servidor y se muestra en el comprobante. */ }
+ const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
+ const SUPABASE_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+ let tarifasCache=null, productosCache=null, cargandoTarifas=null;
+ const clientePago=import("https://esm.sh/@supabase/supabase-js@2").then(({createClient})=>createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}));
+ function normalizarNombre(valor){return String(valor||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();}
+ async function cargarTarifas(){
+  if(tarifasCache&&productosCache)return;
+  if(cargandoTarifas)return cargandoTarifas;
+  cargandoTarifas=(async()=>{
+   const client=await clientePago;
+   const [productsResult,pricesResult]=await Promise.all([
+    client.from("game_products").select("id,product_name,provider_product_id,game,price_gvr,active").eq("active",true).eq("provider","nextlevel"),
+    client.from("manual_game_product_prices").select("product_id,payment_method,base_amount,payment_currency").eq("active",true)
+   ]);
+   if(productsResult.error)throw productsResult.error;
+   if(pricesResult.error)throw pricesResult.error;
+   productosCache=productsResult.data||[];
+   tarifasCache=new Map((pricesResult.data||[]).map(row=>[row.product_id+"|"+row.payment_method,row]));
+  })();
+  try{await cargandoTarifas;}finally{cargandoTarifas=null;}
+ }
+ function productoParaTarjeta(card){
+  const name=normalizarNombre(card.querySelector(".producto-nombre")?.textContent);
+  if(!name||!productosCache)return null;
+  const exact=productosCache.find(p=>normalizarNombre(p.product_name)===name);
+  if(exact)return exact;
+  const candidates=productosCache.filter(p=>{const n=normalizarNombre(p.product_name);return n&&(name.includes(n)||n.includes(name));});
+  return candidates.length===1?candidates[0]:null;
+ }
+ function formatoTarifa(row,method){
+  const amount=Number(row.base_amount);
+  if(!Number.isFinite(amount)||amount<=0)return "Tarifa pendiente";
+  if(method==="USDT")return amount.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" USDT";
+  return amount.toLocaleString("es-ES",{maximumFractionDigits:2})+" CUP";
+ }
+ function pintar(){panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));actualizarImporte();}
+ async function actualizarImporte(){
+  const method=select.value;
+  const cards=[...document.querySelectorAll(".producto, .boton-oferta")].filter(card=>card.querySelector(".producto-precio, .precio-oferta"));
+  cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(!price)return;if(!price.dataset.ggOriginalPrice)price.dataset.ggOriginalPrice=price.textContent;if(method==="GVR"){price.textContent=price.dataset.ggOriginalPrice;return;}price.textContent="Cargando tarifa…";});
+  if(method==="GVR")return;
+  try{await cargarTarifas();cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(!price)return;const product=productoParaTarjeta(card);const row=product&&tarifasCache.get(product.id+"|"+method);price.textContent=row?formatoTarifa(row,method):"Tarifa pendiente";price.dataset.ggManualMethod=method;});}
+  catch(error){console.error("No se pudieron cargar las tarifas manuales:",error);cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(price&&method!=="GVR")price.textContent="Tarifa pendiente";});}
+ }
 select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));pintar();actualizarImporte();}); pintar();
-document.addEventListener("click",event=>{if(event.target.closest(".producto"))setTimeout(actualizarImporte,0);});
+const observadorTarjetas=new MutationObserver(()=>{if(select.value!=="GVR")actualizarImporte();else document.querySelectorAll(".producto-precio, .precio-oferta").forEach(price=>{if(price.dataset.ggOriginalPrice)price.textContent=price.dataset.ggOriginalPrice;});});
+ const catalogo=document.getElementById("catalogo")||document.getElementById("catalogoProductos");if(catalogo)observadorTarjetas.observe(catalogo,{childList:true,subtree:true});
+ const catalogoOfertas=document.getElementById("catalogoOfertas")||document.getElementById("listaOfertas");if(catalogoOfertas)observadorTarjetas.observe(catalogoOfertas,{childList:true,subtree:true});
+ document.addEventListener("click",event=>{if(event.target.closest(".producto, .boton-oferta"))setTimeout(actualizarImporte,0);});
  boton.addEventListener("click",async function(event){
   if(select.value==="GVR") return;
   const savedManualId=localStorage.getItem("gg_manual_game_payment_pending");
