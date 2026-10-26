@@ -467,7 +467,7 @@ function precioProducto(p) {
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 function gvr(n) {
-  return Number(n).toLocaleString("es-ES", { maximumFractionDigits: 4 }) + " GVR";
+  return Number(n).toLocaleString("es-ES", { maximumFractionDigits: 2 }) + " GVR";
 }
 function esUUID(v) {
   return typeof v === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v);
@@ -751,7 +751,7 @@ iniciar();
     <script src="./goldi-widget.js?v=20261023-2" defer></script>
 
 
-<script type="module" src="./reseller-product-discount.js?v=20261025-2"></script>
+<script type="module" src="./reseller-product-discount.js?v=20261025-3"></script>
 </body>
         </html>
 
