@@ -75,6 +75,24 @@ function iniciar(){
   const candidates=productosCache.filter(p=>{const n=normalizarNombre(p.product_name);return n&&(name.includes(n)||n.includes(name));});
   return candidates.length===1?candidates[0]:null;
  }
+ async function restaurarPreciosGVRDesdeSupabase(){
+  try{
+   await cargarTarifas();
+   if(select.value!=="GVR")return;
+   const cards=[...document.querySelectorAll(".producto, .boton-oferta")].filter(card=>card.querySelector(".producto-precio, .precio-oferta"));
+   cards.forEach(card=>{
+    const price=card.querySelector(".producto-precio, .precio-oferta");
+    const product=productoParaTarjeta(card);
+    if(!price||!product)return;
+    const amount=Number(product.price_gvr);
+    if(!Number.isFinite(amount)||amount<=0)return;
+    price.textContent=amount.toLocaleString("es-ES",{maximumFractionDigits:2})+" GVR";
+    price.dataset.ggOriginalPrice=price.textContent;
+    price.dataset.ggManualMethod="";
+    preciosGVRPorNombre.set(claveTarjeta(card),price.textContent);
+   });
+  }catch(error){console.error("No se pudieron restaurar los precios GVR desde Supabase:",error);}
+ }
  function formatoTarifa(row,method){
   const amount=Number(row.base_amount);
   if(!Number.isFinite(amount)||amount<=0)return "Tarifa pendiente";
@@ -103,7 +121,7 @@ function iniciar(){
     price.dataset.ggManualMethod=method;
    }
   });
-  if(method==="GVR")return;
+  if(method==="GVR"){restaurarPreciosGVRDesdeSupabase();return;}
   try{
    await cargarTarifas();
    if(select.value!==method)return;
