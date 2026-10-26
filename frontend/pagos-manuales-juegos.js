@@ -22,7 +22,8 @@ function iniciar(){
  const panel=document.createElement("section");
  panel.className="gg-metodos";
  panel.innerHTML='<div class="gg-titulo">Método de pago</div><div class="gg-opciones" role="group" aria-label="Método de pago"><button type="button" class="gg-opcion" data-metodo="CUP" disabled>CUP</button><button type="button" class="gg-opcion" data-metodo="USDT">₮ USDT</button><button type="button" class="gg-opcion" data-metodo="GVR">◆ GVR</button><button type="button" class="gg-opcion" data-metodo="SALDO_MOVIL">▣ Saldo</button></div><input id="ggMetodoPago" type="hidden" value="GVR"><div id="ggPagoInfo" class="gg-instrucciones" hidden></div>';
- boton.parentNode.insertBefore(panel,boton);
+ const playerLabel=document.querySelector('label[for="idjugador"],label[for="idJugador"]');
+ (playerLabel?.parentNode||boton.parentNode).insertBefore(panel,playerLabel||boton);
  const select=panel.querySelector("#ggMetodoPago"), info=panel.querySelector("#ggPagoInfo");
  panel.querySelectorAll("[data-metodo]").forEach(btn=>btn.addEventListener("click",()=>{select.value=btn.dataset.metodo;panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b===btn));pintar();actualizarImporte();}));
  panel.querySelector('[data-metodo="GVR"]').classList.add("activo");
