@@ -568,7 +568,7 @@ function renderizarDiamantes() {
   catalogo.replaceChildren();
   productosDisponibles.filter(p => PRODUCTOS_DIAMANTES.includes(String(p.provider_product_id || ""))).forEach(p => {
     const btn = document.createElement("button");
-    btn.type = "button"; btn.className = "producto"; btn.setAttribute("aria-pressed", "false");
+    btn.type = "button"; btn.className = "producto"; btn.setAttribute("aria-pressed", "false"); btn.dataset.ggProductId = String(p.id);
     const n = document.createElement("div"); n.className = "producto-nombre"; n.textContent = nombreProducto(p);
     const price = document.createElement("div"); price.className = "producto-precio"; price.textContent = gvr(p.price_gvr);
     const state = document.createElement("div"); state.className = "producto-estado"; state.textContent = "Disponible";
@@ -588,7 +588,7 @@ function renderizarOfertas() {
       const aviso = document.createElement("div"); aviso.className = "estado"; aviso.textContent = oferta.nombre + " no está disponible en este momento."; catalogoOfertas.appendChild(aviso); return;
     }
     const btn = document.createElement("button");
-    btn.type = "button"; btn.className = "producto producto-oferta"; btn.setAttribute("aria-pressed", "false");
+    btn.type = "button"; btn.className = "producto producto-oferta"; btn.setAttribute("aria-pressed", "false"); btn.dataset.ggProductId = String(p.id);
     const icon = document.createElement("div"); icon.className = "oferta-icono"; icon.textContent = oferta.icono;
     const n = document.createElement("div"); n.className = "producto-nombre"; n.textContent = oferta.nombre;
     const price = document.createElement("div"); price.className = "producto-precio"; price.textContent = gvr(p.price_gvr);
