@@ -81,10 +81,41 @@ function iniciar(){
  async function actualizarImporte(){
   const method=select.value;
   const cards=[...document.querySelectorAll(".producto, .boton-oferta")].filter(card=>card.querySelector(".producto-precio, .precio-oferta"));
-  cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(!price)return;if(!price.dataset.ggOriginalPrice)price.dataset.ggOriginalPrice=price.textContent;if(method==="GVR"){price.textContent=price.dataset.ggOriginalPrice;return;}price.textContent="Cargando tarifa…";});
+  /* Guarda el precio original únicamente cuando el catálogo está mostrando GVR.
+     Nunca guardes "Cargando tarifa" o "Tarifa pendiente" como si fueran el precio GVR. */
+  cards.forEach(card=>{
+   const price=card.querySelector(".producto-precio, .precio-oferta");
+   if(!price)return;
+   if(method==="GVR"){
+    if(price.dataset.ggOriginalPrice)price.textContent=price.dataset.ggOriginalPrice;
+    else if(!price.dataset.ggManualMethod)price.dataset.ggOriginalPrice=price.textContent;
+    price.dataset.ggManualMethod="";
+   }else{
+    if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod)price.dataset.ggOriginalPrice=price.textContent;
+    price.textContent="Cargando tarifa…";
+    price.dataset.ggManualMethod=method;
+   }
+  });
   if(method==="GVR")return;
-  try{await cargarTarifas();if(select.value!==method)return;cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(!price)return;const product=productoParaTarjeta(card);const row=product&&tarifasCache.get(product.id+"|"+method);price.textContent=row?formatoTarifa(row,method):"Tarifa pendiente";price.dataset.ggManualMethod=method;});}
-  catch(error){console.error("No se pudieron cargar las tarifas manuales:",error);cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(price&&method!=="GVR")price.textContent="Tarifa pendiente";});}
+  try{
+   await cargarTarifas();
+   if(select.value!==method)return;
+   /* Reconsulta las tarjetas actuales: el juego puede reconstruir el catálogo mientras cargan las tarifas. */
+   const currentCards=[...document.querySelectorAll(".producto, .boton-oferta")].filter(card=>card.querySelector(".producto-precio, .precio-oferta"));
+   currentCards.forEach(card=>{
+    const price=card.querySelector(".producto-precio, .precio-oferta");
+    if(!price)return;
+    if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod)price.dataset.ggOriginalPrice=price.textContent;
+    const product=productoParaTarjeta(card);
+    const row=product&&tarifasCache.get(product.id+"|"+method);
+    price.textContent=row?formatoTarifa(row,method):"Tarifa pendiente";
+    price.dataset.ggManualMethod=method;
+   });
+  }catch(error){
+   console.error("No se pudieron cargar las tarifas manuales:",error);
+   if(select.value!==method)return;
+   document.querySelectorAll(".producto-precio, .precio-oferta").forEach(price=>{price.textContent="Tarifa pendiente";price.dataset.ggManualMethod=method;});
+  }
  }
 select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));pintar();actualizarImporte();}); pintar();
 /* Observa todo el documento: cada juego puede reconstruir sus tarjetas en contenedores distintos. */
