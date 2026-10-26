@@ -19,7 +19,9 @@ drop policy if exists "manual_game_payments_owner_pending_update" on public.manu
 create policy "manual_game_payments_owner_pending_update" on public.manual_game_payments for update to authenticated using (user_id = (select auth.uid()) and status = 'pending') with check (user_id = (select auth.uid()) and status = 'pending');
 revoke insert, delete, update on public.manual_game_payments from anon, authenticated;
 grant update (proof_path) on public.manual_game_payments to authenticated;
-create or replace function public.create_manual_game_order(p_product_id uuid,p_player_id text,p_payment_method text)
+drop function if exists public.create_manual_game_order(uuid,text,text);
+drop function if exists public.create_manual_game_order(uuid,text,text,text);
+create function public.create_manual_game_order(p_product_id uuid,p_player_id text,p_payment_method text,p_zone_id text default null)
 returns uuid language plpgsql security definer set search_path='' as $body$
 declare v_user uuid:=auth.uid(); v_product public.game_products%rowtype; v_order uuid; v_method text:=upper(trim(coalesce(p_payment_method,''))); v_amount numeric(14,2); v_currency text; v_discount numeric:=0; v_completed bigint:=0; v_rank text; v_profile_created timestamptz;
 begin
@@ -35,7 +37,8 @@ begin
   v_discount:=case trim(coalesce(v_rank,'')) when 'Bronce' then 1 when 'Plata' then 2 when 'Oro' then 3 when 'Diamante' then 4 when 'Leyenda' then 5 else case when v_completed>=300 then 5 when v_completed>=150 then 4 when v_completed>=75 then 3 when v_completed>=25 then 2 else 1 end end;
  end if;
  if v_method='USDT' then v_amount:=round(round(v_product.price_gvr*(100-v_discount)/100,4),2); v_currency:='USDT'; else v_amount:=round(round(v_product.price_gvr*(100-v_discount)/100,4)*250,0); v_currency:='SALDO_MOVIL'; end if;
- insert into public.game_orders(user_id,product_id,price_gvr,status,player_id) values(v_user,v_product.id,round(v_product.price_gvr*(100-v_discount)/100,4),'pending',trim(p_player_id)) returning id into v_order;
+ if v_product.game in ('Genshin Impact','mobile-legends') and nullif(trim(coalesce(p_zone_id,'')),'') is null then raise exception 'Debes indicar el servidor o Zone ID.'; end if;
+ insert into public.game_orders(user_id,product_id,price_gvr,status,player_id,zone_id) values(v_user,v_product.id,round(v_product.price_gvr*(100-v_discount)/100,4),'pending',trim(p_player_id),nullif(trim(coalesce(p_zone_id,'')),'')) returning id into v_order;
  insert into public.manual_game_payments(game_order_id,user_id,payment_method,payment_amount,payment_currency) values(v_order,v_user,v_method,v_amount,v_currency);
  return v_order;
 end; $body$;
