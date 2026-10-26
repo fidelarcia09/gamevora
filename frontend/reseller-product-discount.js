@@ -78,7 +78,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     if (!Number.isFinite(value) || value <= 0) return "Precio pendiente";
     return value.toLocaleString("es-ES", {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 4
+      maximumFractionDigits: 3
     }) + " GVR";
   }
 
@@ -117,6 +117,14 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
   function showDiscount() {
     if (!initialized || discountPercent <= 0) return;
+
+    // El descuento de revendedor solo corresponde a GVR; no sobrescribir tarifas manuales de Supabase.
+    const selectedMethod = String(document.getElementById("ggMetodoPago")?.value || "").toUpperCase();
+    if (selectedMethod && selectedMethod !== "GVR") {
+      document.querySelectorAll(".gg-reseller-original-price").forEach(element => element.remove());
+      return;
+    }
+
     addStyles();
     document.querySelectorAll(".producto, .boton-oferta").forEach(card => {
       if (card.matches(":disabled") || card.classList.contains("producto-no-disponible")) return;
