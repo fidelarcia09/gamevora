@@ -87,9 +87,13 @@ function iniciar(){
   catch(error){console.error("No se pudieron cargar las tarifas manuales:",error);cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(price&&method!=="GVR")price.textContent="Tarifa pendiente";});}
  }
 select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));pintar();actualizarImporte();}); pintar();
-const observadorTarjetas=new MutationObserver(records=>{if(!records.some(record=>!record.target.closest?.(".producto-precio, .precio-oferta")))return;if(select.value!=="GVR")actualizarImporte();else document.querySelectorAll(".producto-precio, .precio-oferta").forEach(price=>{if(price.dataset.ggOriginalPrice)price.textContent=price.dataset.ggOriginalPrice;});});
- const catalogo=document.getElementById("catalogo")||document.getElementById("catalogoProductos");if(catalogo)observadorTarjetas.observe(catalogo,{childList:true,subtree:true});
- const catalogoOfertas=document.getElementById("catalogoOfertas")||document.getElementById("listaOfertas");if(catalogoOfertas)observadorTarjetas.observe(catalogoOfertas,{childList:true,subtree:true});
+/* Observa todo el documento: cada juego puede reconstruir sus tarjetas en contenedores distintos. */
+ const observadorTarjetas=new MutationObserver(records=>{
+  if(!records.some(record=>!record.target.closest?.(".producto-precio, .precio-oferta")))return;
+  if(select.value!=="GVR")actualizarImporte();
+  else document.querySelectorAll(".producto-precio, .precio-oferta").forEach(price=>{if(price.dataset.ggOriginalPrice)price.textContent=price.dataset.ggOriginalPrice;});
+ });
+ observadorTarjetas.observe(document.documentElement,{childList:true,subtree:true});
  document.addEventListener("click",event=>{if(event.target.closest(".producto, .boton-oferta"))setTimeout(actualizarImporte,0);});
  boton.addEventListener("click",async function(event){
   if(select.value==="GVR") return;
