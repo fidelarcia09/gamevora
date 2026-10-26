@@ -100,7 +100,7 @@ function iniciar(){
     if(!price||!product)return;
     const amount=Number(product.price_gvr);
     if(!Number.isFinite(amount)||amount<=0)return;
-    price.textContent=amount.toLocaleString("es-ES",{maximumFractionDigits:2})+" GVR";
+    price.textContent=amount.toLocaleString("es-ES",{maximumFractionDigits:3})+" GVR";
     price.dataset.ggOriginalPrice=price.textContent;
     price.dataset.ggManualMethod="";
     preciosGVRPorNombre.set(claveTarjeta(card),price.textContent);
