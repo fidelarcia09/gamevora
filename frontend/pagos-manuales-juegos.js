@@ -36,7 +36,25 @@ function iniciar(){
 select.addEventListener("change",()=>{pintar();actualizarImporte();}); pintar();
 document.addEventListener("click",event=>{if(event.target.closest(".producto"))setTimeout(actualizarImporte,0);});
  boton.addEventListener("click",async function(event){
-  if(select.value==="GVR" || typeof pedidoPendienteId!=="undefined" && pedidoPendienteId) return;
+  if(select.value==="GVR") return;
+  if(typeof pedidoPendienteId!=="undefined" && pedidoPendienteId){
+   const manualPendingId=localStorage.getItem("gg_manual_game_payment_pending");
+   if(manualPendingId===pedidoPendienteId){
+    event.preventDefault(); event.stopImmediatePropagation();
+    const {data:payment,error:paymentError}=await supabase.from("manual_game_payments").select("status").eq("game_order_id",pedidoPendienteId).maybeSingle();
+    if(paymentError){mostrarEstado("No se pudo consultar la revisión del pago. Inténtalo más tarde.","error");return;}
+    if(payment?.status==="approved"){
+     localStorage.removeItem("gg_manual_game_payment_pending");
+     accionPendiente="enviar"; guardarPedidoPendiente(); actualizarBoton();
+     mostrarEstado("Pago aprobado. Continuando con el envío de tu pedido…","correcto");
+     boton.click(); return;
+    }
+    if(payment?.status==="rejected"){mostrarEstado("El pago fue rechazado. Contacta con soporte antes de hacer otro pedido.","error");alert("El pago fue rechazado. Contacta con soporte.");return;}
+    mostrarEstado("Tu comprobante sigue pendiente de revisión administrativa. No se enviará al proveedor todavía.","aviso");
+    return;
+   }
+   return;
+  }
   event.preventDefault(); event.stopImmediatePropagation();
   if(typeof procesando!=="undefined" && procesando) return;
   if(select.value==="CUP"){alert("CUP todavía no está disponible. Falta configurar la tarjeta.");return;}
@@ -63,7 +81,7 @@ document.addEventListener("click",event=>{if(event.target.closest(".producto"))s
    if(uploadError) throw new Error("El pedido quedó registrado, pero no se pudo subir el comprobante: "+uploadError.message+". Contacta a soporte antes de crear otro pedido.");
    const {error:proofError}=await supabase.rpc("attach_manual_game_payment_proof",{p_order_id:orderId,p_proof_path:path});
    if(proofError) throw new Error("El comprobante se subió, pero no se pudo asociar al pedido. Contacta a soporte: "+proofError.message);
-   pedidoPendienteId=orderId; accionPendiente="enviar"; guardarPedidoPendiente(); actualizarBoton();
+   pedidoPendienteId=orderId; accionPendiente="enviar"; localStorage.setItem("gg_manual_game_payment_pending",orderId); guardarPedidoPendiente(); actualizarBoton();
    mostrarEstado("Comprobante enviado. Pedido pendiente de revisión administrativa. No se enviará al proveedor hasta que aprueben el pago.","success");
    alert("¡Comprobante enviado! Tu pedido está pendiente de revisión. La recarga no se enviará hasta que administración apruebe el pago.");
   }catch(error){console.error("Pago manual:",error);mostrarEstado(error.message||"No se pudo enviar el comprobante.","error");alert(error.message||"No se pudo enviar el comprobante.");}
