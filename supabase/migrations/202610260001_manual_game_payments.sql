@@ -61,7 +61,7 @@ begin
  if v_decision not in ('approved','rejected') then raise exception 'Decisión inválida.'; end if;
  update public.manual_game_payments set status=v_decision,reviewed_by=v_user,reviewed_at=now(),review_note=left(nullif(trim(coalesce(p_review_note,'')),''),1000) where game_order_id=p_order_id and status='pending' and proof_path is not null;
  if not found then raise exception 'Pago inexistente, ya revisado o sin comprobante.'; end if;
- if v_decision='rejected' then update public.game_orders set status='cancelled' where id=p_order_id and provider_order_id is null and provider_submitted_at is null; end if;
+ if v_decision='rejected' then update public.game_orders set status='failed' where id=p_order_id and provider_order_id is null and provider_submitted_at is null; end if;
  return true;
 end; $$;
 revoke all on function public.admin_review_manual_game_payment(uuid,text,text) from public,anon;
