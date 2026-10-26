@@ -68,10 +68,13 @@ function iniciar(){
   try{await cargandoTarifas;}finally{cargandoTarifas=null;}
  }
  function productoParaTarjeta(card){
+  if(!productosCache)return null;
+  const id=String(card.dataset.ggProductId||"").trim();
+  if(id){const byId=productosCache.find(p=>String(p.id)===id);if(byId)return byId;}
   const name=normalizarNombre(card.querySelector(".producto-nombre")?.textContent);
-  if(!name||!productosCache)return null;
-  const exact=productosCache.find(p=>normalizarNombre(p.product_name)===name);
-  if(exact)return exact;
+  if(!name)return null;
+  const exact=productosCache.filter(p=>normalizarNombre(p.product_name)===name);
+  if(exact.length===1)return exact[0];
   const candidates=productosCache.filter(p=>{const n=normalizarNombre(p.product_name);return n&&(name.includes(n)||n.includes(name));});
   return candidates.length===1?candidates[0]:null;
  }
