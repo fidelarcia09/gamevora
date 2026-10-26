@@ -18,7 +18,6 @@ create policy "manual_game_payments_owner_or_admin_select" on public.manual_game
 drop policy if exists "manual_game_payments_owner_pending_update" on public.manual_game_payments;
 create policy "manual_game_payments_owner_pending_update" on public.manual_game_payments for update to authenticated using (user_id = (select auth.uid()) and status = 'pending') with check (user_id = (select auth.uid()) and status = 'pending');
 revoke insert, delete, update on public.manual_game_payments from anon, authenticated;
-grant update (proof_path) on public.manual_game_payments to authenticated;
 drop function if exists public.create_manual_game_order(uuid,text,text);
 drop function if exists public.create_manual_game_order(uuid,text,text,text);
 create function public.create_manual_game_order(p_product_id uuid,p_player_id text,p_payment_method text,p_zone_id text default null)
@@ -62,7 +61,7 @@ declare v_user uuid:=auth.uid(); v_decision text:=lower(trim(coalesce(p_decision
 begin
  if v_user is null or not public.is_support_admin() then raise exception 'No autorizado.'; end if;
  if v_decision not in ('approved','rejected') then raise exception 'Decisión inválida.'; end if;
- update public.manual_game_payments set status=v_decision,reviewed_by=v_user,reviewed_at=now(),review_note=left(nullif(trim(coalesce(p_review_note,'')),''),1000) where game_order_id=p_order_id and status='pending' and proof_path is not null;
+ update public.manual_game_payments set status=v_decision,reviewed_by=v_user,reviewed_at=now(),review_note=left(nullif(trim(coalesce(p_review_note,'')),''),1000) where game_order_id=p_order_id and status='pending' and proof_path is not null and exists(select 1 from storage.objects o where o.bucket_id='manual-game-proofs' and o.name=manual_game_payments.proof_path);
  if not found then raise exception 'Pago inexistente, ya revisado o sin comprobante.'; end if;
  if v_decision='rejected' then update public.game_orders set status='failed' where id=p_order_id and provider_order_id is null and provider_submitted_at is null; end if;
  return true;
