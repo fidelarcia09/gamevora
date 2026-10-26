@@ -30,21 +30,8 @@ function iniciar(){
  const select=panel.querySelector("#ggMetodoPago");
  panel.querySelectorAll("[data-metodo]").forEach(btn=>btn.addEventListener("click",()=>{select.value=btn.dataset.metodo;panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b===btn));pintar();actualizarImporte();}));
  panel.querySelector('[data-metodo="GVR"]').classList.add("activo");
- function pintar(){
-  const method=select.value;
-  info.hidden=method==="GVR";
-  if(method==="USDT") info.innerHTML='Envía el importe indicado a esta dirección exclusivamente por la red <b>BNB Smart Chain (BEP20)</b>. <div style="margin-top:8px"><b>Dirección:</b><br><span>0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C</span></div><div id="ggImporte" class="gg-importe">El importe se confirma al crear el pedido.</div><p>Adjunta el comprobante. La recarga queda pendiente hasta que administración lo apruebe.</p>';
-  else if(method==="SALDO_MOVIL") info.innerHTML='Envía el importe indicado al número de saldo móvil cubano <b>63638032</b> y guarda la captura del pago. <div id="ggImporte" class="gg-importe">El importe se confirma al crear el pedido.</div><p>La recarga queda pendiente hasta que administración lo apruebe.</p>';
-  else if(method==="CUP") info.innerHTML='<span class="gg-aviso">No disponible todavía. Se habilitará cuando configures la tarjeta.</span>';
- }
- async function actualizarImporte(){
- const node=info.querySelector("#ggImporte"); if(!node)return;
- const selected=productoSeleccionado&&(productoSeleccionado.local||productoSeleccionado); if(!selected||!selected.id){node.textContent="Selecciona primero un paquete para ver el importe.";return;}
- let price=Number(selected.price_gvr);
- if(typeof window.ggGetResellerDiscountedPrice==="function") price=await window.ggGetResellerDiscountedPrice(price);
- if(!Number.isFinite(price)||price<=0){node.textContent="No se pudo calcular el importe.";return;}
- node.textContent=select.value==="USDT" ? "Importe a enviar: "+price.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" USDT" : "Importe a enviar: "+Math.round(price*250).toLocaleString("es-ES")+" CUP de saldo móvil";
-}
+ function pintar(){ /* Los detalles de pago solo se muestran en la página del comprobante. */ }
+ async function actualizarImporte(){ /* El importe definitivo se calcula en el servidor y se muestra en el comprobante. */ }
 select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));pintar();actualizarImporte();}); pintar();
 document.addEventListener("click",event=>{if(event.target.closest(".producto"))setTimeout(actualizarImporte,0);});
  boton.addEventListener("click",async function(event){
