@@ -83,7 +83,7 @@ function iniciar(){
   const cards=[...document.querySelectorAll(".producto, .boton-oferta")].filter(card=>card.querySelector(".producto-precio, .precio-oferta"));
   cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(!price)return;if(!price.dataset.ggOriginalPrice)price.dataset.ggOriginalPrice=price.textContent;if(method==="GVR"){price.textContent=price.dataset.ggOriginalPrice;return;}price.textContent="Cargando tarifa…";});
   if(method==="GVR")return;
-  try{await cargarTarifas();cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(!price)return;const product=productoParaTarjeta(card);const row=product&&tarifasCache.get(product.id+"|"+method);price.textContent=row?formatoTarifa(row,method):"Tarifa pendiente";price.dataset.ggManualMethod=method;});}
+  try{await cargarTarifas();if(select.value!==method)return;cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(!price)return;const product=productoParaTarjeta(card);const row=product&&tarifasCache.get(product.id+"|"+method);price.textContent=row?formatoTarifa(row,method):"Tarifa pendiente";price.dataset.ggManualMethod=method;});}
   catch(error){console.error("No se pudieron cargar las tarifas manuales:",error);cards.forEach(card=>{const price=card.querySelector(".producto-precio, .precio-oferta");if(price&&method!=="GVR")price.textContent="Tarifa pendiente";});}
  }
 select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));pintar();actualizarImporte();}); pintar();
