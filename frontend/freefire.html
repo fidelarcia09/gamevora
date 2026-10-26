@@ -1638,7 +1638,7 @@ function renderizarOfertas() {
 
         tarjeta.type = "button";
         tarjeta.className = "producto producto-oferta";
-        if (local?.id) tarjeta.dataset.ggProductId = String(local.id);
+        if (productoLocal?.id) tarjeta.dataset.ggProductId = String(productoLocal.id);
 
         if (!comprable) {
             tarjeta.classList.add("producto-no-disponible");
@@ -2211,7 +2211,7 @@ iniciar();
 
 <script type="module" src="./reseller-product-discount.js?v=20261025-4"></script>
 
-<script src="./pagos-manuales-juegos.js?v=20261026-23" defer></script>
+<script src="./pagos-manuales-juegos.js?v=20261026-24" defer></script>
 </body>
     </html>
 
