@@ -89,9 +89,19 @@ function iniciar(){
 select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));pintar();actualizarImporte();}); pintar();
 /* Observa todo el documento: cada juego puede reconstruir sus tarjetas en contenedores distintos. */
  const observadorTarjetas=new MutationObserver(records=>{
-  if(!records.some(record=>!record.target.closest?.(".producto-precio, .precio-oferta")))return;
+  /* Ignora únicamente cambios de texto hechos dentro del propio precio; sí procesa
+     cuando el catálogo reemplaza tarjetas o vuelve a pintar el precio GVR. */
+  const catalogoCambio=records.some(record=>{
+   const target=record.target;
+   if(target.nodeType===1 && target.matches?.(".producto-precio, .precio-oferta"))return false;
+   if(target.parentElement?.matches?.(".producto-precio, .precio-oferta"))return false;
+   return true;
+  });
+  if(!catalogoCambio)return;
   if(select.value!=="GVR")actualizarImporte();
-  else document.querySelectorAll(".producto-precio, .precio-oferta").forEach(price=>{if(price.dataset.ggOriginalPrice)price.textContent=price.dataset.ggOriginalPrice;});
+  else document.querySelectorAll(".producto-precio, .precio-oferta").forEach(price=>{
+   if(price.dataset.ggOriginalPrice)price.textContent=price.dataset.ggOriginalPrice;
+  });
  });
  observadorTarjetas.observe(document.documentElement,{childList:true,subtree:true});
  document.addEventListener("click",event=>{if(event.target.closest(".producto, .boton-oferta"))setTimeout(actualizarImporte,0);});
