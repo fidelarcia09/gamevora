@@ -506,7 +506,7 @@ const local=localDe(p);
 const ok=comprable(local);
 const card=document.createElement("button");
 card.type="button";
-card.className="producto";if(local?.id)card.dataset.ggProductId=String(local.id);card.dataset.ggProductId=String(local.id);
+card.className="producto";if(local?.id)card.dataset.ggProductId=String(local.id);
 card.disabled=!ok;
 if(!ok)card.classList.add("producto-no-disponible");
 const n=document.createElement("div");
@@ -711,7 +711,7 @@ const precioElemento=crearOActualizarElemento(card,"precio-oferta",precioTexto);
 const estadoElemento=crearOActualizarElemento(card,"estado-oferta",disponible?"Disponible":"No disponible");
 
 estadoElemento.classList.toggle("no-disponible",!disponible);
-card.dataset.productId=config.id;
+card.dataset.productId=config.id;card.dataset.ggProductId=String(producto.id);
 card.dataset.precioGvr=disponible?String(Number(producto.price_gvr)):"";
 card.dataset.disponible=String(disponible);
 precioElemento.setAttribute("aria-label","Precio: "+precioTexto);
