@@ -451,7 +451,7 @@ function renderizarOfertasPUBG() {
   const producto = porId.get(oferta.id);
   const tarjeta = document.createElement("button");
   tarjeta.type = "button";
-  tarjeta.className = "producto producto-oferta";
+  tarjeta.className = "producto producto-oferta"; if (producto?.id) tarjeta.dataset.ggProductId = String(producto.id);
   const nombre = document.createElement("div");
   nombre.className = "producto-nombre";
   nombre.textContent = oferta.nombre;
