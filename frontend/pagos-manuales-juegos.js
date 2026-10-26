@@ -164,30 +164,21 @@ function iniciar(){
 select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));pintar();actualizarImporte();}); pintar();
 /* Observa todo el documento: cada juego puede reconstruir sus tarjetas en contenedores distintos. */
  const observadorTarjetas=new MutationObserver(records=>{
-  /* Ignora únicamente cambios de texto hechos dentro del propio precio; sí procesa
-     cuando el catálogo reemplaza tarjetas o vuelve a pintar el precio GVR. */
   const catalogoCambio=records.some(record=>{
    const target=record.target;
-   if(target.nodeType===1 && target.matches?.(".producto-precio, .precio-oferta"))return false;
-   if(target.parentElement?.matches?.(".producto-precio, .precio-oferta"))return false;
+   const priceElement=target.nodeType===1&&target.matches?.(".producto-precio, .precio-oferta")?target:target.parentElement?.matches?.(".producto-precio, .precio-oferta")?target.parentElement:null;
+   if(priceElement){
+    const value=String(priceElement.textContent||"").trim();
+    return /\\b(?:NaN|undefined)\\b/i.test(value);
+   }
    return true;
   });
   if(!catalogoCambio)return;
-  if(select.value!=="GVR")actualizarImporte();
-  else document.querySelectorAll(".producto, .boton-oferta").forEach(card=>{
-   const price=card.querySelector(".producto-precio, .precio-oferta");
-   if(!price)return;
-   const key=claveTarjeta(card);
-   const current=String(price.textContent||"").trim();
-   if(!/^(cargando tarifa|tarifa pendiente)/i.test(current))guardarPrecioGVR(card,price);
-   let original=price.dataset.ggOriginalPrice||preciosGVRPorNombre.get(key);
-   if(!precioGVRValido(original)){
-    delete price.dataset.ggOriginalPrice;
-    preciosGVRPorNombre.delete(key);
-    original="";
-   }
-   if(original)price.textContent=original;
-  });
+  if(select.value==="GVR"){
+   restaurarPreciosGVRDesdeSupabase();
+   return;
+  }
+  actualizarImporte();
  });
  observadorTarjetas.observe(document.documentElement,{childList:true,subtree:true});
  document.addEventListener("click",event=>{if(event.target.closest(".producto, .boton-oferta"))setTimeout(actualizarImporte,0);});
