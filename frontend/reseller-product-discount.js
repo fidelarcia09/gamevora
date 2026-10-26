@@ -16,15 +16,33 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   let initialized = false;
   let initPromise;
 
+  function parsePrice(value) {
+    if (typeof value === "number") return Number.isFinite(value) ? value : NaN;
+    let text = String(value ?? "").trim().replace(/\\s*GVR\\s*$/i, "").replace(/\\s/g, "");
+    if (!text) return NaN;
+    if (text.includes(",")) {
+      text = text.replace(/\\./g, "").replace(",", ".");
+    } else if ((text.match(/\\./g) || []).length > 1) {
+      text = text.replace(/\\./g, "");
+    } else if (text.includes(".")) {
+      const decimals = text.split(".").pop().length;
+      if (decimals === 3 && /^-?\\d{1,3}(?:\\.\\d{3})+$/.test(text)) text = text.replace(/\\./g, "");
+    }
+    const number = Number(text);
+    return Number.isFinite(number) ? number : NaN;
+  }
+
   function formatPrice(price) {
-    return Number(price).toLocaleString("es-ES", {
+    const value = parsePrice(price);
+    if (!Number.isFinite(value) || value <= 0) return "Precio pendiente";
+    return value.toLocaleString("es-ES", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }) + " GVR";
   }
 
   function discountedPrice(price) {
-    const value = Number(price);
+    const value = parsePrice(price);
     if (!Number.isFinite(value) || value <= 0 || discountPercent <= 0) return value;
     return Math.round((value * (100 - discountPercent) / 100 + Number.EPSILON) * 10000) / 10000;
   }
@@ -73,8 +91,14 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
         price.dataset.ggOriginalPrice = String(original);
       }
 
-      const original = Number(price.dataset.ggOriginalPrice);
+      const original = parsePrice(price.dataset.ggOriginalPrice);
+      if (!Number.isFinite(original) || original <= 0) {
+        delete price.dataset.ggOriginalPrice;
+        return;
+      }
+      price.dataset.ggOriginalPrice = String(original);
       const finalPrice = discountedPrice(original);
+      if (!Number.isFinite(finalPrice) || finalPrice <= 0) return;
       let oldPrice = card.querySelector(".gg-reseller-original-price");
       if (!oldPrice) {
         oldPrice = document.createElement("div");
