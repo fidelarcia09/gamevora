@@ -615,7 +615,7 @@ let errorCargaOfertas=false;
 function normalizarOferta(texto){
 return String(texto||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[\s_-]/g,"");
 }
-function formatoPrecioOferta(valor){return Number(valor).toLocaleString("es-ES",{maximumFractionDigits:4})+" GVR";}
+function formatoPrecioOferta(valor){return Number(valor).toLocaleString("es-ES",{maximumFractionDigits:2})+" GVR";}
 function configuracionOfertaPorNombre(nombre){
 const ofertas=window.CONFIG_OFERTAS?.ofertas||[];
 const n=normalizarOferta(nombre);
