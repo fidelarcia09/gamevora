@@ -37,6 +37,8 @@ select.addEventListener("change",()=>{pintar();actualizarImporte();}); pintar();
 document.addEventListener("click",event=>{if(event.target.closest(".producto"))setTimeout(actualizarImporte,0);});
  boton.addEventListener("click",async function(event){
   if(select.value==="GVR") return;
+  const savedManualId=localStorage.getItem("gg_manual_game_payment_pending");
+  if((typeof pedidoPendienteId==="undefined"||!pedidoPendienteId)&&savedManualId){pedidoPendienteId=savedManualId;accionPendiente="enviar";}
   if(typeof pedidoPendienteId!=="undefined" && pedidoPendienteId){
    const manualPendingId=localStorage.getItem("gg_manual_game_payment_pending");
    if(manualPendingId===pedidoPendienteId){
@@ -80,6 +82,7 @@ document.addEventListener("click",event=>{if(event.target.closest(".producto"))s
   if(typeof validacionJugador!=="undefined" && validacionJugador.status==="INVALID" && validacionJugador.playerId===playerId){alert("El ID del jugador no es válido. Compruébalo antes de pagar.");return;}
   const {data:{session},error:sessionError}=await supabase.auth.getSession();
   if(sessionError || !session?.access_token){alert("Debes iniciar sesión para continuar.");return;}
+  if(typeof usuarioActualId!=="undefined") usuarioActualId=session.user.id;
   boton.disabled=true;
   try{
    if(typeof procesando!=="undefined") procesando=true;
