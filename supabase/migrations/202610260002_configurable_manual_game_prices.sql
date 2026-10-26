@@ -1,12 +1,12 @@
 -- Configurable per-product prices for manual payment methods.
--- Prices are intentionally empty until Gamevora supplies the final tariffs.
+-- No tariff rows are inserted until Gamevora supplies final prices.
 create table if not exists public.manual_game_product_prices (
   product_id uuid not null references public.game_products(id) on delete cascade,
   payment_method text not null check (payment_method in ('USDT','SALDO_MOVIL')),
   base_amount numeric(14,2) not null check (base_amount > 0),
   payment_currency text not null check (
     (payment_method = 'USDT' and payment_currency = 'USDT') or
-    (payment_method = 'SALDO_MOVIL' and payment_currency = 'CUP')
+    (payment_method = 'SALDO_MOVIL' and payment_currency = 'SALDO_MOVIL')
   ),
   active boolean not null default true,
   updated_at timestamptz not null default now(),
