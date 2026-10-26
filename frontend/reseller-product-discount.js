@@ -59,15 +59,15 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
   function parsePrice(value) {
     if (typeof value === "number") return Number.isFinite(value) ? value : NaN;
-    let text = String(value ?? "").trim().replace(/\\s*GVR\\s*$/i, "").replace(/\\s/g, "");
+    let text = String(value ?? "").trim().replace(/\s*GVR\s*$/i, "").replace(/\s/g, "");
     if (!text) return NaN;
     if (text.includes(",")) {
-      text = text.replace(/\\./g, "").replace(",", ".");
-    } else if ((text.match(/\\./g) || []).length > 1) {
-      text = text.replace(/\\./g, "");
+      text = text.replace(/\./g, "").replace(",", ".");
+    } else if ((text.match(/\./g) || []).length > 1) {
+      text = text.replace(/\./g, "");
     } else if (text.includes(".")) {
       const decimals = text.split(".").pop().length;
-      if (decimals === 3 && /^-?\\d{1,3}(?:\\.\\d{3})+$/.test(text)) text = text.replace(/\\./g, "");
+      if (decimals === 3 && /^-?\d{1,3}(?:\.\d{3})+$/.test(text)) text = text.replace(/\./g, "");
     }
     const number = Number(text);
     return Number.isFinite(number) ? number : NaN;
