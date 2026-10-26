@@ -47,7 +47,8 @@ function iniciar(){
  let tarifasCache=null, productosCache=null, cargandoTarifas=null;
  const preciosGVRPorNombre=new Map();
  function claveTarjeta(card){return normalizarNombre(card.querySelector(".producto-nombre")?.textContent);}
- function precioGVRValido(value){const text=String(value||"").trim();return !!text&&!/^(cargando tarifa|tarifa pendiente)/i.test(text)&&!/(^|\\s)NaN(\\s|$)/i.test(text)&&!/^undefined(?:\\s|$)/i.test(text);}\n function guardarPrecioGVR(card,price){const key=claveTarjeta(card);const value=String(price?.textContent||"").trim();if(key&&precioGVRValido(value)){preciosGVRPorNombre.set(key,value);price.dataset.ggOriginalPrice=value;}else if(price?.dataset.ggOriginalPrice&&!precioGVRValido(price.dataset.ggOriginalPrice)){delete price.dataset.ggOriginalPrice;}}
+ function precioGVRValido(value){const text=String(value||"").trim();return !!text&&!/^(cargando tarifa|tarifa pendiente)/i.test(text)&&!/(^|\\s)NaN(\\s|$)/i.test(text)&&!/^undefined(?:\\s|$)/i.test(text);}
+ function guardarPrecioGVR(card,price){const key=claveTarjeta(card);const value=String(price?.textContent||"").trim();if(key&&precioGVRValido(value)){preciosGVRPorNombre.set(key,value);price.dataset.ggOriginalPrice=value;}else if(price?.dataset.ggOriginalPrice&&!precioGVRValido(price.dataset.ggOriginalPrice)){delete price.dataset.ggOriginalPrice;}}
  const clientePago=import("https://esm.sh/@supabase/supabase-js@2").then(({createClient})=>createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}));
  function normalizarNombre(valor){return String(valor||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();}
  async function cargarTarifas(){
