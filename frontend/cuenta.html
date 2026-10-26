@@ -280,15 +280,21 @@
     .lista-opciones {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 5px; /* Espacio chiquito igual entre cada opción */
     }
 
+    /* Cada opción principal queda rodeada por su propia tarjeta */
     .acordeon {
-        border-bottom: 1px solid #173047;
+        border: 1px solid #173d63;
+        border-radius: 13px;
+        background: linear-gradient(135deg, #0a1930, #061020);
+        overflow: hidden;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .12);
     }
 
     .acordeon[open] {
-        padding-bottom: 15px;
+        padding-bottom: 10px;
+        border-color: #17649a;
     }
 
     .acordeon summary {
@@ -298,7 +304,7 @@
         list-style: none;
         cursor: pointer;
         min-height: 65px;
-        padding: 12px 5px;
+        padding: 12px 14px;
         user-select: none;
         -webkit-tap-highlight-color: transparent;
     }
