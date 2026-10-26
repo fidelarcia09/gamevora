@@ -506,7 +506,7 @@ const local=localDe(p);
 const ok=comprable(local);
 const card=document.createElement("button");
 card.type="button";
-card.className="producto";card.dataset.ggProductId=String(local.id);
+card.className="producto";if(local?.id)card.dataset.ggProductId=String(local.id);card.dataset.ggProductId=String(local.id);
 card.disabled=!ok;
 if(!ok)card.classList.add("producto-no-disponible");
 const n=document.createElement("div");
