@@ -268,6 +268,55 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  .hero .progress-meta{width:74%;flex-direction:row;align-items:center;justify-content:space-between;gap:5px;white-space:normal;font-size:9px}
  .hero .progress-meta span{max-width:49%;overflow-wrap:anywhere}
 }
+
+/* Refinamiento 3D del panel de plan actual: más relieve y ancho ligeramente reducido */
+.hero{
+  width: min(100%, 530px);
+  max-width: 530px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid rgba(164,235,255,.88);
+  background:
+    linear-gradient(118deg,rgba(255,255,255,.12) 0%,transparent 18% 62%,rgba(54,194,255,.12) 100%),
+    radial-gradient(ellipse at 84% 0%,rgba(72,190,255,.48),transparent 39%),
+    linear-gradient(135deg,#0b3a9d 0%,#06266e 42%,#03102f 76%,#0758b5 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.48),
+    inset 0 0 0 2px rgba(39,164,255,.14),
+    inset 0 -14px 24px rgba(0,4,35,.52),
+    0 3px 0 #04102d,
+    0 7px 0 rgba(1,9,35,.78),
+    0 14px 24px rgba(0,0,0,.48),
+    0 0 24px rgba(0,137,255,.24);
+  transform: perspective(1100px) rotateX(.7deg);
+}
+.hero:before{
+  border-top-color: rgba(225,251,255,.98);
+  filter: drop-shadow(0 0 7px rgba(75,218,255,.3));
+}
+.hero .progress-track{
+  border:1px solid rgba(214,244,255,.48);
+  box-shadow:inset 0 3px 5px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.16);
+}
+.hero .progress-fill{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 0 13px rgba(112,220,255,.82);
+}
+.hero .rank-icon{
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.5),
+    inset 0 -7px 12px rgba(0,14,73,.58),
+    0 4px 0 rgba(0,7,42,.7),
+    0 8px 15px rgba(0,0,0,.35),
+    0 0 16px rgba(65,209,255,.24);
+}
+.hero .button.secondary{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 3px 0 rgba(0,6,36,.75),0 6px 12px rgba(0,0,0,.25);
+}
+@media(max-width:600px){
+  .hero{width:96%;max-width:530px;transform:perspective(900px) rotateX(.45deg)}
+}
+@media(prefers-reduced-motion:reduce){.hero{transform:none}}
+
 </style>
 </head>
 <body>
