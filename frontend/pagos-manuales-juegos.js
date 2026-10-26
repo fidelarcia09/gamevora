@@ -2,19 +2,21 @@
 "use strict";
 const style = document.createElement("style");
 style.textContent = `
-.gg-metodos{margin:12px 0;padding:15px;border:1px solid rgba(0,183,255,.24);border-radius:18px;background:#091a35;color:#eef7ff;box-shadow:0 8px 22px rgba(0,0,0,.16)}
-.gg-metodos .gg-titulo{display:flex;align-items:center;gap:9px;margin-bottom:12px;font-size:16px;font-weight:800;color:#f4f8ff}
-.gg-metodos .gg-titulo:before{content:"▣";color:#20c5ff;font-size:20px}
+.gg-metodos{margin:12px 0;padding:14px 16px;border:1px solid #e0e3e9;border-radius:22px;background:#fff;color:#171923;box-shadow:0 2px 5px rgba(16,24,40,.05)}
+.gg-metodos .gg-titulo{display:flex;align-items:center;gap:9px;margin-bottom:12px;font-size:16px;font-weight:800;color:#171923}
+.gg-metodos .gg-titulo:before{content:"▣";color:#171923;font-size:20px}
 .gg-metodos .gg-opciones{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
-.gg-metodos .gg-opcion{min-width:0;padding:11px 4px;border:1px solid rgba(105,158,215,.18);border-radius:12px;background:#0d1b31;color:#dceaff;font-size:13px;font-weight:700;cursor:pointer}
-.gg-metodos .gg-opcion.activo{border-color:#20c5ff;background:linear-gradient(120deg,#087cff,#005de8);color:#fff;box-shadow:0 4px 12px rgba(0,124,255,.24)}
+.gg-metodos .gg-opcion{min-width:0;min-height:48px;padding:10px 4px;border:1px solid #f0f1f5;border-radius:13px;background:#fff;color:#171923;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 7px rgba(16,24,40,.04)}
+.gg-metodos .gg-opcion.activo{border-color:#4d9aff;background:linear-gradient(120deg,#2685ff,#0758ed);color:#fff;box-shadow:0 4px 10px rgba(0,91,255,.2)}
 .gg-metodos .gg-opcion:disabled{opacity:.45;cursor:not-allowed}
-label[for="idjugador"],label[for="idJugador"]{display:flex;align-items:center;gap:8px;margin-top:14px;color:#eef7ff;font-size:14px;font-weight:800}
-label[for="idjugador"]::before,label[for="idJugador"]::before{content:"♙";display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid rgba(32,197,255,.35);border-radius:9px;background:rgba(0,124,255,.15);color:#20c5ff;font-size:17px}
-input#idjugador,input#idJugador{width:100%;min-height:44px;padding:12px;border:1px solid rgba(0,183,255,.4);border-radius:10px;background:#061226;color:#fff;outline:none}
-input#idjugador:focus,input#idJugador:focus{border-color:#20c5ff;box-shadow:0 0 0 3px rgba(32,197,255,.10)}
-.gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid rgba(0,183,255,.4);background:#07152a;color:#fff}
-@media(max-width:360px){.gg-metodos .gg-opciones{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gg-player-card{margin:12px 0;padding:14px 16px;border:1px solid #e0e3e9;border-radius:22px;background:#fff;box-shadow:0 2px 5px rgba(16,24,40,.05)}
+.gg-player-card label[for="idjugador"],.gg-player-card label[for="idJugador"]{display:flex;align-items:center;gap:9px;margin:0 0 10px;color:#171923;font-size:16px;font-weight:800}
+.gg-player-card label[for="idjugador"]::before,.gg-player-card label[for="idJugador"]::before{content:"♙";display:inline-grid;place-items:center;width:30px;height:30px;color:#171923;font-size:21px}
+.gg-player-card input#idjugador,.gg-player-card input#idJugador{box-sizing:border-box;width:100%;min-height:48px;padding:12px 14px;border:1px solid #dedfe5;border-radius:13px;background:#fff;color:#171923;outline:none;font-size:15px}
+.gg-player-card input#idjugador::placeholder,.gg-player-card input#idJugador::placeholder{color:#9ba2b2}
+.gg-player-card input#idjugador:focus,.gg-player-card input#idJugador:focus{border-color:#2786ff;box-shadow:0 0 0 3px rgba(39,134,255,.10)}
+.gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid #dce2ec;background:#fff;color:#171923}
+@media(max-width:390px){.gg-metodos .gg-opciones{grid-template-columns:repeat(2,minmax(0,1fr))}}
 `;
 document.head.appendChild(style);
 function iniciar(){
@@ -27,6 +29,7 @@ function iniciar(){
  const playerLabel=playerField?document.querySelector('label[for="'+playerField.id+'"]'):null;
  const playerCard=playerField?.closest(".player-id-card, .player-card, .campo, .form-group, .formulario-campo")||playerField?.parentElement;
  if(playerCard && playerField){
+  playerCard.classList.add("gg-player-card");
   playerCard.insertAdjacentElement("afterend",panel);
  }else{
   const region=document.querySelector(".selector-region, #region, .region-selector");
