@@ -49,7 +49,7 @@ document.addEventListener("click",event=>{if(event.target.closest(".producto"))s
      mostrarEstado("Pago aprobado. Continuando con el envío de tu pedido…","correcto");
      boton.click(); return;
     }
-    if(payment?.status==="rejected"){mostrarEstado("El pago fue rechazado. Contacta con soporte antes de hacer otro pedido.","error");alert("El pago fue rechazado. Contacta con soporte.");return;}
+    if(payment?.status==="rejected"){localStorage.removeItem("gg_manual_game_payment_pending"); if(typeof borrarPedidoPendiente==="function") borrarPedidoPendiente(); pedidoPendienteId=null; accionPendiente="crear"; actualizarBoton(); mostrarEstado("El pago fue rechazado. Contacta con soporte si necesitas aclarar la revisión.","error");alert("El pago fue rechazado. Puedes contactar con soporte si necesitas aclararlo.");return;}
     mostrarEstado("Tu comprobante sigue pendiente de revisión administrativa. No se enviará al proveedor todavía.","aviso");
     return;
    }
