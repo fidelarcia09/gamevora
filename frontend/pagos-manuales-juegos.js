@@ -124,7 +124,12 @@ function iniciar(){
    if(!price)return;
    if(method==="GVR"){
     const key=claveTarjeta(card);
-    const original=price.dataset.ggOriginalPrice||preciosGVRPorNombre.get(key);
+    let original=price.dataset.ggOriginalPrice||preciosGVRPorNombre.get(key);
+    if(!precioGVRValido(original)){
+     delete price.dataset.ggOriginalPrice;
+     preciosGVRPorNombre.delete(key);
+     original="";
+    }
     if(original)price.textContent=original;
     else guardarPrecioGVR(card,price);
     price.dataset.ggManualMethod="";
@@ -175,7 +180,12 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
    const key=claveTarjeta(card);
    const current=String(price.textContent||"").trim();
    if(!/^(cargando tarifa|tarifa pendiente)/i.test(current))guardarPrecioGVR(card,price);
-   const original=price.dataset.ggOriginalPrice||preciosGVRPorNombre.get(key);
+   let original=price.dataset.ggOriginalPrice||preciosGVRPorNombre.get(key);
+   if(!precioGVRValido(original)){
+    delete price.dataset.ggOriginalPrice;
+    preciosGVRPorNombre.delete(key);
+    original="";
+   }
    if(original)price.textContent=original;
   });
  });
