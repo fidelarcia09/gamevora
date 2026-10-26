@@ -634,6 +634,18 @@ clientReference,
 `POST /orders HTTP ${createResponse.status}: INSUFFICIENT_BALANCE - ${providerError}`,
 );
 
+if (manualPayment) {
+return reply({
+error: "Next Level no tiene saldo suficiente para procesar el pedido. El pago externo requiere revisión administrativa; no se acreditó GVR.",
+game_order_id: order.id,
+provider_http_status: createResponse.status,
+provider_error: providerError,
+manual_payment: true,
+reconciliation_required: true,
+retry_safe: false,
+}, 502);
+}
+
 const { data: refunded, error: refundError } = await admin.rpc(
 "refund_nextlevel_insufficient_balance",
 { p_game_order_id: order.id },
