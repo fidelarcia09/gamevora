@@ -1351,8 +1351,8 @@ async function validarJugador() {
 
         if (estado === "INVALID") {
             mostrarEstadoValidacion(
-                "El proveedor indica que este ID no es válido. " +
-                "Comprueba el número antes de realizar la compra.",
+                "Gamers Gold Top-Up indica que este ID no es válido. " +
+                "Por favor, compruébalo de nuevo antes de realizar la compra.",
                 "error"
             );
 
@@ -1976,8 +1976,8 @@ async function crearCompra(accessToken, playerId) {
         validacionJugador.productId === productIdValidacion
     ) {
         throw new Error(
-            "Next Level confirmó que el ID del jugador no es válido. " +
-            "Corrígelo y vuelve a verificarlo antes de comprar."
+            "Gamers Gold Top-Up indica que este ID no es válido. " +
+            "Por favor, compruébalo de nuevo antes de comprar."
         );
     }
 
