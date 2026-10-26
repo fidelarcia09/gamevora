@@ -27,6 +27,13 @@ function initManualPayments(){
    const detail=document.createElement("p");detail.style.cssText="font-size:13px;line-height:1.7;color:#c5d7ea;overflow-wrap:anywhere";
    detail.textContent="Pedido: "+row.game_order_id+" · Usuario: "+row.user_id+" · Fecha: "+new Date(row.created_at).toLocaleString("es-ES");
    card.append(detail);
+   const {data:orderDetails,error:orderDetailsError}=await supabaseClient.from("game_orders").select("player_id,zone_id,price_gvr,product:game_products(game,product_name)").eq("id",row.game_order_id).maybeSingle();
+   if(!orderDetailsError&&orderDetails){
+    const product=Array.isArray(orderDetails.product)?orderDetails.product[0]:orderDetails.product;
+    const gameLine=document.createElement("p");gameLine.style.cssText="font-size:13px;line-height:1.7;color:#d8e9fb;overflow-wrap:anywhere";
+    gameLine.textContent="Juego: "+(product?.game||"No disponible")+" · Paquete: "+(product?.product_name||"No disponible")+" · ID jugador: "+(orderDetails.player_id||"—")+(orderDetails.zone_id?" · Zona/servidor: "+orderDetails.zone_id:"")+" · Precio base: "+Number(orderDetails.price_gvr||0).toLocaleString("es-ES")+" GVR";
+    card.append(gameLine);
+   }
    if(row.proof_path){
     const {data:signed,error:signedError}=await supabaseClient.storage.from("manual-game-proofs").createSignedUrl(row.proof_path,300);
     if(!signedError&&signed?.signedUrl){const a=document.createElement("a");a.href=signed.signedUrl;a.target="_blank";a.rel="noopener noreferrer";a.textContent="Ver comprobante (enlace temporal)";a.style.cssText="display:inline-block;margin:8px 0;color:#00d0ff";card.append(a);}
