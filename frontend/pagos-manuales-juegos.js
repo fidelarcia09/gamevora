@@ -2,20 +2,20 @@
 "use strict";
 const style = document.createElement("style");
 style.textContent = `
-.gg-metodos{margin:12px 0;padding:14px 16px;border:1px solid #e0e3e9;border-radius:22px;background:#fff;color:#171923;box-shadow:0 2px 5px rgba(16,24,40,.05)}
-.gg-metodos .gg-titulo{display:flex;align-items:center;gap:9px;margin-bottom:12px;font-size:16px;font-weight:800;color:#171923}
-.gg-metodos .gg-titulo:before{content:"▣";color:#171923;font-size:20px}
+.gg-metodos{margin:12px 0;padding:14px 16px;border:1px solid #164b75;border-radius:22px;background:linear-gradient(145deg,#091a35,#07152b);color:#fff;box-shadow:0 8px 22px rgba(0,0,0,.18)}
+.gg-metodos .gg-titulo{display:flex;align-items:center;gap:9px;margin-bottom:12px;font-size:16px;font-weight:800;color:#fff}
+.gg-metodos .gg-titulo:before{content:"▣";color:#fff;font-size:20px}
 .gg-metodos .gg-opciones{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
-.gg-metodos .gg-opcion{min-width:0;min-height:48px;padding:10px 4px;border:1px solid #f0f1f5;border-radius:13px;background:#fff;color:#171923;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 7px rgba(16,24,40,.04)}
-.gg-metodos .gg-opcion.activo{border-color:#4d9aff;background:linear-gradient(120deg,#2685ff,#0758ed);color:#fff;box-shadow:0 4px 10px rgba(0,91,255,.2)}
+.gg-metodos .gg-opcion{min-width:0;min-height:48px;padding:10px 4px;border:1px solid #164b75;border-radius:13px;background:#fff;color:#fff;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 7px rgba(16,24,40,.04)}
+.gg-metodos .gg-opcion.activo{border-color:#45c8ff;background:linear-gradient(120deg,#087cff,#00baff);color:#fff;box-shadow:0 4px 10px rgba(0,91,255,.2)}
 .gg-metodos .gg-opcion:disabled{opacity:.45;cursor:not-allowed}
-.gg-player-card{margin:12px 0;padding:14px 16px;border:1px solid #e0e3e9;border-radius:22px;background:#fff;box-shadow:0 2px 5px rgba(16,24,40,.05)}
-.gg-player-card label[for="idjugador"],.gg-player-card label[for="idJugador"]{display:flex;align-items:center;gap:9px;margin:0 0 10px;color:#171923;font-size:16px;font-weight:800}
-.gg-player-card label[for="idjugador"]::before,.gg-player-card label[for="idJugador"]::before{content:"♙";display:inline-grid;place-items:center;width:30px;height:30px;color:#171923;font-size:21px}
-.gg-player-card input#idjugador,.gg-player-card input#idJugador{box-sizing:border-box;width:100%;min-height:48px;padding:12px 14px;border:1px solid #dedfe5;border-radius:13px;background:#fff;color:#171923;outline:none;font-size:15px}
-.gg-player-card input#idjugador::placeholder,.gg-player-card input#idJugador::placeholder{color:#9ba2b2}
-.gg-player-card input#idjugador:focus,.gg-player-card input#idJugador:focus{border-color:#2786ff;box-shadow:0 0 0 3px rgba(39,134,255,.10)}
-.gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid #dce2ec;background:#fff;color:#171923}
+.gg-player-card{margin:12px 0;padding:14px 16px;border:1px solid #164b75;border-radius:22px;background:#fff;box-shadow:0 2px 5px rgba(16,24,40,.05)}
+.gg-player-card label[for="idjugador"],.gg-player-card label[for="idJugador"]{display:flex;align-items:center;gap:9px;margin:0 0 10px;color:#fff;font-size:16px;font-weight:800}
+.gg-player-card label[for="idjugador"]::before,.gg-player-card label[for="idJugador"]::before{content:"♙";display:inline-grid;place-items:center;width:30px;height:30px;color:#fff;font-size:21px}
+.gg-player-card input#idjugador,.gg-player-card input#idJugador{box-sizing:border-box;width:100%;min-height:48px;padding:12px 14px;border:1px solid #204c78;border-radius:13px;background:#fff;color:#fff;outline:none;font-size:15px}
+.gg-player-card input#idjugador::placeholder,.gg-player-card input#idJugador::placeholder{color:#8fa5bd}
+.gg-player-card input#idjugador:focus,.gg-player-card input#idJugador:focus{border-color:#00baff;box-shadow:0 0 0 3px rgba(0,186,255,.12)}
+.gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid #dce2ec;background:#fff;color:#fff}
 @media(max-width:390px){.gg-metodos .gg-opciones{grid-template-columns:repeat(2,minmax(0,1fr))}}
 `;
 document.head.appendChild(style);
