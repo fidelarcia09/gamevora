@@ -30,7 +30,8 @@ function iniciar(){
  const playerCard=playerField?.closest(".player-id-card, .player-card, .campo, .form-group, .formulario-campo")||playerField?.parentElement;
  if(playerCard && playerField){
   playerCard.classList.add("gg-player-card");
-  playerCard.insertAdjacentElement("afterend",panel);
+  /* Coloca el selector inmediatamente después del campo donde se escribe el ID. */
+  playerField.insertAdjacentElement("afterend",panel);
  }else{
   const region=document.querySelector(".selector-region, #region, .region-selector");
   const nextSection=document.querySelector(".selector-categorias, #catalogo, #catalogoProductos");
