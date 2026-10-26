@@ -42,8 +42,8 @@ begin
  insert into public.manual_game_payments(game_order_id,user_id,payment_method,payment_amount,payment_currency) values(v_order,v_user,v_method,v_amount,v_currency);
  return v_order;
 end; $body$;
-revoke all on function public.create_manual_game_order(uuid,text,text) from public,anon;
-grant execute on function public.create_manual_game_order(uuid,text,text) to authenticated;
+revoke all on function public.create_manual_game_order(uuid,text,text,text) from public,anon;
+grant execute on function public.create_manual_game_order(uuid,text,text,text) to authenticated;
 create or replace function public.attach_manual_game_payment_proof(p_order_id uuid,p_proof_path text)
 returns boolean language plpgsql security definer set search_path = '' as $$
 declare v_user uuid:=auth.uid();
