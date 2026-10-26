@@ -19,7 +19,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   function formatPrice(price) {
     return Number(price).toLocaleString("es-ES", {
       minimumFractionDigits: 0,
-      maximumFractionDigits: 4
+      maximumFractionDigits: 2
     }) + " GVR";
   }
 
