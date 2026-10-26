@@ -338,7 +338,7 @@ function productId(p){return String(p?.productId||p?.product_id||p?.id||"").trim
 function nombre(p){
 return String(p?.nombreMostrar||p?.name||p?.productName||p?.product_name||p?.title||productId(p)||"Producto Arena Breakout").trim();
 }
-function precioGVR(n){return Number(n).toLocaleString("es-ES",{maximumFractionDigits:4})+" GVR";}
+function precioGVR(n){return Number(n).toLocaleString("es-ES",{maximumFractionDigits:2})+" GVR";}
 function localDe(p){
 return productosLocales.find(x=>String(x.provider_product_id||"").trim()===productId(p))||null;
 }
@@ -982,7 +982,7 @@ if(botonComprarOferta)botonComprarOferta.disabled=true;
     <script src="./goldi-widget.js?v=20261023-2" defer></script>
 
 
-<script type="module" src="./reseller-product-discount.js?v=20261025-2"></script>
+<script type="module" src="./reseller-product-discount.js?v=20261025-3"></script>
 </body>
 </html>
 
