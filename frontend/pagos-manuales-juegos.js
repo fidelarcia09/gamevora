@@ -65,6 +65,8 @@ document.addEventListener("click",event=>{if(event.target.closest(".producto"))s
   if(!["image/jpeg","image/png","image/webp","application/pdf"].includes(file.type)){alert("Formato no admitido. Usa JPG, PNG, WEBP o PDF.");return;}
   const selectedProduct=productoSeleccionado&&(productoSeleccionado.local||productoSeleccionado);
   if(!selectedProduct || !selectedProduct.id){alert("Selecciona primero un producto disponible.");return;}
+  if(typeof validarFormulario==="function" && !validarFormulario()) return;
+  if(document.title.toLowerCase().includes("arena breakout") && typeof vistaActual!=="undefined" && vistaActual!=="bonds"){alert("Selecciona primero una oferta disponible.");return;}
   const playerField=document.getElementById("idjugador")||document.getElementById("idJugador");
   const zoneField=document.getElementById("zonaJugador");
   const regionField=document.getElementById("regionJugador");
@@ -74,6 +76,7 @@ document.addEventListener("click",event=>{if(event.target.closest(".producto"))s
   if(zoneField && !zoneId){alert("Selecciona o introduce el servidor/Zone ID.");return;}
   if(regionField && typeof productoDeRegion==="function" && productoSeleccionado && productoSeleccionado.local && !productoDeRegion(selectedProduct,regionField.value) && !productoDeRegion(productoSeleccionado.proveedor,regionField.value)){alert("Este paquete no corresponde a la región seleccionada.");return;}
   if(!playerId){alert("Introduce tu ID de jugador.");return;}
+  if(playerField.maxLength>0 && playerId.length>playerField.maxLength){alert("El ID del jugador supera la longitud permitida.");return;}
   if(typeof validacionJugador!=="undefined" && validacionJugador.status==="INVALID" && validacionJugador.playerId===playerId){alert("El ID del jugador no es válido. Compruébalo antes de pagar.");return;}
   const {data:{session},error:sessionError}=await supabase.auth.getSession();
   if(sessionError || !session?.access_token){alert("Debes iniciar sesión para continuar.");return;}
