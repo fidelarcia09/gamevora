@@ -320,9 +320,21 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
-const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_URL = "https://gsuhzcavghsi.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+if (!window.supabase || typeof window.supabase.createClient !== "function") {
+ const loadingEl = document.getElementById("loading");
+ if (loadingEl) { loadingEl.className = "empty error"; loadingEl.textContent = "No se pudo cargar el servicio de acceso. Recarga la página e inténtalo de nuevo."; }
+ throw new Error("No se cargó la librería de Supabase.");
+}
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+function conTiempoLimite(promise, label, ms = 18000) {
+ let timeoutId;
+ const timeout = new Promise((_, reject) => {
+  timeoutId = setTimeout(() => reject(new Error("Tiempo de espera agotado al " + label + ".")), ms);
+ });
+ return Promise.race([promise, timeout]).finally(() => clearTimeout(timeoutId));
+}
 const LEVELS = [
  {name:"Bronce",min:0,discount:1},
  {name:"Plata",min:25,discount:2},
@@ -383,14 +395,16 @@ function renderizarClientes(clients){
 }
 async function iniciar(){
  try{
-  const {data:{user},error:authError}=await db.auth.getUser();
+  const authResult = await conTiempoLimite(db.auth.getUser(), "verificar tu sesión");
+  const {data:{user},error:authError}=authResult;
   if(authError||!user){window.location.replace("login.html");return;}
-  const {data:profile,error:profileError}=await db.from("reseller_profiles").select("user_id,role,active,created_at").eq("user_id",user.id).eq("active",true).maybeSingle();
+  const profileResult = await conTiempoLimite(db.from("reseller_profiles").select("user_id,role,active,created_at").eq("user_id",user.id).eq("active",true).maybeSingle(), "comprobar tu rol de revendedor");
+  const {data:profile,error:profileError}=profileResult;
   if(profileError||!profile||profile.role!=="Revendedor"){window.location.replace("cuenta.html");return;}
-  const [ordersResult,statsResult]=await Promise.all([
+  const [ordersResult,statsResult]=await conTiempoLimite(Promise.all([
    db.from("game_orders").select("id,product_id,price_gvr,status,player_id,created_at,completed_at").eq("user_id",user.id).gte("created_at",profile.created_at).order("created_at",{ascending:false}).limit(1000),
    db.rpc("get_reseller_dashboard_stats")
-  ]);
+  ]), "cargar las estadísticas del panel");
   if(ordersResult.error)throw ordersResult.error;
   if(statsResult.error)throw statsResult.error;
   const orders=ordersResult.data||[];
@@ -405,7 +419,7 @@ async function iniciar(){
   renderizarNiveles(completed,level);renderizarVentas(orders,products);renderizarClientes(stats.top_clients||[]);
   $("salesCount").textContent=Number(stats.total_orders||0).toLocaleString("es-ES")+" pedidos";
   $("loading").hidden=true;$("dashboard").hidden=false;
- }catch(error){console.error("Error al cargar Revender:",error);$("loading").className="empty error";$("loading").textContent="No se pudo cargar tu panel. Comprueba tu conexión e inténtalo de nuevo.";}
+ }catch(error){console.error("Error al cargar Revender:",error);$("loading").className="empty error";$("loading").textContent=error?.message?.includes("Tiempo de espera agotado")?"La verificación está tardando demasiado. Comprueba tu conexión y recarga la página.":"No se pudo verificar tu acceso o cargar el panel. Comprueba tu conexión y vuelve a intentarlo.";}
 }
 document.querySelectorAll("[data-scroll]").forEach(button=>button.addEventListener("click",()=>{const target=$(button.dataset.scroll);if(!target)return;if(target.id==="salesDropdown"){target.hidden=false;target.open=true;}else{target.hidden=false;}target.scrollIntoView({behavior:"smooth",block:"start"});}));
 $("showLevels").addEventListener("click",()=>{const section=$("levelsSection");section.hidden=!section.hidden;$("showLevels").textContent=section.hidden?"Ver proceso para subir de nivel":"Ocultar proceso";if(!section.hidden)section.scrollIntoView({behavior:"smooth",block:"start"});});
