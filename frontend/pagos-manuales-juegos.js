@@ -45,6 +45,9 @@ function iniciar(){
  const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
  const SUPABASE_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
  let tarifasCache=null, productosCache=null, cargandoTarifas=null;
+ const preciosGVRPorNombre=new Map();
+ function claveTarjeta(card){return normalizarNombre(card.querySelector(".producto-nombre")?.textContent);}
+ function guardarPrecioGVR(card,price){const key=claveTarjeta(card);const value=String(price?.textContent||"").trim();if(key&&value&&!/^(cargando tarifa|tarifa pendiente)/i.test(value)){preciosGVRPorNombre.set(key,value);price.dataset.ggOriginalPrice=value;}}
  const clientePago=import("https://esm.sh/@supabase/supabase-js@2").then(({createClient})=>createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}));
  function normalizarNombre(valor){return String(valor||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();}
  async function cargarTarifas(){
@@ -87,11 +90,13 @@ function iniciar(){
    const price=card.querySelector(".producto-precio, .precio-oferta");
    if(!price)return;
    if(method==="GVR"){
-    if(price.dataset.ggOriginalPrice)price.textContent=price.dataset.ggOriginalPrice;
-    else if(!price.dataset.ggManualMethod)price.dataset.ggOriginalPrice=price.textContent;
+    const key=claveTarjeta(card);
+    const original=price.dataset.ggOriginalPrice||preciosGVRPorNombre.get(key);
+    if(original)price.textContent=original;
+    else guardarPrecioGVR(card,price);
     price.dataset.ggManualMethod="";
    }else{
-    if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod)price.dataset.ggOriginalPrice=price.textContent;
+    if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod)guardarPrecioGVR(card,price);
     price.textContent="Cargando tarifa…";
     price.dataset.ggManualMethod=method;
    }
@@ -130,8 +135,14 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
   });
   if(!catalogoCambio)return;
   if(select.value!=="GVR")actualizarImporte();
-  else document.querySelectorAll(".producto-precio, .precio-oferta").forEach(price=>{
-   if(price.dataset.ggOriginalPrice)price.textContent=price.dataset.ggOriginalPrice;
+  else document.querySelectorAll(".producto, .boton-oferta").forEach(card=>{
+   const price=card.querySelector(".producto-precio, .precio-oferta");
+   if(!price)return;
+   const key=claveTarjeta(card);
+   const current=String(price.textContent||"").trim();
+   if(!/^(cargando tarifa|tarifa pendiente)/i.test(current))guardarPrecioGVR(card,price);
+   const original=price.dataset.ggOriginalPrice||preciosGVRPorNombre.get(key);
+   if(original)price.textContent=original;
   });
  });
  observadorTarjetas.observe(document.documentElement,{childList:true,subtree:true});
