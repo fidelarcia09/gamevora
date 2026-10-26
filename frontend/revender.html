@@ -273,6 +273,7 @@ const $ = id => document.getElementById(id);
 function esc(value){return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function fecha(value){if(!value)return "Fecha no disponible";return new Date(value).toLocaleString("es-ES",{dateStyle:"medium",timeStyle:"short"});}
 function estado(value){const v=String(value||"").toLowerCase();if(v==="completed")return "Completada";if(v==="pending")return "Pendiente";if(v==="failed")return "Fallida";if(v==="refunded")return "Reembolsada";return v||"Desconocido";}
+let rankBadgeCounter=0;
 function emblemaSvg(name){
  const label=esc(name);
  const themes={
@@ -283,7 +284,7 @@ function emblemaSvg(name){
   Leyenda:{a:"#fff2ff",b:"#d77bff",c:"#6424bf",d:"#ffcbfb"}
  };
  const t=themes[name]||themes.Bronce;
- const id="rank"+({Bronce:"Bronce",Plata:"Plata",Oro:"Oro",Diamante:"Diamante",Leyenda:"Leyenda"}[name]||"Base");
+ const id="rank"+({Bronce:"Bronce",Plata:"Plata",Oro:"Oro",Diamante:"Diamante",Leyenda:"Leyenda"}[name]||"Base")+(++rankBadgeCounter);
  const crest=name==="Diamante"
   ?'<path d="M32 13 45 24 39 43 32 49 25 43 19 24Z" fill="url(#'+id+'Gem)" stroke="#fff" stroke-opacity=".9" stroke-width="1.4"/><path d="m19 24 13 5 13-5M32 29v20M25 43l7-14 7 14" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.5"/>'
   :name==="Leyenda"
