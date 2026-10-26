@@ -18,6 +18,7 @@ create policy "manual_game_payments_owner_or_admin_select" on public.manual_game
 drop policy if exists "manual_game_payments_owner_pending_update" on public.manual_game_payments;
 create policy "manual_game_payments_owner_pending_update" on public.manual_game_payments for update to authenticated using (user_id = (select auth.uid()) and status = 'pending') with check (user_id = (select auth.uid()) and status = 'pending');
 revoke insert, delete, update on public.manual_game_payments from anon, authenticated;
+revoke update (proof_path) on public.manual_game_payments from authenticated;
 drop function if exists public.create_manual_game_order(uuid,text,text);
 drop function if exists public.create_manual_game_order(uuid,text,text,text);
 create function public.create_manual_game_order(p_product_id uuid,p_player_id text,p_payment_method text,p_zone_id text default null)
