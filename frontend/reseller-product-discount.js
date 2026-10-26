@@ -100,7 +100,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
       const { data: profile, error: profileError } = await db
         .from("reseller_profiles")
-        .select("user_id, role, active")
+        .select("user_id, role, active, rank_override")
         .eq("user_id", user.id)
         .eq("active", true)
         .maybeSingle();
@@ -118,7 +118,18 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       let current = LEVELS[0];
       for (const level of LEVELS) if (completed >= level.min) current = level;
 
-      discountPercent = current.discount;
+      // El rango manual asignado a la cuenta prevalece sobre el cálculo automático.
+      const overrideDiscount = {
+        Bronce: 1,
+        Plata: 2,
+        Oro: 3,
+        Diamante: 4,
+        Leyenda: 5
+      };
+      const manualRank = String(profile.rank_override || "").trim();
+      discountPercent = Object.prototype.hasOwnProperty.call(overrideDiscount, manualRank)
+        ? overrideDiscount[manualRank]
+        : current.discount;
       initialized = true;
       window.ggResellerDiscountPercent = discountPercent;
       showDiscount();
