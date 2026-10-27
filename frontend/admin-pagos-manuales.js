@@ -27,7 +27,7 @@ function initManualPayments(){
    const detail=document.createElement("p");detail.style.cssText="font-size:13px;line-height:1.7;color:#c5d7ea;overflow-wrap:anywhere";
    detail.textContent="Pedido: "+row.game_order_id+" · Usuario: "+row.user_id+" · Fecha: "+new Date(row.created_at).toLocaleString("es-ES");
    card.append(detail);
-   const {data:orderDetails,error:orderDetailsError}=await supabaseClient.from("game_orders").select("player_id,zone_id,price_gvr,product:game_products(game,product_name)").eq("id",row.game_order_id).maybeSingle();
+   const {data:orderDetails,error:orderDetailsError}=await supabaseClient.from("game_orders").select("player_id,zone_id,price_gvr,provider_order_id,provider_client_reference,product:game_products(game,product_name)").eq("id",row.game_order_id).maybeSingle();
    if(!orderDetailsError&&orderDetails){
     const product=Array.isArray(orderDetails.product)?orderDetails.product[0]:orderDetails.product;
     const gameLine=document.createElement("p");gameLine.style.cssText="font-size:13px;line-height:1.7;color:#d8e9fb;overflow-wrap:anywhere";
@@ -39,6 +39,24 @@ function initManualPayments(){
     if(!signedError&&signed?.signedUrl){const a=document.createElement("a");a.href=signed.signedUrl;a.target="_blank";a.rel="noopener noreferrer";a.textContent="Ver comprobante (enlace temporal)";a.style.cssText="display:inline-block;margin:8px 0;color:#00d0ff";card.append(a);}
     else {const msg=document.createElement("p");msg.textContent="No se pudo abrir el comprobante.";msg.style.color="#ffb6b6";card.append(msg);}
    }else{const no=document.createElement("p");no.textContent="Falta comprobante.";no.style.color="#ffd66b";card.append(no);}
+   if(row.status==="approved"&&row.proof_path&&orderDetails&&!orderDetails.provider_order_id&&!orderDetails.provider_client_reference){
+    const retryWrap=document.createElement("div");retryWrap.style.cssText="margin-top:12px";
+    const retry=document.createElement("button");retry.type="button";retry.className="boton-push";retry.textContent="Reintentar envío seguro al proveedor";
+    retry.addEventListener("click",async()=>{
+     if(!confirm("El pago ya está aprobado y el pedido no tiene referencia de envío reservada. ¿Intentar enviarlo ahora? No se creará otro pedido."))return;
+     retry.disabled=true;retry.textContent="Procesando…";
+     const {data:sendResult,error:sendError}=await supabaseClient.functions.invoke("admin-aprobar-pago-juego",{body:{game_order_id:row.game_order_id}});
+     if(sendError||!sendResult?.success){
+      const reason=sendResult?.error||sendError?.message||"No se confirmó el envío.";
+      alert("El envío sigue sin confirmarse. No pulses repetidamente ni crees otro pedido. Detalle: "+reason);
+     }else{
+      const n=sendResult.notification;
+      alert("Resultado del envío: "+(sendResult.message||"confirmado")+". Estado del proveedor: "+(sendResult.provider_status||"pendiente")+". "+(n?.sent>0?"Notificación enviada al usuario.":"El pedido se envió, pero la notificación push no se confirmó ("+(n?.reason||"sin detalle")+")."));
+     }
+     load();
+    });
+    retryWrap.append(retry);card.append(retryWrap);
+   }
    if(row.status==="pending"&&row.proof_path){
     const actions=document.createElement("div");actions.style.cssText="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px";
     for(const [decision,label] of [["approved","Aprobar pago"],["rejected","Rechazar pago"]]){
