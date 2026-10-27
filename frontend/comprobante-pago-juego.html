@@ -42,10 +42,10 @@ async function init(){
  if(gameOrder?.product_id){
   const {data:product}=await supabase.from("game_products").select("game,product_name,game_currency_amount").eq("id",gameOrder.product_id).maybeSingle();
   if(product){
-   const gameName=String(product.game||"").replace(/[-_]+/g," ").replace(/\\b\\w/g,letter=>letter.toUpperCase());
+   const gameName=String(product.game||"").replace(/[-_]+/g," ").replace(/\b\w/g,letter=>letter.toUpperCase());
    const packageName=String(product.product_name||"").trim();
    const quantity=Number(product.game_currency_amount);
-   const quantityLabel=Number.isFinite(quantity)&&quantity>0?quantity.toLocaleString("es-ES")+" unidades":"";
+   const quantityLabel=Number.isFinite(quantity)&&quantity>0&&!packageName.includes(String(quantity))?quantity.toLocaleString("es-ES")+" unidades":"";
    orderDisplay=[gameName,packageName,quantityLabel].filter(Boolean).join(" · ")+" · Pedido #"+orderId.slice(0,8).toUpperCase();
   }
  }
