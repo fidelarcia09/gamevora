@@ -86,7 +86,7 @@ const destino = esSolicitudGVR
 
 const options = {
 
-    body: data.body,
+    body: typeof data.body === "string" ? data.body.replace(/\s+·\s+/g, "\n") : data.body,
 
     icon: LOGO,
 
