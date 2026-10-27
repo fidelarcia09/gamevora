@@ -222,6 +222,14 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
    event.preventDefault(); event.stopImmediatePropagation();
    const bridge=window.ggManualPaymentBridge; const client=bridge?.getClient(); if(!client){mostrarEstado("No se pudo conectar con el juego. Recarga la página e inténtalo de nuevo.","error");return;} const {data:payment,error:paymentError}=await client.from("manual_game_payments").select("status,proof_path").eq("game_order_id",savedManualId).maybeSingle();
    if(paymentError){mostrarEstado("No se pudo consultar la revisión del pago. Inténtalo más tarde.","error");return;}
+   if(!payment){
+    /* El pedido pendiente pudo ser eliminado en soporte. Borra solo la referencia local obsoleta;
+       no crees otro pedido automáticamente en este mismo clic. */
+    localStorage.removeItem("gg_manual_game_payment_pending");
+    localStorage.removeItem("gg_manual_game_payment_method");
+    mostrarEstado("La solicitud anterior ya no existe. Vuelve a pulsar Continuar una sola vez para registrar un nuevo pedido.","aviso");
+    return;
+   }
    if(payment?.status==="approved"){
     /* Solo se llama al proveedor después de la aprobación administrativa y de una acción explícita del usuario. */
     const {data:{session},error:sessionError}=await client.auth.getSession();
