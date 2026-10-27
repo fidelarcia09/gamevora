@@ -609,6 +609,9 @@ async function iniciar() {
     if (session?.user?.id) {
       usuarioActualId = session.user.id;
       recuperarPedidoPendiente(usuarioActualId);
+
+            // Validar la referencia guardada al abrir la página para liberar pedidos ya fallidos.
+            await verificarPedidoGuardado(usuarioActualId);
       actualizarBoton();
     }
   } catch (error) { console.error("No se pudo recuperar la sesión:", error); }
