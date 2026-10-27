@@ -40,6 +40,19 @@ function iniciar(){
   else (playerField?.parentNode||boton.parentNode).insertBefore(panel,playerField?.nextSibling||boton);
  }
  const select=panel.querySelector("#ggMetodoPago");
+ function mostrarEstado(mensaje,tipo="aviso"){
+  let estado=document.getElementById("ggEstadoPagoManual");
+  if(!estado){
+   estado=document.createElement("div");
+   estado.id="ggEstadoPagoManual";
+   estado.setAttribute("role","status");
+   estado.style.cssText="box-sizing:border-box;margin:8px 0;padding:10px 12px;border:1px solid #164b75;border-radius:10px;background:#07152b;color:#fff;font-size:13px;line-height:1.4;overflow-wrap:anywhere";
+   panel.insertAdjacentElement("afterend",estado);
+  }
+  estado.textContent=String(mensaje||"");
+  estado.style.borderColor=tipo==="error"?"#ef4444":tipo==="correcto"?"#22c55e":"#164b75";
+  estado.style.color=tipo==="error"?"#fecaca":tipo==="correcto"?"#bbf7d0":"#fff";
+ }
  panel.querySelectorAll("[data-metodo]").forEach(btn=>btn.addEventListener("click",()=>{select.value=btn.dataset.metodo;panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b===btn));pintar();actualizarImporte();}));
  panel.querySelector('[data-metodo="GVR"]').classList.add("activo");
  const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
