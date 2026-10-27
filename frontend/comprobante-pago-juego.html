@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050b18">
-<title>Enviar comprobante | Gamevora</title>
+<title>Enviar comprobante | Gamer Gold Top Up</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{color-scheme:dark;--bg:#050b18;--panel:#091a35;--blue:#087cff;--cyan:#20c5ff;--text:#f4f8ff;--muted:#9aadc4;--border:rgba(0,183,255,.25)}
@@ -11,7 +11,7 @@ header,main,footer{width:100%;max-width:560px;margin:auto}header{display:flex;ju
 main{padding:24px 0}.eyebrow{display:inline-block;padding:7px 11px;border:1px solid var(--border);border-radius:20px;color:var(--cyan);font-size:11px;font-weight:bold;letter-spacing:1px}h1{font-size:28px;margin:15px 0 8px}.sub{color:var(--muted);font-size:14px;line-height:1.6;margin:0 0 20px}.card{padding:20px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(145deg,#0a1b35,#061126);box-shadow:0 15px 40px #0004}.row{padding:13px;margin-bottom:10px;border:1px solid rgba(105,158,215,.15);border-radius:12px;background:#020d1f99}.label{font-size:12px;color:var(--muted);margin-bottom:6px}.value{font-size:15px;font-weight:bold;overflow-wrap:anywhere}.amount{color:var(--cyan);font-size:20px}.instructions{padding:14px;margin:14px 0;border:1px solid var(--border);border-radius:12px;background:#087cff12;font-size:13px;line-height:1.65;overflow-wrap:anywhere}.address{color:var(--cyan);font-weight:bold;overflow-wrap:anywhere}.file{display:block;padding:15px;border:1px dashed #20c5ff88;border-radius:12px;background:#087cff0c;font-size:13px;line-height:1.6}.file input{display:block;width:100%;margin-top:12px;color:var(--muted)}button{width:100%;margin-top:18px;padding:15px;border:0;border-radius:12px;background:linear-gradient(100deg,var(--blue),var(--cyan));color:white;font-size:15px;font-weight:800;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.message{display:none;margin-top:14px;padding:13px;border-radius:10px;font-size:13px;line-height:1.6;overflow-wrap:anywhere}.message.show{display:block}.message.error{color:#ffb5b5;background:#ff324614;border:1px solid #ff465a44}.message.ok{color:#42e6a4;background:#28dc9614;border:1px solid #28dc9640}.message.info{color:#b8eaff;background:#0091ff14;border:1px solid #00aeff40}footer{text-align:center;color:#657995;font-size:12px;padding-bottom:24px}.hidden{display:none!important}
 </style></head>
 <body>
-<header><div class="logo">GAME<span>VORA</span></div><a href="#" id="back">← Volver al juego</a></header>
+<header><div class="logo">GAMER GOLD <span>TOP UP</span></div><a href="#" id="back">← Volver al juego</a></header>
 <main><div class="eyebrow">PAGO MANUAL</div><h1>Envía tu comprobante</h1><p class="sub">Realiza el pago con los datos indicados y adjunta la captura o el PDF. Tu recarga no se enviará hasta que administración apruebe el pago.</p>
 <section class="card">
 <div class="row"><div class="label">Pedido</div><div class="value" id="order">Verificando…</div></div>
@@ -20,7 +20,7 @@ main{padding:24px 0}.eyebrow{display:inline-block;padding:7px 11px;border:1px so
 <div id="instructions" class="instructions">Cargando instrucciones de pago…</div>
 <label class="file">Comprobante de pago (JPG, PNG, WEBP o PDF; máximo 6 MB)<input id="proof" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></label>
 <button id="send" type="button">Enviar comprobante</button><div id="message" class="message" role="status" aria-live="polite"></div>
-</section></main><footer>Gamevora · Pago protegido por revisión administrativa</footer>
+</section></main><footer>Gamer Gold Top Up · Pago protegido por revisión administrativa</footer>
 <script>
 "use strict";
 const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
@@ -29,15 +29,27 @@ const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth
 const $=id=>document.getElementById(id), params=new URLSearchParams(location.search), orderId=params.get("pedido");
 let user=null, alreadyHasProof=false, sending=false;
 function message(text,type){$("message").textContent=text;$("message").className="message show "+type}
-function methodLabel(method){return method==="USDT"?"USDT · BNB Smart Chain (BEP20)":method==="SALDO_MOVIL"?"Saldo móvil cubano":"CUP"}
+function methodLabel(method){return method==="USDT"?"USDT · BNB Smart Chain (BEP20)":method==="SALDO_MOVIL"?"Saldo móvil cubano":method==="GVR"?"GVR":"CUP"}
 $("back").addEventListener("click",e=>{e.preventDefault();history.length>1?history.back():location.assign("./index.html")});
 async function init(){
  if(!orderId||!/^[0-9a-f-]{36}$/i.test(orderId)){message("El enlace del pedido no es válido. Vuelve al juego e inicia la solicitud otra vez.","error");$("send").disabled=true;return}
  const {data,error}=await supabase.auth.getSession(); user=data?.session?.user;
  if(error||!user){message("Inicia sesión con la cuenta que creó este pedido y vuelve a abrir el enlace.","error");$("send").disabled=true;return}
- $("order").textContent=orderId;
  const {data:payment,error:payError}=await supabase.from("manual_game_payments").select("status,proof_path,payment_method,payment_amount,payment_currency,game_order_id").eq("game_order_id",orderId).maybeSingle();
  if(payError||!payment){message("No pudimos verificar este pedido. Comprueba que has iniciado sesión con la cuenta correcta.","error");$("send").disabled=true;return}
+ const {data:gameOrder}=await supabase.from("game_orders").select("product_id,price_gvr").eq("id",orderId).maybeSingle();
+ let orderDisplay="Pedido #"+orderId.slice(0,8).toUpperCase();
+ if(gameOrder?.product_id){
+  const {data:product}=await supabase.from("game_products").select("game,product_name,game_currency_amount").eq("id",gameOrder.product_id).maybeSingle();
+  if(product){
+   const gameName=String(product.game||"").replace(/[-_]+/g," ").replace(/\\b\\w/g,letter=>letter.toUpperCase());
+   const packageName=String(product.product_name||"").trim();
+   const quantity=Number(product.game_currency_amount);
+   const quantityLabel=Number.isFinite(quantity)&&quantity>0?quantity.toLocaleString("es-ES")+" unidades":"";
+   orderDisplay=[gameName,packageName,quantityLabel].filter(Boolean).join(" · ")+" · Pedido #"+orderId.slice(0,8).toUpperCase();
+  }
+ }
+ $("order").textContent=orderDisplay;
  $("method").textContent=methodLabel(payment.payment_method);
  $("amount").textContent=Number(payment.payment_amount).toLocaleString("es-ES",{minimumFractionDigits:payment.payment_method==="USDT"?2:0,maximumFractionDigits:payment.payment_method==="USDT"?2:2})+" "+(payment.payment_method==="SALDO_MOVIL"?"CUP de saldo móvil":payment.payment_currency);
  const info=$("instructions");
