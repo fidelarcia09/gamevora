@@ -138,7 +138,7 @@ function iniciar(){
   price.textContent=formatoTarifa(row,method,final);
  }
  function pintar(){panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));actualizarImporte();}
- async async function actualizarImporte(){
+ async function actualizarImporte(){
   const method=select.value;
   const cards=[...document.querySelectorAll(".producto, .boton-oferta")].filter(card=>card.querySelector(".producto-precio, .precio-oferta"));
   /* Guarda el precio original únicamente cuando el catálogo está mostrando GVR.
