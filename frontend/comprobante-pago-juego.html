@@ -43,7 +43,7 @@ const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 const $=id=>document.getElementById(id), params=new URLSearchParams(location.search), orderId=params.get("pedido");
 if(!window.supabase?.createClient){
- document.getElementById("order").textContent=orderId?"Pedido #"+orderId.slice(0,8).toUpperCase():"Pedido no disponible";
+ document.getElementById("order").textContent=orderId?"Pedido #"+("GT-"+orderId.replaceAll("-","").slice(0,8).toUpperCase()):"Pedido no disponible";
  document.getElementById("method").textContent="No se pudo cargar el sistema de pagos";
  document.getElementById("amount").textContent="No disponible temporalmente";
  document.getElementById("instructions").textContent="No se pudo cargar el servicio necesario para consultar el pago. Comprueba tu conexión y recarga la página. No crees otro pedido ni vuelvas a pagar.";
@@ -67,9 +67,9 @@ async function init(){
  const {data,error}=await withTimeout(supabase.auth.getSession(),"La verificación de sesión"); user=data?.session?.user;
  if(error||!user){$("order").textContent="No se pudo verificar";$("method").textContent=savedMethod?methodLabel(savedMethod):"No disponible";$("amount").textContent="Inicia sesión para consultar el importe";$("instructions").textContent="Inicia sesión con la cuenta que creó este pedido y vuelve a abrir el enlace.";message("Inicia sesión con la cuenta que creó este pedido y vuelve a abrir el enlace.","error");$("send").disabled=true;return}
  const {data:payment,error:payError}=await withTimeout(supabase.from("manual_game_payments").select("status,proof_path,payment_method,payment_amount,payment_currency,game_order_id").eq("game_order_id",orderId).maybeSingle(),"La consulta del pago");
- if(payError||!payment){$("order").textContent="Pedido #"+orderId.slice(0,8).toUpperCase();$("method").textContent=savedMethod?methodLabel(savedMethod):"No disponible";$("amount").textContent="No se pudo consultar el importe";$("instructions").textContent="No pudimos leer los datos de pago de este pedido. Comprueba que has iniciado sesión con la cuenta correcta. Si sigue ocurriendo, contacta con soporte y no crees otro pedido.";message("No se pudo verificar el pedido: "+(payError?.message||"no se encontró el pago asociado")+". No crees otro pedido.","error");$("send").disabled=true;return}
+ if(payError||!payment){$("order").textContent="Pedido #"+("GT-"+orderId.replaceAll("-","").slice(0,8).toUpperCase());$("method").textContent=savedMethod?methodLabel(savedMethod):"No disponible";$("amount").textContent="No se pudo consultar el importe";$("instructions").textContent="No pudimos leer los datos de pago de este pedido. Comprueba que has iniciado sesión con la cuenta correcta. Si sigue ocurriendo, contacta con soporte y no crees otro pedido.";message("No se pudo verificar el pedido: "+(payError?.message||"no se encontró el pago asociado")+". No crees otro pedido.","error");$("send").disabled=true;return}
  const {data:gameOrder}=await withTimeout(supabase.from("game_orders").select("product_id,price_gvr").eq("id",orderId).maybeSingle(),"La consulta del pedido");
- let orderDisplay="Pedido #"+orderId.slice(0,8).toUpperCase();
+ let orderDisplay="Pedido #"+("GT-"+orderId.replaceAll("-","").slice(0,8).toUpperCase());
  if(gameOrder?.product_id){
   const {data:product}=await withTimeout(supabase.from("game_products").select("game,product_name,game_currency_amount").eq("id",gameOrder.product_id).maybeSingle(),"La consulta del paquete");
   if(product){
@@ -77,7 +77,7 @@ async function init(){
    const packageName=String(product.product_name||"").trim();
    const quantity=Number(product.game_currency_amount);
    const quantityLabel=Number.isFinite(quantity)&&quantity>0&&!packageName.includes(String(quantity))?quantity.toLocaleString("es-ES")+" unidades":"";
-   orderDisplay=[gameName,packageName,quantityLabel].filter(Boolean).join(" · ")+" · Pedido #"+orderId.slice(0,8).toUpperCase();
+   orderDisplay=[gameName,packageName,quantityLabel].filter(Boolean).join(" · ")+" · Pedido #"+("GT-"+orderId.replaceAll("-","").slice(0,8).toUpperCase());
   }
  }
  $("order").textContent=orderDisplay;
@@ -94,7 +94,7 @@ async function init(){
  else if(alreadyHasProof){message("Ya hay un comprobante asociado. El pago está pendiente de revisión administrativa.","info");$("send").textContent="Comprobante ya enviado";$("send").disabled=true}
  }catch(error){
  console.error("No se pudo cargar el resumen del pago manual:",error);
- $("order").textContent=orderId?"Pedido #"+orderId.slice(0,8).toUpperCase():"Pedido no disponible";
+ $("order").textContent=orderId?"Pedido #"+("GT-"+orderId.replaceAll("-","").slice(0,8).toUpperCase()):"Pedido no disponible";
  $("amount").textContent="No se pudo cargar el importe";
  $("instructions").textContent="Hubo un error al cargar los datos de pago. Recarga esta página; si continúa, contacta con soporte. No crees otro pedido ni realices otro pago.";
  message("Error al cargar el pedido: "+(error?.message||"error inesperado")+". No crees otro pedido.","error");
