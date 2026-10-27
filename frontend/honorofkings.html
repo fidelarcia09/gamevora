@@ -288,7 +288,7 @@ async function verificarPedidoGuardado(userId) {
   if (!pedidoPendienteId) return false;
   const idVerificado = pedidoPendienteId;
   const { data, error } = await supabase.from("game_orders")
-    .select("id,status,provider_order_id,provider_client_reference,provider_submitted_at")
+    .select("id,status,provider_order_id,provider_client_reference,provider_submitted_at,provider_status,provider_error")
     .eq("id", idVerificado).eq("user_id", userId).maybeSingle();
   if (error) {
     console.error("Error verificando pedido:", error.message);
@@ -296,6 +296,8 @@ async function verificarPedidoGuardado(userId) {
   }
   if (!data) throw new Error("No pudimos confirmar el pedido anterior en la base de datos. No hagas otra recarga hasta aclarar su estado.");
   const status = String(data.status || "").toLowerCase();
+  const errorProveedor = String(data.provider_status || "") + " " + String(data.provider_error || "");
+  if (status === "failed" && /INSUFFICIENT_BALANCE|saldo insuficiente/i.test(errorProveedor)) { borrarPendiente(); return false; }
   if (status === "completed" || status === "refunded") {
     borrarPedidoPendiente();
     return false;
