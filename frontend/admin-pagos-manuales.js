@@ -49,7 +49,18 @@ function initManualPayments(){
       const note=prompt("Nota de revisión (opcional):")||null;b.disabled=true;
       const {error:reviewError}=await supabaseClient.rpc("admin_review_manual_game_payment",{p_order_id:row.game_order_id,p_decision:decision,p_review_note:note});
       if(reviewError){alert("No se pudo revisar el pago: "+reviewError.message);b.disabled=false;return;}
-      alert(decision==="approved"?"Pago aprobado. El usuario podrá continuar el pedido; el proveedor no se llama automáticamente desde este panel.":"Pago rechazado.");
+      if(decision==="approved"){
+       const {data:sendResult,error:sendError}=await supabaseClient.functions.invoke("admin-aprobar-pago-juego",{body:{game_order_id:row.game_order_id}});
+       if(sendError||!sendResult?.success){
+        const reason=sendResult?.error||sendError?.message||"No se confirmó el envío al proveedor.";
+        alert("El pago quedó aprobado, pero el envío automático no se confirmó. No vuelvas a aprobar ni crees otro pedido. Revisa el estado del pedido. Detalle: "+reason);
+       }else{
+        const n=sendResult.notification;
+        alert("Pago aprobado y pedido enviado a Next Level. Estado del proveedor: "+(sendResult.provider_status||"pendiente")+". "+(n?.sent>0?"Notificación enviada al usuario.": "El pedido se envió, pero no se confirmó una notificación push ("+(n?.reason||"sin detalle")+")."));
+       }
+      }else{
+       alert("Pago rechazado.");
+      }
       load();
      });
      actions.append(b);
