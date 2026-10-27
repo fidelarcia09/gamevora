@@ -187,7 +187,7 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
   const savedManualId=localStorage.getItem("gg_manual_game_payment_pending");
   if(savedManualId){
    event.preventDefault(); event.stopImmediatePropagation();
-   const {data:payment,error:paymentError}=await supabase.from("manual_game_payments").select("status,proof_path").eq("game_order_id",savedManualId).maybeSingle();
+   const bridge=window.ggManualPaymentBridge; const client=bridge?.getClient(); if(!client){mostrarEstado("No se pudo conectar con el juego. Recarga la página e inténtalo de nuevo.","error");return;} const {data:payment,error:paymentError}=await client.from("manual_game_payments").select("status,proof_path").eq("game_order_id",savedManualId).maybeSingle();
    if(paymentError){mostrarEstado("No se pudo consultar la revisión del pago. Inténtalo más tarde.","error");return;}
    if(payment?.status==="approved"){
     localStorage.removeItem("gg_manual_game_payment_pending");
@@ -210,22 +210,23 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
   event.preventDefault(); event.stopImmediatePropagation();
   if(typeof procesando!=="undefined" && procesando) return;
   if(select.value==="CUP"){alert("CUP todavía no está disponible. Falta configurar la tarjeta.");return;}
-  const selectedProduct=productoSeleccionado&&(productoSeleccionado.local||productoSeleccionado);
+  const bridge=window.ggManualPaymentBridge; const client=bridge?.getClient(); const selectedProduct=bridge?.getProduct();
   if(!selectedProduct || !selectedProduct.id){alert("Selecciona primero un producto disponible.");return;}
-  if(typeof validarFormulario==="function" && !validarFormulario()) return;
-  if(document.title.toLowerCase().includes("arena breakout") && typeof vistaActual!=="undefined" && vistaActual!=="bonds"){alert("Selecciona primero una oferta disponible.");return;}
-  const playerField=document.getElementById("idjugador")||document.getElementById("idJugador");
-  const zoneField=document.getElementById("zonaJugador");
-  const regionField=document.getElementById("regionJugador");
+  if(!bridge || !client){alert("No se pudo conectar con el sistema de compra. Recarga la página.");return;}
+  if(typeof bridge.validate==="function" && !bridge.validate()) return;
+  if(document.title.toLowerCase().includes("arena breakout") && bridge.getView && bridge.getView()!=="bonds"){alert("Selecciona primero una oferta disponible.");return;}
+  const playerField=bridge.getPlayerField?bridge.getPlayerField():(document.getElementById("idjugador")||document.getElementById("idJugador"));
+  const zoneField=bridge.getZoneField?bridge.getZoneField():document.getElementById("zonaJugador");
+  const regionField=bridge.getRegionField?bridge.getRegionField():document.getElementById("regionJugador");
   if(!playerField){alert("No se encontró el campo de ID del jugador.");return;}
   const playerId=playerField.value.trim();
   const zoneId=zoneField ? zoneField.value.trim() : null;
   if(zoneField && !zoneId){alert("Selecciona o introduce el servidor/Zone ID.");return;}
-  if(regionField && typeof productoDeRegion==="function" && productoSeleccionado && productoSeleccionado.local && !productoDeRegion(selectedProduct,regionField.value) && !productoDeRegion(productoSeleccionado.proveedor,regionField.value)){alert("Este paquete no corresponde a la región seleccionada.");return;}
+  
   if(!playerId){alert("Introduce tu ID de jugador.");return;}
   if(playerField.maxLength>0 && playerId.length>playerField.maxLength){alert("El ID del jugador supera la longitud permitida.");return;}
   if(typeof validacionJugador!=="undefined" && validacionJugador.status==="INVALID" && validacionJugador.playerId===playerId){alert("El ID del jugador no es válido. Compruébalo antes de pagar.");return;}
-  const {data:{session},error:sessionError}=await supabase.auth.getSession();
+  const {data:{session},error:sessionError}=await client.auth.getSession();
   if(sessionError || !session?.access_token){alert("Debes iniciar sesión para continuar.");return;}
   if(typeof usuarioActualId!=="undefined") usuarioActualId=session.user.id;
   boton.disabled=true;
