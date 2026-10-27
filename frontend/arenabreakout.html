@@ -447,10 +447,10 @@ accionPendiente=d.accion==="consultar"?"consultar":"enviar";
 async function verificarPendiente(uid){
 if(!pedidoPendienteId)return false;
 const id=pedidoPendienteId;
-const {data,error}=await supabase.from("game_orders").select("id,status,provider_order_id,provider_client_reference,provider_submitted_at").eq("id",id).eq("user_id",uid).maybeSingle();
+const {data,error}=await supabase.from("game_orders").select("id,status,provider_order_id,provider_client_reference,provider_submitted_at,provider_status,provider_error").eq("id",id).eq("user_id",uid).maybeSingle();
 if(error)throw new Error("No se pudo verificar el pedido anterior. No iniciaremos otra compra.");
 if(!data)throw new Error("No se pudo confirmar el pedido anterior en la base de datos. No realices otra compra todavía.");
-const st=String(data.status||"").toLowerCase();
+const st=String(data.status||"").toLowerCase();const errorProveedor=String(data.provider_status||"")+" "+String(data.provider_error||"");if(st==="failed"&&/INSUFFICIENT_BALANCE|saldo insuficiente/i.test(errorProveedor)){if(pedidoPendienteId===id)borrarPedidoPendiente();return false;}
 if(st==="completed"||st==="refunded"){borrarPendiente();return false;}
 accionPendiente=(data.provider_order_id||data.provider_client_reference||data.provider_submitted_at)?"consultar":(st==="pending"?"enviar":"consultar");
 guardarPendiente();
