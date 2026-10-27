@@ -36,7 +36,7 @@ function initManualPayments(){
   for(const row of rows){
    const card=document.createElement("article");card.style.cssText="padding:15px;margin:12px 0;border:1px solid rgba(0,170,255,.22);border-radius:12px;background:rgba(0,0,0,.16)";
    const head=document.createElement("div");head.style.cssText="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px";
-   const title=document.createElement("strong");title.style.color="#00b7ff";title.textContent=row.payment_method+" · "+Number(row.payment_amount).toLocaleString("es-ES")+" "+row.payment_currency;
+   const title=document.createElement("strong");title.style.color="#00b7ff";title.textContent="GT-"+String(row.game_order_id||"").replaceAll("-","").slice(0,8).toUpperCase()+" · "+row.payment_method+" · "+Number(row.payment_amount).toLocaleString("es-ES")+" "+row.payment_currency;
    const status=document.createElement("span");status.textContent=String(row.status||"pending").toUpperCase();status.style.cssText="font-weight:bold;color:"+(row.status==="approved"?"#5dffb0":row.status==="rejected"?"#ff7777":"#ffd66b");
    head.append(title,status);card.append(head);
    const detail=document.createElement("p");detail.style.cssText="font-size:13px;line-height:1.7;color:#c5d7ea;overflow-wrap:anywhere";
