@@ -591,7 +591,9 @@ async function obtenerPedidoActual(userId) {
             status,
             provider_order_id,
             provider_client_reference,
-            provider_submitted_at
+            provider_submitted_at,
+            provider_status,
+            provider_error
         `)
         .eq("id", pedidoPendienteId)
         .eq("user_id", userId)
@@ -614,6 +616,14 @@ async function obtenerPedidoActual(userId) {
             "No se pudo confirmar el pedido anterior. " +
             "Conservamos su referencia para evitar una compra duplicada."
         );
+    }
+
+    const estadoActual = String(data.status || "").toLowerCase();
+    const errorProveedor = String(data.provider_status || "") + " " + String(data.provider_error || "");
+    if (estadoActual === "failed" && /INSUFFICIENT_BALANCE|saldo insuficiente/i.test(errorProveedor)) {
+        borrarPedidoPendiente();
+        mostrarEstado("El pedido anterior no se completó por saldo insuficiente del proveedor. Puedes crear un pedido nuevo.", "aviso");
+        return null;
     }
 
     if (
