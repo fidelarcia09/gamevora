@@ -675,7 +675,7 @@ async function verificarPendiente(uid) {
   if (!data) throw new Error("No encontramos el pedido anterior en la base de datos. Se conserva la referencia por seguridad.");
   const status = String(data.status || "").toLowerCase();
   const errorProveedor = String(data.provider_status || "") + " " + String(data.provider_error || "");
-  if (status === "failed" && /INSUFFICIENT_BALANCE|saldo insuficiente/i.test(errorProveedor)) { borrarPendiente(); return false; }
+  if (status === "failed" && !data.provider_order_id && !data.provider_submitted_at) { borrarPendiente(); actualizarBoton(); mostrarEstado("El pedido anterior falló y no tiene una recarga remota asociada. Puedes iniciar un pedido nuevo.", "aviso"); return false; }
   if (status === "completed" || status === "refunded") { borrarPendiente(); return false; }
   accionPendiente = (data.provider_order_id || data.provider_client_reference || data.provider_submitted_at) ? "consultar" : (status === "pending" ? "enviar" : "consultar");
   guardarPendiente(); return true;
