@@ -232,7 +232,8 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
     const oldStatus=String(oldOrder?.status||"").toLowerCase();
     const oldProviderStatus=String(oldOrder?.provider_status||"").toUpperCase();
     const oldProviderError=String(oldOrder?.provider_error||"").toLowerCase();
-    const noEnvioRemoto=!oldOrder?.provider_order_id&&!oldOrder?.provider_client_reference&&!oldOrder?.provider_submitted_at;
+    /* provider_client_reference se genera localmente y no demuestra aceptación del proveedor. */
+    const noEnvioRemoto=!oldOrder?.provider_order_id&&!oldOrder?.provider_submitted_at;
     const falloSinSaldo=oldStatus==="failed"&&noEnvioRemoto&&(
      oldProviderStatus==="INSUFFICIENT_BALANCE"||
      oldProviderError.includes("saldo insuficiente")||
