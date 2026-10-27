@@ -264,7 +264,7 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
     alert("El pago fue rechazado. Puedes contactar con soporte si necesitas aclararlo.");
     return;
    }
-   if(!payment?.proof_path){mostrarEstado("El pedido está registrado, pero falta asociar el comprobante. No crees otro pedido; contacta con soporte para resolverlo.","error");return;}
+   if(!payment?.proof_path){mostrarEstado("Este pedido todavía no tiene el comprobante asociado. Abriendo la página para enviarlo o reintentar la asociación sin crear otro pedido…","aviso");location.href="./comprobante-pago-juego.html?pedido="+encodeURIComponent(savedManualId);return;}
    mostrarEstado("Tu comprobante sigue pendiente de revisión administrativa. No se enviará al proveedor todavía.","aviso");
    return;
   }
