@@ -158,6 +158,14 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     });
   }
 
+  // Permite que el selector de pago vuelva a aplicar el descuento GVR después de restaurar precios base.
+  window.ggRefreshResellerDiscount = showDiscount;
+  document.addEventListener("change", event => {
+    if (event.target?.id === "ggMetodoPago" && String(event.target.value || "").toUpperCase() === "GVR") {
+      showDiscount();
+    }
+  });
+
   async function init() {
     try {
       const db = createClient(SUPABASE_URL, SUPABASE_KEY, {
