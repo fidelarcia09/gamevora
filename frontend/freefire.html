@@ -2223,6 +2223,9 @@ async function iniciar() {
 
             recuperarPedidoPendiente(usuarioActualId);
 
+            // Validar la referencia guardada al abrir la página para liberar pedidos ya fallidos.
+            await verificarPedidoGuardado(usuarioActualId);
+
             actualizarBoton();
         }
 
