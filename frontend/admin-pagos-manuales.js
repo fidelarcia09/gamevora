@@ -83,7 +83,7 @@ function initManualPayments(){
       const {error:reviewError}=await supabaseClient.rpc("admin_review_manual_game_payment",{p_order_id:row.game_order_id,p_decision:decision,p_review_note:note});
       if(reviewError){alert("No se pudo revisar el pago: "+reviewError.message);b.disabled=false;return;}
       if(decision==="approved"){
-       const {data:sendResult,error:sendError}=await supabaseClient.functions.invoke("admin-aprobar-pago-juego",{body:{game_order_id:row.game_order_id}});
+       const {data:sendResult,error:sendError}=await invokeApproval(row.game_order_id);
        if(sendError||!sendResult?.success){
         const reason=approvalMessage(sendResult,sendError);
         alert("El pago quedó aprobado, pero el envío automático no se confirmó. No vuelvas a aprobar ni crees otro pedido. Revisa el estado del pedido. Detalle: "+reason);
