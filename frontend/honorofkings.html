@@ -151,6 +151,25 @@ let productosProveedor = [];
 let productosTokens = [];
 let productosLocales = [];
 let productoSeleccionado = null;
+/* Puente explícito desde el módulo del juego al flujo de pago manual. No altera el flujo GVR. */
+window.ggManualPaymentBridge = {
+ getClient: () => supabase,
+ getProduct: () => { const selected = productoSeleccionado; return selected && (selected.local || selected); },
+ getView: () => typeof vistaActual === "undefined" ? null : vistaActual,
+ getPlayerField: () => document.getElementById("idjugador") || document.getElementById("idJugador"),
+ getZoneField: () => document.getElementById("zonaJugador"),
+ getRegionField: () => document.getElementById("regionJugador"),
+ validate: () => {
+  if (typeof validarFormulario === "function" && !validarFormulario()) return false;
+  const selected = productoSeleccionado;
+  const regionField = document.getElementById("regionJugador");
+  if (regionField && typeof productoDeRegion === "function" && selected && selected.local && !productoDeRegion(selected.local, regionField.value) && !productoDeRegion(selected.proveedor, regionField.value)) {
+   alert("Este paquete no corresponde a la región seleccionada."); return false;
+  }
+  return true;
+ }
+};
+
 let vistaActual = "tokens";
 let procesando = false;
 let usuarioActualId = null;
@@ -596,7 +615,7 @@ iniciar();
 
 <script type="module" src="./reseller-product-discount.js?v=20261026-8"></script>
 
-<script src="./pagos-manuales-juegos.js?v=20261026-28" defer></script>
+<script src="./pagos-manuales-juegos.js?v=20261027-1" defer></script>
 </body>
 </html>
 
