@@ -190,10 +190,30 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
    const bridge=window.ggManualPaymentBridge; const client=bridge?.getClient(); if(!client){mostrarEstado("No se pudo conectar con el juego. Recarga la página e inténtalo de nuevo.","error");return;} const {data:payment,error:paymentError}=await client.from("manual_game_payments").select("status,proof_path").eq("game_order_id",savedManualId).maybeSingle();
    if(paymentError){mostrarEstado("No se pudo consultar la revisión del pago. Inténtalo más tarde.","error");return;}
    if(payment?.status==="approved"){
-    localStorage.removeItem("gg_manual_game_payment_pending");
-    localStorage.removeItem("gg_manual_game_payment_method");
-    mostrarEstado("El pago de este pedido ya fue aprobado. El pedido existente se conserva; no crees otro para evitar duplicados.","correcto");
-    alert("El pago ya fue aprobado. Tu pedido existente se conserva; no vuelvas a crear otro pedido.");
+    /* Solo se llama al proveedor después de la aprobación administrativa y de una acción explícita del usuario. */
+    const {data:{session},error:sessionError}=await client.auth.getSession();
+    if(sessionError||!session?.access_token){mostrarEstado("El pago está aprobado. Inicia sesión de nuevo para continuar el pedido.","error");return;}
+    const zoneField=document.getElementById("zonaJugador");
+    const zoneId=zoneField?zoneField.value.trim():null;
+    boton.disabled=true;
+    try{
+     const response=await fetch(SUPABASE_URL+"/functions/v1/nextlevel-crear-pedido",{method:"POST",headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+session.access_token,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({game_order_id:savedManualId,zone_id:zoneId||null}),cache:"no-store"});
+     let result;try{result=await response.json();}catch{result={};}
+     if(!response.ok||result.success!==true){
+      const error=new Error(result.error||result.message||"No se pudo continuar el pedido. No vuelvas a pagar; revisa el estado con administración.");
+      error.reconciliationRequired=result.reconciliation_required===true;
+      throw error;
+     }
+     localStorage.removeItem("gg_manual_game_payment_pending");
+     localStorage.removeItem("gg_manual_game_payment_method");
+     mostrarEstado("Pedido aceptado por el proveedor. Estado: "+String(result.provider_status||"pendiente")+".","correcto");
+     alert("El pago fue aprobado y el pedido ya está registrado con el proveedor. Puedes seleccionar otro paquete cuando quieras.");
+    }catch(error){
+     console.error("Continuación del pedido manual:",error);
+     mostrarEstado(error.message||"No se pudo continuar el pedido.","error");
+     alert(error.message||"No se pudo continuar el pedido.");
+     boton.disabled=false;
+    }
     return;
    }
    if(payment?.status==="rejected"){
