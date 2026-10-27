@@ -491,7 +491,7 @@ function precioProducto(p) {
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 function gvr(n) {
-  return Number(n).toLocaleString("es-ES", { maximumFractionDigits: 2 }) + " GVR";
+  return Number(n).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " GVR";
 }
 function esUUID(v) {
   return typeof v === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v);
