@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagos manuales de juegos | Gamers Gold Top-Up</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}body{margin:0;min-height:100vh;padding:18px;background:#050b18;color:#fff}.contenedor{max-width:900px;margin:auto}.header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:26px}.logo{font-size:20px;font-weight:900}.rayo{color:#00b7ff}.volver{color:#35baff;text-decoration:none;font-size:13px;font-weight:bold}.encabezado{margin-bottom:20px}.encabezado h1{font-size:26px;margin:0 0 8px}.encabezado p{color:#8da4c0;font-size:13px;line-height:1.6}.estadisticas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}.estadisticas>div{padding:14px;border:1px solid #173d67;border-radius:12px;background:#09172d}.estadisticas span{display:block;color:#8da4c0;font-size:12px;margin-bottom:8px}.estadisticas strong{color:#39c5ff;font-size:23px}.vacio{padding:25px;text-align:center;color:#9ab0c9;border:1px solid #173d67;border-radius:12px;background:#09172d}.boton-push{padding:10px 13px;border:1px solid #168bd1;border-radius:9px;background:#0b3155;color:white;font-weight:bold;cursor:pointer}.boton-push:disabled{opacity:.5}@media(max-width:480px){body{padding:13px}.estadisticas{gap:6px}.estadisticas>div{padding:10px 7px}.estadisticas strong{font-size:19px}}
+</style>
+</head>
+<body>
+<main class="contenedor">
+<header class="header">
+<div class="logo"><span class="rayo">⚡</span> Gamers Gold Top-Up</div>
+<a class="volver" href="admin-soporte.html">← Volver a Admin Soporte</a>
+</header>
+<section class="encabezado">
+<h1>Pagos manuales de juegos</h1>
+<p>Revisa el comprobante, el pedido, el juego y el importe antes de aprobar o rechazar el pago. Esta sección es independiente de las confirmaciones GVR.</p>
+</section>
+<div class="estadisticas">
+<div><span>Pendientes de revisión</span><strong id="manualPendientes">—</strong></div>
+<div><span>Aprobados</span><strong id="manualAprobados">—</strong></div>
+<div><span>Rechazados</span><strong id="manualRechazados">—</strong></div>
+</div>
+<div id="manualAdminGate" class="vacio">Comprobando permisos de administrador…</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+(async()=>{
+ const gate=document.getElementById("manualAdminGate");
+ try{
+  const {data:{user},error:authError}=await supabaseClient.auth.getUser();
+  if(authError||!user){location.replace("login.html");return;}
+  const {data:isAdmin,error}=await supabaseClient.rpc("is_support_admin");
+  if(error||isAdmin!==true){gate.textContent="No tienes permiso para administrar los pagos manuales.";return;}
+  gate.remove();
+  const stats=document.querySelector(".estadisticas");
+  const originalStats=stats;
+  const observer=new MutationObserver(()=>{});
+  observer.observe(document.querySelector(".contenedor"),{childList:true,subtree:true});
+  const script=document.createElement("script");
+  script.src="./admin-pagos-manuales.js?v=20261027-1";
+  document.body.appendChild(script);
+  async function refreshStats(){
+   const {data,error}=await supabaseClient.from("manual_game_payments").select("status");
+   if(error)return;
+   document.getElementById("manualPendientes").textContent=data.filter(x=>x.status==="pending").length;
+   document.getElementById("manualAprobados").textContent=data.filter(x=>x.status==="approved").length;
+   document.getElementById("manualRechazados").textContent=data.filter(x=>x.status==="rejected").length;
+  }
+  await refreshStats();
+  setInterval(refreshStats,30000);
+ }catch(e){console.error(e);gate.textContent="No se pudo comprobar el acceso. Inténtalo nuevamente.";}
+})();
+</script>
+<script src="./goldi-widget.js?v=20261023-2" defer></script>
+</body>
+</html>
