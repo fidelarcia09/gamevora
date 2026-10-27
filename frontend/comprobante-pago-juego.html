@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050b18">
 <title>Enviar comprobante | Gamer Gold Top Up</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://unpkg.com/@supabase/supabase-js@2';document.head.appendChild(s)"></script>
+
 <style>
 :root{color-scheme:dark;--bg:#050b18;--panel:#091a35;--blue:#087cff;--cyan:#20c5ff;--text:#f4f8ff;--muted:#9aadc4;--border:rgba(0,183,255,.25)}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;padding:16px;background:radial-gradient(ellipse at top,rgba(0,116,255,.16),transparent 48%),var(--bg);color:var(--text);font-family:Arial,sans-serif}
@@ -22,7 +22,23 @@ main{padding:24px 0}.eyebrow{display:inline-block;padding:7px 11px;border:1px so
 <button id="send" type="button">Enviar comprobante</button><div id="message" class="message" role="status" aria-live="polite"></div>
 </section></main><footer>Gamer Gold Top Up · Pago protegido por revisión administrativa</footer>
 <script>
+(async function bootPaymentPage(){
 "use strict";
+function loadSupabase(src, timeoutMs=5000){
+ return new Promise((resolve,reject)=>{
+  const script=document.createElement("script");
+  const timer=setTimeout(()=>{script.remove();reject(new Error("Tiempo de espera agotado al cargar el servicio de pagos"));},timeoutMs);
+  script.src=src;
+  script.onload=()=>{clearTimeout(timer);resolve();};
+  script.onerror=()=>{clearTimeout(timer);script.remove();reject(new Error("No se pudo cargar el servicio de pagos"));};
+  document.head.appendChild(script);
+ });
+}
+try { await loadSupabase("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"); }
+catch(firstError) {
+ try { await loadSupabase("https://unpkg.com/@supabase/supabase-js@2"); }
+ catch(secondError) { /* The visible fallback below explains the problem. */ }
+}
 const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 const $=id=>document.getElementById(id), params=new URLSearchParams(location.search), orderId=params.get("pedido");
@@ -111,4 +127,5 @@ $("send").addEventListener("click",async()=>{
  finally{sending=false}
 });
 init();
+})();
 </script></body></html>
