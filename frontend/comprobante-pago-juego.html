@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050b18">
 <title>Enviar comprobante | Gamer Gold Top Up</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://unpkg.com/@supabase/supabase-js@2';document.head.appendChild(s)"></script>
 <style>
 :root{color-scheme:dark;--bg:#050b18;--panel:#091a35;--blue:#087cff;--cyan:#20c5ff;--text:#f4f8ff;--muted:#9aadc4;--border:rgba(0,183,255,.25)}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;padding:16px;background:radial-gradient(ellipse at top,rgba(0,116,255,.16),transparent 48%),var(--bg);color:var(--text);font-family:Arial,sans-serif}
@@ -25,8 +25,18 @@ main{padding:24px 0}.eyebrow{display:inline-block;padding:7px 11px;border:1px so
 "use strict";
 const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id), params=new URLSearchParams(location.search), orderId=params.get("pedido");
+if(!window.supabase?.createClient){
+ document.getElementById("order").textContent=orderId?"Pedido #"+orderId.slice(0,8).toUpperCase():"Pedido no disponible";
+ document.getElementById("method").textContent="No se pudo cargar el sistema de pagos";
+ document.getElementById("amount").textContent="No disponible temporalmente";
+ document.getElementById("instructions").textContent="No se pudo cargar el servicio necesario para consultar el pago. Comprueba tu conexión y recarga la página. No crees otro pedido ni vuelvas a pagar.";
+ document.getElementById("message").textContent="No se pudo cargar el sistema de pagos. Recarga la página o inténtalo desde otro navegador.";
+ document.getElementById("message").className="message show error";
+ document.getElementById("send").disabled=true;
+ throw new Error("Supabase JS CDN failed to load");
+}
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 let user=null, alreadyHasProof=false, sending=false;
 const retryKey=()=> "gg_manual_proof_retry_"+orderId;
 function withTimeout(promise,label,ms=10000){return Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error(label+" tardó demasiado. Comprueba tu conexión y recarga la página.")),ms))])}
