@@ -81,6 +81,25 @@ const $=id=>document.getElementById(id);const catalogo=$("catalogo"),estadoCatal
 const modalFondo=$("modalFondo"),modalProducto=$("modalProducto"),modalJugador=$("modalJugador"),modalPrecio=$("modalPrecio"),modalCancelar=$("modalCancelar"),modalAceptar=$("modalAceptar");
 const OFERTAS=[{id:"fz-blood_strike-lucky_bag_week",nombre:"Semana de Bolsa de la Suerte"},{id:"fz-blood_strike-level_up_pass",nombre:"Level Up Pass"},{id:"fz-blood_strike-strike_pass_elite",nombre:"Strike Pass Elite"},{id:"fz-blood_strike-strike_pass_premium",nombre:"Strike Pass Premium"}];
 let tipoActual="bc",productoSeleccionado=null,productosDisponibles=[],productosLocales=[],procesando=false,usuarioActualId=null,pedidoPendienteId=null,accionPendiente="crear",resolverConfirmacion=null;
+/* Puente explícito desde el módulo del juego al flujo de pago manual. No altera el flujo GVR. */
+window.ggManualPaymentBridge = {
+ getClient: () => supabase,
+ getProduct: () => { const selected = productoSeleccionado; return selected && (selected.local || selected); },
+ getView: () => typeof vistaActual === "undefined" ? null : vistaActual,
+ getPlayerField: () => document.getElementById("idjugador") || document.getElementById("idJugador"),
+ getZoneField: () => document.getElementById("zonaJugador"),
+ getRegionField: () => document.getElementById("regionJugador"),
+ validate: () => {
+  if (typeof validarFormulario === "function" && !validarFormulario()) return false;
+  const selected = productoSeleccionado;
+  const regionField = document.getElementById("regionJugador");
+  if (regionField && typeof productoDeRegion === "function" && selected && selected.local && !productoDeRegion(selected.local, regionField.value) && !productoDeRegion(selected.proveedor, regionField.value)) {
+   alert("Este paquete no corresponde a la región seleccionada."); return false;
+  }
+  return true;
+ }
+};
+
 function mostrarEstado(mensaje,tipo=""){mensaje=typeof mensaje==="string"?mensaje.replace(/pedido aceptado por next level/gi,"Pedido aceptado por Gamers Gold Top-Up"):mensaje;estadoCatalogo.textContent=mensaje;estadoCatalogo.classList.toggle("error",tipo==="error");estadoCatalogo.classList.toggle("correcto",tipo==="correcto");}
 function mostrarPrecio(precio){return Number(precio).toLocaleString("es-ES",{maximumFractionDigits:2})+" GVR";}
 function normalizarTexto(v){return String(v??"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[\s_-]/g,"");}
@@ -118,7 +137,7 @@ async function iniciar(){try{const {data:{session}}=await supabase.auth.getSessi
 
 <script type="module" src="./reseller-product-discount.js?v=20261026-8"></script>
 
-<script src="./pagos-manuales-juegos.js?v=20261026-28" defer></script>
+<script src="./pagos-manuales-juegos.js?v=20261027-1" defer></script>
 </body></html>
 
 
