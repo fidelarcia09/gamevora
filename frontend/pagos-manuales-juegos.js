@@ -16,6 +16,7 @@ style.textContent = `
 .gg-player-card input#idjugador::placeholder,.gg-player-card input#idJugador::placeholder{color:#8fa5bd}
 .gg-player-card input#idjugador:focus,.gg-player-card input#idJugador:focus{border-color:#00baff;box-shadow:0 0 0 3px rgba(0,186,255,.12)}
 .gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid #204c78;background:#050b18;color:#fff}
+.gg-manual-original-price{display:block;margin:4px 0 2px;color:#91a6c0;font-size:11px;font-weight:600;line-height:1.3;text-decoration:line-through;text-decoration-thickness:1.5px;opacity:.9}
 @media(max-width:390px){.gg-metodos .gg-opciones{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.gg-metodos .gg-opcion{font-size:10px;padding:7px 1px;min-height:38px;border-radius:9px}}
 `;
 document.head.appendChild(style);
@@ -124,6 +125,7 @@ function iniciar(){
   const amount=Number(amountOverride===undefined?row.base_amount:amountOverride);
   if(!Number.isFinite(amount)||amount<=0)return "Tarifa pendiente";
   if(method==="USDT")return amount.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" USDT";
+  if(method==="SALDO_MOVIL")return amount.toLocaleString("es-ES",{maximumFractionDigits:2})+" Saldo móvil";
   return amount.toLocaleString("es-ES",{maximumFractionDigits:2})+" CUP";
  }
  
@@ -166,19 +168,39 @@ function iniciar(){
     if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod && precioGVRValido(price.textContent))guardarPrecioGVR(card,price);
     const product=productoParaTarjeta(card);
     const row=product&&tarifasCache.get(product.id+"|"+method);
-    /* Los métodos manuales muestran la tarifa base del método elegido, sin descuentos de revendedor. */
-    price.parentElement?.querySelector(":scope > .gg-manual-original-price")?.remove();
+    /* El descuento mostrado coincide con el rango del panel de revendedor y con create_manual_game_order. */
+    let originalPrice=card.querySelector(".gg-manual-original-price");
     if(row){
-     price.textContent=formatoTarifa(row,method);
+     const baseAmount=Number(row.base_amount);
+     const rawDiscount=Number(window.ggResellerDiscountPercent||0);
+     const discount=Number.isFinite(rawDiscount)&&rawDiscount>0?Math.min(rawDiscount,100):0;
+     if(discount>0&&Number.isFinite(baseAmount)&&baseAmount>0){
+      const finalAmount=Math.round((baseAmount*(100-discount)/100+Number.EPSILON)*100)/100;
+      if(!originalPrice){
+       originalPrice=document.createElement("div");
+       originalPrice.className="gg-manual-original-price";
+       originalPrice.setAttribute("aria-label","Precio original sin descuento");
+       price.insertAdjacentElement("beforebegin",originalPrice);
+      }
+      originalPrice.textContent=formatoTarifa(row,method,baseAmount);
+      price.textContent=formatoTarifa(row,method,finalAmount);
+      price.setAttribute("aria-label","Precio final con descuento de revendedor");
+     }else{
+      originalPrice?.remove();
+      price.textContent=formatoTarifa(row,method,baseAmount);
+      price.removeAttribute("aria-label");
+     }
     }else{
+     originalPrice?.remove();
      price.textContent="Tarifa pendiente";
+     price.removeAttribute("aria-label");
     }
     price.dataset.ggManualMethod=method;
    });
   }catch(error){
    console.error("No se pudieron cargar las tarifas manuales:",error);
    if(select.value!==method)return;
-   document.querySelectorAll(".producto-precio, .precio-oferta").forEach(price=>{price.textContent="Tarifa pendiente";price.dataset.ggManualMethod=method;});
+   document.querySelectorAll(".producto, .boton-oferta").forEach(card=>{card.querySelector(".gg-manual-original-price")?.remove();const price=card.querySelector(".producto-precio, .precio-oferta");if(price){price.textContent="Tarifa pendiente";price.dataset.ggManualMethod=method;price.removeAttribute("aria-label");}});
   }
  }
 select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));pintar();actualizarImporte();}); pintar();
