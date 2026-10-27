@@ -40,13 +40,16 @@ function initManualPayments(){
    const status=document.createElement("span");status.textContent=String(row.status||"pending").toUpperCase();status.style.cssText="font-weight:bold;color:"+(row.status==="approved"?"#5dffb0":row.status==="rejected"?"#ff7777":"#ffd66b");
    head.append(title,status);card.append(head);
    const detail=document.createElement("p");detail.style.cssText="font-size:13px;line-height:1.7;color:#c5d7ea;overflow-wrap:anywhere";
-   detail.textContent="Pedido: "+row.game_order_id+" · Usuario: "+row.user_id+" · Fecha: "+new Date(row.created_at).toLocaleString("es-ES");
+   const createdAt=new Date(row.created_at);
+   detail.textContent="Hora: "+createdAt.toLocaleTimeString("es-ES")+" · Fecha: "+createdAt.toLocaleDateString("es-ES");
    card.append(detail);
    const {data:orderDetails,error:orderDetailsError}=await supabaseClient.from("game_orders").select("player_id,zone_id,price_gvr,provider_order_id,provider_client_reference,product:game_products(game,product_name)").eq("id",row.game_order_id).maybeSingle();
+   const {data:sale}=await supabaseClient.from("ventas").select("nombre_usuario").eq("game_order_id",row.game_order_id).maybeSingle();
+   detail.textContent="Usuario: "+(sale?.nombre_usuario||"Nombre no disponible")+" · "+detail.textContent;
    if(!orderDetailsError&&orderDetails){
     const product=Array.isArray(orderDetails.product)?orderDetails.product[0]:orderDetails.product;
     const gameLine=document.createElement("p");gameLine.style.cssText="font-size:13px;line-height:1.7;color:#d8e9fb;overflow-wrap:anywhere";
-    gameLine.textContent="Juego: "+(product?.game||"No disponible")+" · Paquete: "+(product?.product_name||"No disponible")+" · ID jugador: "+(orderDetails.player_id||"—")+(orderDetails.zone_id?" · Zona/servidor: "+orderDetails.zone_id:"")+" · Precio base: "+Number(orderDetails.price_gvr||0).toLocaleString("es-ES")+" GVR";
+    gameLine.textContent="Juego: "+(product?.game||"No disponible")+" · Paquete: "+(product?.product_name||"No disponible")+" · Precio según método: "+Number(row.payment_amount||0).toLocaleString("es-ES")+" "+(row.payment_currency||"")+" · Método: "+(row.payment_method||"No disponible");
     card.append(gameLine);
    }
    if(row.proof_path){
