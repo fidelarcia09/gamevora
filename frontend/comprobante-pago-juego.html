@@ -14,10 +14,10 @@ main{padding:24px 0}.eyebrow{display:inline-block;padding:7px 11px;border:1px so
 <header><div class="logo">GAMER GOLD <span>TOP UP</span></div><a href="#" id="back">← Volver al juego</a></header>
 <main><div class="eyebrow">PAGO MANUAL</div><h1>Envía tu comprobante</h1><p class="sub">Realiza el pago con los datos indicados y adjunta la captura o el PDF. Tu recarga no se enviará hasta que administración apruebe el pago.</p>
 <section class="card">
-<div class="row"><div class="label">Pedido</div><div class="value" id="order">Verificando…</div></div>
-<div class="row"><div class="label">Método de pago</div><div class="value" id="method">Verificando…</div></div>
-<div class="row"><div class="label">Importe orientativo</div><div class="value amount" id="amount">Se confirma en el resumen del pedido</div></div>
-<div id="instructions" class="instructions">Cargando instrucciones de pago…</div>
+<div class="row"><div class="label">Pedido</div><div class="value" id="order">Cargando pedido…</div></div>
+<div class="row"><div class="label">Método de pago</div><div class="value" id="method">Cargando método de pago…</div></div>
+<div class="row"><div class="label">Importe orientativo</div><div class="value amount" id="amount">Consultando importe…</div></div>
+<div id="instructions" class="instructions">Estamos consultando el pedido. Si tarda, aparecerá un aviso para que puedas saber qué falló.</div>
 <label class="file">Comprobante de pago (JPG, PNG, WEBP o PDF; máximo 6 MB)<input id="proof" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></label>
 <button id="send" type="button">Enviar comprobante</button><div id="message" class="message" role="status" aria-live="polite"></div>
 </section></main><footer>Gamer Gold Top Up · Pago protegido por revisión administrativa</footer>
@@ -29,6 +29,7 @@ const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth
 const $=id=>document.getElementById(id), params=new URLSearchParams(location.search), orderId=params.get("pedido");
 let user=null, alreadyHasProof=false, sending=false;
 const retryKey=()=> "gg_manual_proof_retry_"+orderId;
+function withTimeout(promise,label,ms=10000){return Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error(label+" tardó demasiado. Comprueba tu conexión y recarga la página.")),ms))])}
 function message(text,type){$("message").textContent=text;$("message").className="message show "+type}
 function methodLabel(method){return method==="USDT"?"USDT · BNB Smart Chain (BEP20)":method==="SALDO_MOVIL"?"Saldo móvil cubano":method==="GVR"?"GVR":"CUP"}
 $("back").addEventListener("click",e=>{e.preventDefault();history.length>1?history.back():location.assign("./index.html")});
@@ -37,14 +38,14 @@ async function init(){
  if(!orderId||!/^[0-9a-f-]{36}$/i.test(orderId)){$("order").textContent="Pedido no válido";$("method").textContent="No disponible";$("amount").textContent="No disponible";$("instructions").textContent="El enlace del pedido no es válido. Vuelve al juego e inicia la solicitud otra vez.";message("El enlace del pedido no es válido. Vuelve al juego e inicia la solicitud otra vez.","error");$("send").disabled=true;return}
  const savedMethod=localStorage.getItem("gg_manual_game_payment_method");
  if(savedMethod){$("method").textContent=methodLabel(savedMethod);if(savedMethod==="USDT")$("instructions").textContent="Método USDT seleccionado. Verificando el importe y los datos del pedido…";else if(savedMethod==="SALDO_MOVIL")$("instructions").textContent="Método Saldo móvil seleccionado. Verificando el importe y los datos del pedido…";}
- const {data,error}=await supabase.auth.getSession(); user=data?.session?.user;
+ const {data,error}=await withTimeout(supabase.auth.getSession(),"La verificación de sesión"); user=data?.session?.user;
  if(error||!user){$("order").textContent="No se pudo verificar";$("method").textContent=savedMethod?methodLabel(savedMethod):"No disponible";$("amount").textContent="Inicia sesión para consultar el importe";$("instructions").textContent="Inicia sesión con la cuenta que creó este pedido y vuelve a abrir el enlace.";message("Inicia sesión con la cuenta que creó este pedido y vuelve a abrir el enlace.","error");$("send").disabled=true;return}
- const {data:payment,error:payError}=await supabase.from("manual_game_payments").select("status,proof_path,payment_method,payment_amount,payment_currency,game_order_id").eq("game_order_id",orderId).maybeSingle();
+ const {data:payment,error:payError}=await withTimeout(supabase.from("manual_game_payments").select("status,proof_path,payment_method,payment_amount,payment_currency,game_order_id").eq("game_order_id",orderId).maybeSingle(),"La consulta del pago");
  if(payError||!payment){$("order").textContent="Pedido #"+orderId.slice(0,8).toUpperCase();$("method").textContent=savedMethod?methodLabel(savedMethod):"No disponible";$("amount").textContent="No se pudo consultar el importe";$("instructions").textContent="No pudimos leer los datos de pago de este pedido. Comprueba que has iniciado sesión con la cuenta correcta. Si sigue ocurriendo, contacta con soporte y no crees otro pedido.";message("No se pudo verificar el pedido: "+(payError?.message||"no se encontró el pago asociado")+". No crees otro pedido.","error");$("send").disabled=true;return}
- const {data:gameOrder}=await supabase.from("game_orders").select("product_id,price_gvr").eq("id",orderId).maybeSingle();
+ const {data:gameOrder}=await withTimeout(supabase.from("game_orders").select("product_id,price_gvr").eq("id",orderId).maybeSingle(),"La consulta del pedido");
  let orderDisplay="Pedido #"+orderId.slice(0,8).toUpperCase();
  if(gameOrder?.product_id){
-  const {data:product}=await supabase.from("game_products").select("game,product_name,game_currency_amount").eq("id",gameOrder.product_id).maybeSingle();
+  const {data:product}=await withTimeout(supabase.from("game_products").select("game,product_name,game_currency_amount").eq("id",gameOrder.product_id).maybeSingle(),"La consulta del paquete");
   if(product){
    const gameName=String(product.game||"").replace(/[-_]+/g," ").replace(/\b\w/g,letter=>letter.toUpperCase());
    const packageName=String(product.product_name||"").trim();
