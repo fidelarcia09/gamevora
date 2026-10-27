@@ -303,6 +303,18 @@
 
     </a>
 
+    <a
+        href="admin-pagos-juegos.html"
+        class="boton-gvr"
+        style="margin-top:12px;border-color:#247342;background:linear-gradient(135deg,#10351f,#124b30)"
+    >
+        <div>
+            <div class="gvr-titulo">Pagos manuales de juegos <span id="contadorPagosJuegos" style="display:none;margin-left:6px;padding:3px 7px;border-radius:20px;background:#ffcf57;color:#172033;font-size:11px"></span></div>
+            <div class="gvr-descripcion">Revisar comprobantes de pedidos de juegos y aprobar o rechazar pagos manuales.</div>
+        </div>
+        <span class="gvr-flecha" aria-hidden="true">→</span>
+    </a>
+
 </div>
 
 <div id="contenido">
@@ -634,6 +646,62 @@ function escapeHTML(texto) {
 ========================= */
 
 iniciar();
+
+/* Avisos de nuevos comprobantes de pagos manuales mientras Admin Soporte está abierto. */
+let pagosManualesConocidos = new Set();
+let primeraConsultaPagos = true;
+async function revisarPagosManualesPendientes() {
+    try {
+        const { data, error } = await supabaseClient
+            .from("manual_game_payments")
+            .select("game_order_id,proof_path,status,created_at")
+            .eq("status", "pending")
+            .not("proof_path", "is", null)
+            .order("created_at", { ascending: false })
+            .limit(100);
+        if (error) throw error;
+
+        const pendientes = data || [];
+        const contador = document.getElementById("contadorPagosJuegos");
+        if (contador) {
+            contador.textContent = String(pendientes.length);
+            contador.style.display = pendientes.length ? "inline-block" : "none";
+        }
+
+        const actuales = new Set(pendientes.map(p => p.game_order_id));
+        if (!primeraConsultaPagos) {
+            const nuevos = pendientes.filter(p => !pagosManualesConocidos.has(p.game_order_id));
+            if (nuevos.length) {
+                const mensaje = nuevos.length === 1
+                    ? "Llegó un nuevo comprobante de pago manual de juego."
+                    : "Llegaron " + nuevos.length + " nuevos comprobantes de pagos manuales de juegos.";
+                if ("Notification" in window && Notification.permission === "granted") {
+                    new Notification("Gamers Gold Top-Up", {
+                        body: mensaje,
+                        tag: "pagos-manuales-juegos",
+                        data: { url: "admin-pagos-juegos.html" }
+                    }).onclick = function() {
+                        window.focus();
+                        window.location.href = "admin-pagos-juegos.html";
+                    };
+                }
+            }
+        }
+        pagosManualesConocidos = actuales;
+        primeraConsultaPagos = false;
+    } catch (error) {
+        console.warn("No se pudieron consultar los avisos de pagos manuales:", error);
+    }
+}
+async function iniciarAvisosPagosManuales() {
+    if (!("Notification" in window)) return;
+    if (Notification.permission === "default") {
+        try { await Notification.requestPermission(); } catch (_) {}
+    }
+    await revisarPagosManualesPendientes();
+    window.setInterval(revisarPagosManualesPendientes, 30000);
+}
+iniciarAvisosPagosManuales();
 
 </script>    <script src="./goldi-widget.js?v=20261023-2" defer></script>
 
