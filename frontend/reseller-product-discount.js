@@ -78,7 +78,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     if (!Number.isFinite(value) || value <= 0) return "Precio pendiente";
     return value.toLocaleString("es-ES", {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 3
+      maximumFractionDigits: 2
     }) + " GVR";
   }
 
