@@ -216,7 +216,7 @@ function esPaqueteTokens(producto) {
   return /^fz-honor_of_kings-\d+_tokens$/.test(id) || /^\d[\d,.\s]*\s*tokens?$/i.test(nombre);
 }
 function mostrarPrecio(precio) {
-  return Number(precio).toLocaleString("es-ES", { maximumFractionDigits: 2 }) + " GVR";
+  return Number(precio).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " GVR";
 }
 function productoComprable(local) {
   return !!local && local.active === true && Number.isFinite(Number(local.price_gvr)) && Number(local.price_gvr) > 0 &&
