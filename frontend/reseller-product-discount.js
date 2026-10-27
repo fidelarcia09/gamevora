@@ -201,6 +201,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
         : current.discount;
       initialized = true;
       window.ggResellerDiscountPercent = discountPercent;
+      window.dispatchEvent(new Event("gg-reseller-discount-updated"));
       showDiscount();
 
       const observer = new MutationObserver(showDiscount);
