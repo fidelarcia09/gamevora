@@ -44,8 +44,14 @@ function initManualPayments(){
    detail.textContent="Hora: "+createdAt.toLocaleTimeString("es-ES")+" · Fecha: "+createdAt.toLocaleDateString("es-ES");
    card.append(detail);
    const {data:orderDetails,error:orderDetailsError}=await supabaseClient.from("game_orders").select("player_id,zone_id,price_gvr,provider_order_id,provider_client_reference,product:game_products(game,product_name)").eq("id",row.game_order_id).maybeSingle();
+   let displayName=null;
    const {data:sale}=await supabaseClient.from("ventas").select("nombre_usuario").eq("game_order_id",row.game_order_id).maybeSingle();
-   detail.textContent="Usuario: "+(sale?.nombre_usuario||"Nombre no disponible")+" · "+detail.textContent;
+   if(sale?.nombre_usuario) displayName=sale.nombre_usuario;
+   if(!displayName){
+    const {data:profileName}=await supabaseClient.rpc("admin_get_user_display_name",{p_user_id:row.user_id});
+    if(typeof profileName==="string"&&profileName.trim())displayName=profileName.trim();
+   }
+   detail.textContent="Usuario: "+(displayName||"Nombre no disponible")+" · "+detail.textContent;
    if(!orderDetailsError&&orderDetails){
     const product=Array.isArray(orderDetails.product)?orderDetails.product[0]:orderDetails.product;
     const gameLine=document.createElement("p");gameLine.style.cssText="font-size:13px;line-height:1.7;color:#d8e9fb;overflow-wrap:anywhere";
