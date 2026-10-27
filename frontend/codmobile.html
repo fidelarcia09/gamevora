@@ -474,7 +474,7 @@ async function continuarRecarga() {
             "\n" +
 
             "Precio: " +
-            (await window.ggGetResellerDiscountedPrice(Number(producto.price_gvr))).toLocaleString("es-ES", { maximumFractionDigits: 2 }) +
+            (await window.ggGetResellerDiscountedPrice(Number(producto.price_gvr))).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
             " GVR\n\n" +
 
             "ID del pedido:\n" +
