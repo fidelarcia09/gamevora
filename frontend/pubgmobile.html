@@ -620,9 +620,9 @@ async function obtenerPedidoActual(userId) {
 
     const estadoActual = String(data.status || "").toLowerCase();
     const errorProveedor = String(data.provider_status || "") + " " + String(data.provider_error || "");
-    if (estadoActual === "failed" && /INSUFFICIENT_BALANCE|saldo insuficiente/i.test(errorProveedor)) {
-        borrarPedidoPendiente();
-        mostrarEstado("El pedido anterior no se completó por saldo insuficiente del proveedor. Puedes crear un pedido nuevo.", "aviso");
+    if (estadoActual === "failed" && !data.provider_order_id && !data.provider_submitted_at) {
+        borrarPedidoPendiente(); actualizarBoton();
+        mostrarEstado("El pedido anterior falló y no tiene una recarga remota asociada. Puedes iniciar un pedido nuevo.", "aviso");
         return null;
     }
 
