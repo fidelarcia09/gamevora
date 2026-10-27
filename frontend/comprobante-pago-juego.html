@@ -28,6 +28,7 @@ const SUPABASE_ANON_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id), params=new URLSearchParams(location.search), orderId=params.get("pedido");
 let user=null, alreadyHasProof=false, sending=false;
+const retryKey=()=> "gg_manual_proof_retry_"+orderId;
 function message(text,type){$("message").textContent=text;$("message").className="message show "+type}
 function methodLabel(method){return method==="USDT"?"USDT · BNB Smart Chain (BEP20)":method==="SALDO_MOVIL"?"Saldo móvil cubano":method==="GVR"?"GVR":"CUP"}
 $("back").addEventListener("click",e=>{e.preventDefault();history.length>1?history.back():location.assign("./index.html")});
@@ -64,20 +65,27 @@ async function init(){
 }
 $("send").addEventListener("click",async()=>{
  if(sending||!user)return;
- const file=$("proof").files[0];if(!file){message("Selecciona primero el comprobante del pago.","error");return}
- if(file.size>6*1024*1024){message("El archivo no puede superar 6 MB.","error");return}
- if(!["image/jpeg","image/png","image/webp","application/pdf"].includes(file.type)){message("Formato no admitido. Usa JPG, PNG, WEBP o PDF.","error");return}
- sending=true;$("send").disabled=true;$("send").textContent="Enviando comprobante…";
+ const savedPath=localStorage.getItem(retryKey());
+ const file=$("proof").files[0];
+ if(!savedPath&&!file){message("Selecciona primero el comprobante del pago.","error");return}
+ if(!savedPath&&file.size>6*1024*1024){message("El archivo no puede superar 6 MB.","error");return}
+ if(!savedPath&&!["image/jpeg","image/png","image/webp","application/pdf"].includes(file.type)){message("Formato no admitido. Usa JPG, PNG, WEBP o PDF.","error");return}
+ sending=true;$("send").disabled=true;$("send").textContent=savedPath?"Reintentando asociar comprobante…":"Enviando comprobante…";
  try{
- const ext=file.type==="application/pdf"?"pdf":file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
- const path=user.id+"/"+orderId+"/"+crypto.randomUUID()+"."+ext;
- const {error:uploadError}=await supabase.storage.from("manual-game-proofs").upload(path,file,{contentType:file.type,upsert:false});
- if(uploadError)throw new Error("No se pudo subir el comprobante: "+uploadError.message);
- const {error:attachError}=await supabase.rpc("attach_manual_game_payment_proof",{p_order_id:orderId,p_proof_path:path});
- if(attachError)throw new Error("El archivo se subió, pero no se pudo asociar al pedido. Contacta con soporte: "+attachError.message);
- $("proof").disabled=true;$("send").textContent="Comprobante enviado";
- message("¡Comprobante enviado! El pedido está pendiente de revisión administrativa. La recarga no se enviará hasta que aprueben el pago.","ok");
- }catch(err){message(err.message||"No se pudo enviar el comprobante.","error");$("send").disabled=false;$("send").textContent="Reintentar envío"}
+  let path=savedPath;
+  if(!path){
+   const ext=file.type==="application/pdf"?"pdf":file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+   path=user.id+"/"+orderId+"/"+crypto.randomUUID()+"."+ext;
+   const {error:uploadError}=await supabase.storage.from("manual-game-proofs").upload(path,file,{contentType:file.type,upsert:false});
+   if(uploadError)throw new Error("No se pudo subir el comprobante: "+uploadError.message);
+   localStorage.setItem(retryKey(),path);
+  }
+  const {error:attachError}=await supabase.rpc("attach_manual_game_payment_proof",{p_order_id:orderId,p_proof_path:path});
+  if(attachError)throw new Error("El archivo ya está subido; pulsa «Reintentar asociación» para volver a vincularlo sin subirlo otra vez. Detalle: "+attachError.message);
+  localStorage.removeItem(retryKey());
+  $("proof").disabled=true;$("send").textContent="Comprobante enviado";
+  message("¡Comprobante enviado! El pedido está pendiente de revisión administrativa. La recarga no se enviará hasta que aprueben el pago.","ok");
+ }catch(err){message(err.message||"No se pudo enviar el comprobante.","error");$("send").disabled=false;$("send").textContent=localStorage.getItem(retryKey())?"Reintentar asociación":"Reintentar envío"}
  finally{sending=false}
 });
 init();
