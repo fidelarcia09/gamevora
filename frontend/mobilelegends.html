@@ -48,6 +48,25 @@ const OFERTAS_MOBILE_LEGENDS=[
 {id:"fz-mobile_legends_global-twilight_pass",nombre:"Twilight Pass"}
 ];
 let productoSeleccionado=null,productosDisponibles=[],productosProveedor=[],productosLocales=[],procesando=false,usuarioActualId=null,pedidoPendienteId=null,accionPendiente="crear",vistaActual="diamantes",resolverConfirmacionModal=null;
+/* Puente explícito desde el módulo del juego al flujo de pago manual. No altera el flujo GVR. */
+window.ggManualPaymentBridge = {
+ getClient: () => supabase,
+ getProduct: () => { const selected = productoSeleccionado; return selected && (selected.local || selected); },
+ getView: () => typeof vistaActual === "undefined" ? null : vistaActual,
+ getPlayerField: () => document.getElementById("idjugador") || document.getElementById("idJugador"),
+ getZoneField: () => document.getElementById("zonaJugador"),
+ getRegionField: () => document.getElementById("regionJugador"),
+ validate: () => {
+  if (typeof validarFormulario === "function" && !validarFormulario()) return false;
+  const selected = productoSeleccionado;
+  const regionField = document.getElementById("regionJugador");
+  if (regionField && typeof productoDeRegion === "function" && selected && selected.local && !productoDeRegion(selected.local, regionField.value) && !productoDeRegion(selected.proveedor, regionField.value)) {
+   alert("Este paquete no corresponde a la región seleccionada."); return false;
+  }
+  return true;
+ }
+};
+
 function normalizarTexto(v){return String(v??"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[\s_-]/g,"")}
 function mostrarEstado(m,tipo=""){m=typeof m==="string"?m.replace(/pedido aceptado por next level/gi,"Pedido aceptado por Gamers Gold Top-Up"):m;estadoCatalogo.textContent=m;estadoCatalogo.classList.toggle("error",tipo==="error");estadoCatalogo.classList.toggle("correcto",tipo==="correcto")}
 function mensajeError(e,alt){return e?.message||alt}
@@ -94,7 +113,7 @@ iniciar();
 
 <script type="module" src="./reseller-product-discount.js?v=20261026-8"></script>
 
-<script src="./pagos-manuales-juegos.js?v=20261026-28" defer></script>
+<script src="./pagos-manuales-juegos.js?v=20261027-1" defer></script>
 </body>
 </html>
 
