@@ -120,6 +120,16 @@ $("send").addEventListener("click",async()=>{
   }
   const {error:attachError}=await supabase.rpc("attach_manual_game_payment_proof",{p_order_id:orderId,p_proof_path:path});
   if(attachError)throw new Error("El archivo ya está subido; pulsa «Reintentar asociación» para volver a vincularlo sin subirlo otra vez. Detalle: "+attachError.message);
+  /* Aviso Push al administrador al quedar vinculado el comprobante. Un fallo de notificación no invalida el comprobante enviado. */
+  try {
+   const {data:sessionData}=await supabase.auth.getSession();
+   const accessToken=sessionData?.session?.access_token;
+   if(accessToken){
+    const pushResponse=await fetch(SUPABASE_URL+"/functions/v1/notificar-solicitud-pago-juego",{method:"POST",headers:{apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+accessToken,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({game_order_id:orderId}),cache:"no-store",signal:AbortSignal.timeout(8000)});
+    const pushResult=await pushResponse.json().catch(()=>({}));
+    if(!pushResponse.ok||!pushResult.sent)console.warn("Aviso Push administrativo no confirmado:",pushResult.code||pushResult.error||pushResponse.status);
+   }
+  } catch(pushError) { console.warn("El comprobante se guardó, pero no se confirmó el aviso Push administrativo:",pushError); }
   localStorage.removeItem(retryKey());
   $("proof").disabled=true;$("send").textContent="Comprobante enviado";
   message("¡Comprobante enviado! El pedido está pendiente de revisión administrativa. La recarga no se enviará hasta que aprueben el pago.","ok");
