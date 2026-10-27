@@ -235,7 +235,7 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
    if(typeof procesandoPedido!=="undefined") procesandoPedido=true;
    if(typeof datosPendientes!=="undefined") datosPendientes={jugador:playerId,zona:zoneId};
    mostrarEstado("Registrando el pago manual… No cierres esta página.");
-   const {data:orderId,error:createError}=await supabase.rpc("create_manual_game_order",{p_product_id:selectedProduct.id,p_player_id:playerId,p_payment_method:select.value,p_zone_id:zoneId});
+   const {data:orderId,error:createError}=await client.rpc("create_manual_game_order",{p_product_id:selectedProduct.id,p_player_id:playerId,p_payment_method:select.value,p_zone_id:zoneId});
    if(createError) throw new Error(createError.message||"No se pudo crear la solicitud de pago.");
    if(typeof orderId!=="string" || !/^[0-9a-f-]{36}$/i.test(orderId)) throw new Error("El servidor no devolvió un pedido válido.");
    /* Este archivo es un script independiente: las variables de los scripts type=module de cada juego no son globales. */
