@@ -457,6 +457,11 @@ window.ggManualPaymentBridge = {
  validate: () => {
   if (typeof validarFormulario === "function" && !validarFormulario()) return false;
   const selected = productoSeleccionado;
+  const playerField = document.getElementById("idjugador") || document.getElementById("idJugador");
+  const playerId = playerField?.value.trim();
+  if (typeof validacionJugador !== "undefined" && validacionJugador.status === "INVALID" && validacionJugador.playerId === playerId) {
+   alert("El ID del jugador no es válido. Compruébalo antes de pagar."); return false;
+  }
   const regionField = document.getElementById("regionJugador");
   if (regionField && typeof productoDeRegion === "function" && selected && selected.local && !productoDeRegion(selected.local, regionField.value) && !productoDeRegion(selected.proveedor, regionField.value)) {
    alert("Este paquete no corresponde a la región seleccionada."); return false;
