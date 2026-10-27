@@ -184,6 +184,7 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
  document.addEventListener("click",event=>{if(event.target.closest(".producto, .boton-oferta"))setTimeout(actualizarImporte,0);});
  boton.addEventListener("click",async function(event){
   if(select.value==="GVR") return;
+  try{
   const savedManualId=localStorage.getItem("gg_manual_game_payment_pending");
   if(savedManualId){
    event.preventDefault(); event.stopImmediatePropagation();
@@ -264,6 +265,13 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
    location.href="./comprobante-pago-juego.html?pedido="+encodeURIComponent(orderId);
   }catch(error){console.error("Pago manual:",error);mostrarEstado(error.message||"No se pudo enviar el comprobante.","error");alert(error.message||"No se pudo enviar el comprobante.");}
   finally{if(typeof procesando!=="undefined") procesando=false; if(typeof procesandoPedido!=="undefined") procesandoPedido=false; if(typeof actualizarBoton==="function") actualizarBoton();}
+  }catch(error){
+   console.error("Error inesperado en el flujo de pago manual:",error);
+   const message=error?.message||"No se pudo continuar. Comprueba tu conexión e inténtalo otra vez.";
+   try{mostrarEstado(message,"error");}catch{}
+   alert(message);
+   boton.disabled=false;
+  }
  },true);
 }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",iniciar); else iniciar();
