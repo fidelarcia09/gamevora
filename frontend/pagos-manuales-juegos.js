@@ -16,6 +16,7 @@ style.textContent = `
 .gg-player-card input#idjugador::placeholder,.gg-player-card input#idJugador::placeholder{color:#8fa5bd}
 .gg-player-card input#idjugador:focus,.gg-player-card input#idJugador:focus{border-color:#00baff;box-shadow:0 0 0 3px rgba(0,186,255,.12)}
 .gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid #204c78;background:#050b18;color:#fff}
+.gg-manual-original-price{display:block;margin-top:4px;color:#91a6c0;font-size:11px;font-weight:600;line-height:1.3;text-decoration:line-through;text-decoration-thickness:1.5px}
 @media(max-width:390px){.gg-metodos .gg-opciones{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.gg-metodos .gg-opcion{font-size:10px;padding:7px 1px;min-height:38px;border-radius:9px}}
 `;
 document.head.appendChild(style);
@@ -120,11 +121,21 @@ function iniciar(){
    });
   }catch(error){console.error("No se pudieron restaurar los precios GVR desde Supabase:",error);}
  }
- function formatoTarifa(row,method){
-  const amount=Number(row.base_amount);
+ function formatoTarifa(row,method,amountOverride){
+  const amount=Number(amountOverride===undefined?row.base_amount:amountOverride);
   if(!Number.isFinite(amount)||amount<=0)return "Tarifa pendiente";
   if(method==="USDT")return amount.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" USDT";
   return amount.toLocaleString("es-ES",{maximumFractionDigits:2})+" CUP";
+ }
+ function descuentoRevendedor(){const value=Number(window.ggResellerDiscountPercent||0);return Number.isFinite(value)&&value>0?Math.min(100,value):0;}
+ function actualizarEtiquetaPrecioOriginal(price,row,method,discount){
+  let old=price.parentElement?.querySelector(":scope > .gg-manual-original-price");
+  if(!discount||!row||!Number.isFinite(Number(row.base_amount))||Number(row.base_amount)<=0){old?.remove();return;}
+  if(!old){old=document.createElement("span");old.className="gg-manual-original-price";old.setAttribute("aria-label","Precio original sin descuento");price.insertAdjacentElement("beforebegin",old);}
+  const base=Number(row.base_amount);
+  const final=Math.round((base*(100-discount)/100+Number.EPSILON)*100)/100;
+  old.textContent=formatoTarifa(row,method,base);
+  price.textContent=formatoTarifa(row,method,final);
  }
  function pintar(){panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));actualizarImporte();}
  async function actualizarImporte(){
@@ -153,7 +164,7 @@ function iniciar(){
     price.dataset.ggManualMethod=method;
    }
   });
-  if(method==="GVR"){restaurarPreciosGVRDesdeSupabase();return;}
+  if(method==="GVR"){document.querySelectorAll(".gg-manual-original-price").forEach(el=>el.remove());restaurarPreciosGVRDesdeSupabase();return;}
   try{
    await cargarTarifas();
    if(select.value!==method)return;
@@ -165,7 +176,14 @@ function iniciar(){
     if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod && precioGVRValido(price.textContent))guardarPrecioGVR(card,price);
     const product=productoParaTarjeta(card);
     const row=product&&tarifasCache.get(product.id+"|"+method);
-    price.textContent=row?formatoTarifa(row,method):"Tarifa pendiente";
+    const discount=descuentoRevendedor();
+    if(row){
+     actualizarEtiquetaPrecioOriginal(price,row,method,discount);
+     if(!discount)price.textContent=formatoTarifa(row,method);
+    }else{
+     price.parentElement?.querySelector(":scope > .gg-manual-original-price")?.remove();
+     price.textContent="Tarifa pendiente";
+    }
     price.dataset.ggManualMethod=method;
    });
   }catch(error){
@@ -176,6 +194,7 @@ function iniciar(){
  }
 select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));pintar();actualizarImporte();}); pintar();
 /* Observa todo el documento: cada juego puede reconstruir sus tarjetas en contenedores distintos. */
+ window.addEventListener("gg-reseller-discount-updated",()=>{if(select.value!=="GVR")actualizarImporte();});
  const observadorTarjetas=new MutationObserver(records=>{
   const catalogoCambio=records.some(record=>{
    const target=record.target;
