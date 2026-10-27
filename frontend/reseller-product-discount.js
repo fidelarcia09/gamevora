@@ -204,8 +204,20 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       window.dispatchEvent(new Event("gg-reseller-discount-updated"));
       showDiscount();
 
-      const observer = new MutationObserver(showDiscount);
-      observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+      /* Solo recalcula cuando el juego agrega o reemplaza tarjetas.
+         Ignora cambios de precio/texto realizados por este script para evitar bucles. */
+      const observer = new MutationObserver(records => {
+        const catalogChanged = records.some(record =>
+          record.type === "childList" &&
+          [...record.addedNodes, ...record.removedNodes].some(node =>
+            node.nodeType === 1 &&
+            (node.matches?.(".producto, .boton-oferta") ||
+             node.querySelector?.(".producto, .boton-oferta"))
+          )
+        );
+        if (catalogChanged) showDiscount();
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
     } catch (error) {
       console.warn("No se pudo aplicar el descuento de revendedor en el catálogo.", error);
     }
