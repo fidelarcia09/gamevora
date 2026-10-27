@@ -220,6 +220,30 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
     return;
    }
    if(payment?.status==="approved"){
+    /* No reutilizar un pedido que ya falló en el proveedor: la referencia local
+       puede seguir guardada aunque el pago manual figure como aprobado. */
+    const {data:oldOrder,error:oldOrderError}=await client.from("game_orders")
+     .select("id,status,provider_status,provider_error,provider_order_id,provider_client_reference,provider_submitted_at")
+     .eq("id",savedManualId).maybeSingle();
+    if(oldOrderError){
+     mostrarEstado("No se pudo verificar el pedido anterior. Inténtalo más tarde.","error");
+     return;
+    }
+    const oldStatus=String(oldOrder?.status||"").toLowerCase();
+    const oldProviderStatus=String(oldOrder?.provider_status||"").toUpperCase();
+    const oldProviderError=String(oldOrder?.provider_error||"").toLowerCase();
+    const noEnvioRemoto=!oldOrder?.provider_order_id&&!oldOrder?.provider_client_reference&&!oldOrder?.provider_submitted_at;
+    const falloSinSaldo=oldStatus==="failed"&&noEnvioRemoto&&(
+     oldProviderStatus==="INSUFFICIENT_BALANCE"||
+     oldProviderError.includes("saldo insuficiente")||
+     oldProviderError.includes("insufficient balance")
+    );
+    if(falloSinSaldo){
+     localStorage.removeItem("gg_manual_game_payment_pending");
+     localStorage.removeItem("gg_manual_game_payment_method");
+     mostrarEstado("El pedido anterior falló por saldo insuficiente de Next Level. La referencia antigua se limpió; pulsa Continuar otra vez para iniciar una recarga nueva.","aviso");
+     return;
+    }
     /* Solo se llama al proveedor después de la aprobación administrativa y de una acción explícita del usuario. */
     const {data:{session},error:sessionError}=await client.auth.getSession();
     if(sessionError||!session?.access_token){mostrarEstado("El pago está aprobado. Inicia sesión de nuevo para continuar el pedido.","error");return;}
