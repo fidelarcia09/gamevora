@@ -669,11 +669,13 @@ async function llamarFuncion(url, token, body) {
 async function verificarPendiente(uid) {
   if (!pedidoPendienteId) return false;
   const { data, error } = await supabase.from("game_orders")
-    .select("id,status,provider_order_id,provider_client_reference,provider_submitted_at")
+    .select("id,status,provider_order_id,provider_client_reference,provider_submitted_at,provider_status,provider_error")
     .eq("id", pedidoPendienteId).eq("user_id", uid).maybeSingle();
   if (error) throw new Error("No se pudo verificar el pedido anterior. No compres otra vez todavía.");
   if (!data) throw new Error("No encontramos el pedido anterior en la base de datos. Se conserva la referencia por seguridad.");
   const status = String(data.status || "").toLowerCase();
+  const errorProveedor = String(data.provider_status || "") + " " + String(data.provider_error || "");
+  if (status === "failed" && /INSUFFICIENT_BALANCE|saldo insuficiente/i.test(errorProveedor)) { borrarPendiente(); return false; }
   if (status === "completed" || status === "refunded") { borrarPendiente(); return false; }
   accionPendiente = (data.provider_order_id || data.provider_client_reference || data.provider_submitted_at) ? "consultar" : (status === "pending" ? "enviar" : "consultar");
   guardarPendiente(); return true;
