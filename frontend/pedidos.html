@@ -99,6 +99,13 @@
     return Number.isNaN(convertida.getTime()) ? "No disponible" : convertida.toLocaleString("es-ES");
   }
 
+  // Código público para mostrar pedidos. El UUID original sigue intacto
+  // para las consultas y relaciones con Supabase.
+  function codigoPedidoVisible(id) {
+    const limpio = String(id ?? "").replaceAll("-", "").toUpperCase();
+    return limpio ? "GT-" + limpio.slice(0, 8) : "No disponible";
+  }
+
   function normalizarEstado(estado) {
     return String(estado ?? "pending").trim().toLowerCase();
   }
@@ -261,7 +268,7 @@
         campo("Producto", nombreProducto),
         campo("ID del jugador", pedido.player_id || "No disponible"),
         campo("Precio", `${pedido.price_gvr ?? 0} GVR`),
-        campo("Pedido", pedido.id),
+        campo("Pedido", codigoPedidoVisible(pedido.id)),
         campo("Fecha", fechaLegible(pedido.created_at)),
         ...(pedido.completed_at ? [campo("Completado", fechaLegible(pedido.completed_at))] : [])
       ].join("");
@@ -275,7 +282,7 @@
         campo("Cantidad", `${venta.gvr_comprado || 0} GVR`),
         campo("Precio", `${venta.precio || 0} ${venta.moneda || ""}`.trim()),
         campo("Método de pago", venta.metodo_pago || "No especificado"),
-        campo("Pedido", venta.id),
+        campo("Pedido", codigoPedidoVisible(venta.id)),
         campo("Fecha", fechaLegible(venta.created_at))
       ].join("");
       historial.push(prepararPedido("gvr_anterior", venta, venta.created_at, `Compra de GVR · ${venta.gvr_comprado || 0} GVR`, venta.estado, detalles));
