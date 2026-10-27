@@ -119,6 +119,8 @@ function iniciar(){
     price.dataset.ggManualMethod="";
     preciosGVRPorNombre.set(claveTarjeta(card),price.textContent);
    });
+   /* Al volver a GVR, reaplica el descuento del revendedor sobre el precio base restaurado. */
+   if(typeof window.ggRefreshResellerDiscount==="function") window.ggRefreshResellerDiscount();
   }catch(error){console.error("No se pudieron restaurar los precios GVR desde Supabase:",error);}
  }
  function formatoTarifa(row,method,amountOverride){
