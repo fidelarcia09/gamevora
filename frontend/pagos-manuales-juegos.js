@@ -132,6 +132,8 @@ function iniciar(){
  function pintar(){panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));actualizarImporte();}
  async function actualizarImporte(){
   const method=select.value;
+  /* El precio tachado de GVR pertenece solo al método GVR; nunca debe quedar encima de una tarifa manual. */
+  if(method!=="GVR")document.querySelectorAll(".gg-reseller-original-price").forEach(el=>el.remove());
   const cards=[...document.querySelectorAll(".producto, .boton-oferta")].filter(card=>card.querySelector(".producto-precio, .precio-oferta"));
   /* Guarda el precio original únicamente cuando el catálogo está mostrando GVR.
      Nunca guardes "Cargando tarifa" o "Tarifa pendiente" como si fueran el precio GVR. */
@@ -203,7 +205,7 @@ function iniciar(){
    document.querySelectorAll(".producto, .boton-oferta").forEach(card=>{card.querySelector(".gg-manual-original-price")?.remove();const price=card.querySelector(".producto-precio, .precio-oferta");if(price){price.textContent="Tarifa pendiente";price.dataset.ggManualMethod=method;price.removeAttribute("aria-label");}});
   }
  }
-select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));pintar();actualizarImporte();}); pintar();
+select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));if(select.value!=="GVR")document.querySelectorAll(".gg-reseller-original-price").forEach(el=>el.remove());pintar();actualizarImporte();}); pintar();
 /* Observa todo el documento: cada juego puede reconstruir sus tarjetas en contenedores distintos. */
  window.addEventListener("gg-reseller-discount-updated",()=>{if(select.value!=="GVR")actualizarImporte();});
  const observadorTarjetas=new MutationObserver(records=>{
