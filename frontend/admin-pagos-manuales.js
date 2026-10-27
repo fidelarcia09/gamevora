@@ -101,7 +101,22 @@ function initManualPayments(){
         alert("Pago aprobado y pedido enviado a Next Level. Estado del proveedor: "+(sendResult.provider_status||"pendiente")+". "+(n?.sent>0?"Notificación enviada al usuario.": "El pedido se envió, pero no se confirmó una notificación push ("+(n?.reason||"sin detalle")+")."));
        }
       }else{
-       alert("Pago rechazado.");
+       let pushMessage="Pago rechazado.";
+       try{
+        const {data:pushResult,error:pushError}=await supabaseClient.functions.invoke("notificar-rechazo-pago-juego",{body:{game_order_id:row.game_order_id}});
+        if(pushError){
+         console.warn("El pago se rechazó, pero falló la notificación al usuario:",pushError);
+         pushMessage+=" No se pudo confirmar la notificación push.";
+        }else if(pushResult?.sent>0){
+         pushMessage+=" Notificación enviada al usuario.";
+        }else{
+         pushMessage+=" Notificación no enviada: "+(pushResult?.reason||"sin detalle")+".";
+        }
+       }catch(pushError){
+        console.warn("Falló la notificación de rechazo:",pushError);
+        pushMessage+=" No se pudo confirmar la notificación push.";
+       }
+       alert(pushMessage);
       }
       load();
      });
