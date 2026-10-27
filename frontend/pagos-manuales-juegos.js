@@ -242,7 +242,7 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
     if(falloSinSaldo){
      localStorage.removeItem("gg_manual_game_payment_pending");
      localStorage.removeItem("gg_manual_game_payment_method");
-     mostrarEstado("El pedido anterior falló por saldo insuficiente de Next Level. La referencia antigua se limpió; pulsa Continuar otra vez para iniciar una recarga nueva.","aviso");
+     mostrarEstado("El pedido anterior falló. Intenta hacer una recarga nueva.","aviso");
      return;
     }
     /* Solo se llama al proveedor después de la aprobación administrativa y de una acción explícita del usuario. */
