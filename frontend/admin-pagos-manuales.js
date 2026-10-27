@@ -1,5 +1,20 @@
 (() => {
 "use strict";
+async function invokeApproval(gameOrderId){
+ const result=await supabaseClient.functions.invoke("admin-aprobar-pago-juego",{body:{game_order_id:gameOrderId}});
+ let data=result.data||null;
+ if(result.error&&result.error.context&&typeof result.error.context.json==="function"){
+  try{data=await result.error.context.json();}catch(_){}
+ }
+ return {data,error:result.error};
+}
+function approvalMessage(data,error){
+ if(data){
+  const detail=data.provider_error||data.error||data.message;
+  if(detail)return String(detail)+(data.provider_http_status?" (HTTP "+data.provider_http_status+")":"");
+ }
+ return error?.message||"El servidor no devolvió detalles del resultado.";
+}
 function initManualPayments(){
  const base=document.querySelector(".contenedor");
  if(!base||document.getElementById("manualGamePayments"))return;
@@ -45,9 +60,9 @@ function initManualPayments(){
     retry.addEventListener("click",async()=>{
      if(!confirm("El pago ya está aprobado y el pedido no tiene referencia de envío reservada. ¿Intentar enviarlo ahora? No se creará otro pedido."))return;
      retry.disabled=true;retry.textContent="Procesando…";
-     const {data:sendResult,error:sendError}=await supabaseClient.functions.invoke("admin-aprobar-pago-juego",{body:{game_order_id:row.game_order_id}});
+     const {data:sendResult,error:sendError}=await invokeApproval(row.game_order_id);
      if(sendError||!sendResult?.success){
-      const reason=sendResult?.error||sendError?.message||"No se confirmó el envío.";
+      const reason=approvalMessage(sendResult,sendError);
       alert("El envío sigue sin confirmarse. No pulses repetidamente ni crees otro pedido. Detalle: "+reason);
      }else{
       const n=sendResult.notification;
@@ -70,7 +85,7 @@ function initManualPayments(){
       if(decision==="approved"){
        const {data:sendResult,error:sendError}=await supabaseClient.functions.invoke("admin-aprobar-pago-juego",{body:{game_order_id:row.game_order_id}});
        if(sendError||!sendResult?.success){
-        const reason=sendResult?.error||sendError?.message||"No se confirmó el envío al proveedor.";
+        const reason=approvalMessage(sendResult,sendError);
         alert("El pago quedó aprobado, pero el envío automático no se confirmó. No vuelvas a aprobar ni crees otro pedido. Revisa el estado del pedido. Detalle: "+reason);
        }else{
         const n=sendResult.notification;
