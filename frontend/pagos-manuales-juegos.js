@@ -138,7 +138,7 @@ function iniciar(){
   price.textContent=formatoTarifa(row,method,final);
  }
  function pintar(){panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));actualizarImporte();}
- async function actualizarImporte(){
+ async async function actualizarImporte(){
   const method=select.value;
   const cards=[...document.querySelectorAll(".producto, .boton-oferta")].filter(card=>card.querySelector(".producto-precio, .precio-oferta"));
   /* Guarda el precio original únicamente cuando el catálogo está mostrando GVR.
@@ -196,15 +196,15 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
 /* Observa todo el documento: cada juego puede reconstruir sus tarjetas en contenedores distintos. */
  window.addEventListener("gg-reseller-discount-updated",()=>{if(select.value!=="GVR")actualizarImporte();});
  const observadorTarjetas=new MutationObserver(records=>{
-  const catalogoCambio=records.some(record=>{
-   const target=record.target;
-   const priceElement=target.nodeType===1&&target.matches?.(".producto-precio, .precio-oferta")?target:target.parentElement?.matches?.(".producto-precio, .precio-oferta")?target.parentElement:null;
-   if(priceElement){
-    const value=String(priceElement.textContent||"").trim();
-    return /\\b(?:NaN|undefined)\\b/i.test(value);
-   }
-   return true;
-  });
+  /* Reacciona únicamente cuando el juego agrega o reemplaza tarjetas.
+     Ignora cambios de texto/precio hechos por este mismo script para evitar bucles. */
+  const catalogoCambio=records.some(record=>
+   record.type==="childList" &&
+   [...record.addedNodes,...record.removedNodes].some(node=>
+    node.nodeType===1 &&
+    (node.matches?.(".producto, .boton-oferta") || node.querySelector?.(".producto, .boton-oferta"))
+   )
+  );
   if(!catalogoCambio)return;
   if(select.value==="GVR"){
    restaurarPreciosGVRDesdeSupabase();
