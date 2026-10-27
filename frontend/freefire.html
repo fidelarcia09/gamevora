@@ -1540,7 +1540,7 @@ function productoComprable(productoLocal) {
 }
 
 function mostrarPrecio(precio) {
-    return Number(precio).toLocaleString("es-ES", { maximumFractionDigits: 2 }) + " GVR";
+    return Number(precio).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " GVR";
 }
 
 /* SELECCIÓN VISUAL: SIN MENSAJES DE PRODUCTO SELECCIONADO */
