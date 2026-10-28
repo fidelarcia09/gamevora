@@ -173,6 +173,27 @@
             margin: 12px 0 16px;
             min-height: 65px;
         }
+
+        .confirmacion-manual {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 8px 0 14px;
+            color: #b8c9dc;
+            font-size: 13px;
+            line-height: 1.45;
+            cursor: pointer;
+        }
+
+        .confirmacion-manual input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            flex: 0 0 18px;
+            margin: 1px 0 0;
+            padding: 0;
+            accent-color: #00baff;
+            cursor: pointer;
+        }
     
 .encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras{display:none!important}
 </style>
@@ -232,7 +253,9 @@
                 required
             >
 
-            <div class="captcha-wrap">
+            <label class="confirmacion-manual" for="confirmacionHumana"><input type="checkbox" id="confirmacionHumana" required><span>Confirmo que soy una persona y deseo continuar.</span></label>
+
+        <div class="captcha-wrap">
             <div class="cf-turnstile" data-sitekey="0x4AAAAAAFkQPUoJGVxIGYNB" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileExpired"></div>
         </div>
 
@@ -385,6 +408,11 @@ document
                 return;
             }
 
+
+            if (!document.getElementById("confirmacionHumana").checked) {
+                alert("Marca la casilla de confirmación antes de continuar.");
+                return;
+            }
 
             if (!window.ggTurnstileToken) {
                 alert("Completa la verificación de seguridad antes de crear la cuenta.");
