@@ -275,6 +275,32 @@
         filter: drop-shadow(0 2px 3px rgba(0,0,0,.45));
     }
 
+    .accesos-cuenta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin: -8px auto 24px;
+    }
+
+    .accesos-cuenta .acceso-referidos {
+        margin: 0;
+    }
+
+    .acceso-resenas {
+        border-color: #7953c7;
+        background: linear-gradient(145deg, #38235f, #17102f);
+    }
+
+    .acceso-resenas svg {
+        stroke: #c5a6ff;
+    }
+
+    .acceso-resenas:hover {
+        border-color: #b99aff;
+        background: linear-gradient(145deg, #4b2d7d, #211541);
+    }
+
     .acceso-referidos {
         display: flex;
         width: 82px;
@@ -975,11 +1001,7 @@
     <header class="header">
         <a class="encabezado-pagina" href="../index.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Mi cuenta</span></a>
 
-        <nav class="navegacion" aria-label="Navegación principal">
-            <a href="reseñas.html" class="volver">Reseñas</a>
-            <span class="separador">|</span>
-            <a href="../index.html" class="boton-atras"><span class="icono-atras" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span>Atrás</span></a>
-        </nav>
+
     </header>
 
     <main>
@@ -1016,14 +1038,22 @@
         </section>
         <p id="estadoFotoPerfil" class="avatar-estado" role="status" aria-live="polite"></p>
 
-        <a class="acceso-referidos" href="referidos.html" aria-label="Abrir programa de referidos">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="9" cy="8" r="3"></circle>
-                <path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2a4.5 4.5 0 0 1 4.5 4.5V19"></path>
-                <path d="M17 8v6M14 11h6"></path>
-            </svg>
-            <span>Referir</span>
-        </a>
+        <div class="accesos-cuenta" aria-label="Accesos rápidos">
+            <a class="acceso-referidos" href="referidos.html" aria-label="Abrir programa de referidos">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="9" cy="8" r="3"></circle>
+                    <path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2a4.5 4.5 0 0 1 4.5 4.5V19"></path>
+                    <path d="M17 8v6M14 11h6"></path>
+                </svg>
+                <span>Referir</span>
+            </a>
+            <a class="acceso-referidos acceso-resenas" href="reseñas.html" aria-label="Abrir página de reseñas">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9Z"></path>
+                </svg>
+                <span>Reseñas</span>
+            </a>
+        </div>
 
         <div class="lista-opciones">
 
