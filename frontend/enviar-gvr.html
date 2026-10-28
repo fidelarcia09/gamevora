@@ -131,7 +131,7 @@
             return;
           }
 
-          elemento.textContent = Number(wallet.balance).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          elemento.textContent = Number(wallet.balance).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " GVR";
         } catch (error) {
           console.error("Error consultando saldo disponible:", error);
           elemento.textContent = "No disponible";
