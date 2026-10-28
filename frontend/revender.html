@@ -366,6 +366,52 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 
 
 .encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras{display:none!important}
+
+/* Rediseño limpio del plan actual: sin corona 3D ni plataforma flotante */
+.hero{
+  isolation:isolate;position:relative;min-height:0;width:100%;max-width:100%;
+  margin:24px 0 16px;padding:22px;
+  border:1px solid rgba(88,220,255,.25);border-radius:20px;
+  background:linear-gradient(145deg,#0d1c31 0%,#091426 58%,#0b2038 100%);
+  box-shadow:0 12px 30px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.035);
+  overflow:hidden;
+}
+.hero:before,.hero:after{content:none!important;display:none!important}
+.hero .hero-top{min-height:0;align-items:center;position:relative;z-index:1}
+.hero .hero-top>div:first-child{max-width:100%}
+.hero .rank-icon{
+  width:58px;height:58px;flex:0 0 58px;border-radius:16px;
+  border:1px solid rgba(88,220,255,.25);
+  background:linear-gradient(145deg,#102b48,#0a172a);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
+.hero .rank-icon img{width:43px;height:43px;object-fit:contain}
+.hero .eyebrow,.hero .progress-meta{color:#91a6c0}
+.hero .rank-name{font-size:clamp(22px,4vw,28px);color:#f4f8ff;text-shadow:none}
+.hero .discount{font-size:clamp(22px,4vw,28px);color:#58dcff;text-shadow:none}
+.hero .progress-count{width:100%;margin-top:22px;font-size:12px}
+.hero .progress-track{position:relative;width:100%;height:8px;margin-top:9px;background:#07101f;border:1px solid #1b3550;border-radius:99px;overflow:hidden}
+.hero .progress-fill{background:linear-gradient(90deg,#087cff,#58dcff);box-shadow:0 0 12px rgba(88,220,255,.22);border-radius:99px}
+.hero .progress-meta{position:relative;width:100%;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;white-space:normal;font-size:12px}
+.hero .progress-meta span{max-width:100%;min-width:0}
+.hero .button-row{position:relative;width:100%;display:flex;margin-top:17px}
+.hero .button-row .action-button{min-height:42px;padding:10px 14px;border-radius:11px;background:#10243b;border:1px solid #234663;color:#eaf7ff;font-size:12px}
+.hero .button-row .action-button:hover{background:#14304d;border-color:#58dcff}
+.level.current{transform:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07),0 8px 18px rgba(0,124,255,.12)}
+@media(max-width:600px){
+ .hero{padding:17px 15px;margin:16px 0 13px;border-radius:16px}
+ .hero .rank-icon{width:50px;height:50px;flex-basis:50px}
+ .hero .rank-icon img{width:38px;height:38px}
+ .hero .hero-top{gap:10px}
+ .hero .hero-top>div:first-child{gap:10px!important}
+ .hero .rank-name,.hero .discount{font-size:20px}
+ .hero .progress-count{margin-top:18px}
+ .hero .progress-meta{font-size:10px;gap:6px}
+ .hero .button-row{margin-top:13px}
+ .hero .button-row .action-button{width:100%;min-height:42px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.hero *{animation:none!important;transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -525,5 +571,6 @@ iniciar();
  }catch(e){console.warn("No se pudo cargar la navegación inferior.",e);}
 })();
 </script>
+<script src="./goldi-widget.js?v=20261023-16" defer></script>
 </body>
 </html>
