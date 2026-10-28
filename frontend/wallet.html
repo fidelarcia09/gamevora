@@ -1006,6 +1006,28 @@
 .header:has(.boton-atras){flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:12px}
 
 .encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras{display:none!important}
+
+        /* Emblema GVR compartido con Enviar GVR */
+        .gvr-escudo-wallet {
+            display: block;
+            flex: 0 0 43px;
+            width: 43px;
+            height: 48px;
+            object-fit: contain;
+            margin-top: 0;
+            filter: drop-shadow(0 0 7px rgba(0, 183, 255, .45));
+            animation: gvrEscudoFlotarWallet 3.2s ease-in-out infinite;
+        }
+
+        @keyframes gvrEscudoFlotarWallet {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .gvr-escudo-wallet { animation: none; }
+        }
+
 </style>
 </head>
 
@@ -1041,12 +1063,13 @@
                     </div>
                 </div>
 
-                <div
-                    class="saldo-emblema"
-                    aria-label="GVR"
-                    role="img">
-                    <span class="saldo-letra">G</span>
-                </div>
+                <img
+                    class="gvr-escudo-wallet"
+                    src="./gvr-escudo.svg"
+                    alt=""
+                    aria-hidden="true"
+                    width="43"
+                    height="48">
 
                 <div class="estadisticas-mes" aria-label="Resumen del mes">
                     <div class="estadistica-mes">
