@@ -1244,6 +1244,53 @@
             }
         }
 
+
+        /* Borde neón azul que recorre todo el contorno de la pantalla */
+        @property --wallet-borde-giro {
+            syntax: "<angle>";
+            inherits: false;
+            initial-value: 0deg;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            padding: 2px;
+            pointer-events: none;
+            background: conic-gradient(
+                from var(--wallet-borde-giro),
+                transparent 0deg,
+                transparent 245deg,
+                rgba(0, 132, 255, 0.18) 275deg,
+                #168cff 300deg,
+                #b8e8ff 310deg,
+                #168cff 320deg,
+                rgba(0, 132, 255, 0.18) 340deg,
+                transparent 360deg
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                          linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box,
+                  linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            animation: walletBordeRecorrido 7s linear infinite;
+            opacity: 0.9;
+        }
+
+        @keyframes walletBordeRecorrido {
+            to { --wallet-borde-giro: 360deg; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body::after {
+                animation: none !important;
+                background: rgba(22, 140, 255, 0.35);
+            }
+        }
+
 </style>
 </head>
 
