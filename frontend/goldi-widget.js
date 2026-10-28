@@ -14,7 +14,7 @@
 
   var style = document.createElement("link");
   style.rel = "stylesheet";
-  style.href = base + "goldi-widget.css?v=20261028-1";
+  style.href = base + "goldi-widget.css?v=20261028-2";
   document.head.appendChild(style);
 
   var root = document.createElement("div");
@@ -95,6 +95,18 @@
   }
 
   function openPanel() {
+    /* Force viewport centering inline so old site styles or cached CSS cannot override it. */
+    panel.style.position = "fixed";
+    panel.style.left = "50%";
+    panel.style.top = "50%";
+    panel.style.right = "auto";
+    panel.style.bottom = "auto";
+    panel.style.transform = "translate(-50%, -50%)";
+    panel.style.margin = "0";
+    panel.style.zIndex = "100000";
+    panel.style.width = "min(350px, calc(100vw - 24px))";
+    panel.style.maxHeight = "calc(100dvh - 24px)";
+    panel.style.minHeight = "min(360px, calc(100dvh - 24px))";
     panel.hidden = false;
     launcher.setAttribute("aria-expanded", "true");
     if (!welcomed) {
