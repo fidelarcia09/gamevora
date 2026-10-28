@@ -1872,7 +1872,7 @@ function normalizarWhatsApp(valor) {
     return String(valor || "").replace(/[\s().-]/g, "");
 }
 
-async function cargarWhatsApp(userId) {
+async function cargarWhatsApp(userId, mostrarConfirmacion = false) {
     formWhatsApp.hidden = true;
     whatsappRegistrado.hidden = true;
     mostrarEstadoWhatsApp("Cargando número de WhatsApp...");
@@ -1897,12 +1897,18 @@ async function cargarWhatsApp(userId) {
         whatsappRegistrado.textContent = data.whatsapp_number;
         whatsappRegistrado.hidden = false;
         formWhatsApp.hidden = true;
-        mostrarEstadoWhatsApp("Número registrado permanentemente. Por seguridad, no se puede editar ni eliminar.", "exito");
 
-        setTimeout(() => {
+        if (mostrarConfirmacion) {
+            mostrarEstadoWhatsApp("Número registrado permanentemente. Por seguridad, no se puede editar ni eliminar.", "exito");
+
+            setTimeout(() => {
+                estadoWhatsApp.className = "estado-seguridad";
+                estadoWhatsApp.textContent = "";
+            }, 5000);
+        } else {
             estadoWhatsApp.className = "estado-seguridad";
             estadoWhatsApp.textContent = "";
-        }, 5000);
+        }
 
         return;
     }
@@ -1949,7 +1955,7 @@ formWhatsApp.addEventListener("submit", async function(event) {
             throw error;
         }
 
-        await cargarWhatsApp(sesion.user.id);
+        await cargarWhatsApp(sesion.user.id, true);
     } catch (error) {
         mostrarEstadoWhatsApp(error.message || "No se pudo guardar el número. Inténtalo de nuevo.", "error");
         botonGuardarWhatsApp.disabled = false;
