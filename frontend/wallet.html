@@ -1245,39 +1245,29 @@
         }
 
 
-        /* Borde neón azul que recorre todo el contorno de la pantalla */
+
+        /* El destello azul ahora recorre solo el borde de Saldo disponible */
         @property --wallet-borde-giro {
             syntax: "<angle>";
             inherits: false;
             initial-value: 0deg;
         }
 
-        body::after {
-            content: "";
-            position: fixed;
-            inset: 0;
-            z-index: 9998;
-            padding: 2px;
-            pointer-events: none;
+        .saldo::before {
             background: conic-gradient(
                 from var(--wallet-borde-giro),
-                transparent 0deg,
-                transparent 245deg,
-                rgba(0, 132, 255, 0.18) 275deg,
+                #0755a8 0deg,
+                #0755a8 245deg,
+                rgba(0, 132, 255, .25) 275deg,
                 #168cff 300deg,
-                #b8e8ff 310deg,
+                #c5efff 310deg,
                 #168cff 320deg,
-                rgba(0, 132, 255, 0.18) 340deg,
-                transparent 360deg
+                rgba(0, 132, 255, .25) 340deg,
+                #0755a8 360deg
             );
-            -webkit-mask: linear-gradient(#fff 0 0) content-box,
-                          linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask: linear-gradient(#fff 0 0) content-box,
-                  linear-gradient(#fff 0 0);
-            mask-composite: exclude;
+            background-size: auto;
             animation: walletBordeRecorrido 7s linear infinite;
-            opacity: 0.9;
+            filter: drop-shadow(0 0 5px rgba(22, 140, 255, .75));
         }
 
         @keyframes walletBordeRecorrido {
@@ -1285,9 +1275,8 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            body::after {
+            .saldo::before {
                 animation: none !important;
-                background: rgba(22, 140, 255, 0.35);
             }
         }
 
