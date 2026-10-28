@@ -608,13 +608,13 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 }
 
 
-/* Ajuste extra: barra y botón bastante más abajo, escudo flotante con sombra sincronizada y tarjeta algo más estrecha */
+/* Corrección precisa: laterales iguales, base más estrecha y animaciones realmente activas */
 #dashboard > .hero{
- width:96%!important;
+ width:100%!important;
  max-width:590px!important;
- margin-left:auto!important;
- margin-right:auto!important;
+ margin:16px auto 12px!important;
  min-height:420px!important;
+ clip-path:polygon(0 0,100% 0,100% 91%,94% 100%,6% 100%,0 91%)!important;
 }
 #dashboard > .hero:before{
  animation:revenderSombraSincronizada 3.2s ease-in-out infinite!important;
@@ -622,6 +622,7 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 }
 #dashboard > .hero .revender-escudo-3d{
  animation:revenderEscudoConSombra 3.2s ease-in-out infinite!important;
+ transform-origin:center center!important;
  will-change:transform,filter;
 }
 @keyframes revenderEscudoConSombra{
@@ -646,35 +647,22 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
   box-shadow:0 0 0 5px rgba(8,124,255,.09),0 0 22px rgba(50,200,255,.3),inset 0 0 18px rgba(50,200,255,.14);
  }
 }
-#dashboard > .hero .progress-count{
- margin-top:160px!important;
-}
-#dashboard > .hero .progress-track{
- margin-top:15px!important;
-}
-#dashboard > .hero .button-row{
- margin-top:46px!important;
-}
+#dashboard > .hero .progress-count{margin-top:160px!important}
+#dashboard > .hero .progress-track{margin-top:15px!important}
+#dashboard > .hero .button-row{margin-top:46px!important}
 @media(max-width:600px){
  #dashboard > .hero{
-  width:96%!important;
+  width:100%!important;
   min-height:445px!important;
   padding-bottom:25px!important;
+  clip-path:polygon(0 0,100% 0,100% 91%,94% 100%,6% 100%,0 91%)!important;
  }
  #dashboard > .hero .revender-escudo-3d{
-  right:1%!important;
-  top:34%!important;
-  width:clamp(112px,35%,145px)!important;
+  right:1%!important;top:34%!important;width:clamp(112px,35%,145px)!important;
  }
- #dashboard > .hero .progress-count{
-  margin-top:150px!important;
- }
- #dashboard > .hero .progress-track{
-  margin-top:14px!important;
- }
- #dashboard > .hero .button-row{
-  margin-top:42px!important;
- }
+ #dashboard > .hero .progress-count{margin-top:150px!important}
+ #dashboard > .hero .progress-track{margin-top:14px!important}
+ #dashboard > .hero .button-row{margin-top:42px!important}
 }
 @media(prefers-reduced-motion:reduce){
  #dashboard > .hero .revender-escudo-3d,
