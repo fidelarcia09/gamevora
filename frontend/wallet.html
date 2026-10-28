@@ -1217,6 +1217,14 @@
                 movimiento.type || ""
             ).toLowerCase();
 
+            if (tipo.includes("gvr_transfer_sent")) {
+                return "Envío de GVR";
+            }
+
+            if (tipo.includes("gvr_transfer_received")) {
+                return "GVR recibido";
+            }
+
             if (
                 tipo.includes("refund") ||
                 tipo.includes("reembolso")
