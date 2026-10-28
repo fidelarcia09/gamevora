@@ -14,7 +14,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:14px;pa
 .brand{font-size:18px;font-weight:900;letter-spacing:-.3px}.brand span{color:var(--cyan)}.back{color:var(--cyan);text-decoration:none;font-weight:700;font-size:13px}
 h1{font-size:clamp(28px,6vw,38px);margin:0 0 8px;letter-spacing:-.8px}.sub{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
 .hero{position:relative;overflow:hidden;padding:22px;border:1px solid rgba(88,220,255,.23);border-radius:20px;background:linear-gradient(130deg,rgba(8,124,255,.16),rgba(11,22,40,.96) 65%);margin:24px 0 16px}
-.hero-top{display:flex;align-items:center;justify-content:space-between;gap:14px}.rank-icon{width:54px;height:54px;display:grid;place-items:center;border-radius:16px;background:rgba(88,220,255,.1);border:1px solid rgba(88,220,255,.25)}.rank-icon svg{width:39px;height:39px;display:block}.level-emoji{height:34px;display:grid;place-items:center}.level-emoji svg{width:31px;height:31px;display:block}.button-icon{width:21px;height:21px;flex:0 0 21px;display:block}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:14px}.rank-icon{width:54px;height:54px;display:grid;place-items:center;border-radius:16px;background:rgba(88,220,255,.1);border:1px solid rgba(88,220,255,.25)}.rank-icon svg{width:39px;height:39px;display:block}.level-emoji{height:34px;display:grid;place-items:center}.level-emoji svg{width:31px;height:31px;display:block}.level-emoji img{width:100%;height:100%;max-width:43px;max-height:43px;object-fit:contain;display:block;margin:auto}.level-emoji{height:44px}.button-icon{width:21px;height:21px;flex:0 0 21px;display:block}
 .eyebrow{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1.4px;font-weight:800;margin-bottom:7px}.rank-name{font-size:27px;font-weight:900}.discount{font-size:24px;font-weight:900;color:var(--green);white-space:nowrap}.progress-track{height:8px;background:#14253a;border-radius:99px;overflow:hidden;margin-top:20px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#087cff,#58dcff);border-radius:99px;transition:width .3s}
 .progress-meta{display:flex;justify-content:space-between;gap:12px;margin-top:9px;color:var(--muted);font-size:12px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:13px 0;max-width:520px}.card{min-width:0;background:linear-gradient(150deg,rgba(14,29,50,.96),rgba(8,18,33,.96));border:1px solid var(--line);border-radius:16px;padding:17px}.card h2{font-size:15px;margin:0 0 7px}.card p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}.metric{font-size:27px;font-weight:900;margin:10px 0 4px}.section{margin:25px 0}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.section h2{font-size:19px;margin:0}.pill{border:1px solid rgba(88,220,255,.25);background:rgba(8,124,255,.1);color:var(--cyan);border-radius:99px;padding:6px 10px;font-size:11px;font-weight:800}
@@ -43,7 +43,7 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 38%,rgba(32,197,255,.06) 38.2%,transparent 38.8%,transparent 58%,rgba(32,197,255,.05) 58.2%,transparent 58.8%);pointer-events:none}
 .hero-top,.progress-track,.progress-meta,.button-row{position:relative;z-index:1}
 .eyebrow{color:#9aadc4;font-size:11px;letter-spacing:1px}.rank-name{font-size:clamp(24px,5vw,30px);color:#f4f8ff}
-.rank-icon{width:58px;height:58px;border-radius:16px;background:rgba(32,197,255,.08);border:1px solid rgba(32,197,255,.22)}.rank-icon svg{width:40px;height:40px}
+.rank-icon{width:58px;height:58px;border-radius:16px;background:rgba(32,197,255,.08);border:1px solid rgba(32,197,255,.22)}.rank-icon svg{width:40px;height:40px}.rank-icon img{width:100%;height:100%;object-fit:contain;display:block}
 .discount{color:#20c5ff;font-size:25px;text-shadow:0 0 14px rgba(32,197,255,.12)}.progress-track{height:8px;background:#14253a;margin-top:18px}
 .progress-fill{background:linear-gradient(90deg,#087cff,#20c5ff);box-shadow:0 0 12px rgba(32,197,255,.2)}.progress-meta{color:#9aadc4}
 .button-row{grid-template-columns:1fr 1fr}
@@ -447,29 +447,9 @@ function fecha(value){if(!value)return "Fecha no disponible";return new Date(val
 function estado(value){const v=String(value||"").toLowerCase();if(v==="completed")return "Completada";if(v==="pending")return "Pendiente";if(v==="failed")return "Fallida";if(v==="refunded")return "Reembolsada";return v||"Desconocido";}
 let rankBadgeCounter=0;
 function emblemaSvg(name){
- const label=esc(name);
- const palettes={
-  Bronce:{light:"#ffe8c2",mid:"#d8894a",dark:"#623018",edge:"#ffc887",glow:"#e08b49"},
-  Plata:{light:"#ffffff",mid:"#c5d9ee",dark:"#455a78",edge:"#f0f8ff",glow:"#b8e2ff"},
-  Oro:{light:"#fffbd0",mid:"#f5bd32",dark:"#87500b",edge:"#fff0a0",glow:"#ffd34e"},
-  Diamante:{light:"#f2ffff",mid:"#43d8ff",dark:"#1552c9",edge:"#c7ffff",glow:"#52e4ff"},
-  Leyenda:{light:"#fff0ff",mid:"#d58aff",dark:"#51178b",edge:"#ffd5ff",glow:"#d58aff"}
- };
- const p=palettes[name]||palettes.Bronce;
- const id="rank"+(++rankBadgeCounter);
- let symbol="";
- if(name==="Bronce"){
-  symbol='<path d="M22 25 27 18 32 24 37 18 42 25 39 39 32 44 25 39Z" fill="url(#'+id+'metal)" stroke="'+p.light+'" stroke-width="1.6" stroke-linejoin="round"/><path d="M27 30h10M28 35h8" stroke="'+p.light+'" stroke-width="1.6" stroke-linecap="round"/><circle cx="27" cy="15" r="2" fill="'+p.light+'"/><circle cx="32" cy="12" r="2.4" fill="'+p.light+'"/><circle cx="37" cy="15" r="2" fill="'+p.light+'"/>';
- }else if(name==="Plata"){
-  symbol='<path d="M32 13 43 20 43 33 32 44 21 33 21 20Z" fill="url(#'+id+'metal)" stroke="'+p.light+'" stroke-width="1.7" stroke-linejoin="round"/><path d="M32 17 38 22 38 31 32 38 26 31 26 22Z" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M32 17v21M26 22l12 9M38 22l-12 9" stroke="#fff" stroke-width="1.2" opacity=".95"/>';
- }else if(name==="Oro"){
-  symbol='<path d="m32 12 5.2 10.1 11.2 1.6-8.1 7.9 1.9 11.1L32 37.5l-10.2 5.2 1.9-11.1-8.1-7.9 11.2-1.6Z" fill="url(#'+id+'metal)" stroke="'+p.light+'" stroke-width="1.7" stroke-linejoin="round"/><path d="m32 20 2.8 5.7 6.3.9-4.6 4.4 1.1 6.3-5.6-3-5.6 3 1.1-6.3-4.6-4.4 6.3-.9Z" fill="#fffbd7" opacity=".9"/>';
- }else if(name==="Diamante"){
-  symbol='<path d="M16 24 23 15h18l7 9-16 26Z" fill="url(#'+id+'metal)" stroke="'+p.light+'" stroke-width="1.7" stroke-linejoin="round"/><path d="M16 24h32M23 15l9 35 9-35M23 15l-7 9 16 7 16-7-7-9" fill="none" stroke="#fff" stroke-width="1.3" opacity=".95"/><path d="m32 31 7-7-7-9-7 9Z" fill="#fff" opacity=".7"/>';
- }else{
-  symbol='<path d="M17 37 14 20 24 27 32 12 40 27 50 20 47 37 40 45H24Z" fill="url(#'+id+'metal)" stroke="'+p.light+'" stroke-width="1.8" stroke-linejoin="round"/><path d="M22 40h20M26 45h12" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/><circle cx="14" cy="18" r="2.6" fill="#fff"/><circle cx="32" cy="10" r="3" fill="#fff"/><circle cx="50" cy="18" r="2.6" fill="#fff"/><path d="M23 31 32 35 41 31" fill="none" stroke="#fff" stroke-width="1.5"/>';
- }
- return '<svg viewBox="0 0 64 64" role="img" aria-label="'+label+' — insignia de rango" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="'+id+'metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+p.light+'"/><stop offset=".25" stop-color="'+p.mid+'"/><stop offset=".62" stop-color="'+p.dark+'"/><stop offset=".82" stop-color="'+p.mid+'"/><stop offset="1" stop-color="'+p.light+'"/></linearGradient><linearGradient id="'+id+'plate" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+p.light+'"/><stop offset=".46" stop-color="'+p.mid+'"/><stop offset="1" stop-color="'+p.dark+'"/></linearGradient><linearGradient id="'+id+'shine" x1="0" y1="0" x2="0.9" y2="1"><stop stop-color="#fff" stop-opacity=".75"/><stop offset=".48" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="'+p.glow+'" stop-opacity=".35"/></linearGradient><filter id="'+id+'shadow" x="-35%" y="-35%" width="170%" height="180%"><feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#000" flood-opacity=".78"/></filter></defs><path d="M32 2 53 11 62 31 53 51 32 62 11 51 2 31 11 11Z" fill="#020713" stroke="'+p.dark+'" stroke-width="1.5"/><path d="M32 5 50 13 58 31 49 48 32 57 15 48 6 31 14 13Z" fill="url(#'+id+'plate)" stroke="'+p.edge+'" stroke-width="1.8" filter="url(#'+id+'shadow)"/><path d="M32 9 46 16 52 31 44 45 32 52 20 45 12 31 18 16Z" fill="#071327" stroke="'+p.light+'" stroke-opacity=".8" stroke-width="1.2"/><path d="M14 13 32 23 50 13M12 31 32 23 52 31M20 45 32 37 44 45" fill="none" stroke="'+p.edge+'" stroke-opacity=".7" stroke-width="1.1"/><path d="M32 9 46 16 52 31 44 45 32 52 20 45 12 31 18 16Z" fill="url(#'+id+'shine)"/><g filter="url(#'+id+'shadow)">'+symbol+'</g><path d="M13 18 16 20M48 43l3-2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="31" r="1.4" fill="'+p.light+'"/><circle cx="55" cy="31" r="1.4" fill="'+p.light+'"/></svg>';
+ const files={Bronce:"bronce",Plata:"plata",Oro:"oro",Diamante:"diamante",Leyenda:"elite"};
+ const file=files[name]||"bronce";
+ return '<img src="assets/rangos/'+file+'.svg" alt="Insignia de '+esc(name)+'" loading="eager" decoding="async">';
 }
 function nivelPara(total){let actual=LEVELS[0];for(const l of LEVELS){if(total>=l.min)actual=l;}return actual;}
 function siguienteNivel(total){return LEVELS.find(l=>l.min>total)||null;}
