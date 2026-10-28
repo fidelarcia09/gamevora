@@ -6,13 +6,21 @@
 <title>Pagos manuales de juegos | Gamers Gold Top-Up</title>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}body{margin:0;min-height:100vh;padding:18px;background:#050b18;color:#fff}.contenedor{max-width:900px;margin:auto}.header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:26px}.logo{font-size:20px;font-weight:900}.rayo{color:#00b7ff}.volver{color:#35baff;text-decoration:none;font-size:13px;font-weight:bold}.encabezado{margin-bottom:20px}.encabezado h1{font-size:26px;margin:0 0 8px}.encabezado p{color:#8da4c0;font-size:13px;line-height:1.6}.estadisticas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}.estadisticas>div{padding:14px;border:1px solid #173d67;border-radius:12px;background:#09172d}.estadisticas span{display:block;color:#8da4c0;font-size:12px;margin-bottom:8px}.estadisticas strong{color:#39c5ff;font-size:23px}.vacio{padding:25px;text-align:center;color:#9ab0c9;border:1px solid #173d67;border-radius:12px;background:#09172d}.boton-push{padding:10px 13px;border:1px solid #168bd1;border-radius:9px;background:#0b3155;color:white;font-weight:bold;cursor:pointer}.boton-push:disabled{opacity:.5}@media(max-width:480px){body{padding:13px}.estadisticas{gap:6px}.estadisticas>div{padding:10px 7px}.estadisticas strong{font-size:19px}}
+
+/* Botón Atrás: icono en cuadrado con identidad visual de cuenta.html */
+.boton-atras{display:inline-flex;align-items:center;justify-content:flex-start;align-self:flex-start;gap:9px;width:fit-content;max-width:100%;margin:0 auto 0 0;color:#eaf7ff;text-decoration:none;font-size:13px;font-weight:800;line-height:1;-webkit-tap-highlight-color:transparent}
+.icono-atras{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.45)}
+.icono-atras svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.boton-atras:hover .icono-atras{border-color:#28a9ff;background:linear-gradient(145deg,#145184,#09294b)}
+.boton-atras:focus-visible{outline:2px solid #75d7ff;outline-offset:3px;border-radius:8px}
+
 </style>
 </head>
 <body>
 <main class="contenedor">
 <header class="header">
 <div class="logo"><span class="rayo">⚡</span> Gamers Gold Top-Up</div>
-<a class="volver" href="admin-soporte.html">← Volver a Admin Soporte</a>
+<a class="boton-atras" href="admin-soporte.html"><span class="icono-atras" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span>Atrás</span></a>
 </header>
 <section class="encabezado">
 <h1>Pagos manuales de juegos</h1>
