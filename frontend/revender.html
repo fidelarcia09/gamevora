@@ -690,6 +690,40 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  50%{transform:translateY(calc(-50% + 9px)) perspective(500px) rotateX(67deg) scale(.78);opacity:.58}
 }
 
+
+/* Ajuste final de proporciones: conservar márgenes iguales y estrechar apenas la base */
+#dashboard > .hero{
+ box-sizing:border-box!important;
+ width:100%!important;
+ max-width:100%!important;
+ min-height:405px!important;
+ padding:22px 20px 24px!important;
+ clip-path:polygon(0 0,100% 0,100% 97%,98.5% 100%,1.5% 100%,0 97%)!important;
+ border-radius:24px!important;
+}
+#dashboard > .hero .hero-top,
+#dashboard > .hero .progress-count,
+#dashboard > .hero .progress-track,
+#dashboard > .hero #progressMeta,
+#dashboard > .hero .button-row{
+ width:100%!important;
+ box-sizing:border-box!important;
+}
+#dashboard > .hero .progress-count{margin-top:142px!important}
+#dashboard > .hero .progress-track{margin-top:12px!important}
+#dashboard > .hero .button-row{margin-top:32px!important}
+@media(max-width:600px){
+ #dashboard > .hero{
+  min-height:390px!important;
+  padding:18px 14px 21px!important;
+  clip-path:polygon(0 0,100% 0,100% 97%,98% 100%,2% 100%,0 97%)!important;
+  border-radius:21px!important;
+ }
+ #dashboard > .hero .progress-count{margin-top:125px!important}
+ #dashboard > .hero .progress-track{margin-top:11px!important}
+ #dashboard > .hero .button-row{margin-top:27px!important}
+}
+
 </style>
 </head>
 <body>
