@@ -399,6 +399,16 @@ document
 
             try {
 
+                const parametrosRegistro = new URLSearchParams(window.location.search);
+                const codigoReferidoRaw = (
+                    parametrosRegistro.get("ref") ||
+                    parametrosRegistro.get("codigo") ||
+                    ""
+                ).trim().toUpperCase();
+                const codigoReferido = /^[A-Z0-9]{8}$/.test(codigoReferidoRaw)
+                    ? codigoReferidoRaw
+                    : null;
+
                 const {
                     data,
                     error
@@ -414,7 +424,8 @@ document
                             emailRedirectTo: "https://fidelarcia09.github.io/gamevora/frontend/login.html",
                             captchaToken: window.ggTurnstileToken,
                             data: {
-                                username: usuario
+                                username: usuario,
+                                referral_code: codigoReferido
                             }
                         }
 
