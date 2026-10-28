@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050b18">
+  <title>Enviar GVR | Gamers Gold Top-Up</title>
+  <style>
+    :root{color-scheme:dark;--bg:#050b18;--panel:#0a1730;--border:#173b64;--blue:#00b7ff;--purple:#a78bfa;--muted:#91a5bf;--white:#fff;--green:#36e6a0;--red:#ff7588}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+    body{min-height:100vh;background:radial-gradient(ellipse at top,#102750 0%,transparent 48%),var(--bg);color:var(--white);padding:20px}
+    button,input,a{font:inherit;-webkit-tap-highlight-color:transparent}
+    .wrap{width:100%;max-width:560px;margin:0 auto}
+    header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 26px}
+    .back{color:#8ddfff;text-decoration:none;font-size:14px;font-weight:700}
+    .brand{font-size:17px;font-weight:900;letter-spacing:.2px}.brand span{color:var(--blue)}
+    .card{background:linear-gradient(155deg,#0b1b36,#071226);border:1px solid var(--border);border-radius:22px;padding:clamp(20px,5vw,28px);box-shadow:0 16px 45px #0004}
+    .badge{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #6248a4;border-radius:30px;background:#a78bfa12;color:#c9b9ff;font-size:11px;font-weight:800;letter-spacing:.8px;margin-bottom:15px}
+    h1{font-size:clamp(26px,6vw,34px);margin-bottom:9px}
+    .intro{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:25px}
+    label{display:block;font-size:13px;font-weight:700;margin:0 0 9px;color:#dce8fb}
+    .field{margin-bottom:19px}
+    input{width:100%;border:1px solid #27466d;border-radius:12px;background:#050e20;color:#fff;padding:15px 14px;outline:none;min-height:50px}
+    input:focus{border-color:var(--purple);box-shadow:0 0 0 3px #a78bfa20}
+    input::placeholder{color:#607692}
+    .help{color:#8298b5;font-size:12px;line-height:1.5;margin-top:8px}
+    .summary{border:1px solid #293d61;background:#060f21;border-radius:15px;padding:16px;margin:6px 0 19px}
+    .summary-title{font-size:12px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.7px;font-weight:800}
+    .line{display:flex;justify-content:space-between;gap:12px;margin:10px 0;font-size:14px;color:#b7c7dd}
+    .line strong{color:#fff;text-align:right;font-variant-numeric:tabular-nums}
+    .line.total{border-top:1px solid #263b5c;padding-top:13px;margin-top:14px;font-size:15px;color:#fff;font-weight:800}
+    .line.total strong{color:#d7c8ff}
+    .fee-note{font-size:12px;color:#9eafd0;line-height:1.55;margin-top:10px}
+    .btn{width:100%;border:0;border-radius:12px;min-height:52px;padding:14px 18px;font-weight:900;cursor:pointer;transition:transform .15s,opacity .15s}
+    .btn:active{transform:scale(.99)}.btn:disabled{opacity:.55;cursor:not-allowed}
+    .primary{background:linear-gradient(100deg,#8b5cf6,#6d55e8);color:#fff;box-shadow:0 8px 24px #805cf633}
+    .secondary{margin-top:10px;display:block;text-align:center;text-decoration:none;color:#9bdfff;border:1px solid #1d4b72;background:#07162b;border-radius:12px;padding:15px;font-weight:800;font-size:14px}
+    .message{display:none;border-radius:12px;padding:13px 14px;margin-bottom:16px;font-size:13px;line-height:1.55;overflow-wrap:anywhere}
+    .message.show{display:block}.message.error{border:1px solid #713746;background:#391b29;color:#ffd4dc}.message.success{border:1px solid #1e7059;background:#0b3028;color:#b8ffe5}
+    .foot{color:#607895;text-align:center;font-size:11px;line-height:1.6;margin:18px 8px 0}
+    @media(max-width:380px){body{padding:12px}.card{padding:18px}.line{font-size:13px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="back" href="wallet.html">← Volver a Wallet</a>
+      <div class="brand">GAMERS <span>GOLD</span></div>
+    </header>
+    <main class="card">
+      <div class="badge"><span aria-hidden="true">↗</span> TRANSFERENCIA ENTRE USUARIOS</div>
+      <h1>Enviar GVR</h1>
+      <p class="intro">Envía saldo a otra cuenta de Gamers Gold Top-Up usando su correo electrónico. El destinatario recibe la cantidad indicada y la comisión se suma al importe que pagas.</p>
+
+      <div id="mensaje" class="message" role="status" aria-live="polite"></div>
+
+      <form id="formularioTransferencia" novalidate>
+        <div class="field">
+          <label for="correoDestino">Correo electrónico del destinatario</label>
+          <input id="correoDestino" name="correoDestino" type="email" autocomplete="email" maxlength="320" placeholder="usuario@correo.com" required>
+          <p class="help">La cuenta debe existir y tener el correo verificado. No puedes enviarte GVR a ti mismo.</p>
+        </div>
+        <div class="field">
+          <label for="cantidadGVR">Cantidad que recibirá (GVR)</label>
+          <input id="cantidadGVR" name="cantidadGVR" type="number" min="0.01" max="100000000" step="0.01" inputmode="decimal" placeholder="Ej. 100" required>
+          <p class="help">Puedes indicar hasta 2 decimales.</p>
+        </div>
+
+        <section class="summary" aria-label="Resumen de transferencia">
+          <div class="summary-title">Resumen del envío</div>
+          <div class="line"><span>El destinatario recibe</span><strong id="resumenCantidad">0 GVR</strong></div>
+          <div class="line"><span>Comisión (10 %)</span><strong id="resumenComision">0 GVR</strong></div>
+          <div class="line total"><span>Se descontará de tu Wallet</span><strong id="resumenTotal">0 GVR</strong></div>
+          <p class="fee-note">La comisión y el saldo se calculan y validan en Supabase; los valores de esta pantalla son solo una vista previa.</p>
+        </section>
+
+        <button id="botonEnviar" class="btn primary" type="submit">Confirmar envío de GVR</button>
+        <a class="secondary" href="wallet.html">Cancelar y volver</a>
+      </form>
+    </main>
+    <p class="foot">Los envíos se procesan de forma atómica. Si una operación se interrumpe, no vuelvas a crear otro envío sin revisar primero el resultado.</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (() => {
+      "use strict";
+      const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+      const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+      const formulario = document.getElementById("formularioTransferencia");
+      const correo = document.getElementById("correoDestino");
+      const cantidad = document.getElementById("cantidadGVR");
+      const boton = document.getElementById("botonEnviar");
+      const mensaje = document.getElementById("mensaje");
+      const resumenCantidad = document.getElementById("resumenCantidad");
+      const resumenComision = document.getElementById("resumenComision");
+      const resumenTotal = document.getElementById("resumenTotal");
+      let requestIdPendiente = null;
+      let firmaPendiente = null;
+
+      function formatoGVR(valor) {
+        return (Number.isFinite(valor) ? valor : 0).toLocaleString("es-ES", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        }) + " GVR";
+      }
+
+      function mostrarMensaje(texto, tipo) {
+        mensaje.textContent = texto;
+        mensaje.className = "message show " + tipo;
+      }
+
+      function ocultarMensaje() {
+        mensaje.textContent = "";
+        mensaje.className = "message";
+      }
+
+      function actualizarResumen() {
+        const importe = Number(cantidad.value);
+        const valido = cantidad.value.trim() !== "" && Number.isFinite(importe) && importe > 0 && importe <= 100000000;
+        const redondeado = valido ? Math.round((importe + Number.EPSILON) * 100) / 100 : 0;
+        const comision = Math.round((redondeado * 0.10 + Number.EPSILON) * 100) / 100;
+        resumenCantidad.textContent = formatoGVR(redondeado);
+        resumenComision.textContent = formatoGVR(comision);
+        resumenTotal.textContent = formatoGVR(Math.round((redondeado + comision) * 100) / 100);
+      }
+
+      function crearRequestId() {
+        if (window.crypto && typeof window.crypto.randomUUID === "function") {
+          return window.crypto.randomUUID();
+        }
+        const bytes = new Uint8Array(16);
+        window.crypto.getRandomValues(bytes);
+        bytes[6] = (bytes[6] & 0x0f) | 0x40;
+        bytes[8] = (bytes[8] & 0x3f) | 0x80;
+        const hex = Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
+        return hex.slice(0,8) + "-" + hex.slice(8,12) + "-" + hex.slice(12,16) + "-" + hex.slice(16,20) + "-" + hex.slice(20);
+      }
+
+      correo.addEventListener("input", ocultarMensaje);
+      cantidad.addEventListener("input", () => {
+        ocultarMensaje();
+        actualizarResumen();
+      });
+
+      formulario.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+        ocultarMensaje();
+
+        const email = correo.value.trim().toLowerCase();
+        const importe = Number(cantidad.value);
+
+        if (!email || !correo.checkValidity()) {
+          mostrarMensaje("Introduce un correo electrónico válido.", "error");
+          correo.focus();
+          return;
+        }
+        if (!cantidad.value.trim() || !Number.isFinite(importe) || importe <= 0 || importe > 100000000) {
+          mostrarMensaje("Introduce una cantidad de GVR mayor que cero y válida.", "error");
+          cantidad.focus();
+          return;
+        }
+        if (Math.abs(importe * 100 - Math.round(importe * 100)) > 0.000001) {
+          mostrarMensaje("La cantidad puede tener como máximo 2 decimales.", "error");
+          cantidad.focus();
+          return;
+        }
+
+        const amount = Math.round(importe * 100) / 100;
+        const fee = Math.round((amount * 0.10 + Number.EPSILON) * 100) / 100;
+        const total = Math.round((amount + fee) * 100) / 100;
+        const firma = email + "|" + amount;
+
+        if (firma !== firmaPendiente || !requestIdPendiente) {
+          requestIdPendiente = crearRequestId();
+          firmaPendiente = firma;
+        }
+
+        const { data: authData, error: authError } = await supabaseClient.auth.getUser();
+        if (authError || !authData.user) {
+          window.location.href = "login.html";
+          return;
+        }
+        if (authData.user.email && authData.user.email.toLowerCase() === email) {
+          mostrarMensaje("No puedes enviarte GVR a tu propia cuenta.", "error");
+          return;
+        }
+
+        const confirmado = window.confirm(
+          "Confirma tu transferencia:\n\n" +
+          "Destinatario: " + email + "\n" +
+          "Recibe: " + formatoGVR(amount) + "\n" +
+          "Comisión (10 %): " + formatoGVR(fee) + "\n" +
+          "Total que se descontará: " + formatoGVR(total) + "\n\n" +
+          "¿Deseas continuar?"
+        );
+        if (!confirmado) return;
+
+        boton.disabled = true;
+        boton.textContent = "Procesando envío seguro…";
+
+        try {
+          const { data, error } = await supabaseClient.rpc("send_gvr_to_email", {
+            p_request_id: requestIdPendiente,
+            p_recipient_email: email,
+            p_amount: amount
+          });
+
+          if (error) {
+            throw error;
+          }
+          if (!data || data.success !== true) {
+            throw new Error("Supabase no confirmó la transferencia.");
+          }
+
+          mostrarMensaje(
+            "¡Transferencia completada! Se enviaron " + formatoGVR(Number(data.amount)) +
+            " a " + data.recipient_email + ". Comisión: " + formatoGVR(Number(data.fee)) +
+            ". Total descontado: " + formatoGVR(Number(data.total_debit)) +
+            ". Ya puedes volver a tu Wallet para consultar el saldo actualizado.",
+            "success"
+          );
+          formulario.querySelectorAll("input").forEach(input => input.disabled = true);
+          boton.textContent = "Transferencia completada";
+          boton.disabled = true;
+          requestIdPendiente = null;
+          firmaPendiente = null;
+        } catch (error) {
+          console.error("Error enviando GVR:", error);
+          const texto = String(error && error.message || "");
+          let respuesta = "No se pudo confirmar el envío. No repitas la operación con datos nuevos; puedes reintentar con los mismos datos.";
+          if (/Saldo insuficiente/i.test(texto)) respuesta = texto;
+          else if (/correo|cuenta verificada|destinatario/i.test(texto)) respuesta = texto;
+          else if (/iniciar sesión/i.test(texto)) respuesta = texto;
+          else if (/ya se procesó|en curso/i.test(texto)) respuesta = texto;
+          else if (/No puedes enviarte/i.test(texto)) respuesta = texto;
+          mostrarMensaje(respuesta, "error");
+          boton.disabled = false;
+          boton.textContent = "Reintentar envío";
+        }
+      });
+
+      supabaseClient.auth.getUser().then(({ data, error }) => {
+        if (error || !data.user) {
+          window.location.href = "login.html";
+        }
+      }).catch(() => {
+        window.location.href = "login.html";
+      });
+
+      actualizarResumen();
+    })();
+  </script>
+  <script src="./goldi-widget.js?v=20261023-16" defer></script>
+  <script src="./tema-global.js?v=20261023-1" defer></script>
+</body>
+</html>
