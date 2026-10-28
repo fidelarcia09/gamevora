@@ -32,7 +32,7 @@ function iniciar(){
  if(playerCard && playerField){
   playerCard.classList.add("gg-player-card");
   /* Coloca el selector inmediatamente después del campo donde se escribe el ID. */
-  playerField.insertAdjacentElement("afterend",panel);
+  if(document.title.toLowerCase().includes("arena breakout")) playerCard.insertAdjacentElement("afterend",panel); else playerField.insertAdjacentElement("afterend",panel);
  }else{
   const region=document.querySelector(".selector-region, #region, .region-selector");
   const nextSection=document.querySelector(".selector-categorias, #catalogo, #catalogoProductos");
