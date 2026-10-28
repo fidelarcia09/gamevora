@@ -1884,7 +1884,12 @@ async function cargarWhatsApp(userId) {
         .maybeSingle();
 
     if (error) {
-        mostrarEstadoWhatsApp("No se pudo consultar tu número. Recarga la página para intentarlo de nuevo.", "error");
+        console.error("Error al consultar WhatsApp en Supabase:", error);
+        mostrarEstadoWhatsApp(
+            "No se pudo consultar tu número: " + (error.message || error.code || "error desconocido") +
+            ". Recarga la página para intentarlo de nuevo.",
+            "error"
+        );
         return;
     }
 
