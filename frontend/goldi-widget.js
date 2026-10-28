@@ -14,7 +14,7 @@
 
   var style = document.createElement("link");
   style.rel = "stylesheet";
-  style.href = base + "goldi-widget.css?v=20261023-8";
+  style.href = base + "goldi-widget.css?v=20261028-1";
   document.head.appendChild(style);
 
   var root = document.createElement("div");
