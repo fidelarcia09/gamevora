@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 180" role="img" aria-label="Emblema GVR azul en forma de escudo">
+<defs>
+ <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4fbff"/><stop offset=".2" stop-color="#29d3ff"/><stop offset=".55" stop-color="#087cff"/><stop offset="1" stop-color="#063baf"/></linearGradient>
+ <linearGradient id="face" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#123d78"/><stop offset=".5" stop-color="#061b3d"/><stop offset="1" stop-color="#020b1d"/></linearGradient>
+ <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<g filter="url(#glow)">
+ <path d="M80 5 148 34 144 96Q137 137 80 171 23 137 16 96L12 34Z" fill="#04132b" stroke="#087cff" stroke-width="3"/>
+ <path d="M80 12 139 38 135 95Q128 130 80 158 32 130 25 95L21 38Z" fill="url(#face)" stroke="url(#metal)" stroke-width="4"/>
+ <path d="M80 12 139 38 80 49 21 38Z" fill="url(#metal)" opacity=".95"/>
+ <path d="M27 43 80 53 80 153Q37 128 31 94Z" fill="url(#metal)" opacity=".18"/>
+ <path d="M105 53 91 68H69L54 82V108L80 126 101 112V101H80L94 86H119V120L80 143 41 117V76L62 56Z" fill="url(#metal)" stroke="#a4efff" stroke-width="2.5" stroke-linejoin="round"/>
+ <path d="M80 59 68 71H89L102 58Z" fill="#e4fbff" opacity=".85"/>
+ <path d="M80 143 91 126 80 131 69 126Z" fill="#0abfff"/>
+</g>
+</svg>
