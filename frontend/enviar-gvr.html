@@ -8,12 +8,12 @@
   <style>
     :root{color-scheme:dark;--bg:#050b18;--panel:#0a1730;--border:#173b64;--blue:#00b7ff;--purple:#00b7ff;--muted:#91a5bf;--white:#fff;--green:#36e6a0;--red:#ff7588}
     *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-    body{min-height:100vh;background:radial-gradient(ellipse at top,#102750 0%,transparent 48%),var(--bg);color:var(--white);padding:20px}
+    body{width:100%;max-width:100%;min-height:100vh;padding:0;overflow-x:clip;background:radial-gradient(ellipse at top,#102750 0%,transparent 48%),var(--bg);color:var(--white)}
     button,input,a{font:inherit;-webkit-tap-highlight-color:transparent}
     .wrap{width:100%;max-width:1180px;margin:0 auto;padding-bottom:30px}
-    header{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:70px;margin:0 0 24px;padding:11px 22px;background:rgba(5,11,24,.94);border-bottom:1px solid rgba(105,158,215,.1)}
+    header{position:relative;display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;min-height:70px;margin:0 0 24px;padding:11px 22px;background:rgba(5,11,24,.94);border-bottom:1px solid rgba(105,158,215,.1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
     .back{color:#8ddfff;text-decoration:none;font-size:14px;font-weight:700}
-    .page-title{display:flex;align-items:center;gap:10px;color:#fff;font-size:20px;font-weight:900;letter-spacing:-.3px;margin-right:auto}.back{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid rgba(32,197,255,.22);border-radius:9px;background:rgba(8,124,255,.08);color:#8ddfff}.back svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}.page-title span{font-size:20px}
+    .page-title{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.back{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex:0 0 38px;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.back svg{width:21px;height:21px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}.page-title span{overflow-wrap:anywhere}
     .card{width:100%;max-width:none;background:transparent;border:0;border-radius:0;padding:0 12px;box-shadow:none}
     .badge{display:none}
     h1{font-size:clamp(26px,6vw,34px);margin-bottom:9px}
@@ -38,7 +38,7 @@
     .message{display:none;border-radius:12px;padding:13px 14px;margin-bottom:16px;font-size:13px;line-height:1.55;overflow-wrap:anywhere}
     .message.show{display:block}.message.error{border:1px solid #713746;background:#391b29;color:#ffd4dc}.message.success{border:1px solid #1e7059;background:#0b3028;color:#b8ffe5}
     .foot{display:none}
-    @media(max-width:600px){header{padding:11px 22px}.card{padding:0 12px}} @media(max-width:380px){body{padding:0}.card{padding:0 10px}.line{font-size:13px}.page-title,.page-title span{font-size:18px}}
+    @media(max-width:600px){header{padding:11px 20px}.card{padding:0 12px}} @media(max-width:380px){.card{padding:0 10px}.line{font-size:13px}}
   </style>
 </head>
 <body>
