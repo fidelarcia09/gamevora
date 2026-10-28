@@ -496,6 +496,42 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 }
 @media(prefers-reduced-motion:reduce){.revender-escudo-3d{animation:none!important}}
 
+
+/* Ajuste solicitado: bajar progreso y botón; reforzar el fondo 3D del plan actual */
+.hero{
+ min-height:310px!important;
+ padding:25px 24px 22px!important;
+ background:
+   radial-gradient(ellipse at 79% 47%,rgba(0,180,255,.24),transparent 31%),
+   linear-gradient(135deg,transparent 0 45%,rgba(55,174,255,.09) 45.2%,transparent 46%),
+   linear-gradient(145deg,#123b66 0%,#0a1d39 48%,#040a17 100%)!important;
+}
+.hero:before{
+ content:""!important;position:absolute!important;z-index:0!important;
+ right:-3%!important;top:51%!important;width:57%!important;height:62%!important;
+ border:2px solid rgba(88,220,255,.72)!important;border-radius:50%!important;
+ background:linear-gradient(145deg,rgba(20,126,255,.14),rgba(0,8,35,.04))!important;
+ box-shadow:0 0 0 8px rgba(8,124,255,.1),0 0 32px rgba(50,200,255,.4),inset 0 0 25px rgba(50,200,255,.2)!important;
+ transform:translateY(-50%) perspective(500px) rotateX(68deg)!important;
+}
+.hero .progress-count{margin-top:37px!important}
+.hero .progress-track{margin-top:12px!important}
+.hero .progress-meta:not(.progress-count){margin-top:12px!important}
+.hero .button-row{margin-top:22px!important}
+.hero .button-row .action-button{
+ min-height:46px!important;padding:11px 15px!important;
+ border-radius:12px!important;background:linear-gradient(145deg,#174c79,#0b1b30)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 5px 0 rgba(0,4,18,.55),0 9px 18px rgba(0,0,0,.25)!important;
+}
+@media(max-width:600px){
+ .hero{min-height:300px!important;padding:19px 14px 18px!important}
+ .hero .progress-count{margin-top:36px!important}
+ .hero .progress-track{margin-top:11px!important}
+ .hero .progress-meta:not(.progress-count){margin-top:11px!important}
+ .hero .button-row{margin-top:20px!important}
+ .hero .button-row .action-button{min-height:44px!important}
+}
+
 </style>
 </head>
 <body>
