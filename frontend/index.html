@@ -915,7 +915,47 @@
                 transition-duration: .01ms !important;
             }
         }
-    </style>
+    
+        /* Destello neón azul recorriendo el contorno de la pantalla */
+        @property --borde-azul-giro {
+            syntax: "<angle>";
+            inherits: false;
+            initial-value: 0deg;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            padding: 2px;
+            pointer-events: none;
+            background: conic-gradient(
+                from var(--borde-azul-giro),
+                transparent 0deg,
+                transparent 245deg,
+                rgba(0, 132, 255, .18) 275deg,
+                #168cff 300deg,
+                #c5efff 310deg,
+                #168cff 320deg,
+                rgba(0, 132, 255, .18) 340deg,
+                transparent 360deg
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                          linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box,
+                  linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            animation: bordeAzulRecorrido 7s linear infinite;
+            opacity: .92;
+        }
+
+        @keyframes bordeAzulRecorrido {
+            to { --borde-azul-giro: 360deg; }
+        }
+
+</style>
 </head>
 
 <body>
