@@ -275,6 +275,45 @@
         filter: drop-shadow(0 2px 3px rgba(0,0,0,.45));
     }
 
+    .acceso-referidos {
+        display: flex;
+        width: 82px;
+        min-height: 82px;
+        margin: -8px auto 24px;
+        padding: 10px 7px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border: 1px solid #17649a;
+        border-radius: 15px;
+        background: linear-gradient(145deg, #103b65, #08203b);
+        color: #ffffff;
+        text-decoration: none;
+        box-shadow: 0 0 18px rgba(0, 140, 255, .12);
+        font-size: 12px;
+        font-weight: 800;
+        text-align: center;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .acceso-referidos svg {
+        width: 27px;
+        height: 27px;
+        stroke: #4bcaff;
+        stroke-width: 1.8;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+    .acceso-referidos:hover {
+        border-color: #28a9ff;
+        background: linear-gradient(145deg, #145184, #09294b);
+    }
+    .acceso-referidos:focus-visible {
+        outline: 2px solid #75d7ff;
+        outline-offset: 3px;
+    }
+
     /* DESPLEGABLES PRINCIPALES */
 
     .lista-opciones {
@@ -896,6 +935,15 @@
             </div>
         </section>
         <p id="estadoFotoPerfil" class="avatar-estado" role="status" aria-live="polite"></p>
+
+        <a class="acceso-referidos" href="referidos.html" aria-label="Abrir programa de referidos">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="9" cy="8" r="3"></circle>
+                <path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2a4.5 4.5 0 0 1 4.5 4.5V19"></path>
+                <path d="M17 8v6M14 11h6"></path>
+            </svg>
+            <span>Referir</span>
+        </a>
 
         <div class="lista-opciones">
 
