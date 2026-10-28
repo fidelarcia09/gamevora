@@ -662,13 +662,82 @@
             text-shadow: 0 0 12px rgba(0, 200, 255, .75);
         }
 
-        .boton {
-            min-height: 54px;
-            margin-top: 0;
-            border-radius: 12px;
-            font-size: 14px;
-            background: linear-gradient(100deg, #087cff, #00aeea);
-            box-shadow: 0 7px 22px rgba(0, 119, 255, .18);
+        .acciones-wallet {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .accion-wallet {
+            display: flex;
+            min-width: 0;
+            min-height: 100px;
+            padding: 13px 9px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            border: 1px solid #17649a;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #103b65, #08203b);
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 0 18px rgba(0, 140, 255, .12);
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.3;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+            transition: border-color .2s, background .2s, transform .2s;
+        }
+
+        .accion-wallet svg {
+            width: 28px;
+            height: 28px;
+            flex: 0 0 28px;
+            fill: none;
+            stroke: #4bcaff;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .accion-wallet:hover {
+            border-color: #28a9ff;
+            background: linear-gradient(145deg, #145184, #09294b);
+            transform: translateY(-1px);
+        }
+
+        .accion-wallet:focus-visible {
+            outline: 2px solid #75d7ff;
+            outline-offset: 3px;
+        }
+
+        .accion-wallet.enviar {
+            border-color: #7953c7;
+            background: linear-gradient(145deg, #38235f, #17102f);
+        }
+
+        .accion-wallet.enviar svg {
+            stroke: #c5a6ff;
+        }
+
+        .accion-wallet.enviar:hover {
+            border-color: #b99aff;
+            background: linear-gradient(145deg, #4b2d7d, #211541);
+        }
+
+        @media (max-width: 350px) {
+            .acciones-wallet {
+                gap: 8px;
+            }
+
+            .accion-wallet {
+                min-height: 92px;
+                padding: 10px 5px;
+                font-size: 11px;
+            }
         }
 
         .movimientos {
@@ -996,24 +1065,23 @@
 
             </section>
 
-            <a href="recargar-gvr.html" class="boton">
+            <nav class="acciones-wallet" aria-label="Acciones de la wallet">
+                <a href="recargar-gvr.html" class="accion-wallet">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <path d="M12 8v8M8 12h8"></path>
+                    </svg>
+                    <span>Añadir GVR</span>
+                </a>
 
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true">
-                    <circle cx="12" cy="12" r="9"></circle>
-                    <path d="M12 8v8"></path>
-                    <path d="M8 12h8"></path>
-                </svg>
-
-                Añadir GVR
-
-            </a>
+                <a href="enviar-gvr.html" class="accion-wallet enviar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M22 2 11 13"></path>
+                        <path d="m22 2-7 20-4-9-9-4Z"></path>
+                    </svg>
+                    <span>Enviar GVR</span>
+                </a>
+            </nav>
 
             <section class="movimientos">
 
