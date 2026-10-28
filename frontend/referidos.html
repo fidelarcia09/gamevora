@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050b18">
+  <title>Mis referidos | Gamers Gold Top-Up</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { min-height: 100vh; padding: 20px; color: #fff; background: #050b18; }
+    .contenedor { width: 100%; max-width: 720px; margin: 0 auto; }
+    .cabecera { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .logo { font-size: 19px; font-weight: 900; letter-spacing: -.4px; }
+    .rayo { color: #00baff; text-shadow: 0 0 12px #008cff; }
+    .volver { color: #28a9ff; text-decoration: none; font-size: 13px; font-weight: 700; }
+    h1 { margin: 10px 0 8px; text-align: center; font-size: 27px; }
+    .intro { max-width: 540px; margin: 0 auto 24px; color: #9bb0c8; text-align: center; line-height: 1.6; font-size: 14px; }
+    .tarjeta { padding: 20px; margin-bottom: 15px; border: 1px solid #173d63; border-radius: 16px; background: linear-gradient(135deg, #0a1930, #061020); }
+    .etiqueta { display: block; margin-bottom: 10px; color: #8fa5bd; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; }
+    .codigo { color: #75d7ff; font-size: 28px; font-weight: 900; letter-spacing: 3px; overflow-wrap: anywhere; }
+    .enlace { display: block; margin-top: 10px; color: #a9c5e2; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+    .acciones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 17px; }
+    button { min-height: 43px; padding: 11px 15px; border: 1px solid #17649a; border-radius: 10px; background: linear-gradient(90deg, #087cff, #00baff); color: #fff; font-size: 13px; font-weight: 800; cursor: pointer; }
+    button.secundario { background: #061226; border-color: #245078; }
+    button:disabled { opacity: .6; cursor: wait; }
+    .estadisticas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 15px; }
+    .estadistica { padding: 15px 10px; border: 1px solid #173d63; border-radius: 13px; background: #061226; text-align: center; }
+    .numero { display: block; color: #4bcaff; font-size: 23px; font-weight: 900; overflow-wrap: anywhere; }
+    .texto-estadistica { display: block; margin-top: 7px; color: #9bb0c8; font-size: 11px; line-height: 1.4; }
+    h2 { margin-bottom: 14px; font-size: 17px; }
+    .lista { display: flex; flex-direction: column; gap: 9px; }
+    .invitado { padding: 13px; border: 1px solid #173d63; border-radius: 11px; background: #061226; }
+    .fila { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .id-invitado { color: #eaf5ff; font-size: 13px; font-weight: 700; overflow-wrap: anywhere; }
+    .fecha { margin-top: 6px; color: #8195ad; font-size: 11px; }
+    .estado { color: #75d7ff; font-size: 11px; font-weight: 800; text-align: right; }
+    .detalle { margin-top: 8px; color: #9bb0c8; font-size: 12px; }
+    .vacio, .estado-pagina { color: #9bb0c8; font-size: 13px; line-height: 1.6; }
+    .estado-pagina { min-height: 22px; margin: 12px 0; text-align: center; }
+    .error { color: #ff9c9c; }
+    @media (max-width: 460px) {
+      body { padding: 15px; }
+      .estadisticas { grid-template-columns: 1fr; }
+      .estadistica { display: flex; align-items: center; justify-content: space-between; text-align: left; padding: 12px 14px; }
+      .texto-estadistica { margin: 0 0 0 10px; text-align: right; }
+      .codigo { font-size: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="contenedor">
+    <header class="cabecera">
+      <div class="logo"><span class="rayo">⚡</span> GAMERS GOLD TOP-UP</div>
+      <a class="volver" href="cuenta.html">← Mi cuenta</a>
+    </header>
+
+    <h1>Invita y gana GVR</h1>
+    <p class="intro">Comparte tu código personal. Cuando una persona se registre con tu enlace y complete su primera compra de juego validada, recibirás el 5% del importe elegible en GVR.</p>
+
+    <section class="tarjeta" aria-labelledby="tituloCodigo">
+      <span class="etiqueta" id="tituloCodigo">Tu código personal</span>
+      <div class="codigo" id="codigoReferido">CARGANDO…</div>
+      <span class="enlace" id="enlaceReferido">Preparando tu enlace de invitación…</span>
+      <div class="acciones">
+        <button id="copiarEnlace" type="button">Copiar enlace</button>
+        <button id="compartirWhatsApp" class="secundario" type="button">Compartir por WhatsApp</button>
+      </div>
+    </section>
+
+    <section class="estadisticas" aria-label="Resumen de referidos">
+      <div class="estadistica"><span class="numero" id="totalInvitados">—</span><span class="texto-estadistica">Personas invitadas</span></div>
+      <div class="estadistica"><span class="numero" id="recompensasPendientes">—</span><span class="texto-estadistica">Recompensas pendientes</span></div>
+      <div class="estadistica"><span class="numero" id="totalGanado">— GVR</span><span class="texto-estadistica">Total acreditado</span></div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Actividad de tus invitaciones</h2>
+      <div id="listaInvitados" class="lista"><p class="vacio">Cargando tus referidos…</p></div>
+    </section>
+    <p id="estadoPagina" class="estado-pagina" role="status" aria-live="polite"></p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    let enlaceParaCompartir = "";
+
+    function mostrarEstado(mensaje, error = false) {
+      const elemento = document.getElementById("estadoPagina");
+      elemento.textContent = mensaje;
+      elemento.classList.toggle("error", error);
+    }
+
+    function formatoFecha(valor) {
+      if (!valor) return "Fecha no disponible";
+      const fecha = new Date(valor);
+      return Number.isNaN(fecha.getTime()) ? "Fecha no disponible" :
+        fecha.toLocaleDateString("es", { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function formatoGvr(valor) {
+      return Number(valor || 0).toLocaleString("es", {
+        minimumFractionDigits: 2, maximumFractionDigits: 2
+      }) + " GVR";
+    }
+
+    async function copiarEnlace() {
+      if (!enlaceParaCompartir) return;
+      try {
+        await navigator.clipboard.writeText(enlaceParaCompartir);
+        mostrarEstado("Enlace copiado. ¡Compártelo con tus amigos!");
+      } catch (error) {
+        mostrarEstado("No se pudo copiar automáticamente. Mantén pulsado el enlace para copiarlo.", true);
+      }
+    }
+
+    document.getElementById("copiarEnlace").addEventListener("click", copiarEnlace);
+    document.getElementById("compartirWhatsApp").addEventListener("click", function() {
+      if (!enlaceParaCompartir) return;
+      const mensaje = "¡Únete a Gamers Gold Top-Up con mi enlace! " + enlaceParaCompartir;
+      window.open("https://wa.me/?text=" + encodeURIComponent(mensaje), "_blank", "noopener,noreferrer");
+    });
+
+    async function cargarReferidos() {
+      const { data: sesion, error: errorSesion } = await supabaseClient.auth.getUser();
+      if (errorSesion || !sesion.user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Reintentar cualquier recompensa que haya quedado pendiente sin bloquear la pantalla.
+      try { await supabaseClient.rpc("process_my_referral_rewards"); } catch (_) {}
+
+      const usuario = sesion.user;
+      const [codigoResp, relacionesResp, recompensasResp] = await Promise.all([
+        supabaseClient.from("referral_codes").select("code").eq("user_id", usuario.id).maybeSingle(),
+        supabaseClient.from("referral_relationships").select("referred_user_id,created_at").eq("referrer_user_id", usuario.id).order("created_at", { ascending: false }),
+        supabaseClient.from("referral_rewards").select("referred_user_id,eligible_amount_gvr,reward_amount_gvr,status,created_at,credited_at").eq("referrer_user_id", usuario.id).order("created_at", { ascending: false })
+      ]);
+
+      const error = codigoResp.error || relacionesResp.error || recompensasResp.error;
+      if (error) {
+        console.error("Error cargando referidos:", error);
+        mostrarEstado("No pudimos cargar tus datos de referidos. Recarga la página o inténtalo más tarde.", true);
+        document.getElementById("listaInvitados").innerHTML =
+          '<p class="vacio">No se pudieron cargar los datos.</p>';
+        return;
+      }
+
+      if (!codigoResp.data?.code) {
+        mostrarEstado("Tu código aún no está disponible. Contacta con soporte si el problema continúa.", true);
+        return;
+      }
+
+      const codigo = codigoResp.data.code;
+      enlaceParaCompartir = new URL("registro.html", window.location.href).href.split("?")[0] +
+        "?ref=" + encodeURIComponent(codigo);
+      document.getElementById("codigoReferido").textContent = codigo;
+      document.getElementById("enlaceReferido").textContent = enlaceParaCompartir;
+
+      const relaciones = relacionesResp.data || [];
+      const recompensas = recompensasResp.data || [];
+      const porInvitado = new Map(recompensas.map(item => [item.referred_user_id, item]));
+      const pendientes = recompensas.filter(item => item.status === "pending").length;
+      const ganado = recompensas
+        .filter(item => item.status === "credited")
+        .reduce((total, item) => total + Number(item.reward_amount_gvr || 0), 0);
+
+      document.getElementById("totalInvitados").textContent = String(relaciones.length);
+      document.getElementById("recompensasPendientes").textContent = String(pendientes);
+      document.getElementById("totalGanado").textContent = formatoGvr(ganado);
+
+      const lista = document.getElementById("listaInvitados");
+      if (!relaciones.length) {
+        lista.innerHTML = '<p class="vacio">Todavía no tienes invitaciones registradas. Comparte tu enlace para empezar.</p>';
+        return;
+      }
+
+      lista.replaceChildren();
+      for (const relacion of relaciones) {
+        const recompensa = porInvitado.get(relacion.referred_user_id);
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "invitado";
+
+        const fila = document.createElement("div");
+        fila.className = "fila";
+        const info = document.createElement("div");
+        const id = document.createElement("div");
+        id.className = "id-invitado";
+        id.textContent = "Invitado · " + relacion.referred_user_id.slice(0, 8).toUpperCase();
+        const fecha = document.createElement("div");
+        fecha.className = "fecha";
+        fecha.textContent = "Se unió: " + formatoFecha(relacion.created_at);
+        info.append(id, fecha);
+
+        const estado = document.createElement("div");
+        estado.className = "estado";
+        if (!recompensa) {
+          estado.textContent = "Primera compra pendiente";
+        } else if (recompensa.status === "credited") {
+          estado.textContent = "Recompensa acreditada";
+        } else if (recompensa.status === "pending") {
+          estado.textContent = "Recompensa pendiente";
+        } else {
+          estado.textContent = "Sin recompensa";
+        }
+        fila.append(info, estado);
+        tarjeta.append(fila);
+
+        if (recompensa) {
+          const detalle = document.createElement("p");
+          detalle.className = "detalle";
+          detalle.textContent = "Compra elegible: " + formatoGvr(recompensa.eligible_amount_gvr) +
+            " · Recompensa: " + formatoGvr(recompensa.reward_amount_gvr);
+          tarjeta.append(detalle);
+        }
+        lista.append(tarjeta);
+      }
+    }
+
+    cargarReferidos();
+  </script>
+  <script src="./goldi-widget.js?v=20261023-2" defer></script>
+</body>
+</html>
