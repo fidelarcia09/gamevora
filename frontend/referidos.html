@@ -6,44 +6,49 @@
   <meta name="theme-color" content="#050b18">
   <title>Mis referidos | Gamers Gold Top-Up</title>
   <style>
+    :root {
+      --fondo: #050b18; --superficie: #0a1426; --superficie2: #0d1b31;
+      --azul: #087cff; --cian: #20c5ff; --texto: #f4f8ff;
+      --secundario: #9aadc4; --borde: rgba(105,158,215,.18);
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
-    :root { color-scheme: dark; }
-    body { min-height: 100vh; padding: 18px 14px 34px; color: #f7f4ea; background: radial-gradient(ellipse at top, #242014 0%, #0c0d10 46%, #070809 100%); }
+    body { min-height: 100vh; padding: 18px 14px 34px; color: var(--texto); background: var(--fondo); }
     .contenedor { width: 100%; max-width: 680px; margin: 0 auto; }
     .cabecera { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .logo { font-size: 16px; font-weight: 900; letter-spacing: -.5px; color: #fff9e8; }
-    .rayo { color: #f5c542; text-shadow: 0 2px 12px #f5c54266; }
-    .volver { color: #f6d66c; text-decoration: none; font-size: 12px; font-weight: 800; padding: 9px 12px; border-radius: 11px; border: 1px solid #b98a2b55; background: #191710; white-space: nowrap; }
-    .pantalla { padding: 21px 19px 17px; margin-bottom: 19px; border: 1px solid #d0a83b55; border-radius: 23px; background: linear-gradient(145deg, #242016 0%, #121212 54%, #17130a 100%); box-shadow: 0 14px 35px #0008, inset 0 1px #fff1; }
+    .logo { font-size: 16px; font-weight: 900; letter-spacing: -.5px; color: #f5f8ff; }
+    .rayo { color: var(--cian); text-shadow: 0 0 12px #00c8ff70; }
+    .volver { color: var(--cian); text-decoration: none; font-size: 12px; font-weight: 800; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--borde); background: var(--superficie); white-space: nowrap; }
+    .pantalla { padding: 21px 19px 17px; margin-bottom: 19px; border: 1px solid var(--borde); border-radius: 20px; background: radial-gradient(ellipse at 90% 8%, rgba(0,119,255,.18), transparent 43%), linear-gradient(135deg, #0b1b34, #081121 75%); box-shadow: 0 12px 30px #0004; }
     .resumen-superior { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 96px; }
-    .ganado-label { color: #c9c1ad; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
-    .ganado-importe { color: #f7d66f; font-size: clamp(27px, 7vw, 36px); font-weight: 900; letter-spacing: -.7px; overflow-wrap: anywhere; text-shadow: 0 2px 16px #e5b63b22; }
-    .regalo { width: 80px; height: 80px; flex: 0 0 80px; color: #f6cf58; filter: drop-shadow(0 5px 12px #e3b33330); animation: regaloLateral 1.8s ease-in-out infinite alternate; }
+    .ganado-label { color: var(--secundario); font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+    .ganado-importe { color: var(--cian); font-size: clamp(27px, 7vw, 36px); font-weight: 900; letter-spacing: -.7px; overflow-wrap: anywhere; text-shadow: 0 0 18px #00aaff30; }
+    .regalo { width: 80px; height: 80px; flex: 0 0 80px; filter: drop-shadow(0 0 12px #00aaff35); animation: regaloLateral 1.8s ease-in-out infinite alternate; }
     @keyframes regaloLateral { from { transform: translateX(-7px) rotate(-3deg); } to { transform: translateX(7px) rotate(3deg); } }
-    .separador { height: 1px; margin: 17px 0 15px; background: linear-gradient(90deg, #d6ad4055, #ffffff0a); }
+    .separador { height: 1px; margin: 17px 0 15px; background: linear-gradient(90deg, #20c5ff55, #ffffff08); }
     .estadisticas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
-    .estadistica { min-width: 0; padding: 12px 10px; border: 1px solid #ffffff12; border-radius: 14px; background: #ffffff08; }
-    .numero { display: block; color: #fff8e5; font-size: clamp(20px, 4.5vw, 25px); font-weight: 900; overflow-wrap: anywhere; }
-    .texto-estadistica { display: block; margin-top: 5px; color: #bcb5a4; font-size: 11px; line-height: 1.3; }
-    .seccion-titulo { margin: 0 0 12px 2px; color: #f5d46a; font-size: 17px; font-weight: 900; }
-    .tarjeta { padding: 17px; margin-bottom: 14px; border: 1px solid #b992343d; border-radius: 19px; background: linear-gradient(145deg, #181714, #101112); box-shadow: 0 8px 22px #0005; }
-    .etiqueta { display: block; margin-bottom: 9px; color: #e9c75d; font-size: 12px; font-weight: 900; letter-spacing: .4px; }
-    .codigo { color: #fff6d8; font-size: clamp(25px, 6vw, 32px); font-weight: 900; letter-spacing: 2.5px; overflow-wrap: anywhere; }
-    .enlace { display: block; margin-top: 9px; padding: 11px 12px; color: #e7e1d1; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; border: 1px solid #ffffff16; border-radius: 11px; background: #090a0b; }
+    .estadistica { min-width: 0; padding: 12px 10px; border: 1px solid var(--borde); border-radius: 12px; background: rgba(5,11,24,.55); }
+    .numero { display: block; color: #f4f8ff; font-size: clamp(20px, 4.5vw, 25px); font-weight: 900; overflow-wrap: anywhere; }
+    .texto-estadistica { display: block; margin-top: 5px; color: var(--secundario); font-size: 11px; line-height: 1.3; }
+    .seccion-titulo { margin: 0 0 12px 2px; color: var(--texto); font-size: 17px; font-weight: 900; }
+    .seccion-titulo::before { content: ""; display: inline-block; width: 3px; height: 16px; margin-right: 8px; vertical-align: -2px; border-radius: 4px; background: linear-gradient(180deg, var(--cian), var(--azul)); }
+    .tarjeta { padding: 17px; margin-bottom: 14px; border: 1px solid var(--borde); border-radius: 15px; background: linear-gradient(155deg, #0b192d, #07101e); box-shadow: 0 8px 22px #0003; }
+    .etiqueta { display: block; margin-bottom: 9px; color: var(--cian); font-size: 12px; font-weight: 900; letter-spacing: .4px; }
+    .codigo { color: #fff; font-size: clamp(25px, 6vw, 32px); font-weight: 900; letter-spacing: 2.5px; overflow-wrap: anywhere; }
+    .enlace { display: block; margin-top: 9px; padding: 11px 12px; color: #d7e7f9; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; border: 1px solid var(--borde); border-radius: 10px; background: #050b18; }
     .acciones { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 12px; }
-    button { min-height: 44px; padding: 11px 15px; border: 1px solid #f2cc52; border-radius: 12px; background: linear-gradient(110deg, #f4d56b, #c99625); color: #18130a; font-size: 13px; font-weight: 900; cursor: pointer; box-shadow: 0 5px 15px #d6a52a20; transition: transform .15s ease, filter .15s ease; }
+    button { min-height: 44px; padding: 11px 15px; border: 1px solid transparent; border-radius: 9px; background: linear-gradient(100deg, #087cff, #00aeea); color: #fff; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 7px 22px rgba(0,119,255,.18); transition: transform .15s ease, filter .15s ease; }
     button:active { transform: scale(.985); }
-    button.secundario { color: #f6d66c; background: #201b0e; border-color: #a9822c66; box-shadow: none; }
+    button.secundario { color: var(--cian); background: rgba(0,119,255,.1); border-color: rgba(32,197,255,.25); box-shadow: none; }
     button:disabled { opacity: .6; cursor: wait; }
-    h2 { margin-bottom: 14px; font-size: 17px; color: #f5d46a; }
+    h2 { margin-bottom: 14px; font-size: 17px; color: var(--texto); }
     .lista { display: flex; flex-direction: column; gap: 9px; }
-    .invitado { padding: 14px; border: 1px solid #ffffff12; border-radius: 14px; background: #ffffff06; }
+    .invitado { padding: 14px; border: 1px solid var(--borde); border-radius: 12px; background: linear-gradient(155deg, #0b192d, #07101e); }
     .fila { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-    .id-invitado { color: #fff7df; font-size: 13px; font-weight: 800; overflow-wrap: anywhere; }
-    .fecha { margin-top: 6px; color: #a7a091; font-size: 11px; }
-    .estado { color: #f0cc5b; font-size: 11px; font-weight: 800; text-align: right; }
-    .detalle { margin-top: 10px; padding-top: 9px; border-top: 1px solid #ffffff12; color: #c2bbaa; font-size: 12px; line-height: 1.5; }
-    .vacio, .estado-pagina { color: #b8b09e; font-size: 13px; line-height: 1.6; }
+    .id-invitado { color: #f1f6ff; font-size: 13px; font-weight: 800; overflow-wrap: anywhere; }
+    .fecha { margin-top: 6px; color: #8298b2; font-size: 11px; }
+    .estado { color: var(--cian); font-size: 11px; font-weight: 800; text-align: right; }
+    .detalle { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--borde); color: var(--secundario); font-size: 12px; line-height: 1.5; }
+    .vacio, .estado-pagina { color: var(--secundario); font-size: 13px; line-height: 1.6; }
     .estado-pagina { min-height: 22px; margin: 10px 0; text-align: center; }
     .error { color: #ff7889; }
     @media (prefers-reduced-motion: reduce) { .regalo { animation: none; } }
@@ -52,11 +57,11 @@
       .cabecera { margin-bottom: 13px; }
       .logo { font-size: 13px; }
       .volver { padding: 8px 9px; font-size: 11px; }
-      .pantalla { padding: 17px 13px 13px; border-radius: 19px; }
+      .pantalla { padding: 17px 13px 13px; border-radius: 16px; }
       .resumen-superior { min-height: 78px; }
       .regalo { width: 65px; height: 65px; flex-basis: 65px; }
       .estadisticas { gap: 6px; }
-      .estadistica { padding: 10px 7px; border-radius: 11px; }
+      .estadistica { padding: 10px 7px; border-radius: 10px; }
       .texto-estadistica { font-size: 10px; }
       .tarjeta { padding: 14px; }
       .acciones { display: grid; grid-template-columns: 1fr; }
@@ -80,11 +85,11 @@
           <div class="ganado-importe" id="totalGanado">0.00 GVR</div>
         </div>
         <svg class="regalo" viewBox="0 0 100 100" role="img" aria-label="Regalo de recompensas">
-          <path d="M18 43h64v45H18z" fill="#c99625" stroke="#f7dc79" stroke-width="3" />
-          <path d="M12 31h76v17H12z" fill="#f3d05d" stroke="#ffe99a" stroke-width="3" />
-          <path d="M43 31h14v57H43z" fill="#fff0ae" />
-          <path d="M50 31C22 31 18 9 34 9c12 0 16 14 16 22M50 31C78 31 82 9 66 9 54 9 50 23 50 31" fill="none" stroke="#f7d86b" stroke-width="7" stroke-linecap="round" />
-          <path d="M50 32v55" stroke="#fff8d7" stroke-width="3" />
+          <path d="M18 43h64v45H18z" fill="#087cff" stroke="#20c5ff" stroke-width="3" />
+          <path d="M12 31h76v17H12z" fill="#20c5ff" stroke="#8be8ff" stroke-width="3" />
+          <path d="M43 31h14v57H43z" fill="#dff8ff" />
+          <path d="M50 31C22 31 18 9 34 9c12 0 16 14 16 22M50 31C78 31 82 9 66 9 54 9 50 23 50 31" fill="none" stroke="#20c5ff" stroke-width="7" stroke-linecap="round" />
+          <path d="M50 32v55" stroke="#dff8ff" stroke-width="3" />
         </svg>
       </div>
       <div class="separador"></div>
