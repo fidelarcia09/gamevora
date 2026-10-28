@@ -15,6 +15,7 @@
     .back{color:#8ddfff;text-decoration:none;font-size:14px;font-weight:700}
     .page-title{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.back{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex:0 0 38px;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.back svg{width:21px;height:21px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}.page-title span{overflow-wrap:anywhere}
     .card{width:100%;max-width:none;background:transparent;border:0;border-radius:0;padding:0 12px;box-shadow:none}
+    .saldo-disponible{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 12px 18px;padding:10px 14px;min-height:48px;border:1px solid #17649a;border-radius:10px;background:linear-gradient(110deg,rgba(7,29,56,.96),rgba(6,19,39,.96));box-shadow:0 4px 14px rgba(0,140,255,.10)}.saldo-disponible-label{font-size:12px;color:#a4d6ff;font-weight:700}.saldo-disponible-valor{font-size:15px;font-weight:900;color:#fff;text-align:right;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.saldo-disponible-valor.cargando{color:#91a5bf;font-size:12px;font-weight:600}
     .badge{display:none}
     h1{font-size:clamp(26px,6vw,34px);margin-bottom:9px}
     .intro{display:none}
@@ -51,6 +52,7 @@
         <span>Enviar GVR</span>
       </div>
     </header>
+    <section class="saldo-disponible" aria-label="Saldo disponible de GVR"><span class="saldo-disponible-label">GVR DISPONIBLES</span><strong id="saldoDisponibleValor" class="saldo-disponible-valor cargando" aria-live="polite">Consultando saldo…</strong></section>
     <main class="card">
       <h1>Enviar GVR</h1>
 
@@ -104,6 +106,38 @@
           minimumFractionDigits: 0,
           maximumFractionDigits: 2
         }) + " GVR";
+      }
+
+      async function cargarSaldoDisponible() {
+        const elemento = document.getElementById("saldoDisponibleValor");
+        elemento.textContent = "Consultando saldo…";
+        elemento.classList.add("cargando");
+
+        try {
+          const { data: authData, error: authError } = await supabaseClient.auth.getUser();
+          if (authError || !authData.user) {
+            window.location.href = "login.html";
+            return;
+          }
+
+          const { data: wallet, error } = await supabaseClient
+            .from("wallets")
+            .select("balance")
+            .eq("user_id", authData.user.id)
+            .maybeSingle();
+
+          if (error || !wallet || !Number.isFinite(Number(wallet.balance))) {
+            elemento.textContent = "No disponible";
+            return;
+          }
+
+          elemento.textContent = formatoGVR(Number(wallet.balance));
+        } catch (error) {
+          console.error("Error consultando saldo disponible:", error);
+          elemento.textContent = "No disponible";
+        } finally {
+          elemento.classList.remove("cargando");
+        }
       }
 
       function mostrarMensaje(texto, tipo) {
@@ -214,6 +248,7 @@
             throw new Error("Supabase no confirmó la transferencia.");
           }
 
+          await cargarSaldoDisponible();
           mostrarMensaje(
             "¡Transferencia completada! Se enviaron " + formatoGVR(Number(data.amount)) +
             " a " + data.recipient_email + ". Comisión: " + formatoGVR(Number(data.fee)) +
@@ -250,6 +285,7 @@
       });
 
       actualizarResumen();
+      cargarSaldoDisponible();
     })();
   </script>
   <script src="./goldi-widget.js?v=20261023-16" defer></script>
