@@ -28,7 +28,8 @@
     .pedido::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:8px;background:linear-gradient(180deg,#65e6ff,#087dce);box-shadow:0 0 12px rgba(0,183,255,.42)}
     .pedido summary{list-style:none;display:flex;align-items:center;gap:15px;cursor:pointer;min-height:48px}
     .pedido summary::-webkit-details-marker{display:none}
-    .icono-juego{width:60px;height:54px;flex:0 0 60px;border-radius:16px;background:radial-gradient(circle at 30% 20%,#194a69,#0a1b30 72%);display:flex;align-items:center;justify-content:center;color:var(--cian);border:1px solid rgba(88,220,255,.26);box-shadow:inset 0 0 15px rgba(0,183,255,.12),0 0 13px rgba(0,183,255,.06)}
+    .icono-juego{width:54px;height:54px;flex:0 0 54px;border-radius:12px;background:radial-gradient(circle at 30% 20%,#194a69,#0a1b30 72%);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--cian);border:1px solid rgba(88,220,255,.26);box-shadow:inset 0 0 15px rgba(0,183,255,.12),0 0 13px rgba(0,183,255,.06)}
+    .icono-juego img{display:block;width:100%;height:100%;object-fit:cover}
     .icono-juego svg{width:48px;height:39px;filter:drop-shadow(0 0 5px rgba(88,220,255,.32))}
     .pedido-titulo{flex:1;min-width:0;font-size:15px;font-weight:750;line-height:1.5;color:#f4f8ff}
     .flecha{width:19px;height:19px;flex:0 0 19px;color:#8ca6c1;transition:transform .2s}
@@ -45,7 +46,7 @@
     .vacio.error{color:#ff9292}
     .boton-reintentar{margin-top:14px;border:1px solid #1c8ac0;border-radius:10px;background:#0b2137;color:#eaf8ff;padding:10px 15px;font-weight:700;cursor:pointer}
     .nota{margin-top:30px;color:#61758f;font-size:11px;line-height:1.6}
-    @media(max-width:520px){body{padding:18px 13px 30px}.contenedor{padding:0 1px}.header{margin-bottom:28px}.filtro{padding:10px 13px}.lista{padding:0;gap:10px}.pedido{padding:13px 12px 13px 15px;margin:0}.pedido summary{gap:11px}.icono-juego{width:54px;height:49px;flex-basis:54px}.icono-juego svg{width:43px;height:35px}.pedido-titulo{font-size:13px}.detalles{padding-left:0}.detalle-fila{gap:10px}}
+    @media(max-width:520px){body{padding:18px 13px 30px}.contenedor{padding:0 1px}.header{margin-bottom:28px}.filtro{padding:10px 13px}.lista{padding:0;gap:10px}.pedido{padding:13px 12px 13px 15px;margin:0}.pedido summary{gap:11px}.icono-juego{width:48px;height:48px;flex-basis:48px}.icono-juego svg{width:40px;height:33px}.pedido-titulo{font-size:13px}.detalles{padding-left:0}.detalle-fila{gap:10px}}
   
     /* Navegación atrás uniforme en todas las páginas */
     .boton-atras {
@@ -229,13 +230,33 @@
     return { tipo, datos, fecha, titulo, estado, detalles, categoria: categoriaEstado(estado) };
   }
 
+  function rutaImagenJuego(titulo) {
+    const nombre = String(titulo || "").normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLowerCase();
+    const imagenes = [
+      { claves: ["free fire", "freefire"], ruta: "./imagenes/file_00000000323881f5b39e628c9a42a0d2.png" },
+      { claves: ["call of duty", "cod mobile", "codmobile"], ruta: "./imagenes/IMG-20260926-WA0024.jpg" },
+      { claves: ["mobile legends", "mobilelegends"], ruta: "./imagenes/file_00000000a7e081f9b4b5577efa5f6066.png" },
+      { claves: ["blood strike", "bloodstrike"], ruta: "./imagenes/file_00000000da8481f980717bbfaf5b7888.png" },
+      { claves: ["pubg mobile", "pubgmobile", "pubg"], ruta: "./imagenes/file_00000000cde881f6a366f4dbeb1a5fd0.png" },
+      { claves: ["honor of kings", "honorofkings"], ruta: "./imagenes/file_00000000061881f7812f5a04ddc3600d.png" },
+      { claves: ["arena breakout", "arenabreakout"], ruta: "./imagenes/file_00000000eb3881f9a2e363c447e0f6ba.png" },
+      { claves: ["genshin impact", "genshinimpact"], ruta: "./imagenes/file_00000000266081f685eb030a10579fbe.png" }
+    ];
+    const juego = imagenes.find(item => item.claves.some(clave => nombre.includes(clave)));
+    return juego ? juego.ruta : "";
+  }
+
   function crearElementoPedido(item) {
     const detalles = document.createElement("details");
     detalles.className = "pedido";
     detalles.dataset.categoria = item.categoria;
 
     const resumen = document.createElement("summary");
-    resumen.innerHTML = `<span class="icono-juego">${iconoJuego()}</span><span class="pedido-titulo">${escaparHTML(item.titulo)}</span><svg class="flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
+    const rutaImagen = item.tipo === "juego" ? rutaImagenJuego(item.titulo) : "";
+    const visualJuego = rutaImagen
+      ? `<span class="icono-juego"><img src="${rutaImagen}" alt="" loading="lazy"></span>`
+      : `<span class="icono-juego">${iconoJuego()}</span>`;
+    resumen.innerHTML = `${visualJuego}<span class="pedido-titulo">${escaparHTML(item.titulo)}</span><svg class="flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>`;
     detalles.appendChild(resumen);
 
     const panel = document.createElement("div");
