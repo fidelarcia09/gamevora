@@ -176,11 +176,49 @@ input{background:rgba(5,18,39,.8)!important;border-color:rgba(69,146,211,.42)!im
 @media(prefers-reduced-motion:reduce){.gg-auth-atmosfera span,.gg-auth-personaje,.gg-auth-aura,.gg-auth-orbita-b{animation:none!important}.gg-auth-atmosfera span{opacity:.25}}
 
 
-/* Borde neón animado, igual al de los index */
-@property --borde-azul-giro{syntax:"<angle>";inherits:false;initial-value:0deg}
-body::after{content:"";position:fixed;inset:0;z-index:9998;padding:2px;pointer-events:none;background:conic-gradient(from var(--borde-azul-giro),transparent 0deg,transparent 245deg,rgba(0,132,255,.18) 275deg,#168cff 300deg,#c5efff 310deg,#168cff 320deg,rgba(0,132,255,.18) 340deg,transparent 360deg);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;animation:bordeAzulRecorrido 7s linear infinite;opacity:.92}
-@keyframes bordeAzulRecorrido{to{--borde-azul-giro:360deg}}
-@media(prefers-reduced-motion:reduce){body::after{animation:none!important;opacity:.55}}
+/* Destello azul neón visible recorriendo el contorno, como en index.html */
+@property --borde-azul-giro {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    padding: 3px;
+    pointer-events: none;
+    background: conic-gradient(
+        from var(--borde-azul-giro),
+        transparent 0deg,
+        transparent 230deg,
+        rgba(0, 132, 255, .35) 265deg,
+        #087cff 288deg,
+        #7bdcff 302deg,
+        #ffffff 308deg,
+        #38c5ff 316deg,
+        #087cff 330deg,
+        rgba(0, 132, 255, .35) 350deg,
+        transparent 360deg
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    animation: bordeAzulRecorrido 4.8s linear infinite;
+    opacity: 1;
+    filter: drop-shadow(0 0 3px rgba(0, 153, 255, .9));
+}
+@keyframes bordeAzulRecorrido {
+    to { --borde-azul-giro: 360deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+    body::after {
+        animation-duration: 12s;
+        opacity: .95;
+    }
+}
 
 </style>
 </head>
