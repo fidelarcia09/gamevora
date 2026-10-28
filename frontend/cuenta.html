@@ -932,6 +932,23 @@
                         <div class="dato-titulo">ID de cuenta</div>
                         <div class="dato-valor" id="idUsuario">Cargando...</div>
                     </div>
+
+                    <div class="dato" id="bloqueWhatsApp">
+                        <div class="dato-titulo">Número de WhatsApp</div>
+                        <div id="whatsappRegistrado" class="dato-valor" hidden></div>
+                        <form id="formWhatsApp" novalidate>
+                            <p class="texto-ayuda">Añade tu número con el código de país (por ejemplo, +1...). Se guardará una sola vez y no podrás editarlo ni eliminarlo. Lo usaremos como dato de contacto para revisar posibles fraudes.</p>
+                            <div class="campo-seguridad">
+                                <label for="numeroWhatsApp">WhatsApp con código de país</label>
+                                <input id="numeroWhatsApp" name="numeroWhatsApp" type="tel"
+                                    inputmode="tel" autocomplete="tel" maxlength="20"
+                                    placeholder="+12345678900" required>
+                                <span class="ayuda-campo">Incluye el signo + y el código del país.</span>
+                            </div>
+                            <button class="boton" id="guardarWhatsApp" type="submit">Guardar número de WhatsApp</button>
+                        </form>
+                        <p id="estadoWhatsApp" class="estado-seguridad" role="status" aria-live="polite"></p>
+                    </div>
                 </div>
             </details>
 
@@ -1837,6 +1854,100 @@ function emblemaSvgPerfil(name){
 }
 
 /* ==========================================
+   NÚMERO DE WHATSAPP: REGISTRO ÚNICO
+========================================== */
+
+const formWhatsApp = document.getElementById("formWhatsApp");
+const inputWhatsApp = document.getElementById("numeroWhatsApp");
+const botonGuardarWhatsApp = document.getElementById("guardarWhatsApp");
+const whatsappRegistrado = document.getElementById("whatsappRegistrado");
+const estadoWhatsApp = document.getElementById("estadoWhatsApp");
+
+function mostrarEstadoWhatsApp(mensaje, tipo = "") {
+    estadoWhatsApp.textContent = mensaje;
+    estadoWhatsApp.className = "estado-seguridad visible" + (tipo ? " " + tipo : "");
+}
+
+function normalizarWhatsApp(valor) {
+    return String(valor || "").replace(/[\\s().-]/g, "");
+}
+
+async function cargarWhatsApp(userId) {
+    formWhatsApp.hidden = true;
+    whatsappRegistrado.hidden = true;
+    mostrarEstadoWhatsApp("Cargando número de WhatsApp...");
+
+    const { data, error } = await supabaseClient
+        .from("user_whatsapp_contacts")
+        .select("whatsapp_number, created_at")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+    if (error) {
+        mostrarEstadoWhatsApp("No se pudo consultar tu número. Recarga la página para intentarlo de nuevo.", "error");
+        return;
+    }
+
+    if (data?.whatsapp_number) {
+        whatsappRegistrado.textContent = data.whatsapp_number;
+        whatsappRegistrado.hidden = false;
+        formWhatsApp.hidden = true;
+        mostrarEstadoWhatsApp("Número registrado permanentemente. Por seguridad, no se puede editar ni eliminar.", "exito");
+        return;
+    }
+
+    formWhatsApp.hidden = false;
+    estadoWhatsApp.className = "estado-seguridad";
+    estadoWhatsApp.textContent = "";
+}
+
+formWhatsApp.addEventListener("submit", async function(event) {
+    event.preventDefault();
+    const numero = normalizarWhatsApp(inputWhatsApp.value);
+
+    if (!/^\\+[1-9][0-9]{6,14}$/.test(numero)) {
+        mostrarEstadoWhatsApp("Escribe un número internacional válido: +, código de país y número (entre 7 y 15 dígitos).", "error");
+        return;
+    }
+
+    botonGuardarWhatsApp.disabled = true;
+    inputWhatsApp.disabled = true;
+    mostrarEstadoWhatsApp("Guardando número...");
+
+    try {
+        const { data: sesion, error: errorSesion } = await supabaseClient.auth.getUser();
+        if (errorSesion || !sesion.user) {
+            throw new Error("Tu sesión ha expirado. Inicia sesión nuevamente.");
+        }
+
+        const { error } = await supabaseClient
+            .from("user_whatsapp_contacts")
+            .insert({
+                user_id: sesion.user.id,
+                whatsapp_number: numero
+            });
+
+        if (error) {
+            if (error.code === "23505") {
+                await cargarWhatsApp(sesion.user.id);
+                return;
+            }
+            if (error.code === "42501") {
+                throw new Error("No se pudo guardar el número por permisos. Contacta con soporte.");
+            }
+            throw error;
+        }
+
+        await cargarWhatsApp(sesion.user.id);
+    } catch (error) {
+        mostrarEstadoWhatsApp(error.message || "No se pudo guardar el número. Inténtalo de nuevo.", "error");
+        botonGuardarWhatsApp.disabled = false;
+        inputWhatsApp.disabled = false;
+    }
+});
+
+
+/* ==========================================
    CARGAR CUENTA Y PERMISOS
 ========================================== */
 
@@ -1851,6 +1962,8 @@ async function cargarCuenta() {
     }
 
     const usuario = data.user;
+
+    await cargarWhatsApp(usuario.id);
 
     document.getElementById("correoUsuario").textContent =
         usuario.email || "Sin correo";
