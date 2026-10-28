@@ -26,7 +26,7 @@ function iniciar(){
  const panel=document.createElement("section");
  panel.className="gg-metodos";
  panel.innerHTML='<div class="gg-titulo">Método de pago</div><div class="gg-opciones" role="group" aria-label="Método de pago"><button type="button" class="gg-opcion" data-metodo="CUP" disabled><svg class="gg-metodo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/></svg><span>CUP</span></button><button type="button" class="gg-opcion" data-metodo="USDT"><svg class="gg-metodo-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M6 7h12M12 7v11M8 10h8M9 14h6"/></svg><span>USDT</span></button><button type="button" class="gg-opcion" data-metodo="GVR"><svg class="gg-metodo-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 7v10l-9 5-9-5V7z"/><path d="m8 9 4-2 4 2-4 2zM8 14l4 2 4-2"/></svg><span>GVR</span></button><button type="button" class="gg-opcion" data-metodo="SALDO_MOVIL"><svg class="gg-metodo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M9 5h6M10 18h4"/></svg><span>Saldo móvil</span></button></div><input id="ggMetodoPago" type="hidden" value="GVR">';
- const playerField=document.getElementById("idjugador")||document.getElementById("idJugador");
+ const playerField=Array.from(document.querySelectorAll("#idjugador, #idJugador")).find(field=>field.type!=="hidden")||document.getElementById("idjugador")||document.getElementById("idJugador");
  const playerLabel=playerField?document.querySelector('label[for="'+playerField.id+'"]'):null;
  const playerCard=playerField?.closest(".player-id-card, .player-card, .campo, .form-group, .formulario-campo")||playerField?.parentElement;
  if(playerCard && playerField){
@@ -316,7 +316,7 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
   if(!bridge || !client){alert("No se pudo conectar con el sistema de compra. Recarga la página.");return;}
   if(typeof bridge.validate==="function" && !bridge.validate()) return;
   if(document.title.toLowerCase().includes("arena breakout") && bridge.getView && bridge.getView()!=="bonds"){alert("Selecciona primero una oferta disponible.");return;}
-  const playerField=bridge.getPlayerField?bridge.getPlayerField():(document.getElementById("idjugador")||document.getElementById("idJugador"));
+  const playerField=bridge.getPlayerField?bridge.getPlayerField():(Array.from(document.querySelectorAll("#idjugador, #idJugador")).find(field=>field.type!=="hidden")||document.getElementById("idjugador")||document.getElementById("idJugador"));
   const zoneField=bridge.getZoneField?bridge.getZoneField():document.getElementById("zonaJugador");
   const regionField=bridge.getRegionField?bridge.getRegionField():document.getElementById("regionJugador");
   if(!playerField){alert("No se encontró el campo de ID del jugador.");return;}
