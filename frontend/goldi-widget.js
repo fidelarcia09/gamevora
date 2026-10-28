@@ -14,7 +14,7 @@
 
   var style = document.createElement("link");
   style.rel = "stylesheet";
-  style.href = base + "goldi-widget.css?v=20261028-2";
+  style.href = base + "goldi-widget.css?v=20261028-3";
   document.head.appendChild(style);
 
   var root = document.createElement("div");
@@ -74,6 +74,12 @@
   var form = root.querySelector("#gg-goldi-form");
   var faqToggle = root.querySelector("#gg-goldi-faq-toggle");
   var faqList = root.querySelector("#gg-goldi-faq-list");
+  /* Keep the panel outside the draggable launcher container so its fixed center is always the viewport center. */
+  document.documentElement.appendChild(panel);
+  panel.style.setProperty("--gg-goldi-bg", "#071224");
+  panel.style.color = "#f4f8ff";
+  panel.style.fontFamily = "Arial, Helvetica, sans-serif";
+  panel.style.lineHeight = "1.4";
   var welcomed = false;
   var conversationHistory = [];
   
@@ -303,9 +309,9 @@
     var expanded = faqToggle.getAttribute("aria-expanded") === "true";
     faqToggle.setAttribute("aria-expanded", String(!expanded));
     faqList.hidden = expanded;
-    root.querySelector("#gg-goldi-faq-chevron").textContent = expanded ? "⌄" : "⌃";
+    panel.querySelector("#gg-goldi-faq-chevron").textContent = expanded ? "⌄" : "⌃";
   });
-  root.querySelectorAll("[data-goldi-link]").forEach(function (button) {
+  panel.querySelectorAll("[data-goldi-link]").forEach(function (button) {
     button.addEventListener("click", function () { navigate(button.getAttribute("data-goldi-link")); });
   });
   function answerFAQ(question) {
@@ -389,9 +395,9 @@
     return faq[key] || null;
   }
 
-  root.addEventListener("click", function (event) {
+  panel.addEventListener("click", function (event) {
     var button = event.target && event.target.closest ? event.target.closest("[data-goldi-faq]") : null;
-    if (!button || !root.contains(button)) return;
+    if (!button || !panel.contains(button)) return;
     event.preventDefault();
     event.stopPropagation();
     var question = button.getAttribute("data-goldi-faq");
