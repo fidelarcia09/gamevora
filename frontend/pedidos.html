@@ -231,7 +231,7 @@
   }
 
   function rutaImagenJuego(titulo) {
-    const nombre = String(titulo || "").normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLowerCase();
+    const nombre = String(titulo || "").toLowerCase();
     const imagenes = [
       { claves: ["free fire", "freefire"], ruta: "./imagenes/file_00000000323881f5b39e628c9a42a0d2.png" },
       { claves: ["call of duty", "cod mobile", "codmobile"], ruta: "./imagenes/IMG-20260926-WA0024.jpg" },
