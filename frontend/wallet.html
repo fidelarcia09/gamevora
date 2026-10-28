@@ -1028,6 +1028,222 @@
             .gvr-escudo-wallet { animation: none; }
         }
 
+
+        /* VIDA VISUAL WALLET: brillo ambiental, profundidad y microanimaciones */
+        body {
+            background:
+                radial-gradient(ellipse at 12% 12%, rgba(0, 183, 255, .13), transparent 32%),
+                radial-gradient(ellipse at 92% 38%, rgba(0, 93, 255, .11), transparent 34%),
+                radial-gradient(ellipse at 50% 100%, rgba(0, 183, 255, .07), transparent 38%),
+                #050b18;
+            background-size: 140% 140%;
+            animation: walletFondoVivo 16s ease-in-out infinite alternate;
+        }
+
+        @keyframes walletFondoVivo {
+            from { background-position: 0% 0%, 100% 20%, 50% 100%, 0 0; }
+            to { background-position: 15% 12%, 85% 35%, 48% 88%, 0 0; }
+        }
+
+        .header {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .16);
+        }
+
+        .logo {
+            text-shadow: 0 0 20px rgba(0, 183, 255, .18);
+        }
+
+        main.card > h1 {
+            text-shadow: 0 4px 26px rgba(0, 183, 255, .12);
+            animation: walletEntrada .65s ease-out both;
+        }
+
+        .subtitulo {
+            animation: walletEntrada .75s ease-out both;
+        }
+
+        .saldo {
+            overflow: hidden;
+            isolation: isolate;
+            border-color: rgba(0, 183, 255, .34);
+            background:
+                radial-gradient(ellipse at 82% 15%, rgba(0, 200, 255, .24), transparent 36%),
+                linear-gradient(115deg, rgba(8, 124, 255, .13), transparent 55%),
+                linear-gradient(135deg, #0d1d38 0%, #071329 58%, #082b43 100%);
+            box-shadow:
+                0 16px 42px rgba(0, 0, 0, .27),
+                0 0 0 1px rgba(0, 183, 255, .06),
+                0 0 30px rgba(0, 140, 255, .10),
+                inset 0 1px rgba(255, 255, 255, .06);
+            animation: walletEntrada .8s cubic-bezier(.2,.75,.25,1) both,
+                       walletSaldoPulso 6s ease-in-out 1s infinite;
+        }
+
+        .saldo::after {
+            content: "";
+            position: absolute;
+            top: -40%;
+            bottom: -40%;
+            left: -75%;
+            width: 42%;
+            z-index: 0;
+            pointer-events: none;
+            background: linear-gradient(90deg, transparent, rgba(180, 239, 255, .10), transparent);
+            transform: skewX(-18deg);
+            animation: walletDestello 7s ease-in-out 1.4s infinite;
+        }
+
+        .saldo-contenido {
+            z-index: 1;
+        }
+
+        .saldo-titulo {
+            color: #a9e7ff;
+            background: rgba(0, 183, 255, .09);
+            border-color: rgba(0, 183, 255, .23);
+            box-shadow: inset 0 0 16px rgba(0, 183, 255, .04);
+        }
+
+        .saldo-valor {
+            text-shadow: 0 0 20px rgba(0, 183, 255, .23);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .gvr-escudo-wallet {
+            position: relative;
+            z-index: 1;
+            width: 56px;
+            height: 64px;
+            flex: 0 0 56px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(0, 183, 255, .40));
+            animation: walletEscudoVivo 3.4s ease-in-out infinite;
+        }
+
+        @keyframes walletEscudoVivo {
+            0%, 100% { transform: translateY(0) rotate(0deg); filter: drop-shadow(0 0 6px rgba(0,183,255,.35)); }
+            50% { transform: translateY(-5px) rotate(1deg); filter: drop-shadow(0 0 13px rgba(0,183,255,.72)); }
+        }
+
+        @keyframes walletDestello {
+            0%, 18% { left: -75%; opacity: 0; }
+            28% { opacity: 1; }
+            48%, 100% { left: 140%; opacity: 0; }
+        }
+
+        @keyframes walletSaldoPulso {
+            0%, 100% { box-shadow: 0 16px 42px rgba(0,0,0,.27), 0 0 0 1px rgba(0,183,255,.06), 0 0 24px rgba(0,140,255,.08), inset 0 1px rgba(255,255,255,.06); }
+            50% { box-shadow: 0 16px 42px rgba(0,0,0,.27), 0 0 0 1px rgba(0,183,255,.12), 0 0 34px rgba(0,140,255,.17), inset 0 1px rgba(255,255,255,.06); }
+        }
+
+        @keyframes walletEntrada {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .estadistica-mes {
+            transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+        }
+
+        .estadistica-mes:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0, 183, 255, .42);
+            box-shadow: 0 8px 24px rgba(0, 140, 255, .10);
+        }
+
+        .accion-wallet {
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, .15), inset 0 1px rgba(255,255,255,.035);
+            transition: border-color .22s ease, background .22s ease, transform .22s ease, box-shadow .22s ease;
+        }
+
+        .accion-wallet::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            background: linear-gradient(115deg, transparent 20%, rgba(105, 221, 255, .10), transparent 75%);
+            transition: opacity .22s ease;
+        }
+
+        .accion-wallet:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0, 140, 255, .18), inset 0 1px rgba(255,255,255,.06);
+        }
+
+        .accion-wallet:hover::before { opacity: 1; }
+
+        .accion-wallet svg {
+            filter: drop-shadow(0 0 5px rgba(0, 183, 255, .25));
+            transition: transform .22s ease, filter .22s ease;
+        }
+
+        .accion-wallet:hover svg {
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 9px rgba(0, 183, 255, .48));
+        }
+
+        .movimiento {
+            transition: transform .2s ease, border-color .2s ease, background .2s ease;
+            animation: walletEntrada .45s ease-out both;
+        }
+
+        .movimiento:hover {
+            transform: translateX(3px);
+            border-color: rgba(0, 183, 255, .34);
+            background: #0b1d36;
+        }
+
+        .movimiento-icono {
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .movimiento:hover .movimiento-icono {
+            transform: scale(1.05);
+            box-shadow: 0 0 14px rgba(0, 183, 255, .08);
+        }
+
+        .boton-movimientos {
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
+        }
+
+        .volver {
+            transition: border-color .2s ease, background .2s ease, transform .2s ease;
+        }
+
+        .volver:hover {
+            transform: translateY(-1px);
+            border-color: rgba(0, 183, 255, .55);
+            background: rgba(8, 124, 255, .15);
+        }
+
+        @media (max-width: 400px) {
+            .gvr-escudo-wallet {
+                width: 43px;
+                height: 50px;
+                flex-basis: 43px;
+            }
+
+            .saldo {
+                min-height: 160px;
+                padding: 22px 16px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body, main.card > h1, .subtitulo, .saldo, .saldo::after,
+            .gvr-escudo-wallet, .movimiento {
+                animation: none !important;
+            }
+
+            .estadistica-mes, .accion-wallet, .accion-wallet svg,
+            .movimiento, .movimiento-icono, .volver {
+                transition: none !important;
+            }
+        }
+
 </style>
 </head>
 
