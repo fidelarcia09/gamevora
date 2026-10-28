@@ -69,13 +69,63 @@
       .fila { flex-direction: column; }
       .estado { text-align: left; }
     }
+  
+    /* Navegación atrás uniforme en todas las páginas */
+    .boton-atras {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      align-self: flex-start;
+      gap: 9px;
+      width: fit-content;
+      max-width: 100%;
+      margin: 0 auto 0 0;
+      color: #eaf7ff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .icono-atras {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #17649a;
+      border-radius: 11px;
+      background: linear-gradient(145deg, #103b65, #08203b);
+      color: #4bcaff;
+      box-shadow: 0 5px 15px rgba(0, 21, 45, .45);
+    }
+    .icono-atras svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .boton-atras:hover .icono-atras {
+      border-color: #28a9ff;
+      background: linear-gradient(145deg, #145184, #09294b);
+    }
+    .boton-atras:focus-visible {
+      outline: 2px solid #75d7ff;
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+
   </style>
 </head>
 <body>
   <main class="contenedor">
     <header class="cabecera">
       <div class="logo"><span class="rayo">⚡</span> GAMERS GOLD TOP-UP</div>
-      <a class="volver" href="cuenta.html">← Mi cuenta</a>
+      <a class="boton-atras" href="cuenta.html"><span class="icono-atras" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span>Atrás</span></a>
     </header>
 
     <section class="pantalla" aria-label="Resumen de ganancias y referidos">
