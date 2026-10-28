@@ -185,10 +185,12 @@ body{padding:8px}
 <h1>Arena Breakout</h1>
 <p class="descripcion">Selecciona Bonds o una oferta especial para continuar con tu compra.</p>
 
+<div class="player-id-card">
 <label class="etiqueta" for="idJugador">ID del jugador</label>
 <input type="text" id="idJugador" placeholder="Introduce tu ID de Arena Breakout" autocomplete="off" maxlength="50">
 <p class="ayuda">Comprueba tu ID antes de confirmar la compra.</p>
 <div id="estadoValidacion" class="estado-validacion" aria-live="polite" role="status"></div>
+</div>
 
 <nav class="selector-categorias" aria-label="Categorías de Arena Breakout">
 <button type="button" class="pestana-categoria activa" id="pestanaBonds" aria-selected="true">Bonds</button>
@@ -341,13 +343,13 @@ window.ggManualPaymentBridge = {
  getClient: () => supabase,
  getProduct: () => { const selected = productoSeleccionado; return selected && (selected.local || selected); },
  getView: () => typeof vistaActual === "undefined" ? null : vistaActual,
- getPlayerField: () => document.getElementById("idjugador") || document.getElementById("idJugador"),
+ getPlayerField: () => document.getElementById("idJugador") || document.getElementById("idjugador"),
  getZoneField: () => document.getElementById("zonaJugador"),
  getRegionField: () => document.getElementById("regionJugador"),
  validate: () => {
   if (typeof validarFormulario === "function" && !validarFormulario()) return false;
   const selected = productoSeleccionado;
-  const playerField = document.getElementById("idjugador") || document.getElementById("idJugador");
+  const playerField = document.getElementById("idJugador") || document.getElementById("idjugador");
   const playerId = playerField?.value.trim();
   if (typeof validacionJugador !== "undefined" && validacionJugador.status === "INVALID" && validacionJugador.playerId === playerId) {
    alert("El ID del jugador no es válido. Compruébalo antes de pagar."); return false;
