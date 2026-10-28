@@ -1894,8 +1894,8 @@ async function cargarWhatsApp(userId) {
     }
 
     if (data?.whatsapp_number) {
-        whatsappRegistrado.textContent = "";
-        whatsappRegistrado.hidden = true;
+        whatsappRegistrado.textContent = data.whatsapp_number;
+        whatsappRegistrado.hidden = false;
         formWhatsApp.hidden = true;
         mostrarEstadoWhatsApp("Número registrado permanentemente. Por seguridad, no se puede editar ni eliminar.", "exito");
 
