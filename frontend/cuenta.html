@@ -1869,7 +1869,7 @@ function mostrarEstadoWhatsApp(mensaje, tipo = "") {
 }
 
 function normalizarWhatsApp(valor) {
-    return String(valor || "").replace(/[\\s().-]/g, "");
+    return String(valor || "").replace(/[\s().-]/g, "");
 }
 
 async function cargarWhatsApp(userId) {
@@ -1905,7 +1905,7 @@ formWhatsApp.addEventListener("submit", async function(event) {
     event.preventDefault();
     const numero = normalizarWhatsApp(inputWhatsApp.value);
 
-    if (!/^\\+[1-9][0-9]{6,14}$/.test(numero)) {
+    if (!/^\+[1-9][0-9]{6,14}$/.test(numero)) {
         mostrarEstadoWhatsApp("Escribe un número internacional válido: +, código de país y número (entre 7 y 15 dígitos).", "error");
         return;
     }
