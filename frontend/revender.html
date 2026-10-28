@@ -724,6 +724,36 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  #dashboard > .hero .button-row{margin-top:27px!important}
 }
 
+
+/* Ajuste solicitado desde la captura: eliminar hueco inferior y hacer flotar claramente el escudo */
+#dashboard > .hero{
+ min-height:360px!important;
+ padding-bottom:14px!important;
+}
+#dashboard > .hero .revender-escudo-3d{
+ animation:revenderEscudoFlotaVisible 2.4s ease-in-out infinite!important;
+}
+#dashboard > .hero:before{
+ animation:revenderSombraFlotaVisible 2.4s ease-in-out infinite!important;
+}
+@keyframes revenderEscudoFlotaVisible{
+ 0%,100%{transform:translateY(-50%) translateY(0) perspective(700px) rotateY(-15deg) rotateX(4deg);filter:drop-shadow(0 15px 2px rgba(0,0,0,.62)) drop-shadow(0 0 15px rgba(0,183,255,.68))}
+ 50%{transform:translateY(-50%) translateY(-22px) perspective(700px) rotateY(-7deg) rotateX(1deg);filter:drop-shadow(0 22px 3px rgba(0,0,0,.38)) drop-shadow(0 0 25px rgba(0,210,255,.95))}
+}
+@keyframes revenderSombraFlotaVisible{
+ 0%,100%{transform:translateY(-50%) perspective(500px) rotateX(67deg) scale(1);opacity:.92}
+ 50%{transform:translateY(calc(-50% + 12px)) perspective(500px) rotateX(67deg) scale(.72);opacity:.52}
+}
+@media(max-width:600px){
+ #dashboard > .hero{
+  min-height:340px!important;
+  padding-bottom:12px!important;
+ }
+ #dashboard > .hero .progress-count{margin-top:105px!important}
+ #dashboard > .hero .progress-track{margin-top:10px!important}
+ #dashboard > .hero .button-row{margin-top:22px!important}
+}
+
 </style>
 </head>
 <body>
