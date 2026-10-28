@@ -1894,10 +1894,16 @@ async function cargarWhatsApp(userId) {
     }
 
     if (data?.whatsapp_number) {
-        whatsappRegistrado.textContent = data.whatsapp_number;
-        whatsappRegistrado.hidden = false;
+        whatsappRegistrado.textContent = "";
+        whatsappRegistrado.hidden = true;
         formWhatsApp.hidden = true;
         mostrarEstadoWhatsApp("Número registrado permanentemente. Por seguridad, no se puede editar ni eliminar.", "exito");
+
+        setTimeout(() => {
+            estadoWhatsApp.className = "estado-seguridad";
+            estadoWhatsApp.textContent = "";
+        }, 5000);
+
         return;
     }
 
