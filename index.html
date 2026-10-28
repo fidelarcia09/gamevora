@@ -70,7 +70,47 @@
         @media(max-width:600px){header{min-height:64px;padding:10px 13px}.logo{height:42px}.logo-g{width:39px;height:42px;font-size:38px}.logo-resto{font-size:clamp(15px,4.1vw,19px);letter-spacing:-1px}.hero{margin:17px 14px 30px;padding:27px 21px;border-radius:17px}.hero h1{font-size:clamp(30px,8vw,39px);letter-spacing:-1px}.hero p{font-size:14px;line-height:1.7}.hero-button{width:100%}.seccion{padding:0 14px;margin-bottom:31px}.seccion-encabezado{align-items:flex-end;margin-bottom:16px;gap:8px}.seccion-encabezado h2{font-size:23px}.seccion-descripcion{font-size:12px}.ver-todos{font-size:11px}.juegos-grid{gap:10px}.juego-card{border-radius:10px}.juego-info{min-height:49px;padding:9px}.juego-info h3{font-size:11px}.juego-flecha{width:21px;height:21px}.gvr-panel{grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:20px 17px;border-radius:13px}.gvr-panel h2{font-size:21px}.gvr-panel p{font-size:12px}.gvr-icono{width:46px;height:46px;border-radius:12px}.gvr-icono svg{width:25px;height:25px}.gamevora-slide{min-height:128px;padding:20px 18px;gap:12px}.gamevora-slide h3{font-size:16px}.gamevora-slide p{font-size:12px}.ventajas-grid{gap:10px}.ventaja-card{min-height:140px;padding:13px}.ventaja-icono{width:31px;height:31px;margin-bottom:10px}.ventaja-card h3{font-size:11px}.ventaja-card p{font-size:10px}footer{padding:25px 15px 32px}}
         @media(max-width:360px){.logo-resto{font-size:14px;letter-spacing:-.8px}.logo-g{width:34px;font-size:34px}.seccion-encabezado h2{font-size:21px}.juegos-grid{gap:8px}.juego-info{padding:8px}.juego-info h3{font-size:10px}.ventaja-card{padding:11px}}
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
-    </style>
+    
+        /* Destello neón azul recorriendo el contorno de la pantalla */
+        @property --borde-azul-giro {
+            syntax: "<angle>";
+            inherits: false;
+            initial-value: 0deg;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            padding: 2px;
+            pointer-events: none;
+            background: conic-gradient(
+                from var(--borde-azul-giro),
+                transparent 0deg,
+                transparent 245deg,
+                rgba(0, 132, 255, .18) 275deg,
+                #168cff 300deg,
+                #c5efff 310deg,
+                #168cff 320deg,
+                rgba(0, 132, 255, .18) 340deg,
+                transparent 360deg
+            );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                          linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box,
+                  linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            animation: bordeAzulRecorrido 7s linear infinite;
+            opacity: .92;
+        }
+
+        @keyframes bordeAzulRecorrido {
+            to { --borde-azul-giro: 360deg; }
+        }
+
+</style>
 </head>
 <body>
     <div id="splash-screen"><img src="./frontend/imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png" alt="Gamers Gold Top-Up" loading="eager"></div>
