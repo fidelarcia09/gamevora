@@ -177,20 +177,19 @@ input{background:rgba(5,18,39,.8)!important;border-color:rgba(69,146,211,.42)!im
 @media(max-width:480px){body{padding:10px 14px 26px!important}.login-box,.registro,.recuperar-box,.box{padding:8px 10px 24px!important}.gg-auth-escena{height:218px;margin-bottom:0}.gg-auth-personaje{height:205px;width:270px}.gg-auth-orbita{width:200px}.gg-auth-orbita-b{width:225px}.descripcion{margin-bottom:21px!important}}
 @media(prefers-reduced-motion:reduce){.gg-auth-atmosfera span,.gg-auth-personaje,.gg-auth-aura,.gg-auth-orbita-b{animation:none!important}.gg-auth-atmosfera span{opacity:.25}}
 
+
+/* Borde neón animado, igual al de los index */
+@property --borde-azul-giro{syntax:"<angle>";inherits:false;initial-value:0deg}
+body::after{content:"";position:fixed;inset:0;z-index:9998;padding:2px;pointer-events:none;background:conic-gradient(from var(--borde-azul-giro),transparent 0deg,transparent 245deg,rgba(0,132,255,.18) 275deg,#168cff 300deg,#c5efff 310deg,#168cff 320deg,rgba(0,132,255,.18) 340deg,transparent 360deg);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;animation:bordeAzulRecorrido 7s linear infinite;opacity:.92}
+@keyframes bordeAzulRecorrido{to{--borde-azul-giro:360deg}}
+@media(prefers-reduced-motion:reduce){body::after{animation:none!important;opacity:.55}}
+
 </style>
 </head>
 
 <body>
 <div class="gg-auth-atmosfera" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-<div class="gg-auth-escena" aria-hidden="true"><div class="gg-auth-aura"></div>
-<svg class="gg-auth-personaje" viewBox="0 0 300 250" role="presentation" xmlns="http://www.w3.org/2000/svg">
-<defs><linearGradient id="ggArmor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5fbff"/><stop offset=".34" stop-color="#7ad9ff"/><stop offset=".7" stop-color="#1476c9"/><stop offset="1" stop-color="#07172f"/></linearGradient><linearGradient id="ggDark" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#183c67"/><stop offset=".55" stop-color="#07152c"/><stop offset="1" stop-color="#020814"/></linearGradient><linearGradient id="ggVisor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#baf6ff"/><stop offset=".45" stop-color="#12bfff"/><stop offset="1" stop-color="#0050bb"/></linearGradient><filter id="ggGlow"><feGaussianBlur stdDeviation="5"/></filter></defs>
-<ellipse cx="151" cy="225" rx="78" ry="13" fill="#008fff" opacity=".28" filter="url(#ggGlow)"/><path d="M75 226 Q78 176 111 163 L133 151 177 151 199 165 Q228 181 230 226Z" fill="url(#ggDark)" stroke="#218dce" stroke-width="2"/><path d="M103 193 128 177 145 199 127 226 91 226Z" fill="url(#ggArmor)" opacity=".9"/><path d="M197 193 173 177 156 199 174 226 209 226Z" fill="url(#ggArmor)" opacity=".85"/><path d="M109 93 Q104 43 150 30 Q202 37 197 96 L190 142 Q174 169 151 171 Q124 166 111 141Z" fill="url(#ggDark)" stroke="#3daeea" stroke-width="3"/><path d="M102 88 Q111 36 150 27 Q194 31 204 81 L190 74 177 56 150 66 124 57 111 81Z" fill="url(#ggArmor)" stroke="#9be9ff" stroke-width="2"/><path d="M112 88 Q129 68 150 70 Q174 69 191 89 L183 119 Q168 139 151 140 Q131 137 119 119Z" fill="url(#ggVisor)" stroke="#a8f4ff" stroke-width="2"/><path d="M119 92 145 83 138 104 119 110Z" fill="#06152d" opacity=".94"/><path d="M181 92 155 83 162 104 181 110Z" fill="#06152d" opacity=".94"/><path d="M145 118 151 122 157 118" fill="none" stroke="#d7fbff" stroke-width="3" stroke-linecap="round"/><path d="M98 92 83 108 91 140 112 148 119 132 107 117Z" fill="url(#ggArmor)" stroke="#3daeea" stroke-width="2"/><path d="M202 92 217 108 209 140 188 148 181 132 193 117Z" fill="url(#ggArmor)" stroke="#3daeea" stroke-width="2"/><path d="M136 151 150 165 166 151 174 169 151 190 128 169Z" fill="#0c2b50" stroke="#42c9ff" stroke-width="2"/><path d="M141 174 150 181 160 174" fill="none" stroke="#83edff" stroke-width="3"/><path d="M115 48 127 38 121 61 108 73Z" fill="#fff" opacity=".8"/><path d="M184 47 175 38 180 61 193 73Z" fill="#4ad8ff"/><circle cx="81" cy="165" r="4" fill="#63e9ff"/><circle cx="224" cy="150" r="3" fill="#63e9ff"/></svg>
-<div class="gg-auth-orbita gg-auth-orbita-a"></div><div class="gg-auth-orbita gg-auth-orbita-b"></div><div class="gg-auth-marca"><span>⚡</span> GAMERS GOLD <b>TOP-UP</b></div></div>
-
 <div class="login-box">
-
-    <a class="encabezado-pagina" href="index.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Iniciar sesión</span></a>
 
     <h1 class="titulo">Iniciar sesión</h1>
 
