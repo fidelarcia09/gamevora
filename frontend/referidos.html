@@ -6,44 +6,68 @@
   <meta name="theme-color" content="#050b18">
   <title>Mis referidos | Gamers Gold Top-Up</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-    body { min-height: 100vh; padding: 20px; color: #fff; background: #050b18; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
+    :root { color-scheme: light; }
+    body {
+      min-height: 100vh; padding: 20px 16px 34px; color: #111936;
+      background: linear-gradient(180deg, #fbfcff 0%, #eef3ff 52%, #dce7ff 100%);
+    }
     .contenedor { width: 100%; max-width: 720px; margin: 0 auto; }
     .cabecera { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; }
-    .logo { font-size: 19px; font-weight: 900; letter-spacing: -.4px; }
-    .rayo { color: #00baff; text-shadow: 0 0 12px #008cff; }
-    .volver { color: #28a9ff; text-decoration: none; font-size: 13px; font-weight: 700; }
-    h1 { margin: 10px 0 8px; text-align: center; font-size: 27px; }
-    .intro { max-width: 540px; margin: 0 auto 24px; color: #9bb0c8; text-align: center; line-height: 1.6; font-size: 14px; }
-    .tarjeta { padding: 20px; margin-bottom: 15px; border: 1px solid #173d63; border-radius: 16px; background: linear-gradient(135deg, #0a1930, #061020); }
-    .etiqueta { display: block; margin-bottom: 10px; color: #8fa5bd; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; }
-    .codigo { color: #75d7ff; font-size: 28px; font-weight: 900; letter-spacing: 3px; overflow-wrap: anywhere; }
-    .enlace { display: block; margin-top: 10px; color: #a9c5e2; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
-    .acciones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 17px; }
-    button { min-height: 43px; padding: 11px 15px; border: 1px solid #17649a; border-radius: 10px; background: linear-gradient(90deg, #087cff, #00baff); color: #fff; font-size: 13px; font-weight: 800; cursor: pointer; }
-    button.secundario { background: #061226; border-color: #245078; }
+    .logo { font-size: 17px; font-weight: 900; letter-spacing: -.5px; color: #18254d; }
+    .rayo { color: #087bff; text-shadow: 0 2px 9px #91c8ff; }
+    .volver { color: #0759d8; text-decoration: none; font-size: 13px; font-weight: 800; padding: 10px 13px; border-radius: 12px; background: #fff; box-shadow: 0 5px 15px #1a3d7712; white-space: nowrap; }
+    h1 { margin: 8px 0 8px; font-size: clamp(25px, 5vw, 31px); font-weight: 900; letter-spacing: -.8px; text-align: left; color: #111936; }
+    .intro { max-width: 580px; margin: 0 0 20px; color: #606b88; line-height: 1.6; font-size: 14px; }
+    .tarjeta { padding: 20px; margin-bottom: 15px; border: 1px solid #e0e7f5; border-radius: 22px; background: rgba(255,255,255,.94); box-shadow: 0 9px 24px #263f7b12; }
+    .codigo-panel { position: relative; overflow: hidden; padding: 23px 21px 20px; color: #fff; border: 0; border-radius: 23px; background: linear-gradient(125deg, #071d70 0%, #0757e8 58%, #0799ff 100%); box-shadow: 0 14px 26px #165be52c; }
+    .codigo-panel:before { content: ""; position: absolute; width: 190px; height: 190px; right: -48px; top: -77px; border: 1px solid #ffffff30; border-radius: 42px; transform: rotate(35deg); box-shadow: 0 0 0 18px #ffffff0b, 0 0 0 38px #ffffff08; }
+    .codigo-panel:after { content: "★"; position: absolute; right: 22px; top: 19px; color: #d7e8ff; font-size: 35px; text-shadow: 0 3px 15px #001c6b80; }
+    .codigo-panel > * { position: relative; z-index: 1; }
+    .etiqueta { display: block; margin-bottom: 9px; color: #d6e7ff; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+    .codigo { color: #fff; font-size: clamp(27px, 6vw, 34px); font-weight: 900; letter-spacing: 3px; overflow-wrap: anywhere; text-shadow: 0 2px 12px #00194d55; }
+    .enlace { display: block; margin-top: 12px; padding: 10px 12px; color: #f1f7ff; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; border: 1px solid #ffffff3b; border-radius: 12px; background: #001e5d35; }
+    .acciones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+    button { min-height: 46px; padding: 12px 16px; border: 1px solid #0874ee; border-radius: 13px; background: linear-gradient(100deg, #087bff, #0754e8); color: #fff; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 7px 16px #075be52b; transition: transform .15s ease, filter .15s ease; }
+    button:active { transform: scale(.985); }
+    button.secundario { color: #1649ac; background: #fff; border-color: #d7e2fa; box-shadow: none; }
+    .codigo-panel button.secundario { color: #fff; border-color: #ffffff66; background: #ffffff15; }
     button:disabled { opacity: .6; cursor: wait; }
-    .estadisticas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 15px; }
-    .estadistica { padding: 15px 10px; border: 1px solid #173d63; border-radius: 13px; background: #061226; text-align: center; }
-    .numero { display: block; color: #4bcaff; font-size: 23px; font-weight: 900; overflow-wrap: anywhere; }
-    .texto-estadistica { display: block; margin-top: 7px; color: #9bb0c8; font-size: 11px; line-height: 1.4; }
-    h2 { margin-bottom: 14px; font-size: 17px; }
-    .lista { display: flex; flex-direction: column; gap: 9px; }
-    .invitado { padding: 13px; border: 1px solid #173d63; border-radius: 11px; background: #061226; }
+    .estadisticas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .estadistica { min-height: 94px; display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid #e3eaf8; border-radius: 19px; background: rgba(255,255,255,.96); box-shadow: 0 7px 18px #263f7b0e; text-align: left; }
+    .estadistica:before { content: "↗"; flex: 0 0 48px; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; color: #0759e8; background: #e5edff; font-size: 26px; font-weight: 900; }
+    .estadistica:nth-child(2):before { content: "◷"; }
+    .estadistica:nth-child(3):before { content: "G"; font-size: 20px; font-weight: 900; }
+    .numero { display: block; color: #111936; font-size: clamp(21px, 4vw, 27px); font-weight: 900; overflow-wrap: anywhere; }
+    .texto-estadistica { display: block; margin-top: 5px; color: #5f6b88; font-size: 12px; line-height: 1.35; }
+    h2 { margin-bottom: 15px; font-size: 19px; letter-spacing: -.3px; color: #111936; }
+    .lista { display: flex; flex-direction: column; gap: 10px; }
+    .invitado { padding: 15px; border: 1px solid #e2e9f7; border-radius: 16px; background: #fff; box-shadow: 0 5px 14px #263f7b0a; }
     .fila { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-    .id-invitado { color: #eaf5ff; font-size: 13px; font-weight: 700; overflow-wrap: anywhere; }
-    .fecha { margin-top: 6px; color: #8195ad; font-size: 11px; }
-    .estado { color: #75d7ff; font-size: 11px; font-weight: 800; text-align: right; }
-    .detalle { margin-top: 8px; color: #9bb0c8; font-size: 12px; }
-    .vacio, .estado-pagina { color: #9bb0c8; font-size: 13px; line-height: 1.6; }
+    .id-invitado { color: #172348; font-size: 13px; font-weight: 800; overflow-wrap: anywhere; }
+    .fecha { margin-top: 6px; color: #78829c; font-size: 11px; }
+    .estado { color: #075cda; font-size: 11px; font-weight: 800; text-align: right; }
+    .detalle { margin-top: 10px; padding-top: 9px; border-top: 1px solid #edf1fa; color: #5e6a86; font-size: 12px; line-height: 1.5; }
+    .vacio, .estado-pagina { color: #68738e; font-size: 13px; line-height: 1.6; }
     .estado-pagina { min-height: 22px; margin: 12px 0; text-align: center; }
-    .error { color: #ff9c9c; }
+    .error { color: #c5324a; }
     @media (max-width: 460px) {
-      body { padding: 15px; }
-      .estadisticas { grid-template-columns: 1fr; }
-      .estadistica { display: flex; align-items: center; justify-content: space-between; text-align: left; padding: 12px 14px; }
-      .texto-estadistica { margin: 0 0 0 10px; text-align: right; }
-      .codigo { font-size: 25px; }
+      body { padding: 17px 13px 28px; }
+      .cabecera { margin-bottom: 22px; }
+      .logo { font-size: 14px; }
+      .volver { padding: 9px 10px; font-size: 12px; }
+      .intro { font-size: 13px; }
+      .codigo-panel { padding: 21px 17px 18px; }
+      .codigo-panel:after { right: 16px; top: 17px; font-size: 28px; }
+      .acciones { display: grid; grid-template-columns: 1fr; }
+      button { width: 100%; }
+      .estadisticas { grid-template-columns: 1fr 1fr; gap: 9px; }
+      .estadistica { min-height: 110px; display: block; padding: 13px 11px; }
+      .estadistica:before { width: 38px; height: 38px; margin-bottom: 9px; font-size: 21px; }
+      .numero { font-size: 21px; }
+      .texto-estadistica { font-size: 11px; }
+      .fila { flex-direction: column; }
+      .estado { text-align: left; }
     }
   </style>
 </head>
@@ -57,7 +81,7 @@
     <h1>Invita y gana GVR</h1>
     <p class="intro">Comparte tu código personal. Cuando una persona se registre con tu enlace y complete su primera compra de juego validada, recibirás el 5% del importe elegible en GVR.</p>
 
-    <section class="tarjeta" aria-labelledby="tituloCodigo">
+    <section class="tarjeta codigo-panel" aria-labelledby="tituloCodigo">
       <span class="etiqueta" id="tituloCodigo">Tu código personal</span>
       <div class="codigo" id="codigoReferido">CARGANDO…</div>
       <span class="enlace" id="enlaceReferido">Preparando tu enlace de invitación…</span>
