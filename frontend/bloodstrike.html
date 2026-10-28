@@ -69,6 +69,9 @@ input:focus { border-color: #159dff; box-shadow: 0 0 7px rgba(0, 157, 255, 0.15)
 .boton-atras:hover .icono-atras{border-color:#28a9ff;background:linear-gradient(145deg,#145184,#09294b)}
 .boton-atras:focus-visible{outline:2px solid #75d7ff;outline-offset:3px;border-radius:8px}
 
+
+/* Botón Atrás alineado a la izquierda */
+.header:has(.boton-atras){flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:12px}
 </style></head><body><div class="contenedor"><header class="header"><div class="logo"><span class="rayo">⚡</span> Gamers Gold Top-Up</div><a href="juegos.html" class="volver boton-atras"><span class="icono-atras" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span>Atrás</span></a></header>
 <main class="card"><h1>Blood Strike</h1><p class="descripcion">Selecciona el producto que deseas comprar.</p>
 <label class="etiqueta" for="idjugador">ID del jugador</label><input type="text" id="idjugador" placeholder="Introduce tu ID de Blood Strike" autocomplete="off" maxlength="50"><p class="ayuda">Escribe tu ID de jugador para continuar con la compra.</p>
