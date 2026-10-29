@@ -853,7 +853,7 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
                 id="pestanaOfertas"
                 aria-selected="false"
             >
-                Ofertas extra
+                Ofertas Especiales
             </button>
 
             <button
@@ -1945,17 +1945,6 @@ function renderizarOfertas() {
             tarjeta.disabled = true;
         }
 
-        const imagen = document.createElement("img");
-
-        imagen.className = "oferta-imagen";
-        imagen.src = oferta.imagen;
-        imagen.alt = oferta.nombre;
-        imagen.loading = "lazy";
-
-        imagen.addEventListener("error", () => {
-            imagen.style.display = "none";
-        });
-
         const nombre = document.createElement("div");
         nombre.className = "producto-nombre";
         nombre.textContent = oferta.nombre;
@@ -1986,7 +1975,7 @@ function renderizarOfertas() {
             estado.textContent = "Revisar el precio GVR";
         }
 
-        tarjeta.append(imagen, nombre, precio, estado);
+        tarjeta.append(nombre, precio, estado);
 
         if (comprable) {
             tarjeta.addEventListener("click", () => {
