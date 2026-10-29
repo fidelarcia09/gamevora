@@ -863,6 +863,49 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  }
 }
 
+
+/* Borde luminoso recorrido, inspirado en el efecto de la página de inicio */
+@property --plan-border-angle{
+ syntax:"<angle>";
+ inherits:false;
+ initial-value:0deg;
+}
+#dashboard > .hero{
+ position:relative!important;
+ isolation:isolate!important;
+}
+#dashboard > .hero .plan-border-effect{
+ position:absolute;
+ inset:0;
+ z-index:5;
+ padding:2px;
+ border-radius:inherit;
+ pointer-events:none;
+ background:conic-gradient(
+  from var(--plan-border-angle),
+  transparent 0deg,
+  transparent 245deg,
+  rgba(0,132,255,.18) 275deg,
+  #168cff 300deg,
+  #c5efff 310deg,
+  #168cff 320deg,
+  rgba(0,132,255,.18) 340deg,
+  transparent 360deg
+ );
+ -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+ -webkit-mask-composite:xor;
+ mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+ mask-composite:exclude;
+ animation:planBorderTravel 7s linear infinite;
+ opacity:.98;
+}
+@keyframes planBorderTravel{
+ to{--plan-border-angle:360deg}
+}
+@media(prefers-reduced-motion:reduce){
+ #dashboard > .hero .plan-border-effect{animation:none}
+}
+
 </style>
 </head>
 <body>
@@ -875,6 +918,7 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 <div id="loading" class="empty" style="margin-top:20px">Verificando acceso de revendedor…</div>
 <div id="dashboard" hidden>
 <section class="hero">
+<span class="plan-border-effect" aria-hidden="true"></span>
 <div class="revender-escudo-3d" aria-hidden="true"><img src="./gvr-escudo.svg?v=20261028-3" alt="" loading="eager" decoding="async"></div>
 <div class="hero-top">
 <div style="display:flex;align-items:center;gap:13px"><div class="rank-icon" id="rankIcon" aria-label="Emblema del nivel"></div><div><div class="eyebrow">Tu plan actual</div><div class="rank-name" id="rankName">Bronce</div></div></div>
