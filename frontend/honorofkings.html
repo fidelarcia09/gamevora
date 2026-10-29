@@ -279,6 +279,62 @@ body.modal-abierto{overflow:hidden}
   overflow-wrap:anywhere!important;
 }
 
+
+/* PRESENTACION UNIFICADA DE PRECIOS: TODO ALINEADO A LA IZQUIERDA */
+.catalogo .producto,
+#catalogo .producto,
+#catalogoOfertas .producto{
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto auto auto auto!important;
+  align-content:center!important;
+  justify-items:stretch!important;
+  row-gap:2px!important;
+  text-align:left!important;
+}
+.catalogo .producto > .producto-nombre,
+#catalogo .producto > .producto-nombre,
+#catalogoOfertas .producto > .producto-nombre{
+  grid-column:1!important;
+  grid-row:1!important;
+  text-align:left!important;
+  font-size:11px!important;
+  line-height:1.2!important;
+}
+.catalogo .producto > .gg-reseller-original-price,
+#catalogo .producto > .gg-reseller-original-price,
+#catalogoOfertas .producto > .gg-reseller-original-price{
+  grid-column:1!important;
+  grid-row:2!important;
+  justify-self:start!important;
+  width:auto!important;
+  margin:0!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+  text-align:left!important;
+}
+.catalogo .producto > .producto-precio,
+#catalogo .producto > .producto-precio,
+#catalogoOfertas .producto > .producto-precio{
+  grid-column:1!important;
+  grid-row:3!important;
+  justify-self:start!important;
+  width:auto!important;
+  margin:0!important;
+  font-size:11px!important;
+  line-height:1.15!important;
+  text-align:left!important;
+  white-space:normal!important;
+}
+.catalogo .producto > .producto-estado,
+#catalogo .producto > .producto-estado,
+#catalogoOfertas .producto > .producto-estado{
+  grid-column:1!important;
+  grid-row:4!important;
+  text-align:left!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+}
+
 </style>
 </head>
 <body>
