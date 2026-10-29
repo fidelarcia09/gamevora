@@ -236,6 +236,38 @@
 }
 @media(prefers-reduced-motion:reduce){.producto-check{animation:none}}
 
+
+/* Ajuste compacto moderado + borde azul y destello sobre toda la tarjeta */
+.comprobante-nuevo{position:relative;isolation:isolate}
+.comprobante-nuevo .checkout-border-effect{
+ position:absolute;inset:0;z-index:12;padding:2px;border-radius:inherit;
+ pointer-events:none;
+ background:conic-gradient(from var(--checkout-border-angle),transparent 0deg,transparent 245deg,rgba(0,132,255,.18) 275deg,#168cff 300deg,#c5efff 310deg,#168cff 320deg,rgba(0,132,255,.18) 340deg,transparent 360deg);
+ -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+ -webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+ mask-composite:exclude;animation:checkoutBorderTravel 7s linear infinite;opacity:.98
+}
+@property --checkout-border-angle{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes checkoutBorderTravel{to{--checkout-border-angle:360deg}}
+.comprobante-nuevo .checkout-light-sweep{
+ position:absolute;z-index:10;top:-30%;bottom:-30%;left:-45%;width:30%;
+ pointer-events:none;opacity:0;transform:skewX(-22deg);
+ background:linear-gradient(90deg,transparent 0%,rgba(155,225,255,.04) 20%,rgba(190,239,255,.34) 48%,rgba(255,255,255,.58) 50%,rgba(100,198,255,.22) 62%,transparent 100%);
+ filter:blur(2px);animation:checkoutLightSweep 7.5s ease-in-out infinite
+}
+@keyframes checkoutLightSweep{0%,62%{left:-45%;opacity:0}66%{opacity:.9}82%{left:125%;opacity:.65}83%,100%{left:125%;opacity:0}}
+.comprobante-hero{min-height:485px;padding-top:24px;padding-bottom:29px}
+.producto-visual{height:160px;margin-top:38px;margin-bottom:15px}
+.comprobante-cuerpo{padding-top:21px;padding-bottom:22px}
+@media(max-width:480px){
+ .comprobante-hero{min-height:450px;padding-top:20px;padding-bottom:24px}
+ .producto-visual{height:140px;margin-top:32px;margin-bottom:12px}
+ .comprobante-cuerpo{padding-top:16px;padding-bottom:18px}
+}
+@media(prefers-reduced-motion:reduce){
+ .comprobante-nuevo .checkout-border-effect,.comprobante-nuevo .checkout-light-sweep{animation:none;display:none}
+}
+
 </style>
 </head>
 <body>
@@ -248,6 +280,8 @@
 
 <main>
     <section class="tarjeta comprobante-nuevo" id="tarjetaComprobante">
+        <span class="checkout-light-sweep" aria-hidden="true"></span>
+        <span class="checkout-border-effect" aria-hidden="true"></span>
         <div class="comprobante-hero">
             <div id="iconoEstado" class="oculto" aria-hidden="true">…</div>
             <div class="comprobante-cabecera">
