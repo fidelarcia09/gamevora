@@ -172,6 +172,73 @@ body{padding:8px}
             padding-right: 0 !important;
         }
     
+
+/* TAMANO UNIFICADO DE TARJETAS DE PRODUCTOS Y OFERTAS */
+.catalogo,
+#catalogo,
+#catalogoOfertas,
+#listaOfertas,
+.lista-ofertas{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  align-items:stretch!important;
+}
+.catalogo .producto,
+#catalogo .producto,
+#catalogoOfertas .producto,
+#listaOfertas .boton-oferta,
+.lista-ofertas .boton-oferta{
+  box-sizing:border-box!important;
+  height:76px!important;
+  min-height:76px!important;
+  max-height:76px!important;
+  min-width:0!important;
+}
+.producto,
+.producto-oferta{
+  padding:8px!important;
+}
+.producto-oferta .oferta-imagen,
+.producto-oferta .foto-oferta{
+  max-height:38px!important;
+  min-height:0!important;
+  height:38px!important;
+  object-fit:contain!important;
+}
+.lista-ofertas .boton-oferta{
+  flex-direction:row!important;
+  align-items:center!important;
+  gap:8px!important;
+  padding:8px!important;
+}
+.lista-ofertas .foto-oferta{
+  box-sizing:border-box!important;
+  width:48px!important;
+  min-width:48px!important;
+  max-width:48px!important;
+  height:48px!important;
+  min-height:48px!important;
+  flex:0 0 48px!important;
+}
+.lista-ofertas .nombre-oferta{
+  box-sizing:border-box!important;
+  flex:1 1 auto!important;
+  width:auto!important;
+  min-height:0!important;
+  padding:6px!important;
+  border-top:0!important;
+  text-align:left!important;
+  justify-content:flex-start!important;
+  overflow-wrap:anywhere!important;
+}
+@media(max-width:360px){
+  .catalogo,.lista-ofertas,#catalogo,#catalogoOfertas,#listaOfertas{gap:6px!important}
+  .catalogo .producto,#catalogo .producto,#catalogoOfertas .producto,#listaOfertas .boton-oferta,.lista-ofertas .boton-oferta{
+    height:76px!important;min-height:76px!important;max-height:76px!important
+  }
+}
+
 </style>
 </head>
 
