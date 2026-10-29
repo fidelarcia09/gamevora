@@ -820,6 +820,32 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  }
 }
 
+
+/* Ajuste fino solicitado: escudo más pequeño y progreso un poco más abajo.
+   Se conserva exactamente el tamaño de la tarjeta. */
+#dashboard > .hero .revender-escudo-3d{
+ width:clamp(94px,23%,126px)!important;
+ right:4%!important;
+}
+#dashboard > .hero .progress-count{
+ margin-top:27px!important;
+}
+#dashboard > .hero .progress-track{
+ margin-top:9px!important;
+}
+@media(max-width:600px){
+ #dashboard > .hero .revender-escudo-3d{
+  width:clamp(88px,25%,108px)!important;
+  right:3%!important;
+ }
+ #dashboard > .hero .progress-count{
+  margin-top:25px!important;
+ }
+ #dashboard > .hero .progress-track{
+  margin-top:8px!important;
+ }
+}
+
 </style>
 </head>
 <body>
