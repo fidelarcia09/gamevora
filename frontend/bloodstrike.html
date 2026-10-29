@@ -285,6 +285,62 @@ input:focus { border-color: #159dff; box-shadow: 0 0 7px rgba(0, 157, 255, 0.15)
   overflow-wrap:anywhere!important;
 }
 
+
+/* PRESENTACION UNIFICADA DE PRECIOS: TODO ALINEADO A LA IZQUIERDA */
+.catalogo .producto,
+#catalogo .producto,
+#catalogoOfertas .producto{
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto auto auto auto!important;
+  align-content:center!important;
+  justify-items:stretch!important;
+  row-gap:2px!important;
+  text-align:left!important;
+}
+.catalogo .producto > .producto-nombre,
+#catalogo .producto > .producto-nombre,
+#catalogoOfertas .producto > .producto-nombre{
+  grid-column:1!important;
+  grid-row:1!important;
+  text-align:left!important;
+  font-size:11px!important;
+  line-height:1.2!important;
+}
+.catalogo .producto > .gg-reseller-original-price,
+#catalogo .producto > .gg-reseller-original-price,
+#catalogoOfertas .producto > .gg-reseller-original-price{
+  grid-column:1!important;
+  grid-row:2!important;
+  justify-self:start!important;
+  width:auto!important;
+  margin:0!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+  text-align:left!important;
+}
+.catalogo .producto > .producto-precio,
+#catalogo .producto > .producto-precio,
+#catalogoOfertas .producto > .producto-precio{
+  grid-column:1!important;
+  grid-row:3!important;
+  justify-self:start!important;
+  width:auto!important;
+  margin:0!important;
+  font-size:11px!important;
+  line-height:1.15!important;
+  text-align:left!important;
+  white-space:normal!important;
+}
+.catalogo .producto > .producto-estado,
+#catalogo .producto > .producto-estado,
+#catalogoOfertas .producto > .producto-estado{
+  grid-column:1!important;
+  grid-row:4!important;
+  text-align:left!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+}
+
 </style></head><body><div class="contenedor"><header class="header"><a class="encabezado-pagina" href="juegos.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Blood Strike</span></a></header>
 <main class="card"><h1>Blood Strike</h1><p class="descripcion">Selecciona el producto que deseas comprar.</p>
 <label class="etiqueta" for="idjugador">ID del jugador</label><input type="text" id="idjugador" placeholder="Introduce tu ID de Blood Strike" autocomplete="off" maxlength="50"><p class="ayuda">Escribe tu ID de jugador para continuar con la compra.</p>
