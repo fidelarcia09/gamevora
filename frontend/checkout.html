@@ -86,6 +86,7 @@
         button.boton { width: 100%; font-family: Arial, Helvetica, sans-serif; cursor: pointer; }
         button.boton:disabled { opacity: .65; cursor: wait; transform: none; }
         #accionesComprobante { margin-top: 12px; }
+#accionesNavegacion{grid-template-columns:1fr}
         #accionesComprobante .boton { grid-column: 1 / -1; min-height: 48px; }
         .mensaje { margin-top: 11px; color: var(--secundario); font-size: 12px; text-align: center; line-height: 1.6; }
         .mensaje.error { color: var(--rojo); }
@@ -351,7 +352,6 @@
             </div>
 
             <div class="acciones" id="accionesNavegacion">
-                <a class="boton boton-principal boton-atras" href="../index.html"><span class="icono-atras" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span>Atrás</span></a>
                 <a class="boton boton-secundario" href="pedidos.html"><span class="boton-icono" aria-hidden="true">▤</span> VER MIS PEDIDOS</a>
             </div>
             <p class="mensaje error oculto" id="mensajeError"></p>
