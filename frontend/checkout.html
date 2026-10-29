@@ -239,7 +239,8 @@
 
 /* Ajuste compacto moderado + borde azul y destello sobre toda la tarjeta */
 .comprobante-nuevo{position:relative;isolation:isolate}
-.comprobante-nuevo .checkout-border-effect{
+.comprobante-nuevo .comprobante-hero{position:relative;isolation:isolate}
+.comprobante-nuevo .comprobante-hero .checkout-border-effect{
  position:absolute;inset:0;z-index:12;padding:2px;border-radius:inherit;
  pointer-events:none;
  background:conic-gradient(from var(--checkout-border-angle),transparent 0deg,transparent 245deg,rgba(0,132,255,.18) 275deg,#168cff 300deg,#c5efff 310deg,#168cff 320deg,rgba(0,132,255,.18) 340deg,transparent 360deg);
@@ -281,8 +282,8 @@
 <main>
     <section class="tarjeta comprobante-nuevo" id="tarjetaComprobante">
         <span class="checkout-light-sweep" aria-hidden="true"></span>
-        <span class="checkout-border-effect" aria-hidden="true"></span>
         <div class="comprobante-hero">
+            <span class="checkout-border-effect" aria-hidden="true"></span>
             <div id="iconoEstado" class="oculto" aria-hidden="true">…</div>
             <div class="comprobante-cabecera">
                 <div class="marca-ggt">GAMERS GOLD <span>TOP-UP</span></div>
