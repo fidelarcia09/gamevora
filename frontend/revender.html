@@ -773,6 +773,53 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  50%{transform:translateY(calc(-50% + 11px)) perspective(500px) rotateX(67deg) scale(.7);opacity:.48}
 }
 
+
+/* Dimensiones de «Tu plan actual» iguales a «Saldo disponible» de Wallet */
+#dashboard > .hero{
+ box-sizing:border-box!important;
+ width:100%!important;
+ max-width:100%!important;
+ height:190px!important;
+ min-height:190px!important;
+ margin:16px 0 20px!important;
+ padding:18px 18px!important;
+}
+#dashboard > .hero .hero-top{
+ min-height:48px!important;
+}
+#dashboard > .hero .progress-count{
+ margin-top:20px!important;
+}
+#dashboard > .hero .progress-track{
+ margin-top:8px!important;
+ height:8px!important;
+}
+#dashboard > .hero #progressMeta{
+ margin-top:5px!important;
+}
+#dashboard > .hero .button-row{
+ margin-top:10px!important;
+}
+#dashboard > .hero .button-row .action-button{
+ min-height:38px!important;
+ padding:8px 12px!important;
+}
+@media(max-width:600px){
+ #dashboard > .hero{
+  height:190px!important;
+  min-height:190px!important;
+  padding:15px 14px!important;
+ }
+ #dashboard > .hero .hero-top{min-height:44px!important}
+ #dashboard > .hero .progress-count{margin-top:18px!important}
+ #dashboard > .hero .progress-track{margin-top:7px!important}
+ #dashboard > .hero #progressMeta{margin-top:4px!important}
+ #dashboard > .hero .button-row{margin-top:8px!important}
+ #dashboard > .hero .button-row .action-button{
+  min-height:36px!important;font-size:11px!important;padding:7px 9px!important
+ }
+}
+
 </style>
 </head>
 <body>
