@@ -906,6 +906,40 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  #dashboard > .hero .plan-border-effect{animation:none}
 }
 
+
+/* Destello que atraviesa periódicamente la tarjeta, como en Wallet */
+#dashboard > .hero .plan-light-sweep{
+ position:absolute;
+ z-index:1;
+ top:-35%;
+ bottom:-35%;
+ left:-45%;
+ width:30%;
+ pointer-events:none;
+ opacity:0;
+ transform:skewX(-22deg);
+ background:linear-gradient(
+  90deg,
+  transparent 0%,
+  rgba(155,225,255,.04) 20%,
+  rgba(190,239,255,.34) 48%,
+  rgba(255,255,255,.58) 50%,
+  rgba(100,198,255,.22) 62%,
+  transparent 100%
+ );
+ filter:blur(2px);
+ animation:planLightSweep 7.5s ease-in-out infinite;
+}
+@keyframes planLightSweep{
+ 0%,62%{left:-45%;opacity:0}
+ 66%{opacity:.9}
+ 82%{left:125%;opacity:.65}
+ 83%,100%{left:125%;opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+ #dashboard > .hero .plan-light-sweep{animation:none;display:none}
+}
+
 </style>
 </head>
 <body>
@@ -919,6 +953,7 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 <div id="dashboard" hidden>
 <section class="hero">
 <span class="plan-border-effect" aria-hidden="true"></span>
+<span class="plan-light-sweep" aria-hidden="true"></span>
 <div class="revender-escudo-3d" aria-hidden="true"><img src="./gvr-escudo.svg?v=20261028-3" alt="" loading="eager" decoding="async"></div>
 <div class="hero-top">
 <div style="display:flex;align-items:center;gap:13px"><div class="rank-icon" id="rankIcon" aria-label="Emblema del nivel"></div><div><div class="eyebrow">Tu plan actual</div><div class="rank-name" id="rankName">Bronce</div></div></div>
