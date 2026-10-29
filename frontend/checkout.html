@@ -162,9 +162,9 @@
 .comprobante-hero::after{content:"";position:absolute;inset:auto -10% -90px;height:190px;background:radial-gradient(ellipse,rgba(0,161,255,.22),transparent 68%);pointer-events:none}
 .comprobante-cabecera{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .marca-ggt{font-size:15px;font-weight:1000;letter-spacing:.4px;text-align:left}
-.marca-gdt span,.marca-gdt{color:#fff}
-.marca-gdt span{color:#39caff}
-.marca-gdt{ text-shadow:0 0 16px rgba(0,180,255,.25)}
+.marca-ggt span,.marca-ggt{color:#fff}
+.marca-ggt span{color:#39caff}
+.marca-ggt{ text-shadow:0 0 16px rgba(0,180,255,.25)}
 .estado-comprobante{margin:0;padding:9px 13px;border-radius:99px;border:1px solid rgba(32,210,139,.45);background:rgba(21,190,119,.13);color:#75ffc1;font-size:10px;letter-spacing:.4px}
 .producto-visual{position:relative;width:190px;height:175px;margin:46px auto 18px;display:grid;place-items:center}
 .producto-orbita{position:absolute;bottom:9px;width:155px;height:34px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,206,255,.34),transparent 70%);filter:blur(5px)}
@@ -206,7 +206,7 @@
 @media(max-width:480px){
  .comprobante-nuevo{border-radius:26px}
  .comprobante-hero{min-height:480px;padding:22px 14px 28px}
- .marca-gdt{font-size:12px}
+ .marca-ggt{font-size:12px}
  .estado-comprobante{padding:8px 10px;font-size:9px}
  .producto-visual{width:160px;height:150px;margin:39px auto 14px}
  .producto-cristal{width:112px;height:112px;font-size:83px}
@@ -230,7 +230,7 @@
 }
 @media(max-width:350px){
  .comprobante-cabecera{align-items:flex-start}
- .marca-gdt{max-width:105px;line-height:1.35}
+ .marca-ggt{max-width:105px;line-height:1.35}
  .estado-comprobante{font-size:8px}
  .datos-comprobante{grid-template-columns:1fr}
 }
@@ -249,6 +249,7 @@
 <main>
     <section class="tarjeta comprobante-nuevo" id="tarjetaComprobante">
         <div class="comprobante-hero">
+            <div id="iconoEstado" class="oculto" aria-hidden="true">…</div>
             <div class="comprobante-cabecera">
                 <div class="marca-ggt">GAMERS GOLD <span>TOP-UP</span></div>
                 <div class="estado estado-comprobante" id="etiquetaEstado"><span class="punto"></span><span id="textoEstado">CONSULTANDO</span></div>
@@ -510,7 +511,7 @@ function mostrarEstadoPedido(pedido) {
     notaEstado.textContent = info.nota;
     iconoEstado.classList.toggle("completado", estado === "completed" && !idJugadorInvalido);
     iconoEstado.classList.toggle("error", idJugadorInvalido || estado === "failed" || estado === "refunded");
-    etiquetaEstado.className = "estado";
+    etiquetaEstado.className = "estado estado-comprobante";
     if (estado === "completed" && !idJugadorInvalido) etiquetaEstado.classList.add("completado");
     else if (estado === "processing" && !idJugadorInvalido) etiquetaEstado.classList.add("procesando");
     else if (idJugadorInvalido || estado === "failed" || estado === "refunded") etiquetaEstado.classList.add("error");
