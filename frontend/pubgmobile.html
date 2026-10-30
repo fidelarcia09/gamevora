@@ -526,6 +526,7 @@ pestanaOfertas.addEventListener("click", () => cambiarCategoria("ofertas"));
 function mostrarEstado(mensaje, tipo = "") {
     mensaje = typeof mensaje === "string" ? mensaje.replace(/pedido aceptado por next level/gi, "Pedido aceptado por Gamers Gold Top-Up") : mensaje;
     estadoCatalogo.textContent = mensaje;
+    estadoCatalogo.style.display = mensaje ? "" : "none";
 
     estadoCatalogo.classList.toggle(
         "error",
@@ -786,7 +787,8 @@ async function cargarCatalogo() {
    tarjeta.addEventListener("click", () => seleccionarProductoPUBG(producto,tarjeta,estado));
    catalogo.appendChild(tarjeta);
   });
-  mostrarEstado(productosDisponibles.length ? productosDisponibles.length + " paquetes de UC disponibles." : "No hay paquetes de UC disponibles en este momento.", productosDisponibles.length ? "" : "error");
+  if (productosDisponibles.length) mostrarEstado("");
+  else mostrarEstado("No hay paquetes de UC disponibles en este momento.", "error");
   renderizarOfertasPUBG();
  } catch(error) {
   console.error("Error en PUBG Mobile:",error);
