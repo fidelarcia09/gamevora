@@ -345,7 +345,7 @@ body.modal-abierto{overflow:hidden}
 
 <main class="card">
 <h1>Honor of Kings</h1>
-<p class="descripcion">Selecciona el producto que deseas comprar.</p>
+
 
 <label class="etiqueta" for="idJugador">ID del jugador</label>
 <input type="text" id="idJugador" placeholder="Introduce tu ID de Honor of Kings" autocomplete="off" maxlength="100">
@@ -741,13 +741,7 @@ async function cargarCatalogo() {
     });
     renderizarTokens();
     renderizarOfertas();
-    const tokensActivos = productosTokens.filter(p => p.available === true && productoComprable(buscarLocalPorId(obtenerProductId(p)))).length;
-    const ofertasActivas = OFERTAS_HONOR.filter(o => {
-      const p = buscarProveedorOferta(o);
-      return p && p.available === true &&
-        productoComprable(buscarLocalPorId(obtenerProductId(p)));
-    }).length;
-    mostrarEstado("Tokens disponibles: " + tokensActivos + " · Ofertas disponibles: " + ofertasActivas);
+    
   } catch (error) {
     console.error("Error cargando catálogo de Honor of Kings:", error);
     catalogo.replaceChildren(); catalogoOfertas.replaceChildren();
