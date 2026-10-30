@@ -109,6 +109,29 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
         text-decoration-thickness: 1.5px;
         opacity: .9;
       }
+      .producto, .boton-oferta { position: relative; }
+      .gg-reseller-discount-badge {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        z-index: 4;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 25px;
+        height: 16px;
+        padding: 0 5px;
+        border-radius: 4px;
+        background: #e32636;
+        color: #fff;
+        font-size: 9px;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: .1px;
+        white-space: nowrap;
+        pointer-events: none;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, .28);
+      }
       .producto .producto-precio, .boton-oferta .precio-oferta { display: block; }
       .producto .gg-reseller-original-price + .producto-precio, .boton-oferta .gg-reseller-original-price + .precio-oferta { margin-top: 2px; }
     `;
@@ -121,15 +144,21 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     // El descuento de revendedor solo corresponde a GVR; no sobrescribir tarifas manuales de Supabase.
     const selectedMethod = String(document.getElementById("ggMetodoPago")?.value || "").toUpperCase();
     if (selectedMethod && selectedMethod !== "GVR") {
-      document.querySelectorAll(".gg-reseller-original-price").forEach(element => element.remove());
+      document.querySelectorAll(".gg-reseller-original-price, .gg-reseller-discount-badge").forEach(element => element.remove());
       return;
     }
 
     addStyles();
     document.querySelectorAll(".producto, .boton-oferta").forEach(card => {
-      if (card.matches(":disabled") || card.classList.contains("producto-no-disponible")) return;
+      if (card.matches(":disabled") || card.classList.contains("producto-no-disponible")) {
+        card.querySelector(".gg-reseller-discount-badge")?.remove();
+        return;
+      }
       const price = card.querySelector(".producto-precio, .precio-oferta");
-      if (!price) return;
+      if (!price) {
+        card.querySelector(".gg-reseller-discount-badge")?.remove();
+        return;
+      }
 
       /* Use the unmodified Supabase price first: the payment selector can rewrite
          ggOriginalPrice when switching between GVR and manual payment methods. */
@@ -137,6 +166,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       if (!Number.isFinite(original) || original <= 0) {
         delete price.dataset.ggOriginalPrice;
         delete price.dataset.ggResellerBasePrice;
+        card.querySelector(".gg-reseller-discount-badge")?.remove();
         return;
       }
       price.dataset.ggOriginalPrice = String(original);
@@ -155,6 +185,16 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       if (oldPrice.textContent !== oldLabel) oldPrice.textContent = oldLabel;
       if (price.textContent !== finalLabel) price.textContent = finalLabel;
       price.setAttribute("aria-label", "Precio final con descuento de revendedor");
+
+      let badge = card.querySelector(".gg-reseller-discount-badge");
+      if (!badge) {
+        badge = document.createElement("span");
+        badge.className = "gg-reseller-discount-badge";
+        badge.setAttribute("aria-label", "Descuento de revendedor");
+        card.appendChild(badge);
+      }
+      badge.textContent = "-" + discountPercent + "%";
+      badge.setAttribute("aria-label", "Descuento de revendedor: " + discountPercent + "%");
     });
   }
 
