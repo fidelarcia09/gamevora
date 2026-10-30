@@ -2058,7 +2058,16 @@ async function cargarCatalogo() {
         renderizarCatalogo();
         renderizarOfertas();
 
-        const local = productosLocales.find(producto =>
+        const diamantesComprables =
+            productosDisponibles.filter(producto =>
+                productoComprable(buscarProductoLocal(producto))
+            ).length;
+
+        const ofertasComprables =
+            OFERTAS_FREE_FIRE.filter(oferta => {
+                const proveedor = buscarProductoProveedorPorId(oferta.id);
+
+                const local = productosLocales.find(producto =>
                     String(producto.provider_product_id || "").trim() === oferta.id
                 );
 
@@ -2072,7 +2081,10 @@ async function cargarCatalogo() {
                 "Los paquetes de nivel estarán disponibles próximamente."
             );
         } else {
-            
+            mostrarEstado(
+                "Diamantes: " + diamantesComprables +
+                " · Ofertas: " + ofertasComprables
+            );
         }
 
     } catch (error) {
