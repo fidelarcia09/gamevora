@@ -810,9 +810,7 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
     <main class="card">
         <h1>Free Fire</h1>
 
-        <p class="descripcion">
-            Selecciona el producto que deseas comprar.
-        </p>
+        
 
         <label class="etiqueta" for="idjugador">
             ID del jugador
@@ -2060,16 +2058,7 @@ async function cargarCatalogo() {
         renderizarCatalogo();
         renderizarOfertas();
 
-        const diamantesComprables =
-            productosDisponibles.filter(producto =>
-                productoComprable(buscarProductoLocal(producto))
-            ).length;
-
-        const ofertasComprables =
-            OFERTAS_FREE_FIRE.filter(oferta => {
-                const proveedor = buscarProductoProveedorPorId(oferta.id);
-
-                const local = productosLocales.find(producto =>
+        const local = productosLocales.find(producto =>
                     String(producto.provider_product_id || "").trim() === oferta.id
                 );
 
@@ -2083,10 +2072,7 @@ async function cargarCatalogo() {
                 "Los paquetes de nivel estarán disponibles próximamente."
             );
         } else {
-            mostrarEstado(
-                "Diamantes: " + diamantesComprables +
-                " · Ofertas: " + ofertasComprables
-            );
+            
         }
 
     } catch (error) {
