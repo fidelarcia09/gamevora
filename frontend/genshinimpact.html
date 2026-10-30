@@ -589,6 +589,9 @@
 }
 
 .datos-jugador-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr);gap:10px;align-items:start}.campo-dato{min-width:0}.campo-dato .etiqueta{margin-top:12px}.campo-dato input,.campo-dato select{min-width:0}.campo-dato .ayuda{min-height:30px}@media(max-width:340px){.datos-jugador-grid{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:7px}.campo-dato input,.campo-dato select{font-size:12px;padding:9px 7px}}
+
+/* CONTENEDOR UNICO PARA ID DEL JUGADOR Y SERVER ID */
+.player-data-panel{display:block;width:100%;box-sizing:border-box;padding:13px 12px;margin:12px 0;background:#091a35;border:1px solid #164b75;border-radius:13px;box-shadow:0 0 18px rgba(0,140,255,.07)}.player-data-title{margin:0 0 10px;color:#fff;font-size:16px;font-weight:800}.player-data-panel .datos-jugador-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr);gap:10px;align-items:end}.player-data-panel .campo-dato{min-width:0}.player-data-panel .campo-dato .etiqueta{margin:0 0 7px}.player-data-panel input,.player-data-panel select{width:100%;min-width:0;min-height:42px;box-sizing:border-box}@media(max-width:340px){.player-data-panel{padding:11px 9px}.player-data-panel .datos-jugador-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:7px}.player-data-panel input,.player-data-panel select{font-size:12px;padding:9px 7px}}
 </style>
 </head>
 
@@ -604,19 +607,21 @@
         <h1>Genshin Impact</h1>
         <p class="descripcion">Selecciona Genesis Crystals o una oferta especial.</p>
 
-        <div class="datos-jugador-grid">
-            <div class="campo-dato"><label class="etiqueta" for="idJugador">UID del jugador</label>
-            <input type="text" id="idJugador" placeholder="Introduce tu UID" autocomplete="off" maxlength="100">
-            <p class="ayuda">UID de tu cuenta.</p></div>
-            <div class="campo-dato"><label class="etiqueta" for="zonaJugador">Server ID</label>
-            <select id="zonaJugador">
-                <option value="">Servidor</option>
-                <option value="America">América</option>
-                <option value="Europe">Europa</option>
-                <option value="Asia">Asia</option>
-                <option value="TW_HK_MO">TW / HK / MO</option>
-            </select><p class="ayuda">Selecciona tu servidor.</p></div>
-        </div>
+        <section class="player-data-panel">
+            <h2 class="player-data-title">ID del jugador</h2>
+            <div class="datos-jugador-grid">
+                <div class="campo-dato"><label class="etiqueta" for="idJugador">UID del jugador</label>
+                <input type="text" id="idJugador" placeholder="Introduce tu UID" autocomplete="off" maxlength="100"></div>
+                <div class="campo-dato"><label class="etiqueta" for="zonaJugador">Server ID</label>
+                <select id="zonaJugador">
+                    <option value="">Servidor</option>
+                    <option value="America">América</option>
+                    <option value="Europe">Europa</option>
+                    <option value="Asia">Asia</option>
+                    <option value="TW_HK_MO">TW / HK / MO</option>
+                </select></div>
+            </div>
+        </section>
 
         <nav class="selector-categorias" aria-label="Categorías de Genshin Impact">
             <button type="button" class="pestana-categoria activa" id="pestanaDiamantes" aria-selected="true">Genesis Crystals</button>
