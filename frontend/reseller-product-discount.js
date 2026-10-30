@@ -113,7 +113,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       .gg-reseller-discount-badge {
         position: absolute;
         top: 0;
-        right: 0;
+        left: 0;
         z-index: 4;
         display: inline-flex;
         align-items: center;
