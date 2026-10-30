@@ -625,6 +625,7 @@ return String(v??"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u03
 }
 function mostrarEstado(m,tipo=""){m=typeof m==="string"?m.replace(/pedido aceptado por next level/gi,"Pedido aceptado por Gamers Gold Top-Up"):m;
 estadoCatalogo.textContent=m;
+estadoCatalogo.style.display=m?"":"none";
 estadoCatalogo.classList.toggle("error",tipo==="error");
 estadoCatalogo.classList.toggle("correcto",tipo==="correcto");
 }
@@ -825,6 +826,7 @@ card.append(n,price,st);
 if(ok)card.addEventListener("click",()=>seleccionar(p,local,card));
 catalogo.appendChild(card);
 });
+mostrarEstado("");
 
 }catch(e){
 console.error("Error cargando Arena Breakout:",e);
