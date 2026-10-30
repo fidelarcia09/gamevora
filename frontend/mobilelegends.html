@@ -281,8 +281,9 @@
 
 .datos-jugador-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:10px;align-items:start}.campo-dato{min-width:0}.campo-dato .etiqueta{margin-top:12px}.campo-dato input{min-width:0}.campo-dato .ayuda{min-height:30px}@media(max-width:340px){.datos-jugador-grid{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:7px}.campo-dato input{font-size:12px;padding:9px 7px}}
 
-/* CONTENEDOR UNICO PARA ID DEL JUGADOR Y SERVER ID */
-.player-data-panel{display:block;width:100%;box-sizing:border-box;padding:13px 12px;margin:12px 0;background:#091a35;border:1px solid #164b75;border-radius:13px;box-shadow:0 0 18px rgba(0,140,255,.07)}.player-data-title{margin:0 0 10px;color:#fff;font-size:16px;font-weight:800}.player-data-panel .datos-jugador-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:10px;align-items:end}.player-data-panel .campo-dato{min-width:0}.player-data-panel .campo-dato .etiqueta{margin:0 0 7px}.player-data-panel input{width:100%;min-width:0;min-height:42px;box-sizing:border-box}@media(max-width:340px){.player-data-panel{padding:11px 9px}.player-data-panel .datos-jugador-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:7px}.player-data-panel input{font-size:12px;padding:9px 7px}}
+
+/* SERVER ID DENTRO DEL MISMO BLOQUE PRINCIPAL DE ID DEL JUGADOR */
+.titulo-id-jugador{margin:12px 0 7px}.datos-jugador-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:10px;align-items:end;margin:0 0 12px}.datos-jugador-grid .campo-dato{min-width:0}.datos-jugador-grid .campo-dato .etiqueta{margin:0 0 7px}.datos-jugador-grid input{width:100%;min-width:0;box-sizing:border-box}@media(max-width:340px){.datos-jugador-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:7px}.datos-jugador-grid input{font-size:12px;padding:9px 7px}}
 </style>
 </head>
 <body>
@@ -290,13 +291,11 @@
 <header class="header"><a class="encabezado-pagina" href="juegos.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Mobile Legends</span></a></header>
 <main class="card">
 <h1>Mobile Legends</h1><p class="descripcion">Selecciona diamantes u ofertas especiales para tu cuenta.</p>
-<section class="player-data-panel">
-<h2 class="player-data-title">ID del jugador</h2>
+<label class="etiqueta titulo-id-jugador" for="idJugador">ID del jugador</label>
 <div class="datos-jugador-grid">
-<div class="campo-dato"><label class="etiqueta" for="idJugador">ID del jugador</label><input type="text" id="idJugador" placeholder="Introduce tu ID" autocomplete="off" maxlength="50"></div>
+<div class="campo-dato"><input type="text" id="idJugador" placeholder="Introduce tu ID" autocomplete="off" maxlength="50"></div>
 <div class="campo-dato"><label class="etiqueta" for="zonaJugador">Server ID</label><input type="text" id="zonaJugador" placeholder="Server ID" autocomplete="off" maxlength="30"></div>
 </div>
-</section>
 <label class="etiqueta" for="regionJugador">Región</label><select id="regionJugador"><option value="global">Global</option><option value="united_states">United States</option></select><p class="ayuda">La región determina qué productos se pueden comprar.</p>
 <div id="estadoValidacion" class="estado-validacion" aria-live="polite" role="status"></div>
 <nav class="selector-categorias" aria-label="Categorías de Mobile Legends"><button type="button" class="pestana-categoria activa" id="pestanaDiamantes" aria-selected="true">Diamantes</button><button type="button" class="pestana-categoria" id="pestanaOfertas" aria-selected="false">Ofertas especiales</button></nav>
