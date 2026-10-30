@@ -336,6 +336,11 @@ body.modal-abierto{overflow:hidden}
 }
 
 </style>
+
+<style id="gg-compact-game-layout">
+/* Compactación visual: conserva colores, bordes y estilo original. */
+body{padding:8px!important}.header{margin-bottom:7px!important}.card{padding:13px 10px!important}h1{margin-bottom:3px!important}.descripcion{margin-bottom:8px!important}.etiqueta{margin:8px 0 5px!important}input{min-height:39px!important;padding:8px 10px!important}.selector-categorias{margin:8px 0!important}.estado{margin:7px 0!important;padding:7px 9px!important}.catalogo,#catalogoOfertas,#listaOfertas{gap:6px!important;margin-top:5px!important}.producto,#listaOfertas .boton-oferta{min-height:76px!important;padding:8px!important;gap:6px!important}.continuar{margin-top:8px!important}.nota{margin-top:8px!important}.datos-jugador-grid{gap:8px!important;margin-bottom:8px!important}.campo-dato .etiqueta{margin-top:7px!important}
+</style>
 </head>
 <body>
 <div class="contenedor">
@@ -349,7 +354,7 @@ body.modal-abierto{overflow:hidden}
 
 <label class="etiqueta" for="idJugador">ID del jugador</label>
 <input type="text" id="idJugador" placeholder="Introduce tu ID de Honor of Kings" autocomplete="off" maxlength="100">
-<p class="ayuda">Escribe tu ID de jugador para continuar con la compra.</p>
+
 
 <nav class="selector-categorias" aria-label="Categorías de Honor of Kings">
 <button type="button" class="pestana-categoria activa" id="pestanaTokens" aria-selected="true">Tokens</button>
@@ -358,11 +363,11 @@ body.modal-abierto{overflow:hidden}
 
 <div id="estadoCatalogo" class="estado" aria-live="polite">Conectando con el catálogo...</div>
 <section id="vistaTokens">
-<label class="etiqueta">Selecciona un paquete de Tokens</label>
+
 <div id="catalogo" class="catalogo"></div>
 </section>
 <section id="vistaOfertas" class="vista-oculta">
-<label class="etiqueta">Selecciona una oferta especial</label>
+
 <div id="catalogoOfertas" class="catalogo"></div>
 </section>
 
