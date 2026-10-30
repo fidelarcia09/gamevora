@@ -783,7 +783,7 @@ function renderizarOfertasPUBG() {
   if (producto && producto.active === true && Number.isFinite(Number(producto.price_gvr)) && Number(producto.price_gvr) > 0) {
    disponibles++;
    precio.textContent = mostrarPrecio(producto.price_gvr);
-   estado.textContent = "Seleccionar oferta";
+   estado.textContent = "Disponible";
    tarjeta.addEventListener("click", () => seleccionarProductoPUBG(producto, tarjeta, estado));
   } else {
    tarjeta.disabled = true;
@@ -821,7 +821,7 @@ async function cargarCatalogo() {
    tarjeta.type = "button"; tarjeta.className = "producto"; tarjeta.dataset.ggProductId = String(producto.id);
    const nombre = document.createElement("div"); nombre.className = "producto-nombre"; nombre.textContent = producto.product_name;
    const precio = document.createElement("div"); precio.className = "producto-precio"; precio.textContent = mostrarPrecio(producto.price_gvr);
-   const estado = document.createElement("div"); estado.className = "producto-estado"; estado.textContent = "Seleccionar paquete";
+   const estado = document.createElement("div"); estado.className = "producto-estado"; estado.textContent = "Disponible";
    tarjeta.append(nombre,precio,estado);
    tarjeta.addEventListener("click", () => seleccionarProductoPUBG(producto,tarjeta,estado));
    catalogo.appendChild(tarjeta);
