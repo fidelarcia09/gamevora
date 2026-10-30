@@ -797,6 +797,77 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
   line-height:1.1!important;
 }
 
+
+
+/* FREE FIRE: espacio para la foto a la izquierda e información a la derecha */
+.catalogo .producto.producto-con-diamantes,
+#catalogo .producto.producto-con-diamantes{
+  display:grid!important;
+  grid-template-columns:56px minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  align-items:center!important;
+  justify-items:stretch!important;
+  column-gap:9px!important;
+  row-gap:0!important;
+  height:82px!important;
+  min-height:82px!important;
+  max-height:82px!important;
+  padding:7px!important;
+  text-align:left!important;
+}
+.catalogo .producto-con-diamantes > .producto-imagen,
+#catalogo .producto-con-diamantes > .producto-imagen{
+  grid-column:1!important;
+  grid-row:1!important;
+  display:block!important;
+  width:56px!important;
+  height:56px!important;
+  min-width:56px!important;
+  min-height:56px!important;
+  border-radius:6px;
+  background:transparent;
+}
+.catalogo .producto-con-diamantes > .producto-informacion,
+#catalogo .producto-con-diamantes > .producto-informacion{
+  grid-column:2!important;
+  grid-row:1!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  gap:3px!important;
+  min-width:0!important;
+  width:100%!important;
+  text-align:left!important;
+}
+.catalogo .producto-con-diamantes .producto-nombre,
+#catalogo .producto-con-diamantes .producto-nombre,
+.catalogo .producto-con-diamantes .producto-precio,
+#catalogo .producto-con-diamantes .producto-precio,
+.catalogo .producto-con-diamantes .producto-estado,
+#catalogo .producto-con-diamantes .producto-estado{
+  grid-column:auto!important;
+  grid-row:auto!important;
+  justify-self:auto!important;
+  width:100%!important;
+  margin:0!important;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+.catalogo .producto-con-diamantes .producto-nombre,
+#catalogo .producto-con-diamantes .producto-nombre{font-size:11px!important;line-height:1.2!important}
+.catalogo .producto-con-diamantes .producto-precio,
+#catalogo .producto-con-diamantes .producto-precio{font-size:11px!important;line-height:1.15!important}
+.catalogo .producto-con-diamantes .producto-estado,
+#catalogo .producto-con-diamantes .producto-estado{font-size:9px!important;line-height:1.1!important}
+@media(max-width:360px){
+  .catalogo .producto.producto-con-diamantes,
+  #catalogo .producto.producto-con-diamantes{grid-template-columns:48px minmax(0,1fr)!important;column-gap:6px!important;padding:6px!important}
+  .catalogo .producto-con-diamantes > .producto-imagen,
+  #catalogo .producto-con-diamantes > .producto-imagen{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important}
+}
+
 </style>
 
 
@@ -1895,6 +1966,13 @@ function renderizarCatalogo() {
             tarjeta.classList.add("producto-no-disponible");
             tarjeta.disabled = true;
         }
+        const imagen = document.createElement("div");
+        imagen.className = "producto-imagen";
+        imagen.setAttribute("aria-hidden", "true");
+
+        const informacion = document.createElement("div");
+        informacion.className = "producto-informacion";
+
         const nombre = document.createElement("div");
         nombre.className = "producto-nombre";
         nombre.textContent = nombreProducto;
@@ -1909,7 +1987,8 @@ function renderizarCatalogo() {
             precio.textContent = "Precio pendiente";
             estado.textContent = "Temporalmente no disponible";
         }
-        tarjeta.append(nombre, precio, estado);
+        informacion.append(nombre, precio, estado);
+        tarjeta.append(imagen, informacion);
         if (comprable) tarjeta.addEventListener("click", () => {
             seleccionarProducto(producto, local, "diamantes", tarjeta);
         });
