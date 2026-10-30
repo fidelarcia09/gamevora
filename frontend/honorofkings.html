@@ -458,6 +458,7 @@ const CLAVE_PEDIDO_BASE = "ggt_honor_of_kings_pedido_";
 function mostrarEstado(mensaje, tipo = "") {
     mensaje = typeof mensaje === "string" ? mensaje.replace(/pedido aceptado por next level/gi, "Pedido aceptado por Gamers Gold Top-Up") : mensaje;
   estadoCatalogo.textContent = mensaje;
+  estadoCatalogo.style.display = mensaje ? "" : "none";
   estadoCatalogo.classList.toggle("error", tipo === "error");
   estadoCatalogo.classList.toggle("correcto", tipo === "correcto");
 }
@@ -741,6 +742,7 @@ async function cargarCatalogo() {
     });
     renderizarTokens();
     renderizarOfertas();
+    mostrarEstado("");
     
   } catch (error) {
     console.error("Error cargando catálogo de Honor of Kings:", error);
