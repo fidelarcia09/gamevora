@@ -304,6 +304,44 @@
             font-size: 10px;
         }
 
+        /* Ajuste exclusivo del contenido de la tarjeta Saldo móvil.
+           La tarjeta conserva sus dimensiones originales de 95px. */
+        .metodo[data-metodo="Saldo móvil"] {
+            box-sizing: border-box;
+            height: 95px;
+            min-height: 95px;
+            max-height: 95px;
+            padding: 6px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            overflow: hidden;
+        }
+
+        .metodo[data-metodo="Saldo móvil"] .metodo-icono {
+            font-size: 16px;
+            line-height: 1;
+            margin: 0;
+        }
+
+        .metodo[data-metodo="Saldo móvil"] strong {
+            max-width: 100%;
+            font-size: 12px;
+            line-height: 1.15;
+            overflow-wrap: anywhere;
+        }
+
+        .metodo[data-metodo="Saldo móvil"] small {
+            max-width: 100%;
+            margin: 0;
+            font-size: 9px;
+            line-height: 1.15;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
         .resumen {
             background: #061329;
             border: 1px solid #1a3a60;
