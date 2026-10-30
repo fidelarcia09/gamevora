@@ -304,42 +304,64 @@
             font-size: 10px;
         }
 
-        /* Ajuste exclusivo del contenido de la tarjeta Saldo móvil.
-           La tarjeta conserva sus dimensiones originales de 95px. */
+        /* Contenido compacto exclusivo de Saldo móvil.
+           La tarjeta mantiene exactamente 95px de alto. */
         .metodo[data-metodo="Saldo móvil"] {
             box-sizing: border-box;
+            width: 100%;
             height: 95px;
             min-height: 95px;
             max-height: 95px;
-            padding: 6px 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
+            min-width: 0;
+            padding: 0 4px;
+            display: grid;
+            grid-template-rows: 18px 14px 11px;
+            align-content: center;
+            justify-items: center;
+            row-gap: 3px;
             overflow: hidden;
+            line-height: 1;
         }
 
         .metodo[data-metodo="Saldo móvil"] .metodo-icono {
-            font-size: 16px;
-            line-height: 1;
+            display: block;
+            width: 100%;
+            height: 18px;
             margin: 0;
+            font-size: 13px;
+            line-height: 18px;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .metodo[data-metodo="Saldo móvil"] strong {
-            max-width: 100%;
-            font-size: 12px;
-            line-height: 1.15;
-            overflow-wrap: anywhere;
+            display: block;
+            width: 100%;
+            min-width: 0;
+            height: 14px;
+            margin: 0;
+            padding: 0;
+            font-size: 11px;
+            line-height: 14px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .metodo[data-metodo="Saldo móvil"] small {
-            max-width: 100%;
+            display: block;
+            width: 100%;
+            min-width: 0;
+            height: 11px;
             margin: 0;
-            font-size: 9px;
-            line-height: 1.15;
-            white-space: normal;
-            overflow-wrap: anywhere;
+            padding: 0;
+            font-size: 8px;
+            line-height: 11px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .resumen {
