@@ -438,28 +438,28 @@ iniciar();
 
 <script src="./pagos-manuales-juegos.js?v=20261029-02" defer></script>
 <style id="gg-long-product-names">
-/* Ajuste de nombres largos: conserva todas las letras y las dimensiones de las tarjetas. */
+/* Reserva fija para la foto a la izquierda; toda la información queda completa a la derecha. */
 #catalogo .producto,
 #catalogoOfertas .producto{
   box-sizing:border-box!important;
   display:grid!important;
-  grid-template-columns:minmax(0,1fr) auto!important;
-  grid-template-rows:minmax(0,1fr) auto auto!important;
-  align-content:center!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr) auto auto auto!important;
+  align-content:stretch!important;
   align-items:center!important;
-  column-gap:5px!important;
-  row-gap:2px!important;
+  justify-items:stretch!important;
+  row-gap:1px!important;
   width:100%!important;
   height:76px!important;
   min-height:76px!important;
   max-height:76px!important;
   min-width:0!important;
-  padding:6px 8px!important;
+  padding:5px 6px 5px 80px!important;
   overflow:hidden!important;
 }
 #catalogo .producto > .producto-nombre,
 #catalogoOfertas .producto > .producto-nombre{
-  grid-column:1/-1!important;
+  grid-column:1!important;
   grid-row:1!important;
   align-self:center!important;
   min-width:0!important;
@@ -468,43 +468,52 @@ iniciar();
   margin:0!important;
   font-size:10px!important;
   font-weight:700!important;
-  line-height:1.15!important;
+  line-height:1.12!important;
   white-space:normal!important;
   overflow-wrap:anywhere!important;
   word-break:normal!important;
+  text-align:left!important;
 }
 #catalogo .producto > .gg-reseller-original-price,
 #catalogoOfertas .producto > .gg-reseller-original-price{
   grid-column:1!important;
   grid-row:2!important;
   min-width:0!important;
+  max-width:100%!important;
   margin:0!important;
-  font-size:9px!important;
-  line-height:1.1!important;
-  white-space:nowrap!important;
+  font-size:8px!important;
+  line-height:1.05!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-align:left!important;
 }
 #catalogo .producto > .producto-precio,
 #catalogoOfertas .producto > .producto-precio{
-  grid-column:2!important;
-  grid-row:2!important;
+  grid-column:1!important;
+  grid-row:3!important;
   min-width:0!important;
+  max-width:100%!important;
   margin:0!important;
-  font-size:11px!important;
+  font-size:10px!important;
   font-weight:700!important;
-  line-height:1.1!important;
-  white-space:nowrap!important;
-  text-align:right!important;
+  line-height:1.05!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-align:left!important;
 }
 #catalogo .producto > .producto-estado,
 #catalogoOfertas .producto > .producto-estado{
-  grid-column:1/-1!important;
-  grid-row:3!important;
+  grid-column:1!important;
+  grid-row:4!important;
   min-width:0!important;
+  max-width:100%!important;
   margin:0!important;
   font-size:9px!important;
   font-weight:600!important;
-  line-height:1.1!important;
+  line-height:1.05!important;
+  white-space:normal!important;
   overflow-wrap:anywhere!important;
+  text-align:left!important;
 }
 </style>
 </body>
