@@ -31,8 +31,17 @@ function iniciar(){
  const playerCard=playerField?.closest(".player-id-card, .player-card, .campo, .form-group, .formulario-campo")||playerField?.parentElement;
  if(playerCard && playerField){
   playerCard.classList.add("gg-player-card");
-  /* Coloca el selector inmediatamente después del campo donde se escribe el ID. */
-  if(document.title.toLowerCase().includes("arena breakout")) playerCard.insertAdjacentElement("afterend",panel); else playerField.insertAdjacentElement("afterend",panel);
+  /* En Mobile Legends y Genshin, el Server ID forma parte de la misma fila del ID.
+     El método de pago debe ir debajo de ambos campos, nunca entre ellos. */
+  const gameTitle=document.title.toLowerCase();
+  const playerFieldsRow=playerField.closest(".datos-jugador-grid");
+  if((gameTitle.includes("mobile legends") || gameTitle.includes("genshin impact")) && playerFieldsRow){
+   playerFieldsRow.insertAdjacentElement("afterend",panel);
+  }else if(gameTitle.includes("arena breakout")){
+   playerCard.insertAdjacentElement("afterend",panel);
+  }else{
+   playerField.insertAdjacentElement("afterend",panel);
+  }
  }else{
   const region=document.querySelector(".selector-region, #region, .region-selector");
   const nextSection=document.querySelector(".selector-categorias, #catalogo, #catalogoProductos");
