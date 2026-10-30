@@ -799,20 +799,21 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
 
 
 
-/* FREE FIRE: espacio para la foto a la izquierda e información a la derecha */
+/* FREE FIRE: mismo tamaño de tarjeta y espacio de imagen que el resto del catálogo */
 .catalogo .producto.producto-con-diamantes,
 #catalogo .producto.producto-con-diamantes{
   display:grid!important;
-  grid-template-columns:56px minmax(0,1fr)!important;
+  grid-template-columns:48px minmax(0,1fr)!important;
   grid-template-rows:minmax(0,1fr)!important;
   align-items:center!important;
   justify-items:stretch!important;
-  column-gap:9px!important;
+  column-gap:8px!important;
   row-gap:0!important;
-  height:82px!important;
-  min-height:82px!important;
-  max-height:82px!important;
-  padding:7px!important;
+  box-sizing:border-box!important;
+  height:76px!important;
+  min-height:76px!important;
+  max-height:76px!important;
+  padding:8px!important;
   text-align:left!important;
 }
 .catalogo .producto-con-diamantes > .producto-imagen,
@@ -820,10 +821,11 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
   grid-column:1!important;
   grid-row:1!important;
   display:block!important;
-  width:56px!important;
-  height:56px!important;
-  min-width:56px!important;
-  min-height:56px!important;
+  box-sizing:border-box!important;
+  width:48px!important;
+  height:48px!important;
+  min-width:48px!important;
+  min-height:48px!important;
   border-radius:6px;
   background:transparent;
 }
@@ -861,12 +863,6 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
 #catalogo .producto-con-diamantes .producto-precio{font-size:11px!important;line-height:1.15!important}
 .catalogo .producto-con-diamantes .producto-estado,
 #catalogo .producto-con-diamantes .producto-estado{font-size:9px!important;line-height:1.1!important}
-@media(max-width:360px){
-  .catalogo .producto.producto-con-diamantes,
-  #catalogo .producto.producto-con-diamantes{grid-template-columns:48px minmax(0,1fr)!important;column-gap:6px!important;padding:6px!important}
-  .catalogo .producto-con-diamantes > .producto-imagen,
-  #catalogo .producto-con-diamantes > .producto-imagen{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important}
-}
 
 </style>
 
