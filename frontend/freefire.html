@@ -1966,6 +1966,16 @@ function renderizarCatalogo() {
         imagen.className = "producto-imagen";
         imagen.setAttribute("aria-hidden", "true");
 
+        // Esta imagen se muestra únicamente en los paquetes de 110 y 341 diamantes.
+        if (/(?:^|\\D)(?:110|341)(?:\\D|$)/.test(nombreProducto)) {
+            const fotoDiamantes = document.createElement("img");
+            fotoDiamantes.src = "./imagenes/file_000000007708820d838e34b7182d491f.png";
+            fotoDiamantes.alt = "";
+            fotoDiamantes.loading = "lazy";
+            fotoDiamantes.className = "foto-diamantes-producto";
+            imagen.appendChild(fotoDiamantes);
+        }
+
         const informacion = document.createElement("div");
         informacion.className = "producto-informacion";
 
@@ -2718,6 +2728,29 @@ iniciar();
   overflow-wrap:anywhere!important;
 }
 </style>
+
+<style id="gg-freefire-diamond-product-images">
+/* Recorta visualmente los márgenes vacíos de la imagen dentro del espacio reservado. */
+#catalogo .producto-con-diamantes > .producto-imagen{
+  position:relative!important;
+  overflow:hidden!important;
+  flex:0 0 48px!important;
+}
+#catalogo .producto-con-diamantes .foto-diamantes-producto{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  display:block!important;
+  width:72px!important;
+  height:72px!important;
+  max-width:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  transform:translate(-50%,-50%) scale(1.45)!important;
+  pointer-events:none!important;
+}
+</style>
+
 </body>
     </html>
 
