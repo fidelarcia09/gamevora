@@ -434,7 +434,7 @@ body{padding:8px}
 
 <main class="card">
 <h1>Arena Breakout</h1>
-<p class="descripcion">Selecciona Bonds o una oferta especial para continuar con tu compra.</p>
+
 
 <div class="player-id-card">
 <label class="etiqueta" for="idJugador">ID del jugador</label>
@@ -825,8 +825,7 @@ card.append(n,price,st);
 if(ok)card.addEventListener("click",()=>seleccionar(p,local,card));
 catalogo.appendChild(card);
 });
-const count=productosDisponibles.filter(p=>comprable(localDe(p))).length;
-mostrarEstado(count+" paquetes de Bonds disponibles.");
+
 }catch(e){
 console.error("Error cargando Arena Breakout:",e);
 catalogo.replaceChildren();
