@@ -834,7 +834,7 @@ body{padding:0!important}
 #catalogoOfertas .producto,
 #listaOfertas .boton-oferta{
   box-sizing:border-box!important;
-  padding-left:80px!important;
+  padding-left:8px!important;
 }
 </style>
 <style id="gg-freefire-diamond-visuals">
@@ -1895,38 +1895,6 @@ function renderizarCatalogo() {
         tarjeta.className = "producto producto-con-diamantes";
 
         const nombreProducto = obtenerNombre(producto);
-        const cantidadTexto = nombreProducto.match(/[0-9.,]+/)?.[0] ||
-            obtenerProductId(producto).match(/[0-9]+/)?.[0] || "";
-        const cantidadDiamantes = Number(cantidadTexto.replace(/[.,]/g, "")) || 110;
-
-        let archivoVisual, claseVisual;
-        if (cantidadDiamantes > 2398) {
-            archivoVisual = "./imagenes/cofre-diamantes-xl.svg";
-            claseVisual = "visual-cofre visual-cofre-xl";
-        } else if (cantidadDiamantes > 1166) {
-            archivoVisual = "./imagenes/cofre-diamantes.svg";
-            claseVisual = "visual-cofre";
-        } else if (cantidadDiamantes > 572) {
-            archivoVisual = "./imagenes/grupo-diamantes-3.svg";
-            claseVisual = "visual-grupo visual-grupo-grande";
-        } else if (cantidadDiamantes > 341) {
-            archivoVisual = "./imagenes/grupo-diamantes-2.svg";
-            claseVisual = "visual-grupo visual-grupo-medio";
-        } else {
-            archivoVisual = "./imagenes/grupo-diamantes-1.svg";
-            claseVisual = "visual-grupo";
-        }
-
-        const visual = document.createElement("span");
-        visual.className = "visual-diamantes " + claseVisual;
-        visual.setAttribute("aria-hidden", "true");
-        const imagen = document.createElement("img");
-        imagen.src = archivoVisual;
-        imagen.alt = "";
-        imagen.className = "imagen-visual-diamantes";
-        imagen.loading = "lazy";
-        visual.appendChild(imagen);
-        tarjeta.appendChild(visual);
 
         if (local?.id) tarjeta.dataset.ggProductId = String(local.id);
         if (!comprable) {
@@ -2604,7 +2572,7 @@ iniciar();
 }
 </style>
 <style id="gg-payment-price-alignment">
-/* Tipografía y ubicación inspiradas en las tarjetas de Next Level. Se conserva el espacio izquierdo para la imagen y el tamaño exterior de cada tarjeta. */
+/* Tarjetas de diamantes sin imágenes: contenido alineado y compacto. */
 #catalogo .producto,
 #catalogoOfertas .producto{
   box-sizing:border-box!important;
