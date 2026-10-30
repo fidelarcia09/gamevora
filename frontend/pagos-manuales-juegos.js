@@ -28,6 +28,41 @@ style.textContent = `
 .gg-player-card input#idjugador:focus,.gg-player-card input#idJugador:focus{border-color:#00baff;box-shadow:0 0 0 3px rgba(0,186,255,.12)}
 .gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid #204c78;background:#050b18;color:#fff}
 .gg-manual-original-price{display:block;margin:4px 0 2px;color:#91a6c0;font-size:11px;font-weight:600;line-height:1.3;text-decoration:line-through;text-decoration-thickness:1.5px;opacity:.9}
+/* Ajuste específico para el texto largo de Saldo móvil dentro de las tarjetas de productos. */
+.gg-saldo-movil-activo #catalogo .producto > .producto-precio,
+.gg-saldo-movil-activo #catalogoOfertas .producto > .producto-precio,
+.gg-saldo-movil-activo #listaOfertas .boton-oferta .precio-oferta,
+.gg-saldo-movil-activo .catalogo .producto > .producto-precio{
+ box-sizing:border-box!important;
+ display:block!important;
+ width:100%!important;
+ min-width:0!important;
+ max-width:100%!important;
+ margin:2px 0 0!important;
+ font-size:10px!important;
+ line-height:1.12!important;
+ white-space:normal!important;
+ overflow-wrap:anywhere!important;
+ word-break:normal!important;
+ text-align:left!important;
+}
+.gg-saldo-movil-activo #catalogo .producto > .gg-manual-original-price,
+.gg-saldo-movil-activo #catalogoOfertas .producto > .gg-manual-original-price,
+.gg-saldo-movil-activo #listaOfertas .boton-oferta > .gg-manual-original-price,
+.gg-saldo-movil-activo .catalogo .producto > .gg-manual-original-price{
+ box-sizing:border-box!important;
+ display:block!important;
+ width:100%!important;
+ min-width:0!important;
+ max-width:100%!important;
+ margin:1px 0!important;
+ font-size:9px!important;
+ line-height:1.1!important;
+ white-space:normal!important;
+ overflow-wrap:anywhere!important;
+ word-break:normal!important;
+ text-align:left!important;
+}
 @media(max-width:390px){.gg-metodos .gg-opciones{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.gg-metodos .gg-opcion{font-size:10px;padding:7px 1px;min-height:38px;border-radius:9px}}
 `;
 document.head.appendChild(style);
@@ -167,7 +202,7 @@ function iniciar(){
   return amount.toLocaleString("es-ES",{maximumFractionDigits:2})+" CUP";
  }
  
- function pintar(){panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));actualizarImporte();}
+ function pintar(){document.documentElement.classList.toggle("gg-saldo-movil-activo",select.value==="SALDO_MOVIL");panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));actualizarImporte();}
  async function actualizarImporte(){
   const method=select.value;
   /* El precio tachado de GVR pertenece solo al método GVR; nunca debe quedar encima de una tarifa manual. */
