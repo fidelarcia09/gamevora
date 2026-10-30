@@ -16,6 +16,7 @@ style.textContent = `
 .gg-player-card input#idjugador::placeholder,.gg-player-card input#idJugador::placeholder{color:#8fa5bd}
 .gg-player-data-panel{box-sizing:border-box;width:100%;margin:12px 0;padding:14px 16px;border:1px solid #164b75;border-radius:18px;background:linear-gradient(145deg,#091a35,#07152b);box-shadow:0 8px 22px rgba(0,0,0,.18)}
 .gg-player-data-panel>.titulo-id-jugador{margin:0 0 9px;color:#fff;font-size:15px;font-weight:800}
+.gg-player-data-panel>label[for="idjugador"]::before,.gg-player-data-panel>label[for="idJugador"]::before{content:"";display:inline-block;flex:0 0 24px;width:24px;height:24px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2300baff%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2%27/%3E%3Ccircle cx=%2712%27 cy=%277%27 r=%274%27/%3E%3C/svg%3E")}
 .gg-player-data-panel>label[for="idjugador"],.gg-player-data-panel>label[for="idJugador"]{display:flex;align-items:center;gap:9px;margin:0 0 9px;color:#fff;font-size:15px;font-weight:800}
 .gg-player-data-panel>input#idjugador,.gg-player-data-panel>input#idJugador{box-sizing:border-box;width:100%;min-height:44px;padding:10px 12px;border:1px solid #00baff;border-radius:10px;background:#050b18;color:#fff;font-size:13px}
 .gg-player-data-panel .datos-jugador-grid{margin:0!important;gap:10px!important;align-items:end!important}
