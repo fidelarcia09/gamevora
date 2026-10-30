@@ -803,7 +803,7 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
 /* Compactación visual: conserva colores, bordes y estilo original. */
 body{padding:8px!important}
 .header{margin-bottom:7px!important}
-.card{padding:13px 10px!important}
+.card{padding:15px 14px!important}
 h1{margin-bottom:3px!important}
 .descripcion{margin-bottom:8px!important}
 .etiqueta{margin:8px 0 5px!important}
@@ -817,6 +817,7 @@ input{min-height:39px!important;padding:8px 10px!important}
 .datos-jugador-grid{gap:8px!important;margin-bottom:8px!important}
 .campo-dato .etiqueta{margin-top:7px!important}
 </style>
+
 </head>
 
 <body>
@@ -1195,6 +1196,7 @@ pestanaNivel.addEventListener("click", () => cambiarVista("nivel"));
 /* ESTADOS Y PEDIDOS */
 
 function mostrarEstado(mensaje, tipo = "") {
+    estadoCatalogo.style.display = "";
     mensaje = typeof mensaje === "string" ? mensaje.replace(/pedido aceptado por next level/gi, "Pedido aceptado por Gamers Gold Top-Up") : mensaje;
     estadoCatalogo.textContent = mensaje;
 
@@ -2093,6 +2095,8 @@ async function cargarCatalogo() {
             mostrarEstado(
                 "Los paquetes de nivel estarán disponibles próximamente."
             );
+        } else {
+            estadoCatalogo.style.display = "none";
         }
 
     } catch (error) {
