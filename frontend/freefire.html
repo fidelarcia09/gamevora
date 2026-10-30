@@ -837,32 +837,12 @@ body{padding:0!important}
   padding-left:80px!important;
 }
 </style>
-<style id="gg-freefire-110-diamantes-image">
-/* Diamantes 3D locales para todos los paquetes; la cantidad visual crece con el paquete. */
-#catalogo .producto-con-diamantes{
-  position:relative!important;
-  overflow:hidden!important;
-}
-#catalogo .producto-con-diamantes .visual-diamantes{
-  position:absolute!important;
-  left:2px!important;
-  top:50%!important;
-  width:76px!important;
-  height:54px!important;
-  transform:translateY(-50%)!important;
-  pointer-events:none!important;
-}
-#catalogo .producto-con-diamantes .imagen-diamante{
-  position:absolute!important;
-  top:50%!important;
-  width:34px!important;
-  height:38px!important;
-  max-width:34px!important;
-  object-fit:contain!important;
-  object-position:center!important;
-  filter:drop-shadow(0 0 5px rgba(0,174,255,.42))!important;
-  pointer-events:none!important;
-}
+<style id="gg-freefire-diamond-visuals">
+#catalogo .producto-con-diamantes{position:relative!important;overflow:hidden!important}
+#catalogo .producto-con-diamantes .visual-diamantes{position:absolute!important;left:1px!important;top:50%!important;width:76px!important;height:62px!important;transform:translateY(-50%)!important;display:flex!important;align-items:center!important;justify-content:center!important;pointer-events:none!important;overflow:visible!important}
+#catalogo .producto-con-diamantes .imagen-visual-diamantes{display:block!important;width:100%!important;height:100%!important;max-width:none!important;object-fit:contain!important;object-position:center!important;filter:drop-shadow(0 3px 5px rgba(0,174,255,.38))!important}
+#catalogo .producto-con-diamantes .visual-cofre{width:82px!important;height:66px!important;left:0!important}
+#catalogo .producto-con-diamantes .visual-cofre-xl{width:88px!important;height:70px!important;left:-2px!important}
 </style>
 </head>
 
@@ -1905,72 +1885,61 @@ function seleccionarProducto(productoProveedor, productoLocal, tipo, tarjeta) {
 }
 
 /* CATÁLOGO DE DIAMANTES */
-
 function renderizarCatalogo() {
     catalogo.replaceChildren();
-
     productosDisponibles.forEach(producto => {
         const local = buscarProductoLocal(producto);
         const comprable = productoComprable(local);
-
         const tarjeta = document.createElement("button");
-
         tarjeta.type = "button";
-        tarjeta.className = "producto";
+        tarjeta.className = "producto producto-con-diamantes";
+
         const nombreProducto = obtenerNombre(producto);
-        const cantidadTexto =
-            nombreProducto.match(/[0-9.,]+/)?.[0] ||
-            obtenerProductId(producto).match(/[0-9]+/)?.[0] ||
-            "";
-        const cantidadDiamantes =
-            Number(cantidadTexto.replace(/[.,]/g, "")) || 110;
+        const cantidadTexto = nombreProducto.match(/[0-9.,]+/)?.[0] ||
+            obtenerProductId(producto).match(/[0-9]+/)?.[0] || "";
+        const cantidadDiamantes = Number(cantidadTexto.replace(/[.,]/g, "")) || 110;
 
-        // A mayor paquete, más diamantes se muestran en la tarjeta.
-        const cantidadVisual =
-            cantidadDiamantes <= 110 ? 1 :
-            cantidadDiamantes <= 341 ? 2 :
-            cantidadDiamantes <= 572 ? 3 :
-            cantidadDiamantes <= 1166 ? 4 :
-            cantidadDiamantes <= 2398 ? 5 : 6;
-
-        tarjeta.classList.add("producto-con-diamantes");
-
-        const visualDiamantes = document.createElement("span");
-        visualDiamantes.className = "visual-diamantes";
-        visualDiamantes.setAttribute("aria-hidden", "true");
-
-        for (let i = 0; i < cantidadVisual; i++) {
-            const imagenDiamante = document.createElement("img");
-            imagenDiamante.src = "./imagenes/diamante-azul-3d.png";
-            imagenDiamante.alt = "";
-            imagenDiamante.className = "imagen-diamante";
-            imagenDiamante.style.left = (i * 9) + "px";
-            imagenDiamante.style.zIndex = String(i + 1);
-            imagenDiamante.style.transform =
-                "translateY(-50%) rotate(" + ((i % 2 ? 7 : -5)) + "deg) scale(" +
-                (i % 2 ? "0.94" : "1") + ")";
-            visualDiamantes.appendChild(imagenDiamante);
+        let archivoVisual, claseVisual;
+        if (cantidadDiamantes > 2398) {
+            archivoVisual = "./imagenes/cofre-diamantes-xl.svg";
+            claseVisual = "visual-cofre visual-cofre-xl";
+        } else if (cantidadDiamantes > 1166) {
+            archivoVisual = "./imagenes/cofre-diamantes.svg";
+            claseVisual = "visual-cofre";
+        } else if (cantidadDiamantes > 572) {
+            archivoVisual = "./imagenes/grupo-diamantes-3.svg";
+            claseVisual = "visual-grupo visual-grupo-grande";
+        } else if (cantidadDiamantes > 341) {
+            archivoVisual = "./imagenes/grupo-diamantes-2.svg";
+            claseVisual = "visual-grupo visual-grupo-medio";
+        } else {
+            archivoVisual = "./imagenes/grupo-diamantes-1.svg";
+            claseVisual = "visual-grupo";
         }
 
-        tarjeta.appendChild(visualDiamantes);
+        const visual = document.createElement("span");
+        visual.className = "visual-diamantes " + claseVisual;
+        visual.setAttribute("aria-hidden", "true");
+        const imagen = document.createElement("img");
+        imagen.src = archivoVisual;
+        imagen.alt = "";
+        imagen.className = "imagen-visual-diamantes";
+        imagen.loading = "lazy";
+        visual.appendChild(imagen);
+        tarjeta.appendChild(visual);
 
         if (local?.id) tarjeta.dataset.ggProductId = String(local.id);
-
         if (!comprable) {
             tarjeta.classList.add("producto-no-disponible");
             tarjeta.disabled = true;
         }
-
         const nombre = document.createElement("div");
         nombre.className = "producto-nombre";
-        nombre.textContent = obtenerNombre(producto);
-
+        nombre.textContent = nombreProducto;
         const precio = document.createElement("div");
         precio.className = "producto-precio";
-
         const estado = document.createElement("div");
         estado.className = "producto-estado";
-
         if (comprable) {
             precio.textContent = mostrarPrecio(Number(local.price_gvr));
             estado.textContent = "Disponible";
@@ -1978,20 +1947,10 @@ function renderizarCatalogo() {
             precio.textContent = "Precio pendiente";
             estado.textContent = "Temporalmente no disponible";
         }
-
         tarjeta.append(nombre, precio, estado);
-
-        if (comprable) {
-            tarjeta.addEventListener("click", () => {
-                seleccionarProducto(
-                    producto,
-                    local,
-                    "diamantes",
-                    tarjeta
-                );
-            });
-        }
-
+        if (comprable) tarjeta.addEventListener("click", () => {
+            seleccionarProducto(producto, local, "diamantes", tarjeta);
+        });
         catalogo.appendChild(tarjeta);
     });
 }
