@@ -1919,8 +1919,8 @@ function renderizarCatalogo() {
         tarjeta.className = "producto";
         const nombreProducto = obtenerNombre(producto);
         const cantidadTexto =
-            nombreProducto.match(/[\\d.,]+/)?.[0] ||
-            obtenerProductId(producto).match(/\\d+/)?.[0] ||
+            nombreProducto.match(/[0-9.,]+/)?.[0] ||
+            obtenerProductId(producto).match(/[0-9]+/)?.[0] ||
             "";
         const cantidadDiamantes =
             Number(cantidadTexto.replace(/[.,]/g, "")) || 110;
