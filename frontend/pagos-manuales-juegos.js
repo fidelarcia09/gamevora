@@ -14,6 +14,14 @@ style.textContent = `
 .gg-player-card label[for="idjugador"]::before,.gg-player-card label[for="idJugador"]::before{content:"";display:inline-block;flex:0 0 24px;width:24px;height:24px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%2300baff%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2%27/%3E%3Ccircle cx=%2712%27 cy=%277%27 r=%274%27/%3E%3C/svg%3E")}
 .gg-player-card input#idjugador,.gg-player-card input#idJugador{box-sizing:border-box;width:100%;min-height:48px;padding:12px 14px;border:1px solid #00baff;border-radius:13px;background:#050b18;color:#fff;outline:none;font-size:15px}
 .gg-player-card input#idjugador::placeholder,.gg-player-card input#idJugador::placeholder{color:#8fa5bd}
+.gg-player-data-panel{box-sizing:border-box;width:100%;margin:12px 0;padding:14px 16px;border:1px solid #164b75;border-radius:18px;background:linear-gradient(145deg,#091a35,#07152b);box-shadow:0 8px 22px rgba(0,0,0,.18)}
+.gg-player-data-panel>.titulo-id-jugador{margin:0 0 9px;color:#fff;font-size:15px;font-weight:800}
+.gg-player-data-panel .datos-jugador-grid{margin:0!important;gap:10px!important;align-items:end!important}
+.gg-player-data-panel .datos-jugador-grid .etiqueta{margin:0 0 7px!important;color:#b8c9dc;font-size:12px}
+.gg-player-data-panel .datos-jugador-grid input,.gg-player-data-panel .datos-jugador-grid select{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:10px 9px;border:1px solid #00baff;border-radius:10px;background:#050b18;color:#fff;font-size:13px}
+.gg-player-data-panel .gg-metodos{margin:12px 0 0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.gg-player-data-panel .gg-metodos .gg-titulo{font-size:14px}
+@media(max-width:390px){.gg-player-data-panel{padding:12px}.gg-player-data-panel .datos-jugador-grid{gap:7px!important}.gg-player-data-panel .datos-jugador-grid input,.gg-player-data-panel .datos-jugador-grid select{font-size:12px;padding:9px 6px}}
 .gg-player-card input#idjugador:focus,.gg-player-card input#idJugador:focus{border-color:#00baff;box-shadow:0 0 0 3px rgba(0,186,255,.12)}
 .gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid #204c78;background:#050b18;color:#fff}
 .gg-manual-original-price{display:block;margin:4px 0 2px;color:#91a6c0;font-size:11px;font-weight:600;line-height:1.3;text-decoration:line-through;text-decoration-thickness:1.5px;opacity:.9}
@@ -28,26 +36,29 @@ function iniciar(){
  panel.innerHTML='<div class="gg-titulo">Método de pago</div><div class="gg-opciones" role="group" aria-label="Método de pago"><button type="button" class="gg-opcion" data-metodo="CUP" disabled><svg class="gg-metodo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/></svg><span>CUP</span></button><button type="button" class="gg-opcion" data-metodo="USDT"><svg class="gg-metodo-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M6 7h12M12 7v11M8 10h8M9 14h6"/></svg><span>USDT</span></button><button type="button" class="gg-opcion" data-metodo="GVR"><svg class="gg-metodo-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 7v10l-9 5-9-5V7z"/><path d="m8 9 4-2 4 2-4 2zM8 14l4 2 4-2"/></svg><span>GVR</span></button><button type="button" class="gg-opcion" data-metodo="SALDO_MOVIL"><svg class="gg-metodo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M9 5h6M10 18h4"/></svg><span>Saldo móvil</span></button></div><input id="ggMetodoPago" type="hidden" value="GVR">';
  const playerField=Array.from(document.querySelectorAll("#idjugador, #idJugador")).find(field=>field.type!=="hidden")||document.getElementById("idjugador")||document.getElementById("idJugador");
  const playerLabel=playerField?document.querySelector('label[for="'+playerField.id+'"]'):null;
- const playerCard=playerField?.closest(".player-id-card, .player-card, .campo, .form-group, .formulario-campo")||playerField?.parentElement;
- if(playerCard && playerField){
-  playerCard.classList.add("gg-player-card");
-  /* En Mobile Legends y Genshin, el Server ID forma parte de la misma fila del ID.
-     El método de pago debe ir debajo de ambos campos, nunca entre ellos. */
-  const gameTitle=document.title.toLowerCase();
-  const playerFieldsRow=playerField.closest(".datos-jugador-grid");
-  if((gameTitle.includes("mobile legends") || gameTitle.includes("genshin impact")) && playerFieldsRow){
-   playerFieldsRow.insertAdjacentElement("afterend",panel);
-  }else if(gameTitle.includes("arena breakout")){
-   playerCard.insertAdjacentElement("afterend",panel);
-  }else{
-   playerField.insertAdjacentElement("afterend",panel);
-  }
+ const playerFieldsRow=playerField?.closest(".datos-jugador-grid");
+ if(playerFieldsRow && playerFieldsRow.querySelector("#zonaJugador") && playerLabel){
+  /* Mobile Legends y Genshin: ID, Server ID y método de pago forman una sola tarjeta visual. */
+  const dataPanel=document.createElement("section");
+  dataPanel.className="gg-player-data-panel";
+  playerLabel.parentNode.insertBefore(dataPanel,playerLabel);
+  dataPanel.appendChild(playerLabel);
+  dataPanel.appendChild(playerFieldsRow);
+  dataPanel.appendChild(panel);
  }else{
-  const region=document.querySelector(".selector-region, #region, .region-selector");
-  const nextSection=document.querySelector(".selector-categorias, #catalogo, #catalogoProductos");
-  if(region) region.insertAdjacentElement("afterend",panel);
-  else if(nextSection) nextSection.insertAdjacentElement("beforebegin",panel);
-  else (playerField?.parentNode||boton.parentNode).insertBefore(panel,playerField?.nextSibling||boton);
+  const playerCard=playerField?.closest(".player-id-card, .player-card, .campo, .form-group, .formulario-campo")||playerField?.parentElement;
+  if(playerCard && playerField){
+   playerCard.classList.add("gg-player-card");
+   const gameTitle=document.title.toLowerCase();
+   if(gameTitle.includes("arena breakout")) playerCard.insertAdjacentElement("afterend",panel);
+   else playerField.insertAdjacentElement("afterend",panel);
+  }else{
+   const region=document.querySelector(".selector-region, #region, .region-selector");
+   const nextSection=document.querySelector(".selector-categorias, #catalogo, #catalogoProductos");
+   if(region) region.insertAdjacentElement("afterend",panel);
+   else if(nextSection) nextSection.insertAdjacentElement("beforebegin",panel);
+   else (playerField?.parentNode||boton.parentNode).insertBefore(panel,playerField?.nextSibling||boton);
+  }
  }
  const select=panel.querySelector("#ggMetodoPago");
  function mostrarEstado(mensaje,tipo="aviso"){
