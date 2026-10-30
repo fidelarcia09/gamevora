@@ -751,6 +751,7 @@ let vistaActual = "diamantes";
 function mostrarEstado(mensaje, tipo = "") {
     mensaje = typeof mensaje === "string" ? mensaje.replace(/pedido aceptado por next level/gi, "Pedido aceptado por Gamers Gold Top-Up") : mensaje;
   estadoCatalogo.textContent = mensaje;
+  estadoCatalogo.style.display = mensaje ? "" : "none";
   estadoCatalogo.classList.toggle("error", tipo === "error");
   estadoCatalogo.classList.toggle("correcto", tipo === "correcto");
 }
@@ -908,6 +909,7 @@ async function cargarCatalogo() {
     productosDisponibles = PRODUCTOS_PERMITIDOS.filter(id => mapa.has(id)).map(id => mapa.get(id));
     renderizarDiamantes();
     renderizarOfertas();
+    mostrarEstado("");
     
     actualizarBoton();
   } catch (e) {
