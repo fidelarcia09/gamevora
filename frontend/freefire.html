@@ -837,6 +837,25 @@ body{padding:0!important}
   padding-left:80px!important;
 }
 </style>
+<style id="gg-freefire-110-diamantes-image">
+/* Imagen exclusiva del producto de 110 diamantes. */
+#catalogo .producto-con-imagen-110{
+  position:relative!important;
+  overflow:hidden!important;
+}
+#catalogo .producto-con-imagen-110 .imagen-diamantes-110{
+  position:absolute!important;
+  left:7px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  width:64px!important;
+  height:62px!important;
+  max-width:64px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  pointer-events:none!important;
+}
+</style>
 </head>
 
 <body>
@@ -1890,6 +1909,23 @@ function renderizarCatalogo() {
 
         tarjeta.type = "button";
         tarjeta.className = "producto";
+        const nombreProducto = obtenerNombre(producto);
+        const esPaquete110Diamantes =
+            /110/.test(nombreProducto) &&
+            /diamante/i.test(nombreProducto);
+
+        if (esPaquete110Diamantes) {
+            tarjeta.classList.add("producto-con-imagen-110");
+
+            const imagenDiamantes = document.createElement("img");
+            imagenDiamantes.src = "./imagenes/file_00000000cab481f59625e78b71a4b00c.png";
+            imagenDiamantes.alt = "";
+            imagenDiamantes.className = "imagen-diamantes-110";
+            imagenDiamantes.setAttribute("aria-hidden", "true");
+
+            tarjeta.appendChild(imagenDiamantes);
+        }
+
         if (local?.id) tarjeta.dataset.ggProductId = String(local.id);
 
         if (!comprable) {
