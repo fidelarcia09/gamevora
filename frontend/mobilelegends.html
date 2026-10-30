@@ -272,11 +272,13 @@
 .catalogo .producto > .producto-estado,
 #catalogo .producto > .producto-estado,
 #catalogoOfertas .producto > .producto-estado{
-  grid-column:1!important;
-  grid-row:4!important;
-  text-align:left!important;
+  grid-column:1/-1!important;
+  grid-row:3!important;
+  min-width:0!important;
+  margin:0!important;
   font-size:9px!important;
   line-height:1.1!important;
+  overflow-wrap:anywhere!important;
 }
 
 .datos-jugador-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:10px;align-items:start}.campo-dato{min-width:0}.campo-dato .etiqueta{margin-top:12px}.campo-dato input{min-width:0}.campo-dato .ayuda{min-height:30px}@media(max-width:340px){.datos-jugador-grid{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:7px}.campo-dato input{font-size:12px;padding:9px 7px}}
