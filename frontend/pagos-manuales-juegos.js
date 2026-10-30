@@ -16,6 +16,8 @@ style.textContent = `
 .gg-player-card input#idjugador::placeholder,.gg-player-card input#idJugador::placeholder{color:#8fa5bd}
 .gg-player-data-panel{box-sizing:border-box;width:100%;margin:12px 0;padding:14px 16px;border:1px solid #164b75;border-radius:18px;background:linear-gradient(145deg,#091a35,#07152b);box-shadow:0 8px 22px rgba(0,0,0,.18)}
 .gg-player-data-panel>.titulo-id-jugador{margin:0 0 9px;color:#fff;font-size:15px;font-weight:800}
+.gg-player-data-panel>label[for="idjugador"],.gg-player-data-panel>label[for="idJugador"]{display:flex;align-items:center;gap:9px;margin:0 0 9px;color:#fff;font-size:15px;font-weight:800}
+.gg-player-data-panel>input#idjugador,.gg-player-data-panel>input#idJugador{box-sizing:border-box;width:100%;min-height:44px;padding:10px 12px;border:1px solid #00baff;border-radius:10px;background:#050b18;color:#fff;font-size:13px}
 .gg-player-data-panel .datos-jugador-grid{margin:0!important;gap:10px!important;align-items:end!important}
 .gg-player-data-panel .datos-jugador-grid .etiqueta{margin:0 0 7px!important;color:#b8c9dc;font-size:12px}
 .gg-player-data-panel .datos-jugador-grid input,.gg-player-data-panel .datos-jugador-grid select{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:10px 9px;border:1px solid #00baff;border-radius:10px;background:#050b18;color:#fff;font-size:13px}
@@ -47,9 +49,22 @@ function iniciar(){
   dataPanel.appendChild(panel);
  }else{
   const playerCard=playerField?.closest(".player-id-card, .player-card, .campo, .form-group, .formulario-campo")||playerField?.parentElement;
-  if(playerCard && playerField){
+  const gameTitle=document.title.toLowerCase();
+  const unirIdYPago=["free fire","blood strike","arena breakout","pubg mobile","honor of kings"].some(name=>gameTitle.includes(name));
+  if(unirIdYPago && playerField && playerLabel){
+   if(gameTitle.includes("arena breakout") && playerCard){
+    playerCard.classList.add("gg-player-data-panel");
+    playerCard.appendChild(panel);
+   }else{
+    const dataPanel=document.createElement("section");
+    dataPanel.className="gg-player-data-panel";
+    playerLabel.parentNode.insertBefore(dataPanel,playerLabel);
+    dataPanel.appendChild(playerLabel);
+    dataPanel.appendChild(playerField);
+    dataPanel.appendChild(panel);
+   }
+  }else if(playerCard && playerField){
    playerCard.classList.add("gg-player-card");
-   const gameTitle=document.title.toLowerCase();
    if(gameTitle.includes("arena breakout")) playerCard.insertAdjacentElement("afterend",panel);
    else playerField.insertAdjacentElement("afterend",panel);
   }else{
