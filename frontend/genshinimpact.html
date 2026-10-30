@@ -606,7 +606,7 @@
 
     <main class="card">
         <h1>Genshin Impact</h1>
-        <p class="descripcion">Selecciona Genesis Crystals o una oferta especial.</p>
+        
 
         <label class="etiqueta titulo-id-jugador" for="idJugador">ID del jugador</label>
         <div class="datos-jugador-grid">
@@ -908,9 +908,7 @@ async function cargarCatalogo() {
     productosDisponibles = PRODUCTOS_PERMITIDOS.filter(id => mapa.has(id)).map(id => mapa.get(id));
     renderizarDiamantes();
     renderizarOfertas();
-    const totalDiamantes = productosDisponibles.filter(p => PRODUCTOS_DIAMANTES.includes(String(p.provider_product_id || ""))).length;
-    const totalOfertas = productosDisponibles.filter(p => PRODUCTOS_OFERTAS.some(o => o.id === String(p.provider_product_id || ""))).length;
-    mostrarEstado("Genesis Crystals: " + totalDiamantes + " · Ofertas: " + totalOfertas);
+    
     actualizarBoton();
   } catch (e) {
     console.error("Error cargando catálogo Genshin:", e);
