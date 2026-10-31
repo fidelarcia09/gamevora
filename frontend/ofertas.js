@@ -916,6 +916,33 @@ async function cargarOfertas() {
             cantidad++;
         });
 
+        // Añade también las ofertas nuevas del catálogo RechargeGames que todavía
+        // no estén en la configuración visual antigua de esta página.
+        catalogoProveedor.forEach(productoProveedor => {
+            const idProveedor = obtenerIdProveedor(productoProveedor);
+            if (!idProveedor || productosMostrados[idProveedor]) return;
+            if (
+                productoProveedor.available === false ||
+                productoProveedor.available === "false"
+            ) return;
+
+            const ofertaCatalogo = {
+                id: idProveedor,
+                nombre: obtenerNombreProveedor(productoProveedor),
+                emoji: "🎁"
+            };
+
+            productosMostrados[idProveedor] = {
+                ...ofertaCatalogo,
+                productoProveedor
+            };
+
+            lista.appendChild(
+                crearTarjetaOferta(ofertaCatalogo, productoProveedor)
+            );
+            cantidad++;
+        });
+
         if (!cantidad) {
             actualizarEstadoCarga(
                 "No encontramos ofertas configuradas que coincidan con el catálogo actual. Revisa los nombres y los IDs de los productos.",
