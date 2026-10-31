@@ -1162,8 +1162,13 @@ window.ggManualPaymentBridge = {
   const selected = productoSeleccionado;
   const playerField = document.getElementById("idjugador") || document.getElementById("idJugador");
   const playerId = playerField?.value.trim();
-  if (typeof validacionJugador !== "undefined" && validacionJugador.status === "INVALID" && validacionJugador.playerId === playerId) {
-   alert("El ID del jugador no es válido. Compruébalo antes de pagar."); return false;
+  if (typeof validacionJugador !== "undefined" && validacionJugador.playerId === playerId) {
+   if (validacionJugador.status === "CHECKING") {
+    alert("Espera a que termine la comprobación del ID antes de pagar."); return false;
+   }
+   if (["INVALID", "WRONG_REGION"].includes(validacionJugador.status)) {
+    alert(validacionJugador.status === "WRONG_REGION" ? "El ID pertenece a otra región. Comprueba la región antes de pagar." : "El ID del jugador no es válido. Compruébalo antes de pagar."); return false;
+   }
   }
   const regionField = document.getElementById("regionJugador");
   if (regionField && typeof productoDeRegion === "function" && selected && selected.local && !productoDeRegion(selected.local, regionField.value) && !productoDeRegion(selected.proveedor, regionField.value)) {
@@ -1459,7 +1464,8 @@ function actualizarBoton() {
 
     botonContinuar.disabled =
         !campoJugador.value.trim() ||
-        !productoSeleccionado;
+        !productoSeleccionado ||
+        validacionJugador.status === "CHECKING";
 }
 
 /* MODAL */
@@ -1635,6 +1641,7 @@ async function validarJugador() {
         message: "Comprobando ID y región..."
     };
     mostrarEstadoValidacion("Comprobando tu ID de Free Fire...", "aviso");
+    actualizarBoton();
 
     const region = String(
         productoSeleccionado?.local?.provider_region ||
@@ -1696,6 +1703,7 @@ async function validarJugador() {
         } else {
             mostrarEstadoValidacion("RechargeGames no pudo confirmar este ID ahora mismo. Compruébalo directamente en Free Fire antes de continuar.", "aviso");
         }
+        actualizarBoton();
     } catch (error) {
         if (solicitud !== numeroSolicitudValidacion) return;
         console.error("Error verificando jugador Free Fire:", error);
@@ -1708,6 +1716,7 @@ async function validarJugador() {
             message: "No se pudo comprobar el ID."
         };
         mostrarEstadoValidacion("No se pudo conectar con la verificación de RechargeGames. Comprueba tu ID directamente en Free Fire.", "aviso");
+        actualizarBoton();
     }
 }
 
