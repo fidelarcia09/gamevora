@@ -104,6 +104,126 @@
             height: auto;
         }
 
+        /* SPLASH GAMING */
+        .splash-juegos {
+            position: relative;
+            min-height: 190px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 18px;
+            isolation: isolate;
+            background:
+                radial-gradient(ellipse at 50% 115%, rgba(0, 217, 255, .25), transparent 52%),
+                linear-gradient(125deg, #07152b 0%, #0a2850 48%, #071326 100%);
+        }
+        .splash-juegos::before,
+        .splash-juegos::after {
+            content: "";
+            position: absolute;
+            inset: 10px;
+            border: 1px solid rgba(0, 190, 255, .18);
+            border-radius: 13px;
+            pointer-events: none;
+        }
+        .splash-juegos::after {
+            inset: 0;
+            border: 0;
+            border-radius: 0;
+            background: linear-gradient(110deg, transparent 15%, rgba(0, 190, 255, .07) 50%, transparent 85%);
+            z-index: -1;
+        }
+        .splash-luz {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            filter: blur(45px);
+            opacity: .45;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .splash-luz-1 { left: -35px; top: -55px; background: #087cff; }
+        .splash-luz-2 { right: -35px; bottom: -65px; background: #00d9ff; }
+        .splash-contenido {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            text-align: center;
+        }
+        .splash-marca {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: #fff;
+            font-size: clamp(16px, 4vw, 23px);
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 1.2px;
+            text-shadow: 0 0 14px rgba(0, 174, 255, .45);
+        }
+        .splash-marca small {
+            display: block;
+            margin-top: 1px;
+            font-size: 9px;
+            letter-spacing: 4px;
+            text-align: center;
+        }
+        .splash-simbolo {
+            color: var(--cian);
+            font-size: 40px;
+            line-height: .9;
+            font-weight: 900;
+            text-shadow: 0 0 8px #00bfff, 0 0 22px #087cff;
+            transform: skew(-12deg);
+        }
+        .splash-etiqueta {
+            margin-top: 14px;
+            color: #7adfff;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 4px;
+        }
+        .splash-contenido h1 {
+            margin-top: 8px;
+            font-size: clamp(22px, 5vw, 34px);
+            line-height: 1.1;
+            font-weight: 900;
+            letter-spacing: -.7px;
+            text-shadow: 0 3px 18px rgba(0, 0, 0, .5);
+        }
+        .splash-contenido h1 span {
+            color: var(--cian);
+            text-shadow: 0 0 16px rgba(0, 190, 255, .45);
+        }
+        .splash-descripcion {
+            margin-top: 8px;
+            color: #b7d6ef;
+            font-size: 12px;
+            letter-spacing: .7px;
+        }
+        .splash-linea {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 15px auto 0;
+        }
+        .splash-linea span {
+            width: 42px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cian));
+            box-shadow: 0 0 7px var(--cian);
+        }
+        .splash-linea span:last-child { transform: rotate(180deg); }
+        .splash-linea i {
+            width: 5px;
+            height: 5px;
+            border: 1px solid var(--cian);
+            transform: rotate(45deg);
+            box-shadow: 0 0 8px var(--cian);
+        }
+
         /* CATÁLOGO */
 
         .juegos {
@@ -409,6 +529,24 @@
             .logo {
                 font-size: 18px;
             }
+
+            .splash-juegos {
+                min-height: 170px;
+                padding: 24px 14px;
+            }
+
+            .splash-etiqueta {
+                letter-spacing: 2.5px;
+            }
+
+            .catalogo-herramientas {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .buscador-juegos {
+                width: 100%;
+            }
         }
 
         /* ACCESIBILIDAD */
@@ -437,6 +575,70 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
 .encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}
 
 .encabezado-pagina~.boton-atras{display:none!important}
+
+        /* CONTADOR Y BUSCADOR */
+        .catalogo-herramientas {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin: -17px 0 20px;
+        }
+        .contador-juegos {
+            color: #9bb6d1;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .contador-juegos strong {
+            color: var(--cian);
+            font-size: 16px;
+            margin-right: 3px;
+            text-shadow: 0 0 10px rgba(0, 190, 255, .35);
+        }
+        .buscador-juegos {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            width: min(100%, 260px);
+            min-height: 40px;
+            padding: 0 12px;
+            border: 1px solid #174b7a;
+            border-radius: 10px;
+            background: rgba(8, 25, 48, .9);
+            box-shadow: inset 0 0 12px rgba(0, 140, 255, .06);
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .buscador-juegos:focus-within {
+            border-color: var(--cian);
+            box-shadow: 0 0 13px rgba(0, 190, 255, .16);
+        }
+        .buscador-juegos svg {
+            width: 17px;
+            height: 17px;
+            flex: 0 0 17px;
+            fill: none;
+            stroke: #55cfff;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+        .buscador-juegos input {
+            width: 100%;
+            min-width: 0;
+            border: 0;
+            outline: 0;
+            color: #fff;
+            background: transparent;
+            font-size: 12px;
+        }
+        .buscador-juegos input::placeholder { color: #7792ad; }
+        .sin-resultados {
+            padding: 18px 10px;
+            color: #9bb6d1;
+            text-align: center;
+            font-size: 13px;
+        }
+
 </style>
 </head>
 
@@ -450,15 +652,19 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
 
 </header>
 
-<section class="banner">
-
-    <img
-        src="imagenes/file_00000000ce6081f591729a6359f99402.png"
-        alt="Recarga tus juegos favoritos"
-        class="banner-imagen"
-        loading="eager" decoding="async" fetchpriority="high"
-    >
-
+<section class="banner splash-juegos" aria-label="Gamers Gold Top-Up">
+    <div class="splash-luz splash-luz-1"></div>
+    <div class="splash-luz splash-luz-2"></div>
+    <div class="splash-contenido">
+        <div class="splash-marca">
+            <span class="splash-simbolo">G</span>
+            <span>GAMERS GOLD <small>TOP-UP</small></span>
+        </div>
+        <p class="splash-etiqueta">TU UNIVERSO GAMING</p>
+        <h1>Juega. <span>Recarga.</span> Domina.</h1>
+        <p class="splash-descripcion">Tus juegos favoritos, en un solo lugar</p>
+        <div class="splash-linea"><span></span><i></i><span></span></div>
+    </div>
 </section>
 
 <section class="juegos">
@@ -467,7 +673,17 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
         Elige tu <span>juego</span>
     </h2>
 
-    <div class="grid">
+    <div class="catalogo-herramientas">
+        <p class="contador-juegos"><strong id="cantidad-juegos">7</strong> juegos disponibles</p>
+        <label class="buscador-juegos">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 5 5"></path></svg>
+            <input id="buscar-juego" type="search" placeholder="Buscar juego..." autocomplete="off" aria-label="Buscar juegos por nombre">
+        </label>
+    </div>
+
+    <p id="sin-resultados" class="sin-resultados" hidden>No encontramos juegos con ese nombre.</p>
+
+    <div class="grid" id="lista-juegos">
 
         <!-- FREE FIRE -->
 
@@ -633,6 +849,42 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
     </div>
 
 </section>
+
+
+<script>
+(() => {
+    const buscador = document.getElementById("buscar-juego");
+    const lista = document.getElementById("lista-juegos");
+    const contador = document.getElementById("cantidad-juegos");
+    const sinResultados = document.getElementById("sin-resultados");
+    if (!buscador || !lista || !contador || !sinResultados) return;
+
+    const tarjetas = Array.from(lista.querySelectorAll(".juego"));
+    const normalizar = texto => texto
+        .normalize("NFD")
+        .replace(/[\\u0300-\\u036f]/g, "")
+        .toLocaleLowerCase("es");
+
+    const actualizar = () => {
+        const termino = normalizar(buscador.value.trim());
+        let visibles = 0;
+
+        tarjetas.forEach(tarjeta => {
+            const nombre = normalizar(tarjeta.querySelector("h3")?.textContent || "");
+            const coincide = nombre.includes(termino);
+            tarjeta.hidden = !coincide;
+            if (coincide) visibles++;
+        });
+
+        contador.textContent = visibles;
+        sinResultados.hidden = visibles !== 0;
+        lista.hidden = visibles === 0;
+    };
+
+    buscador.addEventListener("input", actualizar);
+    actualizar();
+})();
+</script>
 
     <script src="./goldi-widget.js?v=20261023-16" defer></script>
 
