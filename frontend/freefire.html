@@ -1090,9 +1090,6 @@ const URL_CREAR_PEDIDO =
 const URL_CONSULTAR_PEDIDO =
     SUPABASE_URL + "/functions/v1/rechargegames-consultar-pedido";
 
-const URL_VALIDAR_JUGADOR =
-    SUPABASE_URL + "/functions/v1/nextlevel-validar-jugador";
-
 const supabase = createClient(
     SUPABASE_URL,
     SUPABASE_KEY,
@@ -1590,202 +1587,38 @@ async function validarJugador() {
 
     if (playerId.length > 50) {
         reiniciarValidacionJugador();
-
-        mostrarEstadoValidacion(
-            "El ID del jugador es demasiado largo.",
-            "error"
-        );
-
+        mostrarEstadoValidacion("El ID del jugador es demasiado largo.", "error");
         return;
     }
 
-    const productId = obtenerProductId(
-        productoSeleccionado.proveedor
-    );
-
+    const productId = obtenerProductId(productoSeleccionado.proveedor);
     if (!productId) {
         reiniciarValidacionJugador();
-
-        mostrarEstadoValidacion(
-            "No se pudo identificar el producto para comprobar al jugador.",
-            "aviso"
-        );
-
+        mostrarEstadoValidacion("No se pudo identificar el producto seleccionado.", "aviso");
         return;
     }
 
     const clave = obtenerClaveValidacion(playerId, productId);
-
-    if (
-        claveUltimaValidacion === clave &&
+    if (claveUltimaValidacion === clave &&
         validacionJugador.playerId === playerId &&
         validacionJugador.productId === productId &&
-        validacionJugador.status !== "UNKNOWN"
-    ) {
-        return;
-    }
+        validacionJugador.status !== "UNKNOWN") return;
 
-    const numeroSolicitud = ++numeroSolicitudValidacion;
-
+    numeroSolicitudValidacion++;
     claveUltimaValidacion = clave;
-
     validacionJugador = {
-        status: "UNKNOWN",
+        status: "UNAVAILABLE",
         playerId,
         productId,
         nickname: "",
         region: "",
-        message: ""
+        message: "RechargeGames no ofrece validación previa del jugador para este producto."
     };
 
     mostrarEstadoValidacion(
-        "Comprobando tu cuenta de Free Fire...",
-        ""
+        "No podemos consultar el nickname antes de la compra. Comprueba cuidadosamente tu ID antes de continuar.",
+        "aviso"
     );
-
-    try {
-        const {
-            data: { session },
-            error: sessionError
-        } = await supabase.auth.getSession();
-
-        if (numeroSolicitud !== numeroSolicitudValidacion) return;
-
-        if (sessionError || !session?.access_token) {
-            validacionJugador.status = "UNAVAILABLE";
-
-            mostrarEstadoValidacion(
-                "Inicia sesión para verificar tu cuenta. " +
-                "La validación no se ha completado.",
-                "aviso"
-            );
-
-            return;
-        }
-
-        const respuesta = await fetch(URL_VALIDAR_JUGADOR, {
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json",
-                apikey: SUPABASE_KEY,
-                Authorization: "Bearer " + session.access_token,
-                Accept: "application/json"
-            },
-
-            body: JSON.stringify({
-                playerId,
-                productId,
-                game: "free-fire"
-            }),
-
-            cache: "no-store"
-        });
-
-        let datos;
-
-        try {
-            datos = await respuesta.json();
-        } catch {
-            datos = {};
-        }
-
-        if (numeroSolicitud !== numeroSolicitudValidacion) return;
-
-        if (!respuesta.ok) {
-            const mensaje =
-                datos.error ||
-                datos.message ||
-                "No se pudo consultar la validación.";
-
-            validacionJugador.status = "UNAVAILABLE";
-            validacionJugador.message = mensaje;
-
-            mostrarEstadoValidacion(
-                "No se pudo verificar el jugador en este momento. " +
-                "Esto no significa que el ID sea incorrecto. " +
-                mensaje,
-                "aviso"
-            );
-
-            return;
-        }
-
-        const estado = normalizarEstadoValidacion(datos);
-
-        const nickname = String(
-            datos.nickname ||
-            datos.player?.nickname ||
-            datos.player?.name ||
-            ""
-        ).trim();
-
-        const region = String(
-            datos.region ||
-            datos.player?.region ||
-            ""
-        ).trim();
-
-        validacionJugador = {
-            status: estado,
-            playerId,
-            productId,
-            nickname,
-            region,
-            message: String(
-                datos.message || datos.error || ""
-            ).trim()
-        };
-
-        if (estado === "VALID") {
-            mostrarEstadoValidacion(
-                nickname
-                    ? "Cuenta verificada. Nickname: " + nickname +
-                      (region ? " · Región: " + region : "")
-                    : "El proveedor confirmó que el jugador es válido.",
-                "correcto"
-            );
-
-            return;
-        }
-
-        if (estado === "INVALID") {
-            mostrarEstadoValidacion(
-                "Gamers Gold Top-Up indica que este ID no es válido. " +
-                "Por favor, compruébalo de nuevo antes de realizar la compra.",
-                "error"
-            );
-
-            return;
-        }
-
-        mostrarEstadoValidacion(
-            validacionJugador.message ||
-            "La validación no está disponible en este momento. " +
-            "No podemos confirmar el nombre ni afirmar que el ID sea incorrecto.",
-            "aviso"
-        );
-
-    } catch (error) {
-        if (numeroSolicitud !== numeroSolicitudValidacion) return;
-
-        console.error("Error validando jugador:", error);
-
-        validacionJugador = {
-            status: "UNAVAILABLE",
-            playerId,
-            productId,
-            nickname: "",
-            region: "",
-            message: error?.message || ""
-        };
-
-        mostrarEstadoValidacion(
-            "No se pudo conectar con la validación del proveedor. " +
-            "Esto no significa que el ID sea incorrecto.",
-            "aviso"
-        );
-    }
 }
 
 function programarValidacionJugador() {
