@@ -446,7 +446,13 @@ function renderizarProductos(){
   lista.forEach(p=>{const local=buscarLocal(obtenerProductId(p));catalogo.appendChild(crearTarjeta(p,local,Boolean(p.available===true&&productoComprable(local))));});
   mostrarEstado("Selecciona el paquete de BC que deseas recargar.");
  }else{
-  const lista=productosLocales.filter(p=>p.product_type==="special_offer"&&String(p.provider_region||"").toLowerCase()==="global");
+  const lista=productosLocales.filter(p=>
+   p.product_type==="special_offer" &&
+   p.active===true &&
+   p.provider==="rechargegames" &&
+   String(p.provider_region||"").toLowerCase()==="global" &&
+   String(p.provider_product_id||"").trim()!==""
+  );
   if(!lista.length){mostrarEstado("No hay ofertas especiales importadas para Blood Strike.","error");}
   else{
    lista.forEach(local=>{
