@@ -765,36 +765,37 @@ function seleccionarProductoPUBG(producto, tarjeta, estadoTarjeta) {
 }
 
 function renderizarOfertasPUBG() {
- catalogoOfertas.replaceChildren();
- const porId = new Map(productosOfertas.map(p => [String(p.provider_product_id || "").trim(), p]));
- let disponibles = 0;
- OFERTAS_PUBG.forEach(oferta => {
-  const producto = porId.get(oferta.id);
-  const tarjeta = document.createElement("button");
-  tarjeta.type = "button";
-  tarjeta.className = "producto producto-oferta"; if (producto?.id) tarjeta.dataset.ggProductId = String(producto.id);
-  const nombre = document.createElement("div");
-  nombre.className = "producto-nombre";
-  nombre.textContent = oferta.nombre;
-  const precio = document.createElement("div");
-  precio.className = "producto-precio";
-  const estado = document.createElement("div");
-  estado.className = "producto-estado";
-  if (producto && producto.active === true && Number.isFinite(Number(producto.price_gvr)) && Number(producto.price_gvr) > 0) {
-   disponibles++;
-   precio.textContent = mostrarPrecio(producto.price_gvr);
-   estado.textContent = "Disponible";
-   tarjeta.addEventListener("click", () => seleccionarProductoPUBG(producto, tarjeta, estado));
-  } else {
-   tarjeta.disabled = true;
-   tarjeta.classList.add("producto-no-disponible");
-   precio.textContent = "No disponible";
-   estado.textContent = "Oferta no configurada";
-  }
-  tarjeta.append(nombre, precio, estado);
-  catalogoOfertas.appendChild(tarjeta);
- });
- estadoOfertas.textContent = disponibles ? disponibles + " ofertas disponibles." : "Las ofertas aparecerán aquí cuando estén activadas y configuradas en el catálogo.";
+  catalogoOfertas.replaceChildren();
+  let disponibles = 0;
+  productosOfertas.forEach(producto => {
+   const tarjeta = document.createElement("button");
+   tarjeta.type = "button";
+   tarjeta.className = "producto producto-oferta";
+   if (producto.id) tarjeta.dataset.ggProductId = String(producto.id);
+   const nombre = document.createElement("div");
+   nombre.className = "producto-nombre";
+   nombre.textContent = String(producto.product_name || "Oferta especial").replace(/\\s+\\[[^\\]]+\\]$/, "");
+   const precio = document.createElement("div");
+   precio.className = "producto-precio";
+   const estado = document.createElement("div");
+   estado.className = "producto-estado";
+   const comprable = producto.active === true && Number.isFinite(Number(producto.price_gvr)) && Number(producto.price_gvr) > 0;
+   if (comprable) {
+    disponibles++;
+    precio.textContent = mostrarPrecio(producto.price_gvr);
+    estado.textContent = "Disponible";
+    tarjeta.addEventListener("click", () => seleccionarProductoPUBG(producto, tarjeta, estado));
+   } else {
+    tarjeta.disabled = true;
+    tarjeta.classList.add("producto-no-disponible");
+    precio.textContent = Number(producto.price_gvr) > 0 ? mostrarPrecio(producto.price_gvr) : "Precio pendiente";
+    estado.textContent = "Temporalmente inactiva";
+   }
+   tarjeta.append(nombre, precio, estado);
+   catalogoOfertas.appendChild(tarjeta);
+  });
+  estadoOfertas.textContent = disponibles ? disponibles + " ofertas disponibles." :
+   (productosOfertas.length ? "Las ofertas están importadas, pero permanecen desactivadas." : "No hay ofertas especiales en este catálogo.");
 }
 
 async function cargarCatalogo() {
@@ -808,11 +809,11 @@ async function cargarCatalogo() {
  estadoOfertas.textContent = "Cargando ofertas...";
  try {
   const {data,error} = await supabase.from("game_products")
-   .select("id,game,product_name,game_currency_amount,price_gvr,active,provider,provider_product_id,provider_region")
+   .select("id,game,product_name,game_currency_amount,price_gvr,active,provider,provider_product_id,provider_region,product_type")
    .eq("game","PUBG Mobile").eq("provider","rechargegames");
   if (error) throw new Error("No se pudieron cargar los productos. Inténtalo más tarde.");
   const filas = data || [];
-  productosDisponibles = filas.filter(p => p.active === true && p.provider_region === "Global" && Boolean(p.provider_product_id) && /\bUC\b/i.test(String(p.product_name || "")) && Number(p.game_currency_amount) > 0 && Number.isFinite(Number(p.price_gvr)) && Number(p.price_gvr) > 0)
+  productosDisponibles = filas.filter(p => p.active === true && String(p.provider_region || "").toLowerCase() === "global" && Boolean(p.provider_product_id) && /\bUC\b/i.test(String(p.product_name || "")) && Number(p.game_currency_amount) > 0 && Number.isFinite(Number(p.price_gvr)) && Number(p.price_gvr) > 0)
    .sort((a,b) => Number(a.game_currency_amount)-Number(b.game_currency_amount));
   const ids = new Set(OFERTAS_PUBG.map(o => o.id));
   productosOfertas = filas.filter(p => ids.has(String(p.provider_product_id || "").trim()));
