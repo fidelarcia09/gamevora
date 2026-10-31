@@ -1861,7 +1861,7 @@ function renderizarOfertas() {
         const id = String(local.provider_product_id || "").trim();
         const proveedor = buscarProductoProveedorPorId(id) || {
             productId: id,
-            name: String(local.product_name || "").replace(/\s+\\[[^\]]+\]$/, ""),
+            name: String(local.product_name || "").split(" [")[0],
             available: true
         };
         const comprable = productoComprable(local);
@@ -1874,7 +1874,7 @@ function renderizarOfertas() {
 
         const nombre = document.createElement("div");
         nombre.className = "producto-nombre";
-        nombre.textContent = String(local.product_name || "Oferta especial").replace(/\s+\\[[^\]]+\]$/, "");
+        nombre.textContent = String(local.product_name || "Oferta especial").split(" [")[0];
         const precio = document.createElement("div");
         precio.className = "producto-precio";
         precio.textContent = Number(local.price_gvr) > 0 ? mostrarPrecio(local.price_gvr) : "Precio pendiente";
