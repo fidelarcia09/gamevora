@@ -386,15 +386,15 @@ const METODOS = {
     CUP: {nombre:"CUP", tasa:1050, moneda:"CUP", decimales:0},
     USDT: {nombre:"USDT", tasa:1, moneda:"USDT", decimales:2},
     "SALDO MOVIL": {
-        nombre:"Saldo móvil", tasa:250, moneda:"SALDO_MOVIL", decimales:0
+        nombre:"Saldo móvil", tasa:340, moneda:"SALDO_MOVIL", decimales:0
     }
 };
 
 const cantidad = Number(cantidadTexto);
 const metodo = METODOS[metodoTexto];
 const cantidadValida =
-    /^\d+$/.test(cantidadTexto) &&
-    Number.isSafeInteger(cantidad) &&
+    /^\d+(?:\.\d)?$/.test(cantidadTexto) &&
+    Number.isFinite(cantidad) &&
     cantidad >= 1 &&
     cantidad <= 1000000;
 
