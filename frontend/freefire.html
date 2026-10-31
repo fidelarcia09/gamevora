@@ -1564,17 +1564,37 @@ function obtenerClaveValidacion(playerId, productId) {
 }
 
 function normalizarEstadoValidacion(datos) {
+    const resultado = datos?.result && typeof datos.result === "object"
+        ? datos.result
+        : datos;
     const estado = String(
+        resultado?.status ||
+        resultado?.result ||
+        resultado?.code ||
+        resultado?.state ||
         datos?.status ||
-        datos?.result ||
-        datos?.code ||
         ""
     ).trim().toUpperCase();
 
-    if (estado === "VALID" || datos?.valid === true) return "VALID";
-    if (estado === "INVALID" || datos?.valid === false) return "INVALID";
+    if (["OK", "EXISTS", "VALID"].includes(estado) || resultado?.valid === true) return "VALID";
+    if (["UID_NOT_FOUND", "INVALID"].includes(estado) || resultado?.valid === false) return "INVALID";
+    if (estado === "WRONG_REGION") return "WRONG_REGION";
 
     return "UNAVAILABLE";
+}
+
+function extraerNicknameValidacion(datos) {
+    const resultado = datos?.result && typeof datos.result === "object"
+        ? datos.result
+        : datos;
+    return String(
+        resultado?.nickname ||
+        resultado?.player_name ||
+        resultado?.playerName ||
+        resultado?.username ||
+        resultado?.name ||
+        ""
+    ).trim();
 }
 
 async function validarJugador() {
@@ -1585,9 +1605,9 @@ async function validarJugador() {
         return;
     }
 
-    if (playerId.length > 50) {
+    if (playerId.length > 32) {
         reiniciarValidacionJugador();
-        mostrarEstadoValidacion("El ID del jugador es demasiado largo.", "error");
+        mostrarEstadoValidacion("El ID del jugador no puede superar 32 caracteres.", "error");
         return;
     }
 
@@ -1604,21 +1624,91 @@ async function validarJugador() {
         validacionJugador.productId === productId &&
         validacionJugador.status !== "UNKNOWN") return;
 
-    numeroSolicitudValidacion++;
+    const solicitud = ++numeroSolicitudValidacion;
     claveUltimaValidacion = clave;
     validacionJugador = {
-        status: "UNAVAILABLE",
+        status: "CHECKING",
         playerId,
         productId,
         nickname: "",
         region: "",
-        message: "RechargeGames no permite consultar el nickname antes de comprar este producto."
+        message: "Comprobando ID y región..."
     };
+    mostrarEstadoValidacion("Comprobando tu ID de Free Fire...", "aviso");
 
-    mostrarEstadoValidacion(
-        "Validación automática no disponible: RechargeGames no devuelve el nickname. Comprueba tu ID directamente en Free Fire antes de continuar.",
-        "aviso"
-    );
+    const region = String(
+        productoSeleccionado?.local?.provider_region ||
+        productoSeleccionado?.proveedor?.region ||
+        productoSeleccionado?.proveedor?.provider_region ||
+        "LATAM"
+    ).trim();
+
+    try {
+        const { data, error } = await supabase.functions.invoke(
+            "rechargegames-region-check",
+            {
+                body: {
+                    game: "free-fire",
+                    uid: playerId,
+                    region
+                }
+            }
+        );
+
+        if (solicitud !== numeroSolicitudValidacion) return;
+        if (error) throw error;
+
+        const estado = normalizarEstadoValidacion(data);
+        const resultado = data?.result && typeof data.result === "object"
+            ? data.result
+            : data;
+        const nickname = extraerNicknameValidacion(data);
+        const regionReal = String(
+            resultado?.real_region ||
+            resultado?.region ||
+            resultado?.actual_region ||
+            region
+        ).trim();
+
+        validacionJugador = {
+            status: estado,
+            playerId,
+            productId,
+            nickname,
+            region: regionReal,
+            message: ""
+        };
+
+        if (estado === "VALID") {
+            mostrarEstadoValidacion(
+                nickname
+                    ? "ID verificado. Nickname: " + nickname
+                    : "ID y región verificados (" + regionReal + "). RechargeGames no devolvió el nickname.",
+                "correcto"
+            );
+        } else if (estado === "WRONG_REGION") {
+            mostrarEstadoValidacion(
+                "El ID pertenece a otra región (" + regionReal + "). Selecciona un paquete de esa región.",
+                "error"
+            );
+        } else if (estado === "INVALID") {
+            mostrarEstadoValidacion("No se encontró ese ID de Free Fire. Compruébalo e inténtalo de nuevo.", "error");
+        } else {
+            mostrarEstadoValidacion("RechargeGames no pudo confirmar este ID ahora mismo. Compruébalo directamente en Free Fire antes de continuar.", "aviso");
+        }
+    } catch (error) {
+        if (solicitud !== numeroSolicitudValidacion) return;
+        console.error("Error verificando jugador Free Fire:", error);
+        validacionJugador = {
+            status: "UNAVAILABLE",
+            playerId,
+            productId,
+            nickname: "",
+            region,
+            message: "No se pudo comprobar el ID."
+        };
+        mostrarEstadoValidacion("No se pudo conectar con la verificación de RechargeGames. Comprueba tu ID directamente en Free Fire.", "aviso");
+    }
 }
 
 function programarValidacionJugador() {
