@@ -934,7 +934,7 @@ function renderizarOfertas() {
     icon.textContent = "★";
     const n = document.createElement("div");
     n.className = "producto-nombre";
-    n.textContent = nombreProducto(p).replace(/\\s+\\[[^\\]]+\\]$/, "");
+    n.textContent = nombreProducto(p).replace(/\s+\\[[^\]]+\]$/, "");
     const price = document.createElement("div");
     price.className = "producto-precio";
     price.textContent = gvr(p.price_gvr);
@@ -1044,7 +1044,7 @@ async function crearCompra(token, jugador, zona) {
     .eq("id", seleccionado.id).eq("game", "Genshin Impact").eq("provider", "rechargegames").eq("active", true).maybeSingle();
   if (error) throw new Error("No se pudo verificar el paquete antes de comprar.");
   const idProductoActual = String(actual?.provider_product_id || "");
-  if (!actual || !PRODUCTOS_PERMITIDOS.includes(idProductoActual) || !precioProducto(actual)) throw new Error("El producto ya no está disponible o su precio no es válido. Actualiza el catálogo.");
+  if (!actual || !["topup", "special_offer"].includes(actual.product_type) || !precioProducto(actual)) throw new Error("El producto ya no está disponible o su precio no es válido. Actualiza el catálogo.");
   if (String(actual.provider_product_id) !== String(seleccionado.provider_product_id)) throw new Error("El paquete cambió. Actualiza el catálogo antes de comprar.");
   const productoModal = { ...actual, product_name: nombreProducto(seleccionado) || nombreProducto(actual) };
   if (!await abrirModal(productoModal, jugador, zona, await window.ggGetResellerDiscountedPrice(Number(actual.price_gvr)))) { mostrarEstado("Compra cancelada. No se creó ningún pedido."); return; }
