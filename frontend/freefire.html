@@ -1944,7 +1944,7 @@ async function cargarCatalogo() {
         const productos = extraerProductos(resultado);
 
         if (!productos.length) {
-            throw new Error("Next Level no devolvió productos.");
+            throw new Error("RechargeGames no devolvió productos.");
         }
 
         productosProveedor = productos.filter(producto =>
