@@ -479,10 +479,10 @@ const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
 const URL_CREAR_PEDIDO =
-    SUPABASE_URL + "/functions/v1/nextlevel-crear-pedido";
+    SUPABASE_URL + "/functions/v1/rechargegames-crear-pedido";
 
 const URL_CONSULTAR_PEDIDO =
-    SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
+    SUPABASE_URL + "/functions/v1/rechargegames-consultar-pedido";
 
 const supabase = createClient(
     SUPABASE_URL,
@@ -809,7 +809,7 @@ async function cargarCatalogo() {
  try {
   const {data,error} = await supabase.from("game_products")
    .select("id,game,product_name,game_currency_amount,price_gvr,active,provider,provider_product_id,provider_region")
-   .eq("game","PUBG Mobile").eq("provider","nextlevel");
+   .eq("game","PUBG Mobile").eq("provider","rechargegames");
   if (error) throw new Error("No se pudieron cargar los productos. Inténtalo más tarde.");
   const filas = data || [];
   productosDisponibles = filas.filter(p => p.active === true && p.provider_region === "Global" && Boolean(p.provider_product_id) && /\bUC\b/i.test(String(p.product_name || "")) && Number(p.game_currency_amount) > 0 && Number.isFinite(Number(p.price_gvr)) && Number(p.price_gvr) > 0)
