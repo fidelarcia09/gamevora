@@ -614,7 +614,7 @@ async function copiarTexto(texto) {
 /* Mostrar resumen */
 
 mostrarCantidad.textContent = cantidadValida
-    ? formatoNumero(cantidad) + " GVR"
+    ? new Intl.NumberFormat("es-ES", {maximumFractionDigits:1}).format(cantidad) + " GVR"
     : "Cantidad no válida";
 
 mostrarMetodo.textContent = metodo ? metodo.nombre : "Método no válido";
