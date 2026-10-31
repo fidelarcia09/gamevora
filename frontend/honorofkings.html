@@ -684,7 +684,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && modalFondo
 
 async function cargarProductosLocales() {
   const { data, error } = await supabase.from("game_products")
-    .select("id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region")
+    .select("id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region,product_type")
     .eq("game", "Honor of Kings").eq("provider", "rechargegames");
   if (error) throw new Error("No se pudieron verificar los productos y sus precios GVR.");
   productosLocales = data || [];
@@ -718,36 +718,40 @@ function renderizarTokens() {
 }
 function renderizarOfertas() {
   catalogoOfertas.replaceChildren();
-  if (OFERTAS_HONOR.length === 0) {
+  const ofertas = productosLocales.filter(p => p.product_type === "special_offer");
+  if (!ofertas.length) {
     const vacio = document.createElement("div");
     vacio.className = "estado";
-    vacio.textContent = "No hay ofertas especiales disponibles actualmente.";
+    vacio.textContent = "No hay ofertas especiales importadas actualmente.";
     catalogoOfertas.appendChild(vacio);
     return;
   }
-  OFERTAS_HONOR.forEach(oferta => {
-    const proveedor = buscarProveedorOferta(oferta);
-    const idProveedor = proveedor ? obtenerProductId(proveedor) : oferta.id;
-    const local = buscarLocalPorId(idProveedor);
-    const comprable = !!proveedor && proveedor.available === true && productoComprable(local);
+  ofertas.forEach(local => {
+    const id = String(local.provider_product_id || "").trim();
+    const proveedor = productosProveedor.find(p => obtenerProductId(p) === id) ||
+      { productId: id, name: local.product_name, available: true };
+    const comprable = productoComprable(local);
     const tarjeta = document.createElement("button");
-    tarjeta.type = "button"; tarjeta.className = "producto producto-oferta"; if (local?.id) tarjeta.dataset.ggProductId = String(local.id);
+    tarjeta.type = "button";
+    tarjeta.className = "producto producto-oferta";
+    if (local.id) tarjeta.dataset.ggProductId = String(local.id);
     tarjeta.disabled = !comprable;
     if (!comprable) tarjeta.classList.add("producto-no-disponible");
-    const icono = document.createElement("div"); icono.className = "oferta-icono"; icono.textContent = oferta.icono;
-    const nombre = document.createElement("div"); nombre.className = "producto-nombre"; nombre.textContent = oferta.nombre;
-    const precio = document.createElement("div"); precio.className = "producto-precio";
-    precio.textContent = productoComprable(local) ? mostrarPrecio(Number(local.price_gvr)) : "Precio pendiente";
-    const estado = document.createElement("div"); estado.className = "producto-estado";
-    if (comprable) estado.textContent = "Disponible";
-    else if (!proveedor) estado.textContent = "No encontrado en catálogo";
-    else if (proveedor.available !== true) estado.textContent = "No disponible en proveedor";
-    else if (!local) estado.textContent = "Falta configurar en Supabase";
-    else if (local.active !== true) estado.textContent = "Oferta temporalmente inactiva";
-    else estado.textContent = "Revisar precio GVR";
+    const icono = document.createElement("div");
+    icono.className = "oferta-icono";
+    icono.textContent = "★";
+    const nombre = document.createElement("div");
+    nombre.className = "producto-nombre";
+    nombre.textContent = String(local.product_name || "Oferta especial").split(" [")[0];
+    const precio = document.createElement("div");
+    precio.className = "producto-precio";
+    precio.textContent = Number(local.price_gvr) > 0 ? mostrarPrecio(Number(local.price_gvr)) : "Precio pendiente";
+    const estado = document.createElement("div");
+    estado.className = "producto-estado";
+    estado.textContent = comprable ? "Disponible" : "Temporalmente inactiva";
     tarjeta.append(icono, nombre, precio, estado);
     if (comprable) {
-      const productoConNombre = { ...proveedor, nombreMostrar: oferta.nombre };
+      const productoConNombre = { ...proveedor, nombreMostrar: nombre.textContent };
       tarjeta.addEventListener("click", () => seleccionarProducto(productoConNombre, local, "oferta", tarjeta));
     }
     catalogoOfertas.appendChild(tarjeta);
