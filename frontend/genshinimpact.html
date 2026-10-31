@@ -902,7 +902,7 @@ function renderizarDiamantes() {
   productosDisponibles.filter(p => p.product_type === "topup").forEach(p => {
     const btn = document.createElement("button");
     btn.type = "button"; btn.className = "producto"; btn.setAttribute("aria-pressed", "false"); btn.dataset.ggProductId = String(p.id);
-    const n = document.createElement("div"); n.className = "producto-nombre"; n.textContent = nombreProducto(p);
+    n.textContent = nombreProducto(p).split(" [")[0];
     const price = document.createElement("div"); price.className = "producto-precio"; price.textContent = gvr(p.price_gvr);
     const state = document.createElement("div"); state.className = "producto-estado"; state.textContent = "Disponible";
     btn.append(n, price, state);
@@ -934,7 +934,7 @@ function renderizarOfertas() {
     icon.textContent = "★";
     const n = document.createElement("div");
     n.className = "producto-nombre";
-    n.textContent = nombreProducto(p).replace(/\s+\\[[^\]]+\]$/, "");
+    n.textContent = nombreProducto(p).split(" [")[0];
     const price = document.createElement("div");
     price.className = "producto-precio";
     price.textContent = gvr(p.price_gvr);
