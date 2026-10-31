@@ -774,7 +774,7 @@ function renderizarOfertasPUBG() {
    if (producto.id) tarjeta.dataset.ggProductId = String(producto.id);
    const nombre = document.createElement("div");
    nombre.className = "producto-nombre";
-   nombre.textContent = String(producto.product_name || "Oferta especial").replace(/\\s+\\[[^\\]]+\\]$/, "");
+   nombre.textContent = String(producto.product_name || "Oferta especial").replace(/\s+\\[[^\]]+\]$/, "");
    const precio = document.createElement("div");
    precio.className = "producto-precio";
    const estado = document.createElement("div");
