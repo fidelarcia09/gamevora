@@ -142,7 +142,7 @@ function iniciar(){
   cargandoTarifas=(async()=>{
    const client=await clientePago;
    const [productsResult,pricesResult]=await Promise.all([
-    client.from("game_products").select("id,product_name,provider_product_id,game,price_gvr,active").eq("active",true).eq("provider","nextlevel"),
+    client.from("game_products").select("id,product_name,provider_product_id,game,price_gvr,active").eq("active",true).eq("provider","rechargegames"),
     client.from("manual_game_product_prices").select("product_id,payment_method,base_amount,payment_currency").eq("active",true)
    ]);
    if(productsResult.error)throw productsResult.error;
@@ -168,7 +168,7 @@ function iniciar(){
   if(cargandoProductosGVR)return cargandoProductosGVR;
   cargandoProductosGVR=(async()=>{
    const client=await clientePago;
-   const {data,error}=await client.from("game_products").select("id,product_name,provider_product_id,game,price_gvr,active").eq("active",true).eq("provider","nextlevel");
+   const {data,error}=await client.from("game_products").select("id,product_name,provider_product_id,game,price_gvr,active").eq("active",true).eq("provider","rechargegames");
    if(error)throw error;
    productosCache=data||[];
   })();
@@ -349,7 +349,7 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
     const zoneId=zoneField?zoneField.value.trim():null;
     boton.disabled=true;
     try{
-     const response=await fetch(SUPABASE_URL+"/functions/v1/nextlevel-crear-pedido",{method:"POST",headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+session.access_token,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({game_order_id:savedManualId,zone_id:zoneId||null}),cache:"no-store"});
+     const response=await fetch(SUPABASE_URL+"/functions/v1/rechargegames-crear-pedido",{method:"POST",headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+session.access_token,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({game_order_id:savedManualId,zone_id:zoneId||null}),cache:"no-store"});
      let result;try{result=await response.json();}catch{result={};}
      if(!response.ok||result.success!==true){
       const error=new Error(result.error||result.message||"No se pudo continuar el pedido. No vuelvas a pagar; revisa el estado con administración.");
