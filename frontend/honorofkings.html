@@ -694,7 +694,7 @@ function renderizarTokens() {
   if (!productosTokens.length) {
     const vacio = document.createElement("div");
     vacio.className = "estado";
-    vacio.textContent = "No encontramos paquetes de Tokens disponibles en Next Level.";
+    vacio.textContent = "No encontramos paquetes de Tokens disponibles en RechargeGames.";
     catalogo.appendChild(vacio);
     return;
   }
@@ -771,7 +771,7 @@ async function cargarCatalogo() {
     if (!respuestaHTTP.ok) throw new Error(resultado.error || resultado.message || "Error HTTP " + respuestaHTTP.status);
     if (resultado?.success === false) throw new Error(resultado.message || resultado.error || "No se pudo cargar el catálogo.");
     const productos = extraerProductos(resultado);
-    if (!productos.length) throw new Error("Next Level no devolvió productos para Honor of Kings.");
+    if (!productos.length) throw new Error("RechargeGames no devolvió productos para Honor of Kings.");
     const mapa = new Map();
     productos.forEach(p => {
       const id = obtenerProductId(p);
@@ -984,7 +984,7 @@ iniciar();
 }
 </style>
 <style id="gg-payment-price-alignment">
-/* Tipografía y ubicación inspiradas en las tarjetas de Next Level. Se conserva el espacio izquierdo para la imagen y el tamaño exterior de cada tarjeta. */
+/* Estilo visual del catálogo de Gamers Gold Top-Up. Se conserva el espacio izquierdo para la imagen y el tamaño exterior de cada tarjeta. */
 #catalogo .producto,
 #catalogoOfertas .producto{
   box-sizing:border-box!important;
