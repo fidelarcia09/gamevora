@@ -135,12 +135,11 @@
             width: 100%;
             height: 100%;
             display: block;
-            object-fit: cover;
-            object-position: center 35%;
-            transform: scale(1.025);
-            transition: transform 5.5s ease;
+            object-fit: contain;
+            object-position: center center;
+            transform: none;
+            transition: none;
         }
-        .splash-slide.activo > img { transform: scale(1.09); }
         .splash-overlay {
             position: absolute;
             inset: 0;
@@ -692,7 +691,7 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
 <section class="banner splash-juegos" aria-label="Juegos disponibles en Gamers Gold Top-Up">
     <div class="splash-carrusel" id="splash-carrusel">
         <article class="splash-slide activo" aria-hidden="false">
-            <img src="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png" alt="Free Fire" loading="eager" fetchpriority="high" decoding="async">
+            <img src="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png" alt="Free Fire" loading="eager" fetchpriority="high" decoding="sync">
             <div class="splash-overlay"></div>
             <div class="splash-slide-contenido"><span class="splash-kicker">GAMERS GOLD TOP-UP</span><h1>FREE FIRE</h1><p>Recarga y entra en la batalla</p></div>
         </article>
