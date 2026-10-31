@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
     <meta name="description" content="Gamers Gold Top-Up: recargas digitales para tus juegos favoritos.">
+    <link rel="prefetch" as="image" href="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png">
+    <link rel="prefetch" as="image" href="./imagenes/file_00000000a7e081f9b4b5577efa5f6066.png">
+    <link rel="prefetch" as="image" href="./imagenes/file_00000000cde881f6a366f4dbeb1a5fd0.png">
+    <link rel="prefetch" as="image" href="./imagenes/file_00000000eb3881f9a2e363c447e0f6ba.png">
+    <link rel="prefetch" as="image" href="./imagenes/file_00000000061881f7812f5a04ddc3600d.png">
+    <link rel="prefetch" as="image" href="./imagenes/file_00000000266081f685eb030a10579fbe.png">
+    <link rel="prefetch" as="image" href="./imagenes/file_00000000da8481f980717bbfaf5b7888.png">
     <title>Gamers Gold Top-Up | Recargas Gaming</title>
 
     <link rel="preload" as="image" href="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png" fetchpriority="high">
@@ -1383,6 +1390,22 @@
     <script src="./goldi-widget.js?v=20261023-16" defer></script>
 
 <script src="./tema-global.js?v=20261023-1" defer></script>
+
+<script>
+/* Precarga suave del carrusel de Juegos para que el navegador tenga las imágenes en caché antes de navegar. */
+(() => {
+    const rutas = ["./imagenes/file_00000000323881f5b39e628c9a42a0d2.png","./imagenes/file_00000000a7e081f9b4b5577efa5f6066.png","./imagenes/file_00000000cde881f6a366f4dbeb1a5fd0.png","./imagenes/file_00000000eb3881f9a2e363c447e0f6ba.png","./imagenes/file_00000000061881f7812f5a04ddc3600d.png","./imagenes/file_00000000266081f685eb030a10579fbe.png","./imagenes/file_00000000da8481f980717bbfaf5b7888.png"];
+    const iniciar = () => rutas.forEach(ruta => {
+        const imagen = new Image();
+        imagen.decoding = "async";
+        imagen.fetchPriority = "low";
+        imagen.src = ruta;
+    });
+    if ("requestIdleCallback" in window) requestIdleCallback(iniciar, { timeout: 1200 });
+    else setTimeout(iniciar, 250);
+})();
+</script>
+
 </body>
 </html>
 
