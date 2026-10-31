@@ -16,7 +16,7 @@
 
   const panel = document.createElement("section");
   panel.className = "gg-rg-panel";
-  panel.innerHTML = \`
+  panel.innerHTML = `
     <a class="gg-rg-back" href="juegos.html">← Volver a juegos</a>
     <h1></h1>
     <p class="gg-rg-sub">Catálogo de RechargeGames · precios mostrados en GVR.</p>
@@ -30,7 +30,7 @@
     </div>
     <div class="gg-rg-status" id="ggRgStatus" role="status" aria-live="polite">Consultando catálogo de RechargeGames...</div>
     <div class="gg-rg-grid" id="ggRgGrid"></div>
-  \`;
+  `;
   if (oldMain) container.insertBefore(panel, oldMain);
   else container.appendChild(panel);
 
