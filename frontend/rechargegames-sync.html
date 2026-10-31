@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050b18">
 <title>Sincronizar RechargeGames | Gamers Gold Top-Up</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 body{min-height:100vh;padding:16px;background:radial-gradient(circle at top,#102b55 0%,#06101f 48%,#02060d 100%);color:#fff}
@@ -55,11 +55,11 @@ Precios: coste del proveedor + 25 % · Conversión: 1 USDT = 1 GVR.
 "use strict";
 const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
 const btnPreview=document.getElementById("previsualizar");
 const btnImport=document.getElementById("importar");
 const estado=document.getElementById("estado");
 const resumen=document.getElementById("resumen");
+let supabaseClient=null;
 let previewValido=false;
 function mostrar(m,tipo=""){estado.textContent=m;estado.className=tipo;estado.style.display="block"}
 function pintarResumen(data){
@@ -82,25 +82,49 @@ function pintarResumen(data){
   stats.append(l,v);resumen.append(stats);
  }
  if(Array.isArray(data.errors)&&data.errors.length){
-  const e=document.createElement("div");e.className="aviso";e.textContent="Errores detectados: "+data.errors.length+"\n"+data.errors.map(x=>x.game+": "+x.error).join("\n");resumen.append(e);
+  const e=document.createElement("div");e.className="aviso";e.textContent="Errores detectados: "+data.errors.length+"\\n"+data.errors.map(x=>x.game+": "+x.error).join("\\n");resumen.append(e);
  }
 }
+function cargarSDK(url){
+ return new Promise((resolve,reject)=>{
+  const s=document.createElement("script");
+  s.src=url;s.async=true;
+  s.onload=()=>window.supabase?.createClient?resolve():reject(new Error("El archivo de Supabase cargó, pero no está disponible."));
+  s.onerror=()=>reject(new Error("No se pudo cargar "+url));
+  document.head.appendChild(s);
+ });
+}
+async function prepararSupabase(){
+ if(supabaseClient)return supabaseClient;
+ const fuentes=[
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
+  "https://unpkg.com/@supabase/supabase-js@2"
+ ];
+ let ultimoError=null;
+ for(const url of fuentes){
+  try{await cargarSDK(url);supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});return supabaseClient}
+  catch(e){ultimoError=e}
+ }
+ throw new Error("No se pudo cargar la conexión de Supabase desde los servidores disponibles. Comprueba tu conexión o bloqueador del navegador y vuelve a intentarlo. Detalle: "+(ultimoError?.message||"SDK no disponible"));
+}
 async function comprobarAdmin(){
- const {data:{session},error}=await supabase.auth.getSession();
+ const client=await prepararSupabase();
+ const {data:{session},error}=await client.auth.getSession();
  if(error||!session?.access_token)throw new Error("Inicia sesión con tu cuenta administradora desde Gamers Gold.");
- const {data:admin,error:adminError}=await supabase.rpc("is_support_admin");
+ const {data:admin,error:adminError}=await client.rpc("is_support_admin");
  if(adminError||admin!==true)throw new Error("Esta herramienta es solo para administradores autorizados.");
 }
 async function ejecutar(apply){
  await comprobarAdmin();
- const {data,error}=await supabase.functions.invoke("rechargegames-sync-catalog",{body:{apply}});
+ const {data,error}=await supabaseClient.functions.invoke("rechargegames-sync-catalog",{body:{apply}});
  if(error)throw new Error(error.message||"No se pudo ejecutar la sincronización.");
  if(!data)throw new Error("El servidor no devolvió un resultado.");
  return data;
 }
 btnPreview.addEventListener("click",async()=>{
- btnPreview.disabled=true;btnImport.disabled=true;previewValido=false;resumen.replaceChildren();mostrar("Consultando los siete catálogos…");
+ btnPreview.disabled=true;btnImport.disabled=true;previewValido=false;resumen.replaceChildren();mostrar("Iniciando consulta…");
  try{
+  mostrar("Comprobando conexión y permisos…");
   const data=await ejecutar(false);pintarResumen(data);
   if(!data.ok)throw new Error("La consulta terminó con errores. No se habilitó la importación. Revisa el detalle.");
   previewValido=true;btnImport.disabled=false;
@@ -119,7 +143,9 @@ btnImport.addEventListener("click",async()=>{
   mostrar("Importación completada. Los productos siguen DESACTIVADOS. No se habilitaron compras ni se crearon pedidos.","ok");
  }catch(e){mostrar(e.message||"Error al importar los catálogos.","error");btnPreview.disabled=false}
 });
-comprobarAdmin().then(()=>mostrar("Sesión administrativa verificada. Primero consulta los catálogos.","ok")).catch(e=>{mostrar(e.message,"error");btnPreview.disabled=true});
+window.addEventListener("error",e=>mostrar("Error de JavaScript: "+(e.message||"desconocido"),"error"));
+mostrar("Página lista. Pulsa «Consultar catálogos» para iniciar la comprobación.","ok");
+prepararSupabase().then(()=>comprobarAdmin()).then(()=>mostrar("Sesión administrativa verificada. Primero consulta los catálogos.","ok")).catch(e=>{mostrar(e.message,"error")});
 </script>
 </body>
 </html>
