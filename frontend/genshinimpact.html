@@ -899,7 +899,7 @@ function seleccionarTarjeta(producto, boton, estadoElemento, esOferta = false) {
 }
 function renderizarDiamantes() {
   catalogo.replaceChildren();
-  productosDisponibles.filter(p => PRODUCTOS_DIAMANTES.includes(String(p.provider_product_id || ""))).forEach(p => {
+  productosDisponibles.filter(p => p.product_type === "topup").forEach(p => {
     const btn = document.createElement("button");
     btn.type = "button"; btn.className = "producto"; btn.setAttribute("aria-pressed", "false"); btn.dataset.ggProductId = String(p.id);
     const n = document.createElement("div"); n.className = "producto-nombre"; n.textContent = nombreProducto(p);
@@ -915,19 +915,37 @@ function renderizarDiamantes() {
 }
 function renderizarOfertas() {
   catalogoOfertas.replaceChildren();
-  PRODUCTOS_OFERTAS.forEach(oferta => {
-    const p = productosDisponibles.find(producto => String(producto.provider_product_id || "") === oferta.id);
-    if (!p) {
-      const aviso = document.createElement("div"); aviso.className = "estado"; aviso.textContent = oferta.nombre + " no está disponible en este momento."; catalogoOfertas.appendChild(aviso); return;
-    }
+  const ofertas = productosDisponibles.filter(p => p.product_type === "special_offer");
+  if (!ofertas.length) {
+    const aviso = document.createElement("div");
+    aviso.className = "estado";
+    aviso.textContent = "No hay ofertas especiales configuradas en este momento.";
+    catalogoOfertas.appendChild(aviso);
+    return;
+  }
+  ofertas.forEach(p => {
     const btn = document.createElement("button");
-    btn.type = "button"; btn.className = "producto producto-oferta"; btn.setAttribute("aria-pressed", "false"); btn.dataset.ggProductId = String(p.id);
-    const icon = document.createElement("div"); icon.className = "oferta-icono"; icon.textContent = oferta.icono;
-    const n = document.createElement("div"); n.className = "producto-nombre"; n.textContent = oferta.nombre;
-    const price = document.createElement("div"); price.className = "producto-precio"; price.textContent = gvr(p.price_gvr);
-    const state = document.createElement("div"); state.className = "producto-estado"; state.textContent = "Disponible";
+    btn.type = "button";
+    btn.className = "producto producto-oferta";
+    btn.setAttribute("aria-pressed", "false");
+    btn.dataset.ggProductId = String(p.id);
+    const icon = document.createElement("div");
+    icon.className = "oferta-icono";
+    icon.textContent = "★";
+    const n = document.createElement("div");
+    n.className = "producto-nombre";
+    n.textContent = nombreProducto(p).replace(/\\s+\\[[^\\]]+\\]$/, "");
+    const price = document.createElement("div");
+    price.className = "producto-precio";
+    price.textContent = gvr(p.price_gvr);
+    const state = document.createElement("div");
+    state.className = "producto-estado";
+    const disponible = p.active === true && Number.isFinite(Number(p.price_gvr)) && Number(p.price_gvr) > 0;
+    state.textContent = disponible ? "Disponible" : "Temporalmente inactiva";
+    btn.disabled = !disponible;
+    if (!disponible) btn.classList.add("producto-no-disponible");
     btn.append(icon, n, price, state);
-    btn.addEventListener("click", () => seleccionarTarjeta({ ...p, product_name: oferta.nombre }, btn, state, true));
+    if (disponible) btn.addEventListener("click", () => seleccionarTarjeta({ ...p, product_name: n.textContent }, btn, state, true));
     catalogoOfertas.appendChild(btn);
   });
 }
@@ -936,16 +954,12 @@ async function cargarCatalogo() {
   mostrarEstado("Cargando catálogo de Genshin Impact...");
   try {
     const { data, error } = await supabase.from("game_products")
-      .select("id,game,product_name,price_gvr,active,provider,provider_product_id")
-      .eq("game", "Genshin Impact").eq("active", true).eq("provider", "rechargegames")
-      .in("provider_product_id", PRODUCTOS_PERMITIDOS);
+      .select("id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region,product_type")
+      .eq("game", "Genshin Impact").eq("provider", "rechargegames");
     if (error) throw error;
-    const mapa = new Map();
-    (data || []).forEach(p => {
-      const id = String(p.provider_product_id || ""), precio = precioProducto(p);
-      if (PRODUCTOS_PERMITIDOS.includes(id) && p.id && nombreProducto(p) && precio) mapa.set(id, { ...p, price_gvr: precio });
-    });
-    productosDisponibles = PRODUCTOS_PERMITIDOS.filter(id => mapa.has(id)).map(id => mapa.get(id));
+    productosDisponibles = (data || []).filter(p =>
+      p && p.id && p.provider_product_id && Number.isFinite(Number(p.price_gvr)) && Number(p.price_gvr) > 0
+    ).map(p => ({ ...p, price_gvr: precioProducto(p) }));
     renderizarDiamantes();
     renderizarOfertas();
     mostrarEstado("");
@@ -964,8 +978,8 @@ function validarFormulario() {
   if (!jugador) { mostrarError("Introduce tu UID de Genshin Impact."); idJugador.focus(); return false; }
   if (jugador.length > 100) { mostrarError("El UID del jugador no es válido."); idJugador.focus(); return false; }
   if (!SERVIDORES_PERMITIDOS.includes(zona)) { mostrarError("Selecciona un servidor válido."); zonaJugador.focus(); return false; }
-  const idsPermitidosVista = vistaActual === "ofertas" ? PRODUCTOS_OFERTAS.map(o => o.id) : PRODUCTOS_DIAMANTES;
-  if (!productoSeleccionado || !productosDisponibles.some(p => p.id === productoSeleccionado.id) || !idsPermitidosVista.includes(String(productoSeleccionado.provider_product_id || ""))) { mostrarError(vistaActual === "ofertas" ? "Selecciona una oferta disponible." : "Selecciona un paquete disponible."); return false; }
+  const tipoEsperado = vistaActual === "ofertas" ? "special_offer" : "topup";
+  if (!productoSeleccionado || !productosDisponibles.some(p => p.id === productoSeleccionado.id) || productoSeleccionado.product_type !== tipoEsperado) { mostrarError(vistaActual === "ofertas" ? "Selecciona una oferta disponible." : "Selecciona un paquete disponible."); return false; }
   return true;
 }
 async function llamarFuncion(url, token, body) {
