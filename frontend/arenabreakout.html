@@ -840,9 +840,9 @@ if(!all.length)throw new Error("Next Level no devolvió productos para Arena Bre
 const map=new Map();
 all.forEach(p=>{
 const id=productId(p);
-if(p&&p.available===true&&BONDS_PERMITIDOS.includes(id))map.set(id,p);
+if(p&&p.available===true&&/\\bbonds?\\b/i.test(nombre(p)))map.set(id,p);
 });
-productosDisponibles=BONDS_PERMITIDOS.filter(id=>map.has(id)).map(id=>map.get(id));
+productosDisponibles=Array.from(map.values()).sort((a,b)=>(parseInt(nombre(a).replace(/[^0-9]/g,""),10)||0)-(parseInt(nombre(b).replace(/[^0-9]/g,""),10)||0));
 if(!productosDisponibles.length){mostrarEstado("No se encontraron Bonds disponibles en Next Level.","error");return;}
 productosDisponibles.forEach(p=>{
 const local=localDe(p);
