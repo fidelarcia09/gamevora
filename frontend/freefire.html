@@ -1678,9 +1678,8 @@ function obtenerNombre(producto) {
 }
 
 function esOfertaLATAM(producto) {
-    return String(producto.region || "")
-        .trim()
-        .toUpperCase() === "LATAM & USA";
+    return normalizarTexto(producto.region || producto.provider_region || "").includes("latam") ||
+        obtenerProductId(producto).toLowerCase().includes("/latam/");
 }
 
 function esPaqueteDiamantes(producto) {
@@ -1706,7 +1705,7 @@ async function cargarProductosLocales() {
     const { data, error } = await supabase
         .from("game_products")
         .select(
-            "id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region"
+            "id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region,product_type"
         )
         .eq("provider", "rechargegames");
 
@@ -1845,84 +1844,50 @@ function buscarProductoProveedorPorId(productId) {
 
 function renderizarOfertas() {
     catalogoOfertas.replaceChildren();
+    const ofertas = productosLocales.filter(producto =>
+        producto.product_type === "special_offer" &&
+        String(producto.provider_region || "").toLowerCase() === "latam"
+    );
 
-    OFERTAS_FREE_FIRE.forEach(oferta => {
-        const productoProveedor =
-            buscarProductoProveedorPorId(oferta.id);
+    if (!ofertas.length) {
+        const aviso = document.createElement("div");
+        aviso.className = "estado";
+        aviso.textContent = "No hay ofertas especiales importadas para la región LATAM.";
+        catalogoOfertas.appendChild(aviso);
+        return;
+    }
 
-        const productoLocal = productosLocales.find(producto =>
-            String(producto.provider_product_id || "").trim() === oferta.id
-        ) || null;
-
-        const proveedorDisponible =
-            productoProveedor !== null &&
-            productoProveedor.available !== false;
-
-        const comprable =
-            proveedorDisponible &&
-            productoComprable(productoLocal);
-
-        const productoParaCompra = productoProveedor
-            ? {
-                ...productoProveedor,
-                nombreMostrar: oferta.nombre
-            }
-            : null;
-
+    ofertas.forEach(local => {
+        const id = String(local.provider_product_id || "").trim();
+        const proveedor = buscarProductoProveedorPorId(id) || {
+            productId: id,
+            name: String(local.product_name || "").replace(/\\s+\\[[^\\]]+\\]$/, ""),
+            available: true
+        };
+        const comprable = productoComprable(local);
         const tarjeta = document.createElement("button");
-
         tarjeta.type = "button";
         tarjeta.className = "producto producto-oferta";
-        if (productoLocal?.id) tarjeta.dataset.ggProductId = String(productoLocal.id);
-
-        if (!comprable) {
-            tarjeta.classList.add("producto-no-disponible");
-            tarjeta.disabled = true;
-        }
+        if (local.id) tarjeta.dataset.ggProductId = String(local.id);
+        tarjeta.disabled = !comprable;
+        if (!comprable) tarjeta.classList.add("producto-no-disponible");
 
         const nombre = document.createElement("div");
         nombre.className = "producto-nombre";
-        nombre.textContent = oferta.nombre;
-
+        nombre.textContent = String(local.product_name || "Oferta especial").replace(/\\s+\\[[^\\]]+\\]$/, "");
         const precio = document.createElement("div");
         precio.className = "producto-precio";
-
+        precio.textContent = Number(local.price_gvr) > 0 ? mostrarPrecio(local.price_gvr) : "Precio pendiente";
         const estado = document.createElement("div");
         estado.className = "producto-estado";
-
-        if (productoComprable(productoLocal)) {
-            precio.textContent = mostrarPrecio(Number(productoLocal.price_gvr));
-        } else {
-            precio.textContent = "Precio pendiente";
-        }
-
-        if (comprable) {
-            estado.textContent = "Disponible";
-        } else if (!productoProveedor) {
-            estado.textContent = "Producto no encontrado en el catálogo";
-        } else if (productoProveedor.available === false) {
-            estado.textContent = "No disponible en el proveedor";
-        } else if (!productoLocal) {
-            estado.textContent = "Falta configurar el producto en Supabase";
-        } else if (productoLocal.active !== true) {
-            estado.textContent = "Oferta temporalmente inactiva";
-        } else {
-            estado.textContent = "Revisar el precio GVR";
-        }
-
+        estado.textContent = comprable ? "Disponible" : "Temporalmente inactiva";
         tarjeta.append(nombre, precio, estado);
 
         if (comprable) {
             tarjeta.addEventListener("click", () => {
-                seleccionarProducto(
-                    productoParaCompra,
-                    productoLocal,
-                    "oferta",
-                    tarjeta
-                );
+                seleccionarProducto(proveedor, local, "oferta", tarjeta);
             });
         }
-
         catalogoOfertas.appendChild(tarjeta);
     });
 }
@@ -2000,18 +1965,7 @@ async function cargarCatalogo() {
                 productoComprable(buscarProductoLocal(producto))
             ).length;
 
-        const ofertasComprables =
-            OFERTAS_FREE_FIRE.filter(oferta => {
-                const proveedor = buscarProductoProveedorPorId(oferta.id);
-
-                const local = productosLocales.find(producto =>
-                    String(producto.provider_product_id || "").trim() === oferta.id
-                );
-
-                return proveedor &&
-                    proveedor.available !== false &&
-                    productoComprable(local);
-            }).length;
+        const ofertasComprables = ofertas.filter(productoComprable).length;
 
         if (vistaActual === "nivel") {
             mostrarEstado(
