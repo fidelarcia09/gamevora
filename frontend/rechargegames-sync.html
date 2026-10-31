@@ -114,11 +114,34 @@ async function comprobarAdmin(){
  const {data:admin,error:adminError}=await client.rpc("is_support_admin");
  if(adminError||admin!==true)throw new Error("Esta herramienta es solo para administradores autorizados.");
 }
+async function detalleErrorFuncion(error){
+ let detalle=error?.message||"Error desconocido";
+ const respuesta=error?.context;
+ if(respuesta){
+  try{
+   const copia=respuesta.clone();
+   const texto=await copia.text();
+   if(texto){
+    try{
+     const cuerpo=JSON.parse(texto);
+     const partes=[cuerpo.error,cuerpo.detail,cuerpo.message].filter(Boolean);
+     if(partes.length)detalle=partes.join(" — ");
+     else detalle=texto.slice(0,1200);
+    }catch{detalle=texto.slice(0,1200)}
+   }
+   detalle="HTTP "+respuesta.status+" "+respuesta.statusText+" — "+detalle;
+  }catch(e){
+   detalle+=" (No se pudo leer la respuesta del servidor.)";
+  }
+ }
+ return detalle;
+}
 async function ejecutar(apply){
  await comprobarAdmin();
  const {data,error}=await supabaseClient.functions.invoke("rechargegames-sync-catalog",{body:{apply}});
- if(error)throw new Error(error.message||"No se pudo ejecutar la sincronización.");
+ if(error)throw new Error("Error de RechargeGames Sync: "+await detalleErrorFuncion(error));
  if(!data)throw new Error("El servidor no devolvió un resultado.");
+ if(data.ok===false)throw new Error([data.error,data.detail].filter(Boolean).join(" — ")||"La función informó un error.");
  return data;
 }
 btnPreview.addEventListener("click",async()=>{
