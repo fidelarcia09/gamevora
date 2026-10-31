@@ -707,8 +707,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-const URL_CREAR_PEDIDO = SUPABASE_URL + "/functions/v1/nextlevel-crear-pedido";
-const URL_CONSULTAR_PEDIDO = SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
+const URL_CREAR_PEDIDO = SUPABASE_URL + "/functions/v1/rechargegames-crear-pedido";
+const URL_CONSULTAR_PEDIDO = SUPABASE_URL + "/functions/v1/rechargegames-consultar-pedido";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
 });
@@ -937,7 +937,7 @@ async function cargarCatalogo() {
   try {
     const { data, error } = await supabase.from("game_products")
       .select("id,game,product_name,price_gvr,active,provider,provider_product_id")
-      .eq("game", "Genshin Impact").eq("active", true).eq("provider", "nextlevel")
+      .eq("game", "Genshin Impact").eq("active", true).eq("provider", "rechargegames")
       .in("provider_product_id", PRODUCTOS_PERMITIDOS);
     if (error) throw error;
     const mapa = new Map();
@@ -1027,7 +1027,7 @@ async function crearCompra(token, jugador, zona) {
   const seleccionado = productoSeleccionado;
   const { data: actual, error } = await supabase.from("game_products")
     .select("id,game,product_name,price_gvr,active,provider,provider_product_id")
-    .eq("id", seleccionado.id).eq("game", "Genshin Impact").eq("provider", "nextlevel").eq("active", true).maybeSingle();
+    .eq("id", seleccionado.id).eq("game", "Genshin Impact").eq("provider", "rechargegames").eq("active", true).maybeSingle();
   if (error) throw new Error("No se pudo verificar el paquete antes de comprar.");
   const idProductoActual = String(actual?.provider_product_id || "");
   if (!actual || !PRODUCTOS_PERMITIDOS.includes(idProductoActual) || !precioProducto(actual)) throw new Error("El producto ya no está disponible o su precio no es válido. Actualiza el catálogo.");
