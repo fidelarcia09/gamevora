@@ -817,11 +817,23 @@ async function cargarOfertas() {
                 return productosPorId[idConfigurado];
             }
 
+            const aliasProveedorPUBG = {
+                "fz-pubg_mobile_auto-prime_1_month": "Prime (1 month)",
+                "fz-pubg_mobile_auto-prime_3_months": "Prime (3 months)",
+                "fz-pubg_mobile_auto-prime_6_months": "Prime (6 months)",
+                "fz-pubg_mobile_auto-prime_12_months": "Prime (12 months)",
+                "fz-pubg_mobile_auto-prime_plus_1_month": "Prime Plus (1 month)",
+                "fz-pubg_mobile_auto-prime_plus_3_months": "Prime Plus (3 months)",
+                "fz-pubg_mobile_auto-prime_plus_6_months": "Prime Plus (6 months)",
+                "fz-pubg_mobile_auto-prime_plus_12_months": "Prime Plus (12 months)"
+            };
+
             const nombresBuscados = [
                 oferta?.nombre,
                 oferta?.product_name,
                 oferta?.productName,
-                oferta?.name
+                oferta?.name,
+                aliasProveedorPUBG[idConfigurado]
             ]
                 .filter(Boolean)
                 .map(nombre => normalizarTexto(nombre));
@@ -853,7 +865,7 @@ async function cargarOfertas() {
 
             if (!productoProveedor) {
                 console.warn(
-                    "[Gamers Gold] Oferta no encontrada en Next Level:",
+                    "[Gamers Gold] Oferta no encontrada en RechargeGames:",
                     oferta?.id || oferta?.nombre
                 );
                 return;
