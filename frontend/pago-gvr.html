@@ -420,7 +420,7 @@
     const precios = {
         "CUP": 1050,
         "USDT": 1,
-        "Saldo móvil": 250
+        "Saldo móvil": 340
     };
 
     const cantidad = Number(cantidadTexto);
@@ -466,9 +466,10 @@
     }
 
     function cantidadValida() {
-        return Number.isSafeInteger(cantidad)
+        return Number.isFinite(cantidad)
             && cantidad >= 1
-            && cantidad <= 1000000;
+            && cantidad <= 1000000
+            && Math.round(cantidad * 10) === cantidad * 10;
     }
 
     function actualizarResumen() {
