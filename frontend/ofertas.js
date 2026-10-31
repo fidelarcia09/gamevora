@@ -14,13 +14,13 @@ const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
 const URL_CATALOGO =
-    `${SUPABASE_URL}/functions/v1/nextlevel-catalogo`;
+    `${SUPABASE_URL}/functions/v1/rechargegames-catalogo`;
 
 const URL_CREAR_PEDIDO =
-    `${SUPABASE_URL}/functions/v1/nextlevel-crear-pedido`;
+    `${SUPABASE_URL}/functions/v1/rechargegames-crear-pedido`;
 
 const URL_CONSULTAR_PEDIDO =
-    `${SUPABASE_URL}/functions/v1/nextlevel-consultar-pedido`;
+    `${SUPABASE_URL}/functions/v1/rechargegames-consultar-pedido`;
 
 const TIEMPO_LIMITE = 15000;
 
@@ -242,7 +242,7 @@ function mensajeErrorPedido(error) {
     if (
         textoCompleto.includes("reembols") ||
         textoCompleto.includes("proveedor") ||
-        textoCompleto.includes("nextlevel") ||
+        textoCompleto.includes("rechargegames") ||
         textoCompleto.includes("next level") ||
         textoCompleto.includes("nxc") ||
         textoCompleto.includes("insufficient_balance") ||
@@ -574,72 +574,43 @@ function recuperarPedidoPendiente(userId) {
 
 
 /* =========================================================
-   CATÁLOGO NEXT LEVEL
+   CATÁLOGO RECHARGEGAMES
    ========================================================= */
 
-async function consultarCatalogoNextLevel() {
+async function consultarCatalogoRechargeGames() {
     if (!JUEGO_API) {
         throw new Error(
-            "El juego de esta página no está configurado correctamente."
+            "El juego de esta página no está configurado en RechargeGames."
         );
     }
 
-    const controlador = new AbortController();
+    const { data, error } = await supabase
+        .from("game_products")
+        .select("product_name,active,provider_product_id,provider_region,product_type")
+        .eq("provider", "rechargegames")
+        .eq("game", NOMBRE_JUEGO)
+        .eq("product_type", "special_offer");
 
-    const temporizador = setTimeout(
-        () => controlador.abort(),
-        TIEMPO_LIMITE
-    );
-
-    try {
-        const respuesta = await fetch(
-            `${URL_CATALOGO}?game=${encodeURIComponent(JUEGO_API)}`,
-            {
-                method: "GET",
-                headers: {
-                    apikey: SUPABASE_KEY,
-                    Authorization: `Bearer ${SUPABASE_KEY}`,
-                    Accept: "application/json"
-                },
-                signal: controlador.signal,
-                cache: "no-store"
-            }
-        );
-
-        const texto = await respuesta.text();
-
-        let resultado;
-
-        try {
-            resultado = JSON.parse(texto);
-        } catch {
-            throw new Error(
-                "Respuesta no válida al cargar el catálogo."
-            );
-        }
-
-        if (!respuesta.ok) {
-            throw new Error(
-                resultado.error ||
-                resultado.message ||
-                `Error HTTP ${respuesta.status}`
-            );
-        }
-
-        return extraerProductos(resultado);
-
-    } catch (error) {
-        if (error.name === "AbortError") {
-            throw new Error(
-                "La consulta del catálogo agotó el tiempo de espera."
-            );
-        }
-
-        throw error;
-
-    } finally {
-        clearTimeout(temporizador);
+    if (error) {
+        console.error("[Gamers Gold] Error consultando ofertas RechargeGames:", error);
+        throw new Error("No se pudieron cargar las ofertas especiales.");
     }
+
+    return (data || []).map(producto => {
+        const nombre = String(producto.product_name || "")
+            .replace(/\\s*\\[[^\\]]+\\]\\s*$/, "")
+            .trim();
+
+        return {
+            productId: String(producto.provider_product_id || "").trim(),
+            name: nombre,
+            productName: nombre,
+            product_name: nombre,
+            available: producto.active === true,
+            region: producto.provider_region || "",
+            kind: "special_offer"
+        };
+    }).filter(producto => producto.productId);
 }
 
 async function cargarProductosLocales() {
@@ -648,7 +619,7 @@ async function cargarProductosLocales() {
         .select(
             "id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region"
         )
-        .eq("provider", "nextlevel");
+        .eq("provider", "rechargegames");
 
     if (error) {
         console.error(
@@ -680,7 +651,7 @@ function productoComprable(local) {
     return Boolean(
         local &&
         local.active === true &&
-        local.provider === "nextlevel" &&
+        local.provider === "rechargegames" &&
         String(local.provider_product_id || "").trim() &&
         obtenerPrecioLocal(local) !== null
     );
@@ -813,7 +784,7 @@ async function cargarOfertas() {
 
     try {
         const [catalogoProveedor] = await Promise.all([
-            consultarCatalogoNextLevel(),
+            consultarCatalogoRechargeGames(),
             cargarProductosLocales()
         ]);
 
@@ -1291,7 +1262,7 @@ async function consultarPedido(accessToken) {
 
 
 /* =========================================================
-   ENVIAR PEDIDO AL PROVEEDOR
+   ENVIAR PEDIDO A RECHARGEGAMES
    ========================================================= */
 
 async function enviarPedido(accessToken) {
@@ -1412,7 +1383,7 @@ async function verificarPedidoGuardado(userId) {
 
 
 /* =========================================================
-   CREAR PEDIDO LOCAL Y ENVIARLO A NEXT LEVEL
+   CREAR PEDIDO LOCAL Y ENVIARLO A RECHARGEGAMES
    ========================================================= */
 
 async function crearCompra(
@@ -1429,7 +1400,7 @@ async function crearCompra(
     if (
         !local ||
         local.active !== true ||
-        local.provider !== "nextlevel" ||
+        local.provider !== "rechargegames" ||
         !local.provider_product_id ||
         obtenerPrecioLocal(local) === null
     ) {
@@ -1479,7 +1450,7 @@ async function crearCompra(
             "id,game,price_gvr,active,provider,provider_product_id"
         )
         .eq("id", local.id)
-        .eq("provider", "nextlevel")
+        .eq("provider", "rechargegames")
         .eq("active", true)
         .maybeSingle();
 
