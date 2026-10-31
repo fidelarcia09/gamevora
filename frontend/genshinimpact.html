@@ -899,18 +899,34 @@ function seleccionarTarjeta(producto, boton, estadoElemento, esOferta = false) {
 }
 function renderizarDiamantes() {
   catalogo.replaceChildren();
-  productosDisponibles.filter(p => p.product_type === "topup").forEach(p => {
+  const paquetes = productosDisponibles.filter(p => p.product_type === "topup");
+  paquetes.forEach(p => {
     const btn = document.createElement("button");
-    btn.type = "button"; btn.className = "producto"; btn.setAttribute("aria-pressed", "false"); btn.dataset.ggProductId = String(p.id);
+    btn.type = "button";
+    btn.className = "producto";
+    btn.setAttribute("aria-pressed", "false");
+    btn.dataset.ggProductId = String(p.id);
+    const n = document.createElement("div");
+    n.className = "producto-nombre";
     n.textContent = nombreProducto(p).split(" [")[0];
-    const price = document.createElement("div"); price.className = "producto-precio"; price.textContent = gvr(p.price_gvr);
-    const state = document.createElement("div"); state.className = "producto-estado"; state.textContent = "Disponible";
+    const price = document.createElement("div");
+    price.className = "producto-precio";
+    price.textContent = Number(p.price_gvr) > 0 ? gvr(p.price_gvr) : "Precio pendiente";
+    const state = document.createElement("div");
+    state.className = "producto-estado";
+    const disponible = p.active === true && Number.isFinite(Number(p.price_gvr)) && Number(p.price_gvr) > 0;
+    state.textContent = disponible ? "Disponible" : "Temporalmente inactivo";
+    btn.disabled = !disponible;
+    if (!disponible) btn.classList.add("producto-no-disponible");
     btn.append(n, price, state);
-    btn.addEventListener("click", () => seleccionarTarjeta(p, btn, state, false));
+    if (disponible) btn.addEventListener("click", () => seleccionarTarjeta(p, btn, state, false));
     catalogo.appendChild(btn);
   });
   if (!catalogo.children.length) {
-    const aviso = document.createElement("div"); aviso.className = "estado"; aviso.textContent = "No hay paquetes de Genesis Crystals disponibles."; catalogo.appendChild(aviso);
+    const aviso = document.createElement("div");
+    aviso.className = "estado";
+    aviso.textContent = "No hay paquetes de Genesis Crystals importados.";
+    catalogo.appendChild(aviso);
   }
 }
 function renderizarOfertas() {
