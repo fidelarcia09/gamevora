@@ -433,9 +433,9 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-const URL_CATALOGO = SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
-const URL_CREAR_PEDIDO = SUPABASE_URL + "/functions/v1/nextlevel-crear-pedido";
-const URL_CONSULTAR_PEDIDO = SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
+const URL_CATALOGO = SUPABASE_URL + "/functions/v1/rechargegames-catalogo";
+const URL_CREAR_PEDIDO = SUPABASE_URL + "/functions/v1/rechargegames-crear-pedido";
+const URL_CONSULTAR_PEDIDO = SUPABASE_URL + "/functions/v1/rechargegames-consultar-pedido";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
@@ -531,7 +531,7 @@ function mostrarPrecio(precio) {
 }
 function productoComprable(local) {
   return !!local && local.active === true && Number.isFinite(Number(local.price_gvr)) && Number(local.price_gvr) > 0 &&
-    local.provider === "nextlevel" && !!local.provider_product_id;
+    local.provider === "rechargegames" && !!local.provider_product_id;
 }
 function buscarLocalPorId(id) {
   return productosLocales.find(p => String(p.provider_product_id || "").trim() === String(id).trim()) || null;
@@ -685,7 +685,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && modalFondo
 async function cargarProductosLocales() {
   const { data, error } = await supabase.from("game_products")
     .select("id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region")
-    .eq("game", "Honor of Kings").eq("provider", "nextlevel");
+    .eq("game", "Honor of Kings").eq("provider", "rechargegames");
   if (error) throw new Error("No se pudieron verificar los productos y sus precios GVR.");
   productosLocales = data || [];
 }
@@ -845,7 +845,7 @@ async function crearCompra(accessToken, playerId) {
   }
   const { data: productoActual, error: errorProducto } = await supabase.from("game_products")
     .select("id,game,price_gvr,active,provider,provider_product_id")
-    .eq("id", local.id).eq("provider", "nextlevel").eq("active", true).maybeSingle();
+    .eq("id", local.id).eq("provider", "rechargegames").eq("active", true).maybeSingle();
   if (errorProducto) throw new Error("No se pudo verificar el producto antes de comprar.");
   if (!productoActual || normalizarTexto(productoActual.game) !== "honorofkings" ||
       String(productoActual.provider_product_id || "").trim() !== idProveedor ||
