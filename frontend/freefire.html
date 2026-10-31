@@ -1082,13 +1082,13 @@ const SUPABASE_KEY =
     "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 
 const URL_CATALOGO =
-    SUPABASE_URL + "/functions/v1/nextlevel-catalogo";
+    SUPABASE_URL + "/functions/v1/rechargegames-catalogo";
 
 const URL_CREAR_PEDIDO =
-    SUPABASE_URL + "/functions/v1/nextlevel-crear-pedido";
+    SUPABASE_URL + "/functions/v1/rechargegames-crear-pedido";
 
 const URL_CONSULTAR_PEDIDO =
-    SUPABASE_URL + "/functions/v1/nextlevel-consultar-pedido";
+    SUPABASE_URL + "/functions/v1/rechargegames-consultar-pedido";
 
 const URL_VALIDAR_JUGADOR =
     SUPABASE_URL + "/functions/v1/nextlevel-validar-jugador";
@@ -1875,7 +1875,7 @@ async function cargarProductosLocales() {
         .select(
             "id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region"
         )
-        .eq("provider", "nextlevel");
+        .eq("provider", "rechargegames");
 
     if (error) {
         console.error("Error consultando productos:", error.message);
@@ -2378,7 +2378,7 @@ async function crearCompra(accessToken, playerId) {
         local.active !== true ||
         !Number.isFinite(Number(local.price_gvr)) ||
         Number(local.price_gvr) <= 0 ||
-        local.provider !== "nextlevel" ||
+        local.provider !== "rechargegames" ||
         !local.provider_product_id
     ) {
         throw new Error(
@@ -2392,7 +2392,7 @@ async function crearCompra(accessToken, playerId) {
             "id,game,price_gvr,active,provider,provider_product_id"
         )
         .eq("id", local.id)
-        .eq("provider", "nextlevel")
+        .eq("provider", "rechargegames")
         .eq("active", true)
         .maybeSingle();
 
