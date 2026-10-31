@@ -1643,12 +1643,16 @@ async function validarJugador() {
     mostrarEstadoValidacion("Comprobando tu ID de Free Fire...", "aviso");
     actualizarBoton();
 
-    const region = String(
+    const regionOriginal = String(
         productoSeleccionado?.local?.provider_region ||
         productoSeleccionado?.proveedor?.region ||
         productoSeleccionado?.proveedor?.provider_region ||
         "LATAM"
     ).trim();
+
+    // RechargeGames espera el código de región normalizado; no enviar "latam"
+    // en minúsculas aunque así esté guardado en game_products.
+    const region = regionOriginal.toUpperCase();
 
     try {
         const { data, error } = await supabase.functions.invoke(
