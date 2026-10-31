@@ -129,6 +129,10 @@
             opacity: 1;
             visibility: visible;
         }
+        /* Evita mostrar las diapositivas mientras sus imágenes aún se están decodificando. */
+        .splash-juegos:not(.imagenes-listas) .splash-carrusel {
+            visibility: hidden;
+        }
         .splash-slide > img {
             position: absolute;
             inset: 0;
@@ -921,8 +925,27 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
 (() => {
     const carrusel = document.getElementById("splash-carrusel");
     if (!carrusel) return;
+    const seccion = carrusel.closest(".splash-juegos");
     const slides = Array.from(carrusel.querySelectorAll(".splash-slide"));
     const puntos = Array.from(carrusel.querySelectorAll(".splash-punto"));
+    const imagenes = slides.map(slide => slide.querySelector("img")).filter(Boolean);
+
+    /* Espera a que las siete imágenes estén descargadas y decodificadas. */
+    Promise.all(imagenes.map(imagen => {
+        imagen.loading = "eager";
+        imagen.decoding = "async";
+        if (imagen.complete && imagen.naturalWidth > 0) {
+            return imagen.decode ? imagen.decode().catch(() => {}) : Promise.resolve();
+        }
+        return new Promise(resolve => {
+            const terminar = () => (imagen.decode ? imagen.decode().catch(() => {}).finally(resolve) : resolve());
+            imagen.addEventListener("load", terminar, { once: true });
+            imagen.addEventListener("error", resolve, { once: true });
+        });
+    })).then(() => {
+        if (seccion) seccion.classList.add("imagenes-listas");
+    });
+
     if (slides.length < 2) return;
     let actual = 0;
     const cambiar = siguiente => {
