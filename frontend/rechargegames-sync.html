@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b18">
+<title>Sincronizar RechargeGames | Gamers Gold Top-Up</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{min-height:100vh;padding:16px;background:radial-gradient(circle at top,#102b55 0%,#06101f 48%,#02060d 100%);color:#fff}
+main{width:100%;max-width:760px;margin:25px auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+a{color:#59caff;text-decoration:none;font-weight:700}
+h1{font-size:25px;margin-bottom:8px}
+.sub{color:#9eb3ca;font-size:13px;line-height:1.55}
+.panel{margin-top:18px;padding:18px;background:rgba(7,20,38,.94);border:1px solid rgba(0,170,255,.28);border-radius:14px}
+.aviso{padding:12px;margin:14px 0;background:rgba(0,130,255,.09);border:1px solid rgba(0,170,255,.25);border-radius:9px;color:#b8d9f2;font-size:13px;line-height:1.55}
+.botones{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button{min-height:43px;padding:11px 16px;border:1px solid #159dff;border-radius:8px;background:linear-gradient(90deg,#087cff,#00aaff);color:#fff;font-weight:800;cursor:pointer}
+button.sec{background:#07152b;border-color:#315778;color:#c7d9eb}
+button:disabled{opacity:.45;cursor:not-allowed}
+#estado{display:none;margin-top:16px;padding:12px;border:1px solid #315778;border-radius:8px;background:#061226;color:#c5d8eb;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.5}
+#estado.ok{display:block;border-color:#267b55;color:#9bffca}
+#estado.error{display:block;border-color:#843d4b;color:#ffaaaa}
+#estado.warn{display:block;border-color:#8a672f;color:#ffcf8a}
+#resumen{display:grid;gap:8px;margin-top:14px}
+.fila{display:flex;justify-content:space-between;gap:12px;padding:10px;background:#061226;border:1px solid #173c60;border-radius:7px;font-size:13px}
+.fila span{color:#9eb3ca}.fila strong{text-align:right}
+small{display:block;margin-top:15px;color:#8198b2;line-height:1.5}
+@media(max-width:480px){body{padding:12px}main{margin:12px auto}h1{font-size:21px}.botones{flex-direction:column}button{width:100%}}
+</style>
+</head>
+<body>
+<main>
+<header><a href="admin-ventas.html">← Panel de ventas</a><span style="color:#45c8ff;font-weight:900">GAMERS GOLD</span></header>
+<h1>Sincronización de RechargeGames</h1>
+<p class="sub">Consulta los catálogos de los siete juegos y prepara sus productos en Supabase.</p>
+<section class="panel">
+<div class="aviso">
+<strong>Importante:</strong> los productos se guardarán desactivados. Esta herramienta no habilita compras, no crea pedidos y no modifica el historial de ventas. Giftcards con entrega por código y productos agotados quedan fuera del flujo normal de recargas.
+<br><br>
+Precios: coste del proveedor + 25 % · Conversión: 1 USDT = 1 GVR.
+</div>
+<div class="botones">
+<button id="previsualizar" type="button">1. Consultar catálogos</button>
+<button id="importar" class="sec" type="button" disabled>2. Importar productos desactivados</button>
+</div>
+<div id="estado" role="status" aria-live="polite"></div>
+<div id="resumen"></div>
+<small>Solo una cuenta administradora activa puede ejecutar la sincronización. Primero consulta los siete catálogos; revisa el resultado antes de importar.</small>
+</section>
+</main>
+<script>
+"use strict";
+const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
+const SUPABASE_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
+const btnPreview=document.getElementById("previsualizar");
+const btnImport=document.getElementById("importar");
+const estado=document.getElementById("estado");
+const resumen=document.getElementById("resumen");
+let previewValido=false;
+function mostrar(m,tipo=""){estado.textContent=m;estado.className=tipo;estado.style.display="block"}
+function pintarResumen(data){
+ resumen.replaceChildren();
+ for(const item of (data.summary||[])){
+  const row=document.createElement("div");row.className="fila";
+  const name=document.createElement("span");name.textContent=item.game;
+  const count=document.createElement("strong");count.textContent=String(item.available_player_id_products)+" productos aptos";
+  row.append(name,count);resumen.append(row);
+ }
+ const total=data.summary?.reduce((n,x)=>n+Number(x.available_player_id_products||0),0)||0;
+ const row=document.createElement("div");row.className="fila";
+ const label=document.createElement("span");label.textContent="Total de productos aptos";
+ const value=document.createElement("strong");value.textContent=String(total);
+ row.append(label,value);resumen.append(row);
+ if(data.totals){
+  const stats=document.createElement("div");stats.className="fila";
+  const l=document.createElement("span");l.textContent="Insertados / actualizados / omitidos";
+  const v=document.createElement("strong");v.textContent=[data.totals.inserted,data.totals.updated,data.totals.skipped].join(" / ");
+  stats.append(l,v);resumen.append(stats);
+ }
+ if(Array.isArray(data.errors)&&data.errors.length){
+  const e=document.createElement("div");e.className="aviso";e.textContent="Errores detectados: "+data.errors.length+"\n"+data.errors.map(x=>x.game+": "+x.error).join("\n");resumen.append(e);
+ }
+}
+async function comprobarAdmin(){
+ const {data:{session},error}=await supabase.auth.getSession();
+ if(error||!session?.access_token)throw new Error("Inicia sesión con tu cuenta administradora desde Gamers Gold.");
+ const {data:admin,error:adminError}=await supabase.rpc("is_support_admin");
+ if(adminError||admin!==true)throw new Error("Esta herramienta es solo para administradores autorizados.");
+}
+async function ejecutar(apply){
+ await comprobarAdmin();
+ const {data,error}=await supabase.functions.invoke("rechargegames-sync-catalog",{body:{apply}});
+ if(error)throw new Error(error.message||"No se pudo ejecutar la sincronización.");
+ if(!data)throw new Error("El servidor no devolvió un resultado.");
+ return data;
+}
+btnPreview.addEventListener("click",async()=>{
+ btnPreview.disabled=true;btnImport.disabled=true;previewValido=false;resumen.replaceChildren();mostrar("Consultando los siete catálogos…");
+ try{
+  const data=await ejecutar(false);pintarResumen(data);
+  if(!data.ok)throw new Error("La consulta terminó con errores. No se habilitó la importación. Revisa el detalle.");
+  previewValido=true;btnImport.disabled=false;
+  mostrar("Vista previa completada. No se ha modificado la base de datos. Revisa los productos antes de importar.","ok");
+ }catch(e){mostrar(e.message||"Error al consultar los catálogos.","error")}
+ finally{btnPreview.disabled=false}
+});
+btnImport.addEventListener("click",async()=>{
+ if(!previewValido)return;
+ if(!confirm("¿Importar los productos de RechargeGames? Todos quedarán DESACTIVADOS y no se podrán comprar todavía."))return;
+ btnPreview.disabled=true;btnImport.disabled=true;mostrar("Importando productos…");
+ try{
+  const data=await ejecutar(true);pintarResumen(data);
+  if(!data.ok)throw new Error("La importación terminó con errores. Revisa el detalle antes de continuar.");
+  previewValido=false;
+  mostrar("Importación completada. Los productos siguen DESACTIVADOS. No se habilitaron compras ni se crearon pedidos.","ok");
+ }catch(e){mostrar(e.message||"Error al importar los catálogos.","error");btnPreview.disabled=false}
+});
+comprobarAdmin().then(()=>mostrar("Sesión administrativa verificada. Primero consulta los catálogos.","ok")).catch(e=>{mostrar(e.message,"error");btnPreview.disabled=true});
+</script>
+</body>
+</html>
