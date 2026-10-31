@@ -862,7 +862,7 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
     const tarjetas = Array.from(lista.querySelectorAll(".juego"));
     const normalizar = texto => texto
         .normalize("NFD")
-        .replace(/[\\u0300-\\u036f]/g, "")
+        .replace(/[\u0300-\u036f]/g, "")
         .toLocaleLowerCase("es");
 
     const actualizar = () => {
