@@ -1777,8 +1777,10 @@ function obtenerNombre(producto) {
 }
 
 function esOfertaLATAM(producto) {
-    return normalizarTexto(producto.region || producto.provider_region || "").includes("latam") ||
-        obtenerProductId(producto).toLowerCase().includes("/latam/");
+    // La product_key es la referencia inequívoca de región de RechargeGames.
+    // No confiar en group.name/region: puede ser un nombre visible compartido.
+    const productKey = obtenerProductId(producto).toLowerCase();
+    return productKey.startsWith("topup/free-fire/latam/");
 }
 
 function esPaqueteDiamantes(producto) {
@@ -1945,7 +1947,8 @@ function renderizarOfertas() {
     catalogoOfertas.replaceChildren();
     const ofertas = productosLocales.filter(producto =>
         producto.product_type === "special_offer" &&
-        String(producto.provider_region || "").toLowerCase() === "latam"
+        String(producto.provider_region || "").trim().toLowerCase() === "latam" &&
+        String(producto.provider_product_id || "").trim().toLowerCase().startsWith("topup/free-fire/latam/")
     );
 
     if (!ofertas.length) {
@@ -2064,7 +2067,11 @@ async function cargarCatalogo() {
                 productoComprable(buscarProductoLocal(producto))
             ).length;
 
-        const ofertasComprables = productosLocales.filter(producto => producto.product_type === "special_offer" && String(producto.provider_region || "").toLowerCase() === "latam").filter(productoComprable).length;
+        const ofertasComprables = productosLocales.filter(producto =>
+            producto.product_type === "special_offer" &&
+            String(producto.provider_region || "").trim().toLowerCase() === "latam" &&
+            String(producto.provider_product_id || "").trim().toLowerCase().startsWith("topup/free-fire/latam/")
+        ).filter(productoComprable).length;
 
         if (vistaActual === "nivel") {
             mostrarEstado(
