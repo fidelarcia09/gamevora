@@ -956,7 +956,7 @@ let productosOfertasCargados=false;
 let errorCargaOfertas=false;
 
 function normalizarOferta(texto){
-return String(texto||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[\s_-]/g,"");
+return String(texto||"").split(" [")[0].trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");
 }
 function formatoPrecioOferta(valor){return Number(valor).toLocaleString("es-ES",{maximumFractionDigits:2})+" GVR";}
 function configuracionOfertaPorNombre(nombre){
@@ -1275,8 +1275,9 @@ return;
 
 const {data,error}=await supabaseOfertas.from("game_products")
 .select("game,product_name,price_gvr,active,provider,provider_product_id")
+.eq("game","Arena Breakout")
 .eq("provider","rechargegames")
-.in("provider_product_id",ids);
+.eq("product_type","special_offer");
 
 if(error){
 console.error("No se pudieron cargar los precios de ofertas:",error);
@@ -1291,12 +1292,15 @@ return;
 
 mapaProductosOferta.clear();
 
-(data||[]).forEach(producto=>{
-if(normalizarOferta(producto.game)!=="arenabreakout")return;
-const id=String(producto.provider_product_id||"").trim();
-if(id)mapaProductosOferta.set(id,producto);
+const filas=data||[];
+(window.CONFIG_OFERTAS?.ofertas||[]).forEach(oferta=>{
+ const clave=normalizarOferta(oferta.nombre);
+ const producto=filas.find(f=>{
+  const nombre=normalizarOferta(f.product_name||"");
+  return nombre.includes(clave)||clave.includes(nombre);
+ });
+ if(producto)mapaProductosOferta.set(String(oferta.id).trim(),producto);
 });
-
 productosOfertasCargados=true;
 errorCargaOfertas=false;
 decorarTodasLasTarjetas();
