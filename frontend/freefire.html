@@ -111,53 +111,29 @@
             line-height: 1.45;
         }
 
-        /* SELECTOR DE REGIÓN: adaptable y con el estilo azul de Gamers Gold */
-        .selector-region-wrap {
-            width: 100%;
-            margin: 12px 0 15px;
+        /* SELECTOR DE REGIÓN: botones adaptables al estilo Gamers Gold */
+        .selector-region-wrap { width: 100%; margin: 12px 0 15px; }
+        .selector-region-wrap .etiqueta { display:block; margin-top:0; margin-bottom:7px; }
+        .region-opciones { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; width:100%; }
+        .region-opcion {
+            display:flex; align-items:center; justify-content:center; gap:5px;
+            min-width:0; min-height:43px; padding:8px 5px;
+            border:1px solid #19466f; border-radius:8px;
+            background:linear-gradient(110deg,#0b203b,#07152b);
+            color:#b8cbe0; font-size:12px; font-weight:700; line-height:1.15;
+            text-align:center; cursor:pointer;
+            transition:border-color .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease;
         }
-
-        .selector-region-wrap .etiqueta {
-            margin-top: 0;
+        .region-opcion.activa {
+            border-color:#00baff;
+            background:linear-gradient(110deg,rgba(0,150,255,.2),rgba(0,72,145,.2));
+            color:#fff;
+            box-shadow:inset 0 0 0 1px rgba(0,186,255,.18),0 0 12px rgba(0,140,255,.13);
         }
-
-        .selector-region {
-            display: block;
-            width: 100%;
-            min-height: 44px;
-            padding: 10px 38px 10px 12px;
-            border: 1px solid #17649a;
-            border-radius: 8px;
-            background: linear-gradient(110deg, #0b203b, #07152b);
-            color: #f2f8ff;
-            font-size: 13px;
-            font-weight: 700;
-            outline: none;
-            cursor: pointer;
-            box-shadow: inset 0 0 0 1px rgba(0, 183, 255, 0.04);
-        }
-
-        .selector-region:focus {
-            border-color: #00baff;
-            box-shadow: 0 0 0 2px rgba(0, 186, 255, 0.13), 0 0 13px rgba(0, 140, 255, 0.12);
-        }
-
-        .selector-region:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .selector-region option {
-            background: #091a35;
-            color: #fff;
-        }
-
-        .ayuda-region {
-            margin-top: 6px;
-            color: #8299b4;
-            font-size: 10px;
-            line-height: 1.4;
-        }
+        .region-opcion:focus-visible { outline:2px solid #00baff; outline-offset:2px; }
+        .region-opcion:disabled { opacity:.55; cursor:not-allowed; }
+        .ayuda-region { margin-top:6px; color:#8299b4; font-size:10px; line-height:1.4; }
+        @media(max-width:380px) { .region-opcion { gap:3px; padding:8px 3px; font-size:10px; } }
 
         .estado {
             padding: 9px 10px;
@@ -966,12 +942,12 @@ body{padding:0!important}
         <h1>Free Fire</h1>
 
         <div class="selector-region-wrap">
-            <label class="etiqueta" for="regionJugador">Región de tu cuenta</label>
-            <select id="regionJugador" class="selector-region" aria-label="Selecciona la región de Free Fire">
-                <option value="latam" selected>🌎 LATAM</option>
-                <option value="brazil">🇧🇷 Brasil</option>
-                <option value="indonesia">🇮🇩 Indonesia</option>
-            </select>
+            <span class="etiqueta">Selecciona tu región</span>
+            <div class="region-opciones" role="group" aria-label="Región de Free Fire">
+                <button type="button" class="region-opcion activa" data-region="latam" aria-pressed="true">🌎 <span>LATAM &amp; USA</span></button>
+                <button type="button" class="region-opcion" data-region="brazil" aria-pressed="false">🇧🇷 <span>Brazil</span></button>
+                <button type="button" class="region-opcion" data-region="indonesia" aria-pressed="false">🇮🇩 <span>Indonesia</span></button>
+            </div>
             <p class="ayuda-region">Cada región tiene su propio catálogo y sus propios precios.</p>
         </div>
 
@@ -1175,7 +1151,6 @@ const pestanaNivel = document.getElementById("pestanaNivel");
 const botonContinuar = document.getElementById("botonContinuar");
 
 const campoJugador = document.getElementById("idjugador");
-const regionJugador = document.getElementById("regionJugador");
 const estadoValidacion = document.getElementById("estadoValidacion");
 
 const modalFondo = document.getElementById("modalFondo");
@@ -1213,7 +1188,7 @@ window.ggManualPaymentBridge = {
  getView: () => typeof vistaActual === "undefined" ? null : vistaActual,
  getPlayerField: () => document.getElementById("idjugador") || document.getElementById("idJugador"),
  getZoneField: () => document.getElementById("zonaJugador"),
- getRegionField: () => document.getElementById("regionJugador"),
+ getRegionField: () => ({ value: regionActual }),
  validate: () => {
   if (typeof validarFormulario === "function" && !validarFormulario()) return false;
   const selected = productoSeleccionado;
@@ -1227,7 +1202,7 @@ window.ggManualPaymentBridge = {
     alert(validacionJugador.status === "WRONG_REGION" ? "El ID pertenece a otra región. Comprueba la región antes de pagar." : "El ID del jugador no es válido. Compruébalo antes de pagar."); return false;
    }
   }
-  const regionField = document.getElementById("regionJugador");
+  const regionField = { value: regionActual };
   if (regionField && typeof productoDeRegion === "function" && selected && selected.local && !productoDeRegion(selected.local, regionField.value) && !productoDeRegion(selected.proveedor, regionField.value)) {
    alert("Este paquete no corresponde a la región seleccionada."); return false;
   }
@@ -1336,19 +1311,32 @@ function cambiarVista(vista) {
     actualizarBoton();
 }
 
-regionJugador.addEventListener("change", async () => {
-    const nuevaRegion = String(regionJugador.value || "").trim().toLowerCase();
-    if (!["latam", "brazil", "indonesia"].includes(nuevaRegion) || nuevaRegion === regionActual) return;
-    if (procesando || pedidoPendienteId) {
-        regionJugador.value = regionActual;
-        mostrarEstado("Termina o consulta el pedido pendiente antes de cambiar de región.", "error");
-        return;
-    }
-    regionActual = nuevaRegion;
-    productoSeleccionado = null;
-    limpiarSeleccionVisual();
-    reiniciarValidacionJugador();
-    await cargarCatalogo();
+const botonesRegion = Array.from(document.querySelectorAll(".region-opcion"));
+
+function actualizarSelectorRegion() {
+    botonesRegion.forEach(boton => {
+        const activa = boton.dataset.region === regionActual;
+        boton.classList.toggle("activa", activa);
+        boton.setAttribute("aria-pressed", String(activa));
+        boton.disabled = Boolean(procesando || pedidoPendienteId);
+    });
+}
+
+botonesRegion.forEach(boton => {
+    boton.addEventListener("click", async () => {
+        const nuevaRegion = String(boton.dataset.region || "").trim().toLowerCase();
+        if (!["latam", "brazil", "indonesia"].includes(nuevaRegion) || nuevaRegion === regionActual) return;
+        if (procesando || pedidoPendienteId) {
+            mostrarEstado("Termina o consulta el pedido pendiente antes de cambiar de región.", "error");
+            return;
+        }
+        regionActual = nuevaRegion;
+        productoSeleccionado = null;
+        limpiarSeleccionVisual();
+        reiniciarValidacionJugador();
+        actualizarSelectorRegion();
+        await cargarCatalogo();
+    });
 });
 
 pestanaDiamantes.addEventListener("click", () => cambiarVista("diamantes"));
@@ -2079,7 +2067,7 @@ function renderizarOfertas() {
 /* CARGAR CATÁLOGO */
 
 async function cargarCatalogo() {
-    regionJugador.disabled = Boolean(procesando || pedidoPendienteId);
+    actualizarSelectorRegion();
     productoSeleccionado = null;
     productosDisponibles = [];
     productosProveedor = [];
@@ -2177,7 +2165,7 @@ async function cargarCatalogo() {
         );
     }
 
-    regionJugador.disabled = Boolean(procesando || pedidoPendienteId);
+    actualizarSelectorRegion();
     actualizarBoton();
 }
 
