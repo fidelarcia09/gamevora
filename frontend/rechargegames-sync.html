@@ -170,5 +170,7 @@ window.addEventListener("error",e=>mostrar("Error de JavaScript: "+(e.message||"
 mostrar("Página lista. Pulsa «Consultar catálogos» para iniciar la comprobación.","ok");
 prepararSupabase().then(()=>comprobarAdmin()).then(()=>mostrar("Sesión administrativa verificada. Primero consulta los catálogos.","ok")).catch(e=>{mostrar(e.message,"error")});
 </script>
+    <script src="./nav-inferior-loader.js?v=20261101-nav" defer></script>
+
 </body>
 </html>
