@@ -111,6 +111,54 @@
             line-height: 1.45;
         }
 
+        /* SELECTOR DE REGIÓN: adaptable y con el estilo azul de Gamers Gold */
+        .selector-region-wrap {
+            width: 100%;
+            margin: 12px 0 15px;
+        }
+
+        .selector-region-wrap .etiqueta {
+            margin-top: 0;
+        }
+
+        .selector-region {
+            display: block;
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 38px 10px 12px;
+            border: 1px solid #17649a;
+            border-radius: 8px;
+            background: linear-gradient(110deg, #0b203b, #07152b);
+            color: #f2f8ff;
+            font-size: 13px;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+            box-shadow: inset 0 0 0 1px rgba(0, 183, 255, 0.04);
+        }
+
+        .selector-region:focus {
+            border-color: #00baff;
+            box-shadow: 0 0 0 2px rgba(0, 186, 255, 0.13), 0 0 13px rgba(0, 140, 255, 0.12);
+        }
+
+        .selector-region:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .selector-region option {
+            background: #091a35;
+            color: #fff;
+        }
+
+        .ayuda-region {
+            margin-top: 6px;
+            color: #8299b4;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
         .estado {
             padding: 9px 10px;
             margin: 12px 0;
@@ -917,7 +965,15 @@ body{padding:0!important}
     <main class="card">
         <h1>Free Fire</h1>
 
-        
+        <div class="selector-region-wrap">
+            <label class="etiqueta" for="regionJugador">Región de tu cuenta</label>
+            <select id="regionJugador" class="selector-region" aria-label="Selecciona la región de Free Fire">
+                <option value="latam" selected>🌎 LATAM</option>
+                <option value="brazil">🇧🇷 Brasil</option>
+                <option value="indonesia">🇮🇩 Indonesia</option>
+            </select>
+            <p class="ayuda-region">Cada región tiene su propio catálogo y sus propios precios.</p>
+        </div>
 
         <label class="etiqueta" for="idjugador">
             ID del jugador
@@ -1119,6 +1175,7 @@ const pestanaNivel = document.getElementById("pestanaNivel");
 const botonContinuar = document.getElementById("botonContinuar");
 
 const campoJugador = document.getElementById("idjugador");
+const regionJugador = document.getElementById("regionJugador");
 const estadoValidacion = document.getElementById("estadoValidacion");
 
 const modalFondo = document.getElementById("modalFondo");
@@ -1188,6 +1245,7 @@ let pedidoPendienteId = null;
 let accionPendiente = "crear";
 
 let vistaActual = "diamantes";
+let regionActual = "latam";
 
 let validacionJugador = {
     status: "UNKNOWN",
@@ -1277,6 +1335,21 @@ function cambiarVista(vista) {
 
     actualizarBoton();
 }
+
+regionJugador.addEventListener("change", async () => {
+    const nuevaRegion = String(regionJugador.value || "").trim().toLowerCase();
+    if (!["latam", "brazil", "indonesia"].includes(nuevaRegion) || nuevaRegion === regionActual) return;
+    if (procesando || pedidoPendienteId) {
+        regionJugador.value = regionActual;
+        mostrarEstado("Termina o consulta el pedido pendiente antes de cambiar de región.", "error");
+        return;
+    }
+    regionActual = nuevaRegion;
+    productoSeleccionado = null;
+    limpiarSeleccionVisual();
+    reiniciarValidacionJugador();
+    await cargarCatalogo();
+});
 
 pestanaDiamantes.addEventListener("click", () => cambiarVista("diamantes"));
 pestanaOfertas.addEventListener("click", () => cambiarVista("ofertas"));
@@ -1780,11 +1853,16 @@ function obtenerNombre(producto) {
     ).trim();
 }
 
-function esOfertaLATAM(producto) {
-    // La product_key es la referencia inequívoca de región de RechargeGames.
-    // No confiar en group.name/region: puede ser un nombre visible compartido.
+function obtenerPrefijoRegion(region = regionActual) {
+    const regionNormalizada = String(region || "").trim().toLowerCase();
+    if (!["latam", "brazil", "indonesia"].includes(regionNormalizada)) return "";
+    return "topup/free-fire/" + regionNormalizada + "/";
+}
+
+function esProductoDeRegion(producto, region = regionActual) {
+    const prefijo = obtenerPrefijoRegion(region);
     const productKey = obtenerProductId(producto).toLowerCase();
-    return productKey.startsWith("topup/free-fire/latam/");
+    return Boolean(prefijo) && productKey.startsWith(prefijo);
 }
 
 function esPaqueteDiamantes(producto) {
@@ -1951,14 +2029,14 @@ function renderizarOfertas() {
     catalogoOfertas.replaceChildren();
     const ofertas = productosLocales.filter(producto =>
         producto.product_type === "special_offer" &&
-        String(producto.provider_region || "").trim().toLowerCase() === "latam" &&
-        String(producto.provider_product_id || "").trim().toLowerCase().startsWith("topup/free-fire/latam/")
+        String(producto.provider_region || "").trim().toLowerCase() === regionActual &&
+        String(producto.provider_product_id || "").trim().toLowerCase().startsWith(obtenerPrefijoRegion())
     );
 
     if (!ofertas.length) {
         const aviso = document.createElement("div");
         aviso.className = "estado";
-        aviso.textContent = "No hay ofertas especiales importadas para la región LATAM.";
+        aviso.textContent = "No hay ofertas especiales importadas para esta región.";
         catalogoOfertas.appendChild(aviso);
         return;
     }
@@ -2001,6 +2079,7 @@ function renderizarOfertas() {
 /* CARGAR CATÁLOGO */
 
 async function cargarCatalogo() {
+    regionJugador.disabled = Boolean(procesando || pedidoPendienteId);
     productoSeleccionado = null;
     productosDisponibles = [];
     productosProveedor = [];
@@ -2010,7 +2089,8 @@ async function cargarCatalogo() {
 
     reiniciarValidacionJugador();
 
-    mostrarEstado("Conectando con el catálogo...");
+    const nombreRegion = regionActual === "brazil" ? "Brasil" : regionActual === "indonesia" ? "Indonesia" : "LATAM";
+    mostrarEstado("Conectando con el catálogo de " + nombreRegion + "...");
 
     try {
         const [respuestaCatalogo] = await Promise.all([
@@ -2059,7 +2139,7 @@ async function cargarCatalogo() {
 
         productosDisponibles = productosProveedor.filter(producto =>
             producto.available === true &&
-            esOfertaLATAM(producto) &&
+            esProductoDeRegion(producto) &&
             esPaqueteDiamantes(producto)
         );
 
@@ -2073,8 +2153,8 @@ async function cargarCatalogo() {
 
         const ofertasComprables = productosLocales.filter(producto =>
             producto.product_type === "special_offer" &&
-            String(producto.provider_region || "").trim().toLowerCase() === "latam" &&
-            String(producto.provider_product_id || "").trim().toLowerCase().startsWith("topup/free-fire/latam/")
+            String(producto.provider_region || "").trim().toLowerCase() === regionActual &&
+            String(producto.provider_product_id || "").trim().toLowerCase().startsWith(obtenerPrefijoRegion())
         ).filter(productoComprable).length;
 
         if (vistaActual === "nivel") {
@@ -2097,6 +2177,7 @@ async function cargarCatalogo() {
         );
     }
 
+    regionJugador.disabled = Boolean(procesando || pedidoPendienteId);
     actualizarBoton();
 }
 
@@ -2273,6 +2354,8 @@ async function crearCompra(accessToken, playerId) {
     if (
         !local ||
         local.active !== true ||
+        String(local.provider_region || "").trim().toLowerCase() !== regionActual ||
+        !String(local.provider_product_id || "").trim().toLowerCase().startsWith(obtenerPrefijoRegion()) ||
         !Number.isFinite(Number(local.price_gvr)) ||
         Number(local.price_gvr) <= 0 ||
         local.provider !== "rechargegames" ||
@@ -2286,7 +2369,7 @@ async function crearCompra(accessToken, playerId) {
     const { data: productoActual, error: errorProducto } = await supabase
         .from("game_products")
         .select(
-            "id,game,price_gvr,active,provider,provider_product_id"
+            "id,game,price_gvr,active,provider,provider_product_id,provider_region"
         )
         .eq("id", local.id)
         .eq("provider", "rechargegames")
@@ -2302,6 +2385,8 @@ async function crearCompra(accessToken, playerId) {
     if (
         !productoActual ||
         normalizarTexto(productoActual.game) !== "freefire" ||
+        String(productoActual.provider_region || "").trim().toLowerCase() !== regionActual ||
+        !String(productoActual.provider_product_id || "").trim().toLowerCase().startsWith(obtenerPrefijoRegion()) ||
         String(productoActual.provider_product_id || "").trim() !==
             obtenerProductId(productoSeleccionado.proveedor) ||
         !Number.isFinite(Number(productoActual.price_gvr)) ||
