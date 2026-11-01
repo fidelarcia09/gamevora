@@ -1,6 +1,27 @@
 /* Goldi floating assistant. Isolated from the site's existing business logic. */
 (function () {
   "use strict";
+
+  // Carga la navegación inferior en las páginas que usan Goldi.
+  (function () {
+    var currentPath = (window.location.pathname || "").toLowerCase();
+    var excluded = [
+      "/login.html",
+      "/recuperar-contrasena.html",
+      "/registro.html",
+      "/nueva-contrasena.html"
+    ];
+    if (excluded.some(function (page) { return currentPath.endsWith(page); })) return;
+    if (window.__ggBottomNavLoaderStarted || document.querySelector(".gg-bottom-nav")) return;
+
+    var inFrontend = /\\/frontend\\//i.test(window.location.pathname);
+    var basePath = inFrontend ? "./" : "frontend/";
+    var navLoader = document.createElement("script");
+    navLoader.src = basePath + "nav-inferior-loader.js?v=20261101-nav";
+    navLoader.defer = true;
+    document.head.appendChild(navLoader);
+  })();
+
   if (document.getElementById("gg-goldi-root")) return;
 
   var inFrontend = /\/frontend\//i.test(window.location.pathname);
