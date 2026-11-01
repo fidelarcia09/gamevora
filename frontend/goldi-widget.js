@@ -14,7 +14,7 @@
     if (excluded.some(function (page) { return currentPath.endsWith(page); })) return;
     if (window.__ggBottomNavLoaderStarted || document.querySelector(".gg-bottom-nav")) return;
 
-    var inFrontend = /\\/frontend\\//i.test(window.location.pathname);
+    var inFrontend = window.location.pathname.toLowerCase().indexOf("/frontend/") !== -1;
     var basePath = inFrontend ? "./" : "frontend/";
     var navLoader = document.createElement("script");
     navLoader.src = basePath + "nav-inferior-loader.js?v=20261101-nav";
