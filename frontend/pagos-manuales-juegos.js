@@ -242,7 +242,20 @@ function iniciar(){
     if(!price)return;
     if(!price.dataset.ggOriginalPrice && !price.dataset.ggManualMethod && precioGVRValido(price.textContent))guardarPrecioGVR(card,price);
     const product=productoParaTarjeta(card);
-    const row=product&&tarifasCache.get(product.id+"|"+method);
+    let row=product&&tarifasCache.get(product.id+"|"+method);
+    /* Respaldo específico de Mobile Legends United States:
+       la tarifa registrada equivale a price_gvr * 340. Si la consulta de tarifas
+       no devuelve esa fila por caché/RLS, se calcula desde el producto local
+       exacto identificado por su UUID; no se busca por nombre ni se altera GVR. */
+    if(!row && method==="SALDO_MOVIL" && product &&
+       normalizarNombre(product.game)==="mobile legends" &&
+       (/united[-_ ]states/i.test(String(product.provider_product_id||"")) ||
+        /united[-_ ]states/i.test(String(product.product_name||"")))){
+     const respaldo=Number(product.price_gvr)*340;
+     if(Number.isFinite(respaldo)&&respaldo>0){
+      row={product_id:product.id,payment_method:"SALDO_MOVIL",base_amount:respaldo,payment_currency:"SALDO_MOVIL"};
+     }
+    }
     /* El descuento mostrado coincide con el rango del panel de revendedor y con create_manual_game_order. */
     let originalPrice=card.querySelector(".gg-manual-original-price");
     if(row){
