@@ -112,7 +112,8 @@
         }
 
         /* SELECTOR DE REGIÓN: botones adaptables al estilo Gamers Gold */
-        .selector-region-wrap { width: 100%; margin: 12px 0 15px; }
+        .selector-region-wrap { width: 100%; margin: 12px 0 0; }
+        .selector-region-wrap + label.etiqueta { margin-top: 8px; }
         .selector-region-wrap .etiqueta { display:block; margin-top:0; margin-bottom:7px; }
         .region-opciones { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; width:100%; }
         .region-opcion {
@@ -942,13 +943,11 @@ body{padding:0!important}
         <h1>Free Fire</h1>
 
         <div class="selector-region-wrap">
-            <span class="etiqueta">Selecciona tu región</span>
             <div class="region-opciones" role="group" aria-label="Región de Free Fire">
                 <button type="button" class="region-opcion activa" data-region="latam" aria-pressed="true">🌎 <span>LATAM &amp; USA</span></button>
                 <button type="button" class="region-opcion" data-region="brazil" aria-pressed="false">🇧🇷 <span>Brazil</span></button>
                 <button type="button" class="region-opcion" data-region="indonesia" aria-pressed="false">🇮🇩 <span>Indonesia</span></button>
             </div>
-            <p class="ayuda-region">Cada región tiene su propio catálogo y sus propios precios.</p>
         </div>
 
         <label class="etiqueta" for="idjugador">
