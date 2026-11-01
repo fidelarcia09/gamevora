@@ -472,7 +472,7 @@ function renderizarProductos(){
   else{
    lista.forEach(local=>{
     const id=String(local.provider_product_id||"").trim();
-    const proveedor=productosProveedor.find(p=>obtenerProductId(p)===id)||{productId:id,name:local.product_name,available:true};
+    const proveedor=productosDisponibles.find(p=>obtenerProductId(p)===id)||{productId:id,name:local.product_name,available:true};
     catalogo.appendChild(crearTarjeta(proveedor,local,true));
    });
    mostrarEstado("Ofertas especiales de Blood Strike. Selecciona una para continuar.");
