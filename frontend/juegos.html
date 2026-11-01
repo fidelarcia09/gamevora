@@ -303,6 +303,7 @@
         /* TARJETA COMPLETA */
 
         .juego {
+            aspect-ratio: 16 / 9;
             min-width: 0;
             position: relative;
             display: flex;
@@ -370,9 +371,10 @@
         .juego-imagen {
             position: relative;
             width: 100%;
-            aspect-ratio: 16 / 9;
+            aspect-ratio: auto;
             height: auto;
-            flex-shrink: 0;
+            flex: 1 1 70%;
+            min-height: 0;
 
             border: none;
             border-radius: 0;
@@ -458,10 +460,10 @@
         .juego-info {
             position: relative;
             width: 100%;
-            min-height: 57px;
-            flex: 0 0 auto;
+            min-height: 0;
+            flex: 0 0 30%;
 
-            padding: 12px;
+            padding: 6px 10px;
 
             display: flex;
             flex-direction: row;
@@ -511,8 +513,8 @@
         }
 
         .juego-flecha {
-            width: 23px;
-            height: 23px;
+            width: 21px;
+            height: 21px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -561,17 +563,23 @@
             }
 
             .juego-info {
-                min-height: 49px;
-                padding: 9px;
+                min-height: 0;
+                padding: 3px 7px;
+                gap: 4px;
             }
 
             .juego-info h3 {
-                font-size: 11px;
+                font-size: 10px;
+                line-height: 1.15;
             }
 
             .juego-flecha {
-                width: 21px;
-                height: 21px;
+                width: 18px;
+                height: 18px;
+            }
+            .juego-flecha svg {
+                width: 12px;
+                height: 12px;
             }
 
             .logo {
