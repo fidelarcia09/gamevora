@@ -776,12 +776,61 @@ main{max-width:560px!important;padding:14px 16px 22px!important}
  #accionesNavegacion .boton,#accionesComprobante .boton{min-height:47px!important;font-size:12px!important}
 }
 
+
+/* Ajuste solicitado: encabezado común del sitio y escudo GVR con rayos */
+body>header{
+ display:block!important;position:relative!important;z-index:5!important;
+ padding:13px 16px!important;border:0!important;border-bottom:1px solid rgba(0,153,255,.2)!important;
+ background:rgba(3,9,24,.72)!important;box-shadow:none!important;
+}
+.barra{max-width:560px!important;justify-content:flex-start!important}
+.encabezado-pagina{gap:11px!important;color:#edf7ff!important;font-size:15px!important;font-weight:800!important}
+.encabezado-pagina-icono{
+ width:39px!important;height:39px!important;flex:0 0 39px!important;
+ border:1px solid #17649a!important;border-radius:11px!important;
+ background:linear-gradient(145deg,#103b65,#08203b)!important;color:#4bcaff!important;
+ box-shadow:0 5px 15px rgba(0,21,45,.35)!important;
+}
+.encabezado-pagina-icono svg{width:21px!important;height:21px!important}
+.encabezado-pagina-titulo{font-size:15px!important;letter-spacing:.1px!important}
+.comprobante-cabecera .marca-ggt,.comprobante-cabecera .marca-simbolo,.comprobante-cabecera .marca-nombre,.inicio-checkout{display:none!important}
+.pie-marca{display:none!important}
+.ficha-arte{
+ isolation:isolate!important;
+ background:transparent!important;
+}
+.ficha-arte::before{
+ content:""!important;display:block!important;position:absolute!important;z-index:0!important;
+ width:88%!important;max-width:225px!important;aspect-ratio:1!important;
+ border:1px solid rgba(0,164,255,.36)!important;border-radius:50%!important;
+ background:
+  radial-gradient(circle,rgba(0,129,255,.22) 0 22%,rgba(0,70,190,.12) 42%,transparent 68%)!important;
+ box-shadow:0 0 22px rgba(0,135,255,.18),inset 0 0 22px rgba(0,135,255,.12)!important;
+}
+.ficha-arte::after{
+ content:""!important;display:block!important;position:absolute!important;z-index:0!important;
+ width:100%!important;height:100%!important;inset:0!important;
+ background:
+  repeating-conic-gradient(from 0deg at 50% 50%,transparent 0deg 8deg,rgba(0,178,255,.72) 8.5deg 9.3deg,transparent 10deg 20deg)!important;
+ mask-image:radial-gradient(ellipse at center,transparent 0 30%,#000 43%,transparent 72%)!important;
+ opacity:.52!important;filter:drop-shadow(0 0 7px rgba(0,156,255,.72))!important;
+ pointer-events:none!important;
+}
+.escudo-gvr-flotante{z-index:2!important;filter:drop-shadow(0 0 13px rgba(0,157,255,.58)) drop-shadow(0 0 28px rgba(0,103,255,.34))!important}
+@media(max-width:620px){
+ body>header{padding:11px 13px!important}
+ .barra{max-width:100%!important}
+ .encabezado-pagina-titulo{font-size:14px!important}
+ .ficha-arte::before{width:92%!important}
+ .ficha-arte::after{opacity:.48!important}
+}
+
 </style>
 </head>
 <body>
 <header>
     <div class="barra">
-        <a class="encabezado-pagina" href="../index.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Estado de tu pedido</span></a>
+        <a class="encabezado-pagina" href="../index.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Estado de pedidos</span></a>
         <div class="etiqueta">ESTADO DEL PEDIDO</div>
     </div>
 </header>
@@ -794,7 +843,6 @@ main{max-width:560px!important;padding:14px 16px 22px!important}
             <div id="iconoEstado" class="oculto" aria-hidden="true">…</div>
             <div class="comprobante-cabecera">
                 <div class="marca-ggt"><span class="marca-simbolo">G</span><span class="marca-nombre"><b>GAMERS GOLD</b><strong>TOP-UP</strong></span></div>
-                <a class="inicio-checkout" href="../index.html"><span aria-hidden="true">⌂</span> Inicio</a>
                 <div class="estado estado-comprobante" id="etiquetaEstado"><span class="punto"></span><span id="textoEstado">CONSULTANDO</span></div>
             </div>
             <div class="claim-marca">TU MUNDO GAMING. UN SOLO LUGAR.</div>
