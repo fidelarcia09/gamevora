@@ -712,3 +712,20 @@ async function iniciar(){try{const {data:{session}}=await supabase.auth.getSessi
   overflow-wrap:anywhere!important;
 }
 </style>
+
+<style id="gg-product-cards-full-width-discount-right">
+/* Catálogo y Ofertas Especiales: contenido normal a todo lo ancho y descuento arriba a la derecha. */
+#catalogo .producto,
+#catalogoOfertas .producto,
+#listaOfertas .boton-oferta{
+  box-sizing:border-box!important;
+  padding:8px!important;
+}
+.producto .gg-reseller-discount-badge,
+.boton-oferta .gg-reseller-discount-badge{
+  left:auto!important;
+  right:0!important;
+  top:0!important;
+}
+</style>
+
