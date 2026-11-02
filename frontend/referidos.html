@@ -22,8 +22,22 @@
     .resumen-superior { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 96px; }
     .ganado-label { color: var(--secundario); font-size: 13px; font-weight: 700; margin-bottom: 8px; }
     .ganado-importe { color: var(--cian); font-size: clamp(27px, 7vw, 36px); font-weight: 900; letter-spacing: -.7px; overflow-wrap: anywhere; text-shadow: 0 0 18px #00aaff30; }
-    .regalo { width: 80px; height: 80px; flex: 0 0 80px; filter: drop-shadow(0 0 12px #00aaff35); animation: regaloLateral 1.8s ease-in-out infinite alternate; }
-    @keyframes regaloLateral { from { transform: translateX(-7px) rotate(-3deg); } to { transform: translateX(7px) rotate(3deg); } }
+    /* Mismo escudo GVR utilizado en la pantalla de saldo de Wallet */
+    .escudo-ganado {
+      display: block;
+      position: relative;
+      z-index: 1;
+      width: 56px;
+      height: 64px;
+      flex: 0 0 56px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(0,183,255,.40));
+      animation: escudoGanadoFlotar 3.4s ease-in-out infinite;
+    }
+    @keyframes escudoGanadoFlotar {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
     .separador { height: 1px; margin: 17px 0 15px; background: linear-gradient(90deg, #20c5ff55, #ffffff08); }
     .estadisticas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
     .estadistica { min-width: 0; padding: 12px 10px; border: 1px solid var(--borde); border-radius: 12px; background: rgba(5,11,24,.55); }
@@ -51,7 +65,7 @@
     .vacio, .estado-pagina { color: var(--secundario); font-size: 13px; line-height: 1.6; }
     .estado-pagina { min-height: 22px; margin: 10px 0; text-align: center; }
     .error { color: #ff7889; }
-    @media (prefers-reduced-motion: reduce) { .regalo { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .escudo-ganado { animation: none; } }
     @media (max-width: 460px) {
       body { padding: 15px 12px 26px; }
       .cabecera { margin-bottom: 13px; }
@@ -59,7 +73,7 @@
       .volver { padding: 8px 9px; font-size: 11px; }
       .pantalla { padding: 17px 13px 13px; border-radius: 16px; }
       .resumen-superior { min-height: 78px; }
-      .regalo { width: 65px; height: 65px; flex-basis: 65px; }
+      .escudo-ganado { width: 48px; height: 56px; flex-basis: 48px; }
       .estadisticas { gap: 6px; }
       .estadistica { padding: 10px 7px; border-radius: 10px; }
       .texto-estadistica { font-size: 10px; }
@@ -139,13 +153,7 @@
           <div class="ganado-label">Has ganado</div>
           <div class="ganado-importe" id="totalGanado">0.00 GVR</div>
         </div>
-        <svg class="regalo" viewBox="0 0 100 100" role="img" aria-label="Regalo de recompensas">
-          <path d="M18 43h64v45H18z" fill="#087cff" stroke="#20c5ff" stroke-width="3" />
-          <path d="M12 31h76v17H12z" fill="#20c5ff" stroke="#8be8ff" stroke-width="3" />
-          <path d="M43 31h14v57H43z" fill="#dff8ff" />
-          <path d="M50 31C22 31 18 9 34 9c12 0 16 14 16 22M50 31C78 31 82 9 66 9 54 9 50 23 50 31" fill="none" stroke="#20c5ff" stroke-width="7" stroke-linecap="round" />
-          <path d="M50 32v55" stroke="#dff8ff" stroke-width="3" />
-        </svg>
+        <img class="escudo-ganado" src="./gvr-escudo.svg" alt="Escudo GVR" width="56" height="64">
       </div>
       <div class="separador"></div>
       <div class="estadisticas" aria-label="Resumen de referidos">
