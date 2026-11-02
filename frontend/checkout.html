@@ -423,6 +423,35 @@ main{width:100%!important;max-width:1020px!important;padding:0 20px 20px!importa
 }
 @media(prefers-reduced-motion:reduce){.comprobante-nuevo .checkout-border-effect,.comprobante-nuevo .checkout-light-sweep{animation:none!important}}
 
+
+/* Ficha horizontal: datos a la izquierda e imagen del juego a la derecha */
+.ficha-pedido{grid-template-columns:minmax(0,1.55fr) minmax(210px,.8fr)!important;gap:10px!important;min-height:0!important;height:430px!important;max-height:430px!important;padding:10px!important;align-items:stretch!important}
+.ficha-datos{justify-content:space-between!important;min-height:0!important}
+.ficha-fila{min-height:0!important;height:calc(100% / 6)!important;flex:1 1 0!important;padding:5px 8px!important;gap:12px!important}
+.ficha-icono{width:45px!important;height:45px!important;flex-basis:45px!important;font-size:25px!important}
+.ficha-info>span{font-size:10px!important;margin-bottom:3px!important}
+.ficha-info>strong{font-size:15px!important}
+.ficha-info>strong.precio{font-size:16px!important}
+.logo-juego{width:112px!important;min-height:60px!important;flex-basis:112px!important;font-size:13px!important}
+.ficha-arte{min-height:0!important;height:100%!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.imagen-juego-comprobante{position:relative!important;z-index:2!important;display:block!important;width:100%!important;height:100%!important;max-height:365px!important;object-fit:contain!important;filter:drop-shadow(0 8px 18px rgba(0,133,255,.45))!important}
+.arte-anillo{bottom:10%!important;width:95%!important;height:50px!important}
+.arte-brillo{bottom:10%!important}
+@media(max-width:620px){
+ .ficha-pedido{grid-template-columns:minmax(0,1.35fr) minmax(105px,.75fr)!important;gap:3px!important;height:360px!important;max-height:360px!important;padding:5px!important}
+ .ficha-fila{height:calc(100% / 6)!important;min-height:0!important;padding:4px 2px!important;gap:6px!important}
+ .ficha-icono{width:29px!important;height:29px!important;flex-basis:29px!important;font-size:16px!important}
+ .ficha-info>span{font-size:8px!important;margin-bottom:2px!important}
+ .ficha-info>strong{font-size:11px!important;line-height:1.15!important}
+ .ficha-info>strong.precio{font-size:12px!important}
+ .ficha-info>small{font-size:8px!important}
+ .ficha-info>small b{font-size:9px!important}
+ .logo-juego{display:none!important}
+ .ficha-arte{height:100%!important;min-height:0!important}
+ .imagen-juego-comprobante{max-height:310px!important;width:100%!important}
+ .arte-anillo{height:28px!important}
+}
+
 </style>
 </head>
 <body>
@@ -488,9 +517,7 @@ main{width:100%!important;max-width:1020px!important;padding:0 20px 20px!importa
                 </div>
                 <div class="ficha-arte" aria-hidden="true">
                     <div class="arte-anillo"></div>
-                    <div class="arte-moneda moneda-trasera">G</div>
-                    <div class="arte-moneda moneda-lateral">G</div>
-                    <div class="arte-moneda moneda-frontal">G</div>
+                    <img class="imagen-juego-comprobante" id="imagenJuegoComprobante" src="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png" alt="">
                     <div class="arte-brillo"></div>
                 </div>
             </div>
@@ -519,6 +546,25 @@ main{width:100%!important;max-width:1020px!important;padding:0 20px 20px!importa
         <div class="copyright">GAMERS GOLD TOP-UP · © 2026</div>
     </footer>
 </main>
+
+<script>
+/* Selección de imagen según el juego; solo afecta la presentación del comprobante */
+(() => {
+ const img=document.getElementById("imagenJuegoComprobante"), game=document.getElementById("juego");
+ if(!img||!game)return;
+ const files={
+ "free fire":"file_00000000323881f5b39e628c9a42a0d2.png",
+ "mobile legends":"file_00000000a7e081f9b4b5577efa5f6066.png",
+ "pubg mobile":"file_00000000cde881f6a366f4dbeb1a5fd0.png",
+ "arena breakout":"file_00000000eb3881f9a2e363c447e0f6ba.png",
+ "honor of kings":"file_00000000061881f7812f5a04ddc3600d.png",
+ "genshin impact":"file_00000000266081f685eb030a10579fbe.png",
+ "blood strike":"file_00000000da8481f980717bbfaf5b7888.png"
+ };
+ const update=()=>{const name=game.textContent.trim().toLowerCase();if(files[name])img.src="./imagenes/"+files[name];img.alt=name?"Imagen de "+name:"";};
+ new MutationObserver(update).observe(game,{childList:true,characterData:true,subtree:true});update();
+})();
+</script>
 
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
