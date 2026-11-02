@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#050b18">
-  <title>Enviar GVR | Gamers Gold Top-Up</title>
+  <title>Enviar Gvr | Gamers Gold Top-Up</title>
   <style>
     :root{color-scheme:dark;--bg:#050b18;--panel:#0a1730;--border:#173b64;--blue:#00b7ff;--purple:#00b7ff;--muted:#91a5bf;--white:#fff;--green:#36e6a0;--red:#ff7588}
     *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
@@ -17,7 +17,8 @@
     .card{width:100%;max-width:none;background:transparent;border:0;border-radius:0;padding:0 12px;box-shadow:none}
     .saldo-disponible{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;margin:0 2px 18px;padding:10px 64px 10px 14px;min-height:68px;border:1px solid #17649a;border-radius:10px;background:linear-gradient(110deg,rgba(7,29,56,.96),rgba(6,19,39,.96));box-shadow:0 4px 14px rgba(0,140,255,.10);overflow:hidden}.saldo-disponible-label{font-size:12px;color:#a4d6ff;font-weight:700}.saldo-disponible-valor{font-size:17px;font-weight:900;color:#fff;text-align:left;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.saldo-disponible-valor.cargando{color:#91a5bf;font-size:12px;font-weight:600}.gvr-emblema{position:absolute;right:13px;top:50%;width:43px;height:48px;transform:translateY(-50%);animation:gvrFlotar 3.2s ease-in-out infinite;filter:drop-shadow(0 0 7px rgba(0,183,255,.45));pointer-events:none;object-fit:contain}@keyframes gvrFlotar{0%,100%{translate:0 0;filter:drop-shadow(0 0 5px rgba(0,183,255,.35))}50%{translate:0 -4px;filter:drop-shadow(0 0 9px rgba(0,183,255,.62))}}@media(prefers-reduced-motion:reduce){.gvr-emblema{animation:none}}
     .badge{display:none}
-    h1{font-size:clamp(26px,6vw,34px);margin-bottom:9px}
+    h1{display:flex;align-items:center;gap:10px;font-size:clamp(26px,6vw,34px);margin-bottom:9px}
+    h1::before{content:"";display:inline-block;flex:0 0 22px;width:22px;height:2px;border-radius:2px;background:#20c5ff;box-shadow:0 0 9px rgba(32,197,255,.6)}
     .intro{display:none}
     label{display:block;font-size:13px;font-weight:700;margin:0 0 9px;color:#dce8fb}
     .field{margin-bottom:19px}
@@ -49,11 +50,11 @@
         <a class="back" href="wallet.html" aria-label="Volver a Wallet">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
         </a>
-        <span>Enviar GVR</span>
+        <span>Enviar Gvr</span>
       </div>
     </header>
     <main class="card">
-      <h1>Enviar GVR</h1>
+      <h1>Enviar Gvr</h1>
       <section class="saldo-disponible" aria-label="Saldo disponible"><span class="saldo-disponible-label">Saldo disponible</span><strong id="saldoDisponibleValor" class="saldo-disponible-valor cargando" aria-live="polite">Consultando saldo…</strong><img class="gvr-emblema" src="./gvr-escudo.svg" alt="" aria-hidden="true" width="43" height="48"></section>
 
       <div id="mensaje" class="message" role="status" aria-live="polite"></div>
@@ -64,19 +65,19 @@
           <input id="correoDestino" name="correoDestino" type="email" autocomplete="email" maxlength="320" placeholder="usuario@correo.com" required>
         </div>
         <div class="field">
-          <label for="cantidadGVR">Cantidad que recibirá (GVR)</label>
-          <input id="cantidadGVR" name="cantidadGVR" type="number" min="0.01" max="100000000" step="0.01" inputmode="decimal" placeholder="Ej. 100" required>
+          <label for="cantidadGvr">Cantidad que recibirá (Gvr)</label>
+          <input id="cantidadGvr" name="cantidadGvr" type="number" min="0.01" max="100000000" step="0.01" inputmode="decimal" placeholder="Ej. 100" required>
         </div>
 
         <section class="summary" aria-label="Resumen de transferencia">
           <div class="summary-title">Resumen del envío</div>
-          <div class="line"><span>El destinatario recibe</span><strong id="resumenCantidad">0 GVR</strong></div>
-          <div class="line"><span>Comisión (10 %)</span><strong id="resumenComision">0 GVR</strong></div>
-          <div class="line total"><span>Se descontará de tu Wallet</span><strong id="resumenTotal">0 GVR</strong></div>
+          <div class="line"><span>El destinatario recibe</span><strong id="resumenCantidad">0 Gvr</strong></div>
+          <div class="line"><span>Comisión (10 %)</span><strong id="resumenComision">0 Gvr</strong></div>
+          <div class="line total"><span>Se descontará de tu Wallet</span><strong id="resumenTotal">0 Gvr</strong></div>
           <p class="fee-note">La comisión y el saldo se calculan y validan en Supabase; los valores de esta pantalla son solo una vista previa.</p>
         </section>
 
-        <button id="botonEnviar" class="btn primary" type="submit">Confirmar envío de GVR</button>
+        <button id="botonEnviar" class="btn primary" type="submit">Confirmar envío de Gvr</button>
         <a class="secondary" href="wallet.html">Cancelar y volver</a>
       </form>
     </main>
@@ -92,7 +93,7 @@
 
       const formulario = document.getElementById("formularioTransferencia");
       const correo = document.getElementById("correoDestino");
-      const cantidad = document.getElementById("cantidadGVR");
+      const cantidad = document.getElementById("cantidadGvr");
       const boton = document.getElementById("botonEnviar");
       const mensaje = document.getElementById("mensaje");
       const resumenCantidad = document.getElementById("resumenCantidad");
@@ -101,11 +102,11 @@
       let requestIdPendiente = null;
       let firmaPendiente = null;
 
-      function formatoGVR(valor) {
+      function formatoGvr(valor) {
         return (Number.isFinite(valor) ? valor : 0).toLocaleString("es-ES", {
           minimumFractionDigits: 0,
           maximumFractionDigits: 2
-        }) + " GVR";
+        }) + " Gvr";
       }
 
       async function cargarSaldoDisponible() {
@@ -155,9 +156,9 @@
         const valido = cantidad.value.trim() !== "" && Number.isFinite(importe) && importe > 0 && importe <= 100000000;
         const redondeado = valido ? Math.round((importe + Number.EPSILON) * 100) / 100 : 0;
         const comision = Math.round((redondeado * 0.10 + Number.EPSILON) * 100) / 100;
-        resumenCantidad.textContent = formatoGVR(redondeado);
-        resumenComision.textContent = formatoGVR(comision);
-        resumenTotal.textContent = formatoGVR(Math.round((redondeado + comision) * 100) / 100);
+        resumenCantidad.textContent = formatoGvr(redondeado);
+        resumenComision.textContent = formatoGvr(comision);
+        resumenTotal.textContent = formatoGvr(Math.round((redondeado + comision) * 100) / 100);
       }
 
       function crearRequestId() {
@@ -191,7 +192,7 @@
           return;
         }
         if (!cantidad.value.trim() || !Number.isFinite(importe) || importe <= 0 || importe > 100000000) {
-          mostrarMensaje("Introduce una cantidad de GVR mayor que cero y válida.", "error");
+          mostrarMensaje("Introduce una cantidad de Gvr mayor que cero y válida.", "error");
           cantidad.focus();
           return;
         }
@@ -217,16 +218,16 @@
           return;
         }
         if (authData.user.email && authData.user.email.toLowerCase() === email) {
-          mostrarMensaje("No puedes enviarte GVR a tu propia cuenta.", "error");
+          mostrarMensaje("No puedes enviarte Gvr a tu propia cuenta.", "error");
           return;
         }
 
         const confirmado = window.confirm(
           "Confirma tu transferencia:\n\n" +
           "Destinatario: " + email + "\n" +
-          "Recibe: " + formatoGVR(amount) + "\n" +
-          "Comisión (10 %): " + formatoGVR(fee) + "\n" +
-          "Total que se descontará: " + formatoGVR(total) + "\n\n" +
+          "Recibe: " + formatoGvr(amount) + "\n" +
+          "Comisión (10 %): " + formatoGvr(fee) + "\n" +
+          "Total que se descontará: " + formatoGvr(total) + "\n\n" +
           "¿Deseas continuar?"
         );
         if (!confirmado) return;
@@ -250,9 +251,9 @@
 
           await cargarSaldoDisponible();
           mostrarMensaje(
-            "¡Transferencia completada! Se enviaron " + formatoGVR(Number(data.amount)) +
-            " a " + data.recipient_email + ". Comisión: " + formatoGVR(Number(data.fee)) +
-            ". Total descontado: " + formatoGVR(Number(data.total_debit)) +
+            "¡Transferencia completada! Se enviaron " + formatoGvr(Number(data.amount)) +
+            " a " + data.recipient_email + ". Comisión: " + formatoGvr(Number(data.fee)) +
+            ". Total descontado: " + formatoGvr(Number(data.total_debit)) +
             ". Ya puedes volver a tu Wallet para consultar el saldo actualizado.",
             "success"
           );
@@ -262,7 +263,7 @@
           requestIdPendiente = null;
           firmaPendiente = null;
         } catch (error) {
-          console.error("Error enviando GVR:", error);
+          console.error("Error enviando Gvr:", error);
           const texto = String(error && error.message || "");
           let respuesta = "No se pudo confirmar el envío. No repitas la operación con datos nuevos; puedes reintentar con los mismos datos.";
           if (/Saldo insuficiente/i.test(texto)) respuesta = texto;
