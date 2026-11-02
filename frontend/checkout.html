@@ -333,6 +333,115 @@ main{width:100%;max-width:940px;margin:0 auto;padding:18px 20px 24px;box-sizing:
 }
 @media(prefers-reduced-motion:reduce){.escudo-gvr-flotante{animation:none}}
 
+
+/* ===== Interior de la ficha calcado a la referencia enviada ===== */
+.ficha-pedido{
+ grid-template-columns:minmax(0,1.55fr) minmax(205px,.85fr)!important;
+ grid-template-rows:1fr!important;
+ align-items:stretch!important;
+ min-height:470px!important;
+ padding:14px!important;
+ gap:12px!important;
+ border:2px solid #078fff!important;
+ border-radius:19px!important;
+ background:linear-gradient(145deg,#03132d 0%,#020a1b 65%,#04132a 100%)!important;
+ box-shadow:0 0 22px rgba(0,128,255,.26),inset 0 0 25px rgba(0,128,255,.06)!important;
+}
+.ficha-datos{
+ display:grid!important;
+ grid-template-rows:repeat(6,minmax(0,1fr))!important;
+ align-content:stretch!important;
+ justify-content:stretch!important;
+ height:100%!important;
+ min-height:0!important;
+ border:1px solid rgba(0,116,255,.24)!important;
+ border-radius:12px!important;
+ background:rgba(1,9,24,.46)!important;
+ overflow:hidden!important;
+}
+.ficha-fila{
+ display:grid!important;
+ grid-template-columns:58px minmax(0,1fr) auto!important;
+ align-items:center!important;
+ min-height:0!important;
+ height:auto!important;
+ padding:7px 10px!important;
+ gap:12px!important;
+ border-bottom:1px solid rgba(0,120,255,.2)!important;
+ background:transparent!important;
+}
+.ficha-fila:last-of-type{border-bottom:0!important}
+.ficha-icono{
+ width:52px!important;height:52px!important;flex:0 0 52px!important;
+ border:1.5px solid #087ee6!important;border-radius:50%!important;
+ background:linear-gradient(145deg,rgba(0,122,255,.2),rgba(0,19,48,.45))!important;
+ color:#18caff!important;font-size:27px!important;
+ box-shadow:inset 0 0 12px rgba(0,138,255,.1),0 0 9px rgba(0,115,255,.12)!important;
+}
+.ficha-info{min-width:0!important;overflow:visible!important}
+.ficha-info>span{display:block!important;color:#8fb8ec!important;font-size:11px!important;letter-spacing:.55px!important;margin:0 0 4px!important}
+.ficha-info>strong{display:block!important;color:#f6f9ff!important;font-size:16px!important;line-height:1.2!important;font-weight:650!important;overflow-wrap:anywhere!important;word-break:break-word!important}
+.ficha-info>strong.precio{font-size:17px!important}
+.ficha-info>small{display:block!important;color:#9abbe6!important;font-size:10px!important;margin-top:4px!important}
+.logo-juego{
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ width:142px!important;min-height:70px!important;height:70px!important;flex:0 0 142px!important;
+ padding:6px!important;box-sizing:border-box!important;text-align:center!important;
+ border:1px solid rgba(0,129,255,.65)!important;border-radius:12px!important;
+ background:linear-gradient(145deg,rgba(2,17,39,.98),rgba(0,7,20,.98))!important;
+ color:#fff!important;font-size:14px!important;font-weight:900!important;line-height:1.1!important;
+ box-shadow:0 0 12px rgba(0,120,255,.12)!important;
+}
+.logo-juego small{display:block!important;font-size:10px!important;letter-spacing:3px!important;color:#b9dfff!important;margin-top:4px!important}
+.ficha-arte{
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ min-width:0!important;min-height:0!important;height:100%!important;
+ border:0!important;border-radius:12px!important;overflow:hidden!important;
+ background:radial-gradient(ellipse at 50% 70%,rgba(0,106,255,.23),transparent 65%)!important;
+}
+.escudo-gvr-flotante{width:min(94%,230px)!important;max-width:230px!important;aspect-ratio:160/180!important;flex:0 1 auto!important;filter:drop-shadow(0 0 18px rgba(0,135,255,.55))!important}
+.escudo-gvr-flotante img{width:100%!important;height:100%!important;object-fit:contain!important}
+.arte-anillo{bottom:9%!important;width:94%!important;height:42px!important}
+.arte-brillo{bottom:8%!important}
+@media(max-width:620px){
+ .ficha-pedido{
+  grid-template-columns:minmax(0,1.55fr) minmax(104px,.78fr)!important;
+  min-height:0!important;height:auto!important;max-height:none!important;
+  padding:7px!important;gap:5px!important;border-radius:14px!important;
+ }
+ .ficha-datos{
+  grid-template-rows:repeat(6,minmax(57px,auto))!important;
+  height:auto!important;min-height:0!important;
+ }
+ .ficha-fila{
+  grid-template-columns:32px minmax(0,1fr) auto!important;
+  min-height:57px!important;padding:5px 3px!important;gap:6px!important;
+ }
+ .ficha-icono{width:29px!important;height:29px!important;flex-basis:29px!important;font-size:16px!important}
+ .ficha-info>span{font-size:8px!important;letter-spacing:.3px!important;margin-bottom:3px!important}
+ .ficha-info>strong{font-size:clamp(10px,2.8vw,12px)!important;line-height:1.18!important}
+ .ficha-info>strong.precio{font-size:12px!important}
+ .ficha-info>small{font-size:8px!important;margin-top:3px!important}
+ .logo-juego{
+  width:100%!important;max-width:76px!important;min-height:43px!important;height:43px!important;
+  flex-basis:76px!important;padding:3px!important;border-radius:7px!important;font-size:8px!important;
+ }
+ .logo-juego small{font-size:6px!important;letter-spacing:1px!important;margin-top:2px!important}
+ .ficha-arte{align-self:stretch!important;min-height:100%!important;overflow:hidden!important}
+ .escudo-gvr-flotante{width:100%!important;max-width:125px!important;animation-duration:3.8s!important}
+ .arte-anillo{height:22px!important;bottom:12%!important}
+ .arte-brillo{height:13px!important;bottom:10%!important}
+}
+@media(max-width:370px){
+ .ficha-pedido{grid-template-columns:minmax(0,1.52fr) minmax(88px,.72fr)!important;padding:5px!important;gap:3px!important}
+ .ficha-datos{grid-template-rows:repeat(6,minmax(54px,auto))!important}
+ .ficha-fila{grid-template-columns:27px minmax(0,1fr) auto!important;min-height:54px!important;padding:4px 2px!important;gap:4px!important}
+ .ficha-icono{width:25px!important;height:25px!important;flex-basis:25px!important;font-size:14px!important}
+ .ficha-info>strong{font-size:10px!important}
+ .logo-juego{max-width:64px!important;flex-basis:64px!important}
+ .escudo-gvr-flotante{max-width:105px!important}
+}
+
 </style>
 </head>
 <body>
