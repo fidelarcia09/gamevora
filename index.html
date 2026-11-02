@@ -120,6 +120,24 @@
             to { --borde-azul-giro: 360deg; }
         }
 
+
+        /* Indicador de sección igual al de "Historial de movimientos" en Wallet */
+        .seccion-encabezado h2 {
+            position: relative;
+            padding-left: 13px;
+        }
+        .seccion-encabezado h2::before {
+            content: "";
+            position: absolute;
+            top: 3px;
+            bottom: 3px;
+            left: 0;
+            width: 4px;
+            border-radius: 5px;
+            background: linear-gradient(#20c5ff, #087cff);
+            box-shadow: 0 0 10px rgba(32, 197, 255, .3);
+        }
+
 </style>
 </head>
 <body>
@@ -140,7 +158,7 @@
 
         
 
-        <section class="seccion"><div class="seccion-encabezado"><div><h2><span style="color:var(--cian)">|</span> Anuncios</h2></div></div>
+        <section class="seccion"><div class="seccion-encabezado"><div><h2>Anuncios</h2></div></div>
             <div class="gamevora-carrusel"><div class="gamevora-track" id="gamevoraTrack">
                 <a href="frontend/reseñas.html" class="gamevora-slide gamevora-slide-link"><div class="gamevora-slide-text"><div class="gamevora-slide-label">GAMERS GOLD TOP-UP COMMUNITY</div><h3>Tu opinión cuenta</h3><p>Comparte tu experiencia y ayúdanos a seguir mejorando.</p></div><div class="gamevora-slide-icon"></div></a>
                 <div class="gamevora-slide"><div class="gamevora-slide-text"><div class="gamevora-slide-label">NOVEDADES</div><h3>Nuevas actualizaciones</h3><p>Mantente atento a las novedades de Gamers Gold Top-Up.</p></div><div class="gamevora-slide-icon"></div></div>
@@ -149,9 +167,9 @@
             <div class="gamevora-dots" aria-label="Controles del carrusel"><button class="gamevora-dot activo" type="button" aria-label="Banner 1"></button><button class="gamevora-dot" type="button" aria-label="Banner 2"></button><button class="gamevora-dot" type="button" aria-label="Banner 3"></button></div>
         </section>
 
-        <section class="seccion"><div class="seccion-encabezado"><div><h2><span style="color:var(--cian)">|</span> Saldo Virtual</h2></div></div><div class="gvr-panel"><div><h2>Conoce GVR</h2><p>Descubre cómo funciona nuestro saldo virtual y consulta la información disponible antes de realizar tus compras.</p><a href="frontend/informacion-gvr.html" class="gvr-enlace">Información sobre GVR <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div><div class="gvr-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3 1.5 0 2.9-.2 4-.6"/><path d="M20 11v3"/><path d="m16 17 2 2 4-4"/></svg></div></div></section>
+        <section class="seccion"><div class="seccion-encabezado"><div><h2>Saldo Virtual</h2></div></div><div class="gvr-panel"><div><h2>Conoce GVR</h2><p>Descubre cómo funciona nuestro saldo virtual y consulta la información disponible antes de realizar tus compras.</p><a href="frontend/informacion-gvr.html" class="gvr-enlace">Información sobre GVR <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div><div class="gvr-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3 1.5 0 2.9-.2 4-.6"/><path d="M20 11v3"/><path d="m16 17 2 2 4-4"/></svg></div></div></section>
 
-        <section class="seccion"><div class="seccion-encabezado"><div><h2><span style="color:var(--cian)">|</span> ¿Por qué elegirnos?</h2></div></div>
+        <section class="seccion"><div class="seccion-encabezado"><div><h2>¿Por qué elegirnos?</h2></div></div>
             <div class="ventajas-grid">
                 <article class="ventaja-card"><div class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4.5 13h6L10 22l9.5-12h-6L13 2Z"/></svg></div><h3>ENTREGA RÁPIDA</h3><p>Recargas digitales procesadas de forma ágil.</p></article>
                 <article class="ventaja-card"><div class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg></div><h3>PROCESO CLARO</h3><p>Información de compra presentada de forma sencilla.</p></article>
