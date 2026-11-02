@@ -1246,56 +1246,49 @@
 
 
 
-        /* Destello luminoso que viaja físicamente por los cuatro lados de Saldo disponible */
+        /* Mismo efecto de checkout: destello giratorio recortado al contorno de la tarjeta */
         .saldo {
             position: relative !important;
             isolation: isolate !important;
-            overflow: hidden !important;
-            border: 1px solid rgba(0, 160, 255, .42) !important;
         }
 
-        /* Se conserva un contorno azul fijo y visible */
         .saldo::before {
             content: "" !important;
             position: absolute !important;
             inset: 0 !important;
-            z-index: 2 !important;
-            padding: 1px !important;
+            z-index: 10 !important;
+            padding: 2px !important;
             border-radius: inherit !important;
             pointer-events: none !important;
-            background: linear-gradient(135deg, rgba(0,145,255,.55), rgba(0,190,255,.12), rgba(0,145,255,.55)) !important;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg 270deg,
+                rgba(0,145,255,.08) 292deg,
+                rgba(0,190,255,.95) 310deg,
+                #d8f8ff 318deg,
+                rgba(0,135,255,.9) 326deg,
+                transparent 345deg 360deg
+            ) !important;
             -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
             -webkit-mask-composite: xor !important;
             mask-composite: exclude !important;
+            transform-origin: center center !important;
+            animation: destelloBordeSaldoCheckout 4.2s linear infinite !important;
+            filter: drop-shadow(0 0 7px rgba(0,145,255,.9)) !important;
+        }
+
+        .saldo::after {
+            content: none !important;
             animation: none !important;
         }
 
-        /* La luz avanza alrededor del rectángulo, en vez de rotar en el centro */
-        .saldo::after {
-            content: "" !important;
-            position: absolute !important;
-            z-index: 3 !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 58px !important;
-            height: 4px !important;
-            border-radius: 999px !important;
-            pointer-events: none !important;
-            background: linear-gradient(90deg, transparent, #168cff 22%, #e4faff 52%, #168cff 82%, transparent) !important;
-            box-shadow: 0 0 7px #168cff, 0 0 15px rgba(0,160,255,.9) !important;
-            offset-path: inset(1px round 17px) !important;
-            offset-anchor: center !important;
-            offset-rotate: auto !important;
-            offset-distance: 0% !important;
-            animation: luzRecorreSaldo 4.2s linear infinite !important;
-        }
-
-        @keyframes luzRecorreSaldo {
-            to { offset-distance: 100%; }
+        @keyframes destelloBordeSaldoCheckout {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .saldo::after { animation: none !important; }
+            .saldo::before { animation: none !important; }
         }
 </style>
 </head>
