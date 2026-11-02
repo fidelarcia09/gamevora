@@ -1246,22 +1246,13 @@
 
 
 
-        /* Mismo destello giratorio de contorno utilizado en el checkout */
-        .saldo::before {
-            background: linear-gradient(
-                115deg,
-                #0755a8,
-                #00c8ff,
-                #e2fbff,
-                #008cff,
-                #0755a8
-            ) !important;
-            background-size: 300% 300% !important;
-            animation: none !important;
-            filter: none !important;
+        /* Destello que recorre el perímetro de Saldo disponible, sin girar sobre su centro */
+        .saldo {
+            position: relative;
+            isolation: isolate;
         }
 
-        .saldo::after {
+        .saldo::before {
             content: "" !important;
             position: absolute !important;
             inset: 0 !important;
@@ -1281,20 +1272,26 @@
             -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
             -webkit-mask-composite: xor !important;
             mask-composite: exclude !important;
-            animation: destelloBordeSaldo 4.2s linear infinite !important;
+            transform-origin: center !important;
+            animation: destelloRecorrePerimetroSaldo 4.2s linear infinite !important;
+            filter: drop-shadow(0 0 5px rgba(0,145,255,.65)) !important;
         }
 
-        @keyframes destelloBordeSaldo {
+        .saldo::after {
+            content: none !important;
+            animation: none !important;
+        }
+
+        @keyframes destelloRecorrePerimetroSaldo {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .saldo::after {
+            .saldo::before {
                 animation: none !important;
             }
         }
-
 </style>
 </head>
 
