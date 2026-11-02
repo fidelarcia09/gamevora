@@ -511,6 +511,60 @@ main{width:100%;max-width:940px;margin:0 auto;padding:18px 20px 24px;box-sizing:
 @media(max-width:350px){
  #accionesNavegacion{grid-template-columns:1fr!important;max-width:230px!important}
 }
+
+
+/* Ajuste solicitado: sin marcos exteriores ni separación visual del escudo */
+.tarjeta.comprobante-nuevo{
+ border:0!important;
+ outline:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+ background:transparent!important;
+}
+.tarjeta.comprobante-nuevo::before,
+.tarjeta.comprobante-nuevo::after,
+.comprobante-hero::before,
+.comprobante-hero::after,
+.checkout-border-effect,
+.checkout-light-sweep{
+ display:none!important;
+ content:none!important;
+}
+.ficha-pedido{
+ border:0!important;
+ outline:0!important;
+ border-radius:0!important;
+ padding:0!important;
+ gap:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-datos{
+ border:0!important;
+ outline:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-arte{
+ border:0!important;
+ outline:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.arte-anillo,.arte-brillo{display:none!important}
+.escudo-gvr-flotante{
+ border:0!important;
+ outline:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+@media(max-width:620px){
+ .tarjeta.comprobante-nuevo{border:0!important;border-radius:0!important;box-shadow:none!important}
+ .ficha-pedido{padding:0!important;gap:0!important}
+}
+
 </style>
 </head>
 <body>
