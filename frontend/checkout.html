@@ -527,6 +527,83 @@ main{width:100%!important;max-width:1020px!important;padding:0 20px 20px!importa
  .ficha-info>strong,.ficha-info>strong.precio{font-size:9px!important}
 }
 
+
+/* ===== Corrección final de composición y carga visual ===== */
+/* Quitar por completo los destellos móviles que cruzan la pantalla */
+.comprobante-nuevo .checkout-light-sweep,
+.comprobante-nuevo .checkout-border-effect{display:none!important;animation:none!important;opacity:0!important}
+.comprobante-nuevo::before,.comprobante-nuevo::after{animation:none!important}
+/* El contenedor de datos es la única tarjeta; botones quedan debajo y fuera */
+.comprobante-cuerpo{padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.ficha-pedido{
+ display:grid!important;
+ grid-template-columns:minmax(0,1.35fr) minmax(230px,.8fr)!important;
+ gap:12px!important;
+ width:100%!important;
+ height:440px!important;
+ min-height:440px!important;
+ max-height:440px!important;
+ padding:14px!important;
+ border:1px solid #078fff!important;
+ border-radius:17px!important;
+ background:linear-gradient(145deg,rgba(4,19,43,.98),rgba(2,9,24,.99))!important;
+ box-shadow:0 0 20px rgba(0,119,255,.25),inset 0 0 22px rgba(0,126,255,.05)!important;
+ overflow:hidden!important;
+}
+.ficha-datos{height:100%!important;min-height:0!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;overflow:hidden!important}
+.ficha-fila{flex:1 1 0!important;height:auto!important;min-height:0!important;max-height:none!important;padding:5px 9px!important;gap:12px!important;border-bottom:1px solid rgba(0,137,255,.19)!important}
+.ficha-fila:last-of-type{border-bottom:0!important}
+.ficha-icono{width:48px!important;height:48px!important;flex:0 0 48px!important;font-size:25px!important}
+.ficha-info>span{font-size:10px!important;margin-bottom:4px!important}
+.ficha-info>strong{font-size:15px!important;line-height:1.2!important}
+.ficha-info>strong.precio{font-size:16px!important}
+.ficha-info>small{font-size:10px!important}
+.logo-juego{width:116px!important;min-height:62px!important;flex:0 0 116px!important}
+.ficha-arte{position:relative!important;height:100%!important;min-height:0!important;overflow:hidden!important;border-radius:10px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:radial-gradient(ellipse at 50% 68%,rgba(0,112,255,.2),transparent 60%)!important}
+.imagen-juego-comprobante{
+ display:block!important;position:relative!important;z-index:2!important;
+ width:100%!important;height:100%!important;max-height:none!important;
+ object-fit:cover!important;object-position:center!important;
+ border-radius:8px!important;
+ filter:drop-shadow(0 5px 13px rgba(0,133,255,.32))!important;
+}
+.arte-anillo{z-index:1!important;bottom:9%!important;width:92%!important;height:42px!important;opacity:.7!important}
+.arte-brillo{z-index:0!important;bottom:7%!important;opacity:.45!important}
+/* Separar botones de la ficha de compra, como en la imagen de referencia */
+.comprobante-cuerpo>.nota{margin:15px 0 0!important}
+#accionesComprobante{margin:18px auto 0!important;max-width:680px!important}
+#accionesNavegacion{display:grid!important;grid-template-columns:1fr!important;gap:11px!important;margin:18px auto 0!important;max-width:680px!important}
+#accionesNavegacion .boton{min-height:60px!important;border-radius:13px!important}
+.mensaje{margin:10px auto 0!important;max-width:680px!important}
+@media(max-width:620px){
+ .comprobante-hero{min-height:0!important;padding:20px 8px 22px!important}
+ .producto-visual{height:auto!important;min-height:0!important;margin:25px auto 18px!important}
+ .producto-check{width:126px!important;height:126px!important;font-size:80px!important}
+ .producto-resumen h1{font-size:clamp(27px,7.4vw,38px)!important;line-height:1.05!important}
+ .producto-resumen .subtitulo{font-size:13px!important}
+ .comprobante-cuerpo{padding:0 9px!important}
+ .ficha-pedido{
+  grid-template-columns:minmax(0,1.38fr) minmax(112px,.78fr)!important;
+  gap:5px!important;height:390px!important;min-height:390px!important;max-height:390px!important;
+  padding:7px!important;border-radius:14px!important;
+ }
+ .ficha-datos{height:100%!important}
+ .ficha-fila{padding:4px 2px!important;gap:6px!important}
+ .ficha-icono{width:32px!important;height:32px!important;flex-basis:32px!important;font-size:17px!important}
+ .ficha-info>span{font-size:8px!important;letter-spacing:.35px!important;margin-bottom:3px!important}
+ .ficha-info>strong{font-size:11px!important;line-height:1.17!important;overflow-wrap:anywhere!important}
+ .ficha-info>strong.precio{font-size:12px!important}
+ .ficha-info>small{font-size:8px!important;margin-top:2px!important}
+ .ficha-info>small b{font-size:9px!important}
+ .logo-juego{display:none!important}
+ .ficha-arte{height:100%!important;min-height:0!important}
+ .imagen-juego-comprobante{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
+ .arte-anillo{height:25px!important}
+ #accionesComprobante,#accionesNavegacion{max-width:none!important;margin-top:14px!important}
+ #accionesNavegacion .boton{min-height:54px!important;font-size:14px!important}
+ .comprobante-cuerpo>.nota{font-size:12px!important;padding:14px 10px!important}
+}
+
 </style>
 </head>
 <body>
@@ -592,7 +669,7 @@ main{width:100%!important;max-width:1020px!important;padding:0 20px 20px!importa
                 </div>
                 <div class="ficha-arte" aria-hidden="true">
                     <div class="arte-anillo"></div>
-                    <img class="imagen-juego-comprobante" id="imagenJuegoComprobante" src="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png" alt="">
+                    <img class="imagen-juego-comprobante" id="imagenJuegoComprobante" src="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png" alt="" loading="eager" decoding="async" fetchpriority="high">
                     <div class="arte-brillo"></div>
                 </div>
             </div>
