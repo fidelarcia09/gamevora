@@ -847,12 +847,22 @@ body>header{
 }
 
 
-/* Ajuste fino: quitar las líneas divisorias sin alterar el espacio entre filas */
-.ficha-fila,
-.ficha-fila:last-of-type{
+/* Líneas de separación suaves: se desvanecen hacia el escudo GVR */
+.ficha-fila{
  border-bottom:0!important;
+ background-image:linear-gradient(to right,
+   rgba(0,151,255,.34) 0%,
+   rgba(0,139,255,.22) 42%,
+   rgba(0,125,255,.10) 68%,
+   rgba(0,125,255,0) 100%)!important;
+ background-repeat:no-repeat!important;
+ background-position:left bottom!important;
+ background-size:100% 1px!important;
 }
-/* Se conserva intacta la distribución y el espacio reservado al escudo GVR. */
+.ficha-fila:last-of-type{
+ background-image:none!important;
+}
+/* Se conserva el espacio reservado al escudo GVR. */
 
 </style>
 </head>
