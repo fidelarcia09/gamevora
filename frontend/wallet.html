@@ -1246,42 +1246,41 @@
 
 
 
-        /* Mismo destello de «Tu plan actual» en Revender */
+        /* Mismo destello de contorno que la ficha de pedido en Checkout */
         .saldo{
             position:relative!important;
             isolation:isolate!important;
         }
-        .saldo .plan-border-effect{
-            position:absolute;
-            inset:0;
-            z-index:5;
-            padding:2px;
-            border-radius:inherit;
-            pointer-events:none;
+        .saldo::after{
+            content:""!important;
+            position:absolute!important;
+            inset:0!important;
+            z-index:10!important;
+            padding:2px!important;
+            border-radius:inherit!important;
+            pointer-events:none!important;
             background:conic-gradient(from 0deg,
                 transparent 0deg 270deg,
                 rgba(0,145,255,.08) 292deg,
                 rgba(0,190,255,.95) 310deg,
                 #d8f8ff 318deg,
                 rgba(0,135,255,.9) 326deg,
-                transparent 345deg 360deg);
-            -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-            -webkit-mask-composite:xor;
-            mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-            mask-composite:exclude;
-            animation:destelloPlanCheckout 4.2s linear infinite;
+                transparent 345deg 360deg)!important;
+            -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+            -webkit-mask-composite:xor!important;
+            mask-composite:exclude!important;
+            animation:destelloBordeFicha 4.2s linear infinite!important;
         }
-        /* Desactivar los destellos antiguos de Wallet para evitar que se superpongan */
-        .saldo::before,.saldo::after{
+        .saldo::before{
             content:none!important;
             animation:none!important;
         }
-        @keyframes destelloPlanCheckout{
+        @keyframes destelloBordeFicha{
             from{transform:rotate(0deg)}
             to{transform:rotate(360deg)}
         }
         @media(prefers-reduced-motion:reduce){
-            .saldo .plan-border-effect{animation:none}
+            .saldo::after{animation:none!important}
         }
 </style>
 </head>
@@ -1304,7 +1303,6 @@
             </p>
 
             <section class="saldo" aria-label="Saldo disponible">
-                <span class="plan-border-effect" aria-hidden="true"></span>
 
                 <div class="saldo-contenido">
                     <div class="saldo-titulo">
