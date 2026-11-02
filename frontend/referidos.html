@@ -20,6 +20,11 @@
     .volver { color: var(--cian); text-decoration: none; font-size: 12px; font-weight: 800; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--borde); background: var(--superficie); white-space: nowrap; }
     .pantalla { padding: 21px 19px 17px; margin-bottom: 19px; border: 1px solid var(--borde); border-radius: 20px; background: radial-gradient(ellipse at 90% 8%, rgba(0,119,255,.18), transparent 43%), linear-gradient(135deg, #0b1b34, #081121 75%); box-shadow: 0 12px 30px #0004; }
     .resumen-superior { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 96px; }
+    .regalo { animation: regaloFlotar 3.2s ease-in-out infinite; transform-origin: center; }
+    @keyframes regaloFlotar {
+      0%, 100% { transform: translateX(-7px) rotate(-3deg); }
+      50% { transform: translateX(7px) rotate(3deg); }
+    }
     .ganado-label { color: var(--secundario); font-size: 13px; font-weight: 700; margin-bottom: 8px; }
     .ganado-importe { color: var(--cian); font-size: clamp(27px, 7vw, 36px); font-weight: 900; letter-spacing: -.7px; overflow-wrap: anywhere; text-shadow: 0 0 18px #00aaff30; }
     /* Escudos GVR flotando desde la base de la pantalla de ganancias */
