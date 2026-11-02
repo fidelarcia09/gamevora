@@ -267,12 +267,13 @@
         margin: 0;
         white-space: nowrap;
     }
-    .perfil-rango svg {
+    .perfil-rango img {
         display: block;
-        width: 25px;
-        height: 25px;
-        flex: 0 0 25px;
-        filter: drop-shadow(0 2px 3px rgba(0,0,0,.45));
+        width: 29px;
+        height: 29px;
+        flex: 0 0 29px;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)) drop-shadow(0 0 5px rgba(32,197,255,.2));
     }
 
     .accesos-cuenta {
@@ -2126,6 +2127,83 @@ formWhatsApp.addEventListener("submit", async function(event) {
    CARGAR CUENTA Y PERMISOS
 ========================================== */
 
+let usuarioCuentaIdParaRango = null;
+
+async function actualizarRangoPerfilRevendedor(usuarioId) {
+    const etiquetaRevendedor = document.getElementById("etiquetaRevendedor");
+    const rangoPerfil = document.getElementById("rangoPerfilResumen");
+    if (!etiquetaRevendedor || !rangoPerfil || !usuarioId) return;
+
+    try {
+        const { data: perfilRevendedor, error: errorPerfilRevendedor } =
+            await supabaseClient
+                .from("reseller_profiles")
+                .select("role,active,rank_override")
+                .eq("user_id", usuarioId)
+                .eq("active", true)
+                .maybeSingle();
+
+        if (errorPerfilRevendedor) throw errorPerfilRevendedor;
+
+        if (!perfilRevendedor?.active || perfilRevendedor.role !== "Revendedor") {
+            etiquetaRevendedor.hidden = true;
+            rangoPerfil.hidden = true;
+            rangoPerfil.replaceChildren();
+            return;
+        }
+
+        const { data: stats, error: errorStats } =
+            await supabaseClient.rpc("get_reseller_dashboard_stats");
+        if (errorStats) throw errorStats;
+
+        const datosStats = Array.isArray(stats) ? stats[0] : stats;
+        const total = Number(datosStats?.completed_count || 0);
+        const niveles = [
+            { nombre: "Bronce", minimo: 0 },
+            { nombre: "Plata", minimo: 25 },
+            { nombre: "Oro", minimo: 75 },
+            { nombre: "Diamante", minimo: 150 },
+            { nombre: "Leyenda", minimo: 300 }
+        ];
+        const nivelCalculado = niveles.filter(n => total >= n.minimo).pop() || niveles[0];
+        const nivelActual = niveles.find(n => n.nombre === perfilRevendedor.rank_override) || nivelCalculado;
+        const archivosInsignia = {
+            Bronce: "bronce",
+            Plata: "plata",
+            Oro: "oro",
+            Diamante: "diamante",
+            Leyenda: "elite"
+        };
+        const archivo = archivosInsignia[nivelActual.nombre] || "bronce";
+
+        rangoPerfil.innerHTML =
+            '<img src="assets/rangos/' + archivo + '.svg" alt="Insignia de ' +
+            nivelActual.nombre + '" loading="eager" decoding="async">' +
+            "<span>" + nivelActual.nombre + "</span>";
+        rangoPerfil.setAttribute("aria-label", "Rango de revendedor: " + nivelActual.nombre);
+        etiquetaRevendedor.hidden = false;
+        rangoPerfil.hidden = false;
+    } catch (error) {
+        console.warn("No se pudo sincronizar el rango del perfil:", error);
+    }
+}
+
+// Sincroniza el rango cuando el usuario vuelve a Cuenta y también mientras la página
+// permanece abierta, sin recargar los demás datos ni alterar la sesión.
+window.addEventListener("focus", () => {
+    if (usuarioCuentaIdParaRango) actualizarRangoPerfilRevendedor(usuarioCuentaIdParaRango);
+});
+document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && usuarioCuentaIdParaRango) {
+        actualizarRangoPerfilRevendedor(usuarioCuentaIdParaRango);
+    }
+});
+setInterval(() => {
+    if (!document.hidden && usuarioCuentaIdParaRango) {
+        actualizarRangoPerfilRevendedor(usuarioCuentaIdParaRango);
+    }
+}, 30000);
+
 async function cargarCuenta() {
     const { data, error } =
         await supabaseClient.auth.getUser();
@@ -2165,51 +2243,8 @@ async function cargarCuenta() {
     // Cargar la foto guardada para este usuario.
     mostrarFotoPerfil(usuario.user_metadata?.avatar_url || "");
 
-    // Ocultar por defecto: solo se mostrarán si Supabase confirma que es revendedor activo.
-    const etiquetaRevendedor = document.getElementById("etiquetaRevendedor");
-    const rangoPerfil = document.getElementById("rangoPerfilResumen");
-    etiquetaRevendedor.hidden = true;
-    rangoPerfil.hidden = true;
-    rangoPerfil.textContent = "";
-
-    // El rol y el rango se muestran únicamente si el perfil de revendedor está activo.
-    try {
-        const { data: perfilRevendedor, error: errorPerfilRevendedor } =
-            await supabaseClient
-                .from("reseller_profiles")
-                .select("role,active,rank_override")
-                .eq("user_id", usuario.id)
-                .eq("active", true)
-                .maybeSingle();
-
-        if (!errorPerfilRevendedor && perfilRevendedor?.active &&
-            perfilRevendedor.role === "Revendedor") {
-            etiquetaRevendedor.hidden = false;
-
-            const { data: stats, error: errorStats } =
-                await supabaseClient.rpc("get_reseller_dashboard_stats");
-
-            if (!errorStats && stats) {
-                const datosStats = Array.isArray(stats) ? stats[0] : stats;
-                const total = Number(datosStats?.completed_count || 0);
-                const niveles = [
-                    { nombre: "Bronce", minimo: 0 },
-                    { nombre: "Plata", minimo: 25 },
-                    { nombre: "Oro", minimo: 75 },
-                    { nombre: "Diamante", minimo: 150 },
-                    { nombre: "Leyenda", minimo: 300 }
-                ];
-                const nivelCalculado = niveles.filter(n => total >= n.minimo).pop() || niveles[0];
-                const nivelActual = niveles.find(n => n.nombre === perfilRevendedor.rank_override) || nivelCalculado;
-                rangoPerfil.innerHTML = emblemaSvgPerfil(nivelActual.nombre) +
-                    "<span>" + nivelActual.nombre + "</span>";
-                rangoPerfil.setAttribute("aria-label", "Rango de revendedor: " + nivelActual.nombre);
-                rangoPerfil.hidden = false;
-            }
-        }
-    } catch (error) {
-        console.warn("No se pudo cargar el rango del perfil:", error);
-    }
+    usuarioCuentaIdParaRango = usuario.id;
+    await actualizarRangoPerfilRevendedor(usuario.id);
 
     const esAdmin = await comprobarAdministrador();
 
