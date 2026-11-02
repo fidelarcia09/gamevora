@@ -899,6 +899,33 @@ body>header{
 }
 /* Se conserva el espacio reservado al escudo GVR. */
 
+
+/* Una sola superficie continua para datos y escudo GVR */
+.ficha-pedido{
+ background:linear-gradient(115deg,#03132d 0%,#041832 48%,#061a35 100%)!important;
+ border:2px solid #078fff!important;
+ box-shadow:0 0 22px rgba(0,128,255,.22),inset 0 0 22px rgba(0,128,255,.035)!important;
+ gap:0!important;
+}
+.ficha-datos{
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-arte{
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-arte::before{
+ border-color:rgba(0,164,255,.12)!important;
+ background:radial-gradient(circle,rgba(0,129,255,.06) 0 22%,rgba(0,70,190,.025) 42%,transparent 68%)!important;
+ box-shadow:none!important;
+}
+.ficha-arte::after{opacity:.10!important}
+
 </style>
 </head>
 <body>
