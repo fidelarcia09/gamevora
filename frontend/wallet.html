@@ -1246,40 +1246,49 @@
 
 
 
-        /* Efecto copiado literalmente de Checkout */
-        /* Destello azul que recorre únicamente el contorno de la ficha de pedido */
-        .ficha-pedido{
-         position:relative!important;
-         isolation:isolate!important;
+        /* Destello que recorre el borde: el marco queda fijo y solo gira la luz */
+        @property --wallet-light-angle{
+            syntax:"<angle>";
+            inherits:false;
+            initial-value:0deg;
         }
-        .ficha-pedido::after{
-         content:""!important;
-         position:absolute!important;
-         inset:0!important;
-         z-index:10!important;
-         padding:2px!important;
-         border-radius:inherit!important;
-         pointer-events:none!important;
-         background:conic-gradient(from 0deg,
-          transparent 0deg 270deg,
-          rgba(0,145,255,.08) 292deg,
-          rgba(0,190,255,.95) 310deg,
-          #d8f8ff 318deg,
-          rgba(0,135,255,.9) 326deg,
-          transparent 345deg 360deg)!important;
-         -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
-         -webkit-mask-composite:xor!important;
-         mask-composite:exclude!important;
-         animation:destelloBordeFicha 4.2s linear infinite!important;
+        .saldo{
+            position:relative!important;
+            isolation:isolate!important;
+            overflow:hidden!important;
         }
-        @keyframes destelloBordeFicha{
-         from{transform:rotate(0deg)}
-         to{transform:rotate(360deg)}
+        .saldo::after{
+            content:""!important;
+            position:absolute!important;
+            inset:0!important;
+            z-index:10!important;
+            padding:2px!important;
+            border-radius:inherit!important;
+            pointer-events:none!important;
+            background:conic-gradient(from var(--wallet-light-angle),
+                transparent 0deg 270deg,
+                rgba(0,145,255,.08) 292deg,
+                rgba(0,190,255,.95) 310deg,
+                #d8f8ff 318deg,
+                rgba(0,135,255,.9) 326deg,
+                transparent 345deg 360deg)!important;
+            -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+            -webkit-mask-composite:xor!important;
+            mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+            mask-composite:exclude!important;
+            animation:walletLightTravels 4.2s linear infinite!important;
+        }
+        .saldo::before{
+            content:none!important;
+            animation:none!important;
+        }
+        @keyframes walletLightTravels{
+            from{--wallet-light-angle:0deg}
+            to{--wallet-light-angle:360deg}
         }
         @media(prefers-reduced-motion:reduce){
-         .ficha-pedido::after{animation:none!important}
+            .saldo::after{animation:none!important}
         }
-
 </style>
 </head>
 
@@ -1300,7 +1309,7 @@
                 Consulta tu saldo y administra tus GVR.
             </p>
 
-            <section class="saldo ficha-pedido" aria-label="Saldo disponible">
+            <section class="saldo" aria-label="Saldo disponible">
 
                 <div class="saldo-contenido">
                     <div class="saldo-titulo">
