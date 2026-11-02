@@ -604,6 +604,98 @@ main{width:100%!important;max-width:1020px!important;padding:0 20px 20px!importa
  .comprobante-cuerpo>.nota{font-size:12px!important;padding:14px 10px!important}
 }
 
+
+/* ===== Layout final: sin fotos, escudo GVR flotante y contenido completo ===== */
+html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
+body{min-height:100vh!important;height:auto!important}
+main{width:100%!important;max-width:900px!important;min-width:0!important;margin:0 auto!important;padding:16px 14px 20px!important;box-sizing:border-box!important}
+.comprobante-nuevo{width:100%!important;max-width:860px!important;min-width:0!important;margin:0 auto!important;overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.comprobante-hero{width:100%!important;min-width:0!important;box-sizing:border-box!important;padding:20px 12px 24px!important;background:transparent!important}
+.comprobante-cabecera{display:flex!important;justify-content:center!important;align-items:center!important}
+.marca-ggt{display:flex!important;flex-direction:column!important;align-items:center!important;line-height:.94!important}
+.marca-ggt .marca-principal{font-size:clamp(28px,5vw,43px)!important}
+.marca-ggt .marca-gold{font-size:clamp(43px,7vw,62px)!important}
+.marca-ggt .marca-topup{font-size:12px!important;letter-spacing:7px!important}
+.claim-marca{margin-top:12px!important;font-size:clamp(9px,1.7vw,13px)!important;letter-spacing:clamp(2px,.55vw,5px)!important}
+.producto-visual{height:auto!important;min-height:0!important;margin:22px auto 17px!important}
+.producto-check{width:clamp(108px,16vw,150px)!important;height:clamp(108px,16vw,150px)!important;font-size:clamp(70px,11vw,98px)!important}
+.producto-resumen h1{font-size:clamp(28px,5.7vw,52px)!important;line-height:1.02!important;text-align:center!important;max-width:100%!important;overflow-wrap:anywhere!important}
+.producto-resumen .subtitulo{max-width:680px!important;margin:0 auto!important;text-align:center!important}
+.comprobante-cuerpo{width:100%!important;max-width:100%!important;min-width:0!important;padding:0!important;box-sizing:border-box!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.ficha-pedido{
+ display:grid!important;grid-template-columns:minmax(0,1.45fr) minmax(210px,.82fr)!important;
+ width:100%!important;height:430px!important;min-height:430px!important;max-height:430px!important;
+ min-width:0!important;box-sizing:border-box!important;padding:12px!important;gap:10px!important;
+ border:1px solid #078fff!important;border-radius:17px!important;
+ background:linear-gradient(145deg,#061630,#020a1c)!important;
+ box-shadow:0 0 22px rgba(0,119,255,.27),inset 0 0 25px rgba(0,126,255,.06)!important;
+ overflow:hidden!important
+}
+.ficha-datos{display:flex!important;flex-direction:column!important;justify-content:space-between!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important}
+.ficha-fila{display:flex!important;flex:1 1 0!important;min-width:0!important;min-height:0!important;height:auto!important;padding:5px 7px!important;gap:10px!important;align-items:center!important;border-bottom:1px solid rgba(0,137,255,.2)!important}
+.ficha-fila:last-of-type{border-bottom:0!important}
+.ficha-icono{width:42px!important;height:42px!important;flex:0 0 42px!important;font-size:23px!important}
+.ficha-info{min-width:0!important;overflow:hidden!important}
+.ficha-info>span{font-size:10px!important;margin-bottom:3px!important}
+.ficha-info>strong{font-size:clamp(12px,1.5vw,16px)!important;line-height:1.2!important;overflow-wrap:anywhere!important;word-break:break-word!important}
+.ficha-info>strong.precio{font-size:16px!important}
+.ficha-info>small{font-size:9px!important}
+.logo-juego{display:none!important}
+.ficha-arte{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;height:100%!important;min-height:0!important;min-width:0!important;overflow:visible!important;background:radial-gradient(ellipse,rgba(0,111,255,.2),transparent 68%)!important}
+.escudo-gvr-flotante{position:relative;z-index:3;width:min(100%,230px);height:auto;aspect-ratio:240/270;display:flex;align-items:center;justify-content:center;animation:escudoFlota 4s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(0,140,255,.5))}
+.escudo-gvr-flotante svg{display:block;width:100%;height:100%;overflow:visible}
+@keyframes escudoFlota{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.arte-anillo{z-index:1!important;bottom:8%!important;width:95%!important;height:40px!important}
+.arte-brillo{z-index:0!important;bottom:7%!important}
+.comprobante-cuerpo>.nota{margin:15px 0 0!important;box-sizing:border-box!important}
+#accionesComprobante,#accionesNavegacion{position:relative!important;display:grid!important;width:100%!important;max-width:680px!important;margin:17px auto 0!important;box-sizing:border-box!important;gap:11px!important}
+#accionesNavegacion{grid-template-columns:1fr!important}
+#accionesNavegacion .boton,#accionesComprobante .boton{width:100%!important;min-width:0!important;min-height:58px!important;box-sizing:border-box!important}
+.pie{width:100%!important;max-width:860px!important;margin:0 auto!important;padding:24px 8px 12px!important;box-sizing:border-box!important}
+.ventajas{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
+.ventaja{min-width:0!important}
+.copyright{max-width:100%!important;text-align:center!important;overflow-wrap:anywhere!important}
+@media(max-width:620px){
+ main{padding:9px 10px 16px!important}
+ .comprobante-hero{padding:13px 3px 18px!important}
+ .marca-ggt .marca-principal{font-size:28px!important}
+ .marca-ggt .marca-gold{font-size:46px!important}
+ .marca-ggt .marca-topup{font-size:10px!important;letter-spacing:6px!important}
+ .claim-marca{margin-top:10px!important;font-size:8px!important;letter-spacing:2px!important}
+ .producto-visual{margin:16px auto 14px!important}
+ .producto-check{width:112px!important;height:112px!important;font-size:72px!important}
+ .producto-resumen h1{font-size:clamp(27px,7.5vw,39px)!important}
+ .producto-resumen .subtitulo{font-size:12px!important;line-height:1.45!important}
+ .ficha-pedido{grid-template-columns:minmax(0,1.38fr) minmax(105px,.72fr)!important;height:380px!important;min-height:380px!important;max-height:380px!important;padding:7px!important;gap:3px!important;border-radius:14px!important}
+ .ficha-fila{padding:4px 2px!important;gap:6px!important}
+ .ficha-icono{width:30px!important;height:30px!important;flex-basis:30px!important;font-size:16px!important}
+ .ficha-info>span{font-size:8px!important;letter-spacing:.25px!important}
+ .ficha-info>strong{font-size:clamp(10px,2.7vw,12px)!important;line-height:1.16!important}
+ .ficha-info>strong.precio{font-size:12px!important}
+ .ficha-info>small{font-size:8px!important}
+ .ficha-arte{overflow:hidden!important}
+ .escudo-gvr-flotante{width:100%!important;max-width:138px!important;animation-duration:4.8s!important}
+ .arte-anillo{height:24px!important}
+ .comprobante-cuerpo>.nota{font-size:12px!important;padding:13px 10px!important}
+ #accionesComprobante,#accionesNavegacion{margin-top:12px!important;gap:9px!important}
+ #accionesNavegacion .boton,#accionesComprobante .boton{min-height:52px!important;font-size:13px!important}
+ .pie{padding-top:19px!important}
+ .ventajas{gap:3px!important}
+ .ventaja{grid-template-columns:1fr!important;grid-template-rows:auto auto auto!important;justify-items:center!important;text-align:center!important;padding:3px 1px!important}
+ .ventaja-icono{grid-row:auto!important}
+ .ventaja-icono svg{width:22px!important;height:22px!important}
+ .ventaja strong,.ventaja span{font-size:7px!important;line-height:1.2!important}
+ .copyright{font-size:8px!important;letter-spacing:2px!important}
+}
+@media(max-width:370px){
+ .ficha-pedido{grid-template-columns:minmax(0,1.35fr) minmax(92px,.68fr)!important}
+ .ficha-icono{width:26px!important;height:26px!important;flex-basis:26px!important}
+ .ficha-info>strong{font-size:10px!important}
+ .escudo-gvr-flotante{max-width:116px!important}
+ .logo-juego{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){.escudo-gvr-flotante{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -669,7 +761,21 @@ main{width:100%!important;max-width:1020px!important;padding:0 20px 20px!importa
                 </div>
                 <div class="ficha-arte" aria-hidden="true">
                     <div class="arte-anillo"></div>
-                    <img class="imagen-juego-comprobante" id="imagenJuegoComprobante" src="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png" alt="" loading="eager" decoding="async" fetchpriority="high">
+                    <div class="escudo-gvr-flotante" aria-hidden="true">
+ <svg viewBox="0 0 240 270" role="img" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+   <linearGradient id="gvrMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b8f7ff"/><stop offset=".35" stop-color="#19caff"/><stop offset=".72" stop-color="#0872ed"/><stop offset="1" stop-color="#063a9c"/></linearGradient>
+   <linearGradient id="gvrFill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#123b77"/><stop offset="1" stop-color="#03142f"/></linearGradient>
+   <filter id="gvrGlow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <path d="M120 10 213 45v76c0 63-38 107-93 137-55-30-93-74-93-137V45z" fill="url(#gvrFill)" stroke="url(#gvrMetal)" stroke-width="8" filter="url(#gvrGlow)"/>
+  <path d="M120 27 195 56v65c0 49-28 85-75 112-47-27-75-63-75-112V56z" fill="none" stroke="#38dfff" stroke-opacity=".65" stroke-width="2"/>
+  <path d="m77 111 29 29 58-65" fill="none" stroke="#4dffad" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#gvrGlow)"/>
+  <text x="120" y="185" text-anchor="middle" font-family="Arial,sans-serif" font-size="35" font-weight="900" font-style="italic" fill="#f4fbff" stroke="#087ee8" stroke-width="1">GVR</text>
+  <path d="M79 202h82" stroke="#27d7ff" stroke-width="3" stroke-linecap="round"/>
+  <text x="120" y="222" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="3" fill="#9deeff">GAMERS GOLD</text>
+ </svg>
+</div>
                     <div class="arte-brillo"></div>
                 </div>
             </div>
