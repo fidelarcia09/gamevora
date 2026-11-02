@@ -665,6 +665,117 @@ main{
  .escudo-gvr-flotante{max-width:82px!important}
 }
 
+
+/* ===== Nuevo diseño móvil premium aprobado: checkout Gamers Gold ===== */
+html,body{min-height:100%;width:100%;overflow-x:hidden}
+body{
+ background:
+  linear-gradient(135deg,transparent 0 47%,rgba(0,91,255,.12) 48%,transparent 49%) 0 0/120px 120px,
+  radial-gradient(ellipse at 50% 22%,rgba(0,92,255,.2),transparent 42%),
+  radial-gradient(ellipse at 50% 78%,rgba(0,113,255,.12),transparent 42%),
+  #020817!important;
+}
+body::before{opacity:.55;background:linear-gradient(135deg,transparent 46%,rgba(0,115,255,.22) 48%,transparent 50%) 0 0/145px 145px,linear-gradient(45deg,transparent 46%,rgba(0,183,255,.12) 48%,transparent 50%) 0 0/170px 170px}
+body>header{display:none!important}
+main{max-width:560px!important;padding:14px 16px 22px!important}
+.tarjeta.comprobante-nuevo{max-width:100%!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}
+.comprobante-hero{min-height:0!important;padding:12px 2px 24px!important;background:transparent!important;overflow:visible!important}
+.comprobante-cabecera{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;min-height:58px}
+.marca-ggt{display:flex!important;flex-direction:row!important;align-items:center!important;gap:10px!important;min-width:0;text-align:left!important;line-height:1!important}
+.marca-simbolo{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border:2px solid #08baff;border-radius:14px 4px 14px 4px;background:linear-gradient(145deg,#087dff,#031b50);color:#fff!important;font-size:37px;font-weight:1000;font-style:italic;box-shadow:0 0 22px rgba(0,166,255,.48);transform:skew(-7deg)}
+.marca-nombre{display:flex;flex-direction:column;gap:3px;white-space:nowrap}
+.marca-nombre b{color:#fff;font-size:clamp(14px,4vw,20px);font-style:italic;font-weight:1000;letter-spacing:.2px}
+.marca-nombre strong{color:#08caff;font-size:clamp(19px,5vw,26px);font-style:italic;font-weight:1000;letter-spacing:1px}
+.inicio-checkout{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;padding:10px 13px;border:1px solid rgba(44,139,255,.45);border-radius:15px;background:linear-gradient(145deg,#102b53,#07162f);color:#f3f8ff;text-decoration:none;font-size:13px;font-weight:800;box-shadow:0 5px 18px rgba(0,0,0,.2)}
+.inicio-checkout span{font-size:20px}
+.estado-comprobante{display:none!important}
+.claim-marca{margin:12px auto 0!important;color:#8ba8cc;font-size:9px!important;letter-spacing:3px!important}
+.producto-visual{width:150px!important;height:145px!important;margin:22px auto 16px!important}
+.producto-check{width:126px!important;height:126px!important;border:7px solid #36ff8b!important;border-radius:50%!important;background:radial-gradient(circle,rgba(0,255,130,.16),rgba(0,20,34,.82))!important;color:#dffff0!important;font-size:84px!important;box-shadow:0 0 20px #00e879,0 0 52px rgba(0,255,120,.4),inset 0 0 22px rgba(0,255,130,.18)!important}
+.producto-resumen h1{margin:7px auto 12px!important;color:#fff!important;font-size:clamp(29px,7.5vw,43px)!important;font-weight:1000!important;font-style:italic!important;line-height:1.02!important;text-transform:uppercase!important;text-shadow:0 0 20px rgba(0,147,255,.28)!important}
+.producto-resumen h1::first-line{color:#fff}
+.producto-resumen .subtitulo{max-width:390px!important;color:#b9cbe4!important;font-size:14px!important;line-height:1.5!important}
+.comprobante-cuerpo{padding:0!important;background:transparent!important}
+.ficha-pedido{
+ position:relative!important;display:block!important;width:100%!important;min-height:0!important;height:auto!important;
+ padding:12px 10px!important;margin:0!important;overflow:hidden!important;
+ border:2px solid #087fff!important;border-radius:25px!important;
+ background:linear-gradient(145deg,rgba(3,17,42,.98),rgba(2,9,25,.99))!important;
+ box-shadow:0 0 22px rgba(0,130,255,.23),inset 0 0 22px rgba(0,115,255,.07)!important;
+}
+.ficha-datos{
+ position:relative!important;z-index:2!important;display:grid!important;
+ grid-template-columns:minmax(0,1fr)!important;grid-template-rows:repeat(6,minmax(66px,auto))!important;
+ width:100%!important;min-height:0!important;height:auto!important;padding:0 34% 0 0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;
+}
+.ficha-fila{
+ display:grid!important;grid-template-columns:34px minmax(72px,.72fr) minmax(0,1fr)!important;
+ align-items:center!important;gap:7px!important;min-width:0!important;min-height:66px!important;
+ padding:7px 5px!important;border:0!important;border-bottom:1px solid rgba(0,135,255,.25)!important;background:transparent!important;
+}
+.ficha-fila:last-of-type{border-bottom:0!important}
+.ficha-icono{width:31px!important;height:31px!important;flex:0 0 31px!important;border:0!important;border-radius:50%!important;background:linear-gradient(145deg,#09b9ff,#0065d9)!important;color:#03142f!important;font-size:17px!important;box-shadow:0 0 13px rgba(0,160,255,.22)!important}
+.ficha-info{display:contents!important}
+.ficha-info>span{grid-column:2!important;grid-row:1!important;align-self:center!important;margin:0!important;color:#9db3d2!important;font-size:clamp(9px,2.5vw,12px)!important;font-weight:500!important;letter-spacing:0!important;line-height:1.2!important}
+.ficha-info>strong{grid-column:3!important;grid-row:1!important;align-self:center!important;margin:0!important;color:#f5f8ff!important;font-size:clamp(10px,2.8vw,14px)!important;font-weight:800!important;line-height:1.25!important;text-align:left!important;overflow-wrap:anywhere!important}
+.ficha-info>strong.precio{color:#fff!important;font-size:clamp(13px,3.5vw,17px)!important}
+.ficha-info>small{grid-column:3!important;grid-row:2!important;margin:-14px 0 0!important;color:#83caff!important;font-size:8px!important;line-height:1.1!important}
+.logo-juego{display:none!important}
+.ficha-arte{
+ position:absolute!important;z-index:1!important;top:0!important;right:0!important;bottom:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:36%!important;min-width:0!important;height:100%!important;margin:0!important;padding:0!important;
+ border:0!important;border-radius:0!important;background:radial-gradient(ellipse at 50% 55%,rgba(0,112,255,.24),transparent 68%)!important;box-shadow:none!important;
+}
+.escudo-gvr-flotante{width:100%!important;max-width:190px!important;aspect-ratio:160/180!important;filter:drop-shadow(0 0 18px rgba(0,143,255,.62))!important;animation:walletEscudoFlota 3.2s ease-in-out infinite}
+.escudo-gvr-flotante img{width:100%!important;height:100%!important;object-fit:contain!important}
+.arte-anillo,.arte-brillo{display:none!important}
+.verificacion-comprobante{display:none!important}
+.comprobante-cuerpo>.nota{margin:13px 0 0!important;padding:11px 13px!important;border:0!important;border-radius:10px!important;background:rgba(10,47,84,.5)!important;color:#b8cce7!important;font-size:11px!important;text-align:center!important}
+.comprobante-cuerpo>.nota.completado{color:#57eaa0!important;background:rgba(12,113,70,.16)!important}
+#accionesNavegacion,#accionesComprobante{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:350px!important;gap:10px!important;margin:17px auto 0!important}
+#accionesNavegacion{order:2!important}
+#accionesComprobante{order:3!important}
+.comprobante-cuerpo{display:flex!important;flex-direction:column!important}
+.ficha-pedido{order:0!important}
+.comprobante-cuerpo>.nota{order:1!important}
+#accionesNavegacion .boton,#accionesComprobante .boton{
+ width:100%!important;min-height:51px!important;padding:10px 15px!important;
+ border:2px solid #078fff!important;border-radius:99px!important;
+ background:linear-gradient(100deg,rgba(0,67,160,.32),rgba(0,27,74,.52))!important;
+ color:#f3f8ff!important;font-size:14px!important;font-weight:800!important;letter-spacing:0!important;
+ box-shadow:0 0 14px rgba(0,135,255,.16),inset 0 0 12px rgba(0,130,255,.08)!important;
+}
+#accionesNavegacion .boton-principal{background:linear-gradient(100deg,rgba(0,90,205,.32),rgba(0,33,91,.48))!important}
+#accionesNavegacion .boton-secundario{color:#f3f8ff!important}
+#accionesComprobante .boton{border-color:#08baff!important;color:#fff!important}
+#accionesComprobante .boton-icono,#accionesNavegacion .boton-icono{font-size:20px!important}
+.mensaje{max-width:350px!important;margin:10px auto 0!important}
+.pie{max-width:560px!important;padding:32px 8px 12px!important}
+.pie-marca{display:flex;align-items:center;justify-content:center;gap:12px;color:#09baff;text-align:left}
+.pie-escudo{width:42px;height:46px;display:grid;place-items:center;border:3px solid #08baff;border-radius:12px 4px 12px 4px;font-size:32px;font-weight:900;line-height:1;box-shadow:0 0 14px rgba(0,178,255,.24)}
+.pie-marca strong{display:block;color:#08baff;font-size:19px;font-weight:900}
+.pie-marca small{display:block;margin-top:5px;color:#9bb1ce;font-size:10px;letter-spacing:5px}
+.pie .ventajas,.pie .copyright{display:none!important}
+@media(max-width:390px){
+ main{padding:12px 12px 20px!important}
+ .marca-simbolo{width:41px;height:41px;flex-basis:41px;font-size:31px}
+ .marca-nombre b{font-size:13px}.marca-nombre strong{font-size:18px}
+ .inicio-checkout{padding:8px 10px;font-size:12px}
+ .producto-check{width:112px!important;height:112px!important;font-size:74px!important}
+ .ficha-pedido{padding:8px 6px!important;border-radius:20px!important}
+ .ficha-datos{padding-right:32%!important;grid-template-rows:repeat(6,minmax(61px,auto))!important}
+ .ficha-fila{grid-template-columns:29px minmax(62px,.72fr) minmax(0,1fr)!important;gap:5px!important;min-height:61px!important;padding:5px 2px!important}
+ .ficha-icono{width:27px!important;height:27px!important;flex-basis:27px!important;font-size:15px!important}
+ .ficha-info>span{font-size:8px!important}
+ .ficha-info>strong{font-size:10px!important}
+ .ficha-info>strong.precio{font-size:12px!important}
+ .escudo-gvr-flotante{max-width:125px!important}
+ #accionesNavegacion,#accionesComprobante{max-width:310px!important}
+ #accionesNavegacion .boton,#accionesComprobante .boton{min-height:47px!important;font-size:12px!important}
+}
+
 </style>
 </head>
 <body>
@@ -682,7 +793,8 @@ main{
             <span class="checkout-border-effect" aria-hidden="true"></span>
             <div id="iconoEstado" class="oculto" aria-hidden="true">…</div>
             <div class="comprobante-cabecera">
-                <div class="marca-ggt"><span class="marca-principal">GAMERS</span><span class="marca-gold">GOLD</span><span class="marca-topup">TOP-UP</span></div>
+                <div class="marca-ggt"><span class="marca-simbolo">G</span><span class="marca-nombre"><b>GAMERS GOLD</b><strong>TOP-UP</strong></span></div>
+                <a class="inicio-checkout" href="../index.html"><span aria-hidden="true">⌂</span> Inicio</a>
                 <div class="estado estado-comprobante" id="etiquetaEstado"><span class="punto"></span><span id="textoEstado">CONSULTANDO</span></div>
             </div>
             <div class="claim-marca">TU MUNDO GAMING. UN SOLO LUGAR.</div>
@@ -750,6 +862,7 @@ main{
     </section>
 
     <footer class="pie">
+        <div class="pie-marca"><span class="pie-escudo">♢</span><div><strong>Gamers Gold Top-Up</strong><small>TU MEJOR OPCIÓN</small></div></div>
         <div class="ventajas">
             <div class="ventaja"><span class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4.5 13h6l-.8 9L19.5 10h-6z"/></svg></span><strong>ENTREGA</strong><span>RÁPIDA</span></div>
             <div class="ventaja"><span class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m8.5 12 2.3 2.3 4.8-5"/></svg></span><strong>PAGO SEGURO</strong><span>Y CONFIABLE</span></div>
