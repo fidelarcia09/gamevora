@@ -565,6 +565,106 @@ main{width:100%;max-width:940px;margin:0 auto;padding:18px 20px 24px;box-sizing:
  .ficha-pedido{padding:0!important;gap:0!important}
 }
 
+
+
+/* Distribución continua: el escudo comparte el mismo espacio que los datos */
+main{
+ width:100%!important;
+ max-width:690px!important;
+ margin:0 auto!important;
+ padding:24px 16px 24px!important;
+}
+.tarjeta.comprobante-nuevo{
+ width:100%!important;
+ max-width:100%!important;
+ margin:0 auto!important;
+ border:0!important;
+ border-radius:0!important;
+ outline:0!important;
+ box-shadow:none!important;
+}
+.ficha-pedido{
+ position:relative!important;
+ display:block!important;
+ width:100%!important;
+ min-height:470px!important;
+ padding:0!important;
+ margin:0!important;
+ border:0!important;
+ border-radius:0!important;
+ outline:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+ overflow:hidden!important;
+}
+.ficha-datos{
+ position:relative!important;
+ z-index:2!important;
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr)!important;
+ grid-template-rows:repeat(6,minmax(0,1fr))!important;
+ width:100%!important;
+ min-height:470px!important;
+ padding-right:clamp(112px,28%,210px)!important;
+ border:0!important;
+ border-radius:0!important;
+ outline:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-fila{
+ position:relative!important;
+ z-index:2!important;
+ width:100%!important;
+ background:transparent!important;
+}
+.ficha-arte{
+ position:absolute!important;
+ z-index:1!important;
+ top:0!important;
+ right:0!important;
+ bottom:0!important;
+ width:28%!important;
+ min-width:105px!important;
+ height:100%!important;
+ margin:0!important;
+ padding:0!important;
+ border:0!important;
+ border-left:0!important;
+ border-radius:0!important;
+ outline:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.escudo-gvr-flotante{
+ width:min(100%,190px)!important;
+ max-width:190px!important;
+ border:0!important;
+ border-radius:0!important;
+ outline:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+ filter:drop-shadow(0 0 15px rgba(0,157,255,.38))!important;
+}
+.arte-anillo,.arte-brillo{display:none!important}
+@media(max-width:620px){
+ main{padding:18px 12px 20px!important}
+ .ficha-pedido{min-height:0!important}
+ .ficha-datos{
+  min-height:0!important;
+  grid-template-rows:repeat(6,minmax(57px,auto))!important;
+  padding-right:clamp(94px,29%,120px)!important;
+ }
+ .ficha-arte{width:29%!important;min-width:88px!important}
+ .escudo-gvr-flotante{width:100%!important;max-width:116px!important}
+}
+@media(max-width:370px){
+ main{padding-right:10px!important;padding-left:10px!important}
+ .ficha-datos{padding-right:88px!important}
+ .ficha-arte{width:88px!important;min-width:88px!important}
+ .escudo-gvr-flotante{max-width:82px!important}
+}
+
 </style>
 </head>
 <body>
