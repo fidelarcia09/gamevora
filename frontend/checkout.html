@@ -825,6 +825,27 @@ body>header{
  .ficha-arte::after{opacity:.48!important}
 }
 
+
+/* Refinamiento solicitado: identidad superior, iconos profesionales y fondo continuo */
+.identidad-checkout{position:relative;z-index:1;margin:2px auto 0;text-align:center}
+.identidad-nombre{color:#f4f9ff;font-size:clamp(19px,5vw,25px);font-weight:1000;font-style:italic;letter-spacing:.8px;line-height:1.1;text-shadow:0 0 18px rgba(0,156,255,.3)}
+.identidad-nombre span{color:#08caff}
+.identidad-checkout .claim-marca{margin:7px auto 0!important;color:#a8bed9!important;font-size:10px!important;font-weight:800!important;letter-spacing:2px!important;line-height:1.4}
+.ficha-icono-svg{width:34px!important;height:34px!important;display:grid!important;place-items:center!important;border:1px solid rgba(45,190,255,.5)!important;border-radius:11px!important;background:linear-gradient(145deg,rgba(12,156,255,.22),rgba(0,53,125,.3))!important;color:#65dfff!important;box-shadow:0 0 12px rgba(0,150,255,.18),inset 0 0 9px rgba(0,180,255,.08)!important}
+.ficha-icono-svg svg{width:19px!important;height:19px!important;display:block!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.ficha-pedido{
+ background:linear-gradient(90deg,rgba(3,17,42,.99) 0%,rgba(3,17,42,.96) 34%,rgba(3,17,42,.78) 57%,rgba(3,17,42,.42) 78%,rgba(3,17,42,.08) 100%)!important;
+}
+.ficha-arte{
+ background:radial-gradient(ellipse at 58% 50%,rgba(0,119,255,.25) 0%,rgba(0,95,220,.12) 42%,transparent 74%)!important;
+}
+@media(max-width:480px){
+ .identidad-nombre{font-size:20px}
+ .identidad-checkout .claim-marca{font-size:9px!important;letter-spacing:1.5px!important}
+ .ficha-icono-svg{width:30px!important;height:30px!important;border-radius:10px!important}
+ .ficha-icono-svg svg{width:17px!important;height:17px!important}
+}
+
 </style>
 </head>
 <body>
@@ -845,7 +866,10 @@ body>header{
                 <div class="marca-ggt"><span class="marca-simbolo">G</span><span class="marca-nombre"><b>GAMERS GOLD</b><strong>TOP-UP</strong></span></div>
                 <div class="estado estado-comprobante" id="etiquetaEstado"><span class="punto"></span><span id="textoEstado">CONSULTANDO</span></div>
             </div>
-            <div class="claim-marca">TU MUNDO GAMING. UN SOLO LUGAR.</div>
+            <div class="identidad-checkout">
+                <div class="identidad-nombre">GAMERS GOLD <span>TOP-UP</span></div>
+                <div class="claim-marca">TU MUNDO GAMING. UN SOLO LUGAR.</div>
+            </div>
             <div class="producto-visual" aria-hidden="true">
                 <div class="producto-orbita"></div>
                 <div class="producto-cristal">◆</div>
@@ -862,31 +886,30 @@ body>header{
             <div class="ficha-pedido">
                 <div class="ficha-datos">
                     <div class="ficha-fila juego-fila">
-                        <span class="ficha-icono" aria-hidden="true">🎮</span>
+                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8h11a4 4 0 0 1 3.8 5.2l-.8 2.5a2 2 0 0 1-3.3.8l-2-2H8.8l-2 2a2 2 0 0 1-3.3-.8l-.8-2.5A4 4 0 0 1 6.5 8Z"/><path d="M8 10.5v4M6 12.5h4M16.5 11.5h.01M18.5 13.5h.01"/></svg></span>
                         <div class="ficha-info"><span>JUEGO</span><strong id="juego">CARGANDO JUEGO</strong></div>
                         <div class="logo-juego" aria-hidden="true"><span id="logoJuegoTexto">GAMING</span><small>MOBILE</small></div>
                     </div>
                     <div class="ficha-fila">
-                        <span class="ficha-icono" aria-hidden="true">◇</span>
+                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 5v8l-8 5-8-5V8l8-5Z"/><path d="m4 8 8 5 8-5M12 13v8"/></svg></span>
                         <div class="ficha-info"><span>PRODUCTO</span><strong id="producto">Cargando producto...</strong><small>CANTIDAD: <b id="cantidad">Cargando...</b></small></div>
                     </div>
                     <div class="ficha-fila">
-                        <span class="ficha-icono" aria-hidden="true">♙</span>
+                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0Z"/></svg></span>
                         <div class="ficha-info"><span>ID DEL JUGADOR</span><strong id="idJugador">Cargando...</strong></div>
                     </div>
                     <div class="ficha-fila">
-                        <span class="ficha-icono" aria-hidden="true">▤</span>
+                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h5M8 16h8"/></svg></span>
                         <div class="ficha-info"><span>TOTAL PAGADO</span><strong id="precio" class="precio">Cargando...</strong></div>
                     </div>
                     <div class="ficha-fila">
-                        <span class="ficha-icono" aria-hidden="true">▦</span>
+                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2M14 14h2"/></svg></span>
                         <div class="ficha-info"><span>FECHA</span><strong id="fecha">Cargando...</strong></div>
                     </div>
                     <div class="ficha-fila">
-                        <span class="ficha-icono" aria-hidden="true">#</span>
+                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3 7 21M17 3l-2 18M4 9h16M3 15h16"/></svg></span>
                         <div class="ficha-info"><span>NÚMERO DE PEDIDO</span><strong id="numeroPedido">Cargando...</strong></div>
                     </div>
-                    <div class="estado-oculto" id="estadoDetalle">En consulta</div>
                 </div>
                 <div class="ficha-arte" aria-hidden="true">
                     <div class="arte-anillo"></div>
