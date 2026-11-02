@@ -328,6 +328,101 @@ main{max-width:850px!important;padding:20px 14px 16px!important}
  .copyright{font-size:8px!important;letter-spacing:1.5px!important}
 }
 
+
+/* ===== Replica de la referencia visual enviada ===== */
+body{min-height:100vh!important;background:#020817!important;background-image:radial-gradient(ellipse at 50% 32%,rgba(0,72,185,.24),transparent 48%),radial-gradient(ellipse at 0 58%,rgba(0,90,255,.18),transparent 38%),radial-gradient(ellipse at 100% 60%,rgba(0,105,255,.16),transparent 38%),linear-gradient(180deg,#020817,#030b1d 65%,#020817)!important}
+body::before{opacity:.75!important;background:linear-gradient(135deg,transparent 46%,rgba(0,126,255,.24) 47%,transparent 49%) 0 0/110px 110px,linear-gradient(45deg,transparent 46%,rgba(0,126,255,.18) 47%,transparent 49%) 0 0/150px 150px!important}
+body>header{display:none!important}
+main{width:100%!important;max-width:1020px!important;padding:0 20px 20px!important}
+.comprobante-nuevo{width:100%!important;max-width:900px!important;margin:0 auto!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}
+.comprobante-hero{min-height:0!important;padding:34px 20px 28px!important;background:transparent!important}
+.comprobante-cabecera{justify-content:center!important}
+.marca-ggt{display:flex!important;flex-direction:column!important;align-items:center!important;gap:0!important;font-size:0!important;line-height:.95!important;text-align:center!important;font-style:italic!important}
+.marca-ggt .marca-principal{font-size:clamp(29px,5vw,46px)!important;font-weight:1000!important;letter-spacing:-1px!important;color:#f7fbff!important}
+.marca-ggt .marca-gold{font-size:clamp(43px,7vw,68px)!important;font-weight:1000!important;letter-spacing:-2px!important;background:linear-gradient(180deg,#7af3ff,#00a9ff 58%,#0875e8)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;filter:drop-shadow(0 0 12px rgba(0,160,255,.45))}
+.marca-ggt .marca-topup{margin-top:5px!important;color:#14d9ff!important;font-size:15px!important;letter-spacing:9px!important;font-weight:800!important}
+.claim-marca{margin-top:18px;color:#c7dcfa;font-size:clamp(10px,1.8vw,14px);letter-spacing:clamp(3px,.7vw,6px);text-align:center}
+.estado-comprobante{display:none!important}
+.producto-visual{width:100%!important;height:auto!important;min-height:0!important;margin:38px auto 24px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.producto-orbita,.producto-cristal{display:none!important}
+.producto-check{position:relative!important;inset:auto!important;width:180px!important;height:180px!important;display:grid!important;place-items:center!important;border:6px solid #35ff80!important;border-radius:50%!important;background:rgba(0,255,105,.035)!important;color:#eafff0!important;font-size:116px!important;font-weight:500!important;line-height:1!important;box-shadow:0 0 17px rgba(0,255,110,.55),0 0 48px rgba(0,255,110,.28),inset 0 0 30px rgba(0,255,110,.12)!important}
+.producto-resumen{display:flex!important;flex-direction:column!important;align-items:center!important}
+.producto-resumen h1{order:1!important;margin:0 0 11px!important;color:#f5f8ff!important;font-size:clamp(34px,6vw,58px)!important;font-weight:1000!important;font-style:italic!important;line-height:1.05!important;letter-spacing:-1px!important;text-transform:uppercase!important;text-shadow:0 0 22px rgba(0,105,255,.25)!important}
+.producto-resumen .subtitulo{order:2!important;max-width:650px!important;color:#c1d8f5!important;font-size:clamp(14px,2vw,19px)!important;line-height:1.55!important}
+.estado-tiempo{display:none!important}
+.comprobante-cuerpo{padding:24px 24px 20px!important;border:1px solid #078fff!important;border-radius:19px!important;background:linear-gradient(150deg,rgba(3,15,36,.98),rgba(2,9,23,.99))!important;box-shadow:0 0 22px rgba(0,119,255,.3),0 0 58px rgba(0,89,255,.12),inset 0 0 24px rgba(0,126,255,.06)!important}
+.ficha-pedido{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.85fr);gap:16px;align-items:stretch;min-height:420px;padding:12px;border:1px solid rgba(0,100,220,.28);border-radius:13px;background:rgba(1,9,24,.45)}
+.ficha-datos{min-width:0;display:flex;flex-direction:column}
+.ficha-fila{display:flex;align-items:center;gap:15px;min-height:72px;padding:10px 12px;border-bottom:1px solid rgba(0,137,255,.19)}
+.ficha-fila:last-child{border-bottom:0}
+.ficha-icono{width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;border:1px solid #087ee6;border-radius:50%;background:linear-gradient(145deg,rgba(0,112,255,.18),rgba(0,25,65,.35));color:#19caff;font-size:29px;text-shadow:0 0 12px rgba(0,174,255,.45)}
+.ficha-info{min-width:0;flex:1}
+.ficha-info>span{display:block;margin-bottom:5px;color:#8fb5e8;font-size:12px;letter-spacing:.7px}
+.ficha-info>strong{display:block;color:#f6f9ff;font-size:17px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.ficha-info>strong.precio{color:#f6f9ff;font-size:18px}
+.ficha-info>small{display:block;margin-top:4px;color:#9bbce7;font-size:11px}
+.ficha-info>small b{color:#fff;font-size:12px}
+.logo-juego{width:150px;min-height:72px;flex:0 0 150px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(0,119,255,.42);border-radius:12px;background:linear-gradient(145deg,#061a38,#020918);color:#f4f8ff;font-size:16px;font-weight:1000;font-style:italic;text-align:center;text-shadow:0 0 10px rgba(0,153,255,.45)}
+.logo-juego small{margin-top:3px;color:#31d8ff;font-size:10px;letter-spacing:5px}
+.ficha-arte{position:relative;min-height:350px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.arte-anillo{position:absolute;bottom:16%;width:85%;height:65px;border:3px solid rgba(0,155,255,.8);border-radius:50%;transform:perspective(180px) rotateX(62deg);box-shadow:0 0 18px #008cff,0 0 42px rgba(0,117,255,.5),inset 0 0 16px #008cff}
+.arte-moneda{position:absolute;display:grid;place-items:center;width:112px;height:112px;border:7px double #f5d66c;border-radius:50%;background:radial-gradient(circle at 35% 28%,#fff4a2,#d89a19 48%,#754600 78%,#f4cf55);color:#fff2a4;font-size:60px;font-weight:1000;font-style:italic;text-shadow:0 3px 2px #724300,0 0 12px #fff2a0;box-shadow:0 10px 15px rgba(0,0,0,.5),0 0 18px rgba(255,190,36,.35);-webkit-text-stroke:1px #87520a}
+.moneda-trasera{width:86px;height:86px;left:17%;top:31%;font-size:43px;transform:rotate(-13deg)}
+.moneda-lateral{width:91px;height:91px;right:13%;top:42%;font-size:46px;transform:rotate(13deg)}
+.moneda-frontal{z-index:2;left:36%;top:39%;transform:rotate(-5deg)}
+.arte-brillo{position:absolute;bottom:13%;width:72%;height:30px;border-radius:50%;background:#008dff;filter:blur(23px);opacity:.75}
+.verificacion-comprobante{display:none!important}
+.comprobante-nuevo .nota{margin-top:12px!important;border-left:3px solid #16caff!important;border-radius:7px!important;background:rgba(0,92,180,.1)!important;color:#bcd5f2!important;text-align:center!important}
+#accionesNavegacion{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;margin:24px auto 0!important;max-width:680px!important}
+#accionesNavegacion .boton{min-height:66px!important;border-radius:15px!important;font-size:18px!important;letter-spacing:1px!important}
+#accionesNavegacion .boton-principal{background:linear-gradient(100deg,#0877ff,#00c5ff)!important;color:#fff!important;box-shadow:0 0 22px rgba(0,142,255,.34)!important}
+#accionesNavegacion .boton-secundario{background:rgba(0,22,52,.5)!important;border:2px solid #00baff!important;color:#27d7ff!important}
+#accionesComprobante .boton{min-height:56px!important;border-radius:12px!important}
+.pie{max-width:900px!important;margin:0 auto!important;padding:25px 5px 10px!important}
+.ventajas{padding-bottom:20px!important;border-bottom:1px solid rgba(0,145,255,.18)!important}
+.ventaja{display:grid!important;grid-template-columns:35px auto!important;grid-template-rows:auto auto!important;align-items:center!important;justify-content:center!important;column-gap:8px!important;text-align:left!important}
+.ventaja-icono{grid-row:1/3!important;margin:0!important}
+.ventaja-icono svg{width:31px!important;height:31px!important}
+.ventaja strong,.ventaja span{font-size:11px!important}
+.ventaja span{margin-top:2px!important}
+.copyright{padding-top:17px!important;border:0!important;color:#9bb1d1!important;font-size:11px!important;letter-spacing:5px!important}
+@media(max-width:620px){
+ main{padding:0 10px 14px!important}
+ .comprobante-hero{padding:23px 8px 23px!important}
+ .marca-ggt .marca-principal{font-size:29px!important}
+ .marca-ggt .marca-gold{font-size:47px!important}
+ .marca-ggt .marca-topup{font-size:11px!important;letter-spacing:7px!important}
+ .claim-marca{font-size:9px!important;letter-spacing:2.5px!important}
+ .producto-visual{margin:28px auto 21px!important}
+ .producto-check{width:132px!important;height:132px!important;font-size:85px!important}
+ .producto-resumen h1{font-size:clamp(29px,8vw,39px)!important;letter-spacing:-.5px!important}
+ .producto-resumen .subtitulo{font-size:13px!important}
+ .comprobante-cuerpo{padding:12px 10px 15px!important;border-radius:15px!important}
+ .ficha-pedido{grid-template-columns:minmax(0,1fr)!important;gap:0!important;padding:7px!important}
+ .ficha-fila{min-height:64px!important;gap:10px!important;padding:8px 5px!important}
+ .ficha-icono{width:42px!important;height:42px!important;flex-basis:42px!important;font-size:23px!important}
+ .ficha-info>span{font-size:9px!important}
+ .ficha-info>strong{font-size:13px!important}
+ .ficha-info>strong.precio{font-size:15px!important}
+ .ficha-info>small{font-size:9px!important}
+ .logo-juego{width:88px!important;min-height:55px!important;flex-basis:88px!important;font-size:10px!important}
+ .logo-juego small{font-size:7px!important;letter-spacing:3px!important}
+ .ficha-arte{min-height:190px!important}
+ .arte-moneda{width:83px!important;height:83px!important;font-size:43px!important}
+ .moneda-trasera{width:65px!important;height:65px!important;font-size:32px!important}
+ .moneda-lateral{width:68px!important;height:68px!important;font-size:34px!important}
+ .moneda-frontal{left:37%!important}
+ #accionesNavegacion{margin-top:16px!important;gap:9px!important}
+ #accionesNavegacion .boton{min-height:54px!important;font-size:13px!important;border-radius:11px!important}
+ .ventajas{gap:5px!important}
+ .ventaja{grid-template-columns:1fr!important;grid-template-rows:auto auto auto!important;justify-items:center!important;gap:2px!important;text-align:center!important;padding:4px 1px!important}
+ .ventaja-icono{grid-row:auto!important}
+ .ventaja-icono svg{width:23px!important;height:23px!important}
+ .ventaja strong,.ventaja span{font-size:7px!important}
+ .copyright{font-size:8px!important;letter-spacing:2px!important}
+}
+@media(prefers-reduced-motion:reduce){.comprobante-nuevo .checkout-border-effect,.comprobante-nuevo .checkout-light-sweep{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -345,17 +440,16 @@ main{max-width:850px!important;padding:20px 14px 16px!important}
             <span class="checkout-border-effect" aria-hidden="true"></span>
             <div id="iconoEstado" class="oculto" aria-hidden="true">…</div>
             <div class="comprobante-cabecera">
-                <div class="marca-ggt">GAMERS GOLD <span>TOP-UP</span></div>
+                <div class="marca-ggt"><span class="marca-principal">GAMERS</span><span class="marca-gold">GOLD</span><span class="marca-topup">TOP-UP</span></div>
                 <div class="estado estado-comprobante" id="etiquetaEstado"><span class="punto"></span><span id="textoEstado">CONSULTANDO</span></div>
             </div>
+            <div class="claim-marca">TU MUNDO GAMING. UN SOLO LUGAR.</div>
             <div class="producto-visual" aria-hidden="true">
                 <div class="producto-orbita"></div>
                 <div class="producto-cristal">◆</div>
                 <div class="producto-check" id="selloVisual">✓</div>
             </div>
             <div class="producto-resumen">
-                <div class="juego-etiqueta" id="juego">CARGANDO JUEGO</div>
-                <div class="producto-titulo" id="producto">Cargando producto...</div>
                 <h1 id="tituloEstado">Consultando tu pedido</h1>
                 <p class="subtitulo" id="descripcionEstado">Estamos buscando la información de tu recarga.</p>
                 <div class="estado-tiempo" id="estadoVisual">✦ RECARGA GAMERS GOLD</div>
@@ -363,52 +457,49 @@ main{max-width:850px!important;padding:20px 14px 16px!important}
         </div>
 
         <div class="comprobante-cuerpo">
-            <div class="total-pagado">
-                <div class="total-emblema"><img src="./gvr-escudo.svg" alt="Escudo GVR"></div>
-                <div class="total-texto">
-                    <span>TOTAL PAGADO</span>
-                    <strong class="precio" id="precio">Cargando...</strong>
+            <div class="ficha-pedido">
+                <div class="ficha-datos">
+                    <div class="ficha-fila juego-fila">
+                        <span class="ficha-icono" aria-hidden="true">🎮</span>
+                        <div class="ficha-info"><span>JUEGO</span><strong id="juego">CARGANDO JUEGO</strong></div>
+                        <div class="logo-juego" aria-hidden="true"><span id="logoJuegoTexto">GAMING</span><small>MOBILE</small></div>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="ficha-icono" aria-hidden="true">◇</span>
+                        <div class="ficha-info"><span>PRODUCTO</span><strong id="producto">Cargando producto...</strong><small>CANTIDAD: <b id="cantidad">Cargando...</b></small></div>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="ficha-icono" aria-hidden="true">♙</span>
+                        <div class="ficha-info"><span>ID DEL JUGADOR</span><strong id="idJugador">Cargando...</strong></div>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="ficha-icono" aria-hidden="true">▤</span>
+                        <div class="ficha-info"><span>TOTAL PAGADO</span><strong id="precio" class="precio">Cargando...</strong></div>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="ficha-icono" aria-hidden="true">▦</span>
+                        <div class="ficha-info"><span>FECHA</span><strong id="fecha">Cargando...</strong></div>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="ficha-icono" aria-hidden="true">#</span>
+                        <div class="ficha-info"><span>NÚMERO DE PEDIDO</span><strong id="numeroPedido">Cargando...</strong></div>
+                    </div>
+                    <div class="estado-oculto" id="estadoDetalle">En consulta</div>
+                </div>
+                <div class="ficha-arte" aria-hidden="true">
+                    <div class="arte-anillo"></div>
+                    <div class="arte-moneda moneda-trasera">G</div>
+                    <div class="arte-moneda moneda-lateral">G</div>
+                    <div class="arte-moneda moneda-frontal">G</div>
+                    <div class="arte-brillo"></div>
                 </div>
             </div>
 
-            <div class="datos-comprobante">
-                <div class="dato dato-claro">
-                    <span>CANTIDAD</span>
-                    <strong id="cantidad">Cargando...</strong>
-                </div>
-                <div class="dato dato-claro">
-                    <span>ID DEL JUGADOR</span>
-                    <strong id="idJugador">Cargando...</strong>
-                </div>
-                <div class="dato dato-claro">
-                    <span>FECHA</span>
-                    <strong id="fecha">Cargando...</strong>
-                </div>
-                <div class="dato dato-claro">
-                    <span>ESTADO</span>
-                    <strong id="estadoDetalle">En consulta</strong>
-                </div>
-            </div>
-
-            <div class="orden-comprobante">
-                <div class="codigo-barras" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                <div class="orden-texto">
-                    <span>NÚMERO DE PEDIDO</span>
-                    <strong id="numeroPedido">Cargando...</strong>
-                </div>
-            </div>
-            <div class="verificacion-comprobante">
-                <span class="verificacion-icono">✓</span>
-                <span>Comprobante de Gamers Gold Top-Up</span>
-            </div>
+            <div class="verificacion-comprobante"><span class="verificacion-icono">✓</span><span>Comprobante de Gamers Gold Top-Up</span></div>
             <p class="nota" id="notaEstado">Estamos consultando la información de tu pedido.</p>
-
             <div class="acciones oculto" id="accionesComprobante">
-                <button class="boton boton-principal" type="button" id="guardarComprobante">
-                    <span class="boton-icono" aria-hidden="true">↓</span> GUARDAR COMPROBANTE
-                </button>
+                <button class="boton boton-principal" type="button" id="guardarComprobante"><span class="boton-icono" aria-hidden="true">↓</span> GUARDAR COMPROBANTE</button>
             </div>
-
             <div class="acciones" id="accionesNavegacion">
                 <a class="boton boton-principal" href="../index.html"><span class="boton-icono" aria-hidden="true">⌂</span> VOLVER AL INICIO</a>
                 <a class="boton boton-secundario" href="pedidos.html"><span class="boton-icono" aria-hidden="true">▤</span> VER MIS PEDIDOS</a>
@@ -425,6 +516,7 @@ main{max-width:850px!important;padding:20px 14px 16px!important}
             <div class="ventaja"><span class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 13v-2a8 8 0 0 1 16 0v2"/><path d="M4 13h3v6H6a2 2 0 0 1-2-2zM20 13h-3v6h1a2 2 0 0 0 2-2z"/><path d="M17 19a5 5 0 0 1-5 3h-1"/></svg></span><strong>SOPORTE</strong><span>24/7</span></div>
             <div class="ventaja"><span class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 2 2.8 6 6.5.8-4.8 4.5 1.3 6.4L12 16.5l-5.8 3.2 1.3-6.4-4.8-4.5L9.2 8z"/></svg></span><strong>LOS MEJORES</strong><span>PRECIOS</span></div>
         </div>
+        <div class="copyright">GAMERS GOLD TOP-UP · © 2026</div>
     </footer>
 </main>
 
