@@ -834,10 +834,19 @@ body>header{
 .ficha-icono-svg{width:34px!important;height:34px!important;display:grid!important;place-items:center!important;border:1px solid rgba(45,190,255,.5)!important;border-radius:11px!important;background:linear-gradient(145deg,rgba(12,156,255,.22),rgba(0,53,125,.3))!important;color:#65dfff!important;box-shadow:0 0 12px rgba(0,150,255,.18),inset 0 0 9px rgba(0,180,255,.08)!important}
 .ficha-icono-svg svg{width:19px!important;height:19px!important;display:block!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important}
 .ficha-pedido{
- background:linear-gradient(90deg,rgba(3,17,42,.99) 0%,rgba(3,17,42,.96) 34%,rgba(3,17,42,.78) 57%,rgba(3,17,42,.42) 78%,rgba(3,17,42,.08) 100%)!important;
+ /* El fondo se desvanece de forma progresiva en toda la tarjeta, también desde la izquierda */
+ background:linear-gradient(90deg,
+  rgba(3,17,42,.76) 0%,
+  rgba(3,17,42,.64) 24%,
+  rgba(3,17,42,.43) 48%,
+  rgba(3,17,42,.22) 70%,
+  rgba(3,17,42,.04) 100%)!important;
 }
 .ficha-arte{
- background:radial-gradient(ellipse at 58% 50%,rgba(0,119,255,.25) 0%,rgba(0,95,220,.12) 42%,transparent 74%)!important;
+ background:radial-gradient(ellipse at 58% 50%,
+  rgba(0,119,255,.15) 0%,
+  rgba(0,95,220,.07) 42%,
+  transparent 74%)!important;
 }
 @media(max-width:480px){
  .identidad-nombre{font-size:20px}
