@@ -1246,48 +1246,42 @@
 
 
 
-        /* Destello que recorre el borde: el marco queda fijo y solo gira la luz */
-        @property --wallet-light-angle{
-            syntax:"<angle>";
-            inherits:false;
-            initial-value:0deg;
-        }
+        /* Destello real: una luz recorre un trazado SVG por los cuatro lados */
         .saldo{
             position:relative!important;
             isolation:isolate!important;
             overflow:hidden!important;
         }
+        .saldo::before,
         .saldo::after{
-            content:""!important;
-            position:absolute!important;
-            inset:0!important;
-            z-index:10!important;
-            padding:2px!important;
-            border-radius:inherit!important;
-            pointer-events:none!important;
-            background:conic-gradient(from var(--wallet-light-angle),
-                transparent 0deg 270deg,
-                rgba(0,145,255,.08) 292deg,
-                rgba(0,190,255,.95) 310deg,
-                #d8f8ff 318deg,
-                rgba(0,135,255,.9) 326deg,
-                transparent 345deg 360deg)!important;
-            -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
-            -webkit-mask-composite:xor!important;
-            mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
-            mask-composite:exclude!important;
-            animation:walletLightTravels 4.2s linear infinite!important;
-        }
-        .saldo::before{
             content:none!important;
             animation:none!important;
         }
-        @keyframes walletLightTravels{
-            from{--wallet-light-angle:0deg}
-            to{--wallet-light-angle:360deg}
+        .saldo-destello{
+            position:absolute;
+            inset:0;
+            z-index:2;
+            width:100%;
+            height:100%;
+            overflow:hidden;
+            border-radius:inherit;
+            pointer-events:none;
+        }
+        .saldo-destello-trazo{
+            fill:none;
+            stroke:#b9f2ff;
+            stroke-width:2.2;
+            stroke-linecap:round;
+            stroke-dasharray:34 366;
+            stroke-dashoffset:0;
+            filter:drop-shadow(0 0 3px #00baff) drop-shadow(0 0 7px rgba(0,145,255,.95));
+            animation:walletRecorrerContorno 4.2s linear infinite;
+        }
+        @keyframes walletRecorrerContorno{
+            to{stroke-dashoffset:-400}
         }
         @media(prefers-reduced-motion:reduce){
-            .saldo::after{animation:none!important}
+            .saldo-destello-trazo{animation:none}
         }
 </style>
 </head>
@@ -1310,6 +1304,11 @@
             </p>
 
             <section class="saldo" aria-label="Saldo disponible">
+
+                <svg class="saldo-destello" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="saldo-destello-trazo" pathLength="400"
+                        d="M 10 1 H 90 Q 99 1 99 10 V 90 Q 99 99 90 99 H 10 Q 1 99 1 90 V 10 Q 1 1 10 1 Z"/>
+                </svg>
 
                 <div class="saldo-contenido">
                     <div class="saldo-titulo">
