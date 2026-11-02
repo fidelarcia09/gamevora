@@ -1246,36 +1246,51 @@
 
 
 
-        /* El destello azul ahora recorre solo el borde de Saldo disponible */
-        @property --wallet-borde-giro {
-            syntax: "<angle>";
-            inherits: false;
-            initial-value: 0deg;
-        }
-
+        /* Mismo destello giratorio de contorno utilizado en el checkout */
         .saldo::before {
-            background: conic-gradient(
-                from var(--wallet-borde-giro),
-                #0755a8 0deg,
-                #0755a8 245deg,
-                rgba(0, 132, 255, .25) 275deg,
-                #168cff 300deg,
-                #c5efff 310deg,
-                #168cff 320deg,
-                rgba(0, 132, 255, .25) 340deg,
-                #0755a8 360deg
-            );
-            background-size: auto;
-            animation: walletBordeRecorrido 7s linear infinite;
-            filter: drop-shadow(0 0 5px rgba(22, 140, 255, .75));
+            background: linear-gradient(
+                115deg,
+                #0755a8,
+                #00c8ff,
+                #e2fbff,
+                #008cff,
+                #0755a8
+            ) !important;
+            background-size: 300% 300% !important;
+            animation: none !important;
+            filter: none !important;
         }
 
-        @keyframes walletBordeRecorrido {
-            to { --wallet-borde-giro: 360deg; }
+        .saldo::after {
+            content: "" !important;
+            position: absolute !important;
+            inset: 0 !important;
+            z-index: 2 !important;
+            padding: 2px !important;
+            border-radius: inherit !important;
+            pointer-events: none !important;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg 270deg,
+                rgba(0,145,255,.08) 292deg,
+                rgba(0,190,255,.95) 310deg,
+                #d8f8ff 318deg,
+                rgba(0,135,255,.9) 326deg,
+                transparent 345deg 360deg
+            ) !important;
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+            -webkit-mask-composite: xor !important;
+            mask-composite: exclude !important;
+            animation: destelloBordeSaldo 4.2s linear infinite !important;
+        }
+
+        @keyframes destelloBordeSaldo {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .saldo::before {
+            .saldo::after {
                 animation: none !important;
             }
         }
