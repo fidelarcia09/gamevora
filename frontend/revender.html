@@ -874,6 +874,7 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  position:relative!important;
  isolation:isolate!important;
 }
+/* Destello giratorio del contorno: mismo efecto que la ficha del checkout */
 #dashboard > .hero .plan-border-effect{
  position:absolute;
  inset:0;
@@ -881,63 +882,25 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
  padding:2px;
  border-radius:inherit;
  pointer-events:none;
- background:conic-gradient(
-  from var(--plan-border-angle),
-  transparent 0deg,
-  transparent 245deg,
-  rgba(0,132,255,.18) 275deg,
-  #168cff 300deg,
-  #c5efff 310deg,
-  #168cff 320deg,
-  rgba(0,132,255,.18) 340deg,
-  transparent 360deg
- );
- -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+ background:conic-gradient(from 0deg,
+  transparent 0deg 270deg,
+  rgba(0,145,255,.08) 292deg,
+  rgba(0,190,255,.95) 310deg,
+  #d8f8ff 318deg,
+  rgba(0,135,255,.9) 326deg,
+  transparent 345deg 360deg);
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
  -webkit-mask-composite:xor;
- mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+ mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
  mask-composite:exclude;
- animation:planBorderTravel 7s linear infinite;
- opacity:.98;
+ animation:destelloPlanCheckout 4.2s linear infinite;
 }
-@keyframes planBorderTravel{
- to{--plan-border-angle:360deg}
+@keyframes destelloPlanCheckout{
+ from{transform:rotate(0deg)}
+ to{transform:rotate(360deg)}
 }
 @media(prefers-reduced-motion:reduce){
  #dashboard > .hero .plan-border-effect{animation:none}
-}
-
-
-/* Destello que atraviesa periódicamente la tarjeta, como en Wallet */
-#dashboard > .hero .plan-light-sweep{
- position:absolute;
- z-index:1;
- top:-35%;
- bottom:-35%;
- left:-45%;
- width:30%;
- pointer-events:none;
- opacity:0;
- transform:skewX(-22deg);
- background:linear-gradient(
-  90deg,
-  transparent 0%,
-  rgba(155,225,255,.04) 20%,
-  rgba(190,239,255,.34) 48%,
-  rgba(255,255,255,.58) 50%,
-  rgba(100,198,255,.22) 62%,
-  transparent 100%
- );
- filter:blur(2px);
- animation:planLightSweep 7.5s ease-in-out infinite;
-}
-@keyframes planLightSweep{
- 0%,62%{left:-45%;opacity:0}
- 66%{opacity:.9}
- 82%{left:125%;opacity:.65}
- 83%,100%{left:125%;opacity:0}
-}
-@media(prefers-reduced-motion:reduce){
- #dashboard > .hero .plan-light-sweep{animation:none;display:none}
 }
 
 
@@ -971,7 +934,7 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 <div id="dashboard" hidden>
 <section class="hero">
 <span class="plan-border-effect" aria-hidden="true"></span>
-<span class="plan-light-sweep" aria-hidden="true"></span>
+
 <div class="revender-escudo-3d" aria-hidden="true"><img src="./gvr-escudo.svg?v=20261028-3" alt="" loading="eager" decoding="async"></div>
 <div class="hero-top">
 <div style="display:flex;align-items:center;gap:13px"><div class="rank-icon" id="rankIcon" aria-label="Emblema del nivel"></div><div><div class="eyebrow">Tu plan actual</div><div class="rank-name" id="rankName">Bronce</div></div></div>
