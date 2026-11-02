@@ -805,24 +805,7 @@ main{width:100%!important;max-width:900px!important;min-width:0!important;margin
     </footer>
 </main>
 
-<script>
-/* Selección de imagen según el juego; solo afecta la presentación del comprobante */
-(() => {
- const img=document.getElementById("imagenJuegoComprobante"), game=document.getElementById("juego");
- if(!img||!game)return;
- const files={
- "free fire":"file_00000000323881f5b39e628c9a42a0d2.png",
- "mobile legends":"file_00000000a7e081f9b4b5577efa5f6066.png",
- "pubg mobile":"file_00000000cde881f6a366f4dbeb1a5fd0.png",
- "arena breakout":"file_00000000eb3881f9a2e363c447e0f6ba.png",
- "honor of kings":"file_00000000061881f7812f5a04ddc3600d.png",
- "genshin impact":"file_00000000266081f685eb030a10579fbe.png",
- "blood strike":"file_00000000da8481f980717bbfaf5b7888.png"
- };
- const update=()=>{const name=game.textContent.trim().toLowerCase();if(files[name])img.src="./imagenes/"+files[name];img.alt=name?"Imagen de "+name:"";};
- new MutationObserver(update).observe(game,{childList:true,characterData:true,subtree:true});update();
-})();
-</script>
+
 
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
