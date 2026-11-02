@@ -2807,3 +2807,32 @@ iniciar();
 }
 </style>
 
+<style id="gg-freefire-card-full-width-fix">
+/* Free Fire: las tarjetas no reservan la columna de imagen porque el catálogo ya no la inserta. */
+#catalogo .producto.producto-con-diamantes{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  column-gap:0!important;
+  justify-items:stretch!important;
+  text-align:left!important;
+}
+#catalogo .producto.producto-con-diamantes > .producto-informacion{
+  grid-column:1!important;
+  grid-row:1!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  align-items:stretch!important;
+  text-align:left!important;
+}
+#catalogo .producto.producto-con-diamantes .producto-nombre,
+#catalogo .producto.producto-con-diamantes .gg-reseller-original-price,
+#catalogo .producto.producto-con-diamantes .producto-precio,
+#catalogo .producto.producto-con-diamantes .producto-estado{
+  width:100%!important;
+  max-width:100%!important;
+  text-align:left!important;
+}
+</style>
+
