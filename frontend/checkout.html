@@ -238,463 +238,100 @@
 @media(prefers-reduced-motion:reduce){.producto-check{animation:none}}
 
 
-/* Ajuste compacto moderado + borde azul y destello sobre toda la tarjeta */
-.comprobante-nuevo{position:relative;isolation:isolate}
-.comprobante-nuevo .comprobante-hero{position:relative;isolation:isolate}
-.comprobante-nuevo .comprobante-hero .checkout-border-effect{
- position:absolute;inset:0;z-index:12;padding:2px;border-radius:inherit;
- pointer-events:none;
- background:conic-gradient(from var(--checkout-border-angle),transparent 0deg,transparent 245deg,rgba(0,132,255,.18) 275deg,#168cff 300deg,#c5efff 310deg,#168cff 320deg,rgba(0,132,255,.18) 340deg,transparent 360deg);
- -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
- -webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
- mask-composite:exclude;animation:checkoutBorderTravel 7s linear infinite;opacity:.98
-}
-@property --checkout-border-angle{syntax:"<angle>";inherits:false;initial-value:0deg}
-@keyframes checkoutBorderTravel{to{--checkout-border-angle:360deg}}
-.comprobante-nuevo .checkout-light-sweep{
- position:absolute;z-index:10;top:-30%;bottom:-30%;left:-45%;width:30%;
- pointer-events:none;opacity:0;transform:skewX(-22deg);
- background:linear-gradient(90deg,transparent 0%,rgba(155,225,255,.04) 20%,rgba(190,239,255,.34) 48%,rgba(255,255,255,.58) 50%,rgba(100,198,255,.22) 62%,transparent 100%);
- filter:blur(2px);animation:checkoutLightSweep 7.5s ease-in-out infinite
-}
-@keyframes checkoutLightSweep{0%,62%{left:-45%;opacity:0}66%{opacity:.9}82%{left:125%;opacity:.65}83%,100%{left:125%;opacity:0}}
-.comprobante-hero{min-height:485px;padding-top:24px;padding-bottom:29px}
-.producto-visual{height:160px;margin-top:38px;margin-bottom:15px}
-.comprobante-cuerpo{padding-top:21px;padding-bottom:22px}
-@media(max-width:480px){
- .comprobante-hero{min-height:450px;padding-top:20px;padding-bottom:24px}
- .producto-visual{height:140px;margin-top:32px;margin-bottom:12px}
- .comprobante-cuerpo{padding-top:16px;padding-bottom:18px}
-}
-@media(prefers-reduced-motion:reduce){
- .comprobante-nuevo .checkout-border-effect,.comprobante-nuevo .checkout-light-sweep{animation:none;display:none}
-}
 
-
-/* ===== Checkout visual: confirmación premium Gamers Gold ===== */
-body{background:#020817!important;background-image:radial-gradient(ellipse at 50% 20%,rgba(0,95,255,.22),transparent 42%),radial-gradient(ellipse at 0 70%,rgba(0,105,255,.15),transparent 34%),radial-gradient(ellipse at 100% 75%,rgba(0,190,255,.12),transparent 35%)!important}
-body::before{opacity:.55!important;background:linear-gradient(135deg,transparent 47%,rgba(0,145,255,.16) 48%,transparent 50%) 0 0/90px 90px,linear-gradient(45deg,transparent 47%,rgba(0,145,255,.12) 48%,transparent 50%) 0 0/130px 130px!important}
-body>header{display:none!important}
-main{max-width:850px!important;padding:20px 14px 16px!important}
-.comprobante-nuevo{max-width:800px!important;border:1px solid #078fff!important;border-radius:18px!important;background:#030d22!important;box-shadow:0 0 24px rgba(0,120,255,.28),0 0 65px rgba(0,80,255,.12),inset 0 0 28px rgba(0,145,255,.06)!important}
-.comprobante-hero{min-height:0!important;padding:30px 24px 25px!important;background:radial-gradient(ellipse at 50% 63%,rgba(0,95,255,.2),transparent 45%),linear-gradient(145deg,rgba(2,10,29,.95),rgba(4,20,48,.98))!important}
-.comprobante-cabecera{justify-content:center!important}
-.marca-ggt{font-size:clamp(25px,5vw,43px)!important;font-style:italic!important;letter-spacing:1px!important;text-align:center!important;text-shadow:0 0 22px rgba(0,170,255,.45)!important}
-.marca-ggt span{display:block!important;margin-top:2px!important;font-size:13px!important;letter-spacing:8px!important}
-.estado-comprobante{display:none!important}
-.producto-visual{width:100%!important;height:auto!important;min-height:0!important;margin:28px auto 20px!important;display:flex!important;align-items:center!important;justify-content:center!important}
-.producto-orbita{display:none!important}
-.producto-cristal{display:none!important}
-.producto-check{position:static!important;right:auto!important;bottom:auto!important;width:154px!important;height:154px!important;border:5px solid #38ff83!important;border-radius:50%!important;background:rgba(0,255,105,.06)!important;color:#eafff1!important;font-size:100px!important;line-height:1!important;box-shadow:0 0 18px rgba(0,255,110,.45),0 0 45px rgba(0,255,110,.2),inset 0 0 28px rgba(0,255,110,.12)!important}
-.producto-resumen{display:flex!important;flex-direction:column!important;align-items:center!important}
-.producto-resumen h1{order:1!important;margin:0 0 10px!important;color:#f4f8ff!important;font-size:clamp(27px,5.5vw,48px)!important;font-weight:1000!important;font-style:italic!important;letter-spacing:.3px!important;text-transform:uppercase!important;text-shadow:0 0 22px rgba(0,125,255,.28)!important}
-.producto-resumen .subtitulo{order:2!important;max-width:560px!important;color:#c1d7f4!important;font-size:clamp(13px,2vw,17px)!important}
-.producto-resumen .juego-etiqueta{order:3!important;margin:18px 0 5px!important;color:#49d8ff!important;font-size:12px!important;letter-spacing:2px!important}
-.producto-resumen .producto-titulo{order:4!important;margin:0!important;color:#fff!important;font-size:clamp(19px,3vw,25px)!important}
-.estado-tiempo{order:5!important;margin-top:13px!important}
-.comprobante-cuerpo{padding:22px 24px 25px!important;background:linear-gradient(155deg,#061630,#020a1c 80%)!important}
-.total-pagado{margin-bottom:14px!important;border:1px solid rgba(0,175,255,.52)!important;border-radius:12px!important;background:rgba(0,76,160,.13)!important}
-.datos-comprobante{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:0!important;border:1px solid rgba(0,155,255,.45)!important;border-radius:11px!important;overflow:hidden!important;background:rgba(2,13,32,.75)!important}
-.dato-claro{min-height:76px!important;padding:13px 15px!important;border:0!important;border-bottom:1px solid rgba(0,145,255,.2)!important;border-radius:0!important;background:transparent!important}
-.dato-claro:nth-child(odd){border-right:1px solid rgba(0,145,255,.2)!important}
-.dato-claro span{color:#83b2e9!important;font-size:10px!important;letter-spacing:1px!important}
-.dato-claro strong{color:#f6faff!important;font-size:14px!important}
-.orden-comprobante{margin-top:12px!important;border:1px solid rgba(0,155,255,.3)!important;border-radius:10px!important;background:rgba(0,80,160,.08)!important}
-.nota{border-radius:8px!important}
-#accionesNavegacion{grid-template-columns:1fr!important;gap:10px!important}
-#accionesNavegacion .boton{min-height:54px!important;border-radius:10px!important;font-size:13px!important;letter-spacing:1px!important}
-#accionesNavegacion .boton-principal{color:#fff!important;background:linear-gradient(100deg,#006dff,#00c6ff)!important;box-shadow:0 0 20px rgba(0,145,255,.3)!important}
-#accionesNavegacion .boton-secundario{color:#36d5ff!important;border-color:#13bfff!important;background:rgba(0,95,190,.08)!important}
-#accionesComprobante .boton{min-height:50px!important;border-radius:10px!important;font-size:12px!important}
-.pie{max-width:800px!important;margin:0 auto!important;padding:22px 5px 10px!important}
-.ventajas{padding-bottom:15px!important;border-bottom:1px solid rgba(0,145,255,.18)!important}
-.copyright{border-top:0!important;letter-spacing:3px!important}
-@media(max-width:520px){
- main{padding:10px 9px 12px!important}
- .comprobante-hero{padding:24px 13px 20px!important}
- .marca-ggt{font-size:27px!important}
- .marca-ggt span{font-size:11px!important;letter-spacing:7px!important}
- .producto-visual{margin:23px auto 18px!important}
- .producto-check{width:125px!important;height:125px!important;font-size:79px!important}
- .producto-resumen h1{font-size:27px!important}
- .producto-resumen .subtitulo{font-size:12px!important}
- .comprobante-cuerpo{padding:15px 11px 18px!important}
- .total-pagado{padding:14px 12px!important}
- .dato-claro{min-height:70px!important;padding:10px 9px!important}
- .dato-claro span{font-size:8px!important}
- .dato-claro strong{font-size:11px!important}
- .ventaja{padding:4px 2px!important}
- .ventaja strong,.ventaja span{font-size:7px!important}
- .copyright{font-size:8px!important;letter-spacing:1.5px!important}
-}
-
-
-/* ===== Replica de la referencia visual enviada ===== */
-body{min-height:100vh!important;background:#020817!important;background-image:radial-gradient(ellipse at 50% 32%,rgba(0,72,185,.24),transparent 48%),radial-gradient(ellipse at 0 58%,rgba(0,90,255,.18),transparent 38%),radial-gradient(ellipse at 100% 60%,rgba(0,105,255,.16),transparent 38%),linear-gradient(180deg,#020817,#030b1d 65%,#020817)!important}
-body::before{opacity:.75!important;background:linear-gradient(135deg,transparent 46%,rgba(0,126,255,.24) 47%,transparent 49%) 0 0/110px 110px,linear-gradient(45deg,transparent 46%,rgba(0,126,255,.18) 47%,transparent 49%) 0 0/150px 150px!important}
-body>header{display:none!important}
-main{width:100%!important;max-width:1020px!important;padding:0 20px 20px!important}
-.comprobante-nuevo{width:100%!important;max-width:900px!important;margin:0 auto!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}
-.comprobante-hero{min-height:0!important;padding:34px 20px 28px!important;background:transparent!important}
-.comprobante-cabecera{justify-content:center!important}
-.marca-ggt{display:flex!important;flex-direction:column!important;align-items:center!important;gap:0!important;font-size:0!important;line-height:.95!important;text-align:center!important;font-style:italic!important}
-.marca-ggt .marca-principal{font-size:clamp(29px,5vw,46px)!important;font-weight:1000!important;letter-spacing:-1px!important;color:#f7fbff!important}
-.marca-ggt .marca-gold{font-size:clamp(43px,7vw,68px)!important;font-weight:1000!important;letter-spacing:-2px!important;background:linear-gradient(180deg,#7af3ff,#00a9ff 58%,#0875e8)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;filter:drop-shadow(0 0 12px rgba(0,160,255,.45))}
-.marca-ggt .marca-topup{margin-top:5px!important;color:#14d9ff!important;font-size:15px!important;letter-spacing:9px!important;font-weight:800!important}
-.claim-marca{margin-top:18px;color:#c7dcfa;font-size:clamp(10px,1.8vw,14px);letter-spacing:clamp(3px,.7vw,6px);text-align:center}
-.estado-comprobante{display:none!important}
-.producto-visual{width:100%!important;height:auto!important;min-height:0!important;margin:38px auto 24px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+/* ===== Checkout: composición fiel al comprobante de referencia ===== */
+html,body{width:100%;max-width:100%;min-height:100%;overflow-x:hidden}
+body{margin:0;background:#030a18;color:#f4f8ff}
+main{width:100%;max-width:940px;margin:0 auto;padding:18px 20px 24px;box-sizing:border-box}
+.tarjeta.comprobante-nuevo{width:100%;max-width:860px;margin:0 auto;border:1px solid rgba(0,136,255,.55);border-radius:22px;background:linear-gradient(155deg,#06152d,#020918 72%);overflow:hidden;box-shadow:0 0 28px rgba(0,104,255,.2)}
+.checkout-light-sweep,.checkout-border-effect{display:none!important;animation:none!important}
+.comprobante-hero{min-height:0;padding:26px 24px 28px;text-align:center;background:radial-gradient(ellipse at 50% 62%,rgba(0,139,255,.17),transparent 48%),linear-gradient(145deg,#06152e,#071a37 55%,#030918)}
+.comprobante-cabecera{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.marca-ggt{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:.9}
+.marca-ggt .marca-principal{font-size:clamp(30px,5vw,43px);font-weight:1000}
+.marca-ggt .marca-gold{font-size:clamp(48px,7vw,68px);font-weight:1000}
+.marca-ggt .marca-topup{font-size:13px;letter-spacing:8px;margin-left:8px}
+.estado-comprobante{margin-top:7px}
+.claim-marca{margin:13px auto 0;font-size:clamp(9px,1.5vw,13px);letter-spacing:clamp(2px,.5vw,5px);text-align:center}
+.producto-visual{width:190px;height:170px;margin:25px auto 16px;display:grid;place-items:center}
+.producto-check{width:142px;height:142px;display:grid;place-items:center;border:7px solid #27f68d;border-radius:50%;background:radial-gradient(circle,rgba(0,255,130,.16),rgba(0,20,34,.8));color:#dffff0;font-size:94px;line-height:1;box-shadow:0 0 18px #00e879,0 0 48px rgba(0,255,120,.4),inset 0 0 22px rgba(0,255,130,.18)}
 .producto-orbita,.producto-cristal{display:none!important}
-.producto-check{position:relative!important;inset:auto!important;width:180px!important;height:180px!important;display:grid!important;place-items:center!important;border:6px solid #35ff80!important;border-radius:50%!important;background:rgba(0,255,105,.035)!important;color:#eafff0!important;font-size:116px!important;font-weight:500!important;line-height:1!important;box-shadow:0 0 17px rgba(0,255,110,.55),0 0 48px rgba(0,255,110,.28),inset 0 0 30px rgba(0,255,110,.12)!important}
-.producto-resumen{display:flex!important;flex-direction:column!important;align-items:center!important}
-.producto-resumen h1{order:1!important;margin:0 0 11px!important;color:#f5f8ff!important;font-size:clamp(34px,6vw,58px)!important;font-weight:1000!important;font-style:italic!important;line-height:1.05!important;letter-spacing:-1px!important;text-transform:uppercase!important;text-shadow:0 0 22px rgba(0,105,255,.25)!important}
-.producto-resumen .subtitulo{order:2!important;max-width:650px!important;color:#c1d8f5!important;font-size:clamp(14px,2vw,19px)!important;line-height:1.55!important}
+.producto-resumen h1{margin:12px auto 10px;font-size:clamp(30px,5.2vw,53px);line-height:1.02;text-align:center;overflow-wrap:anywhere}
+.producto-resumen .subtitulo{max-width:680px;margin:0 auto;font-size:clamp(12px,1.7vw,16px);line-height:1.55;text-align:center}
 .estado-tiempo{display:none!important}
-.comprobante-cuerpo{padding:24px 24px 20px!important;border:1px solid #078fff!important;border-radius:19px!important;background:linear-gradient(150deg,rgba(3,15,36,.98),rgba(2,9,23,.99))!important;box-shadow:0 0 22px rgba(0,119,255,.3),0 0 58px rgba(0,89,255,.12),inset 0 0 24px rgba(0,126,255,.06)!important}
-.ficha-pedido{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.85fr);gap:16px;align-items:stretch;min-height:420px;padding:12px;border:1px solid rgba(0,100,220,.28);border-radius:13px;background:rgba(1,9,24,.45)}
-.ficha-datos{min-width:0;display:flex;flex-direction:column}
-.ficha-fila{display:flex;align-items:center;gap:15px;min-height:72px;padding:10px 12px;border-bottom:1px solid rgba(0,137,255,.19)}
-.ficha-fila:last-child{border-bottom:0}
-.ficha-icono{width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;border:1px solid #087ee6;border-radius:50%;background:linear-gradient(145deg,rgba(0,112,255,.18),rgba(0,25,65,.35));color:#19caff;font-size:29px;text-shadow:0 0 12px rgba(0,174,255,.45)}
-.ficha-info{min-width:0;flex:1}
-.ficha-info>span{display:block;margin-bottom:5px;color:#8fb5e8;font-size:12px;letter-spacing:.7px}
-.ficha-info>strong{display:block;color:#f6f9ff;font-size:17px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
-.ficha-info>strong.precio{color:#f6f9ff;font-size:18px}
-.ficha-info>small{display:block;margin-top:4px;color:#9bbce7;font-size:11px}
-.ficha-info>small b{color:#fff;font-size:12px}
-.logo-juego{width:150px;min-height:72px;flex:0 0 150px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(0,119,255,.42);border-radius:12px;background:linear-gradient(145deg,#061a38,#020918);color:#f4f8ff;font-size:16px;font-weight:1000;font-style:italic;text-align:center;text-shadow:0 0 10px rgba(0,153,255,.45)}
-.logo-juego small{margin-top:3px;color:#31d8ff;font-size:10px;letter-spacing:5px}
-.ficha-arte{position:relative;min-height:350px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.arte-anillo{position:absolute;bottom:16%;width:85%;height:65px;border:3px solid rgba(0,155,255,.8);border-radius:50%;transform:perspective(180px) rotateX(62deg);box-shadow:0 0 18px #008cff,0 0 42px rgba(0,117,255,.5),inset 0 0 16px #008cff}
-.arte-moneda{position:absolute;display:grid;place-items:center;width:112px;height:112px;border:7px double #f5d66c;border-radius:50%;background:radial-gradient(circle at 35% 28%,#fff4a2,#d89a19 48%,#754600 78%,#f4cf55);color:#fff2a4;font-size:60px;font-weight:1000;font-style:italic;text-shadow:0 3px 2px #724300,0 0 12px #fff2a0;box-shadow:0 10px 15px rgba(0,0,0,.5),0 0 18px rgba(255,190,36,.35);-webkit-text-stroke:1px #87520a}
-.moneda-trasera{width:86px;height:86px;left:17%;top:31%;font-size:43px;transform:rotate(-13deg)}
-.moneda-lateral{width:91px;height:91px;right:13%;top:42%;font-size:46px;transform:rotate(13deg)}
-.moneda-frontal{z-index:2;left:36%;top:39%;transform:rotate(-5deg)}
-.arte-brillo{position:absolute;bottom:13%;width:72%;height:30px;border-radius:50%;background:#008dff;filter:blur(23px);opacity:.75}
-.verificacion-comprobante{display:none!important}
-.comprobante-nuevo .nota{margin-top:12px!important;border-left:3px solid #16caff!important;border-radius:7px!important;background:rgba(0,92,180,.1)!important;color:#bcd5f2!important;text-align:center!important}
-#accionesNavegacion{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;margin:24px auto 0!important;max-width:680px!important}
-#accionesNavegacion .boton{min-height:66px!important;border-radius:15px!important;font-size:18px!important;letter-spacing:1px!important}
-#accionesNavegacion .boton-principal{background:linear-gradient(100deg,#0877ff,#00c5ff)!important;color:#fff!important;box-shadow:0 0 22px rgba(0,142,255,.34)!important}
-#accionesNavegacion .boton-secundario{background:rgba(0,22,52,.5)!important;border:2px solid #00baff!important;color:#27d7ff!important}
-#accionesComprobante .boton{min-height:56px!important;border-radius:12px!important}
-.pie{max-width:900px!important;margin:0 auto!important;padding:25px 5px 10px!important}
-.ventajas{padding-bottom:20px!important;border-bottom:1px solid rgba(0,145,255,.18)!important}
-.ventaja{display:grid!important;grid-template-columns:35px auto!important;grid-template-rows:auto auto!important;align-items:center!important;justify-content:center!important;column-gap:8px!important;text-align:left!important}
-.ventaja-icono{grid-row:1/3!important;margin:0!important}
-.ventaja-icono svg{width:31px!important;height:31px!important}
-.ventaja strong,.ventaja span{font-size:11px!important}
-.ventaja span{margin-top:2px!important}
-.copyright{padding-top:17px!important;border:0!important;color:#9bb1d1!important;font-size:11px!important;letter-spacing:5px!important}
+.comprobante-cuerpo{width:100%;padding:0 26px 24px;box-sizing:border-box;background:transparent;border:0;box-shadow:none}
+.ficha-pedido{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(220px,.82fr);gap:12px;align-items:stretch;width:100%;height:auto;min-height:440px;max-height:none;padding:12px;box-sizing:border-box;border:1px solid #078fff;border-radius:17px;background:linear-gradient(145deg,rgba(4,19,43,.98),rgba(2,9,24,.99));box-shadow:0 0 20px rgba(0,119,255,.24),inset 0 0 22px rgba(0,126,255,.05);overflow:hidden}
+.ficha-datos{display:flex;flex-direction:column;justify-content:stretch;min-width:0;min-height:0}
+.ficha-fila{display:flex;flex:1 1 auto;align-items:center;gap:12px;min-width:0;min-height:64px;padding:7px 9px;box-sizing:border-box;border-bottom:1px solid rgba(0,137,255,.19)}
+.ficha-fila:last-of-type{border-bottom:0}
+.ficha-icono{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;border:1px solid #087ee6;border-radius:50%;background:linear-gradient(145deg,rgba(0,112,255,.18),rgba(0,25,65,.35));color:#19caff;font-size:25px}
+.ficha-info{min-width:0;flex:1;overflow:hidden}
+.ficha-info>span{display:block;margin-bottom:4px;color:#8fb5e8;font-size:11px;letter-spacing:.7px}
+.ficha-info>strong{display:block;color:#f6f9ff;font-size:16px;font-weight:700;line-height:1.23;overflow-wrap:anywhere;word-break:break-word}
+.ficha-info>strong.precio{font-size:17px}
+.ficha-info>small{display:block;margin-top:4px;color:#9bbce7;font-size:10px}
+.ficha-info>small b{color:#fff;font-size:11px}
+.logo-juego{width:130px;min-height:65px;flex:0 0 130px}
+.ficha-arte{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:100%;overflow:hidden;background:radial-gradient(ellipse at 50% 62%,rgba(0,117,255,.2),transparent 67%)}
+.escudo-gvr-flotante{position:relative;z-index:2;width:min(78%,180px);aspect-ratio:160/180;display:flex;align-items:center;justify-content:center;animation:walletEscudoFlota 3.2s ease-in-out infinite;filter:drop-shadow(0 0 13px rgba(0,157,255,.48))}
+.escudo-gvr-flotante img{display:block;width:100%;height:100%;object-fit:contain}
+@keyframes walletEscudoFlota{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.arte-anillo{position:absolute;z-index:1;bottom:12%;width:90%;height:45px;border:2px solid rgba(0,155,255,.8);border-radius:50%;transform:perspective(180px) rotateX(62deg);box-shadow:0 0 16px #008cff,0 0 34px rgba(0,117,255,.45),inset 0 0 12px #008cff}
+.arte-brillo{position:absolute;z-index:0;bottom:10%;width:70%;height:24px;border-radius:50%;background:#008dff;filter:blur(20px);opacity:.6}
+.comprobante-cuerpo>.nota{margin:16px 0 0;padding:15px 18px;border-left:4px solid #16caff;border-radius:10px;background:rgba(0,92,180,.1);color:#b8cce7;text-align:center;line-height:1.55}
+#accionesComprobante,#accionesNavegacion{display:grid;grid-template-columns:1fr;width:100%;max-width:680px;gap:11px;margin:17px auto 0}
+#accionesComprobante .boton,#accionesNavegacion .boton{width:100%;min-height:58px;box-sizing:border-box}
+#accionesNavegacion{margin-top:12px}
+.mensaje{max-width:680px;margin:10px auto 0;text-align:center;overflow-wrap:anywhere}
+.pie{max-width:860px;margin:0 auto;padding:22px 24px 12px}
+.ventajas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+.ventaja{min-width:0}
+.copyright{text-align:center;overflow-wrap:anywhere}
 @media(max-width:620px){
- main{padding:0 10px 14px!important}
- .comprobante-hero{padding:23px 8px 23px!important}
- .marca-ggt .marca-principal{font-size:29px!important}
- .marca-ggt .marca-gold{font-size:47px!important}
- .marca-ggt .marca-topup{font-size:11px!important;letter-spacing:7px!important}
- .claim-marca{font-size:9px!important;letter-spacing:2.5px!important}
- .producto-visual{margin:28px auto 21px!important}
- .producto-check{width:132px!important;height:132px!important;font-size:85px!important}
- .producto-resumen h1{font-size:clamp(29px,8vw,39px)!important;letter-spacing:-.5px!important}
- .producto-resumen .subtitulo{font-size:13px!important}
- .comprobante-cuerpo{padding:12px 10px 15px!important;border-radius:15px!important}
- .ficha-pedido{grid-template-columns:minmax(0,1fr)!important;gap:0!important;padding:7px!important}
- .ficha-fila{min-height:64px!important;gap:10px!important;padding:8px 5px!important}
- .ficha-icono{width:42px!important;height:42px!important;flex-basis:42px!important;font-size:23px!important}
- .ficha-info>span{font-size:9px!important}
- .ficha-info>strong{font-size:13px!important}
- .ficha-info>strong.precio{font-size:15px!important}
- .ficha-info>small{font-size:9px!important}
- .logo-juego{width:88px!important;min-height:55px!important;flex-basis:88px!important;font-size:10px!important}
- .logo-juego small{font-size:7px!important;letter-spacing:3px!important}
- .ficha-arte{min-height:190px!important}
- .arte-moneda{width:83px!important;height:83px!important;font-size:43px!important}
- .moneda-trasera{width:65px!important;height:65px!important;font-size:32px!important}
- .moneda-lateral{width:68px!important;height:68px!important;font-size:34px!important}
- .moneda-frontal{left:37%!important}
- #accionesNavegacion{margin-top:16px!important;gap:9px!important}
- #accionesNavegacion .boton{min-height:54px!important;font-size:13px!important;border-radius:11px!important}
- .ventajas{gap:5px!important}
- .ventaja{grid-template-columns:1fr!important;grid-template-rows:auto auto auto!important;justify-items:center!important;gap:2px!important;text-align:center!important;padding:4px 1px!important}
- .ventaja-icono{grid-row:auto!important}
- .ventaja-icono svg{width:23px!important;height:23px!important}
- .ventaja strong,.ventaja span{font-size:7px!important}
- .copyright{font-size:8px!important;letter-spacing:2px!important}
-}
-@media(prefers-reduced-motion:reduce){.comprobante-nuevo .checkout-border-effect,.comprobante-nuevo .checkout-light-sweep{animation:none!important}}
-
-
-/* Ficha horizontal: datos a la izquierda e imagen del juego a la derecha */
-.ficha-pedido{grid-template-columns:minmax(0,1.55fr) minmax(210px,.8fr)!important;gap:10px!important;min-height:0!important;height:430px!important;max-height:430px!important;padding:10px!important;align-items:stretch!important}
-.ficha-datos{justify-content:space-between!important;min-height:0!important}
-.ficha-fila{min-height:0!important;height:calc(100% / 6)!important;flex:1 1 0!important;padding:5px 8px!important;gap:12px!important}
-.ficha-icono{width:45px!important;height:45px!important;flex-basis:45px!important;font-size:25px!important}
-.ficha-info>span{font-size:10px!important;margin-bottom:3px!important}
-.ficha-info>strong{font-size:15px!important}
-.ficha-info>strong.precio{font-size:16px!important}
-.logo-juego{width:112px!important;min-height:60px!important;flex-basis:112px!important;font-size:13px!important}
-.ficha-arte{min-height:0!important;height:100%!important;display:flex!important;align-items:center!important;justify-content:center!important}
-.imagen-juego-comprobante{position:relative!important;z-index:2!important;display:block!important;width:100%!important;height:100%!important;max-height:365px!important;object-fit:contain!important;filter:drop-shadow(0 8px 18px rgba(0,133,255,.45))!important}
-.arte-anillo{bottom:10%!important;width:95%!important;height:50px!important}
-.arte-brillo{bottom:10%!important}
-@media(max-width:620px){
- .ficha-pedido{grid-template-columns:minmax(0,1.35fr) minmax(105px,.75fr)!important;gap:3px!important;height:360px!important;max-height:360px!important;padding:5px!important}
- .ficha-fila{height:calc(100% / 6)!important;min-height:0!important;padding:4px 2px!important;gap:6px!important}
- .ficha-icono{width:29px!important;height:29px!important;flex-basis:29px!important;font-size:16px!important}
- .ficha-info>span{font-size:8px!important;margin-bottom:2px!important}
- .ficha-info>strong{font-size:11px!important;line-height:1.15!important}
- .ficha-info>strong.precio{font-size:12px!important}
- .ficha-info>small{font-size:8px!important}
- .ficha-info>small b{font-size:9px!important}
- .logo-juego{display:none!important}
- .ficha-arte{height:100%!important;min-height:0!important}
- .imagen-juego-comprobante{max-height:310px!important;width:100%!important}
- .arte-anillo{height:28px!important}
-}
-
-
-/* ===== Corrección de proporciones móvil: ficha igual a la referencia ===== */
-.ficha-pedido{
- display:grid!important;
- grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr)!important;
- grid-template-rows:minmax(0,1fr)!important;
- height:450px!important;min-height:450px!important;max-height:450px!important;
- gap:8px!important;padding:10px!important;align-items:stretch!important;
-}
-.ficha-datos{
- display:grid!important;grid-template-columns:minmax(0,1fr)!important;
- grid-template-rows:repeat(6,minmax(0,1fr))!important;
- min-height:0!important;height:100%!important;overflow:hidden!important;
-}
-.ficha-fila{
- display:flex!important;min-height:0!important;height:auto!important;
- min-width:0!important;flex:initial!important;
- padding:4px 6px!important;gap:9px!important;overflow:hidden!important;
- border-bottom:1px solid rgba(0,137,255,.2)!important;
-}
-.ficha-fila:last-of-type{border-bottom:0!important}
-.ficha-icono{width:39px!important;height:39px!important;flex:0 0 39px!important;font-size:22px!important}
-.ficha-info{min-width:0!important;overflow:hidden!important}
-.ficha-info>span{font-size:9px!important;line-height:1.15!important;margin-bottom:3px!important}
-.ficha-info>strong,.ficha-info>strong.precio{font-size:clamp(10px,2vw,14px)!important;line-height:1.18!important;overflow-wrap:anywhere!important}
-.ficha-info>small{font-size:9px!important;line-height:1.1!important}
-.logo-juego{display:none!important}
-.ficha-arte{
- display:flex!important;min-width:0!important;width:100%!important;height:100%!important;
- min-height:0!important;align-self:stretch!important;overflow:hidden!important;
-}
-.imagen-juego-comprobante{
- display:block!important;position:relative!important;z-index:3!important;
- width:100%!important;height:100%!important;max-height:none!important;
- object-fit:cover!important;object-position:center!important;
- border-radius:9px!important;filter:drop-shadow(0 5px 14px rgba(0,133,255,.4))!important;
-}
-.arte-anillo{bottom:5%!important;width:88%!important;height:28px!important;z-index:1!important}
-.arte-brillo{bottom:6%!important;z-index:0!important}
-.estado-oculto{display:none!important}
-#estadoDetalle{display:none!important}
-@media(max-width:620px){
- main{padding:0 10px 14px!important}
- .comprobante-hero{padding:20px 6px 18px!important}
- .producto-visual{margin:20px auto 16px!important}
- .producto-check{width:112px!important;height:112px!important;font-size:72px!important}
- .producto-resumen h1{font-size:clamp(27px,7vw,36px)!important;line-height:1.02!important}
- .producto-resumen .subtitulo{font-size:12px!important;line-height:1.35!important}
- .comprobante-cuerpo{padding:10px!important}
- .ficha-pedido{
-  grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr)!important;
-  grid-template-rows:minmax(0,1fr)!important;
-  height:410px!important;min-height:410px!important;max-height:410px!important;
-  gap:4px!important;padding:6px!important;
- }
- .ficha-datos{grid-template-rows:repeat(6,minmax(0,1fr))!important;height:100%!important}
- .ficha-fila{padding:3px 2px!important;gap:6px!important;min-height:0!important}
- .ficha-icono{width:29px!important;height:29px!important;flex-basis:29px!important;font-size:16px!important}
- .ficha-info>span{font-size:7px!important;letter-spacing:.35px!important;margin-bottom:2px!important}
- .ficha-info>strong,.ficha-info>strong.precio{font-size:clamp(9px,2.1vw,12px)!important;line-height:1.13!important}
- .ficha-info>small{font-size:7px!important;margin-top:2px!important}
- .ficha-info>small b{font-size:8px!important}
- .ficha-arte{display:flex!important;min-height:0!important;height:100%!important}
- .imagen-juego-comprobante{width:100%!important;height:100%!important;max-height:none!important;object-fit:cover!important}
- .arte-anillo{height:22px!important}
- #accionesNavegacion{margin-top:14px!important}
- #accionesNavegacion .boton{min-height:54px!important;font-size:13px!important}
-}
-@media(max-width:380px){
- .ficha-pedido{height:385px!important;min-height:385px!important;max-height:385px!important}
- .ficha-icono{width:25px!important;height:25px!important;flex-basis:25px!important}
- .ficha-info>span{font-size:6.5px!important}
- .ficha-info>strong,.ficha-info>strong.precio{font-size:9px!important}
-}
-
-
-/* ===== Corrección final de composición y carga visual ===== */
-/* Quitar por completo los destellos móviles que cruzan la pantalla */
-.comprobante-nuevo .checkout-light-sweep,
-.comprobante-nuevo .checkout-border-effect{display:none!important;animation:none!important;opacity:0!important}
-.comprobante-nuevo::before,.comprobante-nuevo::after{animation:none!important}
-/* El contenedor de datos es la única tarjeta; botones quedan debajo y fuera */
-.comprobante-cuerpo{padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
-.ficha-pedido{
- display:grid!important;
- grid-template-columns:minmax(0,1.35fr) minmax(230px,.8fr)!important;
- gap:12px!important;
- width:100%!important;
- height:440px!important;
- min-height:440px!important;
- max-height:440px!important;
- padding:14px!important;
- border:1px solid #078fff!important;
- border-radius:17px!important;
- background:linear-gradient(145deg,rgba(4,19,43,.98),rgba(2,9,24,.99))!important;
- box-shadow:0 0 20px rgba(0,119,255,.25),inset 0 0 22px rgba(0,126,255,.05)!important;
- overflow:hidden!important;
-}
-.ficha-datos{height:100%!important;min-height:0!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important;overflow:hidden!important}
-.ficha-fila{flex:1 1 0!important;height:auto!important;min-height:0!important;max-height:none!important;padding:5px 9px!important;gap:12px!important;border-bottom:1px solid rgba(0,137,255,.19)!important}
-.ficha-fila:last-of-type{border-bottom:0!important}
-.ficha-icono{width:48px!important;height:48px!important;flex:0 0 48px!important;font-size:25px!important}
-.ficha-info>span{font-size:10px!important;margin-bottom:4px!important}
-.ficha-info>strong{font-size:15px!important;line-height:1.2!important}
-.ficha-info>strong.precio{font-size:16px!important}
-.ficha-info>small{font-size:10px!important}
-.logo-juego{width:116px!important;min-height:62px!important;flex:0 0 116px!important}
-.ficha-arte{position:relative!important;height:100%!important;min-height:0!important;overflow:hidden!important;border-radius:10px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:radial-gradient(ellipse at 50% 68%,rgba(0,112,255,.2),transparent 60%)!important}
-.imagen-juego-comprobante{
- display:block!important;position:relative!important;z-index:2!important;
- width:100%!important;height:100%!important;max-height:none!important;
- object-fit:cover!important;object-position:center!important;
- border-radius:8px!important;
- filter:drop-shadow(0 5px 13px rgba(0,133,255,.32))!important;
-}
-.arte-anillo{z-index:1!important;bottom:9%!important;width:92%!important;height:42px!important;opacity:.7!important}
-.arte-brillo{z-index:0!important;bottom:7%!important;opacity:.45!important}
-/* Separar botones de la ficha de compra, como en la imagen de referencia */
-.comprobante-cuerpo>.nota{margin:15px 0 0!important}
-#accionesComprobante{margin:18px auto 0!important;max-width:680px!important}
-#accionesNavegacion{display:grid!important;grid-template-columns:1fr!important;gap:11px!important;margin:18px auto 0!important;max-width:680px!important}
-#accionesNavegacion .boton{min-height:60px!important;border-radius:13px!important}
-.mensaje{margin:10px auto 0!important;max-width:680px!important}
-@media(max-width:620px){
- .comprobante-hero{min-height:0!important;padding:20px 8px 22px!important}
- .producto-visual{height:auto!important;min-height:0!important;margin:25px auto 18px!important}
- .producto-check{width:126px!important;height:126px!important;font-size:80px!important}
- .producto-resumen h1{font-size:clamp(27px,7.4vw,38px)!important;line-height:1.05!important}
- .producto-resumen .subtitulo{font-size:13px!important}
- .comprobante-cuerpo{padding:0 9px!important}
- .ficha-pedido{
-  grid-template-columns:minmax(0,1.38fr) minmax(112px,.78fr)!important;
-  gap:5px!important;height:390px!important;min-height:390px!important;max-height:390px!important;
-  padding:7px!important;border-radius:14px!important;
- }
- .ficha-datos{height:100%!important}
- .ficha-fila{padding:4px 2px!important;gap:6px!important}
- .ficha-icono{width:32px!important;height:32px!important;flex-basis:32px!important;font-size:17px!important}
- .ficha-info>span{font-size:8px!important;letter-spacing:.35px!important;margin-bottom:3px!important}
- .ficha-info>strong{font-size:11px!important;line-height:1.17!important;overflow-wrap:anywhere!important}
- .ficha-info>strong.precio{font-size:12px!important}
- .ficha-info>small{font-size:8px!important;margin-top:2px!important}
- .ficha-info>small b{font-size:9px!important}
- .logo-juego{display:none!important}
- .ficha-arte{height:100%!important;min-height:0!important}
- .imagen-juego-comprobante{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
- .arte-anillo{height:25px!important}
- #accionesComprobante,#accionesNavegacion{max-width:none!important;margin-top:14px!important}
- #accionesNavegacion .boton{min-height:54px!important;font-size:14px!important}
- .comprobante-cuerpo>.nota{font-size:12px!important;padding:14px 10px!important}
-}
-
-
-/* ===== Layout final: sin fotos, escudo GVR flotante y contenido completo ===== */
-html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
-body{min-height:100vh!important;height:auto!important}
-main{width:100%!important;max-width:900px!important;min-width:0!important;margin:0 auto!important;padding:16px 14px 20px!important;box-sizing:border-box!important}
-.comprobante-nuevo{width:100%!important;max-width:860px!important;min-width:0!important;margin:0 auto!important;overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
-.comprobante-hero{width:100%!important;min-width:0!important;box-sizing:border-box!important;padding:20px 12px 24px!important;background:transparent!important}
-.comprobante-cabecera{display:flex!important;justify-content:center!important;align-items:center!important}
-.marca-ggt{display:flex!important;flex-direction:column!important;align-items:center!important;line-height:.94!important}
-.marca-ggt .marca-principal{font-size:clamp(28px,5vw,43px)!important}
-.marca-ggt .marca-gold{font-size:clamp(43px,7vw,62px)!important}
-.marca-ggt .marca-topup{font-size:12px!important;letter-spacing:7px!important}
-.claim-marca{margin-top:12px!important;font-size:clamp(9px,1.7vw,13px)!important;letter-spacing:clamp(2px,.55vw,5px)!important}
-.producto-visual{height:auto!important;min-height:0!important;margin:22px auto 17px!important}
-.producto-check{width:clamp(108px,16vw,150px)!important;height:clamp(108px,16vw,150px)!important;font-size:clamp(70px,11vw,98px)!important}
-.producto-resumen h1{font-size:clamp(28px,5.7vw,52px)!important;line-height:1.02!important;text-align:center!important;max-width:100%!important;overflow-wrap:anywhere!important}
-.producto-resumen .subtitulo{max-width:680px!important;margin:0 auto!important;text-align:center!important}
-.comprobante-cuerpo{width:100%!important;max-width:100%!important;min-width:0!important;padding:0!important;box-sizing:border-box!important;background:transparent!important;border:0!important;box-shadow:none!important}
-.ficha-pedido{
- display:grid!important;grid-template-columns:minmax(0,1.45fr) minmax(210px,.82fr)!important;
- width:100%!important;height:430px!important;min-height:430px!important;max-height:430px!important;
- min-width:0!important;box-sizing:border-box!important;padding:12px!important;gap:10px!important;
- border:1px solid #078fff!important;border-radius:17px!important;
- background:linear-gradient(145deg,#061630,#020a1c)!important;
- box-shadow:0 0 22px rgba(0,119,255,.27),inset 0 0 25px rgba(0,126,255,.06)!important;
- overflow:hidden!important
-}
-.ficha-datos{display:flex!important;flex-direction:column!important;justify-content:space-between!important;height:100%!important;min-width:0!important;min-height:0!important;overflow:hidden!important}
-.ficha-fila{display:flex!important;flex:1 1 0!important;min-width:0!important;min-height:0!important;height:auto!important;padding:5px 7px!important;gap:10px!important;align-items:center!important;border-bottom:1px solid rgba(0,137,255,.2)!important}
-.ficha-fila:last-of-type{border-bottom:0!important}
-.ficha-icono{width:42px!important;height:42px!important;flex:0 0 42px!important;font-size:23px!important}
-.ficha-info{min-width:0!important;overflow:hidden!important}
-.ficha-info>span{font-size:10px!important;margin-bottom:3px!important}
-.ficha-info>strong{font-size:clamp(12px,1.5vw,16px)!important;line-height:1.2!important;overflow-wrap:anywhere!important;word-break:break-word!important}
-.ficha-info>strong.precio{font-size:16px!important}
-.ficha-info>small{font-size:9px!important}
-.logo-juego{display:none!important}
-.ficha-arte{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;height:100%!important;min-height:0!important;min-width:0!important;overflow:visible!important;background:radial-gradient(ellipse,rgba(0,111,255,.2),transparent 68%)!important}
-.escudo-gvr-flotante{position:relative;z-index:3;width:min(100%,230px);height:auto;aspect-ratio:240/270;display:flex;align-items:center;justify-content:center;animation:escudoFlota 4s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(0,140,255,.5))}
-.escudo-gvr-flotante svg{display:block;width:100%;height:100%;overflow:visible}
-@keyframes escudoFlota{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.arte-anillo{z-index:1!important;bottom:8%!important;width:95%!important;height:40px!important}
-.arte-brillo{z-index:0!important;bottom:7%!important}
-.comprobante-cuerpo>.nota{margin:15px 0 0!important;box-sizing:border-box!important}
-#accionesComprobante,#accionesNavegacion{position:relative!important;display:grid!important;width:100%!important;max-width:680px!important;margin:17px auto 0!important;box-sizing:border-box!important;gap:11px!important}
-#accionesNavegacion{grid-template-columns:1fr!important}
-#accionesNavegacion .boton,#accionesComprobante .boton{width:100%!important;min-width:0!important;min-height:58px!important;box-sizing:border-box!important}
-.pie{width:100%!important;max-width:860px!important;margin:0 auto!important;padding:24px 8px 12px!important;box-sizing:border-box!important}
-.ventajas{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
-.ventaja{min-width:0!important}
-.copyright{max-width:100%!important;text-align:center!important;overflow-wrap:anywhere!important}
-@media(max-width:620px){
- main{padding:9px 10px 16px!important}
- .comprobante-hero{padding:13px 3px 18px!important}
- .marca-ggt .marca-principal{font-size:28px!important}
- .marca-ggt .marca-gold{font-size:46px!important}
- .marca-ggt .marca-topup{font-size:10px!important;letter-spacing:6px!important}
- .claim-marca{margin-top:10px!important;font-size:8px!important;letter-spacing:2px!important}
- .producto-visual{margin:16px auto 14px!important}
- .producto-check{width:112px!important;height:112px!important;font-size:72px!important}
- .producto-resumen h1{font-size:clamp(27px,7.5vw,39px)!important}
- .producto-resumen .subtitulo{font-size:12px!important;line-height:1.45!important}
- .ficha-pedido{grid-template-columns:minmax(0,1.38fr) minmax(105px,.72fr)!important;height:380px!important;min-height:380px!important;max-height:380px!important;padding:7px!important;gap:3px!important;border-radius:14px!important}
- .ficha-fila{padding:4px 2px!important;gap:6px!important}
- .ficha-icono{width:30px!important;height:30px!important;flex-basis:30px!important;font-size:16px!important}
- .ficha-info>span{font-size:8px!important;letter-spacing:.25px!important}
- .ficha-info>strong{font-size:clamp(10px,2.7vw,12px)!important;line-height:1.16!important}
- .ficha-info>strong.precio{font-size:12px!important}
- .ficha-info>small{font-size:8px!important}
- .ficha-arte{overflow:hidden!important}
- .escudo-gvr-flotante{width:100%!important;max-width:138px!important;animation-duration:4.8s!important}
- .arte-anillo{height:24px!important}
- .comprobante-cuerpo>.nota{font-size:12px!important;padding:13px 10px!important}
- #accionesComprobante,#accionesNavegacion{margin-top:12px!important;gap:9px!important}
- #accionesNavegacion .boton,#accionesComprobante .boton{min-height:52px!important;font-size:13px!important}
- .pie{padding-top:19px!important}
- .ventajas{gap:3px!important}
- .ventaja{grid-template-columns:1fr!important;grid-template-rows:auto auto auto!important;justify-items:center!important;text-align:center!important;padding:3px 1px!important}
- .ventaja-icono{grid-row:auto!important}
- .ventaja-icono svg{width:22px!important;height:22px!important}
- .ventaja strong,.ventaja span{font-size:7px!important;line-height:1.2!important}
- .copyright{font-size:8px!important;letter-spacing:2px!important}
+ main{padding:10px 9px 18px}
+ .tarjeta.comprobante-nuevo{border-radius:16px}
+ .comprobante-hero{padding:20px 12px 20px}
+ .marca-ggt .marca-principal{font-size:29px}
+ .marca-ggt .marca-gold{font-size:48px}
+ .marca-ggt .marca-topup{font-size:10px;letter-spacing:6px}
+ .claim-marca{font-size:8px;letter-spacing:2px;margin-top:10px}
+ .producto-visual{width:150px;height:140px;margin:17px auto 12px}
+ .producto-check{width:112px;height:112px;border-width:6px;font-size:73px}
+ .producto-resumen h1{font-size:clamp(27px,7vw,39px);margin:9px auto}
+ .producto-resumen .subtitulo{font-size:12px;line-height:1.45}
+ .comprobante-cuerpo{padding:0 10px 17px}
+ .ficha-pedido{grid-template-columns:minmax(0,1.48fr) minmax(100px,.72fr);gap:4px;min-height:0;padding:7px;border-radius:14px}
+ .ficha-datos{min-height:0}
+ .ficha-fila{min-height:62px;padding:5px 3px;gap:6px}
+ .ficha-icono{width:31px;height:31px;flex-basis:31px;font-size:17px}
+ .ficha-info>span{font-size:8px;letter-spacing:.35px;margin-bottom:3px}
+ .ficha-info>strong{font-size:clamp(10px,2.8vw,12px);line-height:1.2}
+ .ficha-info>strong.precio{font-size:12px}
+ .ficha-info>small{font-size:8px;margin-top:3px}
+ .ficha-info>small b{font-size:9px}
+ .logo-juego{display:none}
+ .ficha-arte{min-height:100%;overflow:hidden}
+ .escudo-gvr-flotante{width:min(90%,116px);animation-duration:3.8s}
+ .arte-anillo{bottom:13%;height:24px}
+ .arte-brillo{bottom:11%;height:15px}
+ .comprobante-cuerpo>.nota{margin-top:12px;padding:12px 9px;font-size:11px}
+ #accionesComprobante,#accionesNavegacion{margin-top:12px;gap:9px}
+ #accionesComprobante .boton,#accionesNavegacion .boton{min-height:53px;font-size:13px}
+ .pie{padding:18px 8px 10px}
+ .ventajas{gap:3px}
+ .ventaja{padding:3px 1px}
+ .ventaja-icono svg{width:21px;height:21px}
+ .ventaja strong,.ventaja span{font-size:7px;line-height:1.2}
+ .copyright{font-size:8px;letter-spacing:1.5px}
 }
 @media(max-width:370px){
- .ficha-pedido{grid-template-columns:minmax(0,1.35fr) minmax(92px,.68fr)!important}
- .ficha-icono{width:26px!important;height:26px!important;flex-basis:26px!important}
- .ficha-info>strong{font-size:10px!important}
- .escudo-gvr-flotante{max-width:116px!important}
- .logo-juego{display:none!important}
+ .ficha-pedido{grid-template-columns:minmax(0,1.4fr) minmax(88px,.7fr);padding:5px}
+ .ficha-fila{gap:4px;padding:4px 1px}
+ .ficha-icono{width:27px;height:27px;flex-basis:27px}
+ .ficha-info>strong{font-size:10px}
+ .escudo-gvr-flotante{width:88%}
 }
-@media(prefers-reduced-motion:reduce){.escudo-gvr-flotante{animation:none!important}}
+@media(prefers-reduced-motion:reduce){.escudo-gvr-flotante{animation:none}}
 
 </style>
 </head>
@@ -761,21 +398,7 @@ main{width:100%!important;max-width:900px!important;min-width:0!important;margin
                 </div>
                 <div class="ficha-arte" aria-hidden="true">
                     <div class="arte-anillo"></div>
-                    <div class="escudo-gvr-flotante" aria-hidden="true">
- <svg viewBox="0 0 240 270" role="img" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-   <linearGradient id="gvrMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b8f7ff"/><stop offset=".35" stop-color="#19caff"/><stop offset=".72" stop-color="#0872ed"/><stop offset="1" stop-color="#063a9c"/></linearGradient>
-   <linearGradient id="gvrFill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#123b77"/><stop offset="1" stop-color="#03142f"/></linearGradient>
-   <filter id="gvrGlow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  </defs>
-  <path d="M120 10 213 45v76c0 63-38 107-93 137-55-30-93-74-93-137V45z" fill="url(#gvrFill)" stroke="url(#gvrMetal)" stroke-width="8" filter="url(#gvrGlow)"/>
-  <path d="M120 27 195 56v65c0 49-28 85-75 112-47-27-75-63-75-112V56z" fill="none" stroke="#38dfff" stroke-opacity=".65" stroke-width="2"/>
-  <path d="m77 111 29 29 58-65" fill="none" stroke="#4dffad" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" filter="url(#gvrGlow)"/>
-  <text x="120" y="185" text-anchor="middle" font-family="Arial,sans-serif" font-size="35" font-weight="900" font-style="italic" fill="#f4fbff" stroke="#087ee8" stroke-width="1">GVR</text>
-  <path d="M79 202h82" stroke="#27d7ff" stroke-width="3" stroke-linecap="round"/>
-  <text x="120" y="222" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="3" fill="#9deeff">GAMERS GOLD</text>
- </svg>
-</div>
+                    <div class="escudo-gvr-flotante" aria-hidden="true"><img src="./gvr-escudo.svg" alt="" width="160" height="180" loading="eager" decoding="async" fetchpriority="high"></div>
                     <div class="arte-brillo"></div>
                 </div>
             </div>
