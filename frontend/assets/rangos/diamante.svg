@@ -1,1 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Insignia Diamante"><defs><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e8ffff"/><stop offset=".25" stop-color="#54eaff"/><stop offset=".5" stop-color="#1765b7"/><stop offset=".76" stop-color="#b5ffff"/><stop offset="1" stop-color="#12356f"/></linearGradient><radialGradient id="bg"><stop stop-color="#123f75"/><stop offset="1" stop-color="#081629"/></radialGradient><filter id="glow"><feGaussianBlur stdDeviation="2.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="64" cy="64" r="59" fill="#071222" stroke="#83f5ff" stroke-width="1.6"/><circle cx="64" cy="64" r="53" fill="url(#bg)" stroke="url(#metal)" stroke-width="4"/><circle cx="64" cy="64" r="46" fill="none" stroke="#a6f8ff" stroke-opacity=".55" stroke-width="1" stroke-dasharray="2 4"/><g fill="#f2ffff" filter="url(#glow)"><path d="M24 31l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z"/><path d="M101 27l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z"/><path d="M103 89l2 4 4 2-4 2-2 4-2-4-4-2 4-2z"/></g><path d="M64 27L92 51 64 98 36 51z" fill="url(#metal)" stroke="#d5ffff" stroke-width="2.4" stroke-linejoin="round" filter="url(#glow)"/><path d="M36 51h56L64 98z" fill="#26d8ff" opacity=".4"/><path d="M64 27v71M36 51l28-24 28 24M50 51l14 47 14-47" fill="none" stroke="#f3ffff" stroke-width="1.7" stroke-opacity=".9"/><path d="M64 27l-14 24h28z" fill="#fff" opacity=".55"/><path d="M27 64l-4 3 4 3M101 64l4 3-4 3" fill="none" stroke="#8cf8ff" stroke-width="2" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Insignia de rango Diamante">
+<defs>
+ <linearGradient id="r3metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d8ffff"/><stop offset=".28" stop-color="#36c9f3"/><stop offset=".56" stop-color="#174b9b"/><stop offset=".78" stop-color="#d8ffff"/><stop offset="1" stop-color="#36c9f3"/></linearGradient>
+ <linearGradient id="r3face" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#36c9f3"/><stop offset=".48" stop-color="#174b9b"/><stop offset="1" stop-color="#071a36"/></linearGradient>
+ <linearGradient id="r3shine" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".72"/><stop offset=".48" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#5ceaff" stop-opacity=".22"/></linearGradient>
+ <filter id="r3glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<path d="M22 39 34 27 48 31 64 18 80 31 94 27 106 39 100 83 64 113 28 83Z" fill="#050b17" stroke="#174b9b" stroke-width="2"/>
+<path d="M25 40 36 31 49 35 64 23 79 35 92 31 103 40 96 80 64 106 32 80Z" fill="url(#r3face)" stroke="url(#r3metal)" stroke-width="5" stroke-linejoin="round"/>
+<path d="M31 43 40 36 51 39 64 29 77 39 88 36 97 43 91 76 64 98 37 76Z" fill="none" stroke="#d8ffff" stroke-opacity=".62" stroke-width="1.5"/>
+<path d="M34 43 64 29 94 43 88 74 64 96 40 74Z" fill="url(#r3shine)" opacity=".6"/>
+
+<path d="M36 55 27 63 37 67M92 55 101 63 91 67" fill="none" stroke="url(#r3metal)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M45 48 51 42 64 46 77 42 83 48" fill="none" stroke="#d8ffff" stroke-opacity=".75" stroke-width="1.6"/>
+<path d="M64 35 86 54 64 88 42 54Z" fill="url(#r3metal)" stroke="#d8ffff" stroke-width="2" stroke-linejoin="round" filter="url(#r3glow)"/>
+<path d="M52 83 64 90 76 83" fill="none" stroke="#d8ffff" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>
+<circle cx="64" cy="61" r="3" fill="#fff" opacity=".8"/>
+<path d="M22 87 34 91 41 101M106 87 94 91 87 101" fill="none" stroke="#36c9f3" stroke-width="2" stroke-linecap="round"/>
+</svg>
