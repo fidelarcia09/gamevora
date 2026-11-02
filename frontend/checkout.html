@@ -926,6 +926,40 @@ body>header{
 }
 .ficha-arte::after{opacity:.10!important}
 
+
+/* Destello azul que recorre únicamente el contorno de la ficha de pedido */
+.ficha-pedido{
+ position:relative!important;
+ isolation:isolate!important;
+}
+.ficha-pedido::after{
+ content:""!important;
+ position:absolute!important;
+ inset:0!important;
+ z-index:10!important;
+ padding:2px!important;
+ border-radius:inherit!important;
+ pointer-events:none!important;
+ background:conic-gradient(from 0deg,
+  transparent 0deg 270deg,
+  rgba(0,145,255,.08) 292deg,
+  rgba(0,190,255,.95) 310deg,
+  #d8f8ff 318deg,
+  rgba(0,135,255,.9) 326deg,
+  transparent 345deg 360deg)!important;
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+ -webkit-mask-composite:xor!important;
+ mask-composite:exclude!important;
+ animation:destelloBordeFicha 4.2s linear infinite!important;
+}
+@keyframes destelloBordeFicha{
+ from{transform:rotate(0deg)}
+ to{transform:rotate(360deg)}
+}
+@media(prefers-reduced-motion:reduce){
+ .ficha-pedido::after{animation:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -1281,7 +1315,7 @@ async function descargarComprobante() {
             scale: Math.min(2, Math.max(1, window.devicePixelRatio || 1)),
             useCORS: true,
             logging: false,
-            onclone(documentoClonado) {
+            async onclone(documentoClonado) {
                 ["accionesComprobante", "accionesNavegacion", "mensajeError", "mensajeActualizacion"].forEach(id => {
                     const elemento = documentoClonado.getElementById(id);
                     if (elemento) elemento.style.display = "none";
@@ -1290,6 +1324,19 @@ async function descargarComprobante() {
                 if (tarjeta) {
                     tarjeta.style.boxShadow = "none";
                     tarjeta.style.width = `${tarjetaComprobante.getBoundingClientRect().width}px`;
+                }
+                /* Garantiza que el escudo GVR aparezca en la imagen descargada */
+                const escudo = documentoClonado.querySelector(".escudo-gvr-flotante img");
+                if (escudo) {
+                    escudo.style.display = "block";
+                    escudo.style.visibility = "visible";
+                    escudo.style.opacity = "1";
+                    escudo.style.width = "100%";
+                    escudo.style.height = "100%";
+                    escudo.setAttribute("loading", "eager");
+                    if (typeof escudo.decode === "function") {
+                        try { await escudo.decode(); } catch (_) {}
+                    }
                 }
             }
         });
