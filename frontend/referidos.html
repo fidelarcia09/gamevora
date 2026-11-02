@@ -22,21 +22,38 @@
     .resumen-superior { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 96px; }
     .ganado-label { color: var(--secundario); font-size: 13px; font-weight: 700; margin-bottom: 8px; }
     .ganado-importe { color: var(--cian); font-size: clamp(27px, 7vw, 36px); font-weight: 900; letter-spacing: -.7px; overflow-wrap: anywhere; text-shadow: 0 0 18px #00aaff30; }
-    /* Mismo escudo GVR utilizado en la pantalla de saldo de Wallet */
-    .escudo-ganado {
-      display: block;
-      position: relative;
-      z-index: 1;
-      width: 56px;
-      height: 64px;
-      flex: 0 0 56px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(0,183,255,.40));
-      animation: escudoGanadoFlotar 3.4s ease-in-out infinite;
+    /* Escudos GVR flotando desde la base de la pantalla de ganancias */
+    .pantalla { position: relative; overflow: hidden; isolation: isolate; }
+    .pantalla > :not(.lluvia-escudos) { position: relative; z-index: 1; }
+    .lluvia-escudos {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
     }
-    @keyframes escudoGanadoFlotar {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
+    .escudo-flotante {
+      position: absolute;
+      bottom: -34px;
+      width: 25px;
+      height: 29px;
+      object-fit: contain;
+      opacity: 0;
+      filter: drop-shadow(0 0 7px rgba(0,183,255,.65));
+      animation: escudoSubir 5.8s linear infinite;
+    }
+    .escudo-flotante:nth-child(1) { left: 8%; animation-delay: 0s; }
+    .escudo-flotante:nth-child(2) { left: 25%; width: 19px; height: 23px; animation-delay: 1.4s; }
+    .escudo-flotante:nth-child(3) { left: 43%; animation-delay: 2.8s; }
+    .escudo-flotante:nth-child(4) { left: 62%; width: 21px; height: 25px; animation-delay: .7s; }
+    .escudo-flotante:nth-child(5) { left: 79%; animation-delay: 3.5s; }
+    .escudo-flotante:nth-child(6) { left: 92%; width: 18px; height: 22px; animation-delay: 2s; }
+    @keyframes escudoSubir {
+      0% { transform: translate3d(0,0,0) rotate(-12deg); opacity: 0; }
+      12% { opacity: .42; }
+      55% { transform: translate3d(12px,-105px,0) rotate(9deg); opacity: .3; }
+      88% { opacity: .12; }
+      100% { transform: translate3d(-8px,-205px,0) rotate(-8deg); opacity: 0; }
     }
     .separador { height: 1px; margin: 17px 0 15px; background: linear-gradient(90deg, #20c5ff55, #ffffff08); }
     .estadisticas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
@@ -65,7 +82,7 @@
     .vacio, .estado-pagina { color: var(--secundario); font-size: 13px; line-height: 1.6; }
     .estado-pagina { min-height: 22px; margin: 10px 0; text-align: center; }
     .error { color: #ff7889; }
-    @media (prefers-reduced-motion: reduce) { .escudo-ganado { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .escudo-flotante { animation: none; display: none; } }
     @media (max-width: 460px) {
       body { padding: 15px 12px 26px; }
       .cabecera { margin-bottom: 13px; }
@@ -73,7 +90,7 @@
       .volver { padding: 8px 9px; font-size: 11px; }
       .pantalla { padding: 17px 13px 13px; border-radius: 16px; }
       .resumen-superior { min-height: 78px; }
-      .escudo-ganado { width: 48px; height: 56px; flex-basis: 48px; }
+      .regalo { width: 65px; height: 65px; flex-basis: 65px; }
       .estadisticas { gap: 6px; }
       .estadistica { padding: 10px 7px; border-radius: 10px; }
       .texto-estadistica { font-size: 10px; }
@@ -148,12 +165,26 @@
     </header>
 
     <section class="pantalla" aria-label="Resumen de ganancias y referidos">
+      <div class="lluvia-escudos" aria-hidden="true">
+        <img class="escudo-flotante" src="./gvr-escudo.svg" alt="">
+        <img class="escudo-flotante" src="./gvr-escudo.svg" alt="">
+        <img class="escudo-flotante" src="./gvr-escudo.svg" alt="">
+        <img class="escudo-flotante" src="./gvr-escudo.svg" alt="">
+        <img class="escudo-flotante" src="./gvr-escudo.svg" alt="">
+        <img class="escudo-flotante" src="./gvr-escudo.svg" alt="">
+      </div>
       <div class="resumen-superior">
         <div>
           <div class="ganado-label">Has ganado</div>
           <div class="ganado-importe" id="totalGanado">0.00 GVR</div>
         </div>
-        <img class="escudo-ganado" src="./gvr-escudo.svg" alt="Escudo GVR" width="56" height="64">
+        <svg class="regalo" viewBox="0 0 100 100" role="img" aria-label="Regalo de recompensas">
+          <path d="M18 43h64v45H18z" fill="#087cff" stroke="#20c5ff" stroke-width="3" />
+          <path d="M12 31h76v17H12z" fill="#20c5ff" stroke="#8be8ff" stroke-width="3" />
+          <path d="M43 31h14v57H43z" fill="#dff8ff" />
+          <path d="M50 31C22 31 18 9 34 9c12 0 16 14 16 22M50 31C78 31 82 9 66 9 54 9 50 23 50 31" fill="none" stroke="#20c5ff" stroke-width="7" stroke-linecap="round" />
+          <path d="M50 32v55" stroke="#dff8ff" stroke-width="3" />
+        </svg>
       </div>
       <div class="separador"></div>
       <div class="estadisticas" aria-label="Resumen de referidos">
