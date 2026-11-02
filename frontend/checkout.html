@@ -452,6 +452,81 @@ main{width:100%!important;max-width:1020px!important;padding:0 20px 20px!importa
  .arte-anillo{height:28px!important}
 }
 
+
+/* ===== Corrección de proporciones móvil: ficha igual a la referencia ===== */
+.ficha-pedido{
+ display:grid!important;
+ grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr)!important;
+ grid-template-rows:minmax(0,1fr)!important;
+ height:450px!important;min-height:450px!important;max-height:450px!important;
+ gap:8px!important;padding:10px!important;align-items:stretch!important;
+}
+.ficha-datos{
+ display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ grid-template-rows:repeat(6,minmax(0,1fr))!important;
+ min-height:0!important;height:100%!important;overflow:hidden!important;
+}
+.ficha-fila{
+ display:flex!important;min-height:0!important;height:auto!important;
+ min-width:0!important;flex:initial!important;
+ padding:4px 6px!important;gap:9px!important;overflow:hidden!important;
+ border-bottom:1px solid rgba(0,137,255,.2)!important;
+}
+.ficha-fila:last-of-type{border-bottom:0!important}
+.ficha-icono{width:39px!important;height:39px!important;flex:0 0 39px!important;font-size:22px!important}
+.ficha-info{min-width:0!important;overflow:hidden!important}
+.ficha-info>span{font-size:9px!important;line-height:1.15!important;margin-bottom:3px!important}
+.ficha-info>strong,.ficha-info>strong.precio{font-size:clamp(10px,2vw,14px)!important;line-height:1.18!important;overflow-wrap:anywhere!important}
+.ficha-info>small{font-size:9px!important;line-height:1.1!important}
+.logo-juego{display:none!important}
+.ficha-arte{
+ display:flex!important;min-width:0!important;width:100%!important;height:100%!important;
+ min-height:0!important;align-self:stretch!important;overflow:hidden!important;
+}
+.imagen-juego-comprobante{
+ display:block!important;position:relative!important;z-index:3!important;
+ width:100%!important;height:100%!important;max-height:none!important;
+ object-fit:cover!important;object-position:center!important;
+ border-radius:9px!important;filter:drop-shadow(0 5px 14px rgba(0,133,255,.4))!important;
+}
+.arte-anillo{bottom:5%!important;width:88%!important;height:28px!important;z-index:1!important}
+.arte-brillo{bottom:6%!important;z-index:0!important}
+.estado-oculto{display:none!important}
+#estadoDetalle{display:none!important}
+@media(max-width:620px){
+ main{padding:0 10px 14px!important}
+ .comprobante-hero{padding:20px 6px 18px!important}
+ .producto-visual{margin:20px auto 16px!important}
+ .producto-check{width:112px!important;height:112px!important;font-size:72px!important}
+ .producto-resumen h1{font-size:clamp(27px,7vw,36px)!important;line-height:1.02!important}
+ .producto-resumen .subtitulo{font-size:12px!important;line-height:1.35!important}
+ .comprobante-cuerpo{padding:10px!important}
+ .ficha-pedido{
+  grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  height:410px!important;min-height:410px!important;max-height:410px!important;
+  gap:4px!important;padding:6px!important;
+ }
+ .ficha-datos{grid-template-rows:repeat(6,minmax(0,1fr))!important;height:100%!important}
+ .ficha-fila{padding:3px 2px!important;gap:6px!important;min-height:0!important}
+ .ficha-icono{width:29px!important;height:29px!important;flex-basis:29px!important;font-size:16px!important}
+ .ficha-info>span{font-size:7px!important;letter-spacing:.35px!important;margin-bottom:2px!important}
+ .ficha-info>strong,.ficha-info>strong.precio{font-size:clamp(9px,2.1vw,12px)!important;line-height:1.13!important}
+ .ficha-info>small{font-size:7px!important;margin-top:2px!important}
+ .ficha-info>small b{font-size:8px!important}
+ .ficha-arte{display:flex!important;min-height:0!important;height:100%!important}
+ .imagen-juego-comprobante{width:100%!important;height:100%!important;max-height:none!important;object-fit:cover!important}
+ .arte-anillo{height:22px!important}
+ #accionesNavegacion{margin-top:14px!important}
+ #accionesNavegacion .boton{min-height:54px!important;font-size:13px!important}
+}
+@media(max-width:380px){
+ .ficha-pedido{height:385px!important;min-height:385px!important;max-height:385px!important}
+ .ficha-icono{width:25px!important;height:25px!important;flex-basis:25px!important}
+ .ficha-info>span{font-size:6.5px!important}
+ .ficha-info>strong,.ficha-info>strong.precio{font-size:9px!important}
+}
+
 </style>
 </head>
 <body>
