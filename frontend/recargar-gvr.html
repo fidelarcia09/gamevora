@@ -24,12 +24,19 @@ h1{font-size:clamp(19px,5vw,24px)}
 .rapida{padding:11px 2px;border:1px solid #1b3c63;border-radius:11px;background:#061329;color:white;font-weight:800;font-size:13px;cursor:pointer}
 .rapida.activa,.metodo.activo{border-color:var(--azul);background:#0b2a49;color:var(--cian)}
 h2{font-size:17px;margin-bottom:14px}
-.metodos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.metodo{min-width:0;min-height:88px;padding:13px 11px;text-align:left;border:1px solid #1b3c63;border-radius:14px;background:#061329;color:white;cursor:pointer}
-.metodo:disabled{opacity:.48;cursor:not-allowed}
-.metodo-icono{display:block;margin-bottom:8px;color:var(--cian);font-size:16px;font-weight:900}
-.metodo strong{display:block;font-size:13px;line-height:1.35}
-.metodo small{display:block;margin-top:5px;color:var(--muted);font-size:10px;line-height:1.4}
+.metodos-lista{display:grid;grid-template-columns:1fr;gap:9px}
+.metodo-opcion{position:relative;display:flex;align-items:center;gap:13px;min-height:65px;padding:12px 14px;border:1px solid #1b3c63;border-radius:13px;background:#061329;cursor:pointer;transition:.2s}
+.metodo-opcion:has(input:checked){border-color:var(--azul);background:#0b2a49;box-shadow:inset 0 0 0 1px #00aaff22}
+.metodo-opcion input{position:absolute;opacity:0;width:1px;height:1px}
+.radio-visual{width:19px;height:19px;flex:0 0 19px;border:2px solid #58718d;border-radius:50%;display:grid;place-items:center}
+.metodo-opcion input:checked+.radio-visual{border-color:var(--cian)}
+.metodo-opcion input:checked+.radio-visual:after{content:"";width:9px;height:9px;border-radius:50%;background:var(--cian)}
+.metodo-opcion:focus-within{outline:2px solid #75d7ff;outline-offset:2px}
+.metodo-texto{display:block;min-width:0}
+.metodo-texto strong{display:block;color:#fff;font-size:14px;line-height:1.35}
+.metodo-texto small{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.4}
+.metodo-opcion.deshabilitado{opacity:.48;cursor:not-allowed}
+.metodo-opcion.deshabilitado .metodo-texto strong{color:#c0ccda}
 .instantaneo{color:#55e6ae!important}
 .barra{position:fixed;z-index:10;left:0;right:0;bottom:0;padding:12px 15px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #17436b;background:rgba(4,13,29,.97);box-shadow:0 -10px 30px #0005}
 .barra-interior{max-width:590px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -39,7 +46,7 @@ h2{font-size:17px;margin-bottom:14px}
 .pagar:disabled{opacity:.45;cursor:not-allowed}
 .mensaje{display:none;max-width:590px;margin:9px auto 0;padding:10px;border:1px solid #854848;border-radius:10px;background:#30151b;color:#ffb5b5;font-size:12px}
 .mensaje.visible{display:block}
-@media(max-width:390px){header{padding:17px 13px}main{padding:0 12px}.bloque{padding:16px 13px}.contador{grid-template-columns:43px 1fr 43px;gap:7px}.cantidades{gap:5px}.rapida{font-size:12px;padding:10px 1px}.metodo{padding:12px 9px}.pagar{min-width:130px;padding:9px 11px}}
+@media(max-width:390px){header{padding:17px 13px}main{padding:0 12px}.bloque{padding:16px 13px}.contador{grid-template-columns:43px 1fr 43px;gap:7px}.cantidades{gap:5px}.rapida{font-size:12px;padding:10px 1px}.metodo-opcion{padding:12px 11px}.pagar{min-width:130px;padding:9px 11px}}
 </style></head>
 <body>
 <header><a class="volver" href="wallet.html"><span class="flecha">‹</span><span>Recargar GVR</span></a></header>
@@ -51,10 +58,19 @@ h2{font-size:17px;margin-bottom:14px}
 <div class="cantidades"><button class="rapida activa" type="button" data-cantidad="5">5</button><button class="rapida" type="button" data-cantidad="10">10</button><button class="rapida" type="button" data-cantidad="25">25</button><button class="rapida" type="button" data-cantidad="50">50</button><button class="rapida" type="button" data-cantidad="100">100</button></div>
 </section>
 <section class="bloque"><h2>¿Cómo vas a pagar?</h2>
-<div class="metodos">
-<button class="metodo" type="button" data-metodo="CUP" disabled aria-disabled="true"><span class="metodo-icono">CUP</span><strong>Transfermovil CUP</strong><small>Próximamente disponible</small></button>
-<button class="metodo" type="button" data-metodo="Saldo móvil"><span class="metodo-icono">MÓVIL</span><strong>Saldo móvil</strong><small>Desde tu línea Cubacel</small></button>
-<button class="metodo" type="button" data-metodo="USDT"><span class="metodo-icono">₮ USDT</span><strong>USDT</strong><small>Red BEP20 · <span class="instantaneo">Se confirma al instante</span></small></button>
+<div class="metodos-lista" role="radiogroup" aria-label="Método de pago">
+<label class="metodo-opcion deshabilitado" aria-disabled="true">
+<input type="radio" name="metodo-pago" value="CUP" data-metodo="CUP" disabled>
+<span class="radio-visual"></span><span class="metodo-texto"><strong>Transferencia CUP</strong><small>Próximamente disponible</small></span>
+</label>
+<label class="metodo-opcion">
+<input type="radio" name="metodo-pago" value="Saldo móvil" data-metodo="Saldo móvil">
+<span class="radio-visual"></span><span class="metodo-texto"><strong>Saldo</strong><small>Desde tu línea Cubacel</small></span>
+</label>
+<label class="metodo-opcion">
+<input type="radio" name="metodo-pago" value="USDT" data-metodo="USDT" checked>
+<span class="radio-visual"></span><span class="metodo-texto"><strong>USDT</strong><small>Red BEP20 · <span class="instantaneo">Se confirma al instante</span></small></span>
+</label>
 </div></section>
 </main>
 <div class="barra"><div class="barra-interior"><div class="recibes"><span>Recibes</span><strong id="recibes">5.00 Gvr</strong></div><button class="pagar" id="pagar" type="button">Pagar 5 USDT</button></div><div class="mensaje" id="mensaje" role="alert"></div></div>
@@ -65,7 +81,7 @@ const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const tarifas={CUP:1150,USDT:1,"Saldo móvil":340};
-const input=document.getElementById("cantidad"),rapidas=[...document.querySelectorAll(".rapida")],metodos=[...document.querySelectorAll(".metodo")];
+const input=document.getElementById("cantidad"),rapidas=[...document.querySelectorAll(".rapida")],metodos=[...document.querySelectorAll(".metodo-opcion input[data-metodo]")];
 const recibe=document.getElementById("recibes"),botonPagar=document.getElementById("pagar"),mensaje=document.getElementById("mensaje");
 let metodo="USDT";
 function fmt(n,d=2){return new Intl.NumberFormat("es-ES",{minimumFractionDigits:d,maximumFractionDigits:d}).format(n)}
@@ -83,7 +99,7 @@ document.getElementById("restar").addEventListener("click",()=>{input.value=Math
 document.getElementById("sumar").addEventListener("click",()=>{input.value=Math.min(1000000,(cantidad()??1)+1);limpiar();actualizar()});
 input.addEventListener("input",()=>{limpiar();actualizar()});
 rapidas.forEach(b=>b.addEventListener("click",()=>{input.value=b.dataset.cantidad;limpiar();actualizar()}));
-metodos.forEach(b=>b.addEventListener("click",()=>{if(b.disabled)return;metodo=b.dataset.metodo;metodos.forEach(x=>x.classList.toggle("activo",x===b));limpiar();actualizar()}));
+metodos.forEach(b=>b.addEventListener("change",()=>{if(b.disabled||!b.checked)return;metodo=b.dataset.metodo;limpiar();actualizar()}));
 botonPagar.addEventListener("click",()=>{const n=cantidad();if(n===null){error("Selecciona una cantidad válida de GVR.");return}const params=new URLSearchParams({cantidad:String(n),metodo});window.location.href="confirmar-gvr.html?"+params.toString()});
 async function cargarSaldo(){try{const {data:{user},error:authError}=await supabaseClient.auth.getUser();if(authError||!user)return;const {data,error}=await supabaseClient.from("wallets").select("balance").eq("user_id",user.id).maybeSingle();if(error){console.warn("No se pudo cargar el saldo GVR",error);return}const saldo=Number(data?.balance??0);if(Number.isFinite(saldo))document.getElementById("saldoActual").textContent=fmt(saldo)+" Gvr"}catch(e){console.warn("No se pudo consultar el saldo GVR",e)}}
 actualizar();cargarSaldo();
