@@ -256,30 +256,15 @@ function iniciar(){
       row={product_id:product.id,payment_method:"SALDO_MOVIL",base_amount:respaldo,payment_currency:"SALDO_MOVIL"};
      }
     }
-    /* El descuento mostrado coincide con el rango del panel de revendedor y con create_manual_game_order. */
-    let originalPrice=card.querySelector(".gg-manual-original-price");
+    // Los descuentos de fidelidad y de revendedor son exclusivos de compras pagadas con GVR.
+    // Para USDT, CUP y Saldo móvil se muestra siempre la tarifa manual íntegra.
+    const originalPrice=card.querySelector(".gg-manual-original-price");
+    originalPrice?.remove();
     if(row){
      const baseAmount=Number(row.base_amount);
-     const rawDiscount=Number(window.ggResellerDiscountPercent||0);
-     const discount=Number.isFinite(rawDiscount)&&rawDiscount>0?Math.min(rawDiscount,100):0;
-     if(discount>0&&Number.isFinite(baseAmount)&&baseAmount>0){
-      const finalAmount=Math.round((baseAmount*(100-discount)/100+Number.EPSILON)*100)/100;
-      if(!originalPrice){
-       originalPrice=document.createElement("div");
-       originalPrice.className="gg-manual-original-price";
-       originalPrice.setAttribute("aria-label","Precio original sin descuento");
-       price.insertAdjacentElement("beforebegin",originalPrice);
-      }
-      originalPrice.textContent=formatoTarifa(row,method,baseAmount);
-      price.textContent=formatoTarifa(row,method,finalAmount);
-      price.setAttribute("aria-label","Precio final con descuento de revendedor");
-     }else{
-      originalPrice?.remove();
-      price.textContent=formatoTarifa(row,method,baseAmount);
-      price.removeAttribute("aria-label");
-     }
+     price.textContent=formatoTarifa(row,method,baseAmount);
+     price.removeAttribute("aria-label");
     }else{
-     originalPrice?.remove();
      price.textContent="Tarifa pendiente";
      price.removeAttribute("aria-label");
     }
