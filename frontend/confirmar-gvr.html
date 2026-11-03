@@ -802,7 +802,8 @@ botonContinuar.addEventListener("click",async () => {
 
         if (!solicitudId) {
             botonContinuar.textContent = "Registrando solicitud...";
-            solicitudId = await crearSolicitud(usuario);
+            const nuevaSolicitud = await crearSolicitud(usuario);
+            solicitudId = nuevaSolicitud.id;
         }
 
         if (!rutaComprobanteSubido) {
