@@ -304,6 +304,8 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
             <div class="titulo">Número receptor</div>
             <div class="direccion">63638032</div>
             <button class="boton-secundario" type="button" id="copiarSaldo">Copiar número</button>
+            <label class="campo-txid" for="numeroOrigenSaldo"><span>Número desde el que transferiste</span><input type="tel" id="numeroOrigenSaldo" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="Escribe tu número de teléfono"></label>
+            <p class="ayuda">Introduce exactamente el número de teléfono desde el que realizaste la transferencia. Lo usaremos para comprobar el pago.</p>
         </div>
 
         <div id="panelUsdt" class="pago-panel oculto">
@@ -325,6 +327,8 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
             <p class="descripcion">
                 Este método todavía no está disponible porque falta configurar la tarjeta receptora.
             </p>
+            <div class="titulo">Número de confirmación</div>
+            <div class="direccion">63638032</div>
         </div>
 
         <div class="temporizador-usdt" id="temporizadorUsdt"><div class="tiempo-label" id="tiempoLabel">Tiempo disponible para completar el pago</div><div class="tiempo" id="tiempoRestante">10:00</div></div>
@@ -427,6 +431,7 @@ let duracionPagoMinutos = metodoTexto === "SALDO MOVIL" ? 2 : 10;
 let intervaloTemporizador = null;
 let plazoVencido = false;
 const txidUsdt = document.getElementById("txidUsdt");
+const numeroOrigenSaldo = document.getElementById("numeroOrigenSaldo");
 const tiempoRestante = document.getElementById("tiempoRestante");
 const temporizadorUsdt = document.getElementById("temporizadorUsdt");
 
@@ -663,7 +668,11 @@ async function subirComprobante(usuario,idSolicitud,archivo) {
 async function vincularComprobante(idSolicitud,usuario,ruta,txid=null) {
     const {data,error} = await supabaseClient
         .from("gvr_purchase_requests")
-        .update({proof_path:ruta,...(metodoTexto === "USDT" ? {payment_txid:txid} : {})})
+        .update({
+            proof_path:ruta,
+            ...(metodoTexto === "USDT" ? {payment_txid:txid} : {}),
+            ...(metodoTexto === "SALDO MOVIL" ? {payment_sender_phone:numeroOrigenSaldo.value.trim()} : {})
+        })
         .eq("id",idSolicitud)
         .eq("user_id",usuario.id)
         .is("proof_path",null)
@@ -853,6 +862,15 @@ botonContinuar.addEventListener("click",async () => {
         mostrarMensaje("Introduce el TxID de la transferencia USDT.","error");
         txidUsdt.focus();
         return;
+    }
+    if (metodoTexto === "SALDO MOVIL") {
+        const numeroEmisor = numeroOrigenSaldo.value.trim();
+        const digitosEmisor = numeroEmisor.replace(/\\D/g,"");
+        if (digitosEmisor.length < 8 || digitosEmisor.length > 15) {
+            mostrarMensaje("Introduce el número de teléfono desde el que realizaste la transferencia (entre 8 y 15 dígitos).","error");
+            numeroOrigenSaldo.focus();
+            return;
+        }
     }
     if (!archivoSeleccionado) {
         mostrarMensaje("Selecciona primero la captura del pago.","error");
