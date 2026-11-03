@@ -578,28 +578,14 @@ async function prepararSolicitudPago() {
     botonContinuar.textContent = "Preparando pago...";
     try {
         const usuario = await obtenerUsuario();
-        let solicitud = await recuperarSolicitudPago(usuario);
-        let reloj = null;
-        if (solicitud) {
-            const recuperacion = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:solicitud.id});
-            if (!recuperacion.error && recuperacion.data?.server_now && recuperacion.data?.expires_at) {
-                reloj = recuperacion.data;
-                if (new Date(reloj.expires_at).getTime() <= new Date(reloj.server_now).getTime()) {
-                    solicitud = null;
-                    reloj = null;
-                }
-            } else {
-                throw new Error("No se pudo sincronizar el tiempo del pago con el servidor. Recarga la página.");
-            }
+        // Cada entrada a esta pantalla crea una solicitud nueva.
+        // No se recuperan solicitudes pendientes de visitas anteriores.
+        let solicitud = await crearSolicitud(usuario);
+        const nuevaLectura = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:solicitud.id});
+        if (nuevaLectura.error || !nuevaLectura.data?.server_now || !nuevaLectura.data?.expires_at) {
+            throw new Error("No se pudo sincronizar el tiempo del pago con el servidor. Recarga la página.");
         }
-        if (!solicitud) {
-            solicitud = await crearSolicitud(usuario);
-            const nuevaLectura = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:solicitud.id});
-            if (nuevaLectura.error || !nuevaLectura.data?.server_now || !nuevaLectura.data?.expires_at) {
-                throw new Error("No se pudo sincronizar el tiempo del pago con el servidor. Recarga la página.");
-            }
-            reloj = nuevaLectura.data;
-        }
+        const reloj = nuevaLectura.data;
         solicitudId = solicitud.id;
         iniciarCuentaRegresiva(reloj.expires_at,reloj.server_now);
         botonContinuar.disabled = false;
@@ -740,6 +726,17 @@ if (metodoTexto === "CUP") {
 }
 
 if (cantidadValida && metodo && metodoTexto !== "CUP") prepararSolicitudPago();
+
+// Si el navegador restaura esta pantalla desde su caché al volver atrás/adelante,
+// se inicia una solicitud nueva igual que en una entrada normal.
+window.addEventListener("pageshow",(evento) => {
+    if (!evento.persisted || !cantidadValida || !metodo || metodoTexto === "CUP") return;
+    if (intervaloTemporizador) clearInterval(intervaloTemporizador);
+    solicitudId = null;
+    plazoVencido = false;
+    vencimientoPago = null;
+    prepararSolicitudPago();
+});
 
 /* Selector y vista previa */
 
