@@ -392,7 +392,7 @@ async function cargarVentas() {
 
         const { data: solicitudesGVR, error: errorGVR } = await supabaseClient
             .from("gvr_purchase_requests")
-            .select("id,user_id,gvr_amount,payment_method,payment_amount,payment_currency,proof_path,status,created_at,reviewed_at,review_note")
+            .select("id,user_id,gvr_amount,payment_method,payment_amount,payment_currency,payment_sender_phone,proof_path,status,created_at,reviewed_at,review_note")
             .order("created_at", { ascending: false });
 
         if (errorGVR) {
@@ -420,6 +420,7 @@ async function cargarVentas() {
                 precio: solicitud.payment_amount,
                 moneda: solicitud.payment_currency,
                 metodo_pago: solicitud.payment_method,
+                payment_sender_phone: solicitud.payment_sender_phone,
                 proveedor: "Solicitud de compra GVR",
                 id_orden_proveedor: "No aplica",
                 proof_path: solicitud.proof_path,
@@ -539,6 +540,7 @@ function crearVentaHTML(venta) {
         <div class="dato"><small>ID de solicitud</small><div>${escaparHTML(venta.solicitud_id)}</div></div>
         <div class="dato"><small>GVR solicitados</small><div>${escaparHTML(venta.gvr_solicitado)} GVR</div></div>
         <div class="dato"><small>Comprobante</small><div>${venta.tiene_comprobante ? "Adjunto en la solicitud" : "Todavía no adjuntado"}</div></div>
+        ${venta.payment_sender_phone ? `<div class="dato"><small>Número desde el que transfirió</small><div>${escaparHTML(venta.payment_sender_phone)}</div></div>` : ""}
         ${venta.reviewed_at ? `<div class="dato"><small>Fecha de revisión</small><div>${escaparHTML(new Date(venta.reviewed_at).toLocaleString("es-ES", {dateStyle:"medium",timeStyle:"short"}))}</div></div>` : ""}
         ${venta.review_note ? `<div class="dato"><small>Nota de revisión</small><div>${escaparHTML(venta.review_note)}</div></div>` : ""}
     ` : `
