@@ -585,7 +585,7 @@ function iniciarCuentaRegresiva(fechaVencimiento, fechaServidor) {
     restanteInicialMs = vencimientoServidor - ahoraServidor;
     inicioMonotonic = performance.now();
     vencimientoPago = inicioMonotonic + restanteInicialMs;
-    duracionPagoMinutos = metodoTexto === "SALDO MOVIL" ? 2 : 10;
+    duracionPagoMinutos = 10;
     document.getElementById("tiempoLabel").textContent = "Tiempo disponible para completar el pago (" + duracionPagoMinutos + " minutos)";
     if (intervaloTemporizador) clearInterval(intervaloTemporizador);
     const actualizar = () => {
