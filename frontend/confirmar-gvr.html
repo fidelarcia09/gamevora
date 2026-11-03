@@ -315,7 +315,7 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
             <div class="titulo">Dirección receptora BEP20</div>
             <div class="direccion">0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C</div>
             <button class="boton-secundario" type="button" id="copiarUsdt">Copiar dirección</button>
-            <div class="temporizador-usdt" id="temporizadorUsdt"><div class="tiempo-label">Tiempo disponible para completar el pago</div><div class="tiempo" id="tiempoRestante">10:00</div></div>
+            
             <label class="campo-txid" for="txidUsdt"><span>TxID de la transacción</span><input type="text" id="txidUsdt" maxlength="200" autocomplete="off" placeholder="Pega aquí el TxID de tu transferencia"></label>
             <p class="ayuda">Después de realizar el pago, copia el TxID desde tu billetera y pégalo aquí. Debe corresponder a la red BNB Smart Chain (BEP20).</p>
         </div>
@@ -326,6 +326,8 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
                 Este método todavía no está disponible porque falta configurar la tarjeta receptora.
             </p>
         </div>
+
+        <div class="temporizador-usdt" id="temporizadorUsdt"><div class="tiempo-label" id="tiempoLabel">Tiempo disponible para completar el pago</div><div class="tiempo" id="tiempoRestante">10:00</div></div>
 
         <div class="aviso">
             <strong>Importante:</strong> enviar una imagen no confirma por sí solo el pago.
@@ -418,7 +420,8 @@ let solicitudId = null;
 let rutaComprobanteSubido = null;
 let envioCompletado = false;
 let enviando = false;
-let vencimientoUsdt = null;
+let vencimientoPago = null;
+let duracionPagoMinutos = metodoTexto === "SALDO MOVIL" ? 5 : 10;
 let intervaloTemporizador = null;
 let plazoVencido = false;
 const txidUsdt = document.getElementById("txidUsdt");
@@ -518,11 +521,12 @@ async function crearSolicitud(usuario) {
     return {id:data.id,expires_at:data.expires_at || null};
 }
 
-async function recuperarSolicitudUsdt(usuario) {
+async function recuperarSolicitudPago(usuario) {
+    const metodoDB = metodoTexto === "SALDO MOVIL" ? "SALDO_MOVIL" : metodoTexto;
     const {data,error} = await supabaseClient.from("gvr_purchase_requests")
         .select("id,expires_at")
         .eq("user_id",usuario.id)
-        .eq("payment_method","USDT")
+        .eq("payment_method",metodoDB)
         .eq("status","pending")
         .is("proof_path",null)
         .gt("expires_at",new Date().toISOString())
@@ -537,11 +541,13 @@ async function recuperarSolicitudUsdt(usuario) {
 }
 
 function iniciarCuentaRegresiva(fechaVencimiento) {
-    vencimientoUsdt = new Date(fechaVencimiento).getTime();
-    if (!Number.isFinite(vencimientoUsdt)) throw new Error("No se pudo establecer el tiempo límite del pago USDT.");
+    vencimientoPago = new Date(fechaVencimiento).getTime();
+    if (!Number.isFinite(vencimientoPago)) throw new Error("Supabase no devolvió una fecha de vencimiento válida para el pago.");
+    duracionPagoMinutos = metodoTexto === "SALDO MOVIL" ? 5 : 10;
+    document.getElementById("tiempoLabel").textContent = "Tiempo disponible para completar el pago (" + duracionPagoMinutos + " minutos)";
     if (intervaloTemporizador) clearInterval(intervaloTemporizador);
     const actualizar = () => {
-        const restante = Math.max(0,vencimientoUsdt - Date.now());
+        const restante = Math.max(0,vencimientoPago - Date.now());
         const segundos = Math.ceil(restante / 1000);
         tiempoRestante.textContent = String(Math.floor(segundos / 60)).padStart(2,"0") + ":" + String(segundos % 60).padStart(2,"0");
         if (restante <= 0) {
@@ -551,7 +557,7 @@ function iniciarCuentaRegresiva(fechaVencimiento) {
             if (intervaloTemporizador) clearInterval(intervaloTemporizador);
             botonContinuar.disabled = true;
             botonContinuar.textContent = "Tiempo de pago vencido";
-            mostrarMensaje("El plazo de 10 minutos para este pago USDT ha terminado. No envíes el comprobante de esta solicitud. Inicia una nueva compra para obtener un nuevo plazo.","error");
+            mostrarMensaje("El plazo de pago ha terminado. No envíes el comprobante de esta solicitud. Inicia una nueva compra para obtener un nuevo plazo.","error");
         }
     };
     plazoVencido = false;
@@ -560,18 +566,18 @@ function iniciarCuentaRegresiva(fechaVencimiento) {
     intervaloTemporizador = setInterval(actualizar,1000);
 }
 
-async function prepararSolicitudUsdt() {
+async function prepararSolicitudPago() {
     botonContinuar.disabled = true;
     botonContinuar.textContent = "Preparando pago...";
     try {
         const usuario = await obtenerUsuario();
-        let solicitud = await recuperarSolicitudUsdt(usuario);
+        let solicitud = await recuperarSolicitudPago(usuario);
         if (!solicitud) solicitud = await crearSolicitud(usuario);
         solicitudId = solicitud.id;
         iniciarCuentaRegresiva(solicitud.expires_at);
         botonContinuar.disabled = false;
         botonContinuar.textContent = "Enviar comprobante y TxID";
-        mostrarMensaje("Tu plazo de pago de 10 minutos ya está activo. Realiza la transferencia y envía el comprobante junto con el TxID.","info");
+        mostrarMensaje("Tu plazo de pago de " + duracionPagoMinutos + " minutos ya está activo. Completa el pago dentro de ese tiempo y envía el comprobante" + (metodoTexto === "USDT" ? " junto con el TxID." : "."),"info");
     } catch (error) {
         console.error("No se pudo preparar la solicitud USDT:",error);
         botonContinuar.disabled = true;
@@ -706,7 +712,7 @@ if (metodoTexto === "CUP") {
     mostrarMensaje("Los datos de esta compra no son válidos.","error");
 }
 
-if (metodoTexto === "USDT" && cantidadValida && metodo) prepararSolicitudUsdt();
+if (cantidadValida && metodo && metodoTexto !== "CUP") prepararSolicitudPago();
 
 /* Selector y vista previa */
 
@@ -771,12 +777,12 @@ botonContinuar.addEventListener("click",async () => {
         return;
     }
 
-    if (metodoTexto === "USDT" && (plazoVencido || (vencimientoUsdt && Date.now() > vencimientoUsdt))) {
+    if (plazoVencido || (vencimientoPago && Date.now() > vencimientoPago)) {
         plazoVencido = true;
         mostrarMensaje("El plazo de pago USDT ha vencido. Inicia una nueva compra para obtener otro plazo.","error");
         return;
     }
-    if (metodoTexto === "USDT" && !solicitudId) {
+    if (!solicitudId) {
         mostrarMensaje("Espera a que se prepare tu solicitud de pago.","info");
         return;
     }
@@ -785,7 +791,7 @@ botonContinuar.addEventListener("click",async () => {
         txidUsdt.focus();
         return;
     }
-    if (!solicitudId && !archivoSeleccionado) {
+    if (!archivoSeleccionado) {
         mostrarMensaje("Selecciona primero la captura del pago.","error");
         return;
     }
