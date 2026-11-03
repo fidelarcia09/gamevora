@@ -27,7 +27,7 @@ style.textContent = `
 @media(max-width:390px){.gg-player-data-panel{padding:12px}.gg-player-data-panel .datos-jugador-grid{gap:7px!important}.gg-player-data-panel .datos-jugador-grid input,.gg-player-data-panel .datos-jugador-grid select{font-size:12px;padding:9px 6px}}
 .gg-player-card input#idjugador:focus,.gg-player-card input#idJugador:focus{border-color:#00baff;box-shadow:0 0 0 3px rgba(0,186,255,.12)}
 .gg-metodos input{width:100%;margin-top:7px;padding:11px;border-radius:9px;border:1px solid #204c78;background:#050b18;color:#fff}
-.gg-manual-original-price{display:block;margin:4px 0 2px;color:#91a6c0;font-size:11px;font-weight:600;line-height:1.3;text-decoration:line-through;text-decoration-thickness:1.5px;opacity:.9}
+.gg-manual-original-price{display:block;margin:4px 0 2px;color:#91a6c0;font-size:11px;font-weight:600;line-height:1.3;text-decoration:line-through;text-decoration-thickness:1.5px;opacity:.9}\n.gg-manual-discount-badge{position:absolute;top:0;right:0;z-index:4;display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:16px;padding:0 5px;border-radius:4px;background:#e32636;color:#fff;font-size:9px;font-weight:800;line-height:1;white-space:nowrap;pointer-events:none;box-shadow:0 1px 5px rgba(0,0,0,.28)}
 /* Ajuste específico para el texto largo de Saldo móvil dentro de las tarjetas de productos. */
 .gg-saldo-movil-activo #catalogo .producto > .producto-precio,
 .gg-saldo-movil-activo #catalogoOfertas .producto > .producto-precio,
@@ -256,14 +256,30 @@ function iniciar(){
       row={product_id:product.id,payment_method:"SALDO_MOVIL",base_amount:respaldo,payment_currency:"SALDO_MOVIL"};
      }
     }
-    // Los descuentos de fidelidad y de revendedor son exclusivos de compras pagadas con GVR.
-    // Para USDT, CUP y Saldo móvil se muestra siempre la tarifa manual íntegra.
+    // En métodos manuales se aplica únicamente el descuento de nivel del revendedor.
+    // El 2% de fidelidad permanece exclusivo de compras pagadas con GVR.
     const originalPrice=card.querySelector(".gg-manual-original-price");
+    const resellerBadge=card.querySelector(".gg-manual-discount-badge");
     originalPrice?.remove();
+    resellerBadge?.remove();
     if(row){
      const baseAmount=Number(row.base_amount);
-     price.textContent=formatoTarifa(row,method,baseAmount);
-     price.removeAttribute("aria-label");
+     const resellerPercent=Math.max(0,Math.min(100,Number(window.ggResellerLevelDiscountPercent)||0));
+     const finalAmount=Math.round((baseAmount*(100-resellerPercent)/100+Number.EPSILON)*100)/100;
+     if(resellerPercent>0 && Number.isFinite(baseAmount) && baseAmount>0){
+      const oldPrice=document.createElement("div");
+      oldPrice.className="gg-manual-original-price";
+      oldPrice.textContent=formatoTarifa(row,method,baseAmount);
+      oldPrice.setAttribute("aria-label","Precio original sin descuento de revendedor");
+      price.insertAdjacentElement("beforebegin",oldPrice);
+      const badge=document.createElement("span");
+      badge.className="gg-manual-discount-badge";
+      badge.textContent="-"+resellerPercent+"%";
+      badge.setAttribute("aria-label","Descuento de revendedor: "+resellerPercent+"%");
+      card.appendChild(badge);
+     }
+     price.textContent=formatoTarifa(row,method,finalAmount);
+     price.setAttribute("aria-label",resellerPercent>0?"Precio final con descuento de revendedor":"Precio");
     }else{
      price.textContent="Tarifa pendiente";
      price.removeAttribute("aria-label");
@@ -273,7 +289,7 @@ function iniciar(){
   }catch(error){
    console.error("No se pudieron cargar las tarifas manuales:",error);
    if(select.value!==method)return;
-   document.querySelectorAll(".producto, .boton-oferta").forEach(card=>{card.querySelector(".gg-manual-original-price")?.remove();const price=card.querySelector(".producto-precio, .precio-oferta");if(price){price.textContent="Tarifa pendiente";price.dataset.ggManualMethod=method;price.removeAttribute("aria-label");}});
+   document.querySelectorAll(".producto, .boton-oferta").forEach(card=>{card.querySelector(".gg-manual-original-price")?.remove();card.querySelector(".gg-manual-discount-badge")?.remove();const price=card.querySelector(".producto-precio, .precio-oferta");if(price){price.textContent="Tarifa pendiente";price.dataset.ggManualMethod=method;price.removeAttribute("aria-label");}});
   }
  }
 select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").forEach(b=>b.classList.toggle("activo",b.dataset.metodo===select.value));if(select.value!=="GVR")document.querySelectorAll(".gg-reseller-original-price, .gg-reseller-discount-badge").forEach(el=>el.remove());window.dispatchEvent(new CustomEvent("gg-payment-method-changed",{detail:{method:select.value}}));pintar();actualizarImporte();}); pintar();
