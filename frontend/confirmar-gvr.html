@@ -49,8 +49,8 @@ header {
     font-weight:bold;
     font-size:14px;
 }
-main {padding:25px 16px 50px}
-.contenedor {max-width:650px;margin:0 auto}
+main {max-width:620px;margin:10px auto 12px;padding:0 15px}
+.contenedor {max-width:100%;margin:0 auto}
 .encabezado {text-align:center;margin:15px 0 25px}
 .etiqueta {
     display:inline-block;
@@ -74,11 +74,11 @@ h1 {font-size:clamp(27px,6vw,38px);margin-bottom:12px}
     font-size:14px;
 }
 .card {
-    padding:clamp(20px,5vw,32px);
-    background:linear-gradient(145deg,#0a1b35,#061126);
-    border:1px solid var(--borde);
-    border-radius:22px;
-    box-shadow:0 15px 45px rgba(0,0,0,.25);
+    padding:0;
+    background:transparent;
+    border:0;
+    border-radius:0;
+    box-shadow:none;
 }
 .seccion-titulo {font-size:16px;margin:24px 0 16px}
 .seccion-titulo:first-child {margin-top:0}
@@ -234,7 +234,8 @@ h1 {font-size:clamp(27px,6vw,38px);margin-bottom:12px}
 .oculto {display:none!important}
 footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
 @media(max-width:420px) {
-    header {padding:17px 14px}
+    header {padding:17px 13px}
+    main {padding:0 12px}
     .dato {padding:14px}
     .valor {font-size:15px}
     .cantidad {font-size:20px}
