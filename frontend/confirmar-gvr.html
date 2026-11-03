@@ -423,7 +423,7 @@ let enviando = false;
 let vencimientoPago = null;
 let restanteInicialMs = 0;
 let inicioMonotonic = 0;
-let duracionPagoMinutos = metodoTexto === "SALDO MOVIL" ? 5 : 10;
+let duracionPagoMinutos = metodoTexto === "SALDO MOVIL" ? 2 : 10;
 let intervaloTemporizador = null;
 let plazoVencido = false;
 const txidUsdt = document.getElementById("txidUsdt");
@@ -541,6 +541,35 @@ async function recuperarSolicitudPago(usuario) {
     return data || null;
 }
 
+function claveSolicitudSesion() {
+    return "gvr_solicitud_pago_" + metodoTexto.replace(/\\s+/g,"_") + "_" + cantidad;
+}
+
+async function recuperarSolicitudDeRecarga(usuario) {
+    const tipoNavegacion = performance.getEntriesByType("navigation")[0]?.type;
+    if (tipoNavegacion !== "reload") return null;
+
+    let idGuardado = null;
+    try { idGuardado = sessionStorage.getItem(claveSolicitudSesion()); } catch (_) {}
+    if (!idGuardado) return null;
+
+    const metodoDB = metodoTexto === "SALDO MOVIL" ? "SALDO_MOVIL" : metodoTexto;
+    const {data,error} = await supabaseClient.from("gvr_purchase_requests")
+        .select("id,expires_at")
+        .eq("id",idGuardado)
+        .eq("user_id",usuario.id)
+        .eq("payment_method",metodoDB)
+        .eq("status","pending")
+        .is("proof_path",null)
+        .maybeSingle();
+
+    if (error || !data) return null;
+    const lectura = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:data.id});
+    if (lectura.error || !lectura.data?.server_now || !lectura.data?.expires_at) return null;
+    if (new Date(lectura.data.expires_at).getTime() <= new Date(lectura.data.server_now).getTime()) return null;
+    return {solicitud:data,reloj:lectura.data};
+}
+
 function iniciarCuentaRegresiva(fechaVencimiento, fechaServidor) {
     const vencimientoServidor = new Date(fechaVencimiento).getTime();
     const ahoraServidor = new Date(fechaServidor).getTime();
@@ -550,7 +579,7 @@ function iniciarCuentaRegresiva(fechaVencimiento, fechaServidor) {
     restanteInicialMs = vencimientoServidor - ahoraServidor;
     inicioMonotonic = performance.now();
     vencimientoPago = inicioMonotonic + restanteInicialMs;
-    duracionPagoMinutos = metodoTexto === "SALDO MOVIL" ? 5 : 10;
+    duracionPagoMinutos = metodoTexto === "SALDO MOVIL" ? 2 : 10;
     document.getElementById("tiempoLabel").textContent = "Tiempo disponible para completar el pago (" + duracionPagoMinutos + " minutos)";
     if (intervaloTemporizador) clearInterval(intervaloTemporizador);
     const actualizar = () => {
@@ -578,14 +607,23 @@ async function prepararSolicitudPago() {
     botonContinuar.textContent = "Preparando pago...";
     try {
         const usuario = await obtenerUsuario();
-        // Cada entrada a esta pantalla crea una solicitud nueva.
-        // No se recuperan solicitudes pendientes de visitas anteriores.
-        let solicitud = await crearSolicitud(usuario);
-        const nuevaLectura = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:solicitud.id});
-        if (nuevaLectura.error || !nuevaLectura.data?.server_now || !nuevaLectura.data?.expires_at) {
-            throw new Error("No se pudo sincronizar el tiempo del pago con el servidor. Recarga la página.");
+        // Al recargar, continuar la solicitud vigente y su tiempo real.
+        // Al entrar nuevamente desde otra página, crear una solicitud nueva.
+        const recuperada = await recuperarSolicitudDeRecarga(usuario);
+        let solicitud;
+        let reloj;
+        if (recuperada) {
+            solicitud = recuperada.solicitud;
+            reloj = recuperada.reloj;
+        } else {
+            solicitud = await crearSolicitud(usuario);
+            const nuevaLectura = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:solicitud.id});
+            if (nuevaLectura.error || !nuevaLectura.data?.server_now || !nuevaLectura.data?.expires_at) {
+                throw new Error("No se pudo sincronizar el tiempo del pago con el servidor. Recarga la página.");
+            }
+            reloj = nuevaLectura.data;
         }
-        const reloj = nuevaLectura.data;
+        try { sessionStorage.setItem(claveSolicitudSesion(),solicitud.id); } catch (_) {}
         solicitudId = solicitud.id;
         iniciarCuentaRegresiva(reloj.expires_at,reloj.server_now);
         botonContinuar.disabled = false;
@@ -732,6 +770,7 @@ if (cantidadValida && metodo && metodoTexto !== "CUP") prepararSolicitudPago();
 window.addEventListener("pageshow",(evento) => {
     if (!evento.persisted || !cantidadValida || !metodo || metodoTexto === "CUP") return;
     if (intervaloTemporizador) clearInterval(intervaloTemporizador);
+    try { sessionStorage.removeItem(claveSolicitudSesion()); } catch (_) {}
     solicitudId = null;
     plazoVencido = false;
     vencimientoPago = null;
