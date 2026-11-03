@@ -531,12 +531,11 @@ async function recuperarSolicitudPago(usuario) {
         .eq("payment_method",metodoDB)
         .eq("status","pending")
         .is("proof_path",null)
-        .gt("expires_at",new Date().toISOString())
         .order("created_at",{ascending:false})
         .limit(1)
         .maybeSingle();
     if (error) {
-        console.warn("No se pudo recuperar la solicitud USDT:",error);
+        console.warn("No se pudo recuperar la solicitud de pago:",error);
         return null;
     }
     return data || null;
@@ -580,18 +579,34 @@ async function prepararSolicitudPago() {
     try {
         const usuario = await obtenerUsuario();
         let solicitud = await recuperarSolicitudPago(usuario);
-        if (!solicitud) solicitud = await crearSolicitud(usuario);
-        solicitudId = solicitud.id;
-        const {data:reloj,error:errorReloj} = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:solicitud.id});
-        if (errorReloj || !reloj?.server_now || !reloj?.expires_at) {
-            throw new Error("No se pudo sincronizar el tiempo del pago con el servidor. Recarga la página.");
+        let reloj = null;
+        if (solicitud) {
+            const recuperacion = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:solicitud.id});
+            if (!recuperacion.error && recuperacion.data?.server_now && recuperacion.data?.expires_at) {
+                reloj = recuperacion.data;
+                if (new Date(reloj.expires_at).getTime() <= new Date(reloj.server_now).getTime()) {
+                    solicitud = null;
+                    reloj = null;
+                }
+            } else {
+                throw new Error("No se pudo sincronizar el tiempo del pago con el servidor. Recarga la página.");
+            }
         }
+        if (!solicitud) {
+            solicitud = await crearSolicitud(usuario);
+            const nuevaLectura = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:solicitud.id});
+            if (nuevaLectura.error || !nuevaLectura.data?.server_now || !nuevaLectura.data?.expires_at) {
+                throw new Error("No se pudo sincronizar el tiempo del pago con el servidor. Recarga la página.");
+            }
+            reloj = nuevaLectura.data;
+        }
+        solicitudId = solicitud.id;
         iniciarCuentaRegresiva(reloj.expires_at,reloj.server_now);
         botonContinuar.disabled = false;
-        botonContinuar.textContent = "Enviar comprobante y TxID";
+        botonContinuar.textContent = "Enviar comprobante";
         mostrarMensaje("Tu plazo de pago de " + duracionPagoMinutos + " minutos ya está activo. Completa el pago dentro de ese tiempo y envía el comprobante" + (metodoTexto === "USDT" ? " junto con el TxID." : "."),"info");
     } catch (error) {
-        console.error("No se pudo preparar la solicitud USDT:",error);
+        console.error("No se pudo preparar la solicitud de pago:",error);
         botonContinuar.disabled = true;
         botonContinuar.textContent = "No se pudo iniciar el pago";
         mostrarMensaje(error.message || "No se pudo iniciar el plazo de pago. Recarga la página para intentarlo de nuevo.","error");
