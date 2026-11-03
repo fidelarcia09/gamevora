@@ -143,6 +143,7 @@ h1 {font-size:clamp(27px,6vw,38px);margin-bottom:12px}
     font-weight:bold;
     cursor:pointer;
 }
+.temporizador-usdt{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0;padding:15px;border:1px solid rgba(0,200,255,.3);border-radius:13px;background:linear-gradient(110deg,rgba(0,125,255,.13),rgba(0,200,255,.04))}.temporizador-usdt .tiempo-label{color:var(--suave);font-size:12px;line-height:1.4}.temporizador-usdt .tiempo{font-size:25px;font-weight:900;letter-spacing:1px;color:var(--cian);font-variant-numeric:tabular-nums}.temporizador-usdt.vencido{border-color:rgba(255,80,90,.4);background:rgba(255,50,70,.08)}.temporizador-usdt.vencido .tiempo{color:#ff858e}.campo-txid{display:block;width:100%;margin-top:15px}.campo-txid span{display:block;margin-bottom:8px;color:var(--suave);font-size:12px;font-weight:bold}.campo-txid input{width:100%;padding:14px;border:1px solid rgba(0,200,255,.35);border-radius:11px;background:#020d1f;color:white;font-size:14px;outline:none}.campo-txid input:focus{border-color:var(--cian);box-shadow:0 0 0 3px rgba(0,200,255,.1)}.campo-txid input::placeholder{color:#6e829e}
 .aviso {
     margin-top:18px;
     padding:15px;
@@ -314,6 +315,9 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
             <div class="titulo">Dirección receptora BEP20</div>
             <div class="direccion">0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C</div>
             <button class="boton-secundario" type="button" id="copiarUsdt">Copiar dirección</button>
+            <div class="temporizador-usdt" id="temporizadorUsdt"><div class="tiempo-label">Tiempo disponible para completar el pago</div><div class="tiempo" id="tiempoRestante">10:00</div></div>
+            <label class="campo-txid" for="txidUsdt"><span>TxID de la transacción</span><input type="text" id="txidUsdt" maxlength="200" autocomplete="off" placeholder="Pega aquí el TxID de tu transferencia"></label>
+            <p class="ayuda">Después de realizar el pago, copia el TxID desde tu billetera y pégalo aquí. Debe corresponder a la red BNB Smart Chain (BEP20).</p>
         </div>
 
         <div id="panelCup" class="pago-panel oculto">
@@ -414,6 +418,12 @@ let solicitudId = null;
 let rutaComprobanteSubido = null;
 let envioCompletado = false;
 let enviando = false;
+let vencimientoUsdt = null;
+let intervaloTemporizador = null;
+let plazoVencido = false;
+const txidUsdt = document.getElementById("txidUsdt");
+const tiempoRestante = document.getElementById("tiempoRestante");
+const temporizadorUsdt = document.getElementById("temporizadorUsdt");
 
 function mostrarMensaje(texto, tipo) {
     mensaje.textContent = texto;
@@ -492,7 +502,7 @@ async function crearSolicitud(usuario) {
             payment_amount:importe,
             payment_currency:monedaDB
         })
-        .select("id")
+         .select("id,expires_at")
         .single();
 
     if (error) {
@@ -505,7 +515,69 @@ async function crearSolicitud(usuario) {
 
     if (!data?.id) throw new Error("Supabase no devolvió el ID de la solicitud.");
 
-    return data.id;
+    return {id:data.id,expires_at:data.expires_at || null};
+}
+
+async function recuperarSolicitudUsdt(usuario) {
+    const {data,error} = await supabaseClient.from("gvr_purchase_requests")
+        .select("id,expires_at")
+        .eq("user_id",usuario.id)
+        .eq("payment_method","USDT")
+        .eq("status","pending")
+        .is("proof_path",null)
+        .gt("expires_at",new Date().toISOString())
+        .order("created_at",{ascending:false})
+        .limit(1)
+        .maybeSingle();
+    if (error) {
+        console.warn("No se pudo recuperar la solicitud USDT:",error);
+        return null;
+    }
+    return data || null;
+}
+
+function iniciarCuentaRegresiva(fechaVencimiento) {
+    vencimientoUsdt = new Date(fechaVencimiento).getTime();
+    if (!Number.isFinite(vencimientoUsdt)) throw new Error("No se pudo establecer el tiempo límite del pago USDT.");
+    if (intervaloTemporizador) clearInterval(intervaloTemporizador);
+    const actualizar = () => {
+        const restante = Math.max(0,vencimientoUsdt - Date.now());
+        const segundos = Math.ceil(restante / 1000);
+        tiempoRestante.textContent = String(Math.floor(segundos / 60)).padStart(2,"0") + ":" + String(segundos % 60).padStart(2,"0");
+        if (restante <= 0) {
+            plazoVencido = true;
+            temporizadorUsdt.classList.add("vencido");
+            tiempoRestante.textContent = "00:00";
+            if (intervaloTemporizador) clearInterval(intervaloTemporizador);
+            botonContinuar.disabled = true;
+            botonContinuar.textContent = "Tiempo de pago vencido";
+            mostrarMensaje("El plazo de 10 minutos para este pago USDT ha terminado. No envíes el comprobante de esta solicitud. Inicia una nueva compra para obtener un nuevo plazo.","error");
+        }
+    };
+    plazoVencido = false;
+    temporizadorUsdt.classList.remove("vencido");
+    actualizar();
+    intervaloTemporizador = setInterval(actualizar,1000);
+}
+
+async function prepararSolicitudUsdt() {
+    botonContinuar.disabled = true;
+    botonContinuar.textContent = "Preparando pago...";
+    try {
+        const usuario = await obtenerUsuario();
+        let solicitud = await recuperarSolicitudUsdt(usuario);
+        if (!solicitud) solicitud = await crearSolicitud(usuario);
+        solicitudId = solicitud.id;
+        iniciarCuentaRegresiva(solicitud.expires_at);
+        botonContinuar.disabled = false;
+        botonContinuar.textContent = "Enviar comprobante y TxID";
+        mostrarMensaje("Tu plazo de pago de 10 minutos ya está activo. Realiza la transferencia y envía el comprobante junto con el TxID.","info");
+    } catch (error) {
+        console.error("No se pudo preparar la solicitud USDT:",error);
+        botonContinuar.disabled = true;
+        botonContinuar.textContent = "No se pudo iniciar el pago";
+        mostrarMensaje(error.message || "No se pudo iniciar el plazo de pago. Recarga la página para intentarlo de nuevo.","error");
+    }
 }
 
 async function subirComprobante(usuario,idSolicitud,archivo) {
@@ -531,10 +603,10 @@ async function subirComprobante(usuario,idSolicitud,archivo) {
     return ruta;
 }
 
-async function vincularComprobante(idSolicitud,usuario,ruta) {
+async function vincularComprobante(idSolicitud,usuario,ruta,txid=null) {
     const {data,error} = await supabaseClient
         .from("gvr_purchase_requests")
-        .update({proof_path:ruta})
+        .update({proof_path:ruta,...(metodoTexto === "USDT" ? {payment_txid:txid} : {})})
         .eq("id",idSolicitud)
         .eq("user_id",usuario.id)
         .is("proof_path",null)
@@ -634,6 +706,8 @@ if (metodoTexto === "CUP") {
     mostrarMensaje("Los datos de esta compra no son válidos.","error");
 }
 
+if (metodoTexto === "USDT" && cantidadValida && metodo) prepararSolicitudUsdt();
+
 /* Selector y vista previa */
 
 archivoComprobante.addEventListener("change",() => {
@@ -697,6 +771,20 @@ botonContinuar.addEventListener("click",async () => {
         return;
     }
 
+    if (metodoTexto === "USDT" && (plazoVencido || (vencimientoUsdt && Date.now() > vencimientoUsdt))) {
+        plazoVencido = true;
+        mostrarMensaje("El plazo de pago USDT ha vencido. Inicia una nueva compra para obtener otro plazo.","error");
+        return;
+    }
+    if (metodoTexto === "USDT" && !solicitudId) {
+        mostrarMensaje("Espera a que se prepare tu solicitud de pago.","info");
+        return;
+    }
+    if (metodoTexto === "USDT" && !txidUsdt.value.trim()) {
+        mostrarMensaje("Introduce el TxID de la transferencia USDT.","error");
+        txidUsdt.focus();
+        return;
+    }
     if (!solicitudId && !archivoSeleccionado) {
         mostrarMensaje("Selecciona primero la captura del pago.","error");
         return;
@@ -735,11 +823,7 @@ botonContinuar.addEventListener("click",async () => {
 
         botonContinuar.textContent = "Confirmando envío...";
 
-        await vincularComprobante(
-            solicitudId,
-            usuario,
-            rutaComprobanteSubido
-        );
+        await vincularComprobante(solicitudId,usuario,rutaComprobanteSubido,metodoTexto === "USDT" ? txidUsdt.value.trim() : null);
 
         /*
          * La solicitud y el comprobante ya están guardados.
@@ -834,6 +918,8 @@ botonContinuar.addEventListener("click",async () => {
             "Pendiente de revisión";
 
         archivoComprobante.disabled = true;
+        if (txidUsdt) txidUsdt.disabled = true;
+        if (intervaloTemporizador) clearInterval(intervaloTemporizador);
         botonContinuar.disabled = true;
         botonContinuar.textContent = "Comprobante enviado";
 
@@ -863,7 +949,7 @@ botonContinuar.addEventListener("click",async () => {
         enviando = false;
 
         if (!envioCompletado) {
-            botonContinuar.disabled = false;
+            botonContinuar.disabled = plazoVencido;
         }
     }
 });
