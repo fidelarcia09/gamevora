@@ -20,6 +20,8 @@ h1{font-size:clamp(19px,5vw,24px)}
 .contador button{height:47px;border:1px solid #1c5684;border-radius:13px;background:#071a32;color:var(--cian);font-size:26px;cursor:pointer}
 .contador input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:white;text-align:center;font-size:28px;font-weight:800}
 .hint{text-align:center;margin-top:12px;color:var(--muted);font-size:12px}
+.aviso-descuento-gvr{margin-top:13px;padding:10px 12px;border:1px solid rgba(0,186,255,.24);border-radius:11px;background:rgba(0,145,255,.07);color:#a9c4df;font-size:11px;line-height:1.5}
+.aviso-descuento-gvr strong{color:#42d5ff;font-weight:800}
 .cantidades{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:15px}
 .rapida{padding:11px 2px;border:1px solid #1b3c63;border-radius:11px;background:#061329;color:white;font-weight:800;font-size:13px;cursor:pointer}
 .rapida.activa,.metodo.activo{border-color:var(--azul);background:#0b2a49;color:var(--cian)}
@@ -78,6 +80,7 @@ h2{font-size:17px;margin-bottom:14px}
 <div class="contador"><button id="restar" type="button" aria-label="Restar">−</button><input id="cantidad" type="number" min="1" max="1000000" step="1" value="5" inputmode="numeric" aria-label="Cantidad de GVR"><button id="sumar" type="button" aria-label="Sumar">+</button></div>
 <p class="hint">Pagas según el precio</p>
 <div class="cantidades"><button class="rapida activa" type="button" data-cantidad="5">5</button><button class="rapida" type="button" data-cantidad="10">10</button><button class="rapida" type="button" data-cantidad="25">25</button><button class="rapida" type="button" data-cantidad="50">50</button><button class="rapida" type="button" data-cantidad="100">100</button></div>
+<p class="aviso-descuento-gvr">Al aprobarse tu primera recarga GVR, desbloqueas un <strong>2% de descuento permanente</strong> en todas tus compras pagadas con GVR.</p>
 </section>
 <section class="bloque"><h2>¿Cómo vas a pagar?</h2>
 <div class="metodos-lista" role="radiogroup" aria-label="Método de pago">
