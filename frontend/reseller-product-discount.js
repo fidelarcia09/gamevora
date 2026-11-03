@@ -52,7 +52,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
     const { data, error } = await db.from("game_products")
       .select("id,game,product_name,price_gvr,active,provider")
       .eq("active", true)
-      .eq("provider", "nextlevel");
+      .eq("provider", "rechargegames");
     if (error) throw error;
     catalogPrices = data || [];
   }
@@ -184,17 +184,17 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       const finalLabel = formatPrice(finalPrice);
       if (oldPrice.textContent !== oldLabel) oldPrice.textContent = oldLabel;
       if (price.textContent !== finalLabel) price.textContent = finalLabel;
-      price.setAttribute("aria-label", "Precio final con descuento de revendedor");
+      price.setAttribute("aria-label", "Precio final con descuento GVR");
 
       let badge = card.querySelector(".gg-reseller-discount-badge");
       if (!badge) {
         badge = document.createElement("span");
         badge.className = "gg-reseller-discount-badge";
-        badge.setAttribute("aria-label", "Descuento de revendedor");
+        badge.setAttribute("aria-label", "Descuento GVR");
         card.appendChild(badge);
       }
       badge.textContent = "-" + discountPercent + "%";
-      badge.setAttribute("aria-label", "Descuento de revendedor: " + discountPercent + "%");
+      badge.setAttribute("aria-label", "Descuento GVR: " + discountPercent + "%");
     });
   }
 
@@ -214,6 +214,21 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
       const { data: { user }, error: authError } = await db.auth.getUser();
       if (authError || !user) return;
 
+      // El 2% se activa cuando existe al menos una recarga GVR aprobada.
+      const { data: approvedTopUp, error: topUpError } = await db
+        .from("gvr_purchase_requests")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("status", "approved")
+        .limit(1)
+        .maybeSingle();
+
+      if (topUpError) {
+        console.warn("No se pudo comprobar la primera recarga GVR aprobada.", topUpError);
+      }
+      const loyaltyDiscount = !topUpError && approvedTopUp ? 2 : 0;
+
+      // El descuento de nivel solo se añade a cuentas de revendedor activas.
       const { data: profile, error: profileError } = await db
         .from("reseller_profiles")
         .select("user_id, role, active, rank_override")
@@ -221,33 +236,39 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
         .eq("active", true)
         .maybeSingle();
 
-      if (profileError || !profile || profile.role !== "Revendedor") return;
+      let resellerDiscount = 0;
+      if (profileError) {
+        console.warn("No se pudo consultar el perfil de revendedor.", profileError);
+      } else if (profile && profile.role === "Revendedor") {
+        const { data, error } = await db.rpc("get_reseller_dashboard_stats");
+        if (error) {
+          console.warn("No se pudo consultar el nivel del revendedor.", error);
+        } else {
+          const stats = Array.isArray(data) ? data[0] : data;
+          const completed = Number(stats?.completed_count || 0);
+          let current = LEVELS[0];
+          for (const level of LEVELS) if (completed >= level.min) current = level;
 
-      const { data, error } = await db.rpc("get_reseller_dashboard_stats");
-      if (error) {
-        console.warn("No se pudo consultar el nivel del revendedor.", error);
-        return;
+          // El rango manual asignado a la cuenta prevalece sobre el cálculo automático.
+          const overrideDiscount = {
+            Bronce: 1,
+            Plata: 2,
+            Oro: 3,
+            Diamante: 4,
+            Leyenda: 5
+          };
+          const manualRank = String(profile.rank_override || "").trim();
+          resellerDiscount = Object.prototype.hasOwnProperty.call(overrideDiscount, manualRank)
+            ? overrideDiscount[manualRank]
+            : current.discount;
+        }
       }
 
-      const stats = Array.isArray(data) ? data[0] : data;
+      discountPercent = Math.min(100, loyaltyDiscount + resellerDiscount);
       await loadCatalogPrices(db);
-      const completed = Number(stats?.completed_count || 0);
-      let current = LEVELS[0];
-      for (const level of LEVELS) if (completed >= level.min) current = level;
-
-      // El rango manual asignado a la cuenta prevalece sobre el cálculo automático.
-      const overrideDiscount = {
-        Bronce: 1,
-        Plata: 2,
-        Oro: 3,
-        Diamante: 4,
-        Leyenda: 5
-      };
-      const manualRank = String(profile.rank_override || "").trim();
-      discountPercent = Object.prototype.hasOwnProperty.call(overrideDiscount, manualRank)
-        ? overrideDiscount[manualRank]
-        : current.discount;
       initialized = true;
+      window.ggLoyaltyDiscountPercent = loyaltyDiscount;
+      window.ggResellerLevelDiscountPercent = resellerDiscount;
       window.ggResellerDiscountPercent = discountPercent;
       window.dispatchEvent(new Event("gg-reseller-discount-updated"));
       showDiscount();
