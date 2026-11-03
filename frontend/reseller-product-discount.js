@@ -139,11 +139,15 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   }
 
   function showDiscount() {
-    if (!initialized || discountPercent <= 0) return;
+    if (!initialized) return;
 
     // El descuento de revendedor solo corresponde a GVR; no sobrescribir tarifas manuales de Supabase.
     const selectedMethod = String(document.getElementById("ggMetodoPago")?.value || "").toUpperCase();
     if (selectedMethod && selectedMethod !== "GVR") {
+      document.querySelectorAll(".gg-reseller-original-price, .gg-reseller-discount-badge").forEach(element => element.remove());
+      return;
+    }
+    if (discountPercent <= 0) {
       document.querySelectorAll(".gg-reseller-original-price, .gg-reseller-discount-badge").forEach(element => element.remove());
       return;
     }
@@ -201,10 +205,9 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
   // Permite que el selector de pago vuelva a aplicar el descuento GVR después de restaurar precios base.
   window.ggRefreshResellerDiscount = showDiscount;
   document.addEventListener("change", event => {
-    if (event.target?.id === "ggMetodoPago" && String(event.target.value || "").toUpperCase() === "GVR") {
-      showDiscount();
-    }
+    if (event.target?.id === "ggMetodoPago") showDiscount();
   });
+  window.addEventListener("gg-payment-method-changed", showDiscount);
 
   async function init() {
     try {
