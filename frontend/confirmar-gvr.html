@@ -421,6 +421,8 @@ let rutaComprobanteSubido = null;
 let envioCompletado = false;
 let enviando = false;
 let vencimientoPago = null;
+let restanteInicialMs = 0;
+let inicioMonotonic = 0;
 let duracionPagoMinutos = metodoTexto === "SALDO MOVIL" ? 5 : 10;
 let intervaloTemporizador = null;
 let plazoVencido = false;
@@ -540,14 +542,20 @@ async function recuperarSolicitudPago(usuario) {
     return data || null;
 }
 
-function iniciarCuentaRegresiva(fechaVencimiento) {
-    vencimientoPago = new Date(fechaVencimiento).getTime();
-    if (!Number.isFinite(vencimientoPago)) throw new Error("Supabase no devolvió una fecha de vencimiento válida para el pago.");
+function iniciarCuentaRegresiva(fechaVencimiento, fechaServidor) {
+    const vencimientoServidor = new Date(fechaVencimiento).getTime();
+    const ahoraServidor = new Date(fechaServidor).getTime();
+    if (!Number.isFinite(vencimientoServidor) || !Number.isFinite(ahoraServidor)) {
+        throw new Error("No se pudo sincronizar el temporizador con el servidor.");
+    }
+    restanteInicialMs = vencimientoServidor - ahoraServidor;
+    inicioMonotonic = performance.now();
+    vencimientoPago = inicioMonotonic + restanteInicialMs;
     duracionPagoMinutos = metodoTexto === "SALDO MOVIL" ? 5 : 10;
     document.getElementById("tiempoLabel").textContent = "Tiempo disponible para completar el pago (" + duracionPagoMinutos + " minutos)";
     if (intervaloTemporizador) clearInterval(intervaloTemporizador);
     const actualizar = () => {
-        const restante = Math.max(0,vencimientoPago - Date.now());
+        const restante = Math.max(0,restanteInicialMs - (performance.now() - inicioMonotonic));
         const segundos = Math.ceil(restante / 1000);
         tiempoRestante.textContent = String(Math.floor(segundos / 60)).padStart(2,"0") + ":" + String(segundos % 60).padStart(2,"0");
         if (restante <= 0) {
@@ -574,7 +582,11 @@ async function prepararSolicitudPago() {
         let solicitud = await recuperarSolicitudPago(usuario);
         if (!solicitud) solicitud = await crearSolicitud(usuario);
         solicitudId = solicitud.id;
-        iniciarCuentaRegresiva(solicitud.expires_at);
+        const {data:reloj,error:errorReloj} = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:solicitud.id});
+        if (errorReloj || !reloj?.server_now || !reloj?.expires_at) {
+            throw new Error("No se pudo sincronizar el tiempo del pago con el servidor. Recarga la página.");
+        }
+        iniciarCuentaRegresiva(reloj.expires_at,reloj.server_now);
         botonContinuar.disabled = false;
         botonContinuar.textContent = "Enviar comprobante y TxID";
         mostrarMensaje("Tu plazo de pago de " + duracionPagoMinutos + " minutos ya está activo. Completa el pago dentro de ese tiempo y envía el comprobante" + (metodoTexto === "USDT" ? " junto con el TxID." : "."),"info");
@@ -777,9 +789,9 @@ botonContinuar.addEventListener("click",async () => {
         return;
     }
 
-    if (plazoVencido || (vencimientoPago && Date.now() > vencimientoPago)) {
+    if (plazoVencido || (vencimientoPago && performance.now() > vencimientoPago)) {
         plazoVencido = true;
-        mostrarMensaje("El plazo de pago USDT ha vencido. Inicia una nueva compra para obtener otro plazo.","error");
+        mostrarMensaje("El plazo de pago ha vencido. Inicia una nueva compra para obtener otro plazo.","error");
         return;
     }
     if (!solicitudId) {
