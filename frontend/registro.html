@@ -245,6 +245,14 @@ body::after {
     }
 }
 
+
+.google-registro{width:100%;min-height:54px;display:flex;align-items:center;justify-content:center;gap:12px;margin:8px 0 20px;padding:13px 16px;border:1px solid rgba(120,177,225,.28);border-radius:14px;background:linear-gradient(145deg,#102440,#0b1b32);color:#f4f8ff;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.18);transition:border-color .2s,transform .2s,filter .2s}
+.google-registro:hover{border-color:#32baff;filter:brightness(1.08);transform:translateY(-1px)}
+.google-registro:disabled{opacity:.65;cursor:wait;transform:none}
+.google-registro svg{width:21px;height:21px;flex:0 0 21px}
+.separador-registro{display:flex;align-items:center;gap:12px;margin:0 0 20px;color:#7890ad;font-size:13px}
+.separador-registro:before,.separador-registro:after{content:"";height:1px;flex:1;background:rgba(120,177,225,.2)}
+
 </style>
 </head>
 
@@ -261,6 +269,12 @@ body::after {
         <p class="descripcion">
             Únete a Gamers Gold Top-Up y comienza tu experiencia gaming.
         </p>
+
+        <button class="google-registro" id="botonGoogle" type="button">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.9c-.58 2.96-2.26 5.48-4.74 7.18l7.66 5.94c4.48-4.14 7.16-10.24 7.16-17.59z"/><path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.53 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.81l-7.66-5.94c-2.13 1.44-4.86 2.3-8.24 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Registrarme con Google
+        </button>
+        <div class="separador-registro">o con tu correo</div>
 
         <form id="registroForm">
 
@@ -378,6 +392,27 @@ const supabaseClient =
 window.ggTurnstileToken = "";
 window.onTurnstileSuccess = function(token) { window.ggTurnstileToken = token; };
 window.onTurnstileExpired = function() { window.ggTurnstileToken = ""; };
+
+document.getElementById("botonGoogle").addEventListener("click", async function() {
+    const botonGoogle = this;
+    botonGoogle.disabled = true;
+    botonGoogle.textContent = "Conectando con Google...";
+    try {
+        const { error } = await supabaseClient.auth.signInWithOAuth({
+            provider: "google",
+            options: {
+                redirectTo: "https://fidelarcia09.github.io/gamevora/index.html",
+                queryParams: { prompt: "select_account" }
+            }
+        });
+        if (error) throw error;
+    } catch (error) {
+        console.error("Error al registrarse con Google:", error);
+        alert("No se pudo iniciar el registro con Google. Comprueba que Google esté habilitado en Supabase Auth.\n\n" + (error.message || "Error inesperado."));
+        botonGoogle.disabled = false;
+        botonGoogle.textContent = "Registrarme con Google";
+    }
+});
 
 
 document
