@@ -1614,7 +1614,7 @@ function mostrarFotoPerfil(url) {
     };
 
     fotoPerfil.onerror = () => {
-        if (avatarPresetActivo && AVATARES_PREDEFINIDOS[avatarPresetActivo]) {
+        if (avatarPresetActivo && AVATARES_PREDEFINIDOS.includes(avatarPresetActivo)) {
             mostrarAvatarPredefinido(avatarPresetActivo);
         } else {
             mostrarAvatarPredeterminado();
