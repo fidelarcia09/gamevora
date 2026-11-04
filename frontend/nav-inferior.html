@@ -145,6 +145,17 @@
     flex-shrink: 0;
 }
    
+.gg-bottom-nav .gg-nav-icon.gg-nav-avatar-preset {
+    width: 26px;
+    height: 26px;
+    border: 1.5px solid rgba(53, 213, 255, .8);
+    border-radius: 50%;
+    background: rgba(8, 42, 70, .9);
+    font-size: 18px;
+    line-height: 1;
+    box-shadow: 0 0 8px rgba(0, 174, 255, .25);
+}
+
 /* BOTÓN ACTIVO */
 
 .gg-bottom-nav .gg-nav-item.gg-active {
@@ -410,7 +421,13 @@ if (item.id === "perfil") {
     const iconoPredeterminado = icons.perfil;
 
     function mostrarPredeterminado() {
+        icon.classList.remove("gg-nav-avatar-preset");
         icon.innerHTML = iconoPredeterminado;
+    }
+
+    function mostrarAvatarPredefinido(emoji) {
+        icon.classList.add("gg-nav-avatar-preset");
+        icon.textContent = emoji;
     }
 
     function mostrarFoto(url) {
@@ -493,39 +510,58 @@ if (item.id === "perfil") {
 
         const usuario = data.user;
 
-        // Primero comprobar la foto guardada en el perfil.
-        let urlFoto = usuario.user_metadata?.avatar_url || "";
+        const metadata = usuario.user_metadata || {};
 
-        // Si no existe en los metadatos, buscarla en su carpeta.
-        if (!urlFoto) {
+        // El avatar propio de GGT tiene prioridad y no depende de Google.
+        const urlFotoGGT = metadata.gg_avatar_url || "";
+        const avatarGGT = metadata.gg_avatar_preset || "";
+        const avatares = {
+            gamer: "🎮",
+            dragon: "🐉",
+            rayo: "⚡",
+            lobo: "🐺",
+            corona: "👑",
+            cohete: "🚀",
+            zorro: "🦊",
+            escudo: "🛡️"
+        };
+
+        if (urlFotoGGT) {
+            mostrarFoto(urlFotoGGT);
+            return;
+        }
+
+        if (avatares[avatarGGT]) {
+            mostrarAvatarPredefinido(avatares[avatarGGT]);
+            return;
+        }
+
+        // Recuperar imágenes antiguas subidas antes de separar los metadatos.
+        // Si el usuario quitó la imagen, no recuperar el archivo anterior.
+        let urlFotoAnterior = "";
+        if (!metadata.gg_avatar_removed) {
             const { data: archivos, error: errorArchivos } =
                 await supabase.storage
                     .from("avatars")
-                    .list(usuario.id, {
-                        limit: 20
-                    });
+                    .list(usuario.id, { limit: 20 });
 
             if (!errorArchivos && archivos?.length) {
                 const archivo = archivos.find((item) =>
-                    /^avatar\.(jpg|jpeg|png|webp)$/i.test(
-                        item.name
-                    )
+                    /^avatar\.(jpg|jpeg|png|webp)$/i.test(item.name)
                 );
 
                 if (archivo) {
                     const ruta = `${usuario.id}/${archivo.name}`;
-
                     const resultado = supabase.storage
                         .from("avatars")
                         .getPublicUrl(ruta);
-
-                    urlFoto = resultado.data?.publicUrl || "";
+                    urlFotoAnterior = resultado.data?.publicUrl || "";
                 }
             }
         }
 
-        if (urlFoto) {
-            mostrarFoto(urlFoto);
+        if (urlFotoAnterior) {
+            mostrarFoto(urlFotoAnterior + "?v=" + Date.now());
         } else {
             mostrarPredeterminado();
         }
