@@ -7,258 +7,54 @@
     <title>Crear cuenta | Gamers Gold Top-Up</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .registro {
-            width: 100%;
-            max-width: 430px;
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 28px 22px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-        }
-
-        .logo {
-            text-align: center;
-            font-size: 28px;
-            font-weight: 900;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .logo .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
-        }
-
-        .logo span {
-            color: #ffffff;
-        }
-
-        .titulo {
-            text-align: center;
-            margin-top: 18px;
-            margin-bottom: 8px;
-            font-size: 24px;
-        }
-
-        .descripcion {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 7px;
-            font-size: 13px;
-            color: #b8c9dc;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px;
-            margin-bottom: 17px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            outline: none;
-            font-size: 15px;
-        }
-
-        input:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
-
-        .crear {
-            width: 100%;
-            padding: 14px;
-            margin-top: 5px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .crear:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .login {
-            text-align: center;
-            margin-top: 20px;
-            color: #8195ad;
-            font-size: 13px;
-        }
-
-        .login a {
-            color: #28a9ff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .nota {
-            margin-top: 18px;
-            text-align: center;
-            color: #627b97;
-            font-size: 11px;
-            line-height: 1.5;
-        }
-
-        .mensaje-exito {
-            display: none;
-            text-align: center;
-        }
-
-        .mensaje-exito .icono {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        .mensaje-exito h2 {
-            font-size: 22px;
-            margin-bottom: 12px;
-        }
-
-        .mensaje-exito p {
-            color: #9bb0c8;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .correo-mostrado {
-            color: #28a9ff;
-            font-weight: bold;
-            word-break: break-word;
-        }
-
-        .volver-login {
-            display: inline-block;
-            margin-top: 22px;
-            padding: 12px 20px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-    
-        .captcha-wrap {
-            display: flex;
-            justify-content: center;
-            margin: 12px 0 16px;
-            min-height: 65px;
-        }
-    
-.encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras{display:none!important}
-
-/* Rediseño visual GGT. Se conservan íntegros los scripts de autenticación y Turnstile. */
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+:root{color-scheme:dark}
 html{min-height:100%;background:#050b18}
-body{position:relative;isolation:isolate;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;overflow-x:hidden;min-height:100svh;padding:24px 18px 34px!important;background:radial-gradient(ellipse at 50% 10%,rgba(0,111,218,.2),transparent 42%),radial-gradient(ellipse at 85% 65%,rgba(0,190,255,.09),transparent 35%),#050b18!important}
-body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background-image:linear-gradient(rgba(86,172,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(86,172,255,.035) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
-.login-box,.registro,.recuperar-box,.box{position:relative;z-index:1;width:min(100%,470px)!important;max-width:470px!important;margin:0 auto!important;padding:12px 22px 26px!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
-.gg-auth-atmosfera{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1}
-.gg-auth-atmosfera span{position:absolute;bottom:-55px;left:var(--x,50%);width:var(--s,14px);height:var(--s,14px);border-radius:50%;border:1px solid rgba(110,218,255,.5);background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.82),rgba(48,173,255,.18) 35%,rgba(0,95,220,.05) 72%);box-shadow:inset -3px -4px 8px rgba(0,130,255,.18),0 0 14px rgba(0,160,255,.12);animation:ggBurbujas var(--d,13s) linear infinite;animation-delay:var(--delay,0s);opacity:0}
-.gg-auth-atmosfera span:nth-child(1){--x:5%;--s:12px;--d:12s;--delay:-8s}.gg-auth-atmosfera span:nth-child(2){--x:14%;--s:23px;--d:16s;--delay:-3s}.gg-auth-atmosfera span:nth-child(3){--x:25%;--s:9px;--d:10s;--delay:-6s}.gg-auth-atmosfera span:nth-child(4){--x:35%;--s:17px;--d:14s;--delay:-1s}.gg-auth-atmosfera span:nth-child(5){--x:44%;--s:11px;--d:11s;--delay:-9s}.gg-auth-atmosfera span:nth-child(6){--x:55%;--s:25px;--d:18s;--delay:-12s}.gg-auth-atmosfera span:nth-child(7){--x:65%;--s:10px;--d:12s;--delay:-4s}.gg-auth-atmosfera span:nth-child(8){--x:74%;--s:18px;--d:15s;--delay:-7s}.gg-auth-atmosfera span:nth-child(9){--x:83%;--s:12px;--d:11s;--delay:-2s}.gg-auth-atmosfera span:nth-child(10){--x:94%;--s:22px;--d:17s;--delay:-10s}.gg-auth-atmosfera span:nth-child(11){--x:31%;--s:7px;--d:9s;--delay:-5s}.gg-auth-atmosfera span:nth-child(12){--x:89%;--s:8px;--d:10s;--delay:-1s}
-@keyframes ggBurbujas{0%{transform:translate3d(0,0,0) scale(.72);opacity:0}10%{opacity:.7}75%{opacity:.5}100%{transform:translate3d(22px,-115vh,0) scale(1.18);opacity:0}}
-.gg-auth-escena{position:relative;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:360px;height:245px;margin:0 auto 2px;perspective:900px;isolation:isolate}
-.gg-auth-aura{position:absolute;width:220px;height:170px;top:35px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,149,255,.28),rgba(0,94,255,.08) 45%,transparent 72%);filter:blur(12px);animation:ggAura 5s ease-in-out infinite}
-.gg-auth-personaje{position:relative;z-index:1;width:min(100%,300px);height:230px;overflow:visible;filter:drop-shadow(0 14px 20px rgba(0,137,255,.2));transform-origin:50% 75%;animation:ggHeroFlotar 5s ease-in-out infinite,ggHeroGiro 8s ease-in-out infinite}
-.gg-auth-orbita{position:absolute;z-index:0;left:50%;top:46%;width:235px;height:75px;border:1px solid rgba(49,190,255,.3);border-radius:50%;transform:translate(-50%,-50%) rotate(-17deg);box-shadow:0 0 18px rgba(0,148,255,.08)}
-.gg-auth-orbita-b{width:260px;height:100px;transform:translate(-50%,-50%) rotate(28deg);border-color:rgba(83,135,255,.2);animation:ggOrbita 9s linear infinite}
-.gg-auth-marca{position:absolute;z-index:2;bottom:0;font-size:12px;letter-spacing:2px;font-weight:900;color:#e8f8ff;text-shadow:0 0 18px rgba(0,161,255,.45)}.gg-auth-marca span{color:#38c8ff}.gg-auth-marca b{color:#54caff}
-@keyframes ggHeroFlotar{0%,100%{transform:translateY(2px) rotateY(-5deg) rotateZ(-1deg)}50%{transform:translateY(-9px) rotateY(6deg) rotateZ(1deg)}}@keyframes ggHeroGiro{0%,100%{filter:drop-shadow(0 14px 20px rgba(0,137,255,.2))}50%{filter:drop-shadow(0 17px 25px rgba(0,190,255,.38)}}@keyframes ggAura{0%,100%{opacity:.65;transform:scale(.92)}50%{opacity:1;transform:scale(1.08)}}@keyframes ggOrbita{from{transform:translate(-50%,-50%) rotate(28deg)}to{transform:translate(-50%,-50%) rotate(388deg)}}
-.titulo{margin-top:8px!important;margin-bottom:10px!important;font-size:clamp(25px,6vw,32px)!important;font-weight:900;letter-spacing:-.7px;background:linear-gradient(100deg,#fff 15%,#a8e7ff 65%,#42baff);-webkit-background-clip:text;background-clip:text;color:transparent}
-.descripcion{max-width:360px;margin-left:auto!important;margin-right:auto!important;line-height:1.65!important;color:#a6bad2!important}label{color:#c8d9ed!important}
-input{background:rgba(5,18,39,.8)!important;border-color:rgba(69,146,211,.42)!important;border-radius:13px!important;min-height:48px;transition:border-color .2s,box-shadow .2s}input:focus{border-color:#32baff!important;box-shadow:0 0 0 3px rgba(25,160,255,.12)!important}
-.entrar,.crear,.enviar,.guardar,.volver-login{border-radius:13px!important;box-shadow:0 8px 24px rgba(0,122,255,.2);transition:transform .2s,filter .2s}.entrar:hover,.crear:hover,.enviar:hover,.guardar:hover,.volver-login:hover{filter:brightness(1.08);transform:translateY(-1px)}
-.encabezado-pagina{margin-bottom:4px!important}.captcha-wrap{position:relative;z-index:2;overflow:visible!important}
-@media(max-width:480px){body{padding:10px 14px 26px!important}.login-box,.registro,.recuperar-box,.box{padding:8px 10px 24px!important}.gg-auth-escena{height:218px;margin-bottom:0}.gg-auth-personaje{height:205px;width:270px}.gg-auth-orbita{width:200px}.gg-auth-orbita-b{width:225px}.descripcion{margin-bottom:21px!important}}
-@media(prefers-reduced-motion:reduce){.gg-auth-atmosfera span,.gg-auth-personaje,.gg-auth-aura,.gg-auth-orbita-b{animation:none!important}.gg-auth-atmosfera span{opacity:.25}}
-
-
-/* Destello azul neón visible recorriendo el contorno, como en index.html */
-@property --borde-azul-giro {
-    syntax: "<angle>";
-    inherits: false;
-    initial-value: 0deg;
-}
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 2147483647;
-    padding: 3px;
-    pointer-events: none;
-    background: conic-gradient(
-        from var(--borde-azul-giro),
-        transparent 0deg,
-        transparent 230deg,
-        rgba(0, 132, 255, .35) 265deg,
-        #087cff 288deg,
-        #7bdcff 302deg,
-        #ffffff 308deg,
-        #38c5ff 316deg,
-        #087cff 330deg,
-        rgba(0, 132, 255, .35) 350deg,
-        transparent 360deg
-    );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    animation: bordeAzulRecorrido 4.8s linear infinite;
-    opacity: 1;
-    filter: drop-shadow(0 0 3px rgba(0, 153, 255, .9));
-}
-@keyframes bordeAzulRecorrido {
-    to { --borde-azul-giro: 360deg; }
-}
-@media (prefers-reduced-motion: reduce) {
-    body::after {
-        animation-duration: 12s;
-        opacity: .95;
-    }
-}
-
-
-.google-registro{width:100%;min-height:54px;display:flex;align-items:center;justify-content:center;gap:12px;margin:8px 0 20px;padding:13px 16px;border:1px solid rgba(120,177,225,.28);border-radius:14px;background:linear-gradient(145deg,#102440,#0b1b32);color:#f4f8ff;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.18);transition:border-color .2s,transform .2s,filter .2s}
-.google-registro:hover{border-color:#32baff;filter:brightness(1.08);transform:translateY(-1px)}
-.google-registro:disabled{opacity:.65;cursor:wait;transform:none}
-.google-registro svg{width:21px;height:21px;flex:0 0 21px}
-.separador-registro{display:flex;align-items:center;gap:12px;margin:0 0 20px;color:#7890ad;font-size:13px}
-.separador-registro:before,.separador-registro:after{content:"";height:1px;flex:1;background:rgba(120,177,225,.2)}
-
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 16px;background:radial-gradient(ellipse at 50% 0%,rgba(0,157,255,.18),transparent 48%),#050b18;color:#f4f9ff}
+.registro{width:100%;max-width:465px;padding:30px 28px 26px;background:linear-gradient(155deg,#0d2342,#08172d 72%);border:1px solid rgba(54,174,255,.3);border-radius:23px;box-shadow:0 22px 65px rgba(0,0,0,.38),0 0 35px rgba(0,137,255,.09)}
+.marca{display:flex;align-items:center;justify-content:center;gap:11px;margin:0 auto 25px;text-align:left}
+.marca-icono{width:45px;height:45px;display:grid;place-items:center;flex:0 0 45px;border:1px solid rgba(51,194,255,.55);border-radius:14px;background:linear-gradient(145deg,#123d68,#08203d);color:#48d2ff;box-shadow:0 0 20px rgba(0,174,255,.16)}
+.marca-icono svg{width:25px;height:25px;fill:currentColor}
+.marca-texto{font-size:18px;line-height:1.15;font-weight:900;letter-spacing:.2px;color:#f5fbff}
+.marca-texto span{display:block;margin-top:4px;font-size:10px;letter-spacing:2.1px;color:#46caff}
+.titulo{text-align:center;margin:0 0 9px;font-size:27px;font-weight:900;letter-spacing:-.5px;color:#f5fbff}
+.descripcion{text-align:center;margin:0 auto 23px;max-width:350px;color:#9fb5cf;font-size:13.5px;line-height:1.55}
+label{display:block;margin:0 0 7px;color:#d0e0f2;font-size:13px;font-weight:700}
+input{display:block;width:100%;height:47px;margin:0 0 16px;padding:0 14px;border:1px solid #294d72;border-radius:11px;outline:none;background:#061328;color:#fff;font-size:14px;transition:border-color .2s,box-shadow .2s}
+input::placeholder{color:#7188a3}
+input:focus{border-color:#28baff;box-shadow:0 0 0 3px rgba(40,186,255,.12)}
+.google-registro{width:100%;min-height:49px;display:flex;align-items:center;justify-content:center;gap:11px;margin:0 0 18px;padding:12px 15px;border:1px solid #345777;border-radius:11px;background:#102744;color:#f4f8ff;font-size:14px;font-weight:800;cursor:pointer;transition:border-color .2s,background .2s}
+.google-registro:hover{border-color:#35c5ff;background:#153354}
+.google-registro:disabled{opacity:.65;cursor:wait}
+.google-registro svg{width:20px;height:20px;flex:0 0 20px}
+.separador-registro{display:flex;align-items:center;gap:12px;margin:0 0 19px;color:#8199b4;font-size:12px}
+.separador-registro:before,.separador-registro:after{content:"";height:1px;flex:1;background:#29435f}
+.captcha-wrap{display:flex;justify-content:center;min-height:65px;margin:5px 0 14px;overflow:visible}
+.crear,.volver-login{width:100%;min-height:49px;display:flex;align-items:center;justify-content:center;margin-top:4px;padding:13px 16px;border:0;border-radius:11px;background:linear-gradient(100deg,#087cff,#08b9ee);color:#fff;text-decoration:none;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(0,132,255,.2);transition:filter .2s,transform .2s}
+.crear:hover,.volver-login:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.crear:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.login{text-align:center;margin-top:21px;color:#9aafc8;font-size:13px}
+.login a{color:#43c7ff;text-decoration:none;font-weight:800}
+.login a:hover{text-decoration:underline}
+.nota{margin-top:18px;text-align:center;color:#7890aa;font-size:11px;line-height:1.5}
+.mensaje-exito{display:none;text-align:center}
+.mensaje-exito .icono{font-size:45px;margin-bottom:14px}
+.mensaje-exito h2{margin-bottom:12px;font-size:22px;color:#f4f9ff}
+.mensaje-exito p{color:#a7bbd2;font-size:14px;line-height:1.6}
+.correo-mostrado{margin-top:7px;color:#43c7ff!important;font-weight:800;word-break:break-word}
+@media(max-width:480px){body{padding:18px 13px}.registro{padding:25px 19px 23px;border-radius:19px}.marca{margin-bottom:22px}.titulo{font-size:25px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 
 <body>
-<div class="gg-auth-atmosfera" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 <div class="registro">
+    <div class="marca" aria-label="Gamers Gold Top-Up">
+        <div class="marca-icono" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M13.2 1.5 4.8 13h5.8l-.8 9.5L19.2 10h-6.1l.1-8.5Z"/></svg>
+        </div>
+        <div class="marca-texto">Gamers Gold<span>TOP-UP</span></div>
+    </div>
 
     <!-- FORMULARIO DE REGISTRO -->
 
@@ -523,7 +319,7 @@ document
                         password: contrasena,
 
                         options: {
-                            // Regresar a la pantalla de inicio de sesión de Gamevora
+                            // Regresar a la pantalla de inicio de sesión de Gamers Gold Top-Up
                             emailRedirectTo: "https://fidelarcia09.github.io/gamevora/frontend/login.html",
                             captchaToken: window.ggTurnstileToken,
                             data: {
