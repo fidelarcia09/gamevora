@@ -1106,7 +1106,8 @@
         <!-- TARJETA DE PERFIL -->
         <section class="perfil-resumen" aria-label="Resumen del perfil">
             <div class="avatar-contenedor">
-                <div class="avatar">
+                <div class="avatar" id="imagenPerfilInteractiva" role="button" tabindex="0"
+                    aria-label="Mostrar opciones de imagen de perfil" aria-expanded="false">
                     <svg id="iconoAvatarPredeterminado" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="12" cy="8" r="4"></circle>
                         <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
@@ -1135,7 +1136,7 @@
             </div>
         </section>
         <p id="estadoFotoPerfil" class="avatar-estado" role="status" aria-live="polite"></p>
-        <div class="avatar-acciones" aria-label="Opciones de imagen de perfil">
+        <div class="avatar-acciones" id="accionesAvatar" aria-label="Opciones de imagen de perfil" hidden>
             <button type="button" id="botonElegirAvatar" class="avatar-accion">Elegir avatar</button>
             <button type="button" id="botonQuitarFoto" class="avatar-accion quitar">Quitar imagen</button>
         </div>
@@ -1544,6 +1545,8 @@ function crearSvgAvatar(id) {
 }
 
 const botonCambiarFoto = document.getElementById("botonCambiarFoto");
+const imagenPerfilInteractiva = document.getElementById("imagenPerfilInteractiva");
+const accionesAvatar = document.getElementById("accionesAvatar");
 const selectorFotoPerfil = document.getElementById("selectorFotoPerfil");
 const fotoPerfil = document.getElementById("fotoPerfil");
 const iconoAvatarPredeterminado = document.getElementById("iconoAvatarPredeterminado");
@@ -1685,8 +1688,26 @@ botonCambiarFoto.addEventListener("click", () => {
     selectorFotoPerfil.click();
 });
 
+function alternarAccionesAvatar() {
+    accionesAvatar.hidden = !accionesAvatar.hidden;
+    imagenPerfilInteractiva.setAttribute("aria-expanded", String(!accionesAvatar.hidden));
+    if (!accionesAvatar.hidden) selectorAvatares.hidden = true;
+}
+
+imagenPerfilInteractiva.addEventListener("click", alternarAccionesAvatar);
+imagenPerfilInteractiva.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        alternarAccionesAvatar();
+    }
+});
+
 botonElegirAvatar.addEventListener("click", () => {
     selectorAvatares.hidden = !selectorAvatares.hidden;
+    if (!selectorAvatares.hidden) {
+        accionesAvatar.hidden = true;
+        imagenPerfilInteractiva.setAttribute("aria-expanded", "false");
+    }
 });
 
 selectorAvatares.querySelectorAll("[data-avatar-id]").forEach((boton) => {
@@ -1717,6 +1738,8 @@ selectorAvatares.querySelectorAll("[data-avatar-id]").forEach((boton) => {
             avatarPresetActivo = id;
             mostrarAvatarPredefinido(id);
             selectorAvatares.hidden = true;
+            accionesAvatar.hidden = true;
+            imagenPerfilInteractiva.setAttribute("aria-expanded", "false");
             mostrarEstadoFoto("Avatar actualizado correctamente.");
         } catch (error) {
             console.error("Error guardando el avatar:", error);
@@ -1795,6 +1818,8 @@ selectorFotoPerfil.addEventListener("change", async () => {
         avatarPresetActivo = null;
         mostrarFotoPerfil(urlFoto);
         selectorAvatares.hidden = true;
+        accionesAvatar.hidden = true;
+        imagenPerfilInteractiva.setAttribute("aria-expanded", "false");
         mostrarEstadoFoto("Foto de perfil actualizada.");
     } catch (error) {
         console.error("Error guardando la foto de perfil:", error);
