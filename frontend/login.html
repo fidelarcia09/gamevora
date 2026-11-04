@@ -1,358 +1,128 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Iniciar sesión | Gamers Gold Top-Up</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: #050b18;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .login-box {
-            width: 100%;
-            max-width: 430px;
-            background: #091a35;
-            border: 1px solid #15518c;
-            border-radius: 20px;
-            padding: 28px 22px;
-            box-shadow: 0 0 30px rgba(0, 140, 255, 0.15);
-        }
-
-        .logo {
-            text-align: center;
-            font-size: 28px;
-            font-weight: 900;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .rayo {
-            color: #00b7ff;
-            text-shadow: 0 0 12px #008cff;
-        }
-
-        .logo span {
-            color: white;
-        }
-
-        .titulo {
-            text-align: center;
-            margin-top: 18px;
-            margin-bottom: 8px;
-            font-size: 24px;
-        }
-
-        .descripcion {
-            text-align: center;
-            color: #8fa5bd;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 7px;
-            font-size: 13px;
-            color: #b8c9dc;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px;
-            margin-bottom: 17px;
-            background: #061226;
-            color: white;
-            border: 1px solid #204c78;
-            border-radius: 10px;
-            outline: none;
-            font-size: 15px;
-        }
-
-        input:focus {
-            border-color: #159dff;
-            box-shadow: 0 0 8px rgba(0, 157, 255, 0.2);
-        }
-
-        .olvidaste {
-            display: block;
-            text-align: right;
-            margin-top: -8px;
-            margin-bottom: 17px;
-            color: #28a9ff;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .olvidaste:hover {
-            text-decoration: underline;
-        }
-
-        .entrar {
-            width: 100%;
-            padding: 14px;
-            margin-top: 5px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #087cff, #00baff);
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .entrar:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .crear {
-            text-align: center;
-            margin-top: 20px;
-            color: #8195ad;
-            font-size: 13px;
-        }
-
-        .crear a {
-            color: #28a9ff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .nota {
-            margin-top: 18px;
-            text-align: center;
-            color: #627b97;
-            font-size: 11px;
-            line-height: 1.5;
-        }
-    
-        .captcha-wrap {
-            display: flex;
-            justify-content: center;
-            margin: 12px 0 16px;
-            min-height: 65px;
-        }
-    
-/* Encabezado unificado con flecha y nombre de página */
-.encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras,header .encabezado-pagina~.boton-atras,.header .encabezado-pagina~.boton-atras{display:none!important}
-
-/* Rediseño visual GGT. Se conservan íntegros los scripts de autenticación y Turnstile. */
-html{min-height:100%;background:#050b18}
-body{position:relative;isolation:isolate;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;overflow-x:hidden;min-height:100svh;padding:24px 18px 34px!important;background:radial-gradient(ellipse at 50% 10%,rgba(0,111,218,.2),transparent 42%),radial-gradient(ellipse at 85% 65%,rgba(0,190,255,.09),transparent 35%),#050b18!important}
-body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background-image:linear-gradient(rgba(86,172,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(86,172,255,.035) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
-.login-box,.registro,.recuperar-box,.box{position:relative;z-index:1;width:min(100%,470px)!important;max-width:470px!important;margin:0 auto!important;padding:12px 22px 26px!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
-.gg-auth-atmosfera{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1}
-.gg-auth-atmosfera span{position:absolute;bottom:-55px;left:var(--x,50%);width:var(--s,14px);height:var(--s,14px);border-radius:50%;border:1px solid rgba(110,218,255,.5);background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.82),rgba(48,173,255,.18) 35%,rgba(0,95,220,.05) 72%);box-shadow:inset -3px -4px 8px rgba(0,130,255,.18),0 0 14px rgba(0,160,255,.12);animation:ggBurbujas var(--d,13s) linear infinite;animation-delay:var(--delay,0s);opacity:0}
-.gg-auth-atmosfera span:nth-child(1){--x:5%;--s:12px;--d:12s;--delay:-8s}.gg-auth-atmosfera span:nth-child(2){--x:14%;--s:23px;--d:16s;--delay:-3s}.gg-auth-atmosfera span:nth-child(3){--x:25%;--s:9px;--d:10s;--delay:-6s}.gg-auth-atmosfera span:nth-child(4){--x:35%;--s:17px;--d:14s;--delay:-1s}.gg-auth-atmosfera span:nth-child(5){--x:44%;--s:11px;--d:11s;--delay:-9s}.gg-auth-atmosfera span:nth-child(6){--x:55%;--s:25px;--d:18s;--delay:-12s}.gg-auth-atmosfera span:nth-child(7){--x:65%;--s:10px;--d:12s;--delay:-4s}.gg-auth-atmosfera span:nth-child(8){--x:74%;--s:18px;--d:15s;--delay:-7s}.gg-auth-atmosfera span:nth-child(9){--x:83%;--s:12px;--d:11s;--delay:-2s}.gg-auth-atmosfera span:nth-child(10){--x:94%;--s:22px;--d:17s;--delay:-10s}.gg-auth-atmosfera span:nth-child(11){--x:31%;--s:7px;--d:9s;--delay:-5s}.gg-auth-atmosfera span:nth-child(12){--x:89%;--s:8px;--d:10s;--delay:-1s}
-@keyframes ggBurbujas{0%{transform:translate3d(0,0,0) scale(.72);opacity:0}10%{opacity:.7}75%{opacity:.5}100%{transform:translate3d(22px,-115vh,0) scale(1.18);opacity:0}}
-.gg-auth-escena{position:relative;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:360px;height:245px;margin:0 auto 2px;perspective:900px;isolation:isolate}
-.gg-auth-aura{position:absolute;width:220px;height:170px;top:35px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,149,255,.28),rgba(0,94,255,.08) 45%,transparent 72%);filter:blur(12px);animation:ggAura 5s ease-in-out infinite}
-.gg-auth-personaje{position:relative;z-index:1;width:min(100%,300px);height:230px;overflow:visible;filter:drop-shadow(0 14px 20px rgba(0,137,255,.2));transform-origin:50% 75%;animation:ggHeroFlotar 5s ease-in-out infinite,ggHeroGiro 8s ease-in-out infinite}
-.gg-auth-orbita{position:absolute;z-index:0;left:50%;top:46%;width:235px;height:75px;border:1px solid rgba(49,190,255,.3);border-radius:50%;transform:translate(-50%,-50%) rotate(-17deg);box-shadow:0 0 18px rgba(0,148,255,.08)}
-.gg-auth-orbita-b{width:260px;height:100px;transform:translate(-50%,-50%) rotate(28deg);border-color:rgba(83,135,255,.2);animation:ggOrbita 9s linear infinite}
-.gg-auth-marca{position:absolute;z-index:2;bottom:0;font-size:12px;letter-spacing:2px;font-weight:900;color:#e8f8ff;text-shadow:0 0 18px rgba(0,161,255,.45)}.gg-auth-marca span{color:#38c8ff}.gg-auth-marca b{color:#54caff}
-@keyframes ggHeroFlotar{0%,100%{transform:translateY(2px) rotateY(-5deg) rotateZ(-1deg)}50%{transform:translateY(-9px) rotateY(6deg) rotateZ(1deg)}}@keyframes ggHeroGiro{0%,100%{filter:drop-shadow(0 14px 20px rgba(0,137,255,.2))}50%{filter:drop-shadow(0 17px 25px rgba(0,190,255,.38)}}@keyframes ggAura{0%,100%{opacity:.65;transform:scale(.92)}50%{opacity:1;transform:scale(1.08)}}@keyframes ggOrbita{from{transform:translate(-50%,-50%) rotate(28deg)}to{transform:translate(-50%,-50%) rotate(388deg)}}
-.titulo{margin-top:8px!important;margin-bottom:10px!important;font-size:clamp(25px,6vw,32px)!important;font-weight:900;letter-spacing:-.7px;background:linear-gradient(100deg,#fff 15%,#a8e7ff 65%,#42baff);-webkit-background-clip:text;background-clip:text;color:transparent}
-.descripcion{max-width:360px;margin-left:auto!important;margin-right:auto!important;line-height:1.65!important;color:#a6bad2!important}label{color:#c8d9ed!important}
-input{background:rgba(5,18,39,.8)!important;border-color:rgba(69,146,211,.42)!important;border-radius:13px!important;min-height:48px;transition:border-color .2s,box-shadow .2s}input:focus{border-color:#32baff!important;box-shadow:0 0 0 3px rgba(25,160,255,.12)!important}
-.entrar,.crear,.enviar,.guardar,.volver-login{border-radius:13px!important;box-shadow:0 8px 24px rgba(0,122,255,.2);transition:transform .2s,filter .2s}.entrar:hover,.crear:hover,.enviar:hover,.guardar:hover,.volver-login:hover{filter:brightness(1.08);transform:translateY(-1px)}
-.encabezado-pagina{margin-bottom:4px!important}.captcha-wrap{position:relative;z-index:2;overflow:visible!important}
-@media(max-width:480px){body{padding:10px 14px 26px!important}.login-box,.registro,.recuperar-box,.box{padding:8px 10px 24px!important}.gg-auth-escena{height:218px;margin-bottom:0}.gg-auth-personaje{height:205px;width:270px}.gg-auth-orbita{width:200px}.gg-auth-orbita-b{width:225px}.descripcion{margin-bottom:21px!important}}
-@media(prefers-reduced-motion:reduce){.gg-auth-atmosfera span,.gg-auth-personaje,.gg-auth-aura,.gg-auth-orbita-b{animation:none!important}.gg-auth-atmosfera span{opacity:.25}}
-
-
-/* Destello azul neón visible recorriendo el contorno, como en index.html */
-@property --borde-azul-giro {
-    syntax: "<angle>";
-    inherits: false;
-    initial-value: 0deg;
-}
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 2147483647;
-    padding: 3px;
-    pointer-events: none;
-    background: conic-gradient(
-        from var(--borde-azul-giro),
-        transparent 0deg,
-        transparent 230deg,
-        rgba(0, 132, 255, .35) 265deg,
-        #087cff 288deg,
-        #7bdcff 302deg,
-        #ffffff 308deg,
-        #38c5ff 316deg,
-        #087cff 330deg,
-        rgba(0, 132, 255, .35) 350deg,
-        transparent 360deg
-    );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    animation: bordeAzulRecorrido 4.8s linear infinite;
-    opacity: 1;
-    filter: drop-shadow(0 0 3px rgba(0, 153, 255, .9));
-}
-@keyframes bordeAzulRecorrido {
-    to { --borde-azul-giro: 360deg; }
-}
-@media (prefers-reduced-motion: reduce) {
-    body::after {
-        animation-duration: 12s;
-        opacity: .95;
-    }
-}
-
-
-/* Nueva presentación de acceso Gamers Gold Top-Up */
-html,body{background:#edf5ff!important;color:#091a35!important}
-body{min-height:100svh!important;padding:18px 16px 30px!important;justify-content:flex-start!important;overflow-x:hidden;background:radial-gradient(ellipse at 50% 18%,rgba(62,170,255,.20),transparent 42%),linear-gradient(180deg,#eaf3ff 0%,#f8fbff 54%,#eaf5ff 100%)!important}
-body:before{background-image:linear-gradient(rgba(16,105,190,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(16,105,190,.045) 1px,transparent 1px)!important}
-body::after{opacity:.8!important;filter:drop-shadow(0 0 3px rgba(0,153,255,.55))!important}
-.login-box{width:min(100%,480px)!important;max-width:480px!important;padding:0 0 26px!important;margin:auto!important}
-.gg-login-top{display:flex;align-items:center;justify-content:center;position:relative;min-height:54px;margin:0 0 8px}
-.gg-login-back{position:absolute;left:0;top:4px;width:44px;height:44px;display:grid;place-items:center;border:1px solid rgba(35,111,184,.12);border-radius:15px;background:rgba(255,255,255,.9);color:#0b2444;text-decoration:none;box-shadow:0 6px 18px rgba(22,73,120,.08)}
-.gg-login-back svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
-.gg-login-brand{font-size:18px;font-weight:950;letter-spacing:-.6px;color:#0a1d38;text-align:center}
-.gg-login-brand span{color:#087cff}
-.gg-login-brand small{display:block;margin-top:2px;font-size:9px;letter-spacing:3px;color:#3b6a99}
-.gg-login-hero{height:230px;position:relative;display:grid;place-items:center;margin:0 auto 6px;overflow:hidden}
-.gg-login-hero:before,.gg-login-hero:after{content:"";position:absolute;width:220px;height:220px;border:1px solid rgba(24,151,235,.2);border-radius:50%;box-shadow:0 0 35px rgba(0,151,255,.09),inset 0 0 35px rgba(0,151,255,.07)}
-.gg-login-hero:after{width:270px;height:130px;transform:rotate(-24deg);border-color:rgba(0,186,255,.22)}
-.gg-login-hero svg{position:relative;z-index:1;width:min(88%,300px);height:210px;filter:drop-shadow(0 16px 22px rgba(0,102,210,.2));animation:ggLoginFloat 5s ease-in-out infinite}
-@keyframes ggLoginFloat{0%,100%{transform:translateY(2px)}50%{transform:translateY(-8px)}}
-.gg-login-eyebrow{display:flex;align-items:center;gap:9px;margin:0 0 10px;color:#1265b5;font-size:13px;font-weight:900;letter-spacing:2.5px}
-.gg-login-eyebrow:before{content:"";width:28px;height:4px;border-radius:9px;background:linear-gradient(90deg,#087cff,#35d5ff);box-shadow:0 0 10px rgba(0,140,255,.35)}
-.titulo{text-align:left!important;margin:0 0 10px!important;font-size:clamp(34px,8vw,48px)!important;line-height:1.05;font-weight:950!important;letter-spacing:-1.7px;background:none!important;color:#071426!important;-webkit-text-fill-color:initial!important}
-.titulo .gg-blue{background:linear-gradient(90deg,#075be8,#18aeea);-webkit-background-clip:text;background-clip:text;color:transparent}
-.descripcion{text-align:left!important;max-width:none!important;margin:0 0 22px!important;color:#66758a!important;font-size:16px!important;line-height:1.55!important}
-.gg-login-google{width:100%;min-height:66px;display:flex;align-items:center;justify-content:center;gap:13px;margin:0 0 17px;padding:14px 18px;border:1px solid rgba(24,69,115,.08);border-radius:22px;background:#fff;color:#101827;font-size:17px;font-weight:850;box-shadow:0 8px 22px rgba(28,72,112,.10);cursor:pointer;transition:transform .2s,box-shadow .2s}
-.gg-login-google:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(28,72,112,.14)}
-.gg-login-google:disabled{opacity:.65;cursor:wait;transform:none}
-.gg-login-google svg{width:23px;height:23px;flex:0 0 23px}
-.gg-login-sep{display:flex;align-items:center;gap:12px;margin:2px 0 17px;color:#7d8da2;font-size:13px}
-.gg-login-sep:before,.gg-login-sep:after{content:"";height:1px;flex:1;background:rgba(60,105,150,.18)}
-#formLogin{padding:0}
-label{color:#354c67!important;font-size:13px!important;font-weight:750}
-input{background:rgba(255,255,255,.94)!important;color:#10223b!important;border:1px solid rgba(62,111,158,.2)!important;border-radius:15px!important;min-height:54px;padding:15px!important;box-shadow:0 4px 14px rgba(27,75,120,.045)}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#edf5ff">
+<title>Iniciar sesión | Gamers Gold Top-Up</title>
+<style>
+:root{--navy:#07162d;--navy2:#0b2547;--blue:#087cff;--cyan:#24c8f5;--muted:#66758a}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+html{min-height:100%;background:#edf5ff}
+body{min-height:100svh;overflow-x:hidden;padding:18px 18px 30px;color:var(--navy);background:radial-gradient(ellipse at 50% 12%,rgba(65,165,255,.2),transparent 37%),radial-gradient(ellipse at 90% 76%,rgba(44,203,245,.13),transparent 32%),linear-gradient(180deg,#eaf2ff 0%,#f8fbff 54%,#eaf6ff 100%)}
+body:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(18,104,185,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(18,104,185,.045) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
+.page{position:relative;z-index:1;width:min(100%,470px);margin:0 auto}
+.top{height:56px;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:8px}
+.back{position:absolute;left:0;top:2px;width:44px;height:44px;display:grid;place-items:center;border:1px solid rgba(35,111,184,.12);border-radius:15px;background:rgba(255,255,255,.94);color:var(--navy);text-decoration:none;box-shadow:0 6px 18px rgba(22,73,120,.08)}
+.back svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.brand{font-size:18px;font-weight:950;letter-spacing:-.6px;color:var(--navy);text-align:center}
+.brand .gold{color:#087cff}
+.brand small{display:block;margin-top:2px;font-size:9px;letter-spacing:3px;color:#3b6a99}
+.hero{height:235px;position:relative;display:grid;place-items:center;margin:0 auto 5px;overflow:hidden}
+.hero:before,.hero:after{content:"";position:absolute;width:218px;height:218px;border:1px solid rgba(24,151,235,.22);border-radius:50%;box-shadow:0 0 35px rgba(0,151,255,.09),inset 0 0 35px rgba(0,151,255,.07)}
+.hero:after{width:270px;height:120px;transform:rotate(-24deg);border-color:rgba(0,186,255,.24)}
+.hero svg{position:relative;z-index:1;width:min(86%,280px);height:205px;filter:drop-shadow(0 14px 22px rgba(0,102,210,.2));animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(2px)}50%{transform:translateY(-7px)}}
+.spark{position:absolute;border-radius:50%;background:#39cafa;box-shadow:0 0 15px #39cafa}
+.spark.one{width:13px;height:13px;left:13%;top:35%}.spark.two{width:9px;height:9px;right:13%;top:24%}.spark.three{width:7px;height:7px;right:20%;bottom:22%}
+.eyebrow{display:flex;align-items:center;gap:9px;margin:0 0 10px;color:#1265b5;font-size:13px;font-weight:900;letter-spacing:2.5px}
+.eyebrow:before{content:"";width:28px;height:4px;border-radius:9px;background:linear-gradient(90deg,var(--blue),var(--cyan));box-shadow:0 0 10px rgba(0,140,255,.35)}
+h1{margin:0 0 10px;font-size:clamp(35px,8vw,48px);line-height:1.05;font-weight:950;letter-spacing:-1.7px;color:#071426}
+h1 span{background:linear-gradient(90deg,#075be8,#18aeea);-webkit-background-clip:text;background-clip:text;color:transparent}
+.description{margin:0 0 23px;color:var(--muted);font-size:16px;line-height:1.55}
+.google{width:100%;min-height:66px;display:flex;align-items:center;justify-content:center;gap:13px;margin:0 0 18px;padding:14px 18px;border:1px solid rgba(24,69,115,.08);border-radius:22px;background:#fff;color:#101827;font-size:17px;font-weight:850;box-shadow:0 8px 22px rgba(28,72,112,.10);cursor:pointer;transition:transform .2s,box-shadow .2s}
+.google:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(28,72,112,.14)}
+.google:disabled{opacity:.65;cursor:wait;transform:none}
+.google svg{width:23px;height:23px;flex:0 0 23px}
+.separator{display:flex;align-items:center;gap:12px;margin:1px 0 18px;color:#7d8da2;font-size:13px}
+.separator:before,.separator:after{content:"";height:1px;flex:1;background:rgba(60,105,150,.18)}
+label{display:block;margin:0 0 7px;color:#354c67;font-size:13px;font-weight:750}
+input{display:block;width:100%;min-height:54px;margin:0 0 16px;padding:15px;border:1px solid rgba(62,111,158,.2);border-radius:15px;background:rgba(255,255,255,.96);color:#10223b;font-size:15px;outline:none;box-shadow:0 4px 14px rgba(27,75,120,.045);transition:border-color .2s,box-shadow .2s}
 input::placeholder{color:#8996a7}
-input:focus{border-color:#168ee8!important;box-shadow:0 0 0 3px rgba(25,145,230,.12)!important}
-.olvidaste{color:#0878d9!important}
-.entrar{min-height:62px!important;border-radius:17px!important;background:linear-gradient(110deg,#087cff,#0754ed)!important;font-size:17px!important;box-shadow:0 12px 24px rgba(0,102,245,.22)!important}
-.crear{margin-top:24px!important;color:#718096!important;font-size:14px!important}
-.crear a{color:#096bce!important}
-.captcha-wrap{margin:14px 0 17px!important}
-.gg-login-foot{display:flex;justify-content:space-around;gap:8px;margin:24px 0 0;padding:0 4px}
-.gg-login-foot-item{flex:1;text-align:center;color:#63758b;font-size:11px;font-weight:700}
-.gg-login-foot-item span{width:48px;height:48px;margin:0 auto 8px;display:grid;place-items:center;border:1px solid rgba(60,128,190,.12);border-radius:16px;background:rgba(255,255,255,.82);color:#1686df;box-shadow:0 6px 16px rgba(29,85,137,.08)}
-.gg-login-foot-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:480px){body{padding:12px 18px 28px!important}.login-box{padding:0 0 20px!important}.gg-login-hero{height:205px}.gg-login-hero svg{height:190px}.gg-login-brand{font-size:16px}.gg-login-google{min-height:62px;font-size:16px}.descripcion{font-size:15px!important}}
-@media(prefers-reduced-motion:reduce){.gg-login-hero svg{animation:none}}
-
+input:focus{border-color:#168ee8;box-shadow:0 0 0 3px rgba(25,145,230,.12)}
+.forgot{display:block;text-align:right;margin:-7px 0 14px;color:#0878d9;text-decoration:none;font-size:13px;font-weight:750}
+.forgot:hover{text-decoration:underline}
+.captcha-wrap{display:flex;justify-content:center;min-height:65px;margin:13px 0 16px;overflow:visible}
+.submit{width:100%;min-height:62px;margin-top:2px;border:0;border-radius:17px;background:linear-gradient(110deg,#087cff,#0754ed);color:#fff;font-size:17px;font-weight:850;box-shadow:0 12px 24px rgba(0,102,245,.22);cursor:pointer;transition:filter .2s,transform .2s}
+.submit:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.submit:disabled{opacity:.65;cursor:not-allowed;transform:none}
+.new-account{text-align:center;margin:22px 0 12px;color:#718096;font-size:14px}
+.create{width:100%;min-height:66px;display:flex;align-items:center;justify-content:center;gap:12px;padding:14px 18px;border-radius:20px;background:linear-gradient(110deg,#087cff,#0754ed);color:#fff;text-decoration:none;font-size:18px;font-weight:850;box-shadow:0 12px 24px rgba(0,102,245,.22)}
+.create svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:27px 0 0}
+.benefit{text-align:center;color:#63758b;font-size:11px;font-weight:700;line-height:1.35}
+.benefit-icon{width:48px;height:48px;margin:0 auto 8px;display:grid;place-items:center;border:1px solid rgba(60,128,190,.12);border-radius:16px;background:rgba(255,255,255,.86);color:#1686df;box-shadow:0 6px 16px rgba(29,85,137,.08)}
+.benefit-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:480px){body{padding:12px 18px 28px}.hero{height:215px}.hero svg{height:190px}.brand{font-size:16px}.google{min-height:62px;font-size:16px}.description{font-size:15px}}
+@media(prefers-reduced-motion:reduce){.hero svg{animation:none}.google,.submit{transition:none}}
 </style>
 </head>
-
 <body>
-<div class="gg-auth-atmosfera" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-<div class="login-box">
-    <div class="gg-login-top">
-        <a class="gg-login-back" href="../index.html" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6M9 12h12"/></svg></a>
-        <div class="gg-login-brand">GAMERS <span>GOLD</span><small>TOP-UP</small></div>
+<main class="page">
+  <header class="top">
+    <a class="back" href="../index.html" aria-label="Volver al inicio"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6M9 12h12"/></svg></a>
+    <div class="brand">GAMERS <span class="gold">GOLD</span><small>TOP-UP</small></div>
+  </header>
+
+  <div class="hero" aria-hidden="true">
+    <i class="spark one"></i><i class="spark two"></i><i class="spark three"></i>
+    <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="shield" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b3975"/><stop offset=".55" stop-color="#087cff"/><stop offset="1" stop-color="#27d0f5"/></linearGradient>
+        <linearGradient id="bolt" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#65e5ff"/></linearGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <circle cx="160" cy="108" r="82" fill="#d9efff" opacity=".42"/>
+      <circle cx="160" cy="108" r="72" fill="none" stroke="#31baff" stroke-width="2" opacity=".55"/>
+      <path d="M160 24 230 54v54c0 47-29 75-70 96-41-21-70-49-70-96V54z" fill="url(#shield)" stroke="#1768ae" stroke-width="4"/>
+      <path d="M160 35 218 60v47c0 38-22 62-58 82-36-20-58-44-58-82V60z" fill="#092b59" opacity=".78"/>
+      <path d="m176 55-47 62h29l-14 49 49-69h-30z" fill="url(#bolt)" filter="url(#glow)"/>
+      <path d="M111 83h-18m134 0h-18M160 10v12M160 194v14" stroke="#19bfff" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+      <circle cx="83" cy="105" r="5" fill="#22c8f5"/><circle cx="237" cy="105" r="5" fill="#22c8f5"/>
+      <path d="M106 177 87 193m127-16 19 16" stroke="#1b9ff0" stroke-width="3" stroke-linecap="round" opacity=".65"/>
+    </svg>
+  </div>
+
+  <div class="eyebrow">ACCESO</div>
+  <h1>Entra a <span>tu cuenta</span></h1>
+  <p class="description">Tus pedidos, tu saldo y tus logros, en un toque.</p>
+
+  <button class="google" id="botonGoogleLogin" type="button">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.9c-.58 2.96-2.26 5.48-4.74 7.18l7.66 5.94c4.48-4.14 7.16-10.24 7.16-17.59z"/><path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.53 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.81l-7.66-5.94c-2.13 1.44-4.86 2.3-8.24 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+    Continuar con Google
+  </button>
+
+  <div class="separator">o entra con tu correo</div>
+
+  <form id="formLogin">
+    <label for="correo">Correo electrónico</label>
+    <input type="email" id="correo" placeholder="tucorreo@email.com" autocomplete="email" required>
+    <label for="contrasena">Contraseña</label>
+    <input type="password" id="contrasena" placeholder="Tu contraseña" autocomplete="current-password" required>
+    <a href="recuperar-contrasena.html" class="forgot">¿Olvidaste tu contraseña?</a>
+    <div class="captcha-wrap">
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAAFkQPUoJGVxIGYNB" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileExpired"></div>
     </div>
-    <div class="gg-login-hero" aria-hidden="true">
-        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
-            <defs><linearGradient id="ggSuit" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#173e75"/><stop offset=".55" stop-color="#087cff"/><stop offset="1" stop-color="#38d5ff"/></linearGradient><linearGradient id="ggBolt" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#20bfff"/></linearGradient></defs>
-            <circle cx="160" cy="105" r="79" fill="#d9efff" opacity=".55"/><circle cx="160" cy="105" r="68" fill="none" stroke="#36bfff" stroke-width="2" opacity=".55"/>
-            <path d="M73 188c9-42 37-62 73-66l14 13 14-13c39 5 65 27 74 66" fill="url(#ggSuit)" stroke="#174f91" stroke-width="3"/>
-            <path d="M112 94c-4-42 18-68 49-68 34 0 52 28 45 67l-9 29-72 1z" fill="#142d50"/>
-            <path d="M121 85c4-31 20-49 43-49 22 0 36 15 39 41-14-5-27-15-34-27-9 17-26 28-48 35z" fill="#d8efff"/>
-            <path d="M128 88c9 9 19 12 30 12m23-12c-7 8-15 11-24 12" fill="none" stroke="#16365f" stroke-width="4" stroke-linecap="round"/>
-            <path d="M143 110l18 8 18-8-5 22-13 11-13-11z" fill="#f1fbff" opacity=".9"/>
-            <path d="M84 172l37-28 31 10 8 34H78zM236 172l-37-28-31 10-8 34h88z" fill="#0a2850" opacity=".9"/>
-            <path d="M154 147l-16 27 19-5-3 22 28-37-19 5 4-18z" fill="url(#ggBolt)"/>
-            <circle cx="62" cy="75" r="5" fill="#16c8ff"/><circle cx="255" cy="54" r="7" fill="#16c8ff" opacity=".8"/><circle cx="268" cy="157" r="4" fill="#087cff"/>
-        </svg>
-    </div>
-    <div class="gg-login-eyebrow">ACCESO</div>
-    <h1 class="titulo">Entra a <span class="gg-blue">tu cuenta</span></h1>
-    <p class="descripcion">Tus pedidos, tu saldo y tus logros, en un toque.</p>
-    <button class="gg-login-google" id="botonGoogleLogin" type="button">
-        <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.9c-.58 2.96-2.26 5.48-4.74 7.18l7.66 5.94c4.48-4.14 7.16-10.24 7.16-17.59z"/><path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.53 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.81l-7.66-5.94c-2.13 1.44-4.86 2.3-8.24 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        Continuar con Google
-    </button>
-    <div class="gg-login-sep">o con tu correo</div>
-    <form id="formLogin">
+    <button class="submit" id="botonEntrar" type="submit">Iniciar sesión ⚡</button>
+  </form>
 
-        <label for="correo">Correo electrónico</label>
+  <div class="new-account">¿Primera vez en Gamers Gold Top-Up?</div>
+  <a class="create" href="registro.html">Crear cuenta gratis <svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
 
-        <input
-            type="email"
-            id="correo"
-            placeholder="tucorreo@email.com"
-            required
-        >
-
-        <label for="contrasena">Contraseña</label>
-
-        <input
-            type="password"
-            id="contrasena"
-            placeholder="Tu contraseña"
-            required
-        >
-
-        <a href="recuperar-contrasena.html" class="olvidaste">
-            ¿Olvidaste tu contraseña?
-        </a>
-
-        <div class="captcha-wrap">
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAAFkQPUoJGVxIGYNB" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileExpired"></div>
-        </div>
-
-        <button class="entrar" id="botonEntrar" type="submit">
-            Iniciar sesión ⚡
-        </button>
-
-    </form>
-
-    <div class="crear">
-        ¿Primera vez en Gamers Gold Top-Up?
-        <a href="registro.html">Crear cuenta gratis →</a>
-    </div>
-    <div class="gg-login-foot" aria-label="Ventajas de Gamers Gold">
-        <div class="gg-login-foot-item"><span><svg viewBox="0 0 24 24"><path d="M6 4h12v17l-6-4-6 4z"/></svg></span>Pedidos</div>
-        <div class="gg-login-foot-item"><span><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span>Actividad</div>
-        <div class="gg-login-foot-item"><span><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18m-4 5h1"/></svg></span>Wallet</div>
-        <div class="gg-login-foot-item"><span><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2-5.3L4 9m0-5v5h5"/></svg></span>Historial</div>
-    </div>
-</div>
+  <section class="benefits" aria-label="Ventajas de Gamers Gold">
+    <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M6 4h12v17l-6-4-6 4z"/></svg></span>Tus pedidos</div>
+    <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span>Actividad</div>
+    <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18m-4 5h1"/></svg></span>Saldo GVR</div>
+    <div class="benefit"><span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2-5.3L4 9m0-5v5h5"/></svg></span>Historial</div>
+  </section>
+</main>
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const supabaseClient = window.supabase.createClient(
-    "https://gsuhzcavghsiolmipnzi.supabase.co",
-    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+  "https://gsuhzcavghsiolmipnzi.supabase.co",
+  "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
 );
 
 window.ggTurnstileToken = "";
@@ -360,99 +130,64 @@ window.onTurnstileSuccess = function(token) { window.ggTurnstileToken = token; }
 window.onTurnstileExpired = function() { window.ggTurnstileToken = ""; };
 
 document.getElementById("botonGoogleLogin").addEventListener("click", async function() {
-    const boton = this;
-    boton.disabled = true;
-    boton.textContent = "Conectando con Google...";
-    try {
-        const { error } = await supabaseClient.auth.signInWithOAuth({
-            provider: "google",
-            options: {
-                redirectTo: "https://fidelarcia09.github.io/gamevora/index.html",
-                queryParams: { prompt: "select_account" }
-            }
-        });
-        if (error) throw error;
-    } catch (error) {
-        console.error("Error al iniciar sesión con Google:", error);
-        alert("No se pudo iniciar sesión con Google. Comprueba la configuración del proveedor Google en Supabase Auth.\n\n" + (error.message || "Error inesperado."));
-        boton.disabled = false;
-        boton.innerHTML = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.9c-.58 2.96-2.26 5.48-4.74 7.18l7.66 5.94c4.48-4.14 7.16-10.24 7.16-17.59z"/><path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.53 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.81l-7.66-5.94c-2.13 1.44-4.86 2.3-8.24 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Continuar con Google';
-    }
+  const boton = this;
+  boton.disabled = true;
+  boton.textContent = "Conectando con Google...";
+  try {
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: "https://fidelarcia09.github.io/gamevora/index.html",
+        queryParams: { prompt: "select_account" }
+      }
+    });
+    if (error) throw error;
+  } catch (error) {
+    console.error("Error al iniciar sesión con Google:", error);
+    alert("No se pudo iniciar sesión con Google. Comprueba la configuración del proveedor Google en Supabase Auth.\n\n" + (error.message || "Error inesperado."));
+    boton.disabled = false;
+    boton.innerHTML = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.9c-.58 2.96-2.26 5.48-4.74 7.18l7.66 5.94c4.48-4.14 7.16-10.24 7.16-17.59z"/><path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.53 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.81l-7.66-5.94c-2.13 1.44-4.86 2.3-8.24 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Continuar con Google';
+  }
 });
 
 document.getElementById("formLogin").addEventListener("submit", async function(event) {
+  event.preventDefault();
+  const correo = document.getElementById("correo").value.trim();
+  const contrasena = document.getElementById("contrasena").value;
+  const boton = document.getElementById("botonEntrar");
 
-    event.preventDefault();
+  if (!window.ggTurnstileToken) {
+    alert("Completa la verificación de seguridad antes de iniciar sesión.");
+    return;
+  }
 
-    const correo =
-        document.getElementById("correo").value.trim();
+  boton.disabled = true;
+  boton.textContent = "Iniciando sesión...";
 
-    const contrasena =
-        document.getElementById("contrasena").value;
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: correo,
+    password: contrasena,
+    options: { captchaToken: window.ggTurnstileToken }
+  });
 
-    const boton =
-        document.getElementById("botonEntrar");
+  if (error) {
+    window.ggTurnstileToken = "";
+    if (window.turnstile) window.turnstile.reset();
+    boton.disabled = false;
+    boton.textContent = "Iniciar sesión ⚡";
+    const mensaje = (error.message || "").toLowerCase();
 
-    if (!window.ggTurnstileToken) {
-        alert("Completa la verificación de seguridad antes de iniciar sesión.");
-        return;
+    if (mensaje.includes("email not confirmed") || mensaje.includes("email_not_confirmed") || mensaje.includes("correo no confirmado")) {
+      alert("📧 Correo no confirmado\n\nDebes confirmar tu correo electrónico antes de iniciar sesión.\n\nRevisa la bandeja de entrada de " + correo + " y también la carpeta de spam.");
+      return;
     }
+    alert("No se pudo iniciar sesión:\n\n" + error.message);
+    return;
+  }
 
-    boton.disabled = true;
-    boton.textContent = "Iniciando sesión...";
-
-    const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-            email: correo,
-            password: contrasena,
-            options: {
-                captchaToken: window.ggTurnstileToken
-            }
-        });
-
-    if (error) {
-
-        window.ggTurnstileToken = "";
-        if (window.turnstile) window.turnstile.reset();
-
-        boton.disabled = false;
-        boton.textContent = "Iniciar sesión ⚡";
-
-        const mensaje =
-            (error.message || "").toLowerCase();
-
-        if (
-            mensaje.includes("email not confirmed") ||
-            mensaje.includes("email_not_confirmed") ||
-            mensaje.includes("correo no confirmado")
-        ) {
-
-            alert(
-                "📧 Correo no confirmado\n\n" +
-                "Debes confirmar tu correo electrónico antes de iniciar sesión.\n\n" +
-                "Revisa la bandeja de entrada de " +
-                correo +
-                " y también la carpeta de spam."
-            );
-
-            return;
-        }
-
-        alert(
-            "No se pudo iniciar sesión:\n\n" +
-            error.message
-        );
-
-        return;
-    }
-
-    alert("¡Inicio de sesión correcto! ⚡");
-
-    window.location.href = "../index.html";
+  alert("¡Inicio de sesión correcto! ⚡");
+  window.location.href = "../index.html";
 });
 </script>
-
-
-
 </body>
 </html>
