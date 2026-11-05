@@ -67,48 +67,17 @@
             font: inherit;
         }
 
-        /* SPLASH */
-
-        #splash-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 999999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #020611;
-            opacity: 1;
-            transition: opacity .8s ease;
-        }
-
-        #splash-screen img {
-            display: block;
-            width: min(75vw, 360px);
-            max-width: 360px;
-            height: auto;
-            object-fit: contain;
-            filter:
-                drop-shadow(0 0 8px #00bfff)
-                drop-shadow(0 0 20px #008cff)
-                drop-shadow(0 0 35px rgba(0, 140, 255, .45));
-            animation: aparecerLogo 1s ease-out;
-        }
-
-        .splash-oculto {
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
-
-        @keyframes aparecerLogo {
-            from {
-                opacity: 0;
-                transform: scale(.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+        /* SPLASH 3D SIN IMÁGENES */
+        #splash-screen{position:fixed;inset:0;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;overflow:hidden;background:radial-gradient(ellipse at 50% 43%,rgba(0,119,255,.16),transparent 34%),radial-gradient(ellipse at 50% 100%,rgba(0,225,150,.07),transparent 45%),#020611;opacity:1;transition:opacity .8s ease}
+        #splash-screen::before{content:"";position:absolute;width:min(72vw,420px);aspect-ratio:1;border:1px solid rgba(32,197,255,.12);border-radius:50%;box-shadow:0 0 90px rgba(0,153,255,.08),inset 0 0 80px rgba(0,153,255,.05);pointer-events:none}
+        .splash-marca{position:relative;display:grid;place-items:center;width:clamp(150px,34vw,230px);aspect-ratio:1;perspective:900px;isolation:isolate}
+        .splash-marca::before{content:"";position:absolute;inset:14%;border-radius:50%;background:rgba(0,153,255,.2);filter:blur(38px);opacity:.8;animation:splashPulso 3.2s ease-in-out infinite}
+        .splash-marca span{position:relative;display:block;font-family:Georgia,"Times New Roman",serif;font-size:clamp(150px,34vw,220px);font-weight:900;font-style:italic;line-height:.9;letter-spacing:-.12em;padding-right:.12em;color:transparent;background:linear-gradient(145deg,#ffffff 5%,#b9edff 24%,#36caff 48%,#087cff 72%,#d9f8ff 91%);background-clip:text;-webkit-background-clip:text;-webkit-text-stroke:1px rgba(220,248,255,.65);text-shadow:1px 1px 0 #0878b8,2px 2px 0 #07649f,3px 3px 0 #064b7c,4px 4px 0 #06375f,5px 5px 0 #052844,0 0 14px rgba(32,197,255,.8),0 0 38px rgba(0,140,255,.55);transform:translateZ(-520px) scale(.18);filter:blur(16px);opacity:0;animation:splashGDesdeLejos 1.65s cubic-bezier(.16,.82,.22,1) .12s forwards}
+        .splash-frase{position:relative;margin:0;padding:0 18px;color:#43f29a;font-size:clamp(13px,3.5vw,17px);font-weight:800;letter-spacing:clamp(2px,.8vw,4px);text-align:center;text-transform:uppercase;text-shadow:0 0 9px rgba(67,242,154,.55),0 0 24px rgba(24,210,119,.28);opacity:0;transform:translateY(15px);animation:splashFraseEntra .8s ease-out 1.25s forwards}
+        .splash-oculto{opacity:0!important;pointer-events:none!important}
+        @keyframes splashGDesdeLejos{0%{opacity:0;transform:translateZ(-520px) scale(.18) rotateX(16deg);filter:blur(16px)}65%{opacity:1;filter:blur(0)}82%{transform:translateZ(18px) scale(1.035)}100%{opacity:1;transform:translateZ(0) scale(1);filter:blur(0)}}
+        @keyframes splashFraseEntra{to{opacity:1;transform:translateY(0)}}
+        @keyframes splashPulso{0%,100%{transform:scale(.82);opacity:.48}50%{transform:scale(1.12);opacity:.9}}
 
         /* CABECERA */
 
@@ -989,13 +958,7 @@
 <body>
     <!-- PANTALLA DE INICIO -->
 
-    <div id="splash-screen">
-        <img
-            src="./imagenes/file_000000004c9c81f58dd5cfed4a31afe4.png"
-            alt="Gamers Gold Top-Up"
-            loading="eager"
-        >
-    </div>
+    <div id="splash-screen" role="status" aria-label="Gamers Gold Top-Up"><div class="splash-marca" aria-hidden="true"><span>G</span></div><p class="splash-frase">Prepárate para la acción</p></div>
 
     <!-- CABECERA -->
 
