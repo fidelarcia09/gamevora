@@ -1452,9 +1452,8 @@
                 </summary>
             </details>
 
-            <!-- SEGURIDAD -->
-
-            <details class="acordeon">
+            <!-- SEGURIDAD: abre una pantalla independiente -->
+            <details class="acordeon" id="bloqueSeguridad">
                 <summary>
                     <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"></path>
@@ -1465,64 +1464,7 @@
                         <path d="m6 9 6 6 6-6"></path>
                     </svg>
                 </summary>
-
-                <div class="contenido-acordeon">
-                    <form id="formCambiarContrasena" novalidate>
-                        <p class="texto-ayuda">
-                            Para cambiar la contraseña, confirma primero la contraseña actual de esta misma cuenta.
-                        </p>
-
-                        <div class="campo-seguridad">
-                            <label for="contrasenaActual">Contraseña actual</label>
-                            <input
-                                type="password"
-                                id="contrasenaActual"
-                                name="current-password"
-                                autocomplete="current-password"
-                                placeholder="Introduce tu contraseña actual"
-                                required
-                            >
-                        </div>
-
-                        <div class="campo-seguridad">
-                            <label for="nuevaContrasena">Nueva contraseña</label>
-                            <input
-                                type="password"
-                                id="nuevaContrasena"
-                                name="new-password"
-                                autocomplete="new-password"
-                                minlength="8"
-                                placeholder="Crea una nueva contraseña"
-                                required
-                            >
-                            <p class="ayuda-campo">Usa al menos 8 caracteres.</p>
-                        </div>
-
-                        <div class="campo-seguridad">
-                            <label for="confirmarContrasena">Confirmar contraseña</label>
-                            <input
-                                type="password"
-                                id="confirmarContrasena"
-                                name="confirm-new-password"
-                                autocomplete="new-password"
-                                minlength="8"
-                                placeholder="Repite la nueva contraseña"
-                                required
-                            >
-                        </div>
-
-                        <p id="estadoCambiarContrasena" class="estado-seguridad" role="status" aria-live="polite"></p>
-
-                        <button type="submit" id="botonCambiarContrasena" class="boton">
-                            <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
-                                <rect x="3" y="11" width="18" height="11" rx="2"></rect>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                            </svg>
-                            <span id="textoCambiarContrasena">Actualizar contraseña</span>
-                        </button>
-                    </form>
-                </div>
-                </details>
+            </details>
             </div>
 
             <h2 class="titulo-seccion-cuenta">Ayuda</h2>
@@ -1806,6 +1748,67 @@
             <span>Los cambios de Gmail y teléfono requieren confirmar un código enviado al Gmail que tienes actualmente registrado.</span>
         </div>
     </section>
+
+        <section id="pantallaSeguridad" class="pantalla-datos-personales" hidden aria-labelledby="tituloPantallaSeguridad">
+            <h1 id="tituloPantallaSeguridad" style="text-align:left;font-size:24px;margin:4px 0 8px;">Seguridad</h1>
+            <p class="datos-intro">Protege tu cuenta y mantén segura tu contraseña de Gamers Gold.</p>
+            <div class="datos-panel seguridad-panel">
+                <form id="formCambiarContrasena" novalidate>
+                    <p class="texto-ayuda">
+                        Para cambiar la contraseña, confirma primero la contraseña actual de esta misma cuenta.
+                    </p>
+
+                    <div class="campo-seguridad">
+                        <label for="contrasenaActual">Contraseña actual</label>
+                        <input
+                            type="password"
+                            id="contrasenaActual"
+                            name="current-password"
+                            autocomplete="current-password"
+                            placeholder="Introduce tu contraseña actual"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo-seguridad">
+                        <label for="nuevaContrasena">Nueva contraseña</label>
+                        <input
+                            type="password"
+                            id="nuevaContrasena"
+                            name="new-password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            placeholder="Crea una nueva contraseña"
+                            required
+                        >
+                        <p class="ayuda-campo">Usa al menos 8 caracteres.</p>
+                    </div>
+
+                    <div class="campo-seguridad">
+                        <label for="confirmarContrasena">Confirmar contraseña</label>
+                        <input
+                            type="password"
+                            id="confirmarContrasena"
+                            name="confirm-new-password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            placeholder="Repite la nueva contraseña"
+                            required
+                        >
+                    </div>
+
+                    <p id="estadoCambiarContrasena" class="estado-seguridad" role="status" aria-live="polite"></p>
+
+                    <button type="submit" id="botonCambiarContrasena" class="boton">
+                        <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span id="textoCambiarContrasena">Actualizar contraseña</span>
+                    </button>
+                </form>
+            </div>
+        </section>
 
 </div>
 
@@ -3103,7 +3106,9 @@ const botonVolverCuenta = document.getElementById("botonVolverCuenta");
 const tituloEncabezadoCuenta = document.getElementById("tituloEncabezadoCuenta");
 const contenidoCuenta = document.getElementById("contenidoCuenta");
 const pantallaDatosPersonales = document.getElementById("pantallaDatosPersonales");
+const pantallaSeguridad = document.getElementById("pantallaSeguridad");
 const bloqueDatosPersonales = document.querySelector(".grupo-cuenta > .acordeon");
+const bloqueSeguridad = document.getElementById("bloqueSeguridad");
 let usuarioDatosActual = null;
 let correoReautenticadoParaCambio = false;
 
@@ -3136,13 +3141,23 @@ function abrirPantallaDatosPersonales() {
     // No trasladar el bloque antiguo de WhatsApp: el número se muestra una sola vez
     // en telefonoDatosPersonales y el cambio se realiza con el formulario verificado.
     contenidoCuenta.hidden = true;
+    pantallaSeguridad.hidden = true;
     pantallaDatosPersonales.hidden = false;
     tituloEncabezadoCuenta.textContent = "Datos personales";
     document.title = "Datos personales | Gamers Gold Top-Up";
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
+function abrirPantallaSeguridad() {
+    contenidoCuenta.hidden = true;
+    pantallaDatosPersonales.hidden = true;
+    pantallaSeguridad.hidden = false;
+    tituloEncabezadoCuenta.textContent = "Seguridad";
+    document.title = "Seguridad | Gamers Gold Top-Up";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
 function volverAMiCuenta() {
     pantallaDatosPersonales.hidden = true;
+    pantallaSeguridad.hidden = true;
     contenidoCuenta.hidden = false;
     tituloEncabezadoCuenta.textContent = "Mi cuenta";
     document.title = "Mi cuenta | Gamers Gold Top-Up";
@@ -3152,6 +3167,12 @@ if (bloqueDatosPersonales) {
     bloqueDatosPersonales.querySelector("summary").addEventListener("click", event => {
         event.preventDefault();
         abrirPantallaDatosPersonales();
+    });
+}
+if (bloqueSeguridad) {
+    bloqueSeguridad.querySelector("summary").addEventListener("click", event => {
+        event.preventDefault();
+        abrirPantallaSeguridad();
     });
 }
 botonVolverCuenta.addEventListener("click", volverAMiCuenta);
