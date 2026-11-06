@@ -3321,7 +3321,16 @@ document.getElementById("confirmarTelefonoDatos").addEventListener("click", asyn
         const { data, error } = await supabaseClient.functions.invoke("actualizar-telefono-cuenta", {
             body: { token, phone: numero }
         });
-        if (error) throw error;
+        if (error) {
+            let mensaje = error.message || "No se pudo completar la solicitud.";
+            // Supabase devuelve el detalle seguro de la Edge Function dentro de context.
+            // Leerlo permite mostrar el motivo real en vez del mensaje genérico non-2xx.
+            if (error.context && typeof error.context.json === "function") {
+                const respuesta = await error.context.json().catch(() => null);
+                if (respuesta?.error) mensaje = respuesta.error;
+            }
+            throw new Error(mensaje);
+        }
         if (data?.error) throw new Error(data.error);
         document.getElementById("telefonoDatosPersonales").textContent = numero;
         document.getElementById("whatsappRegistrado").textContent = numero;
