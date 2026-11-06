@@ -1839,7 +1839,7 @@
                         <button class="boton-secundario-datos" type="button" data-cancelar="editorCorreoDatos">Cancelar</button>
                     </div>
                     <div id="pasoCodigoCorreoDatos" hidden>
-                        <input id="codigoCorreoDatos" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Código de 8 dígitos">
+                        <input id="codigoCorreoDatos" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Código de 6 dígitos">
                         <div class="datos-editor-acciones">
                             <button class="boton" id="confirmarCorreoDatos" type="button">Verificar y cambiar Gmail</button>
                         </div>
@@ -1860,7 +1860,7 @@
                     <form id="formEditarTelefonoDatos">
                         <input id="nuevoTelefonoDatos" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="+12345678900" required>
                         <p class="texto-ayuda">Enviaremos un código al Gmail actual de tu cuenta. El número actualizado seguirá siendo tu WhatsApp de verificación.</p>
-                        <input id="codigoTelefonoDatos" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Código recibido en tu Gmail">
+                        <input id="codigoTelefonoDatos" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Código recibido en tu Gmail">
                         <div class="datos-editor-acciones">
                             <button class="boton" id="enviarCodigoTelefonoDatos" type="button">Enviar código al Gmail actual</button>
                             <button class="boton" id="confirmarTelefonoDatos" type="button">Verificar y guardar teléfono</button>
@@ -3517,7 +3517,7 @@ document.getElementById("enviarCodigoCorreoDatos").addEventListener("click", asy
         const { error } = await supabaseClient.auth.reauthenticate();
         if (error) throw error;
         document.getElementById("pasoCodigoCorreoDatos").hidden = false;
-        mostrarEstadoDatos("estadoCorreoDatos", "Código enviado al Gmail actual. Introduce los 8 dígitos recibidos.");
+        mostrarEstadoDatos("estadoCorreoDatos", "Código enviado al Gmail actual. Introduce los 6 dígitos recibidos.");
     } catch (error) {
         mostrarEstadoDatos("estadoCorreoDatos", error.message || "No se pudo enviar el código.", "error");
     } finally {
@@ -3528,8 +3528,8 @@ document.getElementById("enviarCodigoCorreoDatos").addEventListener("click", asy
 document.getElementById("confirmarCorreoDatos").addEventListener("click", async () => {
     const token = document.getElementById("codigoCorreoDatos").value.trim();
     const nuevoCorreo = document.getElementById("nuevoCorreoDatos").value.trim().toLowerCase();
-    if (!/^\d{8}$/.test(token)) {
-        mostrarEstadoDatos("estadoCorreoDatos", "Introduce el código completo de 8 dígitos.", "error");
+    if (!/^\d{6}$/.test(token)) {
+        mostrarEstadoDatos("estadoCorreoDatos", "Introduce el código completo de 6 dígitos.", "error");
         return;
     }
     const boton = document.getElementById("confirmarCorreoDatos");
@@ -3588,8 +3588,8 @@ document.getElementById("confirmarTelefonoDatos").addEventListener("click", asyn
         mostrarEstadoDatos("estadoTelefonoDatos", "Escribe un número internacional válido.", "error");
         return;
     }
-    if (!/^\d{8}$/.test(token)) {
-        mostrarEstadoDatos("estadoTelefonoDatos", "Introduce el código completo de 8 dígitos.", "error");
+    if (!/^\d{6}$/.test(token)) {
+        mostrarEstadoDatos("estadoTelefonoDatos", "Introduce el código completo de 6 dígitos.", "error");
         return;
     }
     const boton = document.getElementById("confirmarTelefonoDatos");
