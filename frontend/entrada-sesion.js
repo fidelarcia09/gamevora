@@ -10,5 +10,5 @@
   window.setTimeout(function(){
     loader.classList.add("gg-session-out");
     window.setTimeout(function(){loader.remove();},600);
-  },3000);
+  },1500);
 })();
