@@ -709,7 +709,22 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
     </div>
   </div>
 </div>
-"stylesheet" href="./entrada-sesion.css?v=20261106-1">
+<script>
+(function(){
+  try{
+    var key="gamersGoldPantallasVisto";
+    if(sessionStorage.getItem(key)==="true"){
+      document.documentElement.classList.add("gg-session-seen");
+    }else{
+      sessionStorage.setItem(key,"true");
+      document.documentElement.classList.add("gg-session-play");
+    }
+  }catch(error){
+    document.documentElement.classList.add("gg-session-play");
+  }
+})();
+</script>
+<link rel="stylesheet" href="./entrada-sesion.css?v=20261106-1">
     <script src="./entrada-sesion.js?v=20261106-1" defer></script>
 </head>
 
