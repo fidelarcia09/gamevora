@@ -2686,6 +2686,8 @@ async function cargarWhatsApp(userId, mostrarConfirmacion = false) {
         whatsappRegistrado.hidden = false;
         const telefonoVista = document.getElementById("telefonoDatosPersonales");
         if (telefonoVista) telefonoVista.textContent = data.whatsapp_number;
+        const botonTelefono = document.getElementById("editarTelefonoDatos");
+        if (botonTelefono) botonTelefono.textContent = "Cambiar";
         formWhatsApp.hidden = true;
 
         if (mostrarConfirmacion) {
@@ -2703,9 +2705,14 @@ async function cargarWhatsApp(userId, mostrarConfirmacion = false) {
         return;
     }
 
-    formWhatsApp.hidden = false;
+    // El registro y los cambios de teléfono pasan por la verificación del Gmail actual.
+    formWhatsApp.hidden = true;
     estadoWhatsApp.className = "estado-seguridad";
     estadoWhatsApp.textContent = "";
+    const telefonoVista = document.getElementById("telefonoDatosPersonales");
+    if (telefonoVista) telefonoVista.textContent = "Aún no registrado";
+    const botonTelefono = document.getElementById("editarTelefonoDatos");
+    if (botonTelefono) botonTelefono.textContent = "Añadir";
 }
 
 formWhatsApp.addEventListener("submit", async function(event) {
@@ -3116,13 +3123,8 @@ function abrirPantallaDatosPersonales() {
     document.getElementById("nombreDatosPersonales").textContent = nombre;
     document.getElementById("correoDatosPersonales").textContent = correo;
     document.getElementById("telefonoDatosPersonales").textContent = numeroWhatsApp || "Aún no registrado";
-    const bloqueWhatsApp = document.getElementById("bloqueWhatsApp");
-    const contenedorTelefono = document.getElementById("contenedorTelefonoDatos");
-    if (bloqueWhatsApp && contenedorTelefono && !contenedorTelefono.contains(bloqueWhatsApp)) {
-        contenedorTelefono.appendChild(bloqueWhatsApp);
-    }
-    const tituloTelefono = bloqueWhatsApp?.querySelector(".dato-titulo");
-    if (tituloTelefono) tituloTelefono.textContent = "Número registrado para WhatsApp";
+    // No trasladar el bloque antiguo de WhatsApp: el número se muestra una sola vez
+    // en telefonoDatosPersonales y el cambio se realiza con el formulario verificado.
     contenidoCuenta.hidden = true;
     pantallaDatosPersonales.hidden = false;
     tituloEncabezadoCuenta.textContent = "Datos personales";
@@ -3294,6 +3296,7 @@ document.getElementById("confirmarTelefonoDatos").addEventListener("click", asyn
         document.getElementById("whatsappRegistrado").textContent = numero;
         document.getElementById("whatsappRegistrado").hidden = false;
         document.getElementById("formWhatsApp").hidden = true;
+        document.getElementById("editarTelefonoDatos").textContent = "Cambiar";
         usuarioDatosActual = (await supabaseClient.auth.getUser()).data.user || usuarioDatosActual;
         mostrarEstadoDatos("estadoTelefonoDatos", "Número de teléfono y WhatsApp actualizado correctamente.", "exito");
         cerrarEditorDatos("editorTelefonoDatos");
