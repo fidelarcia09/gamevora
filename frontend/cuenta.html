@@ -444,9 +444,9 @@
         transition: transform 0.2s ease;
     }
 
-    .acordeon[open] .icono-flecha {
-        transform: rotate(180deg);
-    }
+    /* Los indicadores apuntan hacia la derecha y giran hacia abajo al abrir. */
+    .acordeon .icono-flecha { transform: rotate(-90deg); }
+    .acordeon[open] .icono-flecha { transform: rotate(0deg); }
 
     .contenido-acordeon {
         padding: 4px 5px 0 41px;
@@ -1108,7 +1108,7 @@
 .header:has(.boton-atras){flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:12px}
 
 /* Encabezado unificado con flecha y nombre de página */
-.encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras,header .encabezado-pagina~.boton-atras,.header .encabezado-pagina~.boton-atras{display:none!important}
+.encabezado-pagina{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;padding:0;border:0;border-radius:0;background:transparent!important;box-shadow:none!important;color:#eaf7ff;text-decoration:none;font:800 15px/1.2 Arial,sans-serif;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}.encabezado-pagina:hover,.encabezado-pagina:active{background:transparent!important;box-shadow:none!important}.encabezado-pagina:focus,.encabezado-pagina:focus-visible{outline:2px solid #35caff;outline-offset:4px;border-radius:8px}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras,header .encabezado-pagina~.boton-atras,.header .encabezado-pagina~.boton-atras{display:none!important}
 
     /* Título de sección: mismo indicador visual que Anuncios en Inicio */
 
@@ -1169,6 +1169,53 @@
         opacity: .65;
         cursor: not-allowed;
     }
+    .datos-editor {
+        display: none;
+        padding: 0 14px 15px;
+    }
+    .datos-editor.visible { display: block; }
+    .datos-editor input {
+        width: 100%;
+        min-height: 43px;
+        padding: 11px 12px;
+        border: 1px solid #214b70;
+        border-radius: 9px;
+        background: #061226;
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+    }
+    .datos-editor input:focus {
+        border-color: #00baff;
+        box-shadow: 0 0 0 2px rgba(0,186,255,.12);
+    }
+    .datos-editor-acciones {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    .datos-editor-acciones .boton { margin-top: 0; }
+    .boton-secundario-datos {
+        min-height: 42px;
+        padding: 10px 13px;
+        border: 1px solid #31506f;
+        border-radius: 9px;
+        background: #0b1b31;
+        color: #b7cce2;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    .datos-estado {
+        margin-top: 9px;
+        color: #91a8c3;
+        font-size: 12px;
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+    }
+    .datos-estado.error { color: #ff8195; }
+    .datos-estado.exito { color: #68df8c; }
+
     .datos-seguridad {
         display: flex;
         align-items: flex-start;
@@ -1362,18 +1409,18 @@
                     </div>
 
                     <div class="dato" id="bloqueWhatsApp">
-                        <div class="dato-titulo">Número de WhatsApp</div>
+                        <div class="dato-titulo">Número registrado para WhatsApp</div>
                         <div id="whatsappRegistrado" class="dato-valor" hidden></div>
                         <form id="formWhatsApp" novalidate>
-                            <p class="texto-ayuda">Añade tu número con el código de país (por ejemplo, +1...). Se guardará una sola vez y no podrás editarlo ni eliminarlo. Lo usaremos como dato de contacto para revisar posibles fraudes.</p>
+                            <p class="texto-ayuda">Añade tu número con el código de país (por ejemplo, +1...). Este será también el número de teléfono de tu cuenta. Para cambiarlo, utiliza la verificación de seguridad de Datos personales.</p>
                             <div class="campo-seguridad">
-                                <label for="numeroWhatsApp">WhatsApp con código de país</label>
+                                <label for="numeroWhatsApp">Número de teléfono con código de país</label>
                                 <input id="numeroWhatsApp" name="numeroWhatsApp" type="tel"
                                     inputmode="tel" autocomplete="tel" maxlength="20"
                                     placeholder="+12345678900" required>
                                 <span class="ayuda-campo">Incluye el signo + y el código del país.</span>
                             </div>
-                            <button class="boton" id="guardarWhatsApp" type="submit">Guardar número de WhatsApp</button>
+                            <button class="boton" id="guardarWhatsApp" type="submit">Guardar número de teléfono</button>
                         </form>
                         <p id="estadoWhatsApp" class="estado-seguridad" role="status" aria-live="polite"></p>
                     </div>
@@ -1674,7 +1721,7 @@
 
     <section id="pantallaDatosPersonales" class="pantalla-datos-personales" hidden aria-labelledby="tituloDatosPersonales">
         <h1 id="tituloDatosPersonales" style="text-align:left;font-size:24px;margin:4px 0 8px;">Datos personales</h1>
-        <p class="datos-intro">Consulta la información vinculada a tu cuenta de Gamers Gold.</p>
+        <p class="datos-intro">Administra la información vinculada a tu cuenta de Gamers Gold.</p>
 
         <div class="datos-panel">
             <div class="datos-campo">
@@ -1682,29 +1729,71 @@
                     <span class="datos-campo-etiqueta">Nombre de usuario</span>
                     <div class="datos-campo-valor" id="nombreDatosPersonales">Cargando...</div>
                 </div>
-                <button class="datos-editar" type="button" disabled>Próximamente</button>
+                <button class="datos-editar" id="editarNombreDatos" type="button">Editar</button>
             </div>
+            <div class="datos-editor" id="editorNombreDatos">
+                <form id="formEditarNombreDatos">
+                    <input id="nuevoNombreDatos" type="text" maxlength="30" autocomplete="nickname" placeholder="Nuevo nombre de usuario" required>
+                    <div class="datos-editor-acciones">
+                        <button class="boton" type="submit">Guardar nombre</button>
+                        <button class="boton-secundario-datos" type="button" data-cancelar="editorNombreDatos">Cancelar</button>
+                    </div>
+                    <p class="datos-estado" id="estadoNombreDatos" role="status" aria-live="polite"></p>
+                </form>
+            </div>
+
             <div class="datos-campo">
                 <div class="datos-campo-info">
                     <span class="datos-campo-etiqueta">Gmail</span>
                     <div class="datos-campo-valor" id="correoDatosPersonales">Cargando...</div>
                 </div>
-                <button class="datos-editar" type="button" disabled>Próximamente</button>
+                <button class="datos-editar" id="editarCorreoDatos" type="button">Cambiar</button>
             </div>
+            <div class="datos-editor" id="editorCorreoDatos">
+                <form id="formEditarCorreoDatos">
+                    <input id="nuevoCorreoDatos" type="email" maxlength="254" autocomplete="email" placeholder="Nuevo Gmail" required>
+                    <p class="texto-ayuda">Primero enviaremos un código al correo actual. Después tendrás que confirmar el nuevo correo según las instrucciones de Supabase.</p>
+                    <div class="datos-editor-acciones">
+                        <button class="boton" id="enviarCodigoCorreoDatos" type="button">Enviar código al Gmail actual</button>
+                        <button class="boton-secundario-datos" type="button" data-cancelar="editorCorreoDatos">Cancelar</button>
+                    </div>
+                    <div id="pasoCodigoCorreoDatos" hidden>
+                        <input id="codigoCorreoDatos" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Código de 6 dígitos">
+                        <div class="datos-editor-acciones">
+                            <button class="boton" id="confirmarCorreoDatos" type="button">Verificar y cambiar Gmail</button>
+                        </div>
+                    </div>
+                    <p class="datos-estado" id="estadoCorreoDatos" role="status" aria-live="polite"></p>
+                </form>
+            </div>
+
             <div id="contenedorTelefonoDatos">
                 <div class="datos-campo">
                     <div class="datos-campo-info">
                         <span class="datos-campo-etiqueta">Número de teléfono</span>
-                        <div class="datos-campo-valor" id="telefonoDatosPersonales">Se mostrará aquí</div>
+                        <div class="datos-campo-valor" id="telefonoDatosPersonales">Aún no registrado</div>
                     </div>
-                    <button class="datos-editar" type="button" disabled>Próximamente</button>
+                    <button class="datos-editar" id="editarTelefonoDatos" type="button">Cambiar</button>
+                </div>
+                <div class="datos-editor" id="editorTelefonoDatos">
+                    <form id="formEditarTelefonoDatos">
+                        <input id="nuevoTelefonoDatos" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="+12345678900" required>
+                        <p class="texto-ayuda">Enviaremos un código al Gmail actual de tu cuenta. El número actualizado seguirá siendo tu WhatsApp de verificación.</p>
+                        <input id="codigoTelefonoDatos" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Código recibido en tu Gmail">
+                        <div class="datos-editor-acciones">
+                            <button class="boton" id="enviarCodigoTelefonoDatos" type="button">Enviar código al Gmail actual</button>
+                            <button class="boton" id="confirmarTelefonoDatos" type="button">Verificar y guardar teléfono</button>
+                            <button class="boton-secundario-datos" type="button" data-cancelar="editorTelefonoDatos">Cancelar</button>
+                        </div>
+                        <p class="datos-estado" id="estadoTelefonoDatos" role="status" aria-live="polite"></p>
+                    </form>
                 </div>
             </div>
         </div>
 
         <div class="datos-seguridad">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"></path><path d="m9 12 2 2 4-4"></path></svg>
-            <span>Para proteger tu cuenta, los cambios de Gmail y teléfono requerirán un código de confirmación enviado a tu Gmail actual. Esta función se activará más adelante.</span>
+            <span>Los cambios de Gmail y teléfono requieren confirmar un código enviado al Gmail que tienes actualmente registrado.</span>
         </div>
     </section>
 
@@ -2757,6 +2846,7 @@ async function cargarCuenta() {
     }
 
     const usuario = data.user;
+    usuarioDatosActual = usuario;
 
     await cargarWhatsApp(usuario.id);
 
@@ -2989,8 +3079,7 @@ document
 
 
 /* ==========================================
-   NAVEGACIÓN DE DATOS PERSONALES
-   Solo presentación: no modifica datos ni Auth.
+   DATOS PERSONALES: EDICIÓN Y VERIFICACIÓN
 ========================================== */
 
 const botonVolverCuenta = document.getElementById("botonVolverCuenta");
@@ -2998,33 +3087,48 @@ const tituloEncabezadoCuenta = document.getElementById("tituloEncabezadoCuenta")
 const contenidoCuenta = document.getElementById("contenidoCuenta");
 const pantallaDatosPersonales = document.getElementById("pantallaDatosPersonales");
 const bloqueDatosPersonales = document.querySelector(".grupo-cuenta > .acordeon");
+let usuarioDatosActual = null;
+let correoReautenticadoParaCambio = false;
+
+function mostrarEstadoDatos(id, mensaje, tipo = "") {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = mensaje;
+    el.className = "datos-estado" + (tipo ? " " + tipo : "");
+}
+
+function abrirEditorDatos(id) {
+    document.getElementById(id)?.classList.add("visible");
+}
+function cerrarEditorDatos(id) {
+    document.getElementById(id)?.classList.remove("visible");
+    const form = document.querySelector("#" + id + " form");
+    if (form) form.reset();
+}
+document.querySelectorAll("[data-cancelar]").forEach(boton => {
+    boton.addEventListener("click", () => cerrarEditorDatos(boton.dataset.cancelar));
+});
 
 function abrirPantallaDatosPersonales() {
     const nombre = document.getElementById("nombreUsuario")?.textContent || "Usuario";
     const correo = document.getElementById("correoUsuario")?.textContent || "Sin correo";
     const numeroWhatsApp = document.getElementById("whatsappRegistrado")?.textContent || "";
-
     document.getElementById("nombreDatosPersonales").textContent = nombre;
     document.getElementById("correoDatosPersonales").textContent = correo;
-    document.getElementById("telefonoDatosPersonales").textContent =
-        numeroWhatsApp || "Aún no registrado";
-
-    // Conserva el formulario existente para registrar el WhatsApp si todavía no existe.
+    document.getElementById("telefonoDatosPersonales").textContent = numeroWhatsApp || "Aún no registrado";
     const bloqueWhatsApp = document.getElementById("bloqueWhatsApp");
     const contenedorTelefono = document.getElementById("contenedorTelefonoDatos");
     if (bloqueWhatsApp && contenedorTelefono && !contenedorTelefono.contains(bloqueWhatsApp)) {
         contenedorTelefono.appendChild(bloqueWhatsApp);
     }
     const tituloTelefono = bloqueWhatsApp?.querySelector(".dato-titulo");
-    if (tituloTelefono) tituloTelefono.textContent = "Número de teléfono";
-
+    if (tituloTelefono) tituloTelefono.textContent = "Número registrado para WhatsApp";
     contenidoCuenta.hidden = true;
     pantallaDatosPersonales.hidden = false;
     tituloEncabezadoCuenta.textContent = "Datos personales";
     document.title = "Datos personales | Gamers Gold Top-Up";
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
 function volverAMiCuenta() {
     pantallaDatosPersonales.hidden = true;
     contenidoCuenta.hidden = false;
@@ -3032,16 +3136,173 @@ function volverAMiCuenta() {
     document.title = "Mi cuenta | Gamers Gold Top-Up";
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
 if (bloqueDatosPersonales) {
-    const resumenDatos = bloqueDatosPersonales.querySelector("summary");
-    resumenDatos.addEventListener("click", function(event) {
+    bloqueDatosPersonales.querySelector("summary").addEventListener("click", event => {
         event.preventDefault();
         abrirPantallaDatosPersonales();
     });
 }
-
 botonVolverCuenta.addEventListener("click", volverAMiCuenta);
+
+document.getElementById("editarNombreDatos").addEventListener("click", () => abrirEditorDatos("editorNombreDatos"));
+document.getElementById("editarCorreoDatos").addEventListener("click", () => {
+    correoReautenticadoParaCambio = false;
+    document.getElementById("pasoCodigoCorreoDatos").hidden = true;
+    abrirEditorDatos("editorCorreoDatos");
+});
+document.getElementById("editarTelefonoDatos").addEventListener("click", () => {
+    document.getElementById("codigoTelefonoDatos").value = "";
+    abrirEditorDatos("editorTelefonoDatos");
+});
+
+document.getElementById("formEditarNombreDatos").addEventListener("submit", async event => {
+    event.preventDefault();
+    const input = document.getElementById("nuevoNombreDatos");
+    const nombre = input.value.trim().replace(/\s+/g, " ");
+    const boton = event.submitter;
+    if (nombre.length < 3 || nombre.length > 30) {
+        mostrarEstadoDatos("estadoNombreDatos", "El nombre debe tener entre 3 y 30 caracteres.", "error");
+        return;
+    }
+    if (!usuarioDatosActual) return;
+    boton.disabled = true;
+    mostrarEstadoDatos("estadoNombreDatos", "Guardando nombre...");
+    try {
+        const { data, error } = await supabaseClient.auth.updateUser({
+            data: { ...usuarioDatosActual.user_metadata, username: nombre }
+        });
+        if (error) throw error;
+        usuarioDatosActual = data.user;
+        document.getElementById("nombreUsuario").textContent = nombre;
+        document.getElementById("nombrePerfilResumen").textContent = nombre;
+        document.getElementById("nombreDatosPersonales").textContent = nombre;
+        mostrarEstadoDatos("estadoNombreDatos", "Nombre de usuario actualizado.", "exito");
+        cerrarEditorDatos("editorNombreDatos");
+    } catch (error) {
+        mostrarEstadoDatos("estadoNombreDatos", error.message || "No se pudo actualizar el nombre.", "error");
+    } finally {
+        boton.disabled = false;
+    }
+});
+
+// El código se envía al correo actual mediante la reautenticación nativa de Supabase.
+document.getElementById("enviarCodigoCorreoDatos").addEventListener("click", async () => {
+    const nuevoCorreo = document.getElementById("nuevoCorreoDatos").value.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(nuevoCorreo)) {
+        mostrarEstadoDatos("estadoCorreoDatos", "Escribe un correo válido.", "error");
+        return;
+    }
+    if (nuevoCorreo === (usuarioDatosActual?.email || "").toLowerCase()) {
+        mostrarEstadoDatos("estadoCorreoDatos", "Ese ya es tu correo actual.", "error");
+        return;
+    }
+    const boton = document.getElementById("enviarCodigoCorreoDatos");
+    boton.disabled = true;
+    mostrarEstadoDatos("estadoCorreoDatos", "Enviando código al Gmail actual...");
+    try {
+        const { error } = await supabaseClient.auth.reauthenticate();
+        if (error) throw error;
+        document.getElementById("pasoCodigoCorreoDatos").hidden = false;
+        mostrarEstadoDatos("estadoCorreoDatos", "Código enviado al Gmail actual. Introduce los 6 dígitos.");
+    } catch (error) {
+        mostrarEstadoDatos("estadoCorreoDatos", error.message || "No se pudo enviar el código.", "error");
+    } finally {
+        boton.disabled = false;
+    }
+});
+
+document.getElementById("confirmarCorreoDatos").addEventListener("click", async () => {
+    const token = document.getElementById("codigoCorreoDatos").value.trim();
+    const nuevoCorreo = document.getElementById("nuevoCorreoDatos").value.trim().toLowerCase();
+    if (!/^\d{6}$/.test(token)) {
+        mostrarEstadoDatos("estadoCorreoDatos", "Introduce el código de 6 dígitos.", "error");
+        return;
+    }
+    const boton = document.getElementById("confirmarCorreoDatos");
+    boton.disabled = true;
+    mostrarEstadoDatos("estadoCorreoDatos", "Verificando código...");
+    try {
+        const { error: errorOtp } = await supabaseClient.auth.verifyOtp({
+            email: usuarioDatosActual.email,
+            token,
+            type: "reauthentication"
+        });
+        if (errorOtp) throw errorOtp;
+        const { data, error } = await supabaseClient.auth.updateUser({ email: nuevoCorreo });
+        if (error) throw error;
+        usuarioDatosActual = data.user || usuarioDatosActual;
+        mostrarEstadoDatos("estadoCorreoDatos", "Código correcto. Supabase ha iniciado la confirmación del nuevo correo; revisa los mensajes que te envíe.", "exito");
+        cerrarEditorDatos("editorCorreoDatos");
+        const { data: actual } = await supabaseClient.auth.getUser();
+        if (actual?.user) {
+            usuarioDatosActual = actual.user;
+            document.getElementById("correoDatosPersonales").textContent = actual.user.email || nuevoCorreo;
+            document.getElementById("correoUsuario").textContent = actual.user.email || nuevoCorreo;
+        }
+    } catch (error) {
+        mostrarEstadoDatos("estadoCorreoDatos", error.message || "No se pudo cambiar el correo.", "error");
+    } finally {
+        boton.disabled = false;
+    }
+});
+
+// El teléfono se actualiza en la tabla existente solo después de verificar el OTP
+// de reautenticación en una Edge Function con service role; no se habilita UPDATE público en RLS.
+document.getElementById("enviarCodigoTelefonoDatos").addEventListener("click", async () => {
+    const numero = String(document.getElementById("nuevoTelefonoDatos").value || "").replace(/[\s().-]/g, "");
+    if (!/^\+[1-9]\d{6,14}$/.test(numero)) {
+        mostrarEstadoDatos("estadoTelefonoDatos", "Escribe el número internacional con + y código de país.", "error");
+        return;
+    }
+    const boton = document.getElementById("enviarCodigoTelefonoDatos");
+    boton.disabled = true;
+    mostrarEstadoDatos("estadoTelefonoDatos", "Enviando código al Gmail actual...");
+    try {
+        const { error } = await supabaseClient.auth.reauthenticate();
+        if (error) throw error;
+        mostrarEstadoDatos("estadoTelefonoDatos", "Código enviado al Gmail actual. Introdúcelo y pulsa Verificar y guardar teléfono.");
+    } catch (error) {
+        mostrarEstadoDatos("estadoTelefonoDatos", error.message || "No se pudo enviar el código.", "error");
+    } finally {
+        boton.disabled = false;
+    }
+});
+document.getElementById("confirmarTelefonoDatos").addEventListener("click", async () => {
+    const numero = String(document.getElementById("nuevoTelefonoDatos").value || "").replace(/[\s().-]/g, "");
+    const token = document.getElementById("codigoTelefonoDatos").value.trim();
+    if (!/^\+[1-9]\d{6,14}$/.test(numero)) {
+        mostrarEstadoDatos("estadoTelefonoDatos", "Escribe un número internacional válido.", "error");
+        return;
+    }
+    if (!/^\d{6}$/.test(token)) {
+        mostrarEstadoDatos("estadoTelefonoDatos", "Introduce el código de 6 dígitos.", "error");
+        return;
+    }
+    const boton = document.getElementById("confirmarTelefonoDatos");
+    boton.disabled = true;
+    mostrarEstadoDatos("estadoTelefonoDatos", "Verificando código y actualizando número...");
+    try {
+        const { data: sesionData, error: sesionError } = await supabaseClient.auth.getSession();
+        const accessToken = sesionData.session?.access_token;
+        if (sesionError || !accessToken) throw new Error("Tu sesión ha expirado. Inicia sesión nuevamente.");
+        const { data, error } = await supabaseClient.functions.invoke("actualizar-telefono-cuenta", {
+            body: { token, phone: numero }
+        });
+        if (error) throw error;
+        if (data?.error) throw new Error(data.error);
+        document.getElementById("telefonoDatosPersonales").textContent = numero;
+        document.getElementById("whatsappRegistrado").textContent = numero;
+        document.getElementById("whatsappRegistrado").hidden = false;
+        document.getElementById("formWhatsApp").hidden = true;
+        usuarioDatosActual = (await supabaseClient.auth.getUser()).data.user || usuarioDatosActual;
+        mostrarEstadoDatos("estadoTelefonoDatos", "Número de teléfono y WhatsApp actualizado correctamente.", "exito");
+        cerrarEditorDatos("editorTelefonoDatos");
+    } catch (error) {
+        mostrarEstadoDatos("estadoTelefonoDatos", error.message || "No se pudo actualizar el teléfono.", "error");
+    } finally {
+        boton.disabled = false;
+    }
+});
 
 /* ==========================================
    INICIAR CUENTA
