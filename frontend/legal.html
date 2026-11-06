@@ -11,9 +11,12 @@
     body{background:#050b18;color:#f4f8ff;min-height:100vh;padding:20px}
     main{max-width:500px;margin:0 auto}
     header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
-    .logo{font-size:20px;font-weight:900;white-space:nowrap}.logo span{color:#00baff;text-shadow:0 0 12px #008cff}
-    .volver{display:inline-flex;align-items:center;gap:8px;color:#55c5ff;text-decoration:none;font-size:13px;font-weight:800}
-    .volver svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2;-webkit-tap-highlight-color:transparent}
+    .encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}
+    .encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .encabezado-pagina-titulo{overflow-wrap:anywhere}
+    .encabezado-pagina:hover{color:#75d7ff}
+    .encabezado-pagina:focus-visible{outline:none}
     h1{font-size:25px;margin:8px 0}
     .intro{color:#91a8c3;font-size:13px;line-height:1.65;margin-bottom:22px}
     .lista{display:flex;flex-direction:column;gap:9px}
@@ -31,10 +34,11 @@
 <body>
   <main>
     <header>
-      <div class="logo">GAMERS GOLD <span>⚡</span></div>
-      <a class="volver" href="cuenta.html">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h12"/></svg>
-        Mi cuenta
+      <a class="encabezado-pagina" href="cuenta.html" aria-label="Volver a Mi cuenta">
+        <span class="encabezado-pagina-icono" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg>
+        </span>
+        <span class="encabezado-pagina-titulo">Legal</span>
       </a>
     </header>
     <h1>Legal</h1>
