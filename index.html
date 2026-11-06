@@ -125,40 +125,63 @@
         }
 
 
-        /* Identidad visual del nombre en la cabecera */
+        /* G insignia: monograma angular exclusivo de Gamers Gold Top-Up */
         .logo {
             gap: 0;
             overflow: visible;
         }
 
         .logo-g {
-            width: 52px;
-            height: 52px;
-            flex-shrink: 0;
+            position: relative;
+            isolation: isolate;
+            width: 54px;
+            height: 54px;
+            flex: 0 0 54px;
+            display: grid;
+            place-items: center;
             font-family: "Arial Black", "Trebuchet MS", sans-serif;
-            font-size: 55px;
+            font-size: 49px;
             font-weight: 1000;
-            font-style: italic;
+            font-style: normal;
             line-height: 1;
-            background: linear-gradient(145deg, #f5fdff 8%, #62edff 42%, #079cff 76%, #f4c96b 100%);
+            letter-spacing: -5px;
+            padding-right: 4px;
+            color: transparent;
+            background: linear-gradient(145deg, #ffffff 5%, #8cf3ff 27%, #19bfff 58%, #087cff 78%, #f3c86b 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 7px rgba(0, 205, 255, .55));
-            transform: skewX(-9deg) scale(1.04);
+            filter: drop-shadow(0 0 7px rgba(0, 190, 255, .42));
+            transform: none;
         }
 
         .logo-g::before {
-            width: 29px;
-            height: 8px;
-            top: 7px;
-            right: -2px;
-            background: linear-gradient(90deg, #f5fdff, #55eaff 48%, #078cff);
-            filter: drop-shadow(0 0 5px rgba(0, 200, 255, .75));
+            content: "";
+            position: absolute;
+            z-index: -1;
+            inset: 4px 5px;
+            border: 1px solid rgba(81, 218, 255, .72);
+            background: linear-gradient(145deg, rgba(12, 70, 112, .72), rgba(4, 15, 34, .96) 72%);
+            clip-path: polygon(18% 0, 82% 0, 100% 18%, 100% 82%, 82% 100%, 18% 100%, 0 82%, 0 18%);
+            box-shadow: inset 0 0 12px rgba(0, 174, 255, .2);
+        }
+
+        .logo-g::after {
+            content: "";
+            position: absolute;
+            z-index: 2;
+            right: 1px;
+            bottom: 10px;
+            width: 21px;
+            height: 5px;
+            background: linear-gradient(90deg, #fff2bd, #e8b64d 72%, #fff0b0);
+            clip-path: polygon(0 0, 100% 0, 76% 100%, 0 100%);
+            transform: rotate(-42deg);
+            filter: drop-shadow(0 0 4px rgba(245, 190, 86, .7));
         }
 
         .logo-resto {
-            margin-left: 0;
+            margin-left: 1px;
             font-family: "Arial Black", "Trebuchet MS", sans-serif;
             font-size: 19px;
             font-weight: 900;
@@ -170,14 +193,21 @@
 
         @media (max-width: 600px) {
             .logo-g {
-                width: 46px;
-                height: 46px;
-                font-size: 49px;
+                width: 47px;
+                height: 47px;
+                flex-basis: 47px;
+                font-size: 43px;
             }
 
             .logo-g::before {
-                width: 25px;
-                top: 6px;
+                inset: 4px 4px;
+            }
+
+            .logo-g::after {
+                right: 0;
+                bottom: 9px;
+                width: 18px;
+                height: 4px;
             }
 
             .logo-resto {
@@ -188,9 +218,10 @@
 
         @media (max-width: 360px) {
             .logo-g {
-                width: 41px;
-                height: 43px;
-                font-size: 44px;
+                width: 42px;
+                height: 44px;
+                flex-basis: 42px;
+                font-size: 39px;
             }
 
             .logo-resto {
