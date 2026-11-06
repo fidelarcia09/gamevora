@@ -68,3 +68,6 @@
 @media(prefers-reduced-motion:reduce){
   #gg-session-loader::before,.gg-session-brand,.gg-session-shield,.gg-session-line,#gg-session-loader::after{animation:none!important}
 }
+
+/* Evita incluso un destello del overlay en páginas posteriores de la misma sesión. */
+html.gg-session-seen #gg-session-loader{display:none!important}
