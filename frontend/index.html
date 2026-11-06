@@ -1064,7 +1064,7 @@
         }
 
     
-        /* IDENTIDAD VISUAL PREMIUM: G protagonista + wordmark bicolor */
+        /* IDENTIDAD VISUAL GVR: escudo oficial + nombre bicolor */
         .logo {
             display: inline-flex;
             align-items: center;
@@ -1079,12 +1079,24 @@
             flex: 0 0 76px;
             width: 76px;
             height: 76px;
+            padding: 0;
+            background: none;
+            color: transparent;
             font-size: 0;
             line-height: 0;
-            color: transparent;
-            background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20112%20112%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22c%22%20x1%3D%2218%22%20y1%3D%228%22%20x2%3D%2291%22%20y2%3D%22100%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20stop-color%3D%22%23f2ffff%22%2F%3E%3Cstop%20offset%3D%22.28%22%20stop-color%3D%22%238af3ff%22%2F%3E%3Cstop%20offset%3D%22.62%22%20stop-color%3D%22%2320d6ff%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230876e8%22%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%22edge%22%20x1%3D%2220%22%20y1%3D%2212%22%20x2%3D%2285%22%20y2%3D%2294%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%3Cstop%20stop-color%3D%22%23fff%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%231685e9%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath%20d%3D%22M87%2027%2075%2016%2057%2010%2038%2013%2022%2025%2013%2043%2012%2064%2021%2082%2037%2094%2057%2098%2075%2091%2088%2078%2094%2062%2094%2049%2062%2049%22%20fill%3D%22none%22%20stroke%3D%22%2303152f%22%20stroke-width%3D%2223%22%20stroke-linecap%3D%22square%22%20stroke-linejoin%3D%22bevel%22%20transform%3D%22translate(2%204)%22%2F%3E%3Cpath%20d%3D%22M87%2027%2075%2016%2057%2010%2038%2013%2022%2025%2013%2043%2012%2064%2021%2082%2037%2094%2057%2098%2075%2091%2088%2078%2094%2062%2094%2049%2062%2049%22%20fill%3D%22none%22%20stroke%3D%22url(%23c)%22%20stroke-width%3D%2216%22%20stroke-linecap%3D%22square%22%20stroke-linejoin%3D%22bevel%22%2F%3E%3Cpath%20d%3D%22M87%2027%2075%2016%2057%2010%2038%2013%2022%2025%2013%2043%2012%2064%2021%2082%2037%2094%2057%2098%2075%2091%2088%2078%2094%2062%2094%2049%2062%2049%22%20fill%3D%22none%22%20stroke%3D%22url(%23edge)%22%20stroke-opacity%3D%22.65%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22square%22%20stroke-linejoin%3D%22bevel%22%2F%3E%3Cpath%20d%3D%22M63%2049h31l-9%2010H63z%22%20fill%3D%22%23f4fdff%22%2F%3E%3Cpath%20d%3D%22m78%2083%2015-20%209%207-17%2018z%22%20fill%3D%22%2325dfff%22%20opacity%3D%22.95%22%2F%3E%3C%2Fsvg%3E") center / contain no-repeat;
             filter: drop-shadow(0 3px 2px rgba(0,8,25,.85)) drop-shadow(0 0 10px rgba(20,205,255,.42));
             transition: filter .2s ease, transform .2s ease;
+        }
+        .logo-g::before,
+        .logo-g::after {
+            content: none !important;
+            display: none !important;
+        }
+        .logo-escudo {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
         .logo:hover .logo-g {
             filter: drop-shadow(0 4px 3px rgba(0,8,25,.9)) drop-shadow(0 0 15px rgba(20,220,255,.62));
@@ -1107,16 +1119,26 @@
             font-style: italic;
             letter-spacing: -.55px;
             line-height: 1;
+            background: none !important;
+            -webkit-background-clip: initial !important;
+            background-clip: initial !important;
+            -webkit-text-fill-color: initial !important;
             text-shadow: 0 2px 0 #102d50, 0 4px 12px rgba(0,10,28,.72);
         }
-        .logo-gamers { color: #f7fbff; }
-        .logo-gold { color: #32dfff; }
+        .logo-gamers {
+            color: #f7fbff !important;
+            -webkit-text-fill-color: #f7fbff !important;
+        }
+        .logo-gold {
+            color: #32dfff !important;
+            -webkit-text-fill-color: #32dfff !important;
+        }
         .logo-base {
             display: block;
             width: 100%;
             height: 3px;
             border-radius: 4px;
-            background: linear-gradient(90deg,#16bceF 0%,#42eaff 62%,rgba(66,234,255,0) 100%);
+            background: linear-gradient(90deg,#16bcef 0%,#42eaff 62%,rgba(66,234,255,0) 100%);
             box-shadow: 0 0 8px rgba(28,204,255,.58);
         }
         @media (max-width: 600px) {
@@ -1147,7 +1169,7 @@
 
     <header>
         <a class="logo" href="./index.html" aria-label="Gamers Gold Top-Up, inicio">
-            <span class="logo-g" aria-hidden="true">G</span>
+            <span class="logo-g" aria-hidden="true"><img class="logo-escudo" src="./gvr-escudo.svg" alt="" width="76" height="76"></span>
             <span class="logo-copy">
                 <span class="logo-resto"><span class="logo-gamers">GAMERS</span> <span class="logo-gold">GOLD TOP UP</span></span>
                 <span class="logo-base" aria-hidden="true"></span>
