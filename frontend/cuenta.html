@@ -3459,7 +3459,19 @@ if (bloqueMetodosAcceso) {
         abrirPantallaMetodosAcceso();
     });
 }
-botonVolverCuenta.addEventListener("click", volverAMiCuenta);
+botonVolverCuenta.addEventListener("click", () => {
+    const hayPantallaInternaAbierta =
+        !pantallaDatosPersonales.hidden ||
+        !pantallaSeguridad.hidden ||
+        !pantallaMetodosAcceso.hidden;
+
+    if (hayPantallaInternaAbierta) {
+        volverAMiCuenta();
+        return;
+    }
+
+    window.location.href = "../index.html";
+});
 
 document.getElementById("editarNombreDatos").addEventListener("click", () => abrirEditorDatos("editorNombreDatos"));
 document.getElementById("editarCorreoDatos").addEventListener("click", () => {
