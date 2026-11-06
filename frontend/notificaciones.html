@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050b18">
+  <meta name="description" content="Centro de notificaciones de Gamers Gold Top-Up.">
+  <title>Notificaciones | Gamers Gold Top-Up</title>
+  <style>
+    :root{--fondo:#050b18;--panel:#0a1426;--panel2:#0d1b31;--cian:#20c5ff;--azul:#087cff;--texto:#f4f8ff;--muted:#9aadc4;--borde:rgba(105,158,215,.16)}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+    body{min-height:100vh;background:radial-gradient(ellipse at 50% -15%,rgba(0,119,255,.13),transparent 42%),var(--fondo);color:var(--texto)}
+    a{color:inherit}
+    header{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:14px;min-height:66px;padding:12px max(16px,calc((100% - 900px)/2));border-bottom:1px solid var(--borde);background:rgba(5,11,24,.94);backdrop-filter:blur(14px)}
+    .volver{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;border:1px solid var(--borde);border-radius:11px;background:#0b1a30;color:var(--cian);text-decoration:none;font-size:22px}
+    .marca{min-width:0}.marca strong{display:block;font-size:15px;letter-spacing:.2px}.marca span{display:block;margin-top:3px;color:var(--muted);font-size:11px}
+    main{width:min(100% - 28px,760px);margin:32px auto 60px}
+    .encabezado{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:20px}
+    h1{font-size:clamp(25px,5vw,32px);letter-spacing:-.7px}
+    .subtitulo{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.6}
+    .marcar{flex-shrink:0;padding:10px 13px;border:1px solid rgba(32,197,255,.25);border-radius:9px;background:rgba(0,119,255,.1);color:var(--cian);font-size:11px;font-weight:800;cursor:pointer}
+    .marcar:disabled{opacity:.45;cursor:default}
+    .lista{display:grid;gap:10px}
+    .item{position:relative;display:flex;align-items:flex-start;gap:13px;padding:16px;border:1px solid var(--borde);border-radius:14px;background:linear-gradient(145deg,rgba(12,27,48,.98),rgba(7,16,30,.98));text-decoration:none;transition:border-color .2s ease,transform .2s ease}
+    .item[href]:hover{transform:translateY(-2px);border-color:rgba(32,197,255,.45)}
+    .item.no-leida{border-color:rgba(32,197,255,.3);background:linear-gradient(145deg,rgba(13,35,59,.98),rgba(7,16,30,.98))}
+    .simbolo{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;border:1px solid rgba(32,197,255,.2);border-radius:11px;background:rgba(0,119,255,.1);color:var(--cian);font-size:19px;font-weight:800}
+    .contenido{min-width:0;flex:1}.titulo{color:#f4f8ff;font-size:14px;font-weight:800;line-height:1.4}.mensaje{margin-top:5px;color:#b4c4d8;font-size:12px;line-height:1.65;overflow-wrap:anywhere}.fecha{display:block;margin-top:9px;color:#7890aa;font-size:10px}
+    .punto{width:8px;height:8px;flex:0 0 8px;margin-top:5px;border-radius:50%;background:var(--cian);box-shadow:0 0 9px rgba(32,197,255,.5)}
+    .vacio,.estado{padding:30px 20px;border:1px dashed rgba(105,158,215,.24);border-radius:14px;color:var(--muted);text-align:center;font-size:13px;line-height:1.7;background:rgba(10,20,38,.55)}
+    .vacio-icono{display:block;margin-bottom:10px;color:var(--cian);font-size:28px}
+    .login-link{display:inline-flex;margin-top:14px;padding:11px 16px;border-radius:9px;background:linear-gradient(100deg,#087cff,#00aeea);color:#fff;text-decoration:none;font-weight:800;font-size:12px}
+    .error{color:#ff9ba8}
+    @media(max-width:520px){header{min-height:60px;padding:10px 14px}main{margin-top:25px}.encabezado{align-items:flex-start;flex-direction:column}.marcar{align-self:flex-end}.item{padding:14px;gap:11px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+  </style>
+</head>
+<body>
+  <header>
+    <a class="volver" href="../index.html" aria-label="Volver al inicio">‹</a>
+    <div class="marca"><strong>Gamers Gold Top-Up</strong><span>Centro de notificaciones</span></div>
+  </header>
+  <main>
+    <div class="encabezado">
+      <div><h1>Notificaciones</h1><p class="subtitulo">Aquí encontrarás todas las actualizaciones de tu cuenta, en una sola lista.</p></div>
+      <button id="marcarTodas" class="marcar" type="button" disabled>Marcar como leídas</button>
+    </div>
+    <div id="estado" class="estado" role="status">Cargando tus notificaciones…</div>
+    <div id="listaNotificaciones" class="lista" aria-live="polite"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseClient = window.supabase.createClient(
+      "https://gsuhzcavghsiolmipnzi.supabase.co",
+      "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
+    );
+
+    const estado = document.getElementById("estado");
+    const lista = document.getElementById("listaNotificaciones");
+    const marcarTodas = document.getElementById("marcarTodas");
+    let usuarioActual = null;
+    let notificaciones = [];
+
+    function crearElemento(tag, clase, texto) {
+      const elemento = document.createElement(tag);
+      if (clase) elemento.className = clase;
+      if (texto !== undefined) elemento.textContent = texto;
+      return elemento;
+    }
+
+    function fechaLegible(valor) {
+      const fecha = new Date(valor);
+      if (Number.isNaN(fecha.getTime())) return "";
+      return new Intl.DateTimeFormat("es-ES", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }).format(fecha);
+    }
+
+    function renderizar() {
+      lista.replaceChildren();
+      const pendientes = notificaciones.filter(item => !item.is_read).length;
+      marcarTodas.disabled = pendientes === 0;
+      marcarTodas.textContent = pendientes ? "Marcar como leídas (" + pendientes + ")" : "Todo leído";
+
+      if (!notificaciones.length) {
+        estado.hidden = false;
+        estado.className = "vacio";
+        estado.replaceChildren();
+        estado.appendChild(crearElemento("span","vacio-icono","♧"));
+        estado.appendChild(document.createTextNode("Todavía no tienes notificaciones."));
+        return;
+      }
+
+      estado.hidden = true;
+      notificaciones.forEach(item => {
+        const href = (() => {
+          if (!item.target_url) return null;
+          try {
+            const destino = new URL(item.target_url, window.location.href);
+            return destino.origin === window.location.origin ? destino.href : null;
+          } catch (_) { return null; }
+        })();
+
+        const tarjeta = crearElemento(href ? "a" : "article", "item" + (item.is_read ? "" : " no-leida"));
+        if (href) tarjeta.href = href;
+
+        tarjeta.appendChild(crearElemento("span","simbolo","✦"));
+        const contenido = crearElemento("div","contenido");
+        contenido.appendChild(crearElemento("div","titulo",item.title));
+        contenido.appendChild(crearElemento("p","mensaje",item.message));
+        contenido.appendChild(crearElemento("time","fecha",fechaLegible(item.created_at)));
+        tarjeta.appendChild(contenido);
+        if (!item.is_read) tarjeta.appendChild(crearElemento("span","punto"));
+        lista.appendChild(tarjeta);
+      });
+    }
+
+    async function cargarNotificaciones() {
+      const { data, error } = await supabaseClient
+        .from("user_notifications")
+        .select("id,title,message,target_url,is_read,created_at")
+        .eq("user_id", usuarioActual.id)
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (error) {
+        estado.hidden = false;
+        estado.className = "estado error";
+        estado.textContent = "No se pudieron cargar tus notificaciones. Actualiza la página para intentarlo de nuevo.";
+        console.error("Error cargando notificaciones:", error.message);
+        return;
+      }
+      notificaciones = data || [];
+      renderizar();
+    }
+
+    marcarTodas.addEventListener("click", async function () {
+      const pendientes = notificaciones.filter(item => !item.is_read).map(item => item.id);
+      if (!pendientes.length) return;
+      marcarTodas.disabled = true;
+      const { error } = await supabaseClient
+        .from("user_notifications")
+        .update({ is_read: true, read_at: new Date().toISOString() })
+        .eq("user_id", usuarioActual.id)
+        .in("id", pendientes);
+
+      if (error) {
+        marcarTodas.disabled = false;
+        console.error("No se pudieron marcar como leídas:", error.message);
+        return;
+      }
+      notificaciones = notificaciones.map(item => pendientes.includes(item.id)
+        ? { ...item, is_read: true }
+        : item);
+      renderizar();
+    });
+
+    (async function iniciarCentroNotificaciones() {
+      const { data, error } = await supabaseClient.auth.getUser();
+      if (error || !data.user) {
+        estado.hidden = false;
+        estado.className = "vacio";
+        estado.replaceChildren();
+        estado.appendChild(crearElemento("p","","Inicia sesión para consultar las notificaciones de tu cuenta."));
+        const acceso = crearElemento("a","login-link","Iniciar sesión");
+        acceso.href = "./login.html";
+        estado.appendChild(acceso);
+        marcarTodas.hidden = true;
+        return;
+      }
+
+      usuarioActual = data.user;
+      await cargarNotificaciones();
+
+      supabaseClient
+        .channel("ggt-notifications-center-" + usuarioActual.id)
+        .on("postgres_changes", {
+          event: "INSERT",
+          schema: "public",
+          table: "user_notifications",
+          filter: "user_id=eq." + usuarioActual.id
+        }, function () {
+          cargarNotificaciones();
+        })
+        .subscribe();
+    })();
+  </script>
+</body>
+</html>
