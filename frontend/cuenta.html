@@ -1266,6 +1266,94 @@
     .datos-estado.error { color: #ff8195; }
     .datos-estado.exito { color: #68df8c; }
 
+    /* Métodos de acceso: estado real devuelto por Supabase Auth */
+    .metodos-acceso-panel {
+        padding: 2px 14px;
+    }
+    .metodo-acceso {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-height: 76px;
+        padding: 13px 0;
+    }
+    .metodo-acceso + .metodo-acceso {
+        border-top: 1px solid #244565;
+    }
+    .metodo-acceso-icono {
+        width: 43px;
+        height: 43px;
+        flex: 0 0 43px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #244565;
+        border-radius: 12px;
+        background: #0b2039;
+    }
+    .metodo-acceso-icono svg {
+        width: 23px;
+        height: 23px;
+        display: block;
+    }
+    .metodo-acceso-info {
+        flex: 1;
+        min-width: 0;
+    }
+    .metodo-acceso-nombre {
+        display: block;
+        color: #f4f8ff;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1.4;
+    }
+    .metodo-acceso-detalle {
+        display: block;
+        margin-top: 3px;
+        color: #91a8c3;
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+    .metodo-acceso-estado {
+        flex: 0 0 auto;
+        max-width: 112px;
+        padding: 6px 9px;
+        border: 1px solid #31506f;
+        border-radius: 20px;
+        color: #b7cce2;
+        background: #0b1b31;
+        font-size: 10px;
+        font-weight: 800;
+        text-align: center;
+        line-height: 1.25;
+    }
+    .metodo-acceso-estado.verificado {
+        border-color: rgba(53, 205, 132, .4);
+        color: #68df9c;
+        background: rgba(22, 110, 73, .15);
+    }
+    .metodo-acceso-estado.pendiente {
+        border-color: rgba(255, 190, 82, .35);
+        color: #ffc66e;
+        background: rgba(140, 91, 20, .13);
+    }
+    .metodo-acceso-estado.proximamente {
+        color: #91a8c3;
+        border-style: dashed;
+    }
+    .metodos-acceso-nota {
+        margin: 13px 0 0;
+        color: #91a8c3;
+        font-size: 12px;
+        line-height: 1.65;
+    }
+    @media (max-width: 380px) {
+        .metodo-acceso { gap: 9px; }
+        .metodo-acceso-icono { width: 39px; height: 39px; flex-basis: 39px; }
+        .metodo-acceso-estado { max-width: 96px; padding: 5px 7px; font-size: 9px; }
+    }
+
     .datos-seguridad {
         display: flex;
         align-items: flex-start;
@@ -1479,7 +1567,7 @@
 
             <!-- MÉTODOS DE ACCESO -->
 
-            <details class="acordeon">
+            <details class="acordeon" id="bloqueMetodosAcceso">
                 <summary>
                     <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="8" cy="15" r="4"></circle>
@@ -1848,6 +1936,72 @@
                     </button>
                 </form>
             </div>
+        </section>
+
+        <section id="pantallaMetodosAcceso" class="pantalla-datos-personales" hidden aria-labelledby="tituloPantallaMetodosAcceso">
+            <h1 id="tituloPantallaMetodosAcceso" style="text-align:left;font-size:24px;margin:4px 0 8px;">Métodos de acceso</h1>
+            <p class="datos-intro">Consulta qué métodos están vinculados y verificados en tu cuenta. Los estados se comprueban directamente con Supabase.</p>
+
+            <div class="datos-panel metodos-acceso-panel">
+                <div class="metodo-acceso" id="metodoCorreo">
+                    <span class="metodo-acceso-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect x="2.5" y="4.5" width="19" height="15" rx="3" stroke="#55c9ff" stroke-width="1.8"/>
+                            <path d="m4 7 8 6 8-6" stroke="#55c9ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span class="metodo-acceso-info">
+                        <span class="metodo-acceso-nombre">Correo electrónico</span>
+                        <span class="metodo-acceso-detalle" id="detalleMetodoCorreo">Comprobando correo...</span>
+                    </span>
+                    <span class="metodo-acceso-estado" id="estadoMetodoCorreo" aria-live="polite">Comprobando</span>
+                </div>
+
+                <div class="metodo-acceso" id="metodoGoogle">
+                    <span class="metodo-acceso-icono" aria-hidden="true">
+                        <svg viewBox="0 0 48 48">
+                            <path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.8 6.1-15z"/>
+                            <path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.1c-1.8 1.2-4.1 2-6.9 2-5.3 0-9.8-3.6-11.4-8.4H5.8v5.3A20 20 0 0 0 24 44z"/>
+                            <path fill="#FBBC05" d="M12.6 27.6a12 12 0 0 1 0-7.2v-5.3H5.8a20 20 0 0 0 0 17.8z"/>
+                            <path fill="#EA4335" d="M24 12c3 0 5.7 1 7.8 3.1l5.8-5.8A19.4 19.4 0 0 0 24 4 20 20 0 0 0 5.8 15.1l6.8 5.3C14.2 15.6 18.7 12 24 12z"/>
+                        </svg>
+                    </span>
+                    <span class="metodo-acceso-info">
+                        <span class="metodo-acceso-nombre">Google</span>
+                        <span class="metodo-acceso-detalle" id="detalleMetodoGoogle">Comprobando cuenta vinculada...</span>
+                    </span>
+                    <span class="metodo-acceso-estado" id="estadoMetodoGoogle" aria-live="polite">Comprobando</span>
+                </div>
+
+                <div class="metodo-acceso">
+                    <span class="metodo-acceso-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M21.5 4.2 18.3 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.6.6-1.2.6l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.2L5.5 13.7.6 12.2c-1.1-.3-1.1-1.1.2-1.6L19.8 3c.9-.3 1.9.2 1.7 1.2Z" fill="#9bb4ce"/>
+                        </svg>
+                    </span>
+                    <span class="metodo-acceso-info">
+                        <span class="metodo-acceso-nombre">Telegram</span>
+                        <span class="metodo-acceso-detalle">Inicio de sesión con Telegram</span>
+                    </span>
+                    <span class="metodo-acceso-estado proximamente">Próximamente</span>
+                </div>
+
+                <div class="metodo-acceso">
+                    <span class="metodo-acceso-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M7 2.8h3l1.5 4.1-2 1.8a15 15 0 0 0 5.8 5.8l1.8-2 4.1 1.5v3c0 1.1-.9 2-2 2A16.2 16.2 0 0 1 5 4.8c0-1.1.9-2 2-2Z" stroke="#9bb4ce" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span class="metodo-acceso-info">
+                        <span class="metodo-acceso-nombre">Número de teléfono</span>
+                        <span class="metodo-acceso-detalle">Acceso mediante código SMS</span>
+                    </span>
+                    <span class="metodo-acceso-estado proximamente">Próximamente</span>
+                </div>
+            </div>
+
+            <p class="metodos-acceso-nota">Solo aparecerán como verificados los métodos que Supabase confirme como vinculados o verificados. Tener un número guardado para WhatsApp no significa que el inicio de sesión por SMS esté activado.</p>
+            <p class="datos-estado" id="estadoCargaMetodosAcceso" role="status" aria-live="polite"></p>
         </section>
 
 </div>
@@ -3147,7 +3301,9 @@ const tituloEncabezadoCuenta = document.getElementById("tituloEncabezadoCuenta")
 const contenidoCuenta = document.getElementById("contenidoCuenta");
 const pantallaDatosPersonales = document.getElementById("pantallaDatosPersonales");
 const pantallaSeguridad = document.getElementById("pantallaSeguridad");
+const pantallaMetodosAcceso = document.getElementById("pantallaMetodosAcceso");
 const bloqueDatosPersonales = document.querySelector(".grupo-cuenta > .acordeon");
+const bloqueMetodosAcceso = document.getElementById("bloqueMetodosAcceso");
 const bloqueSeguridad = document.getElementById("bloqueSeguridad");
 let usuarioDatosActual = null;
 let correoReautenticadoParaCambio = false;
@@ -3182,14 +3338,93 @@ function abrirPantallaDatosPersonales() {
     // en telefonoDatosPersonales y el cambio se realiza con el formulario verificado.
     contenidoCuenta.hidden = true;
     pantallaSeguridad.hidden = true;
+    pantallaMetodosAcceso.hidden = true;
     pantallaDatosPersonales.hidden = false;
     tituloEncabezadoCuenta.textContent = "Datos personales";
     document.title = "Datos personales | Gamers Gold Top-Up";
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
+async function actualizarEstadoMetodosAcceso() {
+    const correoEstado = document.getElementById("estadoMetodoCorreo");
+    const correoDetalle = document.getElementById("detalleMetodoCorreo");
+    const googleEstado = document.getElementById("estadoMetodoGoogle");
+    const googleDetalle = document.getElementById("detalleMetodoGoogle");
+    const estadoGeneral = document.getElementById("estadoCargaMetodosAcceso");
+
+    correoEstado.textContent = "Comprobando";
+    correoEstado.className = "metodo-acceso-estado";
+    googleEstado.textContent = "Comprobando";
+    googleEstado.className = "metodo-acceso-estado";
+    estadoGeneral.textContent = "";
+
+    try {
+        const { data: usuarioData, error: usuarioError } = await supabaseClient.auth.getUser();
+        if (usuarioError || !usuarioData.user) {
+            throw new Error("No se pudo consultar la sesión actual.");
+        }
+
+        const usuario = usuarioData.user;
+        correoDetalle.textContent = usuario.email || "No hay un correo asociado";
+        if (usuario.email_confirmed_at) {
+            correoEstado.textContent = "Verificado";
+            correoEstado.classList.add("verificado");
+        } else {
+            correoEstado.textContent = "No verificado";
+            correoEstado.classList.add("pendiente");
+        }
+
+        const { data: identidadesData, error: identidadesError } =
+            await supabaseClient.auth.getUserIdentities();
+
+        if (identidadesError) {
+            throw identidadesError;
+        }
+
+        const identidades = Array.isArray(identidadesData?.identities)
+            ? identidadesData.identities
+            : [];
+        const identidadGoogle = identidades.find(identidad =>
+            String(identidad.provider || "").toLowerCase() === "google"
+        );
+
+        if (identidadGoogle) {
+            const correoGoogle = identidadGoogle.identity_data?.email;
+            googleDetalle.textContent = correoGoogle
+                ? correoGoogle
+                : "Cuenta de Google vinculada";
+            googleEstado.textContent = "Verificado";
+            googleEstado.classList.add("verificado");
+        } else {
+            googleDetalle.textContent = "No hay una cuenta de Google vinculada";
+            googleEstado.textContent = "No vinculado";
+            googleEstado.classList.add("pendiente");
+        }
+    } catch (error) {
+        console.error("No se pudieron consultar los métodos de acceso:", error);
+        googleDetalle.textContent = "No se pudo comprobar la vinculación";
+        googleEstado.textContent = "Sin comprobar";
+        googleEstado.classList.add("pendiente");
+        estadoGeneral.textContent =
+            "No se pudieron comprobar todos los métodos. Vuelve a abrir esta pantalla para intentarlo de nuevo.";
+        estadoGeneral.className = "datos-estado error";
+    }
+}
+
+function abrirPantallaMetodosAcceso() {
+    contenidoCuenta.hidden = true;
+    pantallaDatosPersonales.hidden = true;
+    pantallaSeguridad.hidden = true;
+    pantallaMetodosAcceso.hidden = false;
+    tituloEncabezadoCuenta.textContent = "Métodos de acceso";
+    document.title = "Métodos de acceso | Gamers Gold Top-Up";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    actualizarEstadoMetodosAcceso();
+}
+
 function abrirPantallaSeguridad() {
     contenidoCuenta.hidden = true;
     pantallaDatosPersonales.hidden = true;
+    pantallaMetodosAcceso.hidden = true;
     pantallaSeguridad.hidden = false;
     tituloEncabezadoCuenta.textContent = "Seguridad";
     document.title = "Seguridad | Gamers Gold Top-Up";
@@ -3198,6 +3433,7 @@ function abrirPantallaSeguridad() {
 function volverAMiCuenta() {
     pantallaDatosPersonales.hidden = true;
     pantallaSeguridad.hidden = true;
+    pantallaMetodosAcceso.hidden = true;
     contenidoCuenta.hidden = false;
     tituloEncabezadoCuenta.textContent = "Mi cuenta";
     document.title = "Mi cuenta | Gamers Gold Top-Up";
@@ -3213,6 +3449,12 @@ if (bloqueSeguridad) {
     bloqueSeguridad.querySelector("summary").addEventListener("click", event => {
         event.preventDefault();
         abrirPantallaSeguridad();
+    });
+}
+if (bloqueMetodosAcceso) {
+    bloqueMetodosAcceso.querySelector("summary").addEventListener("click", event => {
+        event.preventDefault();
+        abrirPantallaMetodosAcceso();
     });
 }
 botonVolverCuenta.addEventListener("click", volverAMiCuenta);
