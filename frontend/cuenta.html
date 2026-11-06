@@ -361,6 +361,29 @@
         border-top: 1px solid #244565;
     }
 
+    /* Accesos directos de Ayuda con el mismo diseño de las opciones de cuenta */
+    .acceso-ayuda-directo {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-height: 65px;
+        padding: 12px 14px;
+        color: inherit;
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .acceso-ayuda-directo:focus-visible {
+        outline: 2px solid #75d7ff;
+        outline-offset: 3px;
+        border-radius: 13px;
+    }
+
+    .acceso-ayuda-directo:hover {
+        border-color: #28a9ff;
+        background: #081a35;
+    }
+
     /* DESPLEGABLES PRINCIPALES */
 
     .lista-opciones {
@@ -1597,35 +1620,35 @@
 
             <h2 class="titulo-seccion-cuenta">Ayuda</h2>
 
-            <!-- SOPORTE -->
+            <!-- SOPORTE: acceso directo a la página habitual -->
+            <a href="soporte.html" class="acordeon acceso-ayuda-directo">
+                <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
+                    <path d="M5 14h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3v-1a2 2 0 0 1 2-2z"></path>
+                    <path d="M19 14h-2a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-1a2 2 0 0 0-2-2z"></path>
+                </svg>
+                <span class="opcion-texto">Soporte</span>
+                <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6"></path>
+                </svg>
+            </a>
 
+            <!-- LEGAL: políticas y privacidad -->
             <details class="acordeon">
                 <summary>
                     <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
-                        <path d="M5 14h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3v-1a2 2 0 0 1 2-2z"></path>
-                        <path d="M19 14h-2a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-1a2 2 0 0 0-2-2z"></path>
+                        <path d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path>
+                        <path d="M14 3v5h5M8 13h8M8 17h8"></path>
                     </svg>
-                    <span class="opcion-texto">Soporte</span>
+                    <span class="opcion-texto">Legal</span>
                     <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="m6 9 6 6 6-6"></path>
                     </svg>
                 </summary>
-
                 <div class="contenido-acordeon">
                     <p class="texto-ayuda">
-                        ¿Necesitas ayuda? Accede a nuestro espacio de soporte.
+                        Consulta las políticas y la información legal de Gamers Gold Top-Up.
                     </p>
-
-                    <a href="soporte.html" class="boton boton-soporte">
-                        <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
-                            <path d="M5 14h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3v-1a2 2 0 0 1 2-2z"></path>
-                            <path d="M19 14h-2a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3v-1a2 2 0 0 0-2-2z"></path>
-                        </svg>
-                        Contactar con soporte
-                    </a>
-
                     <a href="politicas-privacidad.html" class="boton boton-soporte">
                         <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path>
@@ -1633,16 +1656,20 @@
                         </svg>
                         Políticas y privacidad
                     </a>
-
-                    <a href="sobre-gamers-gold.html" class="boton boton-soporte">
-                        <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
-                            <circle cx="12" cy="12" r="9"></circle>
-                            <path d="M12 11v5M12 7h.01"></path>
-                        </svg>
-                        ¿Qué es Gamers Gold Top-Up?
-                    </a>
                 </div>
             </details>
+
+            <!-- Información general: se conserva el acceso existente -->
+            <a href="sobre-gamers-gold.html" class="acordeon acceso-ayuda-directo">
+                <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M12 11v5M12 7h.01"></path>
+                </svg>
+                <span class="opcion-texto">¿Qué es Gamers Gold Top-Up?</span>
+                <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6"></path>
+                </svg>
+            </a>
 
 
             <!-- PANEL DE VENTAS: SOLO ADMINISTRADORES -->
