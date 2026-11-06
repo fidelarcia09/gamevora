@@ -1063,7 +1063,126 @@
             }
         }
 
-    </style>
+    
+        /* IDENTIDAD VISUAL: G protagonista + nombre */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            height: 52px;
+            perspective: 900px;
+            transform-style: preserve-3d;
+        }
+        .logo-g {
+            position: relative;
+            isolation: isolate;
+            display: grid;
+            place-items: center;
+            width: 55px;
+            height: 55px;
+            flex: 0 0 55px;
+            padding: 0;
+            font-family: "Arial Black", "Trebuchet MS", sans-serif;
+            font-size: 57px;
+            font-weight: 1000;
+            font-style: italic;
+            line-height: .9;
+            letter-spacing: -5px;
+            color: #dffaff;
+            background: linear-gradient(155deg,#ffffff 2%,#d9fbff 17%,#63e4ff 38%,#12a9f4 59%,#0754b5 82%,#042b67 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: .65px rgba(210,250,255,.9);
+            filter:
+                drop-shadow(1px 1px 0 #168bd0)
+                drop-shadow(2px 2px 0 #07569c)
+                drop-shadow(3px 3px 0 #063d78)
+                drop-shadow(4px 5px 0 #031e45)
+                drop-shadow(0 0 10px rgba(0,190,255,.58));
+            transform: translateZ(14px) rotateY(-8deg);
+            transform-origin: center;
+        }
+        .logo-g::before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            top: 8px;
+            right: -1px;
+            width: 24px;
+            height: 8px;
+            background: linear-gradient(90deg,#f4ffff,#43e5ff 48%,#0879e9);
+            clip-path: polygon(0 0,100% 0,72% 100%,18% 100%);
+            transform: skewX(-28deg) rotate(-12deg) translateZ(8px);
+            filter: drop-shadow(0 2px 2px rgba(0,15,45,.8));
+        }
+        .logo-g::after {
+            content: "";
+            position: absolute;
+            z-index: 2;
+            right: 0;
+            bottom: 8px;
+            width: 19px;
+            height: 5px;
+            background: linear-gradient(90deg,#fff8d8,#f4c45e 55%,#a96a13);
+            clip-path: polygon(0 0,100% 0,76% 100%,0 100%);
+            transform: rotate(-42deg) translateZ(17px);
+            filter: drop-shadow(1px 2px 0 #75440d) drop-shadow(0 0 5px rgba(245,190,86,.8));
+        }
+        .logo-resto {
+            position: relative;
+            margin-left: 0;
+            font-family: "Arial Black","Trebuchet MS",sans-serif;
+            font-size: clamp(15px,1.65vw,20px);
+            font-weight: 1000;
+            font-style: italic;
+            letter-spacing: -.9px;
+            line-height: 1;
+            white-space: nowrap;
+            color: #eafaff;
+            background: linear-gradient(180deg,#ffffff 0%,#d9f8ff 24%,#8be5ff 49%,#299be5 76%,#dffaff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow:
+                1px 1px 0 #17649c,
+                2px 2px 0 #105080,
+                3px 3px 0 #0b3c68,
+                4px 5px 0 rgba(2,13,32,.95);
+            filter: drop-shadow(0 0 7px rgba(48,183,255,.34));
+            transform: translateZ(8px);
+        }
+        @media (max-width: 600px) {
+            .logo { gap: 3px; height: 46px; perspective: 650px; }
+            .logo-g {
+                width: 47px;
+                height: 48px;
+                flex-basis: 47px;
+                font-size: 49px;
+                filter:
+                    drop-shadow(1px 1px 0 #168bd0)
+                    drop-shadow(2px 2px 0 #07569c)
+                    drop-shadow(3px 4px 0 #031e45)
+                    drop-shadow(0 0 8px rgba(0,190,255,.5));
+            }
+            .logo-g::before { top: 7px; width: 21px; height: 7px; }
+            .logo-g::after { right: 0; bottom: 7px; width: 17px; height: 4px; }
+            .logo-resto {
+                font-size: clamp(13px,3.65vw,17px);
+                letter-spacing: -.75px;
+                text-shadow:
+                    1px 1px 0 #17649c,
+                    2px 2px 0 #105080,
+                    3px 3px 0 rgba(2,13,32,.95);
+            }
+        }
+        @media (max-width: 360px) {
+            .logo { gap: 2px; }
+            .logo-g { width: 41px; flex-basis: 41px; font-size: 43px; }
+            .logo-resto { font-size: 12px; letter-spacing: -.7px; }
+        }
+
+</style>
 </head>
 
 <body>
