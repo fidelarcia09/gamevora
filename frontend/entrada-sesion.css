@@ -1,0 +1,70 @@
+/* Entrada de sesión Gamers Gold — componente independiente */
+#gg-session-loader{
+  position:fixed;inset:0;z-index:2147483000;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;isolation:isolate;
+  background:
+    radial-gradient(ellipse at 50% 48%,rgba(0,137,255,.22),transparent 38%),
+    radial-gradient(ellipse at 50% 100%,rgba(0,190,255,.10),transparent 55%),
+    #020611;
+  opacity:1;visibility:visible;
+  transition:opacity .55s ease,visibility .55s ease;
+}
+#gg-session-loader[hidden]{display:none!important}
+#gg-session-loader::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(115deg,transparent 20%,rgba(32,197,255,.07) 48%,transparent 70%);
+  animation:ggSessionLight 2.4s ease-in-out infinite;
+}
+#gg-session-loader::after{
+  content:"";position:absolute;inset:12%;border:1px solid rgba(32,197,255,.12);
+  clip-path:polygon(50% 0,88% 18%,100% 50%,88% 82%,50% 100%,12% 82%,0 50%,12% 18%);
+  filter:drop-shadow(0 0 16px rgba(0,153,255,.25));
+  animation:ggSessionRing 3s ease-in-out infinite;
+}
+.gg-session-brand{
+  position:relative;z-index:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:13px;
+  width:min(90vw,520px);padding:28px 18px;text-align:center;
+  animation:ggSessionEnter .8s cubic-bezier(.2,.8,.2,1) both;
+}
+.gg-session-shield{
+  display:block;width:clamp(100px,25vw,150px);height:clamp(110px,28vw,165px);
+  object-fit:contain;
+  filter:drop-shadow(0 0 8px rgba(0,190,255,.78)) drop-shadow(0 0 25px rgba(0,112,255,.48));
+  animation:ggSessionFloat 2s ease-in-out infinite;
+}
+.gg-session-copy{
+  display:flex;flex-direction:column;align-items:center;gap:8px;max-width:100%;
+}
+.gg-session-name{
+  display:block;white-space:nowrap;
+  font-family:"Arial Black","Trebuchet MS",Arial,sans-serif;
+  font-size:clamp(20px,5.4vw,34px);font-weight:900;font-style:italic;
+  letter-spacing:-.8px;line-height:1;
+  color:#f7fbff;text-shadow:0 2px 0 #102d50,0 4px 12px rgba(0,10,28,.72);
+}
+.gg-session-name strong{
+  color:#32dfff;font:inherit;
+  text-shadow:0 0 8px rgba(32,197,255,.55),0 2px 0 #07539d;
+}
+.gg-session-line{
+  display:block;width:min(78%,280px);height:3px;border-radius:5px;
+  background:linear-gradient(90deg,transparent 0%,#16bcef 20%,#42eaff 62%,transparent 100%);
+  box-shadow:0 0 8px rgba(28,204,255,.58);
+  transform-origin:center;animation:ggSessionLine 1.3s ease-in-out infinite;
+}
+.gg-session-caption{
+  color:#91c9e8;font-size:9px;font-weight:800;letter-spacing:3.5px;
+  text-transform:uppercase;text-shadow:0 0 10px rgba(0,174,255,.45);
+}
+.gg-session-out{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+@keyframes ggSessionEnter{from{opacity:0;transform:translateY(13px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes ggSessionFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.025)}}
+@keyframes ggSessionLine{0%,100%{opacity:.55;transform:scaleX(.72)}50%{opacity:1;transform:scaleX(1)}}
+@keyframes ggSessionLight{0%,100%{transform:translateX(-18%);opacity:.3}50%{transform:translateX(18%);opacity:1}}
+@keyframes ggSessionRing{0%,100%{opacity:.35;transform:scale(.96)}50%{opacity:.8;transform:scale(1.02)}}
+@media(max-width:360px){.gg-session-name{font-size:19px;letter-spacing:-1px}.gg-session-brand{gap:10px}}
+@media(prefers-reduced-motion:reduce){
+  #gg-session-loader::before,.gg-session-brand,.gg-session-shield,.gg-session-line,#gg-session-loader::after{animation:none!important}
+}
