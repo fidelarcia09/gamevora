@@ -2701,7 +2701,7 @@ async function cargarWhatsApp(userId, mostrarConfirmacion = false) {
         formWhatsApp.hidden = true;
 
         if (mostrarConfirmacion) {
-            mostrarEstadoWhatsApp("Número registrado permanentemente. Por seguridad, no se puede editar ni eliminar.", "exito");
+            mostrarEstadoWhatsApp("Número guardado correctamente.", "exito");
 
             setTimeout(() => {
                 estadoWhatsApp.className = "estado-seguridad";
