@@ -28,7 +28,7 @@
     .contenido{min-width:0;flex:1}.titulo{color:#f4f8ff;font-size:14px;font-weight:800;line-height:1.4}.mensaje{margin-top:5px;color:#b4c4d8;font-size:12px;line-height:1.65;overflow-wrap:anywhere}.fecha{display:block;margin-top:9px;color:#7890aa;font-size:10px}
     .punto{width:8px;height:8px;flex:0 0 8px;margin-top:5px;border-radius:50%;background:var(--cian);box-shadow:0 0 9px rgba(32,197,255,.5)}
     .vacio,.estado{padding:30px 20px;border:1px dashed rgba(105,158,215,.24);border-radius:14px;color:var(--muted);text-align:center;font-size:13px;line-height:1.7;background:rgba(10,20,38,.55)}
-    .vacio-icono{display:block;margin-bottom:10px;color:var(--cian);font-size:28px}
+    .vacio-icono{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 12px;border:1px solid rgba(32,197,255,.2);border-radius:20px;background:linear-gradient(145deg,rgba(0,119,255,.16),rgba(32,197,255,.04));color:var(--cian);box-shadow:0 0 24px rgba(0,119,255,.08)}.vacio-icono svg{display:block;width:34px;height:34px}
     .login-link{display:inline-flex;margin-top:14px;padding:11px 16px;border-radius:9px;background:linear-gradient(100deg,#087cff,#00aeea);color:#fff;text-decoration:none;font-weight:800;font-size:12px}
     .error{color:#ff9ba8}
     @media(max-width:520px){header{min-height:60px;padding:10px 14px}main{margin-top:25px}.encabezado{align-items:flex-start;flex-direction:column}.marcar{align-self:flex-end}.item{padding:14px;gap:11px}}
@@ -42,7 +42,7 @@
   </header>
   <main>
     <div class="encabezado">
-      <div><h1>Notificaciones</h1><p class="subtitulo">Aquí encontrarás todas las actualizaciones de tu cuenta, en una sola lista.</p></div>
+      <div><h1>Notificaciones</h1></div>
       <button id="marcarTodas" class="marcar" type="button" disabled>Marcar como leídas</button>
     </div>
     <div id="estado" class="estado" role="status">Cargando tus notificaciones…</div>
@@ -88,7 +88,10 @@
         estado.hidden = false;
         estado.className = "vacio";
         estado.replaceChildren();
-        estado.appendChild(crearElemento("span","vacio-icono","♧"));
+        const iconoVacio = crearElemento("span","vacio-icono");
+        iconoVacio.setAttribute("aria-hidden","true");
+        iconoVacio.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 21h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M19.5 3.5v3M18 5h3" stroke="#20c5ff" stroke-width="1.4" stroke-linecap="round"/></svg>';
+        estado.appendChild(iconoVacio);
         estado.appendChild(document.createTextNode("Todavía no tienes notificaciones."));
         return;
       }
