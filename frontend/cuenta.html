@@ -1111,6 +1111,115 @@
 .encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras,header .encabezado-pagina~.boton-atras,.header .encabezado-pagina~.boton-atras{display:none!important}
 
     /* Título de sección: mismo indicador visual que Anuncios en Inicio */
+
+    /* Pantalla independiente de Datos personales */
+    .pantalla-datos-personales {
+        animation: aparecer .2s ease;
+    }
+    .datos-intro {
+        margin: 2px 0 18px;
+        color: #91a8c3;
+        font-size: 13px;
+        line-height: 1.65;
+    }
+    .datos-panel {
+        overflow: hidden;
+        border: 1px solid #173d63;
+        border-radius: 15px;
+        background: linear-gradient(145deg, #0a1930, #061226);
+        box-shadow: 0 10px 26px rgba(0, 12, 30, .2);
+    }
+    .datos-campo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 14px;
+    }
+    .datos-campo + .datos-campo {
+        border-top: 1px solid #244565;
+    }
+    .datos-campo-info {
+        flex: 1;
+        min-width: 0;
+    }
+    .datos-campo-etiqueta {
+        display: block;
+        margin-bottom: 7px;
+        color: #7891aa;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    .datos-campo-valor {
+        color: #f4f8ff;
+        font-size: 14px;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+        line-height: 1.5;
+    }
+    .datos-editar {
+        flex: 0 0 auto;
+        min-height: 34px;
+        padding: 7px 10px;
+        border: 1px solid #245477;
+        border-radius: 8px;
+        background: #0a2745;
+        color: #70cfff;
+        font-size: 11px;
+        font-weight: 800;
+        opacity: .65;
+        cursor: not-allowed;
+    }
+    .datos-seguridad {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 15px;
+        padding: 13px;
+        border: 1px solid #244565;
+        border-radius: 11px;
+        background: #07172b;
+        color: #91a8c3;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+    .datos-seguridad svg {
+        width: 19px;
+        height: 19px;
+        flex: 0 0 19px;
+        color: #39c7ff;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+    #contenedorTelefonoDatos .dato {
+        margin: 0;
+        padding: 14px;
+        border: 0;
+        border-top: 1px solid #244565;
+        border-radius: 0;
+        background: transparent;
+    }
+    #contenedorTelefonoDatos .dato-titulo {
+        color: #7891aa;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    #contenedorTelefonoDatos .texto-ayuda {
+        margin-top: 4px;
+    }
+    #contenedorTelefonoDatos .campo-seguridad {
+        margin: 12px 0;
+    }
+    #contenedorTelefonoDatos .boton {
+        margin-top: 8px;
+    }
+    @media (max-width: 420px) {
+        .datos-campo { padding: 14px 11px; }
+        .datos-editar { padding: 7px 8px; }
+    }
+
     .titulo-seccion-cuenta {
         position: relative;
         margin: 0 0 20px;
@@ -1141,12 +1250,12 @@
 <div class="contenedor">
 
     <header class="header">
-        <a class="encabezado-pagina" href="../index.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Mi cuenta</span></a>
+        <button class="encabezado-pagina" id="botonVolverCuenta" type="button" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo" id="tituloEncabezadoCuenta">Mi cuenta</span></button>
 
 
     </header>
 
-    <main>
+    <main id="contenidoCuenta">
 
         <!-- TARJETA DE PERFIL -->
         <section class="perfil-resumen" aria-label="Resumen del perfil">
@@ -1561,6 +1670,43 @@
         </section>
 
     </main>
+
+    <section id="pantallaDatosPersonales" class="pantalla-datos-personales" hidden aria-labelledby="tituloDatosPersonales">
+        <h1 id="tituloDatosPersonales" style="text-align:left;font-size:24px;margin:4px 0 8px;">Datos personales</h1>
+        <p class="datos-intro">Consulta la información vinculada a tu cuenta de Gamers Gold.</p>
+
+        <div class="datos-panel">
+            <div class="datos-campo">
+                <div class="datos-campo-info">
+                    <span class="datos-campo-etiqueta">Nombre de usuario</span>
+                    <div class="datos-campo-valor" id="nombreDatosPersonales">Cargando...</div>
+                </div>
+                <button class="datos-editar" type="button" disabled>Próximamente</button>
+            </div>
+            <div class="datos-campo">
+                <div class="datos-campo-info">
+                    <span class="datos-campo-etiqueta">Gmail</span>
+                    <div class="datos-campo-valor" id="correoDatosPersonales">Cargando...</div>
+                </div>
+                <button class="datos-editar" type="button" disabled>Próximamente</button>
+            </div>
+            <div id="contenedorTelefonoDatos">
+                <div class="datos-campo">
+                    <div class="datos-campo-info">
+                        <span class="datos-campo-etiqueta">Número de teléfono</span>
+                        <div class="datos-campo-valor" id="telefonoDatosPersonales">Se mostrará aquí</div>
+                    </div>
+                    <button class="datos-editar" type="button" disabled>Próximamente</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="datos-seguridad">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            <span>Para proteger tu cuenta, los cambios de Gmail y teléfono requerirán un código de confirmación enviado a tu Gmail actual. Esta función se activará más adelante.</span>
+        </div>
+    </section>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2448,6 +2594,8 @@ async function cargarWhatsApp(userId, mostrarConfirmacion = false) {
     if (data?.whatsapp_number) {
         whatsappRegistrado.textContent = data.whatsapp_number;
         whatsappRegistrado.hidden = false;
+        const telefonoVista = document.getElementById("telefonoDatosPersonales");
+        if (telefonoVista) telefonoVista.textContent = data.whatsapp_number;
         formWhatsApp.hidden = true;
 
         if (mostrarConfirmacion) {
@@ -2837,6 +2985,60 @@ document
         activarNotificacionesGVR
     );
 
+
+
+/* ==========================================
+   NAVEGACIÓN DE DATOS PERSONALES
+   Solo presentación: no modifica datos ni Auth.
+========================================== */
+
+const botonVolverCuenta = document.getElementById("botonVolverCuenta");
+const tituloEncabezadoCuenta = document.getElementById("tituloEncabezadoCuenta");
+const contenidoCuenta = document.getElementById("contenidoCuenta");
+const pantallaDatosPersonales = document.getElementById("pantallaDatosPersonales");
+const bloqueDatosPersonales = document.querySelector(".grupo-cuenta > .acordeon");
+
+function abrirPantallaDatosPersonales() {
+    const nombre = document.getElementById("nombreUsuario")?.textContent || "Usuario";
+    const correo = document.getElementById("correoUsuario")?.textContent || "Sin correo";
+    const numeroWhatsApp = document.getElementById("whatsappRegistrado")?.textContent || "";
+
+    document.getElementById("nombreDatosPersonales").textContent = nombre;
+    document.getElementById("correoDatosPersonales").textContent = correo;
+    document.getElementById("telefonoDatosPersonales").textContent =
+        numeroWhatsApp || "Aún no registrado";
+
+    // Conserva el formulario existente para registrar el WhatsApp si todavía no existe.
+    const bloqueWhatsApp = document.getElementById("bloqueWhatsApp");
+    const contenedorTelefono = document.getElementById("contenedorTelefonoDatos");
+    if (bloqueWhatsApp && contenedorTelefono && !contenedorTelefono.contains(bloqueWhatsApp)) {
+        contenedorTelefono.appendChild(bloqueWhatsApp);
+    }
+
+    contenidoCuenta.hidden = true;
+    pantallaDatosPersonales.hidden = false;
+    tituloEncabezadoCuenta.textContent = "Datos personales";
+    document.title = "Datos personales | Gamers Gold Top-Up";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function volverA MiCuenta() {
+    pantallaDatosPersonales.hidden = true;
+    contenidoCuenta.hidden = false;
+    tituloEncabezadoCuenta.textContent = "Mi cuenta";
+    document.title = "Mi cuenta | Gamers Gold Top-Up";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+if (bloqueDatosPersonales) {
+    const resumenDatos = bloqueDatosPersonales.querySelector("summary");
+    resumenDatos.addEventListener("click", function(event) {
+        event.preventDefault();
+        abrirPantallaDatosPersonales();
+    });
+}
+
+botonVolverCuenta.addEventListener("click", volverA MiCuenta);
 
 /* ==========================================
    INICIAR CUENTA
