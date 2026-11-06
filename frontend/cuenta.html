@@ -1861,6 +1861,8 @@
                         <input id="nuevoTelefonoDatos" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="+12345678900" required>
                         <p class="texto-ayuda">Para confirmar el cambio, introduce la contraseña actual de tu cuenta. El número actualizado seguirá siendo tu WhatsApp de verificación.</p>
                         <input id="claveActualTelefonoDatos" type="password" autocomplete="current-password" maxlength="128" placeholder="Contraseña actual" aria-label="Contraseña actual" required>
+                        <div id="captchaTelefonoDatos" class="captcha-wrap" aria-label="Verificación de seguridad"></div>
+                        <p class="texto-ayuda">Completa la verificación de seguridad para confirmar tu contraseña.</p>
                         <div class="datos-editor-acciones">
                             <button class="boton" id="confirmarTelefonoDatos" type="button">Verificar contraseña y guardar teléfono</button>
                             <button class="boton-secundario-datos" type="button" data-cancelar="editorTelefonoDatos">Cancelar</button>
@@ -2004,6 +2006,7 @@
 
 </div>
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer onload="window.ggTelefonoTurnstileReady=true"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -3463,9 +3466,33 @@ document.getElementById("editarCorreoDatos").addEventListener("click", () => {
     document.getElementById("pasoCodigoCorreoDatos").hidden = true;
     abrirEditorDatos("editorCorreoDatos");
 });
+let ggTelefonoCaptchaWidget = null;
+let ggTelefonoCaptchaToken = "";
+
+function renderCaptchaTelefonoDatos() {
+    if (!window.ggTelefonoTurnstileReady || !window.turnstile) {
+        mostrarEstadoDatos("estadoTelefonoDatos", "La verificación de seguridad todavía está cargando. Espera unos segundos y vuelve a abrir esta sección.", "error");
+        return;
+    }
+    const contenedor = document.getElementById("captchaTelefonoDatos");
+    if (ggTelefonoCaptchaWidget !== null) {
+        window.turnstile.reset(ggTelefonoCaptchaWidget);
+        ggTelefonoCaptchaToken = "";
+        return;
+    }
+    ggTelefonoCaptchaWidget = window.turnstile.render(contenedor, {
+        sitekey: "0x4AAAAAAFkQPUoJGVxIGYNB",
+        callback: (token) => { ggTelefonoCaptchaToken = token; },
+        "expired-callback": () => { ggTelefonoCaptchaToken = ""; },
+        "error-callback": () => { ggTelefonoCaptchaToken = ""; }
+    });
+}
+
 document.getElementById("editarTelefonoDatos").addEventListener("click", () => {
     document.getElementById("claveActualTelefonoDatos").value = "";
+    ggTelefonoCaptchaToken = "";
     abrirEditorDatos("editorTelefonoDatos");
+    renderCaptchaTelefonoDatos();
 });
 
 document.getElementById("formEditarNombreDatos").addEventListener("submit", async event => {
@@ -3572,12 +3599,16 @@ document.getElementById("confirmarTelefonoDatos").addEventListener("click", asyn
         mostrarEstadoDatos("estadoTelefonoDatos", "Introduce la contraseña actual de tu cuenta.", "error");
         return;
     }
+    if (!ggTelefonoCaptchaToken) {
+        mostrarEstadoDatos("estadoTelefonoDatos", "Completa la verificación de seguridad antes de continuar.", "error");
+        return;
+    }
     const boton = document.getElementById("confirmarTelefonoDatos");
     boton.disabled = true;
     mostrarEstadoDatos("estadoTelefonoDatos", "Verificando contraseña y actualizando número...");
     try {
         const { data, error } = await supabaseClient.functions.invoke("actualizar-telefono-cuenta", {
-            body: { password, phone: numero }
+            body: { password, phone: numero, captchaToken: ggTelefonoCaptchaToken }
         });
         if (error) {
             let mensaje = error.message || "No se pudo completar la solicitud.";
@@ -3600,6 +3631,8 @@ document.getElementById("confirmarTelefonoDatos").addEventListener("click", asyn
         mostrarEstadoDatos("estadoTelefonoDatos", error.message || "No se pudo actualizar el teléfono.", "error");
     } finally {
         document.getElementById("claveActualTelefonoDatos").value = "";
+        ggTelefonoCaptchaToken = "";
+        if (ggTelefonoCaptchaWidget !== null && window.turnstile) window.turnstile.reset(ggTelefonoCaptchaWidget);
         boton.disabled = false;
     }
 });
