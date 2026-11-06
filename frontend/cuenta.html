@@ -1859,11 +1859,10 @@
                 <div class="datos-editor" id="editorTelefonoDatos">
                     <form id="formEditarTelefonoDatos">
                         <input id="nuevoTelefonoDatos" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="+12345678900" required>
-                        <p class="texto-ayuda">Enviaremos un código al Gmail actual de tu cuenta. El número actualizado seguirá siendo tu WhatsApp de verificación.</p>
-                        <input id="codigoTelefonoDatos" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Código recibido en tu Gmail">
+                        <p class="texto-ayuda">Para confirmar el cambio, introduce la contraseña actual de tu cuenta. El número actualizado seguirá siendo tu WhatsApp de verificación.</p>
+                        <input id="claveActualTelefonoDatos" type="password" autocomplete="current-password" maxlength="128" placeholder="Contraseña actual" aria-label="Contraseña actual" required>
                         <div class="datos-editor-acciones">
-                            <button class="boton" id="enviarCodigoTelefonoDatos" type="button">Enviar código al Gmail actual</button>
-                            <button class="boton" id="confirmarTelefonoDatos" type="button">Verificar y guardar teléfono</button>
+                            <button class="boton" id="confirmarTelefonoDatos" type="button">Verificar contraseña y guardar teléfono</button>
                             <button class="boton-secundario-datos" type="button" data-cancelar="editorTelefonoDatos">Cancelar</button>
                         </div>
                         <p class="datos-estado" id="estadoTelefonoDatos" role="status" aria-live="polite"></p>
@@ -3465,7 +3464,7 @@ document.getElementById("editarCorreoDatos").addEventListener("click", () => {
     abrirEditorDatos("editorCorreoDatos");
 });
 document.getElementById("editarTelefonoDatos").addEventListener("click", () => {
-    document.getElementById("codigoTelefonoDatos").value = "";
+    document.getElementById("claveActualTelefonoDatos").value = "";
     abrirEditorDatos("editorTelefonoDatos");
 });
 
@@ -3560,52 +3559,28 @@ document.getElementById("confirmarCorreoDatos").addEventListener("click", async 
     }
 });
 
-// El teléfono se actualiza en la tabla existente solo después de verificar el OTP
-// de reautenticación en una Edge Function con service role; no se habilita UPDATE público en RLS.
-document.getElementById("enviarCodigoTelefonoDatos").addEventListener("click", async () => {
-    const numero = String(document.getElementById("nuevoTelefonoDatos").value || "").replace(/[\s().-]/g, "");
-    if (!/^\+[1-9]\d{6,14}$/.test(numero)) {
-        mostrarEstadoDatos("estadoTelefonoDatos", "Escribe el número internacional con + y código de país.", "error");
-        return;
-    }
-    const boton = document.getElementById("enviarCodigoTelefonoDatos");
-    boton.disabled = true;
-    mostrarEstadoDatos("estadoTelefonoDatos", "Enviando código al Gmail actual...");
-    try {
-        const { error } = await supabaseClient.auth.reauthenticate();
-        if (error) throw error;
-        mostrarEstadoDatos("estadoTelefonoDatos", "Código enviado al Gmail actual. Introdúcelo y pulsa Verificar y guardar teléfono.");
-    } catch (error) {
-        mostrarEstadoDatos("estadoTelefonoDatos", error.message || "No se pudo enviar el código.", "error");
-    } finally {
-        boton.disabled = false;
-    }
-});
+// El cambio de teléfono exige volver a autenticar al usuario con su contraseña actual.
+// La Edge Function vuelve a comprobar esa contraseña en el servidor antes de actualizar WhatsApp.
 document.getElementById("confirmarTelefonoDatos").addEventListener("click", async () => {
     const numero = String(document.getElementById("nuevoTelefonoDatos").value || "").replace(/[\s().-]/g, "");
-    const token = document.getElementById("codigoTelefonoDatos").value.trim();
+    const password = document.getElementById("claveActualTelefonoDatos").value;
     if (!/^\+[1-9]\d{6,14}$/.test(numero)) {
         mostrarEstadoDatos("estadoTelefonoDatos", "Escribe un número internacional válido.", "error");
         return;
     }
-    if (!/^\d{8}$/.test(token)) {
-        mostrarEstadoDatos("estadoTelefonoDatos", "Introduce el código completo de 8 dígitos.", "error");
+    if (!password) {
+        mostrarEstadoDatos("estadoTelefonoDatos", "Introduce la contraseña actual de tu cuenta.", "error");
         return;
     }
     const boton = document.getElementById("confirmarTelefonoDatos");
     boton.disabled = true;
-    mostrarEstadoDatos("estadoTelefonoDatos", "Verificando código y actualizando número...");
+    mostrarEstadoDatos("estadoTelefonoDatos", "Verificando contraseña y actualizando número...");
     try {
-        const { data: sesionData, error: sesionError } = await supabaseClient.auth.getSession();
-        const accessToken = sesionData.session?.access_token;
-        if (sesionError || !accessToken) throw new Error("Tu sesión ha expirado. Inicia sesión nuevamente.");
         const { data, error } = await supabaseClient.functions.invoke("actualizar-telefono-cuenta", {
-            body: { token, phone: numero }
+            body: { password, phone: numero }
         });
         if (error) {
             let mensaje = error.message || "No se pudo completar la solicitud.";
-            // Supabase devuelve el detalle seguro de la Edge Function dentro de context.
-            // Leerlo permite mostrar el motivo real en vez del mensaje genérico non-2xx.
             if (error.context && typeof error.context.json === "function") {
                 const respuesta = await error.context.json().catch(() => null);
                 if (respuesta?.error) mensaje = respuesta.error;
@@ -3619,11 +3594,12 @@ document.getElementById("confirmarTelefonoDatos").addEventListener("click", asyn
         document.getElementById("formWhatsApp").hidden = true;
         document.getElementById("editarTelefonoDatos").textContent = "Cambiar";
         usuarioDatosActual = (await supabaseClient.auth.getUser()).data.user || usuarioDatosActual;
-        mostrarEstadoDatos("estadoTelefonoDatos", "Número de teléfono y WhatsApp actualizado correctamente.", "exito");
+        mostrarEstadoDatos("estadoTelefonoDatos", "Contraseña verificada. Número de teléfono y WhatsApp actualizado correctamente.", "exito");
         cerrarEditorDatos("editorTelefonoDatos");
     } catch (error) {
         mostrarEstadoDatos("estadoTelefonoDatos", error.message || "No se pudo actualizar el teléfono.", "error");
     } finally {
+        document.getElementById("claveActualTelefonoDatos").value = "";
         boton.disabled = false;
     }
 });
