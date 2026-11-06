@@ -341,6 +341,26 @@
         outline-offset: 3px;
     }
 
+    /* Grupo único de opciones de Mi cuenta */
+    .grupo-cuenta {
+        overflow: hidden;
+        border: 1px solid #173d63;
+        border-radius: 14px;
+        background: #061226;
+        box-shadow: 0 8px 24px rgba(0, 12, 30, .18);
+    }
+
+    .grupo-cuenta > .acordeon {
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .grupo-cuenta > .acordeon + .acordeon {
+        border-top: 1px solid #244565;
+    }
+
     /* DESPLEGABLES PRINCIPALES */
 
     .lista-opciones {
@@ -1200,9 +1220,10 @@
 
 
 
-            <!-- DATOS PERSONALES -->
+            <div class="grupo-cuenta">
+                <!-- DATOS PERSONALES -->
 
-            <details class="acordeon">
+                <details class="acordeon">
                 <summary>
                     <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="12" cy="8" r="4"></circle>
@@ -1334,7 +1355,8 @@
                         </button>
                     </form>
                 </div>
-            </details>
+                </details>
+            </div>
 
             <h2 class="titulo-seccion-cuenta">Ayuda</h2>
 
