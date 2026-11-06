@@ -922,26 +922,24 @@ h1{font-size:clamp(25px,6vw,34px);color:#f4f8ff;letter-spacing:-.6px;margin:0 0 
 }
 @media(max-width:600px){.levels .level .level-emoji{width:52px;height:52px}.levels .level .level-emoji img{width:44px;height:44px}}
 </style>
-
-    <link rel
-
-=<script>
-(function(){
-  try{
-    var key="gamersGoldPantallasVisto";
-    if(sessionStorage.getItem(key)==="true"){
+ 
+<script>
+(function () {
+  try {
+    var key = "gamersGoldPantallasVisto";
+    if (sessionStorage.getItem(key) === "true") {
       document.documentElement.classList.add("gg-session-seen");
-    }else{
-      sessionStorage.setItem(key,"true");
+    } else {
+      sessionStorage.setItem(key, "true");
       document.documentElement.classList.add("gg-session-play");
     }
-  }catch(error){
+  } catch (error) {
     document.documentElement.classList.add("gg-session-play");
   }
 })();
 </script>
-<link rel=<link rel="stylesheet" href="./entrada-sesion.css?v=20261106-2">
-    <script src="./entrada-sesion.js?v=20261106-1" defer></script>
+<link rel="stylesheet" href="./entrada-sesion.css?v=20261106-3">
+<script src="./entrada-sesion.js?v=20261106-3" defer></script>
 </head>
 <body>
 <div id="gg-session-loader" role="status" aria-label="Gamers Gold Top-Up">
