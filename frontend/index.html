@@ -1157,6 +1157,17 @@
             .logo-g { transition: none; }
         }
 
+
+/* Campanita de notificaciones */
+.gg-notification-bell{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:0 0 42px;width:42px;height:42px;margin-left:8px;border:1px solid rgba(32,197,255,.25);border-radius:12px;background:linear-gradient(145deg,rgba(12,34,61,.98),rgba(7,17,34,.98));color:#eafaff;text-decoration:none;box-shadow:0 5px 18px rgba(0,0,0,.2);transition:border-color .2s ease,transform .2s ease}
+.gg-notification-bell:hover{border-color:rgba(32,197,255,.7);transform:translateY(-1px)}
+.gg-notification-bell svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.gg-notification-dot{position:absolute;top:5px;right:5px;width:10px;height:10px;border:2px solid #081426;border-radius:50%;background:#ff4058;box-shadow:0 0 9px rgba(255,64,88,.75)}
+.gg-notification-dot[hidden]{display:none}
+.gg-notification-bell.tiene-nuevas svg{transform-origin:50% 12%;animation:ggBellRing 1.25s ease-in-out infinite}
+@keyframes ggBellRing{0%,100%{transform:rotate(0)}12%{transform:rotate(13deg)}24%{transform:rotate(-13deg)}36%{transform:rotate(9deg)}48%{transform:rotate(-8deg)}60%{transform:rotate(0)}}
+@media(prefers-reduced-motion:reduce){.gg-notification-bell.tiene-nuevas svg{animation:none}}
+
 </style>
 </head>
 
@@ -1177,6 +1188,7 @@
         </a>
 
         <div class="navegacion">
+            <a id="ggNotificationsBell" class="gg-notification-bell" href="./notificaciones.html" aria-label="Notificaciones" title="Notificaciones"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span id="ggNotificationsDot" class="gg-notification-dot" hidden></span></a>
             <div id="botonesCuenta" class="boton-cuenta"></div>
         </div>
     </header>
@@ -1401,6 +1413,55 @@
             "https://gsuhzcavghsiolmipnzi.supabase.co",
             "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
         );
+
+        /* NOTIFICACIONES DEL USUARIO */
+        (async function iniciarCampanitaNotificaciones() {
+            const campanita = document.getElementById("ggNotificationsBell");
+            const punto = document.getElementById("ggNotificationsDot");
+            if (!campanita || !punto) return;
+
+            async function actualizarIndicador(userId) {
+                const { count, error } = await supabaseClient
+                    .from("user_notifications")
+                    .select("id", { count: "exact", head: true })
+                    .eq("user_id", userId)
+                    .eq("is_read", false);
+
+                if (error) {
+                    console.error("No se pudo consultar el indicador de notificaciones:", error.message);
+                    return;
+                }
+
+                const hayNuevas = (count || 0) > 0;
+                punto.hidden = !hayNuevas;
+                campanita.classList.toggle("tiene-nuevas", hayNuevas);
+                campanita.setAttribute("aria-label", hayNuevas
+                    ? "Notificaciones: tienes notificaciones sin leer"
+                    : "Notificaciones");
+            }
+
+            try {
+                const { data, error } = await supabaseClient.auth.getUser();
+                if (error || !data.user) return;
+
+                await actualizarIndicador(data.user.id);
+
+                supabaseClient
+                    .channel("ggt-user-notifications-" + data.user.id)
+                    .on("postgres_changes", {
+                        event: "*",
+                        schema: "public",
+                        table: "user_notifications",
+                        filter: "user_id=eq." + data.user.id
+                    }, function () {
+                        actualizarIndicador(data.user.id);
+                    })
+                    .subscribe();
+            } catch (error) {
+                console.error("Error al iniciar las notificaciones:", error);
+            }
+        })();
+
 
         function actualizarMenu() {
             const botones = document.getElementById("botonesCuenta");
