@@ -3014,6 +3014,8 @@ function abrirPantallaDatosPersonales() {
     if (bloqueWhatsApp && contenedorTelefono && !contenedorTelefono.contains(bloqueWhatsApp)) {
         contenedorTelefono.appendChild(bloqueWhatsApp);
     }
+    const tituloTelefono = bloqueWhatsApp?.querySelector(".dato-titulo");
+    if (tituloTelefono) tituloTelefono.textContent = "Número de teléfono";
 
     contenidoCuenta.hidden = true;
     pantallaDatosPersonales.hidden = false;
@@ -3022,7 +3024,7 @@ function abrirPantallaDatosPersonales() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function volverA MiCuenta() {
+function volverAMiCuenta() {
     pantallaDatosPersonales.hidden = true;
     contenidoCuenta.hidden = false;
     tituloEncabezadoCuenta.textContent = "Mi cuenta";
@@ -3038,7 +3040,7 @@ if (bloqueDatosPersonales) {
     });
 }
 
-botonVolverCuenta.addEventListener("click", volverA MiCuenta);
+botonVolverCuenta.addEventListener("click", volverAMiCuenta);
 
 /* ==========================================
    INICIAR CUENTA
