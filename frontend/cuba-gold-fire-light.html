@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b18">
+<meta name="description" content="Cuba Gold Fire Light: clasificaciones, equipos, jugadores y ganadores.">
+<title>Cuba Gold Fire Light | Gamers Gold Top-Up</title>
+<style>
+:root{color-scheme:dark;--bg:#050b18;--panel:#0b192d;--panel2:#0d2039;--cyan:#20c5ff;--blue:#087cff;--text:#f4f8ff;--muted:#9aadc4;--line:rgba(105,158,215,.17)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+body{min-height:100vh;background:radial-gradient(ellipse at 50% -10%,rgba(0,119,255,.2),transparent 42%),var(--bg);color:var(--text)}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px max(18px,calc((100% - 1100px)/2));background:rgba(5,11,24,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{font-weight:900;letter-spacing:.3px}.brand span{color:var(--cyan)}
+.back{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:800}
+main{width:min(100% - 32px,1050px);margin:28px auto 60px}
+.hero{position:relative;overflow:hidden;padding:clamp(28px,6vw,58px);border:1px solid rgba(32,197,255,.2);border-radius:22px;background:linear-gradient(130deg,rgba(9,37,68,.97),rgba(7,17,34,.98));box-shadow:0 18px 55px rgba(0,0,0,.22)}
+.kicker{margin-bottom:13px;color:var(--cyan);font-size:11px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase}
+h1{font-size:clamp(34px,7vw,64px);line-height:1.02;letter-spacing:-1.8px;font-weight:950}
+h1 span{display:block;margin-top:7px;color:var(--cyan);text-shadow:0 0 24px rgba(32,197,255,.24)}
+.intro{max-width:570px;margin-top:18px;color:#b5c8dd;font-size:14px;line-height:1.75}
+.status{display:inline-flex;align-items:center;gap:8px;margin-top:23px;padding:9px 12px;border:1px solid rgba(32,197,255,.23);border-radius:30px;background:rgba(0,153,255,.08);color:#bdefff;font-size:11px;font-weight:800;letter-spacing:.6px}
+.status:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.section-head{margin:32px 0 15px}.section-head h2{font-size:21px}.section-head p{margin-top:7px;color:var(--muted);font-size:13px;line-height:1.6}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}
+.tab{min-height:54px;padding:12px 8px;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:#c7d8ea;font-size:12px;font-weight:800;cursor:pointer;transition:.2s}
+.tab[aria-selected=true]{border-color:rgba(32,197,255,.65);background:linear-gradient(135deg,rgba(8,124,255,.24),rgba(32,197,255,.09));color:#fff;box-shadow:inset 0 0 0 1px rgba(32,197,255,.1)}
+.tab:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.panel{min-height:220px;padding:clamp(20px,4vw,30px);border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,var(--panel),#071323)}
+.panel h3{font-size:18px}.empty{display:grid;place-items:center;min-height:145px;text-align:center;color:var(--muted)}
+.empty strong{display:block;margin-bottom:8px;color:#eaf6ff;font-size:14px}.empty p{max-width:420px;font-size:12px;line-height:1.7}
+footer{padding:25px 16px;border-top:1px solid var(--line);color:#72849b;text-align:center;font-size:11px}
+@media(max-width:620px){header{padding:13px 16px}.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}main{width:calc(100% - 26px);margin-top:18px}.hero{border-radius:17px}.brand{font-size:13px}}
+</style>
+</head>
+<body>
+<header><div class="brand">GAMERS <span>GOLD TOP-UP</span></div><a class="back" href="./index.html">← Volver al inicio</a></header>
+<main>
+<section class="hero">
+<div class="kicker">Arena competitiva · Cuba</div>
+<h1>CUBA GOLD <span>FIRE LIGHT</span></h1>
+<p class="intro">Un espacio para seguir la competencia: consulta las clasificaciones, conoce a los equipos y jugadores destacados y descubre quiénes se llevan la victoria.</p>
+<div class="status">CENTRO DE TORNEOS</div>
+</section>
+<section aria-labelledby="ranking-title">
+<div class="section-head"><h2 id="ranking-title">Información de la competición</h2><p>Selecciona una categoría para consultar sus novedades y resultados oficiales.</p></div>
+<div class="tabs" role="tablist" aria-label="Categorías del torneo">
+<button class="tab" id="tab-clasificacion" type="button" role="tab" aria-selected="true" aria-controls="panel-content" data-key="clasificacion">🏆 Clasificación</button>
+<button class="tab" id="tab-equipos" type="button" role="tab" aria-selected="false" aria-controls="panel-content" data-key="equipos">🎮 Mejores equipos</button>
+<button class="tab" id="tab-jugadores" type="button" role="tab" aria-selected="false" aria-controls="panel-content" data-key="jugadores">⭐ Jugadores</button>
+<button class="tab" id="tab-ganadores" type="button" role="tab" aria-selected="false" aria-controls="panel-content" data-key="ganadores">🥇 Ganadores</button>
+</div>
+<div class="panel" id="panel-content" role="tabpanel" aria-labelledby="tab-clasificacion" tabindex="0">
+<h3 id="panel-title">Tabla de clasificación</h3>
+<div class="empty"><div><strong>Próximamente</strong><p>Las posiciones oficiales aparecerán aquí cuando se publiquen los resultados del torneo.</p></div></div>
+</div>
+</section>
+</main>
+<footer>© Gamers Gold Top-Up · Cuba Gold Fire Light</footer>
+<script>
+(function(){
+const titles={clasificacion:"Tabla de clasificación",equipos:"Mejores equipos",jugadores:"Mejores jugadores",ganadores:"Ganadores"};
+const descriptions={clasificacion:"Las posiciones oficiales aparecerán aquí cuando se publiquen los resultados del torneo.",equipos:"Aquí destacaremos los equipos participantes y su rendimiento en la competición.",jugadores:"Aquí aparecerán los jugadores más destacados del torneo.",ganadores:"Aquí se publicarán los equipos y jugadores ganadores de cada competición."};
+const tabs=Array.from(document.querySelectorAll(".tab"));
+const title=document.getElementById("panel-title");
+const panel=document.getElementById("panel-content");
+tabs.forEach(function(tab,index){tab.addEventListener("click",function(){
+tabs.forEach(function(item){item.setAttribute("aria-selected",String(item===tab));item.tabIndex=item===tab?0:-1;});
+title.textContent=titles[tab.dataset.key];
+panel.setAttribute("aria-labelledby",tab.id);
+panel.querySelector(".empty p").textContent=descriptions[tab.dataset.key];
+});tab.tabIndex=index===0?0:-1;});
+})();
+</script>
+</body>
+</html>
