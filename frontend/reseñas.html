@@ -263,6 +263,76 @@
 .escudo-valoracion.activo{filter:drop-shadow(0 0 6px rgba(0,183,255,.65));opacity:1}
 .escudo-valoracion.inactivo{filter:grayscale(.7);opacity:.32}
 .rayos-reseña{justify-content:flex-start;margin-bottom:8px}
+
+/* Rediseño visual Gamers Gold: formulario destacado y reseñas sin marco exterior */
+body{
+    background:
+      radial-gradient(ellipse at 50% -12%,rgba(0,132,255,.18),transparent 42%),
+      linear-gradient(180deg,#071426 0%,#050b18 55%,#040914 100%);
+    color:#f4f8ff;
+}
+.contenedor{max-width:900px;padding:22px 22px 42px}
+.header{gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.encabezado-pagina{font-size:15px}
+.dejar-reseña{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    min-height:42px;padding:0 16px;border:1px solid rgba(32,197,255,.42);
+    border-radius:11px;background:linear-gradient(110deg,#087cff,#00aeea);
+    color:#fff;text-decoration:none;font-size:12px;font-weight:900;
+    box-shadow:0 8px 22px rgba(0,119,255,.2);transition:transform .2s,filter .2s;
+}
+.dejar-reseña:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.dejar-reseña:focus-visible{outline:2px solid #75d7ff;outline-offset:3px}
+.card{margin-bottom:28px}
+#formularioReseña{
+    padding:clamp(20px,4vw,30px);border:1px solid rgba(32,197,255,.2);
+    border-radius:19px;background:radial-gradient(ellipse at 95% 0%,rgba(0,153,255,.13),transparent 42%),linear-gradient(145deg,#0b1c34,#071020 75%);
+    box-shadow:0 16px 38px rgba(0,0,0,.18);
+}
+h1{text-align:left;font-size:clamp(24px,4vw,31px);font-weight:900;letter-spacing:-.6px}
+.descripcion{text-align:left;color:#9aadc4;line-height:1.65}
+.resumen{
+    display:grid;grid-template-columns:auto 1fr;align-items:center;justify-items:start;
+    column-gap:15px;row-gap:4px;padding:17px 18px;margin-bottom:25px;
+    border:1px solid rgba(32,197,255,.2);border-radius:14px;
+    background:rgba(3,13,28,.58);text-align:left;
+}
+.promedio{grid-row:span 2;font-size:36px;color:#f4f8ff;line-height:1}
+.rayos{justify-content:flex-start;margin:0;color:#20c5ff}
+.contador{font-size:11px}
+label{color:#d5e7f8;font-size:12px;font-weight:800;letter-spacing:.2px}
+.selector-rayos{gap:9px}
+.rayo-opcion{background:rgba(5,19,38,.85)}
+textarea{min-height:125px;background:rgba(4,15,31,.9);border-color:rgba(68,139,198,.35);color:#f4f8ff;line-height:1.6}
+textarea::placeholder{color:#6f87a2}
+.publicar{min-height:47px;background:linear-gradient(100deg,#087cff,#00baff);box-shadow:0 8px 22px rgba(0,119,255,.18);transition:transform .2s,filter .2s}
+.publicar:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.08)}
+.nota{color:#7189a3}
+#reseñasPublicadas{padding:0}
+#listaReseñas{display:flex;flex-direction:column;gap:0}
+.reseña{
+    margin:0;padding:19px 2px;background:transparent;border:0;
+    border-bottom:1px solid rgba(105,158,215,.17);border-radius:0;
+}
+.reseña:last-child{border-bottom:0}
+.reseña-header{align-items:center;margin-bottom:9px}
+.usuario{color:#f2f7ff;font-size:14px;font-weight:850}
+.fecha{color:#7189a3}
+.rayos-reseña{margin-bottom:9px}
+.comentario{color:#b9cadd;font-size:13px;line-height:1.7;overflow-wrap:anywhere}
+.mensaje{padding:26px 8px;color:#8ea4bd}
+.boton-eliminar{border-color:rgba(255,64,87,.65);background:rgba(75,16,30,.55)}
+@media(max-width:600px){
+  .contenedor{padding:17px 14px 34px}
+  .header{margin-bottom:23px}
+  .dejar-reseña{min-height:40px;padding:0 12px;font-size:11px}
+  #formularioReseña{padding:20px 16px;border-radius:16px}
+  .resumen{padding:15px;column-gap:12px}
+  .promedio{font-size:32px}
+  .reseña{padding:17px 1px}
+}
+@media(prefers-reduced-motion:reduce){.dejar-reseña,.publicar{transition:none}}
+
 </style>
 </head>
 
@@ -275,12 +345,13 @@
         <a class="encabezado-pagina" href="cuenta.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Reseñas</span></a>
 
         <a href="cuenta.html" class=" boton-atras"><span class="icono-atras" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span>Atrás</span></a>
+        <a class="dejar-reseña" href="#formularioReseña">✎ Dejar reseña</a>
 
     </div>
 
-    <div class="card">
+    <div class="card" id="formularioReseña">
 
-        <h1>Opiniones de la comunidad</h1>
+        <h1>Reseñas de clientes</h1>
 
         <p class="descripcion">
             Comparte tu experiencia con Gamers Gold Top-Up.
@@ -336,7 +407,7 @@
 
     </div>
 
-    <div class="card">
+    <div class="card" id="reseñasPublicadas">
 
         <div id="listaReseñas">
             <div class="mensaje">
