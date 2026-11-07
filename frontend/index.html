@@ -1639,7 +1639,7 @@
         const cantidad = Math.max(0, Math.min(5, Math.round(Number(valor) || 0)));
         return Array.from({ length: 5 }, (_, i) =>
             '<img class="gg-review-shield' + (i < cantidad ? ' active' : '') +
-            '" src="' + (location.pathname.endsWith('/index.html') && location.pathname !== '/index.html' ? './gvr-escudo.svg' : 'frontend/gvr-escudo.svg') +
+            '" src="' + (location.pathname.includes('/frontend/') ? './gvr-escudo.svg' : 'frontend/gvr-escudo.svg') +
             '" alt="" aria-hidden="true">'
         ).join("");
     };
