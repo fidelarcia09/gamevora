@@ -671,12 +671,10 @@
         if (error) throw error;
 
         const promedioEl = document.getElementById("ggReviewsAverage");
-        const escudosEl = document.getElementById("ggReviewsAverageShields");
         const contadorEl = document.getElementById("ggReviewsCount");
 
         if (!reseñas || reseñas.length === 0) {
             promedioEl.textContent = '0.0';
-            escudosEl.innerHTML = pintarEscudos(0);
             contadorEl.textContent = "0 reseñas realizadas";
             lista.innerHTML = '<div class="gg-reviews-empty">Todavía no hay reseñas. ¡Pronto podrás leer aquí las experiencias de nuestros clientes!</div>';
             return;
@@ -684,7 +682,6 @@
 
         const promedio = reseñas.reduce((total, item) => total + (Number(item.rating) || 0), 0) / reseñas.length;
         promedioEl.textContent = promedio.toFixed(1);
-        escudosEl.innerHTML = pintarEscudos(promedio);
         contadorEl.textContent = reseñas.length + " reseñas realizadas";
 
         lista.replaceChildren();
