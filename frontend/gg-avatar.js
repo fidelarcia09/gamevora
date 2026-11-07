@@ -71,21 +71,25 @@
         ))];
 
         for (let i = 0; i < unicos.length; i += 50) {
-            const { data, error } = await supabaseClient.functions.invoke(
-                "reviews-profiles",
-                { body: { user_ids: unicos.slice(i, i + 50) } }
-            );
+            try {
+                const { data, error } = await supabaseClient.functions.invoke(
+                    "reviews-profiles",
+                    { body: { user_ids: unicos.slice(i, i + 50) } }
+                );
 
-            if (error) {
-                console.warn("No se pudieron cargar algunos avatares de reseñas:", error.message);
-                continue;
-            }
-
-            (data && Array.isArray(data.avatars) ? data.avatars : []).forEach((avatar) => {
-                if (avatar && typeof avatar.user_id === "string") {
-                    resultado.set(avatar.user_id, avatar);
+                if (error) {
+                    console.warn("No se pudieron cargar algunos avatares de reseñas:", error.message);
+                    continue;
                 }
-            });
+
+                (data && Array.isArray(data.avatars) ? data.avatars : []).forEach((avatar) => {
+                    if (avatar && typeof avatar.user_id === "string") {
+                        resultado.set(avatar.user_id, avatar);
+                    }
+                });
+            } catch (error) {
+                console.warn("No se pudieron consultar los avatares de reseñas:", error);
+            }
         }
 
         return resultado;
