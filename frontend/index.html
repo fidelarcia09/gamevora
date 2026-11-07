@@ -1251,6 +1251,63 @@
 @media(max-width:360px){.gg-reviews .seccion-encabezado h2{font-size:20px}.gg-reviews-link{padding:0 9px;font-size:10px}}
 .gg-reviews.seccion{border:0!important;outline:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:0 22px!important}.gg-reviews.seccion::before,.gg-reviews.seccion::after{content:none!important;display:none!important}.gg-reviews .seccion-encabezado{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:9px;margin:0 0 15px}.gg-reviews .seccion-encabezado>div{display:block;width:100%;min-width:0}.gg-reviews .seccion-encabezado h2{display:block;width:100%;margin:0;white-space:nowrap;font-size:clamp(14px,4.3vw,30px);letter-spacing:-.55px;line-height:1.2}.gg-reviews-link{align-self:flex-end;flex:0 0 auto;margin:0;white-space:nowrap}.gg-reviews-list{border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}@media(max-width:600px){.gg-reviews.seccion{padding:0 14px!important}.gg-reviews .seccion-encabezado{gap:9px;margin-bottom:13px}.gg-reviews .seccion-encabezado h2{font-size:clamp(14px,4.3vw,23px)}.gg-reviews-link{min-height:34px;padding:0 12px;font-size:11px}}
 
+
+/* Carrusel horizontal: tres reseñas, cada una en su propio rectángulo */
+.gg-reviews-list{
+  display:flex!important;
+  flex-flow:row nowrap!important;
+  align-items:stretch;
+  gap:12px;
+  width:100%;
+  min-width:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:2px 2px 10px;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  scroll-snap-type:x mandatory;
+  scroll-padding-inline:2px;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(32,197,255,.55) rgba(105,158,215,.12);
+}
+.gg-reviews-list:focus-visible{outline:2px solid #20c5ff;outline-offset:3px;border-radius:10px}
+.gg-review-card{
+  box-sizing:border-box;
+  flex:0 0 100%;
+  width:100%;
+  min-width:0;
+  min-height:100%;
+  margin:0;
+  padding:16px;
+  border:1px solid rgba(32,197,255,.3)!important;
+  border-radius:14px!important;
+  background:linear-gradient(145deg,rgba(10,29,54,.88),rgba(5,15,31,.76))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+}
+.gg-review-card:last-child{border-bottom:1px solid rgba(32,197,255,.3)!important}
+.gg-reviews-empty,.gg-reviews-error{
+  box-sizing:border-box;
+  flex:0 0 100%;
+  width:100%;
+  padding:16px;
+  border:1px solid rgba(32,197,255,.25);
+  border-radius:14px;
+  background:rgba(8,26,53,.65);
+}
+@media(max-width:600px){
+  .gg-reviews-list{gap:10px;padding-bottom:9px}
+  .gg-review-card{padding:15px}
+}
+@media(prefers-reduced-motion:reduce){
+  .gg-reviews-list{scroll-behavior:auto}
+}
+
 </style>
 </head>
 
@@ -1492,7 +1549,7 @@
                 </div>
                 <div class="gg-reviews-count" id="ggReviewsCount">0 reseñas realizadas</div>
             </div>
-            <div class="gg-reviews-list" id="ggReviewsList" aria-live="polite">
+            <div class="gg-reviews-list" id="ggReviewsList" aria-live="polite" aria-label="Carrusel de las tres reseñas más recientes" tabindex="0">
                 <div class="gg-reviews-empty">Cargando reseñas de clientes…</div>
             </div>
         </section>
