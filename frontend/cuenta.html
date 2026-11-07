@@ -1682,6 +1682,43 @@
                 <p class="subtitulo">Información de tu cuenta Gamers Gold Top-Up</p>
             </div>
         </section>
+
+        <section class="datos-resumen-perfil" aria-label="Resumen de tu cuenta">
+            <div class="datos-marca">
+                <img class="datos-marca-escudo" src="./gvr-escudo.svg" alt="Escudo GVR">
+                <div class="datos-marca-texto">
+                    <span class="datos-marca-gamers">GAMERS</span>
+                    <span class="datos-marca-gold">GOLD TOP UP</span>
+                </div>
+            </div>
+            <div class="datos-id-cuenta">
+                <span class="datos-id-etiqueta">ID de cuenta</span>
+                <span class="datos-id-valor" id="codigoCuentaDatos">Cargando...</span>
+            </div>
+
+            <div class="datos-perfil-identidad">
+                <div class="datos-avatar-marco" id="avatarDatosPersonales" aria-label="Foto de perfil"></div>
+                <div class="datos-perfil-nombre" id="nombrePerfilDatos">Cargando...</div>
+                <div class="datos-perfil-correo" id="correoPerfilDatos">Cargando...</div>
+            </div>
+
+            <div class="datos-estadisticas" aria-label="Estadísticas de la cuenta">
+                <div class="datos-estadistica">
+                    <span class="datos-estadistica-valor" id="totalRecargasDatos">—</span>
+                    <span class="datos-estadistica-etiqueta">Recargas</span>
+                </div>
+                <div class="datos-estadistica">
+                    <span class="datos-estadistica-valor" id="saldoGvrDatos">—</span>
+                    <span class="datos-estadistica-etiqueta">Saldo GVR</span>
+                </div>
+                <div class="datos-estadistica">
+                    <span class="datos-estadistica-valor" id="totalReferidosDatos">—</span>
+                    <span class="datos-estadistica-etiqueta">Referidos</span>
+                </div>
+            </div>
+            <p class="datos-estado" id="estadoResumenCuentaDatos" role="status" aria-live="polite"></p>
+        </section>
+
         <p id="estadoFotoPerfil" class="avatar-estado" role="status" aria-live="polite"></p>
         <div class="avatar-acciones" id="accionesAvatar" aria-label="Opciones de imagen de perfil" hidden>
             <button type="button" id="botonElegirAvatar" class="avatar-accion">Elegir avatar</button>
@@ -1963,42 +2000,6 @@
 
     <section id="pantallaDatosPersonales" class="pantalla-datos-personales" hidden aria-labelledby="tituloDatosPersonales">
         <h1 id="tituloDatosPersonales" style="text-align:left;font-size:24px;margin:4px 0 8px;">Datos personales</h1>
-
-        <section class="datos-resumen-perfil" aria-label="Resumen de tu cuenta">
-            <div class="datos-marca">
-                <img class="datos-marca-escudo" src="./gvr-escudo.svg" alt="Escudo GVR">
-                <div class="datos-marca-texto">
-                    <span class="datos-marca-gamers">GAMERS</span>
-                    <span class="datos-marca-gold">GOLD TOP UP</span>
-                </div>
-            </div>
-            <div class="datos-id-cuenta">
-                <span class="datos-id-etiqueta">ID de cuenta</span>
-                <span class="datos-id-valor" id="codigoCuentaDatos">Cargando...</span>
-            </div>
-
-            <div class="datos-perfil-identidad">
-                <div class="datos-avatar-marco" id="avatarDatosPersonales" aria-label="Foto de perfil"></div>
-                <div class="datos-perfil-nombre" id="nombrePerfilDatos">Cargando...</div>
-                <div class="datos-perfil-correo" id="correoPerfilDatos">Cargando...</div>
-            </div>
-
-            <div class="datos-estadisticas" aria-label="Estadísticas de la cuenta">
-                <div class="datos-estadistica">
-                    <span class="datos-estadistica-valor" id="totalRecargasDatos">—</span>
-                    <span class="datos-estadistica-etiqueta">Recargas</span>
-                </div>
-                <div class="datos-estadistica">
-                    <span class="datos-estadistica-valor" id="saldoGvrDatos">—</span>
-                    <span class="datos-estadistica-etiqueta">Saldo GVR</span>
-                </div>
-                <div class="datos-estadistica">
-                    <span class="datos-estadistica-valor" id="totalReferidosDatos">—</span>
-                    <span class="datos-estadistica-etiqueta">Referidos</span>
-                </div>
-            </div>
-            <p class="datos-estado" id="estadoResumenCuentaDatos" role="status" aria-live="polite"></p>
-        </section>
 
         <div class="datos-panel">
             <div class="datos-campo">
@@ -3286,6 +3287,16 @@ async function cargarCuenta() {
     // Cargar únicamente el avatar propio de Gamers Gold, nunca la foto del proveedor Google.
     await cargarAvatarPerfil(usuario);
 
+    // El resumen de cuenta vive en la pantalla principal, fuera de Datos personales.
+    document.getElementById("nombrePerfilDatos").textContent =
+        usuario.user_metadata?.username ||
+        usuario.user_metadata?.full_name ||
+        usuario.user_metadata?.name ||
+        "Usuario";
+    document.getElementById("correoPerfilDatos").textContent = usuario.email || "Sin correo";
+    sincronizarAvatarDatosPersonales();
+    await cargarResumenCuentaDatos(usuario.id);
+
     usuarioCuentaIdParaRango = usuario.id;
     await actualizarRangoPerfilRevendedor(usuario.id);
 
@@ -3615,15 +3626,6 @@ function abrirPantallaDatosPersonales() {
     document.getElementById("nombreDatosPersonales").textContent = nombre;
     document.getElementById("correoDatosPersonales").textContent = correo;
     document.getElementById("telefonoDatosPersonales").textContent = numeroWhatsApp || "Aún no registrado";
-    document.getElementById("nombrePerfilDatos").textContent =
-        usuarioDatosActual?.user_metadata?.username ||
-        usuarioDatosActual?.user_metadata?.full_name ||
-        usuarioDatosActual?.user_metadata?.name ||
-        nombre;
-    document.getElementById("correoPerfilDatos").textContent =
-        usuarioDatosActual?.email || correo;
-    sincronizarAvatarDatosPersonales();
-    if (usuarioDatosActual?.id) cargarResumenCuentaDatos(usuarioDatosActual.id);
     // No trasladar el bloque antiguo de WhatsApp: el número se muestra una sola vez
     // en telefonoDatosPersonales y el cambio se realiza con el formulario verificado.
     contenidoCuenta.hidden = true;
