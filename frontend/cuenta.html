@@ -3530,7 +3530,7 @@ function sincronizarAvatarDatosPersonales() {
     if (!destino || !origen) return;
 
     const clon = origen.cloneNode(true);
-    clon.className = "datos-avatar-foto";
+    clon.className = "datos-avatar-foto avatar";
     clon.removeAttribute("id");
     clon.removeAttribute("role");
     clon.removeAttribute("tabindex");
@@ -3578,14 +3578,14 @@ async function cargarResumenCuentaDatos(usuarioId) {
         saldoEl.textContent = "0 GVR";
     }
 
-    if (recargasResp.error || !Number.isFinite(Number(recargasResp.count))) {
+    if (recargasResp.error || typeof recargasResp.count !== "number" || !Number.isFinite(recargasResp.count)) {
         recargasEl.textContent = "No disponible";
         errores.push("recargas");
     } else {
         recargasEl.textContent = String(recargasResp.count);
     }
 
-    if (referidosResp.error || !Number.isFinite(Number(referidosResp.count))) {
+    if (referidosResp.error || typeof referidosResp.count !== "number" || !Number.isFinite(referidosResp.count)) {
         referidosEl.textContent = "No disponible";
         errores.push("referidos");
     } else {
