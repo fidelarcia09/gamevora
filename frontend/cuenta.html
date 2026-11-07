@@ -1232,14 +1232,15 @@
     }
     .datos-marca-texto {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         align-items: baseline;
-        gap: 4px;
+        gap: 2px;
         min-width: 0;
-        font-size: 14px;
+        white-space: nowrap;
+        font-size: clamp(10px, 3vw, 14px);
         line-height: 1.15;
         font-weight: 900;
-        letter-spacing: -.35px;
+        letter-spacing: -.45px;
     }
     .datos-marca-gamers { color: #f4f8ff; }
     .datos-marca-gold { color: #20c5ff; }
@@ -1250,8 +1251,10 @@
         justify-content: flex-end;
         gap: 4px;
         width: fit-content;
-        max-width: 48%;
+        max-width: 44%;
         min-width: 0;
+        flex-shrink: 0;
+        flex-wrap: nowrap;
         margin: 0 0 0 auto;
         padding: 5px 7px;
         border: 1px solid rgba(70, 151, 205, .25);
@@ -1798,7 +1801,7 @@
                     <span class="datos-marca-gold">GOLD TOP UP</span>
                 </div>
                 <div class="datos-id-cuenta">
-                    <span class="datos-id-etiqueta">ID de cuenta</span>
+                    <span class="datos-id-etiqueta">ID</span>
                     <span class="datos-id-valor" id="codigoCuentaDatos">Cargando...</span>
                 </div>
             </div>
