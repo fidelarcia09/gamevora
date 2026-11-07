@@ -99,9 +99,21 @@
             outline: none;
         }
 
-        input:focus {
+        input:focus, select:focus {
             border-color: #159dff;
             box-shadow: 0 0 7px rgba(0, 157, 255, 0.15);
+        }
+
+        select {
+            width: 100%;
+            min-height: 42px;
+            padding: 10px 12px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
         }
 
         .ayuda {
@@ -948,6 +960,17 @@ body{padding:0!important}
             </div>
         </div>
 
+        <label class="etiqueta" for="zonaJugador">Servidor del jugador</label>
+        <select id="zonaJugador" name="zonaJugador" required aria-describedby="ayudaServidor">
+            <option value="">Selecciona tu servidor</option>
+            <option value="os_usa">América</option>
+            <option value="os_asia">Asia</option>
+            <option value="os_euro">Europa</option>
+            <option value="os_sea">SEA</option>
+            <option value="os_cht">TW / HK / MO</option>
+        </select>
+        <p id="ayudaServidor" class="ayuda">Selecciona el servidor donde está creado tu personaje. La región del catálogo permanece en GLOBAL.</p>
+
         <label class="etiqueta" for="idjugador">
             Player ID
         </label>
@@ -1191,6 +1214,8 @@ window.ggManualPaymentBridge = {
   const selected = productoSeleccionado;
   const playerField = document.getElementById("idjugador") || document.getElementById("idJugador");
   const playerId = playerField?.value.trim();
+  const serverField = document.getElementById("zonaJugador");
+  if (!serverField?.value) { alert("Selecciona el servidor de tu personaje."); serverField?.focus(); return false; }
   if (typeof validacionJugador !== "undefined" && validacionJugador.playerId === playerId) {
    if (validacionJugador.status === "CHECKING") {
     alert("Espera a que termine la comprobación del ID antes de pagar."); return false;
@@ -1524,6 +1549,7 @@ function actualizarBoton() {
 
     botonContinuar.disabled =
         !campoJugador.value.trim() ||
+        !document.getElementById("zonaJugador")?.value ||
         !productoSeleccionado ||
         validacionJugador.status === "CHECKING";
 }
@@ -2161,7 +2187,8 @@ async function enviarPedido(accessToken) {
             URL_CREAR_PEDIDO,
             accessToken,
             {
-                game_order_id: idPedido
+                game_order_id: idPedido,
+                zone_id: document.getElementById("zonaJugador")?.value || null
             }
         );
 
