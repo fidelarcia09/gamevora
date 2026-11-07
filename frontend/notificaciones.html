@@ -31,6 +31,15 @@
     .vacio-icono{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 12px;border:1px solid rgba(32,197,255,.2);border-radius:20px;background:linear-gradient(145deg,rgba(0,119,255,.16),rgba(32,197,255,.04));color:var(--cian);box-shadow:0 0 24px rgba(0,119,255,.08)}.vacio-icono svg{display:block;width:34px;height:34px}
     .login-link{display:inline-flex;margin-top:14px;padding:11px 16px;border-radius:9px;background:linear-gradient(100deg,#087cff,#00aeea);color:#fff;text-decoration:none;font-weight:800;font-size:12px}
     .error{color:#ff9ba8}
+    .push-card,.admin-card{margin:0 0 16px;padding:17px;border:1px solid rgba(32,197,255,.22);border-radius:15px;background:linear-gradient(145deg,rgba(12,31,54,.96),rgba(7,16,30,.98));box-shadow:0 12px 30px rgba(0,0,0,.12)}
+    .push-head{display:flex;align-items:center;gap:12px}.push-icon{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(32,197,255,.24);border-radius:12px;background:rgba(0,119,255,.12);color:var(--cian)}.push-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .push-title{font-size:14px;font-weight:800}.push-copy{margin-top:4px;color:var(--muted);font-size:12px;line-height:1.55}
+    .accion{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:13px;min-height:40px;padding:0 15px;border:1px solid rgba(32,197,255,.35);border-radius:10px;background:linear-gradient(100deg,#087cff,#00aeea);color:#fff;font-size:12px;font-weight:800;cursor:pointer}
+    .accion:disabled{opacity:.55;cursor:wait}.push-status,.admin-status{margin-top:10px;color:#9aadc4;font-size:11px;line-height:1.5}.push-status.error,.admin-status.error{color:#ff9ba8}.push-status.ok,.admin-status.ok{color:#72e6b0}
+    .admin-card{border-color:rgba(32,197,255,.34);box-shadow:0 0 24px rgba(0,119,255,.07)}.admin-label{display:block;margin:13px 0 6px;color:#c8d8e9;font-size:11px;font-weight:700}
+    .admin-input,.admin-textarea{display:block;width:100%;padding:12px;border:1px solid rgba(105,158,215,.22);border-radius:10px;outline:none;background:#071326;color:#f4f8ff;font-size:13px}
+    .admin-input:focus,.admin-textarea:focus{border-color:#20c5ff;box-shadow:0 0 0 3px rgba(32,197,255,.09)}.admin-textarea{min-height:105px;resize:vertical;line-height:1.5}
+    .contador{margin-top:5px;color:#7189a3;text-align:right;font-size:10px}
     @media(max-width:520px){header{min-height:60px;padding:10px 14px}main{margin-top:25px}.encabezado{align-items:flex-start;flex-direction:column}.marcar{align-self:flex-end}.item{padding:14px;gap:11px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
   </style>
@@ -61,6 +70,110 @@
     const marcarTodas = document.getElementById("marcarTodas");
     let usuarioActual = null;
     let notificaciones = [];
+
+    const VAPID_PUBLIC_KEY = "BOTEc5uNWGMOVSZicoL3lqSEgQZdcOgQMiZF_JKbk-Yg9dmtU9Yp2yEuONOl3Y3IU42K0DevmR8vmSTCkpq69Ig";
+
+    function mostrarEstado(elemento, mensaje, tipo) {
+      elemento.textContent = mensaje || "";
+      elemento.className = elemento.className.replace(/\\b(error|ok)\\b/g, "").trim();
+      if (tipo) elemento.classList.add(tipo);
+    }
+
+    function convertirClaveVapid(base64String) {
+      const padding = "=".repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+      const raw = window.atob(base64);
+      return Uint8Array.from(raw, character => character.charCodeAt(0));
+    }
+
+    async function guardarSuscripcionPush(registration) {
+      let subscription = await registration.pushManager.getSubscription();
+      if (!subscription) {
+        subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: convertirClaveVapid(VAPID_PUBLIC_KEY)
+        });
+      }
+      const json = subscription.toJSON();
+      const keys = json.keys || {};
+      const { error } = await supabaseClient
+        .from("user_push_subscriptions")
+        .upsert({
+          user_id: usuarioActual.id,
+          endpoint: subscription.endpoint,
+          p256dh: keys.p256dh,
+          auth: keys.auth
+        }, { onConflict: "endpoint" });
+      if (error) throw error;
+      return subscription;
+    }
+
+    async function iniciarNotificacionesPush() {
+      if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
+        pushCard.hidden = false;
+        activarPush.hidden = true;
+        mostrarEstado(pushStatus, "Este navegador no admite notificaciones push. Puedes seguir consultando los avisos dentro de tu cuenta.");
+        return;
+      }
+
+      if (Notification.permission === "denied") {
+        pushCard.hidden = false;
+        activarPush.hidden = true;
+        mostrarEstado(pushStatus, "Las notificaciones están bloqueadas en el navegador. Puedes habilitarlas desde los ajustes del sitio.");
+        return;
+      }
+
+      pushCard.hidden = false;
+      if (Notification.permission === "granted") {
+        try {
+          const registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
+          await navigator.serviceWorker.ready;
+          await guardarSuscripcionPush(registration);
+          document.getElementById("pushTitle").textContent = "Notificaciones activadas";
+          document.getElementById("pushDescription").textContent = "Este dispositivo está preparado para recibir avisos de Gamers Gold Top-Up.";
+          activarPush.hidden = true;
+          mostrarEstado(pushStatus, "Dispositivo registrado correctamente.", "ok");
+        } catch (error) {
+          mostrarEstado(pushStatus, "No se pudo registrar este dispositivo. Actualiza la página e inténtalo de nuevo.", "error");
+          console.error("Error registrando push:", error);
+        }
+        return;
+      }
+
+      activarPush.addEventListener("click", async function () {
+        activarPush.disabled = true;
+        mostrarEstado(pushStatus, "Esperando permiso del navegador…");
+        try {
+          const permission = await Notification.requestPermission();
+          if (permission !== "granted") {
+            activarPush.disabled = false;
+            if (permission === "denied") {
+              activarPush.hidden = true;
+              mostrarEstado(pushStatus, "Permiso denegado. Puedes cambiarlo desde los ajustes del navegador.", "error");
+            } else {
+              mostrarEstado(pushStatus, "Todavía no has permitido las notificaciones.");
+            }
+            return;
+          }
+          const registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
+          await navigator.serviceWorker.ready;
+          await guardarSuscripcionPush(registration);
+          document.getElementById("pushTitle").textContent = "Notificaciones activadas";
+          document.getElementById("pushDescription").textContent = "Este dispositivo está preparado para recibir avisos de Gamers Gold Top-Up.";
+          activarPush.hidden = true;
+          mostrarEstado(pushStatus, "¡Listo! Este dispositivo quedó registrado.", "ok");
+        } catch (error) {
+          activarPush.disabled = false;
+          mostrarEstado(pushStatus, "No se pudo activar el servicio. Comprueba tu conexión e inténtalo otra vez.", "error");
+          console.error("Error activando notificaciones:", error);
+        }
+      });
+    }
+
+    async function comprobarAdministrador() {
+      const { data, error } = await supabaseClient.rpc("is_support_admin");
+      if (!error && data === true) adminCard.hidden = false;
+    }
 
     function crearElemento(tag, clase, texto) {
       const elemento = document.createElement(tag);
@@ -158,6 +271,41 @@
         ? { ...item, is_read: true }
         : item);
       renderizar();
+    });
+
+    const tituloAdmin = document.getElementById("adminNotificationTitle");
+    const mensajeAdmin = document.getElementById("adminNotificationMessage");
+    tituloAdmin.addEventListener("input", () => document.getElementById("titleCount").textContent = String(tituloAdmin.value.length));
+    mensajeAdmin.addEventListener("input", () => document.getElementById("messageCount").textContent = String(mensajeAdmin.value.length));
+
+    adminForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const title = tituloAdmin.value.trim();
+      const message = mensajeAdmin.value.trim();
+      if (!title || !message) return;
+      enviarAviso.disabled = true;
+      enviarAviso.textContent = "Enviando…";
+      mostrarEstado(adminStatus, "Preparando el envío para todas las cuentas…");
+      const targetUrl = document.getElementById("adminNotificationUrl").value.trim();
+      const { data, error } = await supabaseClient.functions.invoke("notificacion-administrativa", {
+        body: { title, message, target_url: targetUrl || null }
+      });
+      enviarAviso.disabled = false;
+      enviarAviso.textContent = "Enviar a todos los usuarios";
+      if (error || !data?.ok) {
+        mostrarEstado(adminStatus, data?.error || error?.message || "No se pudo enviar el aviso.", "error");
+        console.error("Error enviando aviso administrativo:", error || data);
+        return;
+      }
+      mostrarEstado(
+        adminStatus,
+        "Aviso publicado para " + data.recipients + " cuentas. Push enviadas: " + data.push_sent + " de " + data.push_devices + " dispositivos.",
+        "ok"
+      );
+      adminForm.reset();
+      document.getElementById("titleCount").textContent = "0";
+      document.getElementById("messageCount").textContent = "0";
+      await cargarNotificaciones();
     });
 
     (async function iniciarCentroNotificaciones() {
