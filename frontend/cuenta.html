@@ -1340,27 +1340,47 @@
         bottom: 5px;
     }
     .datos-perfil-lateral .avatar-acciones {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 100%;
-        gap: 5px;
-        margin: 8px 0 0;
+        gap: 10px;
+        margin: 12px 0 0;
     }
     .datos-perfil-lateral .avatar-accion {
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
         min-width: 0;
-        min-height: 36px;
-        padding: 6px 4px;
-        font-size: 9px;
+        min-height: 44px;
+        padding: 9px 8px;
+        gap: 8px;
+        font-size: 13px;
         line-height: 1.2;
         text-align: center;
+        border-radius: 11px;
+    }
+    .datos-perfil-lateral .avatar-accion .icono-accion {
+        width: 21px;
+        height: 21px;
+        flex-basis: 21px;
     }
     .datos-perfil-lateral .avatar-accion.compartir {
+        width: 48px;
+        height: 48px;
+        min-height: 48px;
+        padding: 10px;
         border-color: #1688bd;
+        border-radius: 13px;
         background: linear-gradient(145deg, #075b91, #073454);
         color: #e5f8ff;
+        box-shadow: 0 0 16px rgba(0, 186, 255, .2);
+    }
+    .datos-perfil-lateral .avatar-accion.compartir .icono-accion {
+        width: 27px;
+        height: 27px;
+        flex-basis: 27px;
     }
     .datos-resumen-perfil .datos-id-valor {
         text-align: right;
@@ -1797,7 +1817,7 @@
                                 <circle cx="18" cy="19" r="3"></circle>
                                 <path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"></path>
                             </svg>
-                            <span>Compartir</span>
+                            <span class="sr-only">Compartir enlace de referido</span>
                         </button>
                     </div>
                 </div>
