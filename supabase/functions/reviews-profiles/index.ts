@@ -107,6 +107,7 @@ Deno.serve(async (req: Request) => {
       },
     });
 
+    // Solo se publican avatares de cuentas que ya tienen reseñas públicas.
     const { data: rows, error: reviewsError } = await admin
       .from("reviews")
       .select("user_id")
