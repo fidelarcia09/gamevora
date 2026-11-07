@@ -1247,10 +1247,11 @@
         flex-wrap: wrap;
         align-items: center;
         justify-content: flex-end;
+        align-self: flex-end;
         gap: 7px;
         width: fit-content;
         max-width: 100%;
-        margin: 12px 0 13px auto;
+        margin: 16px 0 0 auto;
         padding: 8px 10px;
         border: 1px solid rgba(70, 151, 205, .25);
         border-radius: 9px;
@@ -3754,7 +3755,7 @@ async function cargarResumenCuentaDatos(usuarioId) {
         errores.push("ID de cuenta");
     } else {
         const codigo = codigoResp.data?.code || "";
-        codigoEl.textContent = codigo || "Aún no asignado";
+        codigoEl.textContent = codigo ? "#" + codigo : "Aún no asignado";
         if (codigo) {
             enlaceReferidoCuenta = new URL("registro.html", window.location.href).href.split("?")[0] +
                 "?ref=" + encodeURIComponent(codigo);
