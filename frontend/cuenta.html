@@ -3300,8 +3300,13 @@ setInterval(() => {
 }, 30000);
 
 async function cargarCuenta() {
-    const { data, error } =
-        await supabaseClient.auth.getUser();
+    const { data, error } = await Promise.race([
+        supabaseClient.auth.getUser(),
+        new Promise((_, reject) => setTimeout(
+            () => reject(new Error("La sesión está tardando demasiado en responder.")),
+            15000
+        ))
+    ]);
 
     if (error || !data.user) {
         alert("No hay una sesión iniciada.");
@@ -4048,7 +4053,20 @@ document.getElementById("confirmarTelefonoDatos").addEventListener("click", asyn
    INICIAR CUENTA
 ========================================== */
 
-cargarCuenta();
+cargarCuenta().catch(error => {
+    console.error("No se pudo iniciar la pantalla Cuenta:", error);
+    const mensaje = "No se pudieron cargar los datos de tu cuenta. Comprueba tu conexión y vuelve a intentarlo.";
+    ["nombrePerfilDatos", "correoPerfilDatos", "codigoCuentaDatos", "totalRecargasDatos", "saldoGvrDatos", "totalReferidosDatos"].forEach(id => {
+        const elemento = document.getElementById(id);
+        if (elemento) elemento.textContent = "No disponible";
+    });
+    const estado = document.getElementById("estadoResumenCuentaDatos");
+    if (estado) {
+        estado.textContent = mensaje;
+        estado.className = "datos-estado error";
+    }
+    mostrarAvatarPredeterminado();
+});
 
 
 /* ==========================================
