@@ -926,6 +926,10 @@
     }
 
     .avatar-accion {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
         min-height: 39px;
         padding: 9px 13px;
         border: 1px solid #17649a;
@@ -934,7 +938,28 @@
         color: #dff6ff;
         font-size: 12px;
         font-weight: 800;
+        line-height: 1.2;
+        white-space: nowrap;
         cursor: pointer;
+        transition: border-color .2s ease, filter .2s ease, box-shadow .2s ease;
+    }
+
+    .avatar-accion .icono-accion {
+        display: block;
+        width: 17px;
+        height: 17px;
+        flex: 0 0 17px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .avatar-accion.compartir {
+        border-color: #1688bd;
+        background: linear-gradient(145deg, #075b91, #073454);
+        color: #e5f8ff;
     }
 
     .avatar-accion:hover {
@@ -1758,8 +1783,22 @@
                         </div>
                     </div>
                     <div class="avatar-acciones" id="accionesAvatar" aria-label="Opciones de perfil">
-                        <button type="button" id="botonElegirAvatar" class="avatar-accion">Elegir avatar</button>
-                        <button type="button" id="botonCompartirReferido" class="avatar-accion compartir">Compartir</button>
+                        <button type="button" id="botonElegirAvatar" class="avatar-accion" aria-expanded="false" aria-controls="selectorAvatares">
+                            <svg class="icono-accion" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+                                <path d="M4 7h3l1.5-2h7L17 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+                            </svg>
+                            <span>Mi avatar</span>
+                        </button>
+                        <button type="button" id="botonCompartirReferido" class="avatar-accion compartir">
+                            <svg class="icono-accion" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="18" cy="5" r="3"></circle>
+                                <circle cx="6" cy="12" r="3"></circle>
+                                <circle cx="18" cy="19" r="3"></circle>
+                                <path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"></path>
+                            </svg>
+                            <span>Compartir</span>
+                        </button>
                     </div>
                 </div>
                 <div class="datos-perfil-info">
