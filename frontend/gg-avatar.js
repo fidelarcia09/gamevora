@@ -11,7 +11,7 @@
         const estilos = {
             gamer: { a: "#20d9ff", b: "#0755bd", c: "#baf7ff", cresta: '<path d="M35 23 42 8 51 22 61 7 68 24" fill="#20d9ff" stroke="#baf7ff" stroke-width="2"/>' },
             dragon: { a: "#ff765d", b: "#8c183b", c: "#ffd0a8", cresta: '<path d="M31 28 22 12 42 22 49 8 57 23 78 13 67 32" fill="#ff765d" stroke="#ffd0a8" stroke-width="2"/>' },
-            rayo: { a: "#ffe05b", b: "#b56a08", c: "#fff3ae", cresta: '<path d="M58 7-20 29 13 0-8 25 27-36H56Z" fill="#ffe05b" stroke="#fff3ae" stroke-width="2" stroke-linejoin="round"/>' },
+            rayo: { a: "#ffe05b", b: "#b56a08", c: "#fff3ae", cresta: '<path d="m58 7-20 29h13l-8 25 27-36H56Z" fill="#ffe05b" stroke="#fff3ae" stroke-width="2" stroke-linejoin="round"/>' },
             lobo: { a: "#b5d8ff", b: "#355d9d", c: "#f2f8ff", cresta: '<path d="M29 34 20 8 43 23 56 8 79 10 69 37" fill="#b5d8ff" stroke="#f2f8ff" stroke-width="2"/>' },
             corona: { a: "#ffc95c", b: "#a65a14", c: "#fff0b0", cresta: '<path d="m27 28-7-20 19 13 11-17 12 17 19-13-7 23" fill="#ffc95c" stroke="#fff0b0" stroke-width="2"/><circle cx="20" cy="8" r="3" fill="#fff0b0"/><circle cx="50" cy="4" r="3" fill="#fff0b0"/><circle cx="80" cy="8" r="3" fill="#fff0b0"/>' },
             cohete: { a: "#8c9dff", b: "#4c36a8", c: "#dce2ff", cresta: '<path d="M50 5c15 11 19 25 18 38L50 57 32 43C31 30 36 15 50 5Z" fill="#8c9dff" stroke="#dce2ff" stroke-width="2"/><path d="m34 39-13 12 17 1M66 39l13 12-17 1" fill="#4c36a8" stroke="#dce2ff" stroke-width="2"/>' },
