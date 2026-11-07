@@ -381,6 +381,57 @@ textarea::placeholder{color:#6f87a2}
 .comentario{width:100%;margin:0;color:#b9cadd;font-size:13px;line-height:1.7;overflow-wrap:anywhere;white-space:pre-wrap}
 @media(max-width:600px){#reseñasPublicadas{padding:12px!important;border-radius:15px!important}#listaReseñas{gap:10px}.reseña{padding:14px!important;gap:10px}.gg-review-avatar{flex-basis:40px;width:40px;height:40px}}
 
+
+
+/* Orden visual acordado: puntuación arriba, comentario al centro y autor abajo */
+.reseña{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:14px;
+  padding:18px;
+  border:1px solid rgba(32,197,255,.24);
+  border-radius:15px;
+  background:linear-gradient(145deg,rgba(13,31,54,.96),rgba(6,16,31,.96));
+}
+.rayos-reseña{
+  order:1;
+  justify-content:center;
+  margin:0;
+}
+.comentario{
+  order:2;
+  width:100%;
+  text-align:center;
+  line-height:1.7;
+  overflow-wrap:anywhere;
+}
+.reseña-header{
+  order:3;
+  display:flex;
+  justify-content:center;
+  margin:0;
+}
+.autor-reseña{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-width:0;
+}
+.datos-autor{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:3px;
+  min-width:0;
+}
+.usuario{text-align:left}
+.fecha{font-size:10px}
+@media(max-width:600px){
+  .reseña{padding:16px;gap:12px}
+}
+
 </style>
 </head>
 
@@ -620,19 +671,21 @@ async function cargarReseñas() {
 
         tarjeta.innerHTML = `
 
-            <div class="reseña-header">
-                <div class="autor-reseña">
-                    <span class="avatar-reseña-slot"></span>
-                    <div class="usuario"></div>
-                </div>
-                <div class="fecha"></div>
-            </div>
-
             <div class="rayos-reseña">
                 ${mostrarEscudos(reseña.rating)}
             </div>
 
             <div class="comentario"></div>
+
+            <div class="reseña-header">
+                <div class="autor-reseña">
+                    <span class="avatar-reseña-slot"></span>
+                    <div class="datos-autor">
+                        <div class="usuario"></div>
+                        <div class="fecha"></div>
+                    </div>
+                </div>
+            </div>
 
         `;
 
