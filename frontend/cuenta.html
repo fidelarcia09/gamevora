@@ -269,9 +269,9 @@
     }
     .perfil-rango img {
         display: block;
-        width: 29px;
-        height: 29px;
-        flex: 0 0 29px;
+        width: 18px;
+        height: 18px;
+        flex: 0 0 18px;
         object-fit: contain;
         filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)) drop-shadow(0 0 5px rgba(32,197,255,.2));
     }
@@ -1221,12 +1221,16 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+        justify-content: flex-end;
         gap: 7px;
-        margin: 11px 0 15px;
-        padding: 9px 10px;
+        width: fit-content;
+        max-width: 100%;
+        margin: 12px 0 13px auto;
+        padding: 8px 10px;
         border: 1px solid rgba(70, 151, 205, .25);
         border-radius: 9px;
         background: rgba(3, 13, 29, .62);
+        text-align: right;
     }
     .datos-id-etiqueta {
         color: #819bb7;
@@ -1243,12 +1247,40 @@
         letter-spacing: 1.2px;
         overflow-wrap: anywhere;
     }
-    .datos-perfil-identidad {
+    .datos-perfil-layout {
+        display: grid;
+        grid-template-columns: 104px minmax(0, 1fr);
+        align-items: center;
+        gap: 13px;
+        padding: 2px 0 4px;
+    }
+    .datos-perfil-lateral {
         display: flex;
+        min-width: 0;
         flex-direction: column;
         align-items: center;
-        text-align: center;
-        padding: 1px 4px 16px;
+    }
+    .datos-perfil-info {
+        min-width: 0;
+        text-align: left;
+    }
+    .datos-perfil-estados {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 5px;
+        max-width: 100%;
+        margin-top: 10px;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #245477 transparent;
+    }
+    .datos-perfil-estados .perfil-etiqueta,
+    .datos-perfil-estados .perfil-rango {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        font-size: 9px;
+        padding: 4px 6px;
     }
     .datos-avatar-marco {
         display: flex;
@@ -1281,6 +1313,44 @@
     .datos-avatar-marco .avatar-camara {
         right: 0;
         bottom: 5px;
+    }
+    .datos-perfil-lateral .avatar-acciones {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        gap: 5px;
+        margin: 8px 0 0;
+    }
+    .datos-perfil-lateral .avatar-accion {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        min-height: 36px;
+        padding: 6px 4px;
+        font-size: 9px;
+        line-height: 1.2;
+        text-align: center;
+    }
+    .datos-perfil-lateral .avatar-accion.compartir {
+        border-color: #1688bd;
+        background: linear-gradient(145deg, #075b91, #073454);
+        color: #e5f8ff;
+    }
+    .datos-resumen-perfil .datos-id-valor {
+        text-align: right;
+    }
+    .datos-resumen-perfil .avatar-estado {
+        margin: 7px 0 0;
+        text-align: left;
+    }
+    .datos-resumen-perfil .avatar-selector {
+        max-width: 100%;
+        margin: 10px 0 0;
+    }
+    .datos-resumen-perfil .avatar-selector .avatar-accion.quitar {
+        grid-column: 1 / -1;
+        width: 100%;
     }
     .datos-perfil-nombre {
         color: #f4f8ff;
@@ -1662,42 +1732,49 @@
                     <span class="datos-marca-gold">GOLD TOP UP</span>
                 </div>
             </div>
+            
+
+            <div class="datos-perfil-layout">
+                <div class="datos-perfil-lateral">
+                    <div class="datos-avatar-marco" aria-label="Foto de perfil">
+                        <div class="avatar-contenedor">
+                            <div class="avatar" id="imagenPerfilInteractiva" aria-label="Foto de perfil">
+                                <svg id="iconoAvatarPredeterminado" viewBox="0 0 24 24" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="4"></circle>
+                                    <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+                                </svg>
+                                <span id="avatarEmojiPerfil" class="avatar-svg-perfil" aria-hidden="true"></span>
+                                <img id="fotoPerfil" alt="Foto de perfil">
+                            </div>
+                            <button type="button" id="botonCambiarFoto" class="avatar-camara"
+                                aria-label="Subir foto de perfil" title="Subir foto de perfil">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M14 4h-4L8 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-4z"></path>
+                                    <circle cx="12" cy="13" r="3"></circle>
+                                </svg>
+                            </button>
+                            <input type="file" id="selectorFotoPerfil"
+                                accept="image/jpeg,image/png,image/webp" hidden>
+                        </div>
+                    </div>
+                    <div class="avatar-acciones" id="accionesAvatar" aria-label="Opciones de perfil">
+                        <button type="button" id="botonElegirAvatar" class="avatar-accion">Elegir avatar</button>
+                        <button type="button" id="botonCompartirReferido" class="avatar-accion compartir">Compartir</button>
+                    </div>
+                </div>
+                <div class="datos-perfil-info">
+                    <div class="datos-perfil-nombre" id="nombrePerfilDatos">Cargando...</div>
+                    <div class="datos-perfil-correo" id="correoPerfilDatos">Cargando...</div>
+                    <div class="datos-perfil-estados" aria-label="Estado de la cuenta">
+                        <span id="etiquetaRevendedor" class="perfil-etiqueta revendedor" hidden>Revendedor</span>
+                        <span id="etiquetaVerificacion" class="perfil-etiqueta no-verificado">No verificado</span>
+                        <span id="rangoPerfilResumen" class="perfil-rango" hidden></span>
+                    </div>
+                </div>
+            </div>
             <div class="datos-id-cuenta">
                 <span class="datos-id-etiqueta">ID de cuenta</span>
                 <span class="datos-id-valor" id="codigoCuentaDatos">Cargando...</span>
-            </div>
-
-            <div class="datos-perfil-identidad">
-                <div class="datos-avatar-marco" aria-label="Foto de perfil">
-                    <div class="avatar-contenedor">
-                        <div class="avatar" id="imagenPerfilInteractiva" role="button" tabindex="0"
-                            aria-label="Mostrar opciones de imagen de perfil" aria-expanded="false">
-                            <svg id="iconoAvatarPredeterminado" viewBox="0 0 24 24" aria-hidden="true">
-                                <circle cx="12" cy="8" r="4"></circle>
-                                <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
-                            </svg>
-                            <span id="avatarEmojiPerfil" class="avatar-svg-perfil" aria-hidden="true"></span>
-                            <img id="fotoPerfil" alt="Foto de perfil">
-                        </div>
-                        <button type="button" id="botonCambiarFoto" class="avatar-camara"
-                            aria-label="Cambiar foto de perfil" title="Cambiar foto de perfil">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M14 4h-4L8 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-4z"></path>
-                                <circle cx="12" cy="13" r="3"></circle>
-                            </svg>
-                        </button>
-                        <input type="file" id="selectorFotoPerfil"
-                            accept="image/jpeg,image/png,image/webp" hidden>
-                    </div>
-                </div>
-                <div class="datos-perfil-nombre" id="nombrePerfilDatos">Cargando...</div>
-                <div class="datos-perfil-correo" id="correoPerfilDatos">Cargando...</div>
-                <div hidden>
-                    <h1 id="nombrePerfilResumen">Mi cuenta</h1>
-                    <span id="etiquetaRevendedor" class="perfil-etiqueta revendedor" hidden>Revendedor</span>
-                    <span id="rangoPerfilResumen" class="perfil-rango" hidden></span>
-                    <span id="etiquetaVerificacion" class="perfil-etiqueta no-verificado">No verificado</span>
-                </div>
             </div>
 
             <div class="datos-estadisticas" aria-label="Estadísticas de la cuenta">
@@ -1718,10 +1795,6 @@
         </section>
 
         <p id="estadoFotoPerfil" class="avatar-estado" role="status" aria-live="polite"></p>
-        <div class="avatar-acciones" id="accionesAvatar" aria-label="Opciones de imagen de perfil" hidden>
-            <button type="button" id="botonElegirAvatar" class="avatar-accion">Elegir avatar</button>
-            <button type="button" id="botonQuitarFoto" class="avatar-accion quitar">Quitar imagen</button>
-        </div>
         <div id="selectorAvatares" class="avatar-selector" aria-label="Avatares predeterminados" hidden>
             <button type="button" class="avatar-opcion" data-avatar-id="gamer" aria-label="Avatar gamer"></button>
             <button type="button" class="avatar-opcion" data-avatar-id="dragon" aria-label="Avatar dragon"></button>
@@ -1731,6 +1804,7 @@
             <button type="button" class="avatar-opcion" data-avatar-id="cohete" aria-label="Avatar cohete"></button>
             <button type="button" class="avatar-opcion" data-avatar-id="zorro" aria-label="Avatar zorro"></button>
             <button type="button" class="avatar-opcion" data-avatar-id="escudo" aria-label="Avatar escudo"></button>
+            <button type="button" id="botonQuitarFoto" class="avatar-accion quitar">Quitar imagen</button>
         </div>
 
         <div class="accesos-cuenta" aria-label="Accesos rápidos">
@@ -2250,7 +2324,7 @@ function crearSvgAvatar(id) {
 
 const botonCambiarFoto = document.getElementById("botonCambiarFoto");
 const imagenPerfilInteractiva = document.getElementById("imagenPerfilInteractiva");
-const accionesAvatar = document.getElementById("accionesAvatar");
+
 const selectorFotoPerfil = document.getElementById("selectorFotoPerfil");
 const fotoPerfil = document.getElementById("fotoPerfil");
 const iconoAvatarPredeterminado = document.getElementById("iconoAvatarPredeterminado");
@@ -2259,6 +2333,7 @@ const estadoFotoPerfil = document.getElementById("estadoFotoPerfil");
 const botonElegirAvatar = document.getElementById("botonElegirAvatar");
 const botonQuitarFoto = document.getElementById("botonQuitarFoto");
 const selectorAvatares = document.getElementById("selectorAvatares");
+document.getElementById("botonCompartirReferido").disabled = true;
 
 selectorAvatares.querySelectorAll("[data-avatar-id]").forEach((boton) => {
     boton.innerHTML = crearSvgAvatar(boton.dataset.avatarId);
@@ -2392,26 +2467,9 @@ botonCambiarFoto.addEventListener("click", () => {
     selectorFotoPerfil.click();
 });
 
-function alternarAccionesAvatar() {
-    accionesAvatar.hidden = !accionesAvatar.hidden;
-    imagenPerfilInteractiva.setAttribute("aria-expanded", String(!accionesAvatar.hidden));
-    if (!accionesAvatar.hidden) selectorAvatares.hidden = true;
-}
-
-imagenPerfilInteractiva.addEventListener("click", alternarAccionesAvatar);
-imagenPerfilInteractiva.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        alternarAccionesAvatar();
-    }
-});
-
 botonElegirAvatar.addEventListener("click", () => {
     selectorAvatares.hidden = !selectorAvatares.hidden;
-    if (!selectorAvatares.hidden) {
-        accionesAvatar.hidden = true;
-        imagenPerfilInteractiva.setAttribute("aria-expanded", "false");
-    }
+    botonElegirAvatar.setAttribute("aria-expanded", String(!selectorAvatares.hidden));
 });
 
 selectorAvatares.querySelectorAll("[data-avatar-id]").forEach((boton) => {
@@ -2442,8 +2500,6 @@ selectorAvatares.querySelectorAll("[data-avatar-id]").forEach((boton) => {
             avatarPresetActivo = id;
             mostrarAvatarPredefinido(id);
             selectorAvatares.hidden = true;
-            accionesAvatar.hidden = true;
-            imagenPerfilInteractiva.setAttribute("aria-expanded", "false");
             mostrarEstadoFoto("Avatar actualizado correctamente.");
         } catch (error) {
             console.error("Error guardando el avatar:", error);
@@ -2522,8 +2578,6 @@ selectorFotoPerfil.addEventListener("change", async () => {
         avatarPresetActivo = null;
         mostrarFotoPerfil(urlFoto);
         selectorAvatares.hidden = true;
-        accionesAvatar.hidden = true;
-        imagenPerfilInteractiva.setAttribute("aria-expanded", "false");
         mostrarEstadoFoto("Foto de perfil actualizada.");
     } catch (error) {
         console.error("Error guardando la foto de perfil:", error);
@@ -3538,6 +3592,8 @@ function formatoResumenCuenta(valor) {
     return numero.toLocaleString("es-ES", { maximumFractionDigits: 4 });
 }
 
+let enlaceReferidoCuenta = "";
+
 async function cargarResumenCuentaDatos(usuarioId) {
     const estado = document.getElementById("estadoResumenCuentaDatos");
     const recargasEl = document.getElementById("totalRecargasDatos");
@@ -3588,7 +3644,13 @@ async function cargarResumenCuentaDatos(usuarioId) {
         codigoEl.textContent = "No disponible";
         errores.push("ID de cuenta");
     } else {
-        codigoEl.textContent = codigoResp.data?.code || "Aún no asignado";
+        const codigo = codigoResp.data?.code || "";
+        codigoEl.textContent = codigo || "Aún no asignado";
+        if (codigo) {
+            enlaceReferidoCuenta = new URL("registro.html", window.location.href).href.split("?")[0] +
+                "?ref=" + encodeURIComponent(codigo);
+            document.getElementById("botonCompartirReferido").disabled = false;
+        }
     }
 
     if (errores.length) {
@@ -3599,6 +3661,45 @@ async function cargarResumenCuentaDatos(usuarioId) {
         estado.className = "datos-estado";
     }
 }
+
+document.getElementById("botonCompartirReferido").addEventListener("click", async () => {
+    if (!enlaceReferidoCuenta) {
+        mostrarEstadoFoto("Tu enlace de referido todavía no está disponible.", true);
+        return;
+    }
+
+    const boton = document.getElementById("botonCompartirReferido");
+    const mensaje = "¡Únete a Gamers Gold Top-Up con mi enlace! " + enlaceReferidoCuenta;
+    boton.disabled = true;
+
+    try {
+        if (navigator.share) {
+            await navigator.share({
+                title: "Gamers Gold Top-Up",
+                text: "¡Únete a Gamers Gold Top-Up con mi enlace!",
+                url: enlaceReferidoCuenta
+            });
+            mostrarEstadoFoto("Enlace de referido compartido.");
+        } else if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(enlaceReferidoCuenta);
+            mostrarEstadoFoto("Enlace de referido copiado. Ya puedes compartirlo.");
+        } else {
+            window.open("https://wa.me/?text=" + encodeURIComponent(mensaje), "_blank", "noopener,noreferrer");
+            mostrarEstadoFoto("Abriendo WhatsApp para compartir tu enlace.");
+        }
+    } catch (error) {
+        if (error?.name !== "AbortError") {
+            try {
+                await navigator.clipboard.writeText(enlaceReferidoCuenta);
+                mostrarEstadoFoto("Enlace de referido copiado. Ya puedes compartirlo.");
+            } catch (_) {
+                mostrarEstadoFoto("No se pudo compartir el enlace. Inténtalo nuevamente.", true);
+            }
+        }
+    } finally {
+        boton.disabled = false;
+    }
+});
 
 function abrirPantallaDatosPersonales() {
     const nombre = document.getElementById("nombreUsuario")?.textContent || "Usuario";
