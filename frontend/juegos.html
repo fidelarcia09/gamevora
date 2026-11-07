@@ -714,6 +714,26 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
 </script>
 <link rel="stylesheet" href="./entrada-sesion.css?v=20261106-3">
 <script src="./entrada-sesion.js?v=20261106-3" defer></script>
+<style id="gg-wuthering-waves-card">
+.juego-wuthering-imagen{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle at 50% 42%,rgba(128,151,255,.38),transparent 34%),
+        radial-gradient(circle at 72% 75%,rgba(0,217,255,.18),transparent 42%),
+        linear-gradient(145deg,#101b3b,#20204b 52%,#07172b)!important;
+}
+.juego-wuthering-imagen span{
+    color:#dcecff;
+    font-size:clamp(42px,8vw,76px);
+    font-weight:900;
+    font-style:italic;
+    letter-spacing:-8px;
+    transform:skew(-12deg);
+    text-shadow:0 0 12px rgba(107,174,255,.9),0 0 34px rgba(0,170,255,.65);
+}
+</style>
 </head>
 
 <body>
@@ -788,7 +808,7 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
     </h2>
 
     <div class="catalogo-herramientas">
-        <p class="contador-juegos"><strong id="cantidad-juegos">7</strong> juegos disponibles</p>
+        <p class="contador-juegos"><strong id="cantidad-juegos">8</strong> juegos disponibles</p>
         <label class="buscador-juegos">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 5 5"></path></svg>
             <input id="buscar-juego" type="search" placeholder="Buscar juego..." autocomplete="off" aria-label="Buscar juegos por nombre">
@@ -958,6 +978,21 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
                 </span>
             </div>
 
+        </a>
+
+        <!-- WUTHERING WAVES -->
+        <a href="wutheringwaves.html" class="juego juego-wuthering">
+            <div class="juego-imagen juego-wuthering-imagen" aria-label="Wuthering Waves">
+                <span aria-hidden="true">WW</span>
+            </div>
+            <div class="juego-info">
+                <h3>Wuthering Waves</h3>
+                <span class="juego-flecha" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </span>
+            </div>
         </a>
 
     </div>
