@@ -341,6 +341,9 @@ textarea::placeholder{color:#6f87a2}
     border:0;border-radius:0;box-shadow:none;
     background:transparent;padding:0 0 22px;
 }
+#formularioReseña[hidden]{display:none!important}
+.dejar-reseña{font-family:Arial,sans-serif;cursor:pointer}
+
 #reseñasPublicadas{border:0;border-radius:0;box-shadow:none;background:transparent;padding:0}
 #listaReseñas{width:100%;min-width:0}
 .reseña{
@@ -374,11 +377,11 @@ textarea::placeholder{color:#6f87a2}
         <a class="encabezado-pagina" href="cuenta.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Reseñas</span></a>
 
         <a href="cuenta.html" class=" boton-atras"><span class="icono-atras" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span>Atrás</span></a>
-        <a class="dejar-reseña" href="#formularioReseña">✎ Dejar reseña</a>
+        <button class="dejar-reseña" id="btnDejarReseña" type="button" aria-controls="formularioReseña" aria-expanded="false">✎ Dejar reseña</button>
 
     </div>
 
-    <div class="card" id="formularioReseña">
+    <div class="card" id="formularioReseña" hidden>
 
         <h1>Reseñas de clientes</h1>
 
@@ -429,10 +432,6 @@ textarea::placeholder{color:#6f87a2}
         >
             Publicar reseña
         </button>
-
-        <p class="nota">
-            Solo puedes publicar una reseña cada 30 días.
-        </p>
 
     </div>
 
@@ -813,6 +812,25 @@ document
         publicarReseña
     );
 
+document
+    .getElementById("btnDejarReseña")
+    .addEventListener("click", () => {
+        const formulario = document.getElementById("formularioReseña");
+        formulario.hidden = false;
+
+        document
+            .getElementById("btnDejarReseña")
+            .setAttribute("aria-expanded", "true");
+
+        formulario.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+        window.setTimeout(() => {
+            document.querySelector("#selectorRayos .rayo-opcion")?.focus();
+        }, 350);
+    });
 
 cargarReseñas();
 
