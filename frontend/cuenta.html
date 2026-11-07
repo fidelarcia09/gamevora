@@ -1443,7 +1443,7 @@
         width: 100%;
         margin-top: 10px;
         overflow: hidden;
-        border: 1px solid #245477;
+        border: 1px solid rgba(36, 84, 119, .62);
         border-radius: 12px;
         background: rgba(3, 13, 29, .76);
     }
@@ -1452,9 +1452,6 @@
         padding: 12px 5px 11px;
         text-align: center;
     }
-    .datos-estadistica + .datos-estadistica {
-        border-left: 1px solid #244565;
-    }
     .datos-estadistica-valor {
         display: block;
         color: #f4f8ff;
@@ -1462,9 +1459,6 @@
         font-weight: 900;
         line-height: 1.25;
         overflow-wrap: anywhere;
-    }
-    .datos-estadistica:nth-child(2) .datos-estadistica-valor {
-        color: #20c5ff;
     }
     .datos-estadistica-etiqueta {
         display: block;
@@ -3682,7 +3676,10 @@ document.querySelectorAll("[data-cancelar]").forEach(boton => {
 function formatoResumenCuenta(valor) {
     const numero = Number(valor);
     if (!Number.isFinite(numero)) return "No disponible";
-    return numero.toLocaleString("es-ES", { maximumFractionDigits: 4 });
+    return numero.toLocaleString("es-ES", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
 }
 
 let enlaceReferidoCuenta = "";
@@ -3732,9 +3729,9 @@ async function cargarResumenCuentaDatos(usuarioId) {
         saldoEl.textContent = "No disponible";
         errores.push("saldo");
     } else if (walletResp.data) {
-        saldoEl.textContent = formatoResumenCuenta(walletResp.data.balance) + " GVR";
+        saldoEl.textContent = formatoResumenCuenta(walletResp.data.balance);
     } else {
-        saldoEl.textContent = "0 GVR";
+        saldoEl.textContent = "0,00";
     }
 
     if (recargasResp.error || typeof recargasResp.count !== "number" || !Number.isFinite(recargasResp.count)) {
