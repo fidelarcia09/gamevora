@@ -622,6 +622,41 @@
   .gg-review-more-count{font-size:14px}
 }
 
+
+/* Reseñas: título y botón en una misma fila */
+.gg-reviews .seccion-encabezado{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  width:100%;
+}
+.gg-reviews .seccion-encabezado>div{
+  flex:1 1 auto;
+  min-width:0;
+}
+.gg-reviews .seccion-encabezado h2{
+  width:auto!important;
+  max-width:100%;
+  margin:0!important;
+  white-space:nowrap;
+  font-size:clamp(15px,4.2vw,30px)!important;
+}
+.gg-reviews .gg-reviews-link{
+  align-self:center!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-height:34px;
+  margin:0!important;
+  padding:0 11px;
+  font-size:11px;
+}
+@media(max-width:360px){
+  .gg-reviews .seccion-encabezado{gap:7px!important}
+  .gg-reviews .seccion-encabezado h2{font-size:15px!important}
+  .gg-reviews .gg-reviews-link{padding:0 8px;font-size:10px}
+}
 </style>
 </head>
 <body>
