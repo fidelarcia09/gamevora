@@ -1295,24 +1295,25 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        flex-wrap: wrap;
-        gap: 5px;
+        flex-wrap: nowrap;
+        gap: 4px;
         width: 100%;
         max-width: 100%;
         min-width: 0;
         margin-top: 10px;
-        overflow: visible;
+        overflow: hidden;
     }
     .datos-perfil-estados .perfil-etiqueta,
     .datos-perfil-estados .perfil-rango {
         flex: 0 1 auto;
         min-width: 0;
         max-width: 100%;
-        white-space: normal;
-        overflow-wrap: anywhere;
-        font-size: 9px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 8px;
         line-height: 1.25;
-        padding: 4px 6px;
+        padding: 4px 4px;
     }
     .datos-avatar-marco {
         display: flex;
@@ -1437,6 +1438,8 @@
     .datos-estadisticas {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: 100%;
+        margin-top: 10px;
         overflow: hidden;
         border: 1px solid #245477;
         border-radius: 12px;
