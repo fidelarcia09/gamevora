@@ -3312,63 +3312,65 @@ async function cargarCuenta() {
     const usuario = data.user;
     usuarioDatosActual = usuario;
 
-    await cargarWhatsApp(usuario.id);
-
-    document.getElementById("correoUsuario").textContent =
-        usuario.email || "Sin correo";
-
-    document.getElementById("idUsuario").textContent =
-        usuario.id;
-
-    document.getElementById("nombreUsuario").textContent =
-        usuario.user_metadata?.username || "Usuario";
-
-    // Actualizar la tarjeta resumida del perfil sin mostrar el correo.
+    // Mostrar inmediatamente los datos que ya vienen de Supabase Auth.
+    // Ninguna consulta secundaria debe bloquear nombre, Gmail o ID.
     const nombreVisible = usuario.user_metadata?.username ||
         usuario.user_metadata?.full_name ||
         usuario.user_metadata?.name ||
         "Usuario";
-    document.getElementById("nombrePerfilResumen").textContent = nombreVisible;
 
-    // Solo considerar verificado si Supabase Auth confirma específicamente el correo.
+    document.getElementById("correoUsuario").textContent = usuario.email || "Sin correo";
+    document.getElementById("idUsuario").textContent = usuario.id;
+    document.getElementById("nombreUsuario").textContent = nombreVisible;
+    document.getElementById("nombrePerfilResumen").textContent = nombreVisible;
+    document.getElementById("nombrePerfilDatos").textContent = nombreVisible;
+    document.getElementById("correoPerfilDatos").textContent = usuario.email || "Sin correo";
+
+    // Estado del correo disponible sin esperar ninguna otra consulta.
     const verificado = Boolean(usuario.email_confirmed_at);
     const etiquetaVerificacion = document.getElementById("etiquetaVerificacion");
     etiquetaVerificacion.textContent = verificado ? "✓ Verificado" : "No verificado";
     etiquetaVerificacion.classList.toggle("no-verificado", !verificado);
 
-    // Cargar únicamente el avatar propio de Gamers Gold, nunca la foto del proveedor Google.
-    await cargarAvatarPerfil(usuario);
+    // Mantener un avatar de reserva visible mientras se recupera la foto guardada.
+    mostrarAvatarPredeterminado();
+    cargarAvatarPerfil(usuario).catch(error => {
+        console.warn("No se pudo cargar la foto de perfil:", error);
+        mostrarAvatarPredeterminado();
+    });
 
-    // El resumen de cuenta vive en la pantalla principal, fuera de Datos personales.
-    document.getElementById("nombrePerfilDatos").textContent =
-        usuario.user_metadata?.username ||
-        usuario.user_metadata?.full_name ||
-        usuario.user_metadata?.name ||
-        "Usuario";
-    document.getElementById("correoPerfilDatos").textContent = usuario.email || "Sin correo";
-    await cargarResumenCuentaDatos(usuario.id);
+    // WhatsApp, estadísticas, rango y permisos se consultan en paralelo.
+    // Si cualquiera tarda o falla, no bloquea el resto de la pantalla.
+    cargarWhatsApp(usuario.id).catch(error => {
+        console.warn("No se pudo cargar WhatsApp:", error);
+    });
+
+    cargarResumenCuentaDatos(usuario.id).catch(error => {
+        console.error("No se pudo cargar el resumen de cuenta:", error);
+        document.getElementById("totalRecargasDatos").textContent = "No disponible";
+        document.getElementById("saldoGvrDatos").textContent = "No disponible";
+        document.getElementById("totalReferidosDatos").textContent = "No disponible";
+        document.getElementById("codigoCuentaDatos").textContent = "No disponible";
+        const estado = document.getElementById("estadoResumenCuentaDatos");
+        estado.textContent = "No se pudieron cargar los datos. Comprueba tu conexión e inténtalo nuevamente.";
+        estado.className = "datos-estado error";
+    });
 
     usuarioCuentaIdParaRango = usuario.id;
-    await actualizarRangoPerfilRevendedor(usuario.id);
+    actualizarRangoPerfilRevendedor(usuario.id).catch(error => {
+        console.warn("No se pudo cargar el rango de revendedor:", error);
+    });
 
-    const esAdmin = await comprobarAdministrador();
+    comprobarAdministrador().then(esAdmin => {
+        if (esAdmin) document.getElementById("panelAdministracion").style.display = "block";
+    }).catch(error => console.warn("No se pudo comprobar el rol de administrador:", error));
 
-    if (esAdmin) {
-        document.getElementById(
-            "panelAdministracion"
-        ).style.display = "block";
-    }
-
-    const {
-        data: esPropietario,
-        error: errorPropietario
-    } = await supabaseClient.rpc("is_gamevora_owner");
-
-    if (!errorPropietario && esPropietario === true) {
-        panelSaludSistema.style.display = "block";
-
-        await cargarHistorialSalud();
-    }
+    supabaseClient.rpc("is_gamevora_owner").then(async ({ data: esPropietario, error: errorPropietario }) => {
+        if (!errorPropietario && esPropietario === true) {
+            panelSaludSistema.style.display = "block";
+            await cargarHistorialSalud();
+        }
+    }).catch(error => console.warn("No se pudo comprobar el propietario:", error));
 }
 
 
@@ -3607,15 +3609,33 @@ async function cargarResumenCuentaDatos(usuarioId) {
     referidosEl.textContent = "…";
     codigoEl.textContent = "Consultando...";
 
-    const [walletResp, recargasResp, referidosResp, codigoResp] = await Promise.all([
-        supabaseClient.from("wallets").select("balance").eq("user_id", usuarioId).maybeSingle(),
-        supabaseClient.from("game_orders").select("id", { count: "exact", head: true })
-            .eq("user_id", usuarioId).eq("status", "completed"),
-        supabaseClient.from("referral_relationships").select("referred_user_id", { count: "exact", head: true })
-            .eq("referrer_user_id", usuarioId),
-        supabaseClient.from("referral_codes").select("code").eq("user_id", usuarioId).maybeSingle()
+    // Consultar cada dato de forma independiente: un fallo de red o de permisos
+    // no debe dejar congeladas las demás estadísticas.
+    const consultas = await Promise.allSettled([
+        Promise.race([
+            supabaseClient.from("wallets").select("balance").eq("user_id", usuarioId).maybeSingle(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Tiempo de espera agotado")), 12000))
+        ]),
+        Promise.race([
+            supabaseClient.from("game_orders").select("id", { count: "exact", head: true })
+                .eq("user_id", usuarioId).eq("status", "completed"),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Tiempo de espera agotado")), 12000))
+        ]),
+        Promise.race([
+            supabaseClient.from("referral_relationships").select("referred_user_id", { count: "exact", head: true })
+                .eq("referrer_user_id", usuarioId),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Tiempo de espera agotado")), 12000))
+        ]),
+        Promise.race([
+            supabaseClient.from("referral_codes").select("code").eq("user_id", usuarioId).maybeSingle(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Tiempo de espera agotado")), 12000))
+        ])
     ]);
 
+    const respuesta = consultas.map(item =>
+        item.status === "fulfilled" ? item.value : { error: item.reason, data: null, count: null }
+    );
+    const [walletResp, recargasResp, referidosResp, codigoResp] = respuesta;
     const errores = [];
     if (walletResp.error) {
         saldoEl.textContent = "No disponible";
