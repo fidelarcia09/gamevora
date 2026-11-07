@@ -514,6 +514,71 @@
 .gg-review-comment{flex:1 1 auto;width:100%;margin:0;color:#b9cadd;font-size:13px;line-height:1.7;overflow-wrap:anywhere;white-space:pre-wrap}
 @media(max-width:600px){.gg-review-card{min-height:164px;padding:15px!important;gap:11px}.gg-review-avatar{flex-basis:40px;width:40px;height:40px}.gg-review-user{font-size:13px}.gg-review-date{font-size:10px}}
 
+
+
+/* Diseño final de reseñas: puntuación, comentario y autor; carrusel con vista previa */
+.gg-reviews-list{
+  display:flex!important;
+  flex-flow:row nowrap!important;
+  align-items:stretch;
+  gap:12px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  padding:3px 2px 12px;
+  -webkit-overflow-scrolling:touch;
+}
+.gg-review-card{
+  box-sizing:border-box;
+  display:flex!important;
+  flex:0 0 66%;
+  width:66%;
+  min-width:0;
+  min-height:220px;
+  flex-direction:column;
+  align-items:center;
+  gap:15px;
+  padding:19px!important;
+  scroll-snap-align:start;
+}
+.gg-review-shields{
+  justify-content:center;
+  margin:0;
+}
+.gg-review-comment{
+  flex:1 1 auto;
+  width:100%;
+  margin:0;
+  text-align:center;
+  line-height:1.65;
+}
+.gg-review-footer{
+  display:flex;
+  justify-content:center;
+  width:100%;
+  margin-top:auto;
+}
+.gg-review-author{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.gg-review-user-info{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  text-align:left;
+}
+.gg-review-date{font-size:10px}
+@media(max-width:600px){
+  .gg-reviews-list{gap:10px}
+  .gg-review-card{flex-basis:66%;width:66%;min-height:205px;padding:15px!important;gap:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  .gg-reviews-list{scroll-behavior:auto}
+}
+
 </style>
 </head>
 <body>
@@ -583,7 +648,7 @@
         <section class="gg-reviews seccion" id="reseñas-clientes" aria-labelledby="ggReviewsTitle">
             <div class="seccion-encabezado">
                 <div>
-                    <h2 id="ggReviewsTitle">Reseñas de clientes GGT</h2>
+                    <h2 id="ggReviewsTitle">Reseñas de clientes</h2>
                 </div>
                 <a class="gg-reviews-link" href="frontend/reseñas.html">Ver todas las reseñas <span aria-hidden="true">→</span></a>
             </div>
@@ -765,9 +830,6 @@
             const tarjeta = document.createElement("article");
             tarjeta.className = "gg-review-card";
 
-            const encabezado = document.createElement("div");
-            encabezado.className = "gg-review-top";
-
             const autor = document.createElement("div");
             autor.className = "gg-review-author";
             autor.appendChild(
@@ -791,7 +853,11 @@
                 fecha.textContent = fechaObj.toLocaleDateString("es-ES");
             }
 
-            encabezado.append(autor, fecha);
+            datosUsuario.appendChild(fecha);
+
+            const pie = document.createElement("div");
+            pie.className = "gg-review-footer";
+            pie.appendChild(autor);
 
             const valoracion = document.createElement("div");
             valoracion.className = "gg-review-shields";
@@ -802,7 +868,7 @@
             comentario.className = "gg-review-comment";
             comentario.textContent = reseña.comment || "";
 
-            tarjeta.append(encabezado, valoracion, comentario);
+            tarjeta.append(valoracion, comentario, pie);
             lista.appendChild(tarjeta);
         });
     } catch (error) {
