@@ -418,6 +418,31 @@
 .gg-reviews-shields{justify-content:flex-start;margin:0 0 0 2px}
 .gg-reviews-count{color:#91a8c1;font-size:11px}
 @media(max-width:480px){.gg-reviews-heading{gap:8px}.gg-reviews-title{font-size:18px}.gg-reviews-link{font-size:11px}.gg-reviews-summary{gap:8px 13px}.gg-reviews-average{font-size:23px}.gg-reviews-unit{font-size:11px}}
+
+
+/* Presentación integrada de reseñas: sin tarjeta exterior */
+.gg-reviews.seccion{position:relative;isolation:auto;overflow:visible;margin:0 auto 42px;padding:0 22px;border:0;border-radius:0;background:transparent;box-shadow:none}
+.gg-reviews.seccion:before{display:none}
+.gg-reviews .seccion-encabezado{align-items:center;margin-bottom:17px}
+.gg-reviews .seccion-encabezado h2{font-size:clamp(23px,4vw,30px)}
+.gg-reviews-link{display:inline-flex;min-height:38px;align-items:center;justify-content:center;gap:8px;padding:0 14px;border:1px solid rgba(32,197,255,.42);border-radius:9px;background:linear-gradient(110deg,rgba(0,119,255,.22),rgba(32,197,255,.1));color:#72dcff;text-decoration:none;font-size:12px;font-weight:850;white-space:nowrap;transition:background .18s,border-color .18s,transform .18s}
+.gg-reviews-link:hover{transform:translateY(-1px);border-color:#20c5ff;background:rgba(0,153,255,.22);color:#a4edff}
+.gg-reviews-link:focus-visible{outline:2px solid #75d7ff;outline-offset:3px}
+.gg-reviews-summary{display:flex;align-items:center;flex-wrap:wrap;gap:9px 18px;margin:0 0 13px}
+.gg-reviews-score{display:inline-flex;align-items:center;gap:7px;min-width:0;padding:0;border:0;border-radius:0;background:transparent;text-align:left}
+.gg-reviews-average{color:#fff;font-size:25px;font-weight:900;line-height:1}
+.gg-reviews-gvr-icon{display:block;width:23px;height:23px;object-fit:contain;filter:drop-shadow(0 0 5px rgba(32,197,255,.42))}
+.gg-reviews-unit{display:none}
+.gg-reviews-shields{display:none!important}
+.gg-reviews-count{color:#91a8c1;font-size:11px}
+.gg-reviews-list{display:block;width:100%;border:0;border-radius:0;background:transparent;box-shadow:none}
+.gg-review-card{width:100%;min-width:0;margin:0;padding:15px 2px;border:0;border-bottom:1px solid rgba(105,158,215,.17);border-radius:0;background:transparent;box-shadow:none}
+.gg-review-card:last-child{border-bottom:0}
+.gg-reviews-empty,.gg-reviews-error{padding:10px 0;border:0;border-radius:0;background:transparent;color:#9aadc4;text-align:left}
+@media(max-width:760px){.gg-reviews.seccion{margin-bottom:35px}}
+@media(max-width:600px){.gg-reviews.seccion{padding:0 14px;margin:0 auto 31px}.gg-reviews .seccion-encabezado{gap:8px;margin-bottom:15px}.gg-reviews .seccion-encabezado h2{font-size:23px}.gg-reviews-link{min-height:35px;padding:0 11px;font-size:11px}.gg-reviews-summary{gap:8px 13px;margin-bottom:11px}.gg-reviews-average{font-size:23px}.gg-reviews-gvr-icon{width:21px;height:21px}.gg-review-card{padding:14px 1px}}
+@media(max-width:360px){.gg-reviews .seccion-encabezado h2{font-size:20px}.gg-reviews-link{padding:0 9px;font-size:10px}}
+
 </style>
 </head>
 <body>
@@ -484,16 +509,17 @@
         </section>
 
         <!-- RESEÑAS DE CLIENTES -->
-        <section class="gg-reviews" id="reseñas-clientes" aria-labelledby="ggReviewsTitle">
-            <div class="gg-reviews-heading">
-                <h2 class="gg-reviews-title" id="ggReviewsTitle">Reseñas de clientes en GGT</h2>
-                <a class="gg-reviews-link" href="frontend/reseñas.html">Ver todas <span aria-hidden="true">→</span></a>
+        <section class="gg-reviews seccion" id="reseñas-clientes" aria-labelledby="ggReviewsTitle">
+            <div class="seccion-encabezado">
+                <div>
+                    <h2 id="ggReviewsTitle">Reseñas de clientes GGT</h2>
+                </div>
+                <a class="gg-reviews-link" href="frontend/reseñas.html">Ver reseñas <span aria-hidden="true">→</span></a>
             </div>
             <div class="gg-reviews-summary">
                 <div class="gg-reviews-score" aria-label="Valoración media de clientes">
                     <strong class="gg-reviews-average" id="ggReviewsAverage">0.0</strong>
-                    <span class="gg-reviews-unit">escudos GVR</span>
-                    <div class="gg-reviews-shields" id="ggReviewsAverageShields" aria-hidden="true"></div>
+                    <img class="gg-reviews-gvr-icon" src="frontend/gvr-escudo.svg" alt="Escudo GVR" width="23" height="23">
                 </div>
                 <div class="gg-reviews-count" id="ggReviewsCount">0 reseñas realizadas</div>
             </div>
