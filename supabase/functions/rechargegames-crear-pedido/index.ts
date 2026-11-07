@@ -42,6 +42,10 @@ Deno.serve(async (req: Request) => {
   const authClient = createClient(supabaseUrl, anonKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
+  const caller = createClient(supabaseUrl, anonKey, {
+    global: { headers: { Authorization: authorization } },
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
   const admin = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
@@ -55,10 +59,19 @@ Deno.serve(async (req: Request) => {
     if (!validUuid(orderId)) return json({ ok: false, error: "game_order_id inválido." }, 400);
 
     const { data: order, error: orderError } = await admin
-      .from("game_orders").select("*").eq("id", orderId).eq("user_id", authData.user.id).maybeSingle();
+      .from("game_orders").select("*").eq("id", orderId).maybeSingle();
 
     if (orderError) return json({ ok: false, error: "No se pudo consultar el pedido." }, 500);
     if (!order) return json({ ok: false, error: "Pedido no encontrado." }, 404);
+
+    // El propietario puede enviar su pedido. Soporte solo puede hacerlo
+    // después de aprobar el pago manual y superar la comprobación de rol.
+    if (order.user_id !== authData.user.id) {
+      const { data: isSupportAdmin, error: roleError } = await caller.rpc("is_support_admin");
+      if (roleError || isSupportAdmin !== true) {
+        return json({ ok: false, error: "No autorizado para procesar este pedido." }, 403);
+      }
+    }
 
     if (order.provider_order_id) {
       return json({
@@ -97,8 +110,13 @@ Deno.serve(async (req: Request) => {
     }
 
     const playerId = String(order.player_id).trim();
-    const serverId = String(order.zone_id ?? "").trim();
-    if (String(product.game ?? "").toLowerCase().replace(/[\\s_-]/g, "") === "mobilelegends" && !serverId) {
+    const gameKey = String(product.game ?? "").toLowerCase().replace(/[\\s_-]/g, "");
+    const serverId = String(body?.zone_id ?? body?.server_id ?? order.zone_id ?? "").trim();
+    const wutheringServers = ["os_asia", "os_usa", "os_euro", "os_sea", "os_cht"];
+    if (gameKey === "wutheringwaves" && !wutheringServers.includes(serverId)) {
+      return json({ ok: false, error: "Selecciona un servidor válido de Wuthering Waves.", required_server_id: true }, 400);
+    }
+    if (gameKey === "mobilelegends" && !serverId) {
       return json({ ok: false, error: "Mobile Legends requiere el Server ID." }, 400);
     }
 
