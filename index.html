@@ -579,6 +579,49 @@
   .gg-reviews-list{scroll-behavior:auto}
 }
 
+
+/* Tarjeta final del carrusel: cantidad de reseñas que quedan y acceso a todas */
+.gg-review-card{
+  min-height:178px;
+  padding:15px!important;
+  gap:11px;
+}
+.gg-review-more-card{
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  border-color:rgba(32,197,255,.35);
+  background:radial-gradient(circle at 50% 0%,rgba(0,174,255,.16),transparent 65%),linear-gradient(145deg,#0d2542,#071426);
+}
+.gg-review-more-count{
+  color:#eaf7ff;
+  font-size:15px;
+  font-weight:900;
+}
+.gg-review-more-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:36px;
+  padding:0 18px;
+  border:1px solid rgba(32,197,255,.5);
+  border-radius:10px;
+  background:linear-gradient(110deg,#087cff,#00aeea);
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+  text-decoration:none;
+  box-shadow:0 5px 16px rgba(0,130,255,.18);
+}
+.gg-review-more-link:focus-visible{
+  outline:2px solid #75d7ff;
+  outline-offset:3px;
+}
+@media(max-width:600px){
+  .gg-review-card{min-height:166px;padding:13px!important;gap:9px}
+  .gg-review-more-count{font-size:14px}
+}
+
 </style>
 </head>
 <body>
@@ -871,6 +914,28 @@
             tarjeta.append(valoracion, comentario, pie);
             lista.appendChild(tarjeta);
         });
+
+        const reseñasRestantes = reseñas.length - 3;
+        if (reseñasRestantes > 0) {
+            const tarjetaMas = document.createElement("article");
+            tarjetaMas.className = "gg-review-card gg-review-more-card";
+
+            const cantidadMas = document.createElement("strong");
+            cantidadMas.className = "gg-review-more-count";
+            cantidadMas.textContent = reseñasRestantes + (
+                reseñasRestantes === 1 ? " reseña más" : " reseñas más"
+            );
+
+            const enlaceTodas = document.createElement("a");
+            enlaceTodas.className = "gg-review-more-link";
+            enlaceTodas.href = location.pathname.includes("/frontend/")
+                ? "./reseñas.html"
+                : "frontend/reseñas.html";
+            enlaceTodas.textContent = "Ver todas";
+
+            tarjetaMas.append(cantidadMas, enlaceTodas);
+            lista.appendChild(tarjetaMas);
+        }
     } catch (error) {
         console.error("No se pudieron cargar las reseñas en el inicio:", error);
         lista.innerHTML = '<div class="gg-reviews-error">No pudimos cargar las reseñas en este momento.</div>';
