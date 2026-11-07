@@ -4,138 +4,2727 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
-    <meta name="description" content="Recarga Lunite y consulta la oferta especial de Wuthering Waves en Gamers Gold Top-Up.">
+    <meta name="description" content="Recarga lunite y compra ofertas de Wuthering Waves en Gamers Gold Top-Up.">
     <title>Wuthering Waves | Gamers Gold Top-Up</title>
+
     <style>
-        *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-        :root{color-scheme:dark}
-        body{min-height:100vh;padding:12px;background:#050b18;color:#fff}
-        .contenedor{width:100%;max-width:520px;margin:0 auto}
-        .header{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:38px;margin-bottom:12px}
-        .logo{font-size:18px;font-weight:900;letter-spacing:-.3px}
-        .rayo{color:#00b7ff;text-shadow:0 0 10px #008cff}
-        .volver{color:#45c8ff;text-decoration:none;font-size:13px;font-weight:700;white-space:nowrap}
-        .volver:focus-visible,.pestana:focus-visible{outline:2px solid #75d7ff;outline-offset:3px}
-        .card{padding:16px 13px;background:#091a35;border:1px solid #164b75;border-radius:13px;box-shadow:0 0 22px rgba(0,140,255,.08)}
-        .hero{padding:15px 13px;margin-bottom:13px;border:1px solid #164b75;border-radius:10px;background:linear-gradient(115deg,#0b2342,#091a35 65%,#14234b)}
-        .kicker{display:block;margin-bottom:7px;color:#45c8ff;font-size:9px;font-weight:900;letter-spacing:2px}
-        h1{font-size:22px;line-height:1.15;margin-bottom:6px}
-        .descripcion{color:#8fa5bd;font-size:12px;line-height:1.5}
-        .etiqueta{display:block;margin:12px 0 7px;color:#b8c9dc;font-size:12px;font-weight:700}
-        .datos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-        .dato{padding:9px 10px;border:1px solid #173d63;border-radius:7px;background:#061226}
-        .dato span{display:block;margin-bottom:4px;color:#8299b4;font-size:10px}
-        .dato strong{color:#eaf7ff;font-size:12px}
-        .selector-categorias{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:14px 0 10px}
-        .pestana{min-height:37px;padding:8px 6px;border:1px solid #204568;border-radius:5px;background:#07152b;color:#8fa5bd;font-size:11px;font-weight:800;cursor:pointer}
-        .pestana:hover{border-color:#168cff;color:#fff}
-        .pestana.activa{color:#fff;background:#0b3157;border-color:#00baff;box-shadow:inset 0 -2px 0 #00baff}
-        .seccion-titulo{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0}
-        .seccion-titulo h2{font-size:15px}
-        .region{padding:5px 8px;border:1px solid #23689b;border-radius:20px;background:#0b2745;color:#a9e5ff;font-size:10px;font-weight:800;white-space:nowrap}
-        .catalogo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-        .producto{display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-width:0;min-height:76px;padding:9px 8px;border:1px solid #164b75;border-radius:7px;background:#061226}
-        .producto-nombre{font-size:12px;font-weight:800;line-height:1.3;overflow-wrap:anywhere}
-        .producto-pie{display:flex;align-items:center;justify-content:space-between;gap:6px}
-        .precio{font-size:13px;font-weight:900;color:#fff}
-        .estado{font-size:9px;font-weight:800;color:#ffcf8a;text-align:right}
-        .producto-especial{grid-column:1/-1;min-height:94px;border-color:#8b6a2c;background:linear-gradient(115deg,rgba(107,77,22,.28),#061226 75%);box-shadow:inset 0 0 0 1px rgba(255,201,94,.08)}
-        .producto-especial .producto-nombre{color:#ffe0a0;font-size:13px}
-        .etiqueta-especial{display:inline-flex;align-items:center;gap:5px;width:fit-content;margin-bottom:5px;padding:4px 7px;border:1px solid #8b6a2c;border-radius:20px;background:rgba(117,82,20,.2);color:#ffd783;font-size:9px;font-weight:900;letter-spacing:.4px}
-        .aviso{margin-top:13px;padding:10px 11px;border:1px solid #735c31;border-radius:7px;background:rgba(95,68,21,.16);color:#f4d7a0;font-size:11px;line-height:1.5}
-        .pie{margin:13px 3px 5px;color:#8299b4;font-size:10px;line-height:1.5;text-align:center}
-        .panel-categoria[hidden]{display:none!important}
-        @media(max-width:360px){body{padding:8px}.card{padding:13px 10px}.logo{font-size:15px}.catalogo{gap:6px}.producto{padding:8px}.producto-nombre{font-size:11px}.pestana{font-size:10px}}
-    </style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        :root {
+            color-scheme: dark;
+        }
+
+        body {
+            background: #050b18;
+            color: #fff;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            min-height: 34px;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .rayo {
+            color: #00b7ff;
+            text-shadow: 0 0 10px #008cff;
+        }
+
+        .volver {
+            color: #45c8ff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .card {
+            background: #091a35;
+            border: 1px solid #164b75;
+            border-radius: 13px;
+            padding: 16px 13px;
+            box-shadow: 0 0 22px rgba(0, 140, 255, 0.08);
+        }
+
+        h1 {
+            font-size: 21px;
+            margin-bottom: 5px;
+        }
+
+        .descripcion {
+            color: #8fa5bd;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .etiqueta {
+            display: block;
+            margin: 12px 0 7px;
+            color: #b8c9dc;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            min-height: 42px;
+            padding: 10px 12px;
+            background: #061226;
+            color: white;
+            border: 1px solid #204c78;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #159dff;
+            box-shadow: 0 0 7px rgba(0, 157, 255, 0.15);
+        }
+
+        .ayuda {
+            margin-top: 6px;
+            color: #8299b4;
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        /* SELECTOR DE REGIÓN: botones adaptables al estilo Gamers Gold */
+        .selector-region-wrap { width: 100%; margin: 12px 0 0; }
+        .selector-region-wrap + label.etiqueta { margin-top: 8px; }
+        .selector-region-wrap .etiqueta { display:block; margin-top:0; margin-bottom:7px; }
+        .region-opciones { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; width:100%; }
+        .region-opcion {
+            display:flex; align-items:center; justify-content:center; gap:5px;
+            min-width:0; min-height:43px; padding:8px 5px;
+            border:1px solid #19466f; border-radius:8px;
+            background:linear-gradient(110deg,#0b203b,#07152b);
+            color:#b8cbe0; font-size:12px; font-weight:700; line-height:1.15;
+            text-align:center; cursor:pointer;
+            transition:border-color .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease;
+        }
+        .region-opcion.activa {
+            border-color:#00baff;
+            background:linear-gradient(110deg,rgba(0,150,255,.2),rgba(0,72,145,.2));
+            color:#fff;
+            box-shadow:inset 0 0 0 1px rgba(0,186,255,.18),0 0 12px rgba(0,140,255,.13);
+        }
+        .region-opcion:focus-visible { outline:2px solid #00baff; outline-offset:2px; }
+        .region-opcion:disabled { opacity:.55; cursor:not-allowed; }
+        .ayuda-region { margin-top:6px; color:#8299b4; font-size:10px; line-height:1.4; }
+        @media(max-width:380px) { .region-opcion { gap:3px; padding:8px 3px; font-size:10px; } }
+
+        .estado {
+            padding: 9px 10px;
+            margin: 12px 0;
+            border: 1px solid #204c78;
+            border-radius: 7px;
+            background: #061226;
+            color: #a9c4df;
+            font-size: 11px;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .estado.error {
+            color: #ffaaaa;
+            border-color: #843d4b;
+        }
+
+        .estado.correcto {
+            color: #8fffc0;
+            border-color: #267b55;
+        }
+
+        .estado-validacion {
+            display: none;
+            padding: 9px 10px;
+            margin-top: 8px;
+            border: 1px solid #204c78;
+            border-radius: 7px;
+            background: #061226;
+            color: #a9c4df;
+            font-size: 11px;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .estado-validacion.visible {
+            display: block;
+        }
+
+        .estado-validacion.error {
+            color: #ffaaaa;
+            border-color: #843d4b;
+        }
+
+        .estado-validacion.correcto {
+            color: #8fffc0;
+            border-color: #267b55;
+        }
+
+        .estado-validacion.aviso {
+            color: #ffcf8a;
+            border-color: #8a672f;
+        }
+
+        /* CATEGORÍAS FINAS Y RECTANGULARES */
+
+        .selector-categorias {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 6px;
+            margin: 13px 0;
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+        }
+
+        .pestana-categoria {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            min-height: 36px;
+            padding: 7px 4px;
+            background: #07152b;
+            color: #8fa5bd;
+            border: 1px solid #204568;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            line-height: 1.25;
+            text-align: center;
+            cursor: pointer;
+            transition:
+                color 0.2s,
+                background 0.2s,
+                border-color 0.2s,
+                box-shadow 0.2s;
+        }
+
+        .pestana-categoria:hover {
+            border-color: #168cff;
+            color: #fff;
+        }
+
+        .pestana-categoria.activa {
+            color: #fff;
+            background: #0b3157;
+            border-color: #00baff;
+            box-shadow: inset 0 -2px 0 #00baff;
+        }
+
+        .pestana-categoria:focus-visible {
+            outline: 2px solid #45c8ff;
+            outline-offset: 2px;
+        }
+
+        /* CATÁLOGO COMPACTO */
+
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .producto {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+            min-width: 0;
+            min-height: 83px;
+            padding: 10px;
+            background: #061226;
+            color: white;
+            border: 1px solid #164b75;
+            border-radius: 7px;
+            text-align: left;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        button.producto {
+            cursor: pointer;
+        }
+
+        .producto:hover:not(:disabled) {
+            border-color: #168cff;
+        }
+
+        .producto:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .producto.seleccionado {
+            background: #09203b;
+            border-color: #00baff;
+            box-shadow: inset 0 -2px 0 #00baff;
+        }
+
+        .producto-nombre {
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        .producto-precio {
+            color: #fff;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .producto-estado {
+            color: #45c8ff;
+            font-size: 10px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .producto-no-disponible .producto-estado {
+            color: #ffcf8a;
+        }
+
+        .boton {
+            width: 100%;
+            min-height: 42px;
+            padding: 11px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .continuar {
+            margin-top: 13px;
+            background: linear-gradient(90deg, #087cff, #00aaff);
+            color: white;
+            cursor: pointer;
+        }
+
+        .continuar:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        /* OFERTAS */
+
+        .oferta-imagen {
+            display: block;
+            width: 100%;
+            height: 85px;
+            object-fit: contain;
+            margin: 0 auto 3px;
+            border-radius: 5px;
+        }
+
+        .producto-oferta {
+            text-align: center;
+            align-items: stretch;
+        }
+
+        .producto-oferta .producto-nombre,
+        .producto-oferta .producto-precio,
+        .producto-oferta .producto-estado {
+            text-align: center;
+        }
+
+        .vista-oculta {
+            display: none !important;
+        }
+
+        .aviso-proximamente {
+            padding: 17px 12px;
+            margin-top: 8px;
+            background: #061226;
+            border: 1px solid #164b75;
+            border-radius: 7px;
+            text-align: center;
+        }
+
+        .aviso-proximamente h2 {
+            margin-bottom: 7px;
+            font-size: 16px;
+            color: #45c8ff;
+        }
+
+        .aviso-proximamente p {
+            color: #8fa5bd;
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .nota {
+            margin-top: 13px;
+            text-align: center;
+            color: #8299b4;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        /* MODAL */
+
+        body.modal-abierto {
+            overflow: hidden;
+        }
+
+        .modal-fondo {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            background: rgba(1, 6, 17, 0.85);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-fondo.visible {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 360px;
+            padding: 19px 15px;
+            background: #091a35;
+            border: 1px solid #168cff;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 140, 255, 0.18);
+            animation: modalAparecer 0.18s ease-out;
+        }
+
+        @keyframes modalAparecer {
+            from {
+                opacity: 0;
+                transform: translateY(7px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal h2 {
+            margin-bottom: 7px;
+            text-align: center;
+            font-size: 19px;
+        }
+
+        .modal-descripcion {
+            margin-bottom: 13px;
+            color: #8fa5bd;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .modal-detalles {
+            padding: 10px;
+            margin-bottom: 13px;
+            background: #061226;
+            border: 1px solid #204c78;
+            border-radius: 7px;
+        }
+
+        .modal-fila {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 7px 0;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .modal-fila + .modal-fila {
+            border-top: 1px solid rgba(32, 76, 120, 0.55);
+        }
+
+        .modal-fila span:first-child {
+            color: #8fa5bd;
+            flex-shrink: 0;
+        }
+
+        .modal-fila strong {
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .modal-total {
+            color: #45c8ff;
+            font-size: 15px;
+        }
+
+        .modal-botones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .modal-boton {
+            min-height: 39px;
+            padding: 9px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-cancelar {
+            background: #07152b;
+            color: #c1d0e0;
+            border: 1px solid #204c78;
+        }
+
+        .modal-aceptar {
+            background: linear-gradient(90deg, #087cff, #00baff);
+            color: white;
+            border: 0;
+        }
+
+        .modal-boton:disabled {
+            opacity: 0.55;
+            cursor: wait;
+        }
+
+        @media (max-width: 360px) {
+            body {
+                padding: 8px;
+            }
+
+            .card {
+                padding: 13px 10px;
+            }
+
+            .logo {
+                font-size: 15px;
+            }
+
+            .pestana-categoria {
+                font-size: 10px;
+                padding: 6px 2px;
+            }
+
+            .catalogo {
+                gap: 6px;
+            }
+
+            .producto {
+                padding: 8px;
+            }
+        }
+    .boton-atras{display:inline-flex;align-items:center;gap:9px;width:fit-content;max-width:100%;margin:0 auto 0 0;color:#eaf7ff;text-decoration:none;font-size:13px;font-weight:800;line-height:1}.icono-atras{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.45)}.icono-atras svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.boton-atras:hover .icono-atras{border-color:#28a9ff;background:linear-gradient(145deg,#145184,#09294b)}.boton-atras:focus-visible{outline:2px solid #75d7ff;outline-offset:3px;border-radius:8px}
+
+/* Encabezado unificado: flecha y nombre de la página */
+.encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}
+.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}
+.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.encabezado-pagina-titulo{overflow-wrap:anywhere}
+.encabezado-pagina:hover .encabezado-pagina-icono{border-color:#28a9ff;background:linear-gradient(145deg,#145184,#09294b)}
+.encabezado-pagina:focus-visible{outline:2px solid #75d7ff;outline-offset:3px;border-radius:8px}
+header .boton-atras, header .volver, header .back, .header .boton-atras, .header .volver, .header .back{display:none!important}
+
+/* Encabezado unificado con flecha y nombre de página */
+.encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras,header .encabezado-pagina~.boton-atras,.header .encabezado-pagina~.boton-atras{display:none!important}
+
+        /* Ajuste visual: catálogo alineado con el ancho de index y sin marco exterior */
+        .contenedor {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+        .card {
+            background: transparent !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    
+
+/* TAMANO UNIFICADO DE TARJETAS DE PRODUCTOS Y OFERTAS */
+.catalogo,
+#catalogo,
+#catalogoOfertas,
+#listaOfertas,
+.lista-ofertas{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  align-items:stretch!important;
+}
+.catalogo .producto,
+#catalogo .producto,
+#catalogoOfertas .producto,
+#listaOfertas .boton-oferta,
+.lista-ofertas .boton-oferta{
+  box-sizing:border-box!important;
+  height:76px!important;
+  min-height:76px!important;
+  max-height:76px!important;
+  min-width:0!important;
+}
+.producto,
+.producto-oferta{
+  padding:8px!important;
+}
+.producto-oferta .oferta-imagen,
+.producto-oferta .foto-oferta{
+  max-height:38px!important;
+  min-height:0!important;
+  height:38px!important;
+  object-fit:contain!important;
+}
+.lista-ofertas .boton-oferta{
+  flex-direction:row!important;
+  align-items:center!important;
+  gap:8px!important;
+  padding:8px!important;
+}
+.lista-ofertas .foto-oferta{
+  box-sizing:border-box!important;
+  width:48px!important;
+  min-width:48px!important;
+  max-width:48px!important;
+  height:48px!important;
+  min-height:48px!important;
+  flex:0 0 48px!important;
+}
+.lista-ofertas .nombre-oferta{
+  box-sizing:border-box!important;
+  flex:1 1 auto!important;
+  width:auto!important;
+  min-height:0!important;
+  padding:6px!important;
+  border-top:0!important;
+  text-align:left!important;
+  justify-content:flex-start!important;
+  overflow-wrap:anywhere!important;
+}
+@media(max-width:360px){
+  .catalogo,.lista-ofertas,#catalogo,#catalogoOfertas,#listaOfertas{gap:6px!important}
+  .catalogo .producto,#catalogo .producto,#catalogoOfertas .producto,#listaOfertas .boton-oferta,.lista-ofertas .boton-oferta{
+    height:76px!important;min-height:76px!important;max-height:76px!important
+  }
+}
+
+
+/* AJUSTE DE CONTENIDO: MISMO TAMANO DE TARJETA, TEXTO SIEMPRE DENTRO */
+.catalogo .producto,
+#catalogo .producto,
+#catalogoOfertas .producto{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-rows:minmax(0,1fr) auto auto!important;
+  align-content:center!important;
+  align-items:center!important;
+  column-gap:6px!important;
+  row-gap:2px!important;
+  padding:6px 8px!important;
+  overflow:hidden!important;
+}
+.catalogo .producto > .producto-nombre,
+#catalogo .producto > .producto-nombre,
+#catalogoOfertas .producto > .producto-nombre{
+  grid-column:1/-1!important;
+  grid-row:1!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  font-size:11px!important;
+  line-height:1.15!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+.catalogo .producto > .gg-reseller-original-price,
+#catalogo .producto > .gg-reseller-original-price,
+#catalogoOfertas .producto > .gg-reseller-original-price{
+  grid-column:1!important;
+  grid-row:2!important;
+  min-width:0!important;
+  margin:0!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+.catalogo .producto > .producto-precio,
+#catalogo .producto > .producto-precio,
+#catalogoOfertas .producto > .producto-precio{
+  grid-column:2!important;
+  grid-row:2!important;
+  min-width:0!important;
+  margin:0!important;
+  font-size:11px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+  text-align:right!important;
+}
+.catalogo .producto > .producto-estado,
+#catalogo .producto > .producto-estado,
+#catalogoOfertas .producto > .producto-estado{
+  grid-column:1/-1!important;
+  grid-row:3!important;
+  min-width:0!important;
+  margin:0!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+  overflow-wrap:anywhere!important;
+}
+#catalogoOfertas .producto-oferta > .oferta-icono{
+  display:none!important;
+}
+#listaOfertas .boton-oferta,
+.lista-ofertas .boton-oferta{
+  display:grid!important;
+  grid-template-columns:40px minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr) auto!important;
+  align-content:center!important;
+  align-items:center!important;
+  column-gap:7px!important;
+  row-gap:2px!important;
+  height:76px!important;
+  min-height:76px!important;
+  max-height:76px!important;
+  min-width:0!important;
+  padding:6px!important;
+  overflow:hidden!important;
+}
+#listaOfertas .boton-oferta > .foto-oferta,
+.lista-ofertas .boton-oferta > .foto-oferta{
+  grid-column:1!important;
+  grid-row:1/3!important;
+  width:40px!important;
+  min-width:40px!important;
+  max-width:40px!important;
+  height:40px!important;
+  min-height:40px!important;
+  max-height:40px!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+#listaOfertas .foto-oferta img,
+.lista-ofertas .foto-oferta img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+}
+#listaOfertas .boton-oferta > .nombre-oferta,
+.lista-ofertas .boton-oferta > .nombre-oferta{
+  grid-column:2!important;
+  grid-row:1!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:10px!important;
+  line-height:1.15!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+#listaOfertas .boton-oferta > div:not(.foto-oferta):not(.nombre-oferta),
+.lista-ofertas .boton-oferta > div:not(.foto-oferta):not(.nombre-oferta){
+  grid-column:2!important;
+  grid-row:2!important;
+  min-width:0!important;
+  width:auto!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:10px!important;
+  line-height:1.1!important;
+  text-align:left!important;
+  overflow-wrap:anywhere!important;
+}
+
+
+/* PRESENTACION UNIFICADA DE PRECIOS: TODO ALINEADO A LA IZQUIERDA */
+.catalogo .producto,
+#catalogo .producto,
+#catalogoOfertas .producto{
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto auto auto auto!important;
+  align-content:center!important;
+  justify-items:stretch!important;
+  row-gap:2px!important;
+  text-align:left!important;
+}
+.catalogo .producto > .producto-nombre,
+#catalogo .producto > .producto-nombre,
+#catalogoOfertas .producto > .producto-nombre{
+  grid-column:1!important;
+  grid-row:1!important;
+  text-align:left!important;
+  font-size:11px!important;
+  line-height:1.2!important;
+}
+.catalogo .producto > .gg-reseller-original-price,
+#catalogo .producto > .gg-reseller-original-price,
+#catalogoOfertas .producto > .gg-reseller-original-price{
+  grid-column:1!important;
+  grid-row:2!important;
+  justify-self:start!important;
+  width:auto!important;
+  margin:0!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+  text-align:left!important;
+}
+.catalogo .producto > .producto-precio,
+#catalogo .producto > .producto-precio,
+#catalogoOfertas .producto > .producto-precio{
+  grid-column:1!important;
+  grid-row:3!important;
+  justify-self:start!important;
+  width:auto!important;
+  margin:0!important;
+  font-size:11px!important;
+  line-height:1.15!important;
+  text-align:left!important;
+  white-space:normal!important;
+}
+.catalogo .producto > .producto-estado,
+#catalogo .producto > .producto-estado,
+#catalogoOfertas .producto > .producto-estado{
+  grid-column:1!important;
+  grid-row:4!important;
+  text-align:left!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+}
+
+
+
+/* WUTHERING WAVES: mismo tamaño de tarjeta y espacio de imagen que el resto del catálogo */
+.catalogo .producto.producto-con-lunite,
+#catalogo .producto.producto-con-lunite{
+  display:grid!important;
+  grid-template-columns:48px minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  align-items:center!important;
+  justify-items:stretch!important;
+  column-gap:8px!important;
+  row-gap:0!important;
+  box-sizing:border-box!important;
+  height:76px!important;
+  min-height:76px!important;
+  max-height:76px!important;
+  padding:8px!important;
+  text-align:left!important;
+}
+.catalogo .producto-con-lunite > .producto-imagen,
+#catalogo .producto-con-lunite > .producto-imagen{
+  grid-column:1!important;
+  grid-row:1!important;
+  display:block!important;
+  box-sizing:border-box!important;
+  width:48px!important;
+  height:48px!important;
+  min-width:48px!important;
+  min-height:48px!important;
+  border-radius:6px;
+  background:transparent;
+}
+.catalogo .producto-con-lunite > .producto-informacion,
+#catalogo .producto-con-lunite > .producto-informacion{
+  grid-column:2!important;
+  grid-row:1!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  gap:3px!important;
+  min-width:0!important;
+  width:100%!important;
+  text-align:left!important;
+}
+.catalogo .producto-con-lunite .producto-nombre,
+#catalogo .producto-con-lunite .producto-nombre,
+.catalogo .producto-con-lunite .producto-precio,
+#catalogo .producto-con-lunite .producto-precio,
+.catalogo .producto-con-lunite .producto-estado,
+#catalogo .producto-con-lunite .producto-estado{
+  grid-column:auto!important;
+  grid-row:auto!important;
+  justify-self:auto!important;
+  width:100%!important;
+  margin:0!important;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+.catalogo .producto-con-lunite .producto-nombre,
+#catalogo .producto-con-lunite .producto-nombre{font-size:11px!important;line-height:1.2!important}
+.catalogo .producto-con-lunite .producto-precio,
+#catalogo .producto-con-lunite .producto-precio{font-size:11px!important;line-height:1.15!important}
+.catalogo .producto-con-lunite .producto-estado,
+#catalogo .producto-con-lunite .producto-estado{font-size:9px!important;line-height:1.1!important}
+
+</style>
+
+
+
+<style id="gg-compact-game-layout">
+/* Compactación visual: conserva colores, bordes y estilo original. */
+body{padding:8px!important}
+.header{margin-bottom:7px!important}
+.card{padding-top:15px!important;padding-bottom:15px!important;padding-left:0!important;padding-right:0!important}
+h1{margin-bottom:3px!important}
+.descripcion{margin-bottom:8px!important}
+.etiqueta{margin:8px 0 5px!important}
+input{min-height:39px!important;padding:8px 10px!important}
+.selector-categorias{margin:8px 0!important}
+.estado{margin:7px 0!important;padding:7px 9px!important}
+.catalogo,#catalogoOfertas,#listaOfertas{gap:6px!important;margin-top:5px!important}
+.producto,#listaOfertas .boton-oferta{min-height:76px!important;padding:8px!important;gap:6px!important}
+.continuar{margin-top:8px!important}
+.nota{margin-top:8px!important}
+.datos-jugador-grid{gap:8px!important;margin-bottom:8px!important}
+.campo-dato .etiqueta{margin-top:7px!important}
+</style>
+
+
+<style id="gg-index-margins">
+/* Márgenes iguales a los index: 14px en móvil y 22px en pantallas grandes. */
+body{padding:0!important}
+.contenedor{box-sizing:border-box;width:100%;max-width:1180px;margin:0 auto;padding:0 14px!important}
+@media(min-width:768px){.contenedor{padding-right:22px!important;padding-left:22px!important}}
+</style>
+
+<style id="gg-product-content-offset">
+/* Reserva espacio a la izquierda para las futuras fotos; no cambia el tamaño exterior de las tarjetas. */
+#catalogo .producto,
+#catalogoOfertas .producto,
+#listaOfertas .boton-oferta{
+  box-sizing:border-box!important;
+  padding-left: 90px!important;
+}
+</style>
+
 </head>
+
 <body>
 <div class="contenedor">
+
     <header class="header">
-        <span class="logo">GAMERS GOLD <span class="rayo">⚡</span></span>
-        <a class="volver" href="juegos.html">← Volver a juegos</a>
+        <a class="encabezado-pagina" href="juegos.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Wuthering Waves</span></a>
     </header>
 
     <main class="card">
-        <section class="hero" aria-labelledby="tituloJuego">
-            <span class="kicker">UNIVERSO GAMING · RECARGAS</span>
-            <h1 id="tituloJuego">Wuthering Waves</h1>
-            <p class="descripcion">Lunite para tu cuenta · Catálogo global de RechargeGames</p>
-            <div class="datos">
-                <div class="dato"><span>Región disponible</span><strong>🌐 Global</strong></div>
-                <div class="dato"><span>Dato de entrega</span><strong>Player ID</strong></div>
-            </div>
-        </section>
+        <h1>Wuthering Waves</h1>
 
-        <div class="selector-categorias" role="tablist" aria-label="Categorías de Wuthering Waves">
-            <button class="pestana activa" id="tabLunite" type="button" role="tab" aria-selected="true" aria-controls="panelLunite">Lunite</button>
-            <button class="pestana" id="tabOfertas" type="button" role="tab" aria-selected="false" aria-controls="panelOfertas">Oferta especial</button>
+        <div class="selector-region-wrap">
+            <div class="region-opciones" role="group" aria-label="Región de Wuthering Waves">
+                <span class="region-opcion activa" aria-label="Región Global">🌐 <span>GLOBAL</span></span>
+            </div>
         </div>
 
-        <section class="panel-categoria" id="panelLunite" role="tabpanel" aria-labelledby="tabLunite">
-            <div class="seccion-titulo">
-                <h2>Paquetes de Lunite</h2>
-                <span class="region">🌐 GLOBAL</span>
-            </div>
-            <p class="descripcion" style="margin-bottom:10px">Selecciona el paquete que buscas. Los precios se configurarán más adelante.</p>
-            <div class="catalogo" aria-label="Paquetes de Lunite">
-                <article class="producto"><span class="producto-nombre">60 Lunite</span><div class="producto-pie"><strong class="precio">0 GVR</strong><span class="estado">Pendiente</span></div></article>
-                <article class="producto"><span class="producto-nombre">330 Lunite</span><div class="producto-pie"><strong class="precio">0 GVR</strong><span class="estado">Pendiente</span></div></article>
-                <article class="producto"><span class="producto-nombre">1090 Lunite</span><div class="producto-pie"><strong class="precio">0 GVR</strong><span class="estado">Pendiente</span></div></article>
-                <article class="producto"><span class="producto-nombre">2240 Lunite</span><div class="producto-pie"><strong class="precio">0 GVR</strong><span class="estado">Pendiente</span></div></article>
-                <article class="producto"><span class="producto-nombre">3880 Lunite</span><div class="producto-pie"><strong class="precio">0 GVR</strong><span class="estado">Pendiente</span></div></article>
-                <article class="producto"><span class="producto-nombre">8080 Lunite</span><div class="producto-pie"><strong class="precio">0 GVR</strong><span class="estado">Pendiente</span></div></article>
+        <label class="etiqueta" for="idjugador">
+            Player ID
+        </label>
+
+        <input
+            type="text"
+            id="idjugador"
+            placeholder="Introduce tu Player ID"
+            autocomplete="off"
+            maxlength="50"
+        >
+
+        
+
+        <div
+            id="estadoValidacion"
+            class="estado-validacion"
+            aria-live="polite"
+            role="status"
+        ></div>
+
+        <nav class="selector-categorias" aria-label="Categorías de Wuthering Waves">
+            <button
+                type="button"
+                class="pestana-categoria activa"
+                id="pestanaLunite"
+                aria-selected="true"
+            >
+                Lunite
+            </button>
+
+            <button
+                type="button"
+                class="pestana-categoria"
+                id="pestanaOfertas"
+                aria-selected="false"
+            >
+                Ofertas Especiales
+            </button>
+
+            <button
+                type="button"
+                class="pestana-categoria"
+                id="pestanaNivel" style="display:none"
+                aria-selected="false"
+            >
+                Paquete de nivel
+            </button>
+        </nav>
+
+        <div id="estadoCatalogo" class="estado" aria-live="polite">
+            Conectando con el catálogo...
+        </div>
+
+        <section id="vistaLunite">
+            
+            <div id="catalogo" class="catalogo"></div>
+        </section>
+
+        <section id="vistaOfertas" class="vista-oculta">
+            
+
+            <div id="catalogoOfertas" class="catalogo"></div>
+        </section>
+
+        <section id="vistaNivel" class="vista-oculta" style="display:none">
+            <div class="aviso-proximamente">
+                <h2>Paquete de nivel</h2>
+
+                <p>
+                    Esta categoría estará disponible próximamente.
+                    Estamos preparando los productos para que puedas
+                    comprarlos desde Gamers Gold Top-Up.
+                </p>
             </div>
         </section>
 
-        <section class="panel-categoria" id="panelOfertas" role="tabpanel" aria-labelledby="tabOfertas" hidden>
-            <div class="seccion-titulo">
-                <h2>Ofertas especiales</h2>
-                <span class="region">✨ ESPECIAL</span>
-            </div>
-            <p class="descripcion" style="margin-bottom:10px">Beneficio especial disponible para Wuthering Waves.</p>
-            <div class="catalogo" aria-label="Ofertas especiales">
-                <article class="producto producto-especial">
-                    <div>
-                        <span class="etiqueta-especial">⭐ OFERTA ESPECIAL</span>
-                        <div class="producto-nombre">Lunite Subscription</div>
-                    </div>
-                    <div class="producto-pie"><strong class="precio">0 GVR</strong><span class="estado">Precio pendiente</span></div>
-                </article>
-            </div>
-        </section>
-
-        <p class="aviso" role="status">Catálogo añadido. Los precios de venta siguen pendientes y las compras permanecen desactivadas.</p>
-    </main>
-    <p class="pie">Gamers Gold Top-Up · Productos globales de RechargeGames</p>
+        <button
+            id="botonContinuar"
+            class="boton continuar"
+            type="button"
+            disabled
+        >
+            RECARGAR
+        </button>
+</main>
 </div>
-<script>
-(() => {
-    const tabs = [
-        {button: document.getElementById("tabLunite"), panel: document.getElementById("panelLunite")},
-        {button: document.getElementById("tabOfertas"), panel: document.getElementById("panelOfertas")}
-    ];
-    function activar(indice) {
-        tabs.forEach((tab, i) => {
-            const activo = i === indice;
-            tab.button.classList.toggle("activa", activo);
-            tab.button.setAttribute("aria-selected", String(activo));
-            tab.button.tabIndex = activo ? 0 : -1;
-            tab.panel.hidden = !activo;
-        });
-    }
-    tabs.forEach((tab, i) => tab.button.addEventListener("click", () => activar(i)));
-    tabs.forEach((tab, i) => tab.button.addEventListener("keydown", event => {
-        if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
-            event.preventDefault();
-            const siguiente = (i + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
-            activar(siguiente);
-            tabs[siguiente].button.focus();
+
+<div
+    id="modalFondo"
+    class="modal-fondo"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitulo"
+    aria-hidden="true"
+>
+    <div class="modal">
+        <h2 id="modalTitulo">Confirmar compra</h2>
+
+        <p class="modal-descripcion">
+            Comprueba los datos antes de continuar con tu pedido.
+        </p>
+
+        <div class="modal-detalles">
+            <div class="modal-fila">
+                <span>Juego</span>
+                <strong>Wuthering Waves</strong>
+            </div>
+
+            <div class="modal-fila">
+                <span>Producto</span>
+                <strong id="modalPaquete">—</strong>
+            </div>
+
+            <div class="modal-fila">
+                <span>ID de jugador</span>
+                <strong id="modalJugador">—</strong>
+            </div>
+
+            <div class="modal-fila">
+                <span>Total</span>
+                <strong id="modalTotal" class="modal-total">—</strong>
+            </div>
+        </div>
+
+        <p class="modal-descripcion">
+            La compra descontará GVR de tu saldo. Si hay un pedido pendiente,
+            primero se verificará su estado.
+        </p>
+
+        <div class="modal-botones">
+            <button
+                id="modalCancelar"
+                class="modal-boton modal-cancelar"
+                type="button"
+            >
+                CANCELAR
+            </button>
+
+            <button
+                id="modalAceptar"
+                class="modal-boton modal-aceptar"
+                type="button"
+            >
+                ACEPTAR
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+"use strict";
+
+import { createClient } from
+    "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL =
+    "https://gsuhzcavghsiolmipnzi.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
+
+const URL_CATALOGO =
+    SUPABASE_URL + "/functions/v1/rechargegames-catalogo";
+
+const URL_CREAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/rechargegames-crear-pedido";
+
+const URL_CONSULTAR_PEDIDO =
+    SUPABASE_URL + "/functions/v1/rechargegames-consultar-pedido";
+
+const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
         }
-    }));
-    activar(0);
-})();
+    }
+);
+
+/* ELEMENTOS */
+
+const catalogo = document.getElementById("catalogo");
+const catalogoOfertas = document.getElementById("catalogoOfertas");
+const estadoCatalogo = document.getElementById("estadoCatalogo");
+
+const vistaLunite = document.getElementById("vistaLunite");
+const vistaOfertas = document.getElementById("vistaOfertas");
+const vistaNivel = document.getElementById("vistaNivel");
+
+const pestanaLunite = document.getElementById("pestanaLunite");
+const pestanaOfertas = document.getElementById("pestanaOfertas");
+const pestanaNivel = document.getElementById("pestanaNivel");
+
+const botonContinuar = document.getElementById("botonContinuar");
+
+const campoJugador = document.getElementById("idjugador");
+const estadoValidacion = document.getElementById("estadoValidacion");
+
+const modalFondo = document.getElementById("modalFondo");
+const modalPaquete = document.getElementById("modalPaquete");
+const modalJugador = document.getElementById("modalJugador");
+const modalTotal = document.getElementById("modalTotal");
+const modalCancelar = document.getElementById("modalCancelar");
+const modalAceptar = document.getElementById("modalAceptar");
+
+const OFERTAS_FREE_FIRE = [
+    {
+        id: "fz-free_fire_global-booyah_pass",
+        nombre: "Booyah Pass",
+        imagen: "imagenes/file_0000000083708210b16777d81d12559e.png"
+    },
+    {
+        id: "fz-free_fire_global-weekly_membership",
+        nombre: "Membresía Semanal",
+        imagen: "imagenes/file_0000000058f481f596270e00ee90d93d.png"
+    },
+    {
+        id: "fz-free_fire_global-monthly_membership",
+        nombre: "Membresía Mensual",
+        imagen: "imagenes/file_000000009360820e93e689acad10b27a.png"
+    }
+];
+
+let resolverConfirmacionModal = null;
+
+let productoSeleccionado = null;
+/* Puente explícito desde el módulo del juego al flujo de pago manual. No altera el flujo GVR. */
+window.ggManualPaymentBridge = {
+ getClient: () => supabase,
+ getProduct: () => { const selected = productoSeleccionado; return selected && (selected.local || selected); },
+ getView: () => typeof vistaActual === "undefined" ? null : vistaActual,
+ getPlayerField: () => document.getElementById("idjugador") || document.getElementById("idJugador"),
+ getZoneField: () => document.getElementById("zonaJugador"),
+ getRegionField: () => ({ value: regionActual }),
+ validate: () => {
+  if (typeof validarFormulario === "function" && !validarFormulario()) return false;
+  const selected = productoSeleccionado;
+  const playerField = document.getElementById("idjugador") || document.getElementById("idJugador");
+  const playerId = playerField?.value.trim();
+  if (typeof validacionJugador !== "undefined" && validacionJugador.playerId === playerId) {
+   if (validacionJugador.status === "CHECKING") {
+    alert("Espera a que termine la comprobación del ID antes de pagar."); return false;
+   }
+   if (["INVALID", "WRONG_REGION"].includes(validacionJugador.status)) {
+    alert(validacionJugador.status === "WRONG_REGION" ? "El ID pertenece a otra región. Comprueba la región antes de pagar." : "El Player ID no es válido. Compruébalo antes de pagar."); return false;
+   }
+  }
+  const regionField = { value: regionActual };
+  if (regionField && typeof productoDeRegion === "function" && selected && selected.local && !productoDeRegion(selected.local, regionField.value) && !productoDeRegion(selected.proveedor, regionField.value)) {
+   alert("Este paquete no corresponde a la región seleccionada."); return false;
+  }
+  return true;
+ }
+};
+
+let productosDisponibles = [];
+let productosProveedor = [];
+let productosLocales = [];
+
+let procesando = false;
+let usuarioActualId = null;
+let pedidoPendienteId = null;
+let accionPendiente = "crear";
+
+let vistaActual = "lunite";
+let regionActual = "global";
+
+let validacionJugador = {
+    status: "UNKNOWN",
+    playerId: "",
+    productId: "",
+    nickname: "",
+    region: "",
+    message: ""
+};
+
+let temporizadorValidacion = null;
+let numeroSolicitudValidacion = 0;
+let claveUltimaValidacion = "";
+
+/* CAMBIO DE CATEGORÍA */
+
+function cambiarVista(vista) {
+    if (!["lunite", "ofertas", "nivel"].includes(vista)) {
+        return;
+    }
+
+    vistaActual = vista;
+
+    vistaLunite.classList.toggle(
+        "vista-oculta",
+        vista !== "lunite"
+    );
+
+    vistaOfertas.classList.toggle(
+        "vista-oculta",
+        vista !== "ofertas"
+    );
+
+    vistaNivel.classList.toggle(
+        "vista-oculta",
+        vista !== "nivel"
+    );
+
+    pestanaLunite.classList.toggle(
+        "activa",
+        vista === "lunite"
+    );
+
+    pestanaOfertas.classList.toggle(
+        "activa",
+        vista === "ofertas"
+    );
+
+    pestanaNivel.classList.toggle(
+        "activa",
+        vista === "nivel"
+    );
+
+    pestanaLunite.setAttribute(
+        "aria-selected",
+        String(vista === "lunite")
+    );
+
+    pestanaOfertas.setAttribute(
+        "aria-selected",
+        String(vista === "ofertas")
+    );
+
+    pestanaNivel.setAttribute(
+        "aria-selected",
+        String(vista === "nivel")
+    );
+
+    productoSeleccionado = null;
+
+    limpiarSeleccionVisual();
+    reiniciarValidacionJugador();
+
+    if (vista === "lunite") {
+        mostrarEstado(
+            productosDisponibles.length
+                ? "Selecciona el paquete que deseas comprar."
+                : "El catálogo de lunite todavía no está disponible."
+        );
+    } else if (vista === "ofertas") {
+        mostrarEstado("Selecciona una oferta especial.");
+    } else {
+        mostrarEstado(
+            "Los paquetes de nivel estarán disponibles próximamente."
+        );
+    }
+
+    actualizarBoton();
+}
+
+const botonesRegion = Array.from(document.querySelectorAll(".region-opcion"));
+
+function actualizarSelectorRegion() {
+    botonesRegion.forEach(boton => {
+        const activa = boton.dataset.region === regionActual;
+        boton.classList.toggle("activa", activa);
+        boton.setAttribute("aria-pressed", String(activa));
+        boton.disabled = Boolean(procesando || pedidoPendienteId);
+    });
+}
+
+botonesRegion.forEach(boton => {
+    boton.addEventListener("click", async () => {
+        const nuevaRegion = String(boton.dataset.region || "").trim().toLowerCase();
+        if (!["global", "brazil", "indonesia"].includes(nuevaRegion) || nuevaRegion === regionActual) return;
+        if (procesando || pedidoPendienteId) {
+            mostrarEstado("Termina o consulta el pedido pendiente antes de cambiar de región.", "error");
+            return;
+        }
+        regionActual = nuevaRegion;
+        productoSeleccionado = null;
+        limpiarSeleccionVisual();
+        reiniciarValidacionJugador();
+        actualizarSelectorRegion();
+        await cargarCatalogo();
+    });
+});
+
+pestanaLunite.addEventListener("click", () => cambiarVista("lunite"));
+pestanaOfertas.addEventListener("click", () => cambiarVista("ofertas"));
+pestanaNivel.addEventListener("click", () => cambiarVista("nivel"));
+
+/* ESTADOS Y PEDIDOS */
+
+function mostrarEstado(mensaje, tipo = "") {
+    estadoCatalogo.style.display = "";
+    mensaje = typeof mensaje === "string" ? mensaje.replace(/pedido aceptado por next level/gi, "Pedido aceptado por Gamers Gold Top-Up") : mensaje;
+    estadoCatalogo.textContent = mensaje;
+
+    estadoCatalogo.classList.toggle("error", tipo === "error");
+    estadoCatalogo.classList.toggle("correcto", tipo === "correcto");
+}
+
+function mensajeError(error, alternativo) {
+    return error?.message || alternativo;
+}
+
+function normalizarTexto(valor) {
+    return String(valor ?? "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[\s_-]/g, "");
+}
+
+function clavePedidoPendiente(userId) {
+    return "ggtopup_wutheringwaves_pedido_" + userId;
+}
+
+function guardarPedidoPendiente() {
+    if (!usuarioActualId || !pedidoPendienteId) return;
+
+    localStorage.setItem(
+        clavePedidoPendiente(usuarioActualId),
+        JSON.stringify({
+            orderId: pedidoPendienteId,
+            accion: accionPendiente
+        })
+    );
+}
+
+function borrarPedidoPendiente() {
+    if (usuarioActualId) {
+        localStorage.removeItem(
+            clavePedidoPendiente(usuarioActualId)
+        );
+    }
+
+    pedidoPendienteId = null;
+    accionPendiente = "crear";
+}
+
+function recuperarPedidoPendiente(userId) {
+    try {
+        const guardado = localStorage.getItem(
+            clavePedidoPendiente(userId)
+        );
+
+        if (!guardado) {
+            pedidoPendienteId = null;
+            accionPendiente = "crear";
+            return;
+        }
+
+        const datos = JSON.parse(guardado);
+
+        if (
+            typeof datos.orderId !== "string" ||
+            !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(datos.orderId)
+        ) {
+            throw new Error("La referencia del pedido no es válida.");
+        }
+
+        pedidoPendienteId = datos.orderId;
+
+        accionPendiente =
+            datos.accion === "consultar"
+                ? "consultar"
+                : "enviar";
+
+    } catch (error) {
+        console.error("Error recuperando pedido:", error);
+        pedidoPendienteId = null;
+        accionPendiente = "crear";
+    }
+}
+
+async function verificarPedidoGuardado(userId) {
+    if (!pedidoPendienteId) return false;
+
+    const idVerificado = pedidoPendienteId;
+
+    const { data, error } = await supabase
+        .from("game_orders")
+        .select(
+            "id,status,provider_order_id,provider_client_reference,provider_submitted_at,provider_status,provider_error"
+        )
+        .eq("id", idVerificado)
+        .eq("user_id", userId)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Error verificando pedido:", error.message);
+
+        throw new Error(
+            "No se pudo verificar el pedido anterior. " +
+            "No iniciaremos otra compra hasta resolverlo."
+        );
+    }
+
+    if (!data) {
+        throw new Error(
+            "No pudimos confirmar el pedido anterior en la base de datos. " +
+            "No hagas otra recarga hasta aclarar su estado."
+        );
+    }
+
+    const estadoLocal = String(data.status || "").toLowerCase();
+    const errorProveedor = String(data.provider_status || "") + " " + String(data.provider_error || "");
+    if (estadoLocal === "failed" && !data.provider_order_id && !data.provider_submitted_at) {
+        if (pedidoPendienteId === idVerificado) borrarPedidoPendiente();
+        actualizarBoton();
+        mostrarEstado("El pedido anterior falló y no tiene una recarga remota asociada. Puedes iniciar un pedido nuevo.", "aviso");
+        return false;
+    }
+
+    if (estadoLocal === "completed" || estadoLocal === "refunded") {
+        if (pedidoPendienteId === idVerificado) {
+            borrarPedidoPendiente();
+        }
+
+        return false;
+    }
+
+    if (
+        data.provider_order_id ||
+        data.provider_client_reference ||
+        data.provider_submitted_at
+    ) {
+        accionPendiente = "consultar";
+    } else if (estadoLocal === "pending") {
+        accionPendiente = "enviar";
+    } else {
+        accionPendiente = "consultar";
+    }
+
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    return true;
+}
+
+/* BOTÓN PRINCIPAL */
+
+function actualizarBoton() {
+    if (procesando) {
+        botonContinuar.disabled = true;
+        return;
+    }
+
+    if (pedidoPendienteId) {
+        botonContinuar.textContent =
+            accionPendiente === "enviar"
+                ? "RECUPERAR PEDIDO"
+                : "CONSULTAR PEDIDO";
+
+        botonContinuar.disabled = false;
+        return;
+    }
+
+    if (vistaActual === "nivel") {
+        botonContinuar.textContent = "PRÓXIMAMENTE";
+        botonContinuar.disabled = true;
+        return;
+    }
+
+    botonContinuar.textContent =
+        vistaActual === "ofertas"
+            ? "COMPRAR OFERTA"
+            : "RECARGAR";
+
+    botonContinuar.disabled =
+        !campoJugador.value.trim() ||
+        !productoSeleccionado ||
+        validacionJugador.status === "CHECKING";
+}
+
+/* MODAL */
+
+function cerrarModalConfirmacion(resultado) {
+    modalFondo.classList.remove("visible");
+    modalFondo.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-abierto");
+
+    if (typeof resolverConfirmacionModal === "function") {
+        const resolver = resolverConfirmacionModal;
+        resolverConfirmacionModal = null;
+        resolver(resultado);
+    }
+}
+
+function abrirModalConfirmacion(producto, playerId, precio) {
+    modalPaquete.textContent = obtenerNombre(producto);
+    modalJugador.textContent = playerId;
+    modalTotal.textContent = mostrarPrecio(precio);
+
+    modalFondo.classList.add("visible");
+    modalFondo.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-abierto");
+
+    modalCancelar.disabled = false;
+    modalAceptar.disabled = false;
+
+    return new Promise(resolve => {
+        resolverConfirmacionModal = resolve;
+        modalCancelar.focus();
+    });
+}
+
+modalCancelar.addEventListener("click", () => {
+    cerrarModalConfirmacion(false);
+});
+
+modalAceptar.addEventListener("click", () => {
+    cerrarModalConfirmacion(true);
+});
+
+modalFondo.addEventListener("click", event => {
+    if (event.target === modalFondo) {
+        cerrarModalConfirmacion(false);
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if (
+        event.key === "Escape" &&
+        modalFondo.classList.contains("visible")
+    ) {
+        cerrarModalConfirmacion(false);
+    }
+});
+
+/* VALIDACIÓN DEL JUGADOR */
+
+function mostrarEstadoValidacion(mensaje, tipo = "") {
+    estadoValidacion.textContent = mensaje;
+    estadoValidacion.classList.add("visible");
+
+    estadoValidacion.classList.remove(
+        "error",
+        "correcto",
+        "aviso"
+    );
+
+    if (tipo) estadoValidacion.classList.add(tipo);
+}
+
+function ocultarEstadoValidacion() {
+    estadoValidacion.textContent = "";
+
+    estadoValidacion.classList.remove(
+        "visible",
+        "error",
+        "correcto",
+        "aviso"
+    );
+}
+
+function reiniciarValidacionJugador() {
+    numeroSolicitudValidacion++;
+    claveUltimaValidacion = "";
+
+    validacionJugador = {
+        status: "UNKNOWN",
+        playerId: "",
+        productId: "",
+        nickname: "",
+        region: "",
+        message: ""
+    };
+
+    ocultarEstadoValidacion();
+}
+
+function obtenerClaveValidacion(playerId, productId) {
+    return playerId + "::" + productId;
+}
+
+function normalizarEstadoValidacion(datos) {
+    const resultado = datos?.result && typeof datos.result === "object"
+        ? datos.result
+        : datos;
+    const estado = String(
+        resultado?.status ||
+        resultado?.result ||
+        resultado?.code ||
+        resultado?.state ||
+        datos?.status ||
+        ""
+    ).trim().toUpperCase();
+
+    if (["OK", "EXISTS", "VALID"].includes(estado) || resultado?.valid === true) return "VALID";
+    if (["UID_NOT_FOUND", "INVALID"].includes(estado) || resultado?.valid === false) return "INVALID";
+    if (estado === "WRONG_REGION") return "WRONG_REGION";
+
+    return "UNAVAILABLE";
+}
+
+function extraerNicknameValidacion(datos) {
+    const resultado = datos?.result && typeof datos.result === "object"
+        ? datos.result
+        : datos;
+    return String(
+        resultado?.nickname ||
+        resultado?.player_name ||
+        resultado?.playerName ||
+        resultado?.username ||
+        resultado?.name ||
+        ""
+    ).trim();
+}
+
+async function validarJugador() {
+    const playerId = campoJugador.value.trim();
+    if (!playerId || !productoSeleccionado) {
+        reiniciarValidacionJugador();
+        return;
+    }
+    if (playerId.length > 32) {
+        reiniciarValidacionJugador();
+        mostrarEstadoValidacion("El Player ID no puede superar 32 caracteres.", "error");
+        return;
+    }
+    const productId = obtenerProductId(productoSeleccionado.proveedor);
+    validacionJugador = {
+        status: "UNAVAILABLE",
+        playerId,
+        productId,
+        nickname: "",
+        region: "GLOBAL",
+        message: "Comprueba el Player ID directamente en el juego."
+    };
+    mostrarEstadoValidacion("Comprueba que el Player ID sea correcto antes de continuar. No hay validación automática disponible para este juego.", "aviso");
+    actualizarBoton();
+}
+
+function programarValidacionJugador() {
+    clearTimeout(temporizadorValidacion);
+
+    reiniciarValidacionJugador();
+
+    if (
+        !campoJugador.value.trim() ||
+        !productoSeleccionado ||
+        pedidoPendienteId
+    ) {
+        return;
+    }
+
+    temporizadorValidacion = setTimeout(validarJugador, 650);
+}
+
+campoJugador.addEventListener("input", () => {
+    programarValidacionJugador();
+    actualizarBoton();
+});
+
+/* PRODUCTOS Y PRECIOS */
+
+function extraerProductos(respuesta) {
+    if (Array.isArray(respuesta)) return respuesta;
+    if (!respuesta || typeof respuesta !== "object") return [];
+
+    if (Array.isArray(respuesta.productos)) return respuesta.productos;
+    if (Array.isArray(respuesta.products)) return respuesta.products;
+    if (Array.isArray(respuesta.data)) return respuesta.data;
+    if (Array.isArray(respuesta.data?.products)) return respuesta.data.products;
+
+    return [];
+}
+
+function obtenerProductId(producto) {
+    return String(
+        producto?.productId ||
+        producto?.product_id ||
+        producto?.id ||
+        ""
+    ).trim();
+}
+
+function obtenerNombre(producto) {
+    return String(
+        producto?.nombreMostrar ||
+        producto?.name ||
+        producto?.productName ||
+        producto?.product_name ||
+        producto?.title ||
+        obtenerProductId(producto) ||
+        "Producto de Wuthering Waves"
+    ).trim();
+}
+
+function obtenerPrefijoRegion() {
+    return "topup/wuthering-waves/global/";
+}
+
+function esProductoDeRegion(producto, region = regionActual) {
+    const prefijo = obtenerPrefijoRegion(region);
+    const productKey = obtenerProductId(producto).toLowerCase();
+    return Boolean(prefijo) && productKey.startsWith(prefijo);
+}
+
+function esPaqueteLunite(producto) {
+    const id = obtenerProductId(producto).toLowerCase();
+    const nombre = obtenerNombre(producto).toLowerCase();
+    return !id.includes("subscription") && !nombre.includes("subscription");
+}
+
+async function cargarProductosLocales() {
+    const { data, error } = await supabase
+        .from("game_products")
+        .select(
+            "id,game,product_name,price_gvr,active,provider,provider_product_id,provider_region,product_type"
+        )
+        .eq("provider", "rechargegames");
+
+    if (error) {
+        console.error("Error consultando productos:", error.message);
+
+        throw new Error(
+            "No se pudieron verificar los productos y sus precios GVR."
+        );
+    }
+
+    productosLocales = (data || []).filter(producto =>
+        normalizarTexto(producto.game) === "wutheringwaves"
+    );
+}
+
+function buscarProductoLocal(productoProveedor) {
+    const providerId = obtenerProductId(productoProveedor);
+
+    return productosLocales.find(producto =>
+        String(producto.provider_product_id || "").trim() === providerId
+    ) || null;
+}
+
+function productoComprable(productoLocal) {
+    if (!productoLocal) return false;
+
+    const precio = Number(productoLocal.price_gvr);
+
+    return productoLocal.active === true &&
+        Number.isFinite(precio) &&
+        precio > 0;
+}
+
+function mostrarPrecio(precio) {
+    return Number(precio).toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " GVR";
+}
+
+/* SELECCIÓN VISUAL: SIN MENSAJES DE PRODUCTO SELECCIONADO */
+
+function limpiarSeleccionVisual() {
+    document
+        .querySelectorAll("#catalogo .producto, #catalogoOfertas .producto")
+        .forEach(elemento => {
+            elemento.classList.remove("seleccionado");
+        });
+}
+
+function seleccionarProducto(productoProveedor, productoLocal, tipo, tarjeta) {
+    if (procesando || pedidoPendienteId) return;
+    if (!productoComprable(productoLocal)) return;
+
+    limpiarSeleccionVisual();
+
+    tarjeta.classList.add("seleccionado");
+
+    productoSeleccionado = {
+        proveedor: productoProveedor,
+        local: productoLocal,
+        tipo
+    };
+
+    /*
+     * No mostramos mensajes como "Seleccionaste Lunite".
+     * La elección se indica visualmente con el borde iluminado.
+     */
+    reiniciarValidacionJugador();
+    programarValidacionJugador();
+    actualizarBoton();
+}
+
+/* CATÁLOGO DE DIAMANTES */
+function renderizarCatalogo() {
+    catalogo.replaceChildren();
+    productosDisponibles.forEach(producto => {
+        const local = buscarProductoLocal(producto);
+        const comprable = productoComprable(local);
+        const tarjeta = document.createElement("button");
+        tarjeta.type = "button";
+        tarjeta.className = "producto producto-con-lunite";
+
+        const nombreProducto = obtenerNombre(producto);
+
+        if (local?.id) tarjeta.dataset.ggProductId = String(local.id);
+        if (!comprable) {
+            tarjeta.classList.add("producto-no-disponible");
+            tarjeta.disabled = true;
+        }
+        const informacion = document.createElement("div");
+        informacion.className = "producto-informacion";
+
+        const nombre = document.createElement("div");
+        nombre.className = "producto-nombre";
+        nombre.textContent = nombreProducto;
+        const precio = document.createElement("div");
+        precio.className = "producto-precio";
+        const estado = document.createElement("div");
+        estado.className = "producto-estado";
+        if (comprable) {
+            precio.textContent = mostrarPrecio(Number(local.price_gvr));
+            estado.textContent = "Disponible";
+        } else {
+            precio.textContent = "Precio pendiente";
+            estado.textContent = "Temporalmente no disponible";
+        }
+        informacion.append(nombre, precio, estado);
+        tarjeta.append(informacion);
+        if (comprable) tarjeta.addEventListener("click", () => {
+            seleccionarProducto(producto, local, "lunite", tarjeta);
+        });
+        catalogo.appendChild(tarjeta);
+    });
+}
+
+/* OFERTAS EXTRA */
+
+function buscarProductoProveedorPorId(productId) {
+    return productosProveedor.find(producto =>
+        obtenerProductId(producto) === productId
+    ) || null;
+}
+
+function renderizarOfertas() {
+    catalogoOfertas.replaceChildren();
+    const ofertas = productosLocales.filter(producto =>
+        producto.product_type === "special_offer" &&
+        String(producto.provider_region || "").trim().toLowerCase() === regionActual &&
+        String(producto.provider_product_id || "").trim().toLowerCase().startsWith(obtenerPrefijoRegion())
+    );
+
+    if (!ofertas.length) {
+        const aviso = document.createElement("div");
+        aviso.className = "estado";
+        aviso.textContent = "No hay ofertas especiales importadas para esta región.";
+        catalogoOfertas.appendChild(aviso);
+        return;
+    }
+
+    ofertas.forEach(local => {
+        const id = String(local.provider_product_id || "").trim();
+        const proveedor = buscarProductoProveedorPorId(id) || {
+            productId: id,
+            name: String(local.product_name || "").split(" [")[0],
+            available: true
+        };
+        const comprable = productoComprable(local);
+        const tarjeta = document.createElement("button");
+        tarjeta.type = "button";
+        tarjeta.className = "producto producto-oferta";
+        if (local.id) tarjeta.dataset.ggProductId = String(local.id);
+        tarjeta.disabled = !comprable;
+        if (!comprable) tarjeta.classList.add("producto-no-disponible");
+
+        const nombre = document.createElement("div");
+        nombre.className = "producto-nombre";
+        nombre.textContent = String(local.product_name || "Oferta especial").split(" [")[0];
+        const precio = document.createElement("div");
+        precio.className = "producto-precio";
+        precio.textContent = Number(local.price_gvr) > 0 ? mostrarPrecio(local.price_gvr) : "Precio pendiente";
+        const estado = document.createElement("div");
+        estado.className = "producto-estado";
+        estado.textContent = comprable ? "Disponible" : "Temporalmente inactiva";
+        tarjeta.append(nombre, precio, estado);
+
+        if (comprable) {
+            tarjeta.addEventListener("click", () => {
+                seleccionarProducto(proveedor, local, "oferta", tarjeta);
+            });
+        }
+        catalogoOfertas.appendChild(tarjeta);
+    });
+}
+
+/* CARGAR CATÁLOGO */
+
+async function cargarCatalogo() {
+    actualizarSelectorRegion();
+    productoSeleccionado = null;
+    productosDisponibles = [];
+    productosProveedor = [];
+
+    catalogo.replaceChildren();
+    catalogoOfertas.replaceChildren();
+
+    reiniciarValidacionJugador();
+
+    const nombreRegion = regionActual === "brazil" ? "Brasil" : regionActual === "indonesia" ? "Indonesia" : "GLOBAL";
+    mostrarEstado("Conectando con el catálogo de " + nombreRegion + "...");
+
+    try {
+        const [respuestaCatalogo] = await Promise.all([
+            fetch(URL_CATALOGO + "?game=wuthering-waves", {
+                method: "GET",
+
+                headers: {
+                    apikey: SUPABASE_KEY,
+                    Authorization: "Bearer " + SUPABASE_KEY,
+                    Accept: "application/json"
+                },
+
+                cache: "no-store"
+            }),
+
+            cargarProductosLocales()
+        ]);
+
+        let resultado;
+
+        try {
+            resultado = await respuestaCatalogo.json();
+        } catch {
+            throw new Error(
+                "El catálogo devolvió una respuesta no válida."
+            );
+        }
+
+        if (!respuestaCatalogo.ok) {
+            throw new Error(
+                resultado.error ||
+                resultado.message ||
+                "Error HTTP " + respuestaCatalogo.status
+            );
+        }
+
+        const productos = extraerProductos(resultado);
+
+        if (!productos.length) {
+            throw new Error("RechargeGames no devolvió productos.");
+        }
+
+        productosProveedor = productos.filter(producto =>
+            producto && obtenerProductId(producto) !== ""
+        );
+
+        productosDisponibles = productosProveedor.filter(producto =>
+            producto.available === true &&
+            esProductoDeRegion(producto) &&
+            esPaqueteLunite(producto)
+        );
+
+        renderizarCatalogo();
+        renderizarOfertas();
+
+        const luniteComprables =
+            productosDisponibles.filter(producto =>
+                productoComprable(buscarProductoLocal(producto))
+            ).length;
+
+        const ofertasComprables = productosLocales.filter(producto =>
+            producto.product_type === "special_offer" &&
+            String(producto.provider_region || "").trim().toLowerCase() === regionActual &&
+            String(producto.provider_product_id || "").trim().toLowerCase().startsWith(obtenerPrefijoRegion())
+        ).filter(productoComprable).length;
+
+        if (vistaActual === "nivel") {
+            mostrarEstado(
+                "Los paquetes de nivel estarán disponibles próximamente."
+            );
+        } else {
+            estadoCatalogo.style.display = "none";
+        }
+
+    } catch (error) {
+        console.error("Error cargando catálogo:", error);
+
+        catalogo.replaceChildren();
+        catalogoOfertas.replaceChildren();
+
+        mostrarEstado(
+            mensajeError(error, "No se pudo cargar el catálogo."),
+            "error"
+        );
+    }
+
+    actualizarSelectorRegion();
+    actualizarBoton();
+}
+
+/* FUNCIONES EDGE */
+
+async function llamarFuncion(url, accessToken, body) {
+    const respuesta = await fetch(url, {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+            apikey: SUPABASE_KEY,
+            Authorization: "Bearer " + accessToken
+        },
+
+        body: JSON.stringify(body)
+    });
+
+    let datos;
+
+    try {
+        datos = await respuesta.json();
+    } catch {
+        datos = {};
+    }
+
+    if (!respuesta.ok) {
+        const error = new Error(
+            datos.error ||
+            datos.message ||
+            "La función devolvió HTTP " + respuesta.status
+        );
+
+        error.status = respuesta.status;
+        error.data = datos;
+
+        throw error;
+    }
+
+    return datos;
+}
+
+/* CONSULTAR PEDIDO */
+
+async function consultarPedido(accessToken) {
+    if (!pedidoPendienteId) {
+        throw new Error("No hay ningún pedido guardado para consultar.");
+    }
+
+    const datos = await llamarFuncion(
+        URL_CONSULTAR_PEDIDO,
+        accessToken,
+        {
+            game_order_id: pedidoPendienteId
+        }
+    );
+
+    const estadoLocal = String(datos.status || "").toLowerCase();
+    const estadoProveedor = String(datos.provider_status || "").toUpperCase();
+
+    if (estadoLocal === "completed" || estadoLocal === "refunded") {
+        const mensaje = estadoLocal === "completed"
+            ? "¡Recarga completada por el proveedor!"
+            : "El pedido figura como reembolsado.";
+
+        borrarPedidoPendiente();
+        actualizarBoton();
+
+        mostrarEstado(mensaje, "correcto");
+
+        alert(
+            mensaje + "\n\nPedido: " +
+            (datos.game_order_id || "consultado")
+        );
+
+        return;
+    }
+
+    if (estadoProveedor === "FAILED") {
+        accionPendiente = "consultar";
+
+        guardarPedidoPendiente();
+        actualizarBoton();
+
+        mostrarEstado(
+            "El proveedor informa FAILED. Verifica el pedido y el reembolso antes de volver a comprar.",
+            "error"
+        );
+
+        return;
+    }
+
+    accionPendiente = "consultar";
+
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    mostrarEstado(
+        datos.message ||
+        "El pedido sigue pendiente. Verifica su estado antes de comprar otra vez."
+    );
+}
+
+/* ENVIAR PEDIDO Y ABRIR CHECKOUT */
+
+async function enviarPedido(accessToken) {
+    if (!pedidoPendienteId) {
+        throw new Error("No hay ningún pedido guardado para enviar.");
+    }
+
+    const idPedido = pedidoPendienteId;
+
+    accionPendiente = "consultar";
+
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    try {
+        const datos = await llamarFuncion(
+            URL_CREAR_PEDIDO,
+            accessToken,
+            {
+                game_order_id: idPedido
+            }
+        );
+
+        console.log("Respuesta de crear pedido:", datos);
+
+        mostrarEstado(
+            datos.message ||
+            "Solicitud procesada. Abriendo el seguimiento del pedido...",
+            "correcto"
+        );
+
+    } catch (error) {
+        console.error("Error enviando pedido:", error, error.data || "");
+
+        mostrarEstado(
+            "No se pudo confirmar el envío. Abriendo el seguimiento del pedido para verificar su estado.",
+            "error"
+        );
+    }
+
+    window.location.href = new URL(
+        "checkout.html?id=" + encodeURIComponent(idPedido),
+        window.location.href
+    ).href;
+}
+
+/* CREAR COMPRA */
+
+async function crearCompra(accessToken, playerId) {
+    if (!productoSeleccionado) {
+        throw new Error("Selecciona primero un producto disponible.");
+    }
+
+    const productIdValidacion = obtenerProductId(
+        productoSeleccionado.proveedor
+    );
+
+    if (
+        validacionJugador.status === "INVALID" &&
+        validacionJugador.playerId === playerId &&
+        validacionJugador.productId === productIdValidacion
+    ) {
+        throw new Error(
+            "Gamers Gold Top-Up indica que este ID no es válido. " +
+            "Por favor, compruébalo de nuevo antes de comprar."
+        );
+    }
+
+    const local = productoSeleccionado.local;
+
+    if (
+        !local ||
+        local.active !== true ||
+        String(local.provider_region || "").trim().toLowerCase() !== regionActual ||
+        !String(local.provider_product_id || "").trim().toLowerCase().startsWith(obtenerPrefijoRegion()) ||
+        !Number.isFinite(Number(local.price_gvr)) ||
+        Number(local.price_gvr) <= 0 ||
+        local.provider !== "rechargegames" ||
+        !local.provider_product_id
+    ) {
+        throw new Error(
+            "El producto no está correctamente configurado para la compra."
+        );
+    }
+
+    const { data: productoActual, error: errorProducto } = await supabase
+        .from("game_products")
+        .select(
+            "id,game,price_gvr,active,provider,provider_product_id,provider_region"
+        )
+        .eq("id", local.id)
+        .eq("provider", "rechargegames")
+        .eq("active", true)
+        .maybeSingle();
+
+    if (errorProducto) {
+        throw new Error(
+            "No se pudo verificar el producto antes de comprar."
+        );
+    }
+
+    if (
+        !productoActual ||
+        normalizarTexto(productoActual.game) !== "wutheringwaves" ||
+        String(productoActual.provider_region || "").trim().toLowerCase() !== regionActual ||
+        !String(productoActual.provider_product_id || "").trim().toLowerCase().startsWith(obtenerPrefijoRegion()) ||
+        String(productoActual.provider_product_id || "").trim() !==
+            obtenerProductId(productoSeleccionado.proveedor) ||
+        !Number.isFinite(Number(productoActual.price_gvr)) ||
+        Number(productoActual.price_gvr) <= 0
+    ) {
+        throw new Error(
+            "El producto o su precio cambiaron. Actualiza el catálogo antes de comprar."
+        );
+    }
+
+    const precioConfirmado = await window.ggGetResellerDiscountedPrice(Number(productoActual.price_gvr));
+
+    const confirmar = await abrirModalConfirmacion(
+        productoSeleccionado.proveedor,
+        playerId,
+        precioConfirmado
+    );
+
+    if (!confirmar) {
+        mostrarEstado("Compra cancelada. No se creó ningún pedido.");
+        return;
+    }
+
+    mostrarEstado("Creando pedido. No cierres esta página...");
+
+    const { data: orderId, error: errorCompra } = await supabase.rpc(
+        "purchase_game_product",
+        {
+            p_product_id: productoActual.id,
+            p_player_id: playerId
+        }
+    );
+
+    if (errorCompra) {
+        console.error("Error creando compra:", errorCompra.message);
+
+        throw new Error(
+            errorCompra.message ||
+            "No se pudo crear la compra. Comprueba tu saldo y tu sesión."
+        );
+    }
+
+    if (
+        typeof orderId !== "string" ||
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(orderId)
+    ) {
+        throw new Error(
+            "No recibimos un ID de pedido válido. Revisa game_orders antes de volver a intentarlo."
+        );
+    }
+
+    pedidoPendienteId = orderId;
+    accionPendiente = "enviar";
+
+    guardarPedidoPendiente();
+    actualizarBoton();
+
+    await enviarPedido(accessToken);
+}
+
+/* BOTÓN DE COMPRA */
+
+botonContinuar.addEventListener("click", async () => {
+    if (procesando) return;
+
+    procesando = true;
+    botonContinuar.disabled = true;
+
+    try {
+        const {
+            data: { session },
+            error: sessionError
+        } = await supabase.auth.getSession();
+
+        if (sessionError) {
+            throw new Error("No se pudo comprobar la sesión.");
+        }
+
+        if (!session?.access_token) {
+            throw new Error("Debes iniciar sesión para continuar.");
+        }
+
+        const {
+            data: { user },
+            error: userError
+        } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+            throw new Error(
+                "Tu sesión no es válida o ha caducado. Inicia sesión nuevamente."
+            );
+        }
+
+        usuarioActualId = user.id;
+
+        recuperarPedidoPendiente(user.id);
+
+        await verificarPedidoGuardado(user.id);
+
+        if (pedidoPendienteId) {
+            if (accionPendiente === "enviar") {
+                mostrarEstado(
+                    "Retomando el pedido pendiente existente. No se creará otro pedido..."
+                );
+
+                await enviarPedido(session.access_token);
+
+            } else {
+                mostrarEstado(
+                    "Consultando el estado del pedido anterior..."
+                );
+
+                await consultarPedido(session.access_token);
+            }
+
+            return;
+        }
+
+        if (vistaActual === "nivel") {
+            throw new Error(
+                "Los paquetes de nivel estarán disponibles próximamente."
+            );
+        }
+
+        const playerId = campoJugador.value.trim();
+
+        if (!playerId) {
+            throw new Error("Introduce tu ID de Wuthering Waves.");
+        }
+
+        if (playerId.length > 50) {
+            throw new Error("El Player ID es demasiado largo.");
+        }
+
+        if (!productoSeleccionado) {
+            throw new Error(
+                vistaActual === "ofertas"
+                    ? "Selecciona primero una oferta disponible."
+                    : "Selecciona primero un paquete disponible."
+            );
+        }
+
+        await crearCompra(session.access_token, playerId);
+
+    } catch (error) {
+        console.error("Error en compra de Wuthering Waves:", error);
+
+        mostrarEstado(
+            mensajeError(error, "No se pudo completar la operación."),
+            "error"
+        );
+
+        alert(
+            mensajeError(error, "No se pudo completar la operación.")
+        );
+
+    } finally {
+        procesando = false;
+        actualizarBoton();
+    }
+});
+
+/* INICIO */
+
+async function iniciar() {
+    try {
+        const {
+            data: { session }
+        } = await supabase.auth.getSession();
+
+        if (session?.user?.id) {
+            usuarioActualId = session.user.id;
+
+            recuperarPedidoPendiente(usuarioActualId);
+
+            // Validar la referencia guardada al abrir la página para liberar pedidos ya fallidos.
+            await verificarPedidoGuardado(usuarioActualId);
+
+            actualizarBoton();
+        }
+
+    } catch (error) {
+        console.error("No se pudo recuperar la sesión:", error);
+    }
+
+    await cargarCatalogo();
+
+    actualizarBoton();
+}
+
+iniciar();
 </script>
-<script src="./goldi-widget.js?v=20261023-16" defer></script>
-<script src="./tema-global.js?v=20261023-1" defer></script>
+    <script src="./goldi-widget.js?v=20261023-16" defer></script>
+
+
+<script type="module" src="./reseller-product-discount.js?v=20261103-02"></script>
+
+<script src="./pagos-manuales-juegos.js?v=20261103-02" defer></script>
+<style id="gg-product-readable-content">
+/* Mejora solo la lectura y distribución del contenido interno; no modifica el tamaño de las tarjetas. */
+#catalogo .producto,
+#catalogoOfertas .producto{
+  align-content:space-between!important;
+  row-gap:0!important;
+}
+#catalogo .producto > .producto-nombre,
+#catalogoOfertas .producto > .producto-nombre{
+  font-size:13px!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+}
+#catalogo .producto > .gg-reseller-original-price,
+#catalogoOfertas .producto > .gg-reseller-original-price{
+  font-size:10px!important;
+  font-weight:600!important;
+  line-height:1.2!important;
+}
+#catalogo .producto > .producto-precio,
+#catalogoOfertas .producto > .producto-precio{
+  font-size:13px!important;
+  font-weight:700!important;
+  line-height:1.2!important;
+}
+#catalogo .producto > .producto-estado,
+#catalogoOfertas .producto > .producto-estado{
+  font-size:10px!important;
+  font-weight:600!important;
+  line-height:1.2!important;
+}
+#listaOfertas .boton-oferta{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-between!important;
+  align-items:flex-start!important;
+  text-align:left!important;
+  font-size:12px!important;
+  font-weight:650!important;
+  line-height:1.25!important;
+}
+#listaOfertas .boton-oferta > *{
+  max-width:100%!important;
+  font-weight:650!important;
+  line-height:1.25!important;
+}
+</style>
+<style id="gg-payment-price-alignment">
+/* Tarjetas de lunite sin imágenes: contenido alineado y compacto. */
+#catalogo .producto,
+#catalogoOfertas .producto{
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  gap:1px!important;
+  min-width:0!important;
+  padding-left:8px!important;
+  text-align:left!important;
+  overflow:visible!important;
+}
+#catalogo .producto > .producto-nombre,
+#catalogoOfertas .producto > .producto-nombre{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  font-size:11px!important;
+  font-weight:500!important;
+  line-height:1.2!important;
+  color:#e5e7eb!important;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+#catalogo .producto > .gg-reseller-original-price,
+#catalogoOfertas .producto > .gg-reseller-original-price{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  font-size:9px!important;
+  font-weight:400!important;
+  line-height:1.15!important;
+  color:#9298a5!important;
+  text-align:left!important;
+  text-decoration:line-through!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+#catalogo .producto > .producto-precio,
+#catalogoOfertas .producto > .producto-precio{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:1px 0 0!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+  color:#4f8df7!important;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+#catalogo .producto > .producto-estado,
+#catalogoOfertas .producto > .producto-estado{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:1px 0 0!important;
+  font-size:8px!important;
+  font-weight:600!important;
+  line-height:1.1!important;
+  color:#45c8ff!important;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+</style>
+
+<style id="gg-wutheringwaves-diamond-product-images">
+/* Recorta visualmente los márgenes vacíos de la imagen dentro del espacio reservado. */
+#catalogo .producto-con-lunite > .producto-imagen{
+  position:relative!important;
+  overflow:hidden!important;
+  flex:0 0 48px!important;
+}
+#catalogo .producto-con-lunite .foto-lunite-producto{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  display:block!important;
+  width:72px!important;
+  height:72px!important;
+  max-width:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  transform:translate(-50%,-50%) scale(1.45)!important;
+  pointer-events:none!important;
+}
+</style>
+<style id="gg-wuthering-layout">
+.selector-categorias{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#pestanaNivel,#vistaNivel{display:none!important}
+.region-opciones{grid-template-columns:1fr!important}
+.region-opcion{cursor:default!important}
+</style>
 </body>
-</html>
+    </html>
+
+    
+
+
+<style id="gg-product-cards-no-images">
+/* Tarjetas sin fotos: se conserva su tamaño exterior y se aprovecha todo el espacio interior. */
+#catalogo .producto,
+#catalogoOfertas .producto{
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:stretch!important;
+  gap:2px!important;
+  min-width:0!important;
+  padding:8px!important;
+  text-align:left!important;
+  overflow:hidden!important;
+}
+#catalogo .producto > .producto-imagen,
+#catalogoOfertas .producto > .producto-imagen{
+  display:none!important;
+}
+#catalogo .producto > .producto-informacion,
+#catalogoOfertas .producto > .producto-informacion{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:stretch!important;
+  gap:2px!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+#catalogo .producto > .producto-nombre,
+#catalogoOfertas .producto > .producto-nombre{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+#catalogo .producto > .gg-reseller-original-price,
+#catalogoOfertas .producto > .gg-reseller-original-price{
+  display:block!important;
+  width:100%!important;
+  margin:0!important;
+  font-size:9px!important;
+  line-height:1.1!important;
+  text-align:left!important;
+  overflow-wrap:anywhere!important;
+}
+#catalogo .producto > .producto-precio,
+#catalogoOfertas .producto > .producto-precio{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+  text-align:left!important;
+  overflow-wrap:anywhere!important;
+}
+#catalogo .producto > .producto-estado,
+#catalogoOfertas .producto > .producto-estado{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  font-size:9px!important;
+  font-weight:600!important;
+  line-height:1.1!important;
+  text-align:left!important;
+  overflow-wrap:anywhere!important;
+}
+</style>
+
+<style id="gg-product-cards-full-width-discount-right">
+/* Catálogo y Ofertas Especiales: contenido normal a todo lo ancho y descuento arriba a la derecha. */
+#catalogo .producto,
+#catalogoOfertas .producto,
+#listaOfertas .boton-oferta{
+  box-sizing:border-box!important;
+  padding:8px!important;
+}
+.producto .gg-reseller-discount-badge,
+.boton-oferta .gg-reseller-discount-badge{
+  left:auto!important;
+  right:0!important;
+  top:0!important;
+}
+</style>
+
+<style id="gg-wutheringwaves-card-full-width-fix">
+/* Wuthering Waves: las tarjetas no reservan la columna de imagen porque el catálogo ya no la inserta. */
+#catalogo .producto.producto-con-lunite{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  column-gap:0!important;
+  justify-items:stretch!important;
+  text-align:left!important;
+}
+#catalogo .producto.producto-con-lunite > .producto-informacion{
+  grid-column:1!important;
+  grid-row:1!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  align-items:stretch!important;
+  text-align:left!important;
+}
+#catalogo .producto.producto-con-lunite .producto-nombre,
+#catalogo .producto.producto-con-lunite .gg-reseller-original-price,
+#catalogo .producto.producto-con-lunite .producto-precio,
+#catalogo .producto.producto-con-lunite .producto-estado{
+  width:100%!important;
+  max-width:100%!important;
+  text-align:left!important;
+}
+</style>
+
