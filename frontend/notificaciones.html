@@ -143,63 +143,89 @@
       return subscription;
     }
 
-    async function iniciarNotificacionesPush() {
-      if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
-        pushCard.hidden = false;
-        activarPush.hidden = true;
-        mostrarEstado(pushStatus, "Este navegador no admite notificaciones push. Puedes seguir consultando los avisos dentro de tu cuenta.");
-        return;
-      }
+    async function registrarDispositivoPush() {
+      const registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
+      await navigator.serviceWorker.ready;
+      await guardarSuscripcionPush(registration);
+      pushCard.hidden = true;
+      activarPush.disabled = false;
+      activarPush.textContent = "Activar notificaciones";
+      mostrarEstado(pushStatus, "");
+    }
 
-      if (Notification.permission === "denied") {
-        pushCard.hidden = false;
-        activarPush.hidden = true;
-        mostrarEstado(pushStatus, "Las notificaciones están bloqueadas en el navegador. Puedes habilitarlas desde los ajustes del sitio.");
+    async function iniciarNotificacionesPush() {
+      pushCard.hidden = false;
+      activarPush.hidden = false;
+      activarPush.disabled = false;
+      activarPush.textContent = "Activar notificaciones";
+
+      const compatible = ("serviceWorker" in navigator) &&
+        ("PushManager" in window) &&
+        ("Notification" in window);
+
+      if (!compatible) {
+        mostrarEstado(pushStatus, "Este navegador o modo de navegación no admite notificaciones push. Prueba desde Chrome o instala la web como aplicación si tu teléfono lo requiere.");
         return;
       }
 
       if (Notification.permission === "granted") {
         try {
-          const registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
-          await navigator.serviceWorker.ready;
-          await guardarSuscripcionPush(registration);
-          pushCard.hidden = true;
+          await registrarDispositivoPush();
         } catch (error) {
-          pushCard.hidden = false;
-          mostrarEstado(pushStatus, "No se pudo registrar este dispositivo. Actualiza la página e inténtalo de nuevo.", "error");
+          activarPush.textContent = "Reintentar activación";
+          mostrarEstado(pushStatus, "El permiso está concedido, pero este dispositivo no quedó registrado. Pulsa para reintentarlo.", "error");
           console.error("Error registrando push:", error);
         }
         return;
       }
 
-      pushCard.hidden = false;
-      activarPush.addEventListener("click", async function () {
-        activarPush.disabled = true;
-        mostrarEstado(pushStatus, "Esperando permiso del navegador…");
-        try {
+      if (Notification.permission === "denied") {
+        mostrarEstado(pushStatus, "El permiso está bloqueado. Actívalo desde los ajustes del sitio en tu navegador y después vuelve a esta página.");
+        return;
+      }
+
+      mostrarEstado(pushStatus, "Activa las notificaciones para recibir avisos de tu cuenta en este dispositivo.");
+    }
+
+    activarPush.addEventListener("click", async function () {
+      if (!(("serviceWorker" in navigator) && ("PushManager" in window) && ("Notification" in window))) {
+        mostrarEstado(pushStatus, "Este navegador o modo de navegación no admite notificaciones push. Prueba desde Chrome o instala la web como aplicación si tu teléfono lo requiere.", "error");
+        return;
+      }
+
+      if (Notification.permission === "denied") {
+        mostrarEstado(pushStatus, "El permiso está bloqueado. Entra en los ajustes del navegador, busca los permisos de este sitio y permite las notificaciones. Luego vuelve aquí y recarga la página.", "error");
+        return;
+      }
+
+      activarPush.disabled = true;
+      activarPush.textContent = "Activando…";
+      mostrarEstado(pushStatus, "Esperando permiso del navegador…");
+
+      try {
+        if (Notification.permission !== "granted") {
           const permission = await Notification.requestPermission();
           if (permission !== "granted") {
             activarPush.disabled = false;
+            activarPush.textContent = "Activar notificaciones";
             if (permission === "denied") {
-              activarPush.hidden = true;
-              mostrarEstado(pushStatus, "Permiso denegado. Puedes cambiarlo desde los ajustes del navegador.", "error");
+              mostrarEstado(pushStatus, "El permiso quedó bloqueado. Puedes cambiarlo desde los ajustes del navegador.", "error");
             } else {
               mostrarEstado(pushStatus, "Todavía no has permitido las notificaciones.");
             }
             return;
           }
-          const registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
-          await navigator.serviceWorker.ready;
-          await guardarSuscripcionPush(registration);
-          pushCard.hidden = true;
-        } catch (error) {
-          activarPush.disabled = false;
-          mostrarEstado(pushStatus, "No se pudo activar el servicio. Comprueba tu conexión e inténtalo otra vez.", "error");
-          console.error("Error activando notificaciones:", error);
         }
-      });
-    }
 
+        activarPush.textContent = "Registrando dispositivo…";
+        await registrarDispositivoPush();
+      } catch (error) {
+        activarPush.disabled = false;
+        activarPush.textContent = "Reintentar activación";
+        mostrarEstado(pushStatus, "No se pudo registrar este dispositivo. Comprueba tu conexión e inténtalo otra vez.", "error");
+        console.error("Error activando notificaciones:", error);
+      }
+    });
     async function comprobarAdministrador() {
       const { data, error } = await supabaseClient.rpc("is_support_admin");
       if (!error && data === true) adminCard.hidden = false;
