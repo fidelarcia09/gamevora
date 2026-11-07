@@ -158,23 +158,21 @@
         return;
       }
 
-      pushCard.hidden = false;
       if (Notification.permission === "granted") {
         try {
           const registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
           await navigator.serviceWorker.ready;
           await guardarSuscripcionPush(registration);
           pushCard.hidden = true;
-          document.getElementById("pushDescription").textContent = "Este dispositivo está preparado para recibir avisos de Gamers Gold Top-Up.";
-          activarPush.hidden = true;
-          mostrarEstado(pushStatus, "Dispositivo registrado correctamente.", "ok");
         } catch (error) {
+          pushCard.hidden = false;
           mostrarEstado(pushStatus, "No se pudo registrar este dispositivo. Actualiza la página e inténtalo de nuevo.", "error");
           console.error("Error registrando push:", error);
         }
         return;
       }
 
+      pushCard.hidden = false;
       activarPush.addEventListener("click", async function () {
         activarPush.disabled = true;
         mostrarEstado(pushStatus, "Esperando permiso del navegador…");
@@ -194,9 +192,6 @@
           await navigator.serviceWorker.ready;
           await guardarSuscripcionPush(registration);
           pushCard.hidden = true;
-          document.getElementById("pushDescription").textContent = "Este dispositivo está preparado para recibir avisos de Gamers Gold Top-Up.";
-          activarPush.hidden = true;
-          mostrarEstado(pushStatus, "¡Listo! Este dispositivo quedó registrado.", "ok");
         } catch (error) {
           activarPush.disabled = false;
           mostrarEstado(pushStatus, "No se pudo activar el servicio. Comprueba tu conexión e inténtalo otra vez.", "error");
