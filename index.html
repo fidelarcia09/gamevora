@@ -361,6 +361,40 @@
 @keyframes ggBellRing{0%,100%{transform:rotate(0)}12%{transform:rotate(13deg)}24%{transform:rotate(-13deg)}36%{transform:rotate(9deg)}48%{transform:rotate(-8deg)}60%{transform:rotate(0)}}
 @media(prefers-reduced-motion:reduce){.gg-notification-bell.tiene-nuevas svg{animation:none}}
 
+
+/* RESEÑAS DE CLIENTES — sección de inicio */
+.gg-reviews{position:relative;isolation:isolate;overflow:hidden;margin:30px auto 12px;padding:clamp(20px,4vw,30px);border:1px solid rgba(32,197,255,.22);border-radius:22px;background:radial-gradient(ellipse at 92% 0%,rgba(0,153,255,.16),transparent 42%),linear-gradient(145deg,#0b1c34,#071020 72%);box-shadow:0 18px 45px rgba(0,0,0,.2)}
+.gg-reviews:before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,transparent,#20c5ff 35%,#087cff 70%,transparent);opacity:.8}
+.gg-reviews-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px}
+.gg-reviews-kicker{display:inline-flex;align-items:center;gap:7px;margin-bottom:9px;color:#55d5ff;font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.gg-reviews-kicker:before{content:"";width:18px;height:2px;border-radius:4px;background:#20c5ff;box-shadow:0 0 10px #20c5ff}
+.gg-reviews-title{color:#f4f8ff;font-size:clamp(21px,4vw,28px);font-weight:900;letter-spacing:-.6px}
+.gg-reviews-subtitle{margin-top:7px;color:#9aadc4;font-size:12px;line-height:1.6}
+.gg-reviews-score{flex:0 0 auto;min-width:100px;padding:12px 14px;border:1px solid rgba(32,197,255,.22);border-radius:15px;background:rgba(3,13,28,.72);text-align:center}
+.gg-reviews-average{color:#fff;font-size:28px;font-weight:900;line-height:1}
+.gg-reviews-average small{color:#7d96b1;font-size:12px}
+.gg-reviews-shields,.gg-review-shields{display:flex;align-items:center;gap:4px}
+.gg-reviews-shields{justify-content:center;margin:8px 0 5px}
+.gg-review-shields{margin:0 0 10px}
+.gg-review-shield{width:15px;height:15px;object-fit:contain;filter:grayscale(1);opacity:.3}
+.gg-review-shield.active{filter:drop-shadow(0 0 5px rgba(32,197,255,.55));opacity:1}
+.gg-reviews-count{color:#91a8c1;font-size:10px}
+.gg-reviews-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.gg-review-card{min-width:0;padding:15px;border:1px solid rgba(105,158,215,.15);border-radius:15px;background:linear-gradient(145deg,rgba(13,31,54,.96),rgba(6,16,31,.96))}
+.gg-review-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.gg-review-user{overflow:hidden;color:#edf7ff;font-size:12px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
+.gg-review-date{flex:0 0 auto;color:#6f87a2;font-size:10px}
+.gg-review-comment{display:-webkit-box;overflow:hidden;color:#bdcadd;font-size:12px;line-height:1.65;overflow-wrap:anywhere;-webkit-box-orient:vertical;-webkit-line-clamp:4}
+.gg-reviews-empty,.gg-reviews-error{grid-column:1/-1;padding:20px;border:1px dashed rgba(105,158,215,.22);border-radius:14px;color:#9aadc4;text-align:center;font-size:12px;line-height:1.6}
+.gg-reviews-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:17px;padding-top:15px;border-top:1px solid rgba(105,158,215,.13)}
+.gg-reviews-note{color:#7189a3;font-size:10px;line-height:1.5}
+.gg-reviews-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 15px;border:1px solid rgba(32,197,255,.42);border-radius:11px;background:linear-gradient(110deg,rgba(0,119,255,.2),rgba(32,197,255,.1));color:#72dcff;text-decoration:none;font-size:11px;font-weight:900;white-space:nowrap;transition:transform .18s,border-color .18s,background .18s}
+.gg-reviews-link:hover{transform:translateY(-2px);border-color:#20c5ff;background:rgba(0,153,255,.2)}
+.gg-reviews-link:focus-visible{outline:2px solid #75d7ff;outline-offset:3px}
+@media(max-width:700px){.gg-reviews-list{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.gg-reviews{padding:18px 14px;border-radius:17px}.gg-reviews-head{gap:10px}.gg-reviews-score{min-width:83px;padding:10px 8px}.gg-reviews-average{font-size:24px}.gg-reviews-list{grid-template-columns:1fr}.gg-review-card{padding:13px}.gg-reviews-actions{align-items:stretch;flex-direction:column}.gg-reviews-link{width:100%}}
+@media(prefers-reduced-motion:reduce){.gg-reviews-link{transition:none}}
+
 </style>
 </head>
 <body>
@@ -423,6 +457,29 @@
                 <article class="ventaja-card"><div class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg></div><h3>PROCESO CLARO</h3><p>Información de compra presentada de forma sencilla.</p></article>
                 <article class="ventaja-card"><div class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v5h4M10 13h6M10 17h6"/><path d="M4 7v14"/></svg></div><h3>PEDIDOS ORGANIZADOS</h3><p>Consulta la información de tus compras desde la plataforma.</p></article>
                 <article class="ventaja-card"><div class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 13v-2a8 8 0 0 1 16 0v2"/><path d="M4 13H3a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h3v-6H4Z"/><path d="M20 13h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-3v-6h2Z"/><path d="M17 20c-.8 1-2 1.5-4 1.5"/></svg></div><h3>ATENCIÓN AL CLIENTE</h3><p>Estamos aquí para ayudarte con tus consultas.</p></article>
+            </div>
+        </section>
+
+        <!-- RESEÑAS DE CLIENTES -->
+        <section class="gg-reviews" id="reseñas-clientes" aria-labelledby="ggReviewsTitle">
+            <div class="gg-reviews-head">
+                <div>
+                    <div class="gg-reviews-kicker">La comunidad Gamers Gold</div>
+                    <h2 class="gg-reviews-title" id="ggReviewsTitle">Reseñas de clientes</h2>
+                    <p class="gg-reviews-subtitle">Experiencias compartidas por quienes ya forman parte de nuestra comunidad.</p>
+                </div>
+                <div class="gg-reviews-score" aria-label="Valoración general de clientes">
+                    <div class="gg-reviews-average" id="ggReviewsAverage">0.0<small>/5</small></div>
+                    <div class="gg-reviews-shields" id="ggReviewsAverageShields" aria-hidden="true"></div>
+                    <div class="gg-reviews-count" id="ggReviewsCount">0 reseñas</div>
+                </div>
+            </div>
+            <div class="gg-reviews-list" id="ggReviewsList" aria-live="polite">
+                <div class="gg-reviews-empty">Cargando reseñas de clientes…</div>
+            </div>
+            <div class="gg-reviews-actions">
+                <p class="gg-reviews-note">Valoraciones publicadas por nuestra comunidad.</p>
+                <a class="gg-reviews-link" href="frontend/reseñas.html">Ver todas las reseñas <span aria-hidden="true">→</span></a>
             </div>
         </section>
     </main>
@@ -543,6 +600,88 @@
     </script>
     <script src="frontend/goldi-widget.js?v=20261023-16" defer></script>
 
+
+
+<script>
+/* Reseñas públicas: reutiliza la tabla reviews y los mismos campos del sistema actual. */
+(async function cargarReseñasEnInicio() {
+    const lista = document.getElementById("ggReviewsList");
+    if (!lista || typeof supabaseClient === "undefined") return;
+
+    const pintarEscudos = (valor) => {
+        const cantidad = Math.max(0, Math.min(5, Math.round(Number(valor) || 0)));
+        return Array.from({ length: 5 }, (_, i) =>
+            '<img class="gg-review-shield' + (i < cantidad ? ' active' : '') +
+            '" src="' + (location.pathname.endsWith('/index.html') && location.pathname !== '/index.html' ? './gvr-escudo.svg' : 'frontend/gvr-escudo.svg') +
+            '" alt="" aria-hidden="true">'
+        ).join("");
+    };
+
+    try {
+        const { data: reseñas, error } = await supabaseClient
+            .from("reviews")
+            .select("id, rating, comment, username, created_at")
+            .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        const promedioEl = document.getElementById("ggReviewsAverage");
+        const escudosEl = document.getElementById("ggReviewsAverageShields");
+        const contadorEl = document.getElementById("ggReviewsCount");
+
+        if (!reseñas || reseñas.length === 0) {
+            promedioEl.innerHTML = '0.0<small>/5</small>';
+            escudosEl.innerHTML = pintarEscudos(0);
+            contadorEl.textContent = "0 reseñas";
+            lista.innerHTML = '<div class="gg-reviews-empty">Todavía no hay reseñas. ¡Pronto podrás leer aquí las experiencias de nuestros clientes!</div>';
+            return;
+        }
+
+        const promedio = reseñas.reduce((total, item) => total + (Number(item.rating) || 0), 0) / reseñas.length;
+        promedioEl.innerHTML = promedio.toFixed(1) + '<small>/5</small>';
+        escudosEl.innerHTML = pintarEscudos(promedio);
+        contadorEl.textContent = reseñas.length === 1 ? "1 reseña" : reseñas.length + " reseñas";
+
+        lista.replaceChildren();
+        reseñas.slice(0, 3).forEach((reseña) => {
+            const tarjeta = document.createElement("article");
+            tarjeta.className = "gg-review-card";
+
+            const encabezado = document.createElement("div");
+            encabezado.className = "gg-review-top";
+
+            const usuario = document.createElement("strong");
+            usuario.className = "gg-review-user";
+            usuario.textContent = reseña.username || "Cliente";
+
+            const fecha = document.createElement("time");
+            fecha.className = "gg-review-date";
+            if (reseña.created_at) {
+                const fechaObj = new Date(reseña.created_at);
+                fecha.dateTime = fechaObj.toISOString();
+                fecha.textContent = fechaObj.toLocaleDateString("es-ES");
+            }
+
+            encabezado.append(usuario, fecha);
+
+            const valoracion = document.createElement("div");
+            valoracion.className = "gg-review-shields";
+            valoracion.setAttribute("aria-label", (Number(reseña.rating) || 0) + " de 5 escudos");
+            valoracion.innerHTML = pintarEscudos(reseña.rating);
+
+            const comentario = document.createElement("p");
+            comentario.className = "gg-review-comment";
+            comentario.textContent = reseña.comment || "";
+
+            tarjeta.append(encabezado, valoracion, comentario);
+            lista.appendChild(tarjeta);
+        });
+    } catch (error) {
+        console.error("No se pudieron cargar las reseñas en el inicio:", error);
+        lista.innerHTML = '<div class="gg-reviews-error">No pudimos cargar las reseñas en este momento.</div>';
+    }
+})();
+</script>
 
 </body>
 </html>
