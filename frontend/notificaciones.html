@@ -164,7 +164,7 @@
           const registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
           await navigator.serviceWorker.ready;
           await guardarSuscripcionPush(registration);
-          document.getElementById("pushTitle").textContent = "Notificaciones activadas";
+          pushCard.hidden = true;
           document.getElementById("pushDescription").textContent = "Este dispositivo está preparado para recibir avisos de Gamers Gold Top-Up.";
           activarPush.hidden = true;
           mostrarEstado(pushStatus, "Dispositivo registrado correctamente.", "ok");
@@ -193,7 +193,7 @@
           const registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
           await navigator.serviceWorker.ready;
           await guardarSuscripcionPush(registration);
-          document.getElementById("pushTitle").textContent = "Notificaciones activadas";
+          pushCard.hidden = true;
           document.getElementById("pushDescription").textContent = "Este dispositivo está preparado para recibir avisos de Gamers Gold Top-Up.";
           activarPush.hidden = true;
           mostrarEstado(pushStatus, "¡Listo! Este dispositivo quedó registrado.", "ok");
