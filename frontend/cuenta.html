@@ -1180,6 +1180,160 @@
     .pantalla-datos-personales {
         animation: aparecer .2s ease;
     }
+    .datos-resumen-perfil {
+        margin: 0 0 16px;
+        padding: 16px 14px 14px;
+        border: 1px solid #1a4a70;
+        border-radius: 17px;
+        background:
+            radial-gradient(ellipse at 88% 0%, rgba(0, 186, 255, .13), transparent 42%),
+            linear-gradient(145deg, #0b1c34, #061226 76%);
+        box-shadow: 0 10px 26px rgba(0, 12, 30, .24);
+    }
+    .datos-marca {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-width: 0;
+    }
+    .datos-marca-escudo {
+        display: block;
+        width: 38px;
+        height: 42px;
+        flex: 0 0 38px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 8px rgba(0, 186, 255, .25));
+    }
+    .datos-marca-texto {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 4px;
+        min-width: 0;
+        font-size: 14px;
+        line-height: 1.15;
+        font-weight: 900;
+        letter-spacing: -.35px;
+    }
+    .datos-marca-gamers { color: #f4f8ff; }
+    .datos-marca-gold { color: #20c5ff; }
+    .datos-id-cuenta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 7px;
+        margin: 11px 0 15px;
+        padding: 9px 10px;
+        border: 1px solid rgba(70, 151, 205, .25);
+        border-radius: 9px;
+        background: rgba(3, 13, 29, .62);
+    }
+    .datos-id-etiqueta {
+        color: #819bb7;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .45px;
+        text-transform: uppercase;
+    }
+    .datos-id-valor {
+        min-width: 0;
+        color: #75d7ff;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 1.2px;
+        overflow-wrap: anywhere;
+    }
+    .datos-perfil-identidad {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 1px 4px 16px;
+    }
+    .datos-avatar-marco {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 94px;
+        height: 94px;
+        flex: 0 0 94px;
+        margin-bottom: 10px;
+        border: 2px solid #20c5ff;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #123c63, #07172b);
+        box-shadow: 0 0 0 4px rgba(32, 197, 255, .10), 0 0 22px rgba(0, 140, 255, .2);
+    }
+    .datos-avatar-marco .datos-avatar-foto {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: 78px;
+        height: 78px;
+        margin: 0;
+        border: 0;
+        box-shadow: none;
+    }
+    .datos-avatar-marco .datos-avatar-foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .datos-perfil-nombre {
+        color: #f4f8ff;
+        font-size: 18px;
+        font-weight: 900;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+    .datos-perfil-correo {
+        max-width: 100%;
+        margin-top: 4px;
+        color: #91a8c3;
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+    .datos-estadisticas {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        overflow: hidden;
+        border: 1px solid #245477;
+        border-radius: 12px;
+        background: rgba(3, 13, 29, .76);
+    }
+    .datos-estadistica {
+        min-width: 0;
+        padding: 12px 5px 11px;
+        text-align: center;
+    }
+    .datos-estadistica + .datos-estadistica {
+        border-left: 1px solid #244565;
+    }
+    .datos-estadistica-valor {
+        display: block;
+        color: #f4f8ff;
+        font-size: clamp(15px, 4.5vw, 19px);
+        font-weight: 900;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+    }
+    .datos-estadistica:nth-child(2) .datos-estadistica-valor {
+        color: #20c5ff;
+    }
+    .datos-estadistica-etiqueta {
+        display: block;
+        margin-top: 5px;
+        color: #91a8c3;
+        font-size: 10px;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+    @media (max-width: 360px) {
+        .datos-resumen-perfil { padding: 13px 10px 11px; }
+        .datos-estadistica { padding-left: 3px; padding-right: 3px; }
+        .datos-estadistica-etiqueta { font-size: 9px; }
+    }
+
     .datos-intro {
         margin: 2px 0 18px;
         color: #91a8c3;
@@ -1809,7 +1963,42 @@
 
     <section id="pantallaDatosPersonales" class="pantalla-datos-personales" hidden aria-labelledby="tituloDatosPersonales">
         <h1 id="tituloDatosPersonales" style="text-align:left;font-size:24px;margin:4px 0 8px;">Datos personales</h1>
-        
+
+        <section class="datos-resumen-perfil" aria-label="Resumen de tu cuenta">
+            <div class="datos-marca">
+                <img class="datos-marca-escudo" src="./gvr-escudo.svg" alt="Escudo GVR">
+                <div class="datos-marca-texto">
+                    <span class="datos-marca-gamers">GAMERS</span>
+                    <span class="datos-marca-gold">GOLD TOP UP</span>
+                </div>
+            </div>
+            <div class="datos-id-cuenta">
+                <span class="datos-id-etiqueta">ID de cuenta</span>
+                <span class="datos-id-valor" id="codigoCuentaDatos">Cargando...</span>
+            </div>
+
+            <div class="datos-perfil-identidad">
+                <div class="datos-avatar-marco" id="avatarDatosPersonales" aria-label="Foto de perfil"></div>
+                <div class="datos-perfil-nombre" id="nombrePerfilDatos">Cargando...</div>
+                <div class="datos-perfil-correo" id="correoPerfilDatos">Cargando...</div>
+            </div>
+
+            <div class="datos-estadisticas" aria-label="Estadísticas de la cuenta">
+                <div class="datos-estadistica">
+                    <span class="datos-estadistica-valor" id="totalRecargasDatos">—</span>
+                    <span class="datos-estadistica-etiqueta">Recargas</span>
+                </div>
+                <div class="datos-estadistica">
+                    <span class="datos-estadistica-valor" id="saldoGvrDatos">—</span>
+                    <span class="datos-estadistica-etiqueta">Saldo GVR</span>
+                </div>
+                <div class="datos-estadistica">
+                    <span class="datos-estadistica-valor" id="totalReferidosDatos">—</span>
+                    <span class="datos-estadistica-etiqueta">Referidos</span>
+                </div>
+            </div>
+            <p class="datos-estado" id="estadoResumenCuentaDatos" role="status" aria-live="polite"></p>
+        </section>
 
         <div class="datos-panel">
             <div class="datos-campo">
@@ -3335,6 +3524,90 @@ document.querySelectorAll("[data-cancelar]").forEach(boton => {
     boton.addEventListener("click", () => cerrarEditorDatos(boton.dataset.cancelar));
 });
 
+function sincronizarAvatarDatosPersonales() {
+    const destino = document.getElementById("avatarDatosPersonales");
+    const origen = document.getElementById("imagenPerfilInteractiva");
+    if (!destino || !origen) return;
+
+    const clon = origen.cloneNode(true);
+    clon.className = "datos-avatar-foto";
+    clon.removeAttribute("id");
+    clon.removeAttribute("role");
+    clon.removeAttribute("tabindex");
+    clon.removeAttribute("aria-label");
+    clon.removeAttribute("aria-expanded");
+    clon.querySelectorAll("[id]").forEach(elemento => elemento.removeAttribute("id"));
+    destino.replaceChildren(clon);
+}
+
+function formatoResumenCuenta(valor) {
+    const numero = Number(valor);
+    if (!Number.isFinite(numero)) return "No disponible";
+    return numero.toLocaleString("es-ES", { maximumFractionDigits: 4 });
+}
+
+async function cargarResumenCuentaDatos(usuarioId) {
+    const estado = document.getElementById("estadoResumenCuentaDatos");
+    const recargasEl = document.getElementById("totalRecargasDatos");
+    const saldoEl = document.getElementById("saldoGvrDatos");
+    const referidosEl = document.getElementById("totalReferidosDatos");
+    const codigoEl = document.getElementById("codigoCuentaDatos");
+
+    estado.textContent = "";
+    recargasEl.textContent = "…";
+    saldoEl.textContent = "…";
+    referidosEl.textContent = "…";
+    codigoEl.textContent = "Consultando...";
+
+    const [walletResp, recargasResp, referidosResp, codigoResp] = await Promise.all([
+        supabaseClient.from("wallets").select("balance").eq("user_id", usuarioId).maybeSingle(),
+        supabaseClient.from("game_orders").select("id", { count: "exact", head: true })
+            .eq("user_id", usuarioId).eq("status", "completed"),
+        supabaseClient.from("referral_relationships").select("referred_user_id", { count: "exact", head: true })
+            .eq("referrer_user_id", usuarioId),
+        supabaseClient.from("referral_codes").select("code").eq("user_id", usuarioId).maybeSingle()
+    ]);
+
+    const errores = [];
+    if (walletResp.error) {
+        saldoEl.textContent = "No disponible";
+        errores.push("saldo");
+    } else if (walletResp.data) {
+        saldoEl.textContent = formatoResumenCuenta(walletResp.data.balance) + " GVR";
+    } else {
+        saldoEl.textContent = "0 GVR";
+    }
+
+    if (recargasResp.error || !Number.isFinite(Number(recargasResp.count))) {
+        recargasEl.textContent = "No disponible";
+        errores.push("recargas");
+    } else {
+        recargasEl.textContent = String(recargasResp.count);
+    }
+
+    if (referidosResp.error || !Number.isFinite(Number(referidosResp.count))) {
+        referidosEl.textContent = "No disponible";
+        errores.push("referidos");
+    } else {
+        referidosEl.textContent = String(referidosResp.count);
+    }
+
+    if (codigoResp.error) {
+        codigoEl.textContent = "No disponible";
+        errores.push("ID de cuenta");
+    } else {
+        codigoEl.textContent = codigoResp.data?.code || "Aún no asignado";
+    }
+
+    if (errores.length) {
+        estado.textContent = "No se pudieron consultar algunos datos: " + errores.join(", ") + ".";
+        estado.className = "datos-estado error";
+    } else {
+        estado.textContent = "";
+        estado.className = "datos-estado";
+    }
+}
+
 function abrirPantallaDatosPersonales() {
     const nombre = document.getElementById("nombreUsuario")?.textContent || "Usuario";
     const correo = document.getElementById("correoUsuario")?.textContent || "Sin correo";
@@ -3342,6 +3615,15 @@ function abrirPantallaDatosPersonales() {
     document.getElementById("nombreDatosPersonales").textContent = nombre;
     document.getElementById("correoDatosPersonales").textContent = correo;
     document.getElementById("telefonoDatosPersonales").textContent = numeroWhatsApp || "Aún no registrado";
+    document.getElementById("nombrePerfilDatos").textContent =
+        usuarioDatosActual?.user_metadata?.username ||
+        usuarioDatosActual?.user_metadata?.full_name ||
+        usuarioDatosActual?.user_metadata?.name ||
+        nombre;
+    document.getElementById("correoPerfilDatos").textContent =
+        usuarioDatosActual?.email || correo;
+    sincronizarAvatarDatosPersonales();
+    if (usuarioDatosActual?.id) cargarResumenCuentaDatos(usuarioDatosActual.id);
     // No trasladar el bloque antiguo de WhatsApp: el número se muestra una sola vez
     // en telefonoDatosPersonales y el cambio se realiza con el formulario verificado.
     contenidoCuenta.hidden = true;
@@ -3535,6 +3817,7 @@ document.getElementById("formEditarNombreDatos").addEventListener("submit", asyn
         document.getElementById("nombreUsuario").textContent = nombre;
         document.getElementById("nombrePerfilResumen").textContent = nombre;
         document.getElementById("nombreDatosPersonales").textContent = nombre;
+        document.getElementById("nombrePerfilDatos").textContent = nombre;
         mostrarEstadoDatos("estadoNombreDatos", "Nombre de usuario actualizado.", "exito");
         cerrarEditorDatos("editorNombreDatos");
     } catch (error) {
@@ -3596,6 +3879,7 @@ document.getElementById("confirmarCorreoDatos").addEventListener("click", async 
         if (actual?.user) {
             usuarioDatosActual = actual.user;
             document.getElementById("correoDatosPersonales").textContent = actual.user.email || nuevoCorreo;
+            document.getElementById("correoPerfilDatos").textContent = actual.user.email || nuevoCorreo;
             document.getElementById("correoUsuario").textContent = actual.user.email || nuevoCorreo;
         }
     } catch (error) {
