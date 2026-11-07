@@ -1339,48 +1339,63 @@
         right: 0;
         bottom: 5px;
     }
-    .datos-perfil-lateral .avatar-acciones {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        gap: 10px;
-        margin: 12px 0 0;
-    }
-    .datos-perfil-lateral .avatar-accion {
+    .datos-resumen-perfil > .avatar-acciones {
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: 12px;
         width: 100%;
+        max-width: 260px;
+        margin: 14px auto 4px;
+        padding: 0 8px;
+        box-sizing: border-box;
+    }
+    .datos-resumen-perfil > .avatar-acciones .avatar-accion {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         min-width: 0;
         min-height: 44px;
-        padding: 9px 8px;
+        padding: 10px 14px;
         gap: 8px;
         font-size: 13px;
         line-height: 1.2;
-        text-align: center;
         border-radius: 11px;
+        box-sizing: border-box;
     }
-    .datos-perfil-lateral .avatar-accion .icono-accion {
+    .datos-resumen-perfil > .avatar-acciones #botonElegirAvatar {
+        flex: 1 1 auto;
+        max-width: 178px;
+    }
+    .datos-resumen-perfil > .avatar-acciones .icono-accion {
         width: 21px;
         height: 21px;
-        flex-basis: 21px;
+        flex: 0 0 21px;
     }
-    .datos-perfil-lateral .avatar-accion.compartir {
-        width: 48px;
-        height: 48px;
-        min-height: 48px;
-        padding: 10px;
+    .datos-resumen-perfil > .avatar-acciones .avatar-accion.compartir {
+        flex: 0 0 46px;
+        width: 46px;
+        height: 46px;
+        min-height: 46px;
+        padding: 9px;
         border-color: #1688bd;
-        border-radius: 13px;
+        border-radius: 12px;
         background: linear-gradient(145deg, #075b91, #073454);
         color: #e5f8ff;
-        box-shadow: 0 0 16px rgba(0, 186, 255, .2);
+        box-shadow: 0 0 14px rgba(0, 186, 255, .16);
     }
-    .datos-perfil-lateral .avatar-accion.compartir .icono-accion {
-        width: 27px;
-        height: 27px;
-        flex-basis: 27px;
+    .datos-resumen-perfil > .avatar-acciones .avatar-accion.compartir .icono-accion {
+        width: 26px;
+        height: 26px;
+        flex-basis: 26px;
+    }
+    .datos-resumen-perfil > .avatar-acciones .avatar-accion:hover {
+        border-color: #28caff;
+        filter: brightness(1.1);
+    }
+    .datos-resumen-perfil > .avatar-acciones .avatar-accion:focus-visible {
+        outline: 2px solid #75d7ff;
+        outline-offset: 3px;
     }
     .datos-resumen-perfil .datos-id-valor {
         text-align: right;
@@ -1802,24 +1817,6 @@
                                 accept="image/jpeg,image/png,image/webp" hidden>
                         </div>
                     </div>
-                    <div class="avatar-acciones" id="accionesAvatar" aria-label="Opciones de perfil">
-                        <button type="button" id="botonElegirAvatar" class="avatar-accion" aria-expanded="false" aria-controls="selectorAvatares">
-                            <svg class="icono-accion" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
-                                <path d="M4 7h3l1.5-2h7L17 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
-                            </svg>
-                            <span>Mi avatar</span>
-                        </button>
-                        <button type="button" id="botonCompartirReferido" class="avatar-accion compartir">
-                            <svg class="icono-accion" viewBox="0 0 24 24" aria-hidden="true">
-                                <circle cx="18" cy="5" r="3"></circle>
-                                <circle cx="6" cy="12" r="3"></circle>
-                                <circle cx="18" cy="19" r="3"></circle>
-                                <path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"></path>
-                            </svg>
-                            <span class="sr-only">Compartir enlace de referido</span>
-                        </button>
-                    </div>
                 </div>
                 <div class="datos-perfil-info">
                     <div class="datos-perfil-nombre" id="nombrePerfilDatos">Cargando...</div>
@@ -1830,6 +1827,23 @@
                         <span id="rangoPerfilResumen" class="perfil-rango" hidden></span>
                     </div>
                 </div>
+            </div>
+            <div class="avatar-acciones" id="accionesAvatar" aria-label="Opciones de perfil">
+                <button type="button" id="botonElegirAvatar" class="avatar-accion" aria-expanded="false" aria-controls="selectorAvatares">
+                    <svg class="icono-accion" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path>
+                        <path d="M4 7h3l1.5-2h7L17 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"></path>
+                    </svg>
+                    <span>Mi avatar</span>
+                </button>
+                <button type="button" id="botonCompartirReferido" class="avatar-accion compartir" aria-label="Compartir enlace de referido" title="Compartir">
+                    <svg class="icono-accion" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"></path>
+                    </svg>
+                </button>
             </div>
             <div class="datos-id-cuenta">
                 <span class="datos-id-etiqueta">ID de cuenta</span>
