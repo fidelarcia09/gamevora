@@ -1977,8 +1977,8 @@
             lista.appendChild(tarjeta);
         });
 
-        const reseñasRestantes = reseñas.length - 3;
-        if (reseñasRestantes > 0) {
+        const reseñasRestantes = Math.max(0, reseñas.length - 3);
+        if (reseñas.length >= 3) {
             const tarjetaMas = document.createElement("article");
             tarjetaMas.className = "gg-review-card gg-review-more-card";
 
