@@ -403,6 +403,21 @@
 @media(max-width:760px){.gg-reviews{margin-bottom:35px}}
 @media(max-width:600px){.gg-reviews{margin:0 14px 31px;padding:18px 14px;border-radius:16px}}
 
+
+/* Encabezado compacto de reseñas GGT */
+.gg-reviews-head{display:block;margin-bottom:0}
+.gg-reviews-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+.gg-reviews-title{color:#f4f8ff;font-size:clamp(19px,3.5vw,25px);font-weight:900;letter-spacing:-.45px;line-height:1.25}
+.gg-reviews-link{min-height:0;padding:5px 0;border:0;border-radius:0;background:transparent;color:#20c5ff;font-size:12px;font-weight:850}
+.gg-reviews-link:hover{transform:none;border:0;background:transparent;color:#8be5ff}
+.gg-reviews-summary{display:flex;align-items:center;flex-wrap:wrap;gap:9px 18px;margin:0 0 17px}
+.gg-reviews-score{display:flex;align-items:center;flex-wrap:wrap;gap:7px;min-width:0;padding:0;border:0;border-radius:0;background:transparent;text-align:left}
+.gg-reviews-average{color:#fff;font-size:25px;font-weight:900;line-height:1}
+.gg-reviews-average small{display:none}
+.gg-reviews-unit{color:#c4d5e9;font-size:12px;font-weight:800}
+.gg-reviews-shields{justify-content:flex-start;margin:0 0 0 2px}
+.gg-reviews-count{color:#91a8c1;font-size:11px}
+@media(max-width:480px){.gg-reviews-heading{gap:8px}.gg-reviews-title{font-size:18px}.gg-reviews-link{font-size:11px}.gg-reviews-summary{gap:8px 13px}.gg-reviews-average{font-size:23px}.gg-reviews-unit{font-size:11px}}
 </style>
 </head>
 <body>
@@ -470,24 +485,20 @@
 
         <!-- RESEÑAS DE CLIENTES -->
         <section class="gg-reviews" id="reseñas-clientes" aria-labelledby="ggReviewsTitle">
-            <div class="gg-reviews-head">
-                <div>
-                    <div class="gg-reviews-kicker">La comunidad Gamers Gold</div>
-                    <h2 class="gg-reviews-title" id="ggReviewsTitle">Reseñas de clientes</h2>
-                    <p class="gg-reviews-subtitle">Experiencias compartidas por quienes ya forman parte de nuestra comunidad.</p>
-                </div>
-                <div class="gg-reviews-score" aria-label="Valoración general de clientes">
-                    <div class="gg-reviews-average" id="ggReviewsAverage">0.0<small>/5</small></div>
+            <div class="gg-reviews-heading">
+                <h2 class="gg-reviews-title" id="ggReviewsTitle">Reseñas de clientes en GGT</h2>
+                <a class="gg-reviews-link" href="frontend/reseñas.html">Ver todas <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="gg-reviews-summary">
+                <div class="gg-reviews-score" aria-label="Valoración media de clientes">
+                    <strong class="gg-reviews-average" id="ggReviewsAverage">0.0</strong>
+                    <span class="gg-reviews-unit">escudos GVR</span>
                     <div class="gg-reviews-shields" id="ggReviewsAverageShields" aria-hidden="true"></div>
-                    <div class="gg-reviews-count" id="ggReviewsCount">0 reseñas</div>
                 </div>
+                <div class="gg-reviews-count" id="ggReviewsCount">0 reseñas realizadas</div>
             </div>
             <div class="gg-reviews-list" id="ggReviewsList" aria-live="polite">
                 <div class="gg-reviews-empty">Cargando reseñas de clientes…</div>
-            </div>
-            <div class="gg-reviews-actions">
-                <p class="gg-reviews-note">Valoraciones publicadas por nuestra comunidad.</p>
-                <a class="gg-reviews-link" href="frontend/reseñas.html">Ver todas las reseñas <span aria-hidden="true">→</span></a>
             </div>
         </section>
     </main>
@@ -638,17 +649,17 @@
         const contadorEl = document.getElementById("ggReviewsCount");
 
         if (!reseñas || reseñas.length === 0) {
-            promedioEl.innerHTML = '0.0<small>/5</small>';
+            promedioEl.textContent = '0.0';
             escudosEl.innerHTML = pintarEscudos(0);
-            contadorEl.textContent = "0 reseñas";
+            contadorEl.textContent = "0 reseñas realizadas";
             lista.innerHTML = '<div class="gg-reviews-empty">Todavía no hay reseñas. ¡Pronto podrás leer aquí las experiencias de nuestros clientes!</div>';
             return;
         }
 
         const promedio = reseñas.reduce((total, item) => total + (Number(item.rating) || 0), 0) / reseñas.length;
-        promedioEl.innerHTML = promedio.toFixed(1) + '<small>/5</small>';
+        promedioEl.textContent = promedio.toFixed(1);
         escudosEl.innerHTML = pintarEscudos(promedio);
-        contadorEl.textContent = reseñas.length === 1 ? "1 reseña" : reseñas.length + " reseñas";
+        contadorEl.textContent = reseñas.length + " reseñas realizadas";
 
         lista.replaceChildren();
         reseñas.slice(0, 3).forEach((reseña) => {
