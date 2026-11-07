@@ -678,6 +678,7 @@ function crearTarjetaOferta(oferta, proveedor) {
 
     tarjeta.type = "button";
     tarjeta.className = "boton-oferta";
+    tarjeta.dataset.ggProductId = local?.id || "";
     tarjeta.disabled = !comprable;
 
     const foto = document.createElement("div");
@@ -726,6 +727,9 @@ function crearTarjetaOferta(oferta, proveedor) {
     tarjeta.append(foto, nombre);
 
     const detalle = document.createElement("div");
+    // Identificadores usados por pagos-manuales-juegos.js para mostrar
+    // las tarifas exactas de USDT y Saldo móvil de este producto.
+    detalle.className = "precio-oferta";
 
     detalle.style.cssText =
         "padding:9px;font-size:13px;background:#061226;" +
