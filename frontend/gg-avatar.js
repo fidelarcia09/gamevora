@@ -5,6 +5,8 @@
         "gamer", "dragon", "rayo", "lobo", "corona", "cohete", "zorro", "escudo"
     ];
 
+    let avatarSvgCounter = 0;
+
     function crearSvgAvatar(id) {
         const estilos = {
             gamer: { a: "#20d9ff", b: "#0755bd", c: "#baf7ff", cresta: '<path d="M35 23 42 8 51 22 61 7 68 24" fill="#20d9ff" stroke="#baf7ff" stroke-width="2"/>' },
@@ -20,7 +22,7 @@
         const p = estilos[id];
         if (!p) return "";
 
-        const uid = "ggav" + id;
+        const uid = "ggav" + id + "-" + (++avatarSvgCounter);
         return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Avatar gamer" focusable="false"><defs><linearGradient id="' + uid + 'bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="' + p.b + '"/><stop offset="1" stop-color="#050b18"/></linearGradient><linearGradient id="' + uid + 'metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="' + p.c + '"/><stop offset=".35" stop-color="' + p.a + '"/><stop offset="1" stop-color="' + p.b + '"/></linearGradient><filter id="' + uid + 'glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="50" cy="50" r="48" fill="url(#' + uid + 'bg)"/><circle cx="50" cy="50" r="45" fill="none" stroke="' + p.a + '" stroke-opacity=".55" stroke-width="1.5"/><path d="M12 72 25 61M88 72 75 61" stroke="' + p.a + '" stroke-width="2" opacity=".7"/><path d="M20 91c2-17 13-25 30-25s28 8 30 25" fill="#071326" stroke="' + p.a + '" stroke-width="3"/><path d="M30 49c0-21 8-31 20-31s20 10 20 31l-5 17-15 10-15-10Z" fill="url(#' + uid + 'metal)" stroke="' + p.c + '" stroke-width="2"/>' + p.cresta + '<path d="M25 42c3-17 12-25 25-25s22 8 25 25l-8 7H33Z" fill="#07182d" stroke="' + p.a + '" stroke-width="3"/><path d="M31 43 43 39 50 41 57 39 69 43 65 54 56 59H44L35 54Z" fill="#06101f" stroke="' + p.c + '" stroke-width="1.8"/><path d="m36 47 10-2 4 3-4 4-10-1Zm28 0-10-2-4 3 4 4 10-1Z" fill="' + p.a + '" filter="url(#' + uid + 'glow)"/><path d="M42 64h16M46 69h8" stroke="' + p.c + '" stroke-width="2" stroke-linecap="round"/><path d="M18 82h12M70 82h12" stroke="' + p.a + '" stroke-width="2" stroke-linecap="round"/><circle cx="50" cy="88" r="2.5" fill="' + p.c + '"/></svg>';
     }
 
