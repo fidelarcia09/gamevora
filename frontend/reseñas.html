@@ -365,6 +365,22 @@ textarea::placeholder{color:#6f87a2}
     .contenedor{padding-left:28px;padding-right:28px}
 }
 
+
+/* Marco exterior del listado y tarjetas completas de reseñas */
+#reseñasPublicadas{width:100%;padding:clamp(13px,2.5vw,21px)!important;border:1px solid rgba(32,197,255,.28)!important;border-radius:18px!important;background:linear-gradient(145deg,rgba(10,29,54,.84),rgba(5,15,31,.72))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important}
+#listaReseñas{display:flex;flex-direction:column;align-items:stretch;gap:12px;width:100%;min-width:0}
+.reseña{display:flex;flex-direction:column;align-items:stretch;gap:11px;width:100%;min-width:0;margin:0;padding:16px!important;border:1px solid rgba(32,197,255,.24)!important;border-radius:14px!important;background:rgba(4,15,31,.72)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important}
+.reseña:last-child{border-bottom:1px solid rgba(32,197,255,.24)!important}
+.reseña-header{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin:0;flex-wrap:wrap}
+.autor-reseña{display:flex;align-items:center;gap:11px;min-width:0}
+.usuario{display:block;min-width:0;color:#f2f7ff;font-size:14px;font-weight:850;overflow-wrap:anywhere}
+.fecha{flex:0 0 auto;color:#7189a3;font-size:11px;white-space:nowrap}
+.gg-review-avatar{display:inline-flex;flex:0 0 44px;align-items:center;justify-content:center;width:44px;height:44px;overflow:hidden;border:1px solid rgba(32,197,255,.5);border-radius:50%;background:linear-gradient(145deg,#123b61,#071326);box-shadow:0 0 12px rgba(32,197,255,.14)}
+.gg-review-avatar img,.gg-review-avatar svg{display:block;width:100%;height:100%;object-fit:cover}
+.rayos-reseña{width:100%;margin:0;justify-content:flex-start}
+.comentario{width:100%;margin:0;color:#b9cadd;font-size:13px;line-height:1.7;overflow-wrap:anywhere;white-space:pre-wrap}
+@media(max-width:600px){#reseñasPublicadas{padding:12px!important;border-radius:15px!important}#listaReseñas{gap:10px}.reseña{padding:14px!important;gap:10px}.gg-review-avatar{flex-basis:40px;width:40px;height:40px}}
+
 </style>
 </head>
 
@@ -448,6 +464,7 @@ textarea::placeholder{color:#6f87a2}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./gg-avatar.js"></script>
 
 <script>
 
@@ -582,6 +599,13 @@ async function cargarReseñas() {
             ? "1 reseña"
             : `${reseñas.length} reseñas`;
 
+    const avataresPorUsuario = window.GGReviewAvatars
+        ? await window.GGReviewAvatars.cargarPorUsuarioIds(
+            supabaseClient,
+            reseñas.map((reseña) => reseña.user_id)
+        )
+        : new Map();
+
     reseñas.forEach((reseña) => {
 
         const tarjeta =
@@ -597,13 +621,11 @@ async function cargarReseñas() {
         tarjeta.innerHTML = `
 
             <div class="reseña-header">
-
-                <div class="usuario"></div>
-
-                <div class="fecha">
-                    ${fecha}
+                <div class="autor-reseña">
+                    <span class="avatar-reseña-slot"></span>
+                    <div class="usuario"></div>
                 </div>
-
+                <div class="fecha"></div>
             </div>
 
             <div class="rayos-reseña">
@@ -617,6 +639,14 @@ async function cargarReseñas() {
         tarjeta.querySelector(".usuario").textContent =
             reseña.username || "Usuario";
 
+        const avatarSlot = tarjeta.querySelector(".avatar-reseña-slot");
+        if (window.GGReviewAvatars) {
+            avatarSlot.replaceWith(
+                window.GGReviewAvatars.crearElemento(avataresPorUsuario.get(reseña.user_id))
+            );
+        }
+
+        tarjeta.querySelector(".fecha").textContent = fecha;
         tarjeta.querySelector(".comentario").textContent =
             reseña.comment || "";
 
