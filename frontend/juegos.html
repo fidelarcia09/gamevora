@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preload" as="image" href="./imagenes/file_00000000323881f5b39e628c9a42a0d2.png" fetchpriority="high">
-<link rel="preload" as="image" href="./imagenes/file_00000000493481f59c138af18f31a5a5.png" fetchpriority="high" decoding="async">
     <link rel="preload" as="image" href="./imagenes/file_00000000a7e081f9b4b5577efa5f6066.png">
     <link rel="preload" as="image" href="./imagenes/file_00000000cde881f6a366f4dbeb1a5fd0.png">
     <link rel="preload" as="image" href="./imagenes/file_00000000eb3881f9a2e363c447e0f6ba.png">
@@ -716,6 +715,26 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
 <link rel="stylesheet" href="./entrada-sesion.css?v=20261106-3">
 <script src="./entrada-sesion.js?v=20261106-3" defer></script>
 
+<style id="gg-wuthering-waves-card">
+.juego-wuthering-imagen{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle at 50% 42%,rgba(128,151,255,.38),transparent 34%),
+        radial-gradient(circle at 72% 75%,rgba(0,217,255,.18),transparent 42%),
+        linear-gradient(145deg,#101b3b,#20204b 52%,#07172b)!important;
+}
+.juego-wuthering-imagen span{
+    color:#dcecff;
+    font-size:clamp(42px,8vw,76px);
+    font-weight:900;
+    font-style:italic;
+    letter-spacing:-8px;
+    transform:skew(-12deg);
+    text-shadow:0 0 12px rgba(107,174,255,.9),0 0 34px rgba(0,170,255,.65);
+}
+</style>
 </head>
 
 <body>
@@ -964,12 +983,8 @@ header .boton-atras, header .volver, header .back, .header .boton-atras, .header
 
         <!-- WUTHERING WAVES -->
         <a href="wutheringwaves.html" class="juego juego-wuthering">
-            <div class="juego-imagen">
-                <img
-                    src="./imagenes/file_00000000493481f59c138af18f31a5a5.png"
-                    alt="Wuthering Waves"
-                    loading="eager" decoding="async" fetchpriority="high"
-                >
+            <div class="juego-imagen juego-wuthering-imagen" aria-label="Wuthering Waves">
+                <span aria-hidden="true">WW</span>
             </div>
             <div class="juego-info">
                 <h3>Wuthering Waves</h3>
