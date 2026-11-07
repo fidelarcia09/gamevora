@@ -23,10 +23,9 @@ body{background:radial-gradient(ellipse at top,#0b1d36 0%,#050b18 55%);color:#f4
 .encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras{display:none!important}
 
 /* Iconos oficiales de contacto */
-.icono-marca svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.icono-marca svg,.comunidad-icono svg{width:29px;height:29px;fill:currentColor;stroke:none;display:block}
 .icono-marca.whatsapp,.comunidad-icono.whatsapp{color:#25d366}
 .icono-marca.telegram,.comunidad-icono.telegram{color:#29b6f6}
-.comunidad-icono svg{width:29px;height:29px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 
@@ -67,7 +66,7 @@ body{background:radial-gradient(ellipse at top,#0b1d36 0%,#050b18 55%);color:#f4
         <div class="lista-opciones">
             <details class="acordeon">
                 <summary>
-                    <span class="icono-opcion icono-marca whatsapp" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="M12 2a9.8 9.8 0 0 0-8.45 14.76L2.2 22l5.4-1.3A10 10 0 1 0 12 2Z"/><path d="M8.1 7.7c.2-.45.45-.46.7-.47h.6c.2 0 .4.05.55.4l.8 1.9c.1.25.1.45-.05.65l-.6.75c-.15.18-.3.36-.12.67.18.3.8 1.3 1.75 2.1 1.2 1 2.2 1.3 2.5 1.45.3.15.5.12.68-.1l.9-1.05c.2-.25.4-.28.68-.17l1.75.83c.3.15.5.22.55.37.05.16.05.9-.25 1.75-.3.83-1.65 1.55-2.3 1.6-.65.05-1.3.3-4.4-1-3.7-1.55-6.05-5.4-6.23-5.65-.18-.25-1.5-2-.1-4.03Z"/></svg></span>
+                    <span class="icono-opcion icono-marca whatsapp" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.626.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.438 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0 0 12.03 0C5.495 0 .16 5.335.157 11.872c0 2.096.547 4.142 1.588 5.946L.057 24l6.335-1.662a11.88 11.88 0 0 0 5.627 1.43h.005c6.535 0 11.87-5.335 11.873-11.873a11.82 11.82 0 0 0-3.49-8.41Z"/></svg></span>
                     <span class="opcion-texto">WhatsApp<span class="opcion-descripcion">La forma más rápida · atención directa</span></span>
                     <svg class="icono-flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
                 </summary>
@@ -78,7 +77,7 @@ body{background:radial-gradient(ellipse at top,#0b1d36 0%,#050b18 55%);color:#f4
             </details>
             <details class="acordeon">
                 <summary>
-                    <span class="icono-opcion icono-marca telegram" aria-hidden="true"><svg viewBox="0 0 24 24" role="img"><path d="M22 3 19 21l-7-5-4 3 1-6L22 3Z"/><path d="m9 13 8-6-5 8"/></svg></span>
+                    <span class="icono-opcion icono-marca telegram" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.5 3.2 19.1 20c-.25 1.2-.9 1.5-1.8.9l-5-3.7-2.4 2.3c-.27.27-.5.5-1 .5l.36-5.1 9.3-8.4c.4-.36-.09-.56-.62-.2L6.45 13.5l-4.9-1.54c-1.07-.34-1.09-1.07.22-1.58L21 2.9c.9-.33 1.7.22 1.5.3Z"/></svg></span>
                     <span class="opcion-texto">Telegram<span class="opcion-descripcion">Escríbenos directamente al chat</span></span>
                     <svg class="icono-flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
                 </summary>
@@ -92,7 +91,7 @@ body{background:radial-gradient(ellipse at top,#0b1d36 0%,#050b18 55%);color:#f4
         <h2 class="seccion-titulo">Comunidad oficial ⚡</h2>
         <p class="comunidad-intro">Únete a nuestra comunidad para recibir novedades, anuncios y noticias de Gamers Gold Top-Up.</p>
         <div class="comunidad-card">
-            <div class="comunidad-icono whatsapp" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a9.8 9.8 0 0 0-8.45 14.76L2.2 22l5.4-1.3A10 10 0 1 0 12 2Z"/><path d="M8.1 7.7c.2-.45.45-.46.7-.47h.6c.2 0 .4.05.55.4l.8 1.9c.1.25.1.45-.05.65l-.6.75c-.15.18-.3.36-.12.67.18.3.8 1.3 1.75 2.1 1.2 1 2.2 1.3 2.5 1.45.3.15.5.12.68-.1l.9-1.05c.2-.25.4-.28.68-.17l1.75.83c.3.15.5.22.55.37.05.16.05.9-.25 1.75-.3.83-1.65 1.55-2.3 1.6-.65.05-1.3.3-4.4-1-3.7-1.55-6.05-5.4-6.23-5.65-.18-.25-1.5-2-.1-4.03Z"/></svg></div>
+            <div class="comunidad-icono whatsapp" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.626.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.437-9.884 9.89-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.438 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0 0 12.03 0C5.495 0 .16 5.335.157 11.872c0 2.096.547 4.142 1.588 5.946L.057 24l6.335-1.662a11.88 11.88 0 0 0 5.627 1.43h.005c6.535 0 11.87-5.335 11.873-11.873a11.82 11.82 0 0 0-3.49-8.41Z"/></svg></div>
             <div class="comunidad-info">
                 <span class="comunidad-etiqueta">CANAL OFICIAL</span>
                 <div class="comunidad-nombre">Gamers Gold Top-Up · WhatsApp</div>
@@ -101,7 +100,7 @@ body{background:radial-gradient(ellipse at top,#0b1d36 0%,#050b18 55%);color:#f4
             <a class="boton-unirse" href="https://whatsapp.com/channel/0029Vb9Ts5E0wajmawAiVo0K" target="_blank" rel="noopener noreferrer">Unirme ↗</a>
         </div>
         <div class="comunidad-card">
-            <div class="comunidad-icono telegram" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 3 19 21l-7-5-4 3 1-6L22 3Z"/><path d="m9 13 8-6-5 8"/></svg></div>
+            <div class="comunidad-icono telegram" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.5 3.2 19.1 20c-.25 1.2-.9 1.5-1.8.9l-5-3.7-2.4 2.3c-.27.27-.5.5-1 .5l.36-5.1 9.3-8.4c.4-.36-.09-.56-.62-.2L6.45 13.5l-4.9-1.54c-1.07-.34-1.09-1.07.22-1.58L21 2.9c.9-.33 1.7.22 1.5.3Z"/></svg></div>
             <div class="comunidad-info">
                 <span class="comunidad-etiqueta">TELEGRAM</span>
                 <div class="comunidad-nombre">Gamers Gold Top-Up · Telegram</div>
