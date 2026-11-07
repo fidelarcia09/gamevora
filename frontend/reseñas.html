@@ -333,6 +333,35 @@ textarea::placeholder{color:#6f87a2}
 }
 @media(prefers-reduced-motion:reduce){.dejar-reseña,.publicar{transition:none}}
 
+
+/* Ajuste final: página completa, listado abierto y sin marcos exteriores */
+.contenedor{width:100%;max-width:1180px;margin:0 auto;padding:22px 22px 42px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+#formularioReseña{
+    border:0;border-radius:0;box-shadow:none;
+    background:transparent;padding:0 0 22px;
+}
+#reseñasPublicadas{border:0;border-radius:0;box-shadow:none;background:transparent;padding:0}
+#listaReseñas{width:100%;min-width:0}
+.reseña{
+    width:100%;min-width:0;margin:0;padding:20px 2px;
+    border:0;border-bottom:1px solid rgba(105,158,215,.17);
+    border-radius:0;background:transparent;box-shadow:none;
+}
+.reseña:last-child{border-bottom:0}
+.comentario{overflow-wrap:anywhere;white-space:pre-wrap}
+@media(max-width:600px){
+    .contenedor{padding:17px 14px 34px}
+    .header{margin-bottom:23px}
+    .dejar-reseña{margin-left:auto}
+    #formularioReseña{padding:0 0 18px}
+    #reseñasPublicadas{padding:0}
+    .reseña{padding:17px 1px}
+}
+@media(min-width:601px){
+    .contenedor{padding-left:28px;padding-right:28px}
+}
+
 </style>
 </head>
 
