@@ -50,6 +50,34 @@
     <div class="marca"><strong>Gamers Gold Top-Up</strong><span>Centro de notificaciones</span></div>
   </header>
   <main>
+    <section id="pushCard" class="push-card" hidden aria-labelledby="pushTitle">
+      <div class="push-head">
+        <span class="push-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg></span>
+        <div><div id="pushTitle" class="push-title">Activa las notificaciones</div><p class="push-copy" id="pushDescription">Recibe avisos importantes de Gamers Gold Top-Up directamente en tu teléfono.</p></div>
+      </div>
+      <button id="activarPush" class="accion" type="button">Activar notificaciones</button>
+      <p id="pushStatus" class="push-status" role="status"></p>
+    </section>
+
+    <section id="adminCard" class="admin-card" hidden aria-labelledby="adminTitle">
+      <div class="push-head">
+        <span class="push-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M4.2 5.2l2.1 2.1m11.4 9.4 2.1 2.1M3 12h3m12 0h3M4.2 18.8l2.1-2.1m11.4-9.4 2.1-2.1"/><circle cx="12" cy="12" r="5"/></svg></span>
+        <div><div id="adminTitle" class="push-title">Panel privado de administración</div><p class="push-copy">Envía un aviso a todas las cuentas de Gamers Gold Top-Up. Los dispositivos suscritos también recibirán la notificación push.</p></div>
+      </div>
+      <form id="adminForm">
+        <label class="admin-label" for="adminNotificationTitle">Título de la notificación</label>
+        <input id="adminNotificationTitle" class="admin-input" type="text" maxlength="160" required placeholder="Ej. Nueva actualización disponible">
+        <div class="contador"><span id="titleCount">0</span>/160</div>
+        <label class="admin-label" for="adminNotificationMessage">Mensaje</label>
+        <textarea id="adminNotificationMessage" class="admin-textarea" maxlength="1000" required placeholder="Escribe el aviso que recibirán los usuarios…"></textarea>
+        <div class="contador"><span id="messageCount">0</span>/1000</div>
+        <label class="admin-label" for="adminNotificationUrl">Enlace interno (opcional)</label>
+        <input id="adminNotificationUrl" class="admin-input" type="text" maxlength="300" placeholder="/gamevora/frontend/notificaciones.html">
+        <button id="enviarAviso" class="accion" type="submit">Enviar a todos los usuarios</button>
+        <p id="adminStatus" class="admin-status" role="status"></p>
+      </form>
+    </section>
+
     <div class="encabezado">
       <div><h1>Notificaciones</h1></div>
       <button id="marcarTodas" class="marcar" type="button" disabled>Marcar como leídas</button>
@@ -68,6 +96,13 @@
     const estado = document.getElementById("estado");
     const lista = document.getElementById("listaNotificaciones");
     const marcarTodas = document.getElementById("marcarTodas");
+    const pushCard = document.getElementById("pushCard");
+    const activarPush = document.getElementById("activarPush");
+    const pushStatus = document.getElementById("pushStatus");
+    const adminCard = document.getElementById("adminCard");
+    const adminForm = document.getElementById("adminForm");
+    const adminStatus = document.getElementById("adminStatus");
+    const enviarAviso = document.getElementById("enviarAviso");
     let usuarioActual = null;
     let notificaciones = [];
 
@@ -75,7 +110,7 @@
 
     function mostrarEstado(elemento, mensaje, tipo) {
       elemento.textContent = mensaje || "";
-      elemento.className = elemento.className.replace(/\\b(error|ok)\\b/g, "").trim();
+      elemento.className = elemento.className.replace(/\b(error|ok)\b/g, "").trim();
       if (tipo) elemento.classList.add(tipo);
     }
 
@@ -323,7 +358,7 @@
       }
 
       usuarioActual = data.user;
-      await cargarNotificaciones();
+      await Promise.all([cargarNotificaciones(), iniciarNotificacionesPush(), comprobarAdministrador()]);
 
       supabaseClient
         .channel("ggt-notifications-center-" + usuarioActual.id)
