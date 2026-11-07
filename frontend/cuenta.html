@@ -697,6 +697,7 @@
     }
 
     .boton-cerrar {
+        margin-top: 20px;
         background: linear-gradient(90deg, #701b30, #a5223a);
         border: 1px solid #ff4057;
     }
@@ -1705,35 +1706,16 @@
                 </div>
             </details>
 
-            <!-- CERRAR SESIÓN -->
+            <!-- CERRAR SESIÓN: ACCIÓN DIRECTA -->
 
-            <details class="acordeon">
-                <summary>
-                    <svg class="icono-opcion" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M10 3H5.5A2.5 2.5 0 0 0 3 5.5v13A2.5 2.5 0 0 0 5.5 21H10"></path>
-                        <path d="M14 8l4 4-4 4M18 12H8"></path>
-                    </svg>
-                    <span class="opcion-texto">Cerrar sesión</span>
-                    <svg class="icono-flecha" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="m6 9 6 6 6-6"></path>
-                    </svg>
-                </summary>
-
-                <div class="contenido-acordeon">
-                    <p class="texto-ayuda">
-                        Cierra la sesión de tu cuenta en este dispositivo.
-                    </p>
-
-                    <button id="cerrarSesion" class="boton boton-cerrar" type="button">
-                        <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M10 17l5-5-5-5"></path>
-                            <path d="M15 12H3"></path>
-                            <path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"></path>
-                        </svg>
-                        <span id="textoCerrarSesion">Cerrar sesión de mi cuenta</span>
-                    </button>
-                </div>
-            </details>
+            <button id="cerrarSesion" class="boton boton-cerrar" type="button">
+                <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 17l5-5-5-5"></path>
+                    <path d="M15 12H3"></path>
+                    <path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"></path>
+                </svg>
+                <span id="textoCerrarSesion">Cerrar sesión de mi cuenta</span>
+            </button>
 
         </div>
 
