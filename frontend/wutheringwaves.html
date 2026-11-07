@@ -1337,7 +1337,9 @@ botonesRegion.forEach(boton => {
 });
 
 pestanaLunite.addEventListener("click", () => cambiarVista("lunite"));
-pestanaOfertas.addEventListener("click", () => cambiarVista("ofertas"));
+pestanaOfertas.addEventListener("click", () => {
+    window.location.href = "ofertas-wutheringwaves.html";
+});
 pestanaNivel.addEventListener("click", () => cambiarVista("nivel"));
 
 /* ESTADOS Y PEDIDOS */
