@@ -19,7 +19,10 @@
     h1{font-size:clamp(25px,5vw,32px);letter-spacing:-.7px}
     .subtitulo{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.6}
     .marcar{flex-shrink:0;padding:10px 13px;border:1px solid rgba(32,197,255,.25);border-radius:9px;background:rgba(0,119,255,.1);color:var(--cian);font-size:11px;font-weight:800;cursor:pointer}
-    .marcar:disabled{opacity:.45;cursor:default}
+    .acciones-notificaciones{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0;flex-wrap:wrap}
+    .marcar,.limpiar{padding:10px 13px;border:1px solid rgba(32,197,255,.25);border-radius:9px;background:rgba(0,119,255,.1);color:var(--cian);font-size:11px;font-weight:800;cursor:pointer}
+    .limpiar{border-color:rgba(255,112,130,.28);background:rgba(255,76,100,.08);color:#ff9ba8}
+    .marcar:disabled,.limpiar:disabled{opacity:.45;cursor:default}
     .lista{display:grid;gap:10px}
     .item{position:relative;display:flex;align-items:flex-start;gap:13px;padding:16px;border:1px solid var(--borde);border-radius:14px;background:linear-gradient(145deg,rgba(12,27,48,.98),rgba(7,16,30,.98));text-decoration:none;transition:border-color .2s ease,transform .2s ease}
     .item[href]:hover{transform:translateY(-2px);border-color:rgba(32,197,255,.45)}
@@ -40,7 +43,7 @@
     .admin-input,.admin-textarea{display:block;width:100%;padding:12px;border:1px solid rgba(105,158,215,.22);border-radius:10px;outline:none;background:#071326;color:#f4f8ff;font-size:13px}
     .admin-input:focus,.admin-textarea:focus{border-color:#20c5ff;box-shadow:0 0 0 3px rgba(32,197,255,.09)}.admin-textarea{min-height:105px;resize:vertical;line-height:1.5}
     .contador{margin-top:5px;color:#7189a3;text-align:right;font-size:10px}
-    @media(max-width:520px){header{min-height:60px;padding:10px 14px}main{margin-top:25px}.encabezado{align-items:flex-start;flex-direction:column}.marcar{align-self:flex-end}.item{padding:14px;gap:11px}}
+    @media(max-width:520px){header{min-height:60px;padding:10px 14px}main{margin-top:25px}.encabezado{align-items:flex-start;flex-direction:column}.acciones-notificaciones{align-self:flex-end}.item{padding:14px;gap:11px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
   </style>
 </head>
@@ -80,7 +83,10 @@
 
     <div class="encabezado">
       <div><h1>Notificaciones</h1></div>
-      <button id="marcarTodas" class="marcar" type="button" disabled>Marcar como leídas</button>
+      <div class="acciones-notificaciones">
+        <button id="marcarTodas" class="marcar" type="button" disabled>Marcar como leídas</button>
+        <button id="limpiarTodas" class="limpiar" type="button" disabled>Limpiar todas</button>
+      </div>
     </div>
     <div id="estado" class="estado" role="status">Cargando tus notificaciones…</div>
     <div id="listaNotificaciones" class="lista" aria-live="polite"></div>
@@ -96,6 +102,7 @@
     const estado = document.getElementById("estado");
     const lista = document.getElementById("listaNotificaciones");
     const marcarTodas = document.getElementById("marcarTodas");
+    const limpiarTodas = document.getElementById("limpiarTodas");
     const pushCard = document.getElementById("pushCard");
     const activarPush = document.getElementById("activarPush");
     const pushStatus = document.getElementById("pushStatus");
@@ -252,6 +259,7 @@
       const pendientes = notificaciones.filter(item => !item.is_read).length;
       marcarTodas.disabled = pendientes === 0;
       marcarTodas.textContent = pendientes ? "Marcar como leídas (" + pendientes + ")" : "Todo leído";
+      limpiarTodas.disabled = notificaciones.length === 0;
 
       if (!notificaciones.length) {
         estado.hidden = false;
@@ -329,6 +337,35 @@
       renderizar();
     });
 
+    limpiarTodas.addEventListener("click", async function () {
+      if (!usuarioActual || !notificaciones.length) return;
+      const confirmar = window.confirm("¿Seguro que quieres eliminar todas tus notificaciones? Esta acción no se puede deshacer.");
+      if (!confirmar) return;
+
+      limpiarTodas.disabled = true;
+      limpiarTodas.textContent = "Limpiando…";
+
+      const { data, error } = await supabaseClient
+        .from("user_notifications")
+        .delete()
+        .eq("user_id", usuarioActual.id)
+        .select("id");
+
+      if (error) {
+        console.error("No se pudieron limpiar las notificaciones:", error.message);
+        limpiarTodas.disabled = false;
+        limpiarTodas.textContent = "Limpiar todas";
+        estado.hidden = false;
+        estado.className = "estado error";
+        estado.textContent = "No se pudieron eliminar las notificaciones. Inténtalo de nuevo.";
+        return;
+      }
+
+      notificaciones = [];
+      renderizar();
+      limpiarTodas.textContent = "Limpiar todas";
+    });
+
     const tituloAdmin = document.getElementById("adminNotificationTitle");
     const mensajeAdmin = document.getElementById("adminNotificationMessage");
     tituloAdmin.addEventListener("input", () => document.getElementById("titleCount").textContent = String(tituloAdmin.value.length));
@@ -375,6 +412,7 @@
         acceso.href = "./login.html";
         estado.appendChild(acceso);
         marcarTodas.hidden = true;
+        limpiarTodas.hidden = true;
         return;
       }
 
