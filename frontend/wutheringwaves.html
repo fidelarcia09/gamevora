@@ -955,21 +955,17 @@ body{padding:0!important}
         <h1>Wuthering Waves</h1>
 
         <div class="selector-region-wrap">
-            <div class="region-opciones" role="group" aria-label="Región de Wuthering Waves">
-                <span class="region-opcion activa" data-region="global" aria-pressed="true" aria-label="Región Global">🌐 <span>GLOBAL</span></span>
+            <div class="region-opciones" role="group" aria-label="Región del catálogo">
+                <span class="region-opcion activa" aria-label="Catálogo Global">🌐 <span>GLOBAL</span></span>
             </div>
+            <label class="etiqueta" style="margin-top:12px">Servidor del jugador</label>
+            <div class="region-opciones" role="group" aria-label="Servidor de Wuthering Waves">
+                <button type="button" class="region-opcion activa" data-server="os_usa" aria-pressed="true">🌎 <span>América</span></button>
+                <button type="button" class="region-opcion" data-server="os_asia" aria-pressed="false">🌏 <span>Asia</span></button>
+                <button type="button" class="region-opcion" data-server="os_euro" aria-pressed="false">🌍 <span>Europa</span></button>
+            </div>
+            <input type="hidden" id="zonaJugador" name="zonaJugador" value="os_usa">
         </div>
-
-        <label class="etiqueta" for="zonaJugador">Servidor del jugador</label>
-        <select id="zonaJugador" name="zonaJugador" required aria-describedby="ayudaServidor">
-            <option value="">Selecciona tu servidor</option>
-            <option value="os_usa">América</option>
-            <option value="os_asia">Asia</option>
-            <option value="os_euro">Europa</option>
-            <option value="os_sea">SEA</option>
-            <option value="os_cht">TW / HK / MO</option>
-        </select>
-        <p id="ayudaServidor" class="ayuda">Selecciona el servidor donde está creado tu personaje. La región del catálogo permanece en GLOBAL.</p>
 
         <label class="etiqueta" for="idjugador">
             Player ID
@@ -1243,6 +1239,7 @@ let accionPendiente = "crear";
 
 let vistaActual = "lunite";
 let regionActual = "global";
+let servidorActual = "os_usa";
 
 let validacionJugador = {
     status: "UNKNOWN",
@@ -1333,31 +1330,32 @@ function cambiarVista(vista) {
     actualizarBoton();
 }
 
-const botonesRegion = Array.from(document.querySelectorAll(".region-opcion"));
+const botonesRegion = Array.from(document.querySelectorAll("[data-server]"));
+const campoServidor = document.getElementById("zonaJugador");
 
 function actualizarSelectorRegion() {
     botonesRegion.forEach(boton => {
-        const activa = boton.dataset.region === regionActual;
+        const activa = boton.dataset.server === servidorActual;
         boton.classList.toggle("activa", activa);
         boton.setAttribute("aria-pressed", String(activa));
         boton.disabled = Boolean(procesando || pedidoPendienteId);
     });
+    if (campoServidor) campoServidor.value = servidorActual;
 }
 
 botonesRegion.forEach(boton => {
-    boton.addEventListener("click", async () => {
-        const nuevaRegion = String(boton.dataset.region || "").trim().toLowerCase();
-        if (!["global", "brazil", "indonesia"].includes(nuevaRegion) || nuevaRegion === regionActual) return;
+    boton.addEventListener("click", () => {
+        const nuevoServidor = String(boton.dataset.server || "").trim().toLowerCase();
+        if (!["os_usa", "os_asia", "os_euro"].includes(nuevoServidor) || nuevoServidor === servidorActual) return;
         if (procesando || pedidoPendienteId) {
-            mostrarEstado("Termina o consulta el pedido pendiente antes de cambiar de región.", "error");
+            mostrarEstado("Termina o consulta el pedido pendiente antes de cambiar de servidor.", "error");
             return;
         }
-        regionActual = nuevaRegion;
+        servidorActual = nuevoServidor;
         productoSeleccionado = null;
         limpiarSeleccionVisual();
         reiniciarValidacionJugador();
         actualizarSelectorRegion();
-        await cargarCatalogo();
     });
 });
 
