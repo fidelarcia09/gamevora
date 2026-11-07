@@ -1263,20 +1263,24 @@
         background: linear-gradient(145deg, #123c63, #07172b);
         box-shadow: 0 0 0 4px rgba(32, 197, 255, .10), 0 0 22px rgba(0, 140, 255, .2);
     }
-    .datos-avatar-marco .datos-avatar-foto {
+    .datos-avatar-marco .avatar-contenedor {
         position: relative;
-        top: auto;
-        left: auto;
-        width: 78px;
-        height: 78px;
+        width: 90px;
+        height: 90px;
         margin: 0;
+        flex: 0 0 90px;
+    }
+    .datos-avatar-marco .avatar {
+        top: 7px;
+        left: 7px;
+        width: 76px;
+        height: 76px;
         border: 0;
         box-shadow: none;
     }
-    .datos-avatar-marco .datos-avatar-foto img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    .datos-avatar-marco .avatar-camara {
+        right: 0;
+        bottom: 5px;
     }
     .datos-perfil-nombre {
         color: #f4f8ff;
@@ -1650,39 +1654,6 @@
 
     <main id="contenidoCuenta">
 
-        <!-- TARJETA DE PERFIL -->
-        <section class="perfil-resumen" aria-label="Resumen del perfil">
-            <div class="avatar-contenedor">
-                <div class="avatar" id="imagenPerfilInteractiva" role="button" tabindex="0"
-                    aria-label="Mostrar opciones de imagen de perfil" aria-expanded="false">
-                    <svg id="iconoAvatarPredeterminado" viewBox="0 0 24 24" aria-hidden="true">
-                        <circle cx="12" cy="8" r="4"></circle>
-                        <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
-                    </svg>
-                    <span id="avatarEmojiPerfil" class="avatar-svg-perfil" aria-hidden="true"></span>
-                    <img id="fotoPerfil" alt="Foto de perfil">
-                </div>
-                <button type="button" id="botonCambiarFoto" class="avatar-camara"
-                    aria-label="Cambiar foto de perfil" title="Cambiar foto de perfil">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M14 4h-4L8 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-4z"></path>
-                        <circle cx="12" cy="13" r="3"></circle>
-                    </svg>
-                </button>
-                <input type="file" id="selectorFotoPerfil"
-                    accept="image/jpeg,image/png,image/webp" hidden>
-            </div>
-            <div class="perfil-resumen-info">
-                <h1 id="nombrePerfilResumen">Mi cuenta</h1>
-                <div class="perfil-etiquetas">
-                    <span id="etiquetaRevendedor" class="perfil-etiqueta revendedor" hidden>Revendedor</span>
-                    <span id="rangoPerfilResumen" class="perfil-rango" hidden></span>
-                    <span id="etiquetaVerificacion" class="perfil-etiqueta no-verificado">No verificado</span>
-                </div>
-                <p class="subtitulo">Información de tu cuenta Gamers Gold Top-Up</p>
-            </div>
-        </section>
-
         <section class="datos-resumen-perfil" aria-label="Resumen de tu cuenta">
             <div class="datos-marca">
                 <img class="datos-marca-escudo" src="./gvr-escudo.svg" alt="Escudo GVR">
@@ -1697,9 +1668,36 @@
             </div>
 
             <div class="datos-perfil-identidad">
-                <div class="datos-avatar-marco" id="avatarDatosPersonales" aria-label="Foto de perfil"></div>
+                <div class="datos-avatar-marco" aria-label="Foto de perfil">
+                    <div class="avatar-contenedor">
+                        <div class="avatar" id="imagenPerfilInteractiva" role="button" tabindex="0"
+                            aria-label="Mostrar opciones de imagen de perfil" aria-expanded="false">
+                            <svg id="iconoAvatarPredeterminado" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+                            </svg>
+                            <span id="avatarEmojiPerfil" class="avatar-svg-perfil" aria-hidden="true"></span>
+                            <img id="fotoPerfil" alt="Foto de perfil">
+                        </div>
+                        <button type="button" id="botonCambiarFoto" class="avatar-camara"
+                            aria-label="Cambiar foto de perfil" title="Cambiar foto de perfil">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M14 4h-4L8 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-4z"></path>
+                                <circle cx="12" cy="13" r="3"></circle>
+                            </svg>
+                        </button>
+                        <input type="file" id="selectorFotoPerfil"
+                            accept="image/jpeg,image/png,image/webp" hidden>
+                    </div>
+                </div>
                 <div class="datos-perfil-nombre" id="nombrePerfilDatos">Cargando...</div>
                 <div class="datos-perfil-correo" id="correoPerfilDatos">Cargando...</div>
+                <div hidden>
+                    <h1 id="nombrePerfilResumen">Mi cuenta</h1>
+                    <span id="etiquetaRevendedor" class="perfil-etiqueta revendedor" hidden>Revendedor</span>
+                    <span id="rangoPerfilResumen" class="perfil-rango" hidden></span>
+                    <span id="etiquetaVerificacion" class="perfil-etiqueta no-verificado">No verificado</span>
+                </div>
             </div>
 
             <div class="datos-estadisticas" aria-label="Estadísticas de la cuenta">
@@ -3294,7 +3292,6 @@ async function cargarCuenta() {
         usuario.user_metadata?.name ||
         "Usuario";
     document.getElementById("correoPerfilDatos").textContent = usuario.email || "Sin correo";
-    sincronizarAvatarDatosPersonales();
     await cargarResumenCuentaDatos(usuario.id);
 
     usuarioCuentaIdParaRango = usuario.id;
@@ -3534,22 +3531,6 @@ function cerrarEditorDatos(id) {
 document.querySelectorAll("[data-cancelar]").forEach(boton => {
     boton.addEventListener("click", () => cerrarEditorDatos(boton.dataset.cancelar));
 });
-
-function sincronizarAvatarDatosPersonales() {
-    const destino = document.getElementById("avatarDatosPersonales");
-    const origen = document.getElementById("imagenPerfilInteractiva");
-    if (!destino || !origen) return;
-
-    const clon = origen.cloneNode(true);
-    clon.className = "datos-avatar-foto avatar";
-    clon.removeAttribute("id");
-    clon.removeAttribute("role");
-    clon.removeAttribute("tabindex");
-    clon.removeAttribute("aria-label");
-    clon.removeAttribute("aria-expanded");
-    clon.querySelectorAll("[id]").forEach(elemento => elemento.removeAttribute("id"));
-    destino.replaceChildren(clon);
-}
 
 function formatoResumenCuenta(valor) {
     const numero = Number(valor);
