@@ -86,7 +86,7 @@ function iniciar(){
  }else{
   const playerCard=playerField?.closest(".player-id-card, .player-card, .campo, .form-group, .formulario-campo")||playerField?.parentElement;
   const gameTitle=document.title.toLowerCase();
-  const unirIdYPago=["free fire","blood strike","arena breakout","pubg mobile","honor of kings"].some(name=>gameTitle.includes(name));
+  const unirIdYPago=["free fire","wuthering waves","blood strike","arena breakout","pubg mobile","honor of kings"].some(name=>gameTitle.includes(name));
   if(unirIdYPago && playerField && playerLabel){
    if(gameTitle.includes("arena breakout") && playerCard){
     playerCard.classList.add("gg-player-data-panel");
@@ -365,7 +365,7 @@ select.addEventListener("change",()=>{panel.querySelectorAll("[data-metodo]").fo
     try{
      const response=await fetch(SUPABASE_URL+"/functions/v1/rechargegames-crear-pedido",{method:"POST",headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+session.access_token,"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({game_order_id:savedManualId,zone_id:zoneId||null}),cache:"no-store"});
      let result;try{result=await response.json();}catch{result={};}
-     if(!response.ok||result.success!==true){
+     if(!response.ok||(result.success!==true&&result.ok!==true)){
       const error=new Error(result.error||result.message||"No se pudo continuar el pedido. No vuelvas a pagar; revisa el estado con administración.");
       error.reconciliationRequired=result.reconciliation_required===true;
       throw error;
