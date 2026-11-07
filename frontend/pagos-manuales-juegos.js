@@ -141,14 +141,37 @@ function iniciar(){
   if(cargandoTarifas)return cargandoTarifas;
   cargandoTarifas=(async()=>{
    const client=await clientePago;
-   const [productsResult,pricesResult]=await Promise.all([
-    client.from("game_products").select("id,product_name,provider_product_id,game,price_gvr,active").eq("active",true).eq("provider","rechargegames"),
-    client.from("manual_game_product_prices").select("product_id,payment_method,base_amount,payment_currency").eq("active",true)
-   ]);
-   if(productsResult.error)throw productsResult.error;
-   if(pricesResult.error)throw pricesResult.error;
-   productosCache=productsResult.data||[];
-   tarifasCache=new Map((pricesResult.data||[]).map(row=>[row.product_id+"|"+row.payment_method,row]));
+   /*
+    * No descargar las 1.560 tarifas globales de una sola vez:
+    * la API puede limitar la respuesta y dejar productos fuera.
+    * Primero identificamos los UUID de las tarjetas de esta página.
+    */
+   const idsVisibles=[...new Set(
+    [...document.querySelectorAll(".producto, .boton-oferta")]
+     .map(card=>String(card.dataset.ggProductId||"").trim())
+     .filter(Boolean)
+   )];
+   let productsQuery=client.from("game_products")
+    .select("id,product_name,provider_product_id,game,price_gvr,active")
+    .eq("active",true)
+    .eq("provider","rechargegames");
+   if(idsVisibles.length)productsQuery=productsQuery.in("id",idsVisibles);
+   const {data:productsData,error:productsError}=await productsQuery;
+   if(productsError)throw productsError;
+   productosCache=productsData||[];
+   const productIds=[...new Set(productosCache.map(product=>String(product.id||"").trim()).filter(Boolean))];
+   const priceRows=[];
+   /* Lotes pequeños: cada producto tiene pocas tarifas y nunca chocamos con el límite global de filas. */
+   for(let i=0;i<productIds.length;i+=100){
+    const batch=productIds.slice(i,i+100);
+    const {data,error}=await client.from("manual_game_product_prices")
+     .select("product_id,payment_method,base_amount,payment_currency")
+     .eq("active",true)
+     .in("product_id",batch);
+    if(error)throw error;
+    priceRows.push(...(data||[]));
+   }
+   tarifasCache=new Map(priceRows.map(row=>[row.product_id+"|"+row.payment_method,row]));
   })();
   try{await cargandoTarifas;}finally{cargandoTarifas=null;}
  }
