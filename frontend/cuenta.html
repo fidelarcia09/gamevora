@@ -3327,7 +3327,8 @@ async function cargarCuenta() {
     document.getElementById("correoUsuario").textContent = usuario.email || "Sin correo";
     document.getElementById("idUsuario").textContent = usuario.id;
     document.getElementById("nombreUsuario").textContent = nombreVisible;
-    document.getElementById("nombrePerfilResumen").textContent = nombreVisible;
+    // El elemento antiguo nombrePerfilResumen se retiró del diseño nuevo.
+    // La pantalla actual usa nombrePerfilDatos y nombreUsuario.
     document.getElementById("nombrePerfilDatos").textContent = nombreVisible;
     document.getElementById("correoPerfilDatos").textContent = usuario.email || "Sin correo";
 
