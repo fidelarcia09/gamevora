@@ -67,7 +67,8 @@ const JUEGOS_API = {
     pubgmobile: "pubg-mobile",
     honorofkings: "honor-of-kings",
     arenabreakout: "arena-breakout",
-    genshinimpact: "genshin-impact"
+    genshinimpact: "genshin-impact",
+    wutheringwaves: "wuthering-waves"
 };
 
 const JUEGO_API =
@@ -124,6 +125,10 @@ const ES_VENTAS_HABILITADAS =
     ) ||
     (
         ES_MOBILE_LEGENDS &&
+        CONFIG?.habilitarCompras === true
+    ) ||
+    (
+        JUEGO_NORMALIZADO === "wutheringwaves" &&
         CONFIG?.habilitarCompras === true
     );
 
