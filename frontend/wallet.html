@@ -2060,7 +2060,7 @@
         }
         .grupo-tarjeta {
             overflow: hidden;
-            padding: 4px 16px;
+            padding: 0;
             border: 1px solid rgba(32, 197, 255, .2);
             border-radius: 20px;
             background:
@@ -2069,7 +2069,10 @@
             box-shadow: 0 10px 26px rgba(0, 0, 0, .2), inset 0 1px rgba(255,255,255,.025);
         }
         .grupo-tarjeta .movimiento {
+            width: 100%;
+            height: 88px;
             min-height: 88px;
+            max-height: 88px;
             padding: 16px 18px;
             gap: 14px;
             border: 0;
@@ -2135,14 +2138,16 @@
         }
         @media (max-width: 400px) {
             .grupo-tarjeta .movimiento {
+                height: 82px;
                 min-height: 82px;
+                max-height: 82px;
                 padding: 13px;
                 gap: 12px;
             }
         }
         @media (max-width: 380px) {
-            .grupo-tarjeta { padding: 3px 11px; }
-            .grupo-tarjeta .movimiento { gap: 12px; padding: 13px; }
+            .grupo-tarjeta { padding: 0; }
+            .grupo-tarjeta .movimiento { height: 82px; min-height: 82px; max-height: 82px; gap: 12px; padding: 13px; }
             .grupo-tarjeta .movimiento-icono { width: 48px; height: 48px; flex-basis: 48px; }
             .grupo-tarjeta .movimiento-titulo,
             .grupo-tarjeta .movimiento-monto { font-size: 13px; }
