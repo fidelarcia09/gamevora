@@ -1317,7 +1317,7 @@ function actualizarSelectorRegion() {
         const activa = boton.dataset.region === regionActual;
         boton.classList.toggle("activa", activa);
         boton.setAttribute("aria-pressed", String(activa));
-        boton.disabled = Boolean(procesando || pedidoPendienteId);
+        boton.disabled = Boolean(procesando);
     });
 }
 
@@ -1325,8 +1325,8 @@ botonesRegion.forEach(boton => {
     boton.addEventListener("click", async () => {
         const nuevaRegion = String(boton.dataset.region || "").trim().toLowerCase();
         if (!["latam", "brazil", "indonesia"].includes(nuevaRegion) || nuevaRegion === regionActual) return;
-        if (procesando || pedidoPendienteId) {
-            mostrarEstado("Termina o consulta el pedido pendiente antes de cambiar de región.", "error");
+        if (procesando) {
+            mostrarEstado("Espera a que termine la operación antes de cambiar de región.", "error");
             return;
         }
         regionActual = nuevaRegion;
