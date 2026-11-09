@@ -2210,6 +2210,131 @@
         }
     }
 
+
+    /* Agrupar las opciones como un único panel, con divisores internos */
+    .grupo-cuenta {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        overflow: hidden;
+        border: 1px solid rgba(48, 102, 153, .58);
+        border-radius: 13px;
+        background: #061226;
+        box-shadow: 0 0 18px rgba(0, 140, 255, .08);
+    }
+
+    .grupo-cuenta > .acordeon,
+    .grupo-cuenta > .acceso-ayuda-directo {
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        overflow: hidden;
+    }
+
+    .grupo-cuenta > .acordeon + .acordeon,
+    .grupo-cuenta > .acceso-ayuda-directo + .acceso-ayuda-directo {
+        border-top: 1px solid rgba(75, 115, 157, .32);
+    }
+
+    .grupo-cuenta > .acordeon summary,
+    .grupo-cuenta > .acceso-ayuda-directo {
+        min-height: 64px;
+        padding: 9px 12px;
+        gap: 11px;
+    }
+
+    .grupo-cuenta > .acordeon .icono-opcion,
+    .grupo-cuenta > .acceso-ayuda-directo .icono-opcion {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        padding: 7px;
+        border-radius: 10px;
+    }
+
+    .grupo-cuenta > .acordeon .opcion-texto,
+    .grupo-cuenta > .acceso-ayuda-directo .opcion-texto {
+        font-size: 14px;
+        line-height: 1.25;
+    }
+
+    .grupo-cuenta > .acordeon .icono-flecha,
+    .grupo-cuenta > .acceso-ayuda-directo .icono-flecha {
+        width: 17px;
+        height: 17px;
+    }
+
+    /* Los tres encabezados usan exactamente la misma escala */
+    .titulo-seccion-cuenta,
+    .seccion-negocio-titulo,
+    .titulo-seccion-cuenta.titulo-ayuda {
+        margin: 8px 0 12px;
+        padding-left: 12px;
+        font-size: 18px;
+        letter-spacing: -.2px;
+        line-height: 1.2;
+    }
+
+    /* Acciones del avatar alineadas y compactas */
+    .datos-resumen-perfil > .avatar-acciones {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        width: auto;
+        max-width: 100%;
+        margin: 8px 0 4px;
+    }
+
+    .datos-resumen-perfil > .avatar-acciones #botonElegirAvatar {
+        flex: 0 1 auto;
+        width: auto;
+        max-width: none;
+        min-height: 38px;
+        padding: 8px 11px;
+        gap: 6px;
+        font-size: 12px;
+        border-radius: 10px;
+    }
+
+    .datos-resumen-perfil > .avatar-acciones .avatar-accion.compartir {
+        flex: 0 0 38px;
+        width: 38px;
+        height: 38px;
+        min-height: 38px;
+        padding: 7px;
+        border-radius: 10px;
+    }
+
+    .datos-resumen-perfil > .avatar-acciones #botonElegirAvatar .icono-accion {
+        width: 17px;
+        height: 17px;
+        flex-basis: 17px;
+    }
+
+    .datos-resumen-perfil > .avatar-acciones .avatar-accion.compartir .icono-accion {
+        width: 20px;
+        height: 20px;
+        flex-basis: 20px;
+    }
+
+    @media (max-width: 400px) {
+        .grupo-cuenta > .acordeon summary,
+        .grupo-cuenta > .acceso-ayuda-directo {
+            min-height: 60px;
+            padding: 8px 10px;
+            gap: 9px;
+        }
+
+        .grupo-cuenta > .acordeon .icono-opcion,
+        .grupo-cuenta > .acceso-ayuda-directo .icono-opcion {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            padding: 6px;
+        }
+    }
+
 </style>
  
 <script>
