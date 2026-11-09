@@ -1772,6 +1772,203 @@
             }
         }
 
+
+        /* Corrección de estructura: el CSS permanece dentro de <style>. */
+        body {
+            padding: 20px;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .header {
+            min-height: 0;
+            margin: 0 0 30px;
+            padding: 0;
+            background: transparent;
+            border: 0;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        main.card {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        /* Saldo horizontal: icono de la referencia, saldo y escudo GVR a la derecha. */
+        .saldo {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            width: 100%;
+            min-height: 112px;
+            margin: 0 0 16px;
+            padding: 18px 17px;
+            text-align: left;
+            border: 1px solid rgba(32, 197, 255, .28);
+            border-radius: 17px;
+            background:
+                radial-gradient(circle at 88% 45%, rgba(0, 183, 255, .19), transparent 38%),
+                linear-gradient(120deg, rgba(8, 124, 255, .13), transparent 52%),
+                linear-gradient(135deg, #0d1d38, #071329 62%, #082b43);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, .18), inset 0 1px rgba(255,255,255,.025);
+        }
+
+        .saldo-icono-referencia {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 40px;
+            width: 40px;
+            height: 40px;
+            color: #35c8ff;
+            filter: drop-shadow(0 0 8px rgba(0, 183, 255, .4));
+        }
+
+        .saldo-icono-referencia svg {
+            display: block;
+            width: 40px;
+            height: 40px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.2;
+            stroke-linecap: square;
+            stroke-linejoin: bevel;
+        }
+
+        .saldo-contenido {
+            position: relative;
+            z-index: 1;
+            flex: 1 1 auto;
+            min-width: 0;
+            width: auto;
+            text-align: left;
+        }
+
+        .saldo-titulo {
+            display: block;
+            margin: 0 0 6px;
+            padding: 0;
+            color: #a9d9f8;
+            background: transparent;
+            border: 0;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .saldo-valor {
+            color: #fff;
+            font-size: clamp(25px, 6vw, 34px);
+            font-weight: 900;
+            line-height: 1.12;
+            letter-spacing: -.7px;
+            text-align: left;
+            overflow-wrap: anywhere;
+        }
+
+        .gvr-escudo-wallet {
+            position: relative;
+            z-index: 1;
+            display: block;
+            flex: 0 0 54px;
+            width: 54px;
+            height: 60px;
+            margin: 0;
+            padding: 0;
+            object-fit: contain;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            filter: drop-shadow(0 0 9px rgba(0, 190, 255, .4));
+        }
+
+        .estadisticas-mes {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .estadistica-movimientos {
+            display: none !important;
+        }
+
+        .icono-estadistica {
+            width: auto;
+            height: auto;
+            flex: 0 0 auto;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .icono-estadistica svg {
+            display: block;
+            width: 29px;
+            height: 29px;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            stroke: #55ddcb;
+            stroke-width: 1.9;
+            filter: drop-shadow(0 0 5px rgba(85, 221, 205, .2));
+        }
+
+        @media (max-width: 400px) {
+            body {
+                padding: 16px;
+            }
+
+            .header {
+                margin-bottom: 26px;
+            }
+
+            .saldo {
+                min-height: 96px;
+                gap: 9px;
+                padding: 15px 12px;
+            }
+
+            .saldo-icono-referencia,
+            .saldo-icono-referencia svg {
+                width: 34px;
+                height: 34px;
+            }
+
+            .saldo-icono-referencia {
+                flex-basis: 34px;
+            }
+
+            .saldo-valor {
+                font-size: clamp(23px, 6.5vw, 29px);
+            }
+
+            .gvr-escudo-wallet {
+                width: 46px;
+                height: 52px;
+                flex-basis: 46px;
+            }
+
+            .icono-estadistica svg {
+                width: 26px;
+                height: 26px;
+            }
+        }
+
 </style>
  
 <script>
@@ -1822,17 +2019,22 @@
             </p>
 
             <section class="saldo" aria-label="Saldo disponible">
+                <span class="saldo-icono-referencia" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" focusable="false">
+                        <path d="M36 9H17l-8 8v14l8 8h18l7-7V22H25v8h9v1H19l-4-5V20l5-5h16z"></path>
+                    </svg>
+                </span>
+                <div class="saldo-contenido">
+                    <div class="saldo-titulo">Saldo disponible</div>
+                    <div class="saldo-valor" id="saldoGVR" aria-live="polite">Cargando...</div>
+                </div>
                 <img
                     class="gvr-escudo-wallet"
                     src="./gvr-escudo.svg"
                     alt=""
                     aria-hidden="true"
-                    width="56"
-                    height="62">
-                <div class="saldo-contenido">
-                    <div class="saldo-titulo">Saldo disponible</div>
-                    <div class="saldo-valor" id="saldoGVR" aria-live="polite">Cargando...</div>
-                </div>
+                    width="54"
+                    height="60">
             </section>
 
             <section class="estadisticas-mes" aria-label="Resumen del mes">
@@ -2517,100 +2719,3 @@
 <script src="./tema-global.js?v=20261023-1" defer></script>
 </body>
                     </html>
-
-
-        /* Ajuste final solicitado: saldo centrado con escudo y verificación refinada */
-        .saldo {
-            min-height: 0;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 23px 18px 25px;
-            text-align: center;
-            background:
-                radial-gradient(circle at 50% 0%, rgba(0, 183, 255, .22), transparent 58%),
-                linear-gradient(135deg, #08244a, #063467);
-            border: 1px solid #168cff;
-            border-radius: 16px;
-            box-shadow: 0 0 18px rgba(0, 140, 255, .2), inset 0 0 20px rgba(0, 183, 255, .07);
-        }
-
-        .saldo-contenido {
-            flex: 0 0 auto;
-            width: 100%;
-            text-align: center;
-        }
-
-        .gvr-escudo-wallet {
-            display: block;
-            width: 54px;
-            height: 60px;
-            flex: 0 0 auto;
-            padding: 0;
-            margin: 0 auto 2px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 10px rgba(0, 190, 255, .38));
-        }
-
-        .saldo-titulo {
-            display: block;
-            margin: 0 0 8px;
-            padding: 0;
-            color: #b9dcff;
-            background: transparent;
-            border: 0;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .saldo-valor {
-            font-size: clamp(30px, 7vw, 40px);
-            line-height: 1.15;
-            letter-spacing: -.7px;
-            text-align: center;
-        }
-
-        .estadisticas-mes {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .estadistica-movimientos {
-            display: none !important;
-        }
-
-        .estadistica-mes {
-            border: 1px solid rgba(105, 158, 215, .16);
-        }
-
-        .estadistica-mes + .estadistica-mes {
-            border-left: 1px solid rgba(105, 158, 215, .16);
-        }
-
-        .icono-estadistica {
-            width: auto;
-            height: auto;
-            flex: 0 0 auto;
-            border: 0;
-            border-radius: 0;
-            background: transparent;
-            box-shadow: none;
-        }
-
-        .icono-estadistica svg {
-            width: 34px;
-            height: 34px;
-            padding: 0;
-            border: 0;
-            border-radius: 0;
-            background: transparent;
-            stroke: #55ddcb;
-            stroke-width: 1.9;
-            filter: drop-shadow(0 0 5px rgba(85, 221, 203, .2));
-        }
-
-        @media (max-width: 400px) {
-            .saldo { padding: 21px 14px 23px; }
-            .gvr-escudo-wallet { width: 49px; height: 55px; }
-            .icono-estadistica svg { width: 32px; height: 32px; }
-        }
