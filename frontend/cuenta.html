@@ -276,16 +276,82 @@
         filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)) drop-shadow(0 0 5px rgba(32,197,255,.2));
     }
 
+    .seccion-negocio {
+        margin: 20px 0 25px;
+    }
+
+    .seccion-negocio-titulo {
+        margin: 0 0 12px;
+        color: #f4f8ff;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
     .accesos-cuenta {
         display: flex;
-        align-items: center;
-        justify-content: center;
+        align-items: stretch;
         gap: 12px;
-        margin: 12px auto 20px;
+        width: 100%;
+        margin: 0;
     }
 
     .accesos-cuenta .acceso-referidos {
+        flex: 0 0 82px;
+        width: 82px;
+        min-height: 82px;
         margin: 0;
+    }
+
+    .acceso-panel-revendedor {
+        display: flex;
+        flex: 1;
+        min-width: 0;
+        min-height: 82px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        border: 1px solid #17649a;
+        border-radius: 15px;
+        background: linear-gradient(110deg, #103b65, #08203b);
+        color: #fff;
+        text-decoration: none;
+        box-shadow: 0 0 18px rgba(0, 140, 255, .12);
+        font-size: 14px;
+        font-weight: 800;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .acceso-panel-revendedor:hover {
+        border-color: #28a9ff;
+        background: linear-gradient(110deg, #145184, #09294b);
+    }
+
+    .acceso-panel-revendedor:focus-visible {
+        outline: 2px solid #75d7ff;
+        outline-offset: 3px;
+    }
+
+    .acceso-panel-revendedor svg {
+        width: 25px;
+        height: 25px;
+        flex: 0 0 25px;
+        stroke: #4bcaff;
+        stroke-width: 1.8;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .acceso-panel-revendedor .texto-panel-revendedor {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .acceso-panel-revendedor .flecha-panel-revendedor {
+        width: 18px;
+        height: 18px;
+        flex: 0 0 18px;
     }
 
     .acceso-resenas {
@@ -1889,16 +1955,29 @@
             <button type="button" id="botonQuitarFoto" class="avatar-accion quitar">Quitar imagen</button>
         </div>
 
-        <div class="accesos-cuenta" aria-label="Accesos rápidos">
-            <a class="acceso-referidos" href="referidos.html" aria-label="Abrir programa de referidos">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="9" cy="8" r="3"></circle>
-                    <path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2a4.5 4.5 0 0 1 4.5 4.5V19"></path>
-                    <path d="M17 8v6M14 11h6"></path>
-                </svg>
-                <span>Referir</span>
-            </a>
-        </div>
+        <section class="seccion-negocio" aria-labelledby="tituloTuNegocio">
+            <h2 class="seccion-negocio-titulo" id="tituloTuNegocio">Tu negocio</h2>
+            <div class="accesos-cuenta" aria-label="Accesos de tu negocio">
+                <a class="acceso-referidos" href="referidos.html" aria-label="Abrir programa de referidos">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="9" cy="8" r="3"></circle>
+                        <path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2a4.5 4.5 0 0 1 4.5 4.5V19"></path>
+                        <path d="M17 8v6M14 11h6"></path>
+                    </svg>
+                    <span>Referir</span>
+                </a>
+                <a class="acceso-panel-revendedor" href="revender.html" aria-label="Abrir panel de revendedor">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 10h18l-1.5-6h-15L3 10Z"></path>
+                        <path d="M5 10v10h14V10M9 20v-6h6v6M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"></path>
+                    </svg>
+                    <span class="texto-panel-revendedor">Panel de revendedor</span>
+                    <svg class="flecha-panel-revendedor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                </a>
+            </div>
+        </section>
 
         <div class="lista-opciones">
             <h2 class="titulo-seccion-cuenta">Mi cuenta</h2>
