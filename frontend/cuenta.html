@@ -1816,6 +1816,191 @@
         box-shadow: 0 0 10px rgba(32, 197, 255, .3);
     }
 
+
+    
+    /* Distribución compacta y dimensiones de tarjetas inspiradas en la referencia. */
+    .seccion-negocio {
+        margin: 24px 0 30px;
+    }
+
+    .seccion-negocio-titulo {
+        position: relative;
+        margin: 0 0 14px;
+        padding-left: 17px;
+        color: #f4f8ff;
+        font-size: 23px;
+        font-weight: 850;
+        letter-spacing: -.45px;
+        line-height: 1.2;
+    }
+
+    .seccion-negocio-titulo::before {
+        content: "";
+        position: absolute;
+        top: 1px;
+        bottom: 1px;
+        left: 0;
+        width: 5px;
+        border-radius: 5px;
+        background: linear-gradient(180deg, #20c5ff, #087cff);
+        box-shadow: 0 0 12px rgba(32, 197, 255, .35);
+    }
+
+    .accesos-cuenta {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 11px;
+        align-items: stretch;
+    }
+
+    .accesos-cuenta .acceso-panel-revendedor {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        min-height: 88px;
+        padding: 16px 18px;
+        border-radius: 20px;
+        gap: 14px;
+        background: linear-gradient(110deg, #102f55, #081a35);
+        border-color: rgba(32, 153, 255, .48);
+        box-shadow: 0 8px 22px rgba(0, 12, 30, .22), 0 0 16px rgba(0, 157, 255, .08);
+        font-size: 16px;
+    }
+
+    .accesos-cuenta .acceso-panel-revendedor svg:first-child {
+        width: 48px;
+        height: 48px;
+        flex-basis: 48px;
+        padding: 11px;
+        border: 1px solid rgba(65, 159, 255, .55);
+        border-radius: 17px;
+        background: linear-gradient(145deg, #173c70, #0b2447);
+        stroke: #36a9ff;
+    }
+
+    .acceso-panel-revendedor .flecha-panel-revendedor {
+        width: 21px;
+        height: 21px;
+        flex-basis: 21px;
+        stroke: #9bb9d9;
+    }
+
+    .accesos-cuenta .acceso-referidos {
+        grid-column: 1;
+        grid-row: 2;
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        aspect-ratio: 1 / 1;
+        margin: 0;
+        padding: 12px 8px;
+        gap: 10px;
+        border-radius: 20px;
+        border-color: rgba(32, 153, 255, .38);
+        background: linear-gradient(155deg, #102b50, #081a35);
+        box-shadow: 0 8px 20px rgba(0, 12, 30, .2);
+        font-size: 13px;
+    }
+
+    .accesos-cuenta .acceso-referidos svg {
+        width: 34px;
+        height: 34px;
+        stroke: #36a9ff;
+    }
+
+    .lista-opciones {
+        gap: 15px;
+    }
+
+    .titulo-seccion-cuenta {
+        margin: 8px 0 0;
+        padding-left: 17px;
+        font-size: 23px;
+        letter-spacing: -.45px;
+    }
+
+    .grupo-cuenta {
+        border-radius: 20px;
+        border-color: rgba(48, 102, 153, .58);
+        background: linear-gradient(145deg, #0a1b32, #071426);
+        box-shadow: 0 9px 25px rgba(0, 8, 22, .22);
+    }
+
+    .grupo-cuenta > .acordeon + .acordeon {
+        border-top-color: rgba(75, 115, 157, .28);
+    }
+
+    .grupo-cuenta > .acordeon,
+    .grupo-cuenta > .acceso-ayuda-directo {
+        background: transparent;
+    }
+
+    .acordeon summary,
+    .acceso-ayuda-directo {
+        min-height: 91px;
+        padding: 15px 17px;
+        gap: 17px;
+    }
+
+    .icono-opcion {
+        width: 54px;
+        height: 54px;
+        min-width: 54px;
+        padding: 13px;
+        border-radius: 17px;
+        border-color: rgba(67, 145, 232, .55);
+        background: linear-gradient(145deg, #173b70, #0b2345);
+        color: #38a5ff;
+        box-shadow: 0 5px 15px rgba(0, 8, 25, .28), inset 0 0 12px rgba(0, 140, 255, .08);
+    }
+
+    .opcion-texto {
+        font-size: 16px;
+        line-height: 1.3;
+    }
+
+    .icono-flecha {
+        width: 21px;
+        height: 21px;
+        color: #a9c5e4;
+    }
+
+    .contenido-acordeon {
+        padding: 5px 14px 2px 88px;
+    }
+
+    @media (max-width: 400px) {
+        .accesos-cuenta {
+            gap: 9px;
+        }
+
+        .accesos-cuenta .acceso-panel-revendedor {
+            min-height: 82px;
+            padding: 13px;
+        }
+
+        .acordeon summary,
+        .acceso-ayuda-directo {
+            min-height: 84px;
+            padding: 13px 12px;
+            gap: 12px;
+        }
+
+        .icono-opcion {
+            width: 49px;
+            height: 49px;
+            min-width: 49px;
+            padding: 11px;
+        }
+
+        .opcion-texto {
+            font-size: 15px;
+        }
+
+        .contenido-acordeon {
+            padding-left: 70px;
+        }
+    }
+
 </style>
  
 <script>
