@@ -1585,6 +1585,149 @@
             .icono-estadistica svg { width: 31px; height: 31px; }
         }
 
+
+        /* Ajuste compacto: proporciones y márgenes de la referencia móvil */
+        .card {
+            padding: 20px 18px;
+        }
+
+        .saldo {
+            min-height: 0;
+            margin: 0 0 14px;
+            padding: 20px 18px;
+            border-radius: 19px;
+        }
+
+        .saldo-titulo {
+            margin-bottom: 11px;
+            font-size: 12px;
+        }
+
+        .saldo-valor {
+            font-size: clamp(29px, 7vw, 38px);
+        }
+
+        .gvr-escudo-wallet,
+        .saldo-emblema {
+            width: 62px;
+            height: 62px;
+            flex-basis: 62px;
+            padding: 9px;
+            border-radius: 15px;
+        }
+
+        .estadisticas-mes {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin: 0 0 16px;
+        }
+
+        .estadistica-mes {
+            min-height: 132px;
+            padding: 13px 12px;
+            border-radius: 16px;
+            gap: 8px;
+        }
+
+        .estadistica-cabecera {
+            min-height: 48px;
+            gap: 6px;
+        }
+
+        .estadistica-cabecera .estadistica-etiqueta {
+            padding-top: 3px;
+            font-size: 10px;
+            line-height: 1.35;
+        }
+
+        .icono-estadistica {
+            width: 48px;
+            height: 48px;
+            flex-basis: 48px;
+            border-radius: 13px;
+        }
+
+        .icono-estadistica svg {
+            width: 31px;
+            height: 31px;
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .estadistica-valor {
+            font-size: clamp(19px, 4.8vw, 24px);
+        }
+
+        .estadistica-movimientos {
+            grid-column: 1 / -1;
+            min-height: 76px;
+            flex-direction: row;
+            align-items: center;
+            padding: 12px 14px;
+        }
+
+        .estadistica-movimientos .estadistica-cabecera {
+            min-height: 0;
+            flex: 1;
+            align-items: center;
+        }
+
+        .estadistica-movimientos .estadistica-valor {
+            margin: 0 5px 0 0;
+        }
+
+        .acciones-wallet {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin: 0 0 18px;
+        }
+
+        .accion-wallet {
+            aspect-ratio: auto;
+            min-height: 76px;
+            padding: 9px 11px;
+            flex-direction: row;
+            gap: 10px;
+            border-radius: 15px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .icono-accion-wallet {
+            width: 48px;
+            height: 48px;
+            flex-basis: 48px;
+            border-radius: 12px;
+        }
+
+        .icono-accion-wallet svg {
+            width: 31px;
+            height: 31px;
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .movimientos {
+            margin-top: 18px;
+        }
+
+        @media (max-width: 400px) {
+            .card { padding: 17px 14px; }
+            .saldo { padding: 17px 14px; }
+            .gvr-escudo-wallet, .saldo-emblema {
+                width: 54px;
+                height: 54px;
+                flex-basis: 54px;
+            }
+            .estadisticas-mes { gap: 10px; }
+            .estadistica-mes { min-height: 122px; padding: 11px 9px; }
+            .icono-estadistica { width: 43px; height: 43px; flex-basis: 43px; }
+            .icono-estadistica svg { width: 28px; height: 28px; }
+            .accion-wallet { min-height: 68px; gap: 7px; padding: 8px; font-size: 11px; }
+            .icono-accion-wallet { width: 42px; height: 42px; flex-basis: 42px; }
+            .icono-accion-wallet svg { width: 28px; height: 28px; }
+        }
+
 </style>
  
 <script>
