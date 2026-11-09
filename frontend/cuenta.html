@@ -2059,29 +2059,43 @@
         flex: 0 0 24px;
     }
 
-    /* Dimensiones compactas como la referencia: filas de Mi cuenta */
+    /* Separación entre opciones y pictogramas compactos */
     .lista-opciones {
-        gap: 6px;
+        gap: 10px;
     }
 
     .grupo-cuenta {
-        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .grupo-cuenta > .acordeon,
+    .grupo-cuenta > .acceso-ayuda-directo {
+        border: 1px solid rgba(23, 100, 154, .72);
+        border-radius: 13px;
+        background: #061226;
         overflow: hidden;
     }
 
     .grupo-cuenta > .acordeon summary,
     .grupo-cuenta > .acceso-ayuda-directo {
-        min-height: 66px;
-        padding: 10px 13px;
-        gap: 12px;
+        min-height: 64px;
+        padding: 9px 12px;
+        gap: 11px;
     }
 
     .grupo-cuenta > .acordeon .icono-opcion {
-        width: 42px;
-        height: 42px;
-        min-width: 42px;
-        padding: 9px;
-        border-radius: 13px;
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        padding: 7px;
+        border-radius: 10px;
     }
 
     .grupo-cuenta > .acordeon .opcion-texto {
@@ -2090,8 +2104,8 @@
     }
 
     .grupo-cuenta > .acordeon .icono-flecha {
-        width: 18px;
-        height: 18px;
+        width: 17px;
+        height: 17px;
     }
 
     .grupo-cuenta > .acordeon + .acordeon {
@@ -2099,18 +2113,22 @@
     }
 
     @media (max-width: 400px) {
+        .grupo-cuenta {
+            gap: 8px;
+        }
+
         .grupo-cuenta > .acordeon summary,
         .grupo-cuenta > .acceso-ayuda-directo {
-            min-height: 64px;
-            padding: 9px 11px;
-            gap: 10px;
+            min-height: 60px;
+            padding: 8px 10px;
+            gap: 9px;
         }
 
         .grupo-cuenta > .acordeon .icono-opcion {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
-            padding: 8px;
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            padding: 6px;
         }
     }
 
