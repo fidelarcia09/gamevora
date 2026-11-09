@@ -1444,6 +1444,147 @@
             .icono-accion-wallet svg { width: 21px; height: 21px; }
         }
 
+
+        /* Iconografía de tarjetas: marco exterior y SVG en marco interior */
+        .estadistica-mes {
+            position: relative;
+            min-height: 142px;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 16px;
+        }
+
+        .estadistica-cabecera {
+            display: flex;
+            min-height: 58px;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .estadistica-cabecera .estadistica-etiqueta {
+            padding-top: 5px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .35px;
+            text-transform: uppercase;
+        }
+
+        .icono-estadistica {
+            display: flex;
+            width: 58px;
+            height: 58px;
+            flex: 0 0 58px;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(54, 205, 190, .18);
+            border-radius: 15px;
+            background: linear-gradient(145deg, rgba(27, 194, 171, .17), rgba(32, 197, 255, .09));
+            box-shadow: inset 0 1px rgba(255,255,255,.045), 0 5px 16px rgba(0,0,0,.12);
+        }
+
+        .icono-estadistica svg {
+            display: block;
+            width: 34px;
+            height: 34px;
+            padding: 5px;
+            border: 1px solid rgba(71, 221, 205, .24);
+            border-radius: 9px;
+            background: rgba(4, 19, 34, .38);
+            fill: none;
+            stroke: #55ddcb;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .estadistica-valor {
+            margin-top: auto;
+            font-size: clamp(20px, 4.8vw, 25px);
+        }
+
+        .estadistica-movimientos {
+            grid-column: 1 / -1;
+            min-height: 112px;
+        }
+
+        .estadistica-movimientos .estadistica-cabecera {
+            min-height: 48px;
+        }
+
+        /* Botones cuadrados con doble marco alrededor de cada icono */
+        .acciones-wallet {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-items: stretch;
+            gap: 12px;
+            margin: 0 0 22px;
+        }
+
+        .accion-wallet {
+            aspect-ratio: 1 / .88;
+            min-height: 0;
+            padding: 15px 10px;
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+            border-radius: 19px;
+            font-size: 14px;
+            letter-spacing: .15px;
+        }
+
+        .icono-accion-wallet {
+            width: 66px;
+            height: 66px;
+            flex: 0 0 66px;
+            border-radius: 17px;
+            border: 1px solid rgba(75, 202, 255, .3);
+            background: linear-gradient(145deg, rgba(32, 197, 255, .16), rgba(8, 124, 255, .08));
+            box-shadow: inset 0 1px rgba(255,255,255,.07), 0 7px 18px rgba(0,0,0,.16);
+        }
+
+        .icono-accion-wallet svg {
+            width: 38px;
+            height: 38px;
+            padding: 6px;
+            border: 1px solid rgba(123, 224, 255, .27);
+            border-radius: 10px;
+            background: rgba(4, 19, 34, .42);
+            stroke: #7be0ff;
+        }
+
+        .accion-wallet.enviar .icono-accion-wallet {
+            border-color: rgba(38, 214, 178, .3);
+            background: linear-gradient(145deg, rgba(20, 195, 158, .17), rgba(8, 124, 255, .08));
+        }
+
+        .accion-wallet.enviar .icono-accion-wallet svg {
+            border-color: rgba(87, 228, 194, .28);
+            stroke: #57e4c2;
+        }
+
+        @media (max-width: 400px) {
+            .accion-wallet {
+                aspect-ratio: 1 / .92;
+                padding: 12px 8px;
+                gap: 10px;
+                font-size: 12px;
+            }
+            .icono-accion-wallet {
+                width: 58px;
+                height: 58px;
+                flex-basis: 58px;
+            }
+            .icono-accion-wallet svg {
+                width: 34px;
+                height: 34px;
+            }
+            .estadistica-mes { min-height: 132px; padding: 13px 11px; }
+            .estadistica-cabecera { min-height: 54px; }
+            .icono-estadistica { width: 50px; height: 50px; flex-basis: 50px; }
+            .icono-estadistica svg { width: 31px; height: 31px; }
+        }
+
 </style>
  
 <script>
@@ -1509,16 +1650,41 @@
 
             <section class="estadisticas-mes" aria-label="Resumen del mes">
                 <div class="estadistica-mes">
+                    <div class="estadistica-cabecera">
+                        <span class="estadistica-etiqueta" id="etiquetaEntradasMes">Entró este mes</span>
+                        <span class="icono-estadistica" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 12.5 9.5 17 19 7.5"></path>
+                                <circle cx="12" cy="12" r="9"></circle>
+                            </svg>
+                        </span>
+                    </div>
                     <strong class="estadistica-valor entrada-mes" id="entradasMes">Cargando...</strong>
-                    <span class="estadistica-etiqueta" id="etiquetaEntradasMes">Entró este mes</span>
                 </div>
                 <div class="estadistica-mes">
+                    <div class="estadistica-cabecera">
+                        <span class="estadistica-etiqueta" id="etiquetaGastosMes">Gastado este mes</span>
+                        <span class="icono-estadistica" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 3v18h18"></path>
+                                <path d="m7 14 4-4 3 2 6-7"></path>
+                                <path d="M16 5h4v4"></path>
+                            </svg>
+                        </span>
+                    </div>
                     <strong class="estadistica-valor salida-mes" id="gastosMes">Cargando...</strong>
-                    <span class="estadistica-etiqueta" id="etiquetaGastosMes">Gastado este mes</span>
                 </div>
-                <div class="estadistica-mes">
+                <div class="estadistica-mes estadistica-movimientos">
+                    <div class="estadistica-cabecera">
+                        <span class="estadistica-etiqueta">Movimientos</span>
+                        <span class="icono-estadistica" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M7 3h8l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"></path>
+                                <path d="M15 3v5h5M9 13h6M9 17h6"></path>
+                            </svg>
+                        </span>
+                    </div>
                     <strong class="estadistica-valor" id="movimientosMes">—</strong>
-                    <span class="estadistica-etiqueta">Movimientos</span>
                 </div>
             </section>
 
