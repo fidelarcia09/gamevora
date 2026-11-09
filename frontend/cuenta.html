@@ -2059,69 +2059,59 @@
         flex: 0 0 24px;
     }
 
-    /* Ajuste de dimensiones de botones: conserva intacta la paleta GGT */
-    .avatar-acciones {
+    /* Dimensiones compactas como la referencia: filas de Mi cuenta */
+    .lista-opciones {
+        gap: 6px;
+    }
+
+    .grupo-cuenta {
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .grupo-cuenta > .acordeon summary,
+    .grupo-cuenta > .acceso-ayuda-directo {
+        min-height: 66px;
+        padding: 10px 13px;
         gap: 12px;
     }
 
-    .avatar-accion {
-        min-height: 80px;
-        flex: 1 1 0;
-        padding: 16px 18px;
-        border-radius: 18px;
+    .grupo-cuenta > .acordeon .icono-opcion {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        padding: 9px;
+        border-radius: 13px;
+    }
+
+    .grupo-cuenta > .acordeon .opcion-texto {
         font-size: 14px;
+        line-height: 1.25;
     }
 
-    .avatar-accion .icono-accion {
-        width: 22px;
-        height: 22px;
-        flex-basis: 22px;
+    .grupo-cuenta > .acordeon .icono-flecha {
+        width: 18px;
+        height: 18px;
     }
 
-    .acceso-panel-revendedor {
-        min-height: 88px;
-        padding: 16px 18px;
-        border-radius: 18px;
+    .grupo-cuenta > .acordeon + .acordeon {
+        border-top-width: 1px;
     }
 
-    .acceso-referidos,
-    .accesos-cuenta .acceso-referidos {
-        width: 94px;
-        min-height: 94px;
-        flex-basis: 94px;
-        padding: 12px 8px;
-        border-radius: 18px;
-        gap: 8px;
-        font-size: 13px;
-    }
+    @media (max-width: 400px) {
+        .grupo-cuenta > .acordeon summary,
+        .grupo-cuenta > .acceso-ayuda-directo {
+            min-height: 64px;
+            padding: 9px 11px;
+            gap: 10px;
+        }
 
-    .acceso-referidos svg {
-        width: 29px;
-        height: 29px;
-    }
-
-    .acordeon summary,
-    .acceso-ayuda-directo {
-        min-height: 72px;
-        padding: 14px 16px;
-    }
-
-    .icono-opcion {
-        width: 48px;
-        height: 48px;
-        min-width: 48px;
-        border-radius: 15px;
-    }
-
-    .boton,
-    .boton-admin,
-    .boton-soporte,
-    .boton-cerrar,
-    .boton-notificaciones,
-    .boton-salud {
-        min-height: 48px;
-        padding: 13px 18px;
-        border-radius: 14px !important;
+        .grupo-cuenta > .acordeon .icono-opcion {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            padding: 8px;
+        }
     }
 
 </style>
