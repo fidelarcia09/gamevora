@@ -1397,6 +1397,53 @@
             .accion-wallet { transition: none; }
         }
 
+
+        .icono-accion-wallet {
+            display: inline-flex;
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(75, 202, 255, .22);
+            border-radius: 13px;
+            background: linear-gradient(145deg, rgba(32, 197, 255, .15), rgba(8, 124, 255, .07));
+            box-shadow: inset 0 1px rgba(255,255,255,.06), 0 5px 14px rgba(0,0,0,.12);
+        }
+
+        .icono-accion-wallet svg {
+            display: block;
+            width: 23px;
+            height: 23px;
+            fill: none;
+            stroke: #7be0ff;
+            stroke-width: 1.75;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .accion-wallet {
+            min-height: 76px;
+            gap: 11px;
+            font-size: 14px;
+            letter-spacing: .1px;
+        }
+
+        .accion-wallet.enviar .icono-accion-wallet {
+            border-color: rgba(38, 214, 178, .22);
+            background: linear-gradient(145deg, rgba(20, 195, 158, .16), rgba(8, 124, 255, .07));
+        }
+
+        .accion-wallet.enviar .icono-accion-wallet svg {
+            stroke: #57e4c2;
+        }
+
+        @media (max-width: 400px) {
+            .accion-wallet { min-height: 70px; gap: 8px; font-size: 12px; }
+            .icono-accion-wallet { width: 37px; height: 37px; flex-basis: 37px; }
+            .icono-accion-wallet svg { width: 21px; height: 21px; }
+        }
+
 </style>
  
 <script>
@@ -1446,24 +1493,6 @@
                 Consulta tu saldo y administra tus GVR.
             </p>
 
-            <nav class="acciones-wallet" aria-label="Acciones de la wallet">
-                <a href="recargar-gvr.html" class="accion-wallet">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <circle cx="12" cy="12" r="9"></circle>
-                        <path d="M12 8v8M8 12h8"></path>
-                    </svg>
-                    <span>Añadir GVR</span>
-                </a>
-
-                <a href="enviar-gvr.html" class="accion-wallet enviar">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M22 2 11 13"></path>
-                        <path d="m22 2-7 20-4-9-9-4Z"></path>
-                    </svg>
-                    <span>Enviar GVR</span>
-                </a>
-            </nav>
-
             <section class="saldo" aria-label="Saldo disponible">
                 <div class="saldo-contenido">
                     <div class="saldo-titulo">Saldo disponible</div>
@@ -1492,6 +1521,32 @@
                     <span class="estadistica-etiqueta">Movimientos</span>
                 </div>
             </section>
+
+            <nav class="acciones-wallet" aria-label="Acciones de la wallet">
+                <a href="recargar-gvr.html" class="accion-wallet">
+                    <span class="icono-accion-wallet" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4.5 7.5h13a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2h11"></path>
+                            <path d="M2.5 8h17"></path>
+                            <path d="M15 13h4.5v4H15a2 2 0 0 1 0-4Z"></path>
+                            <path d="M18 15h.01"></path>
+                            <path d="M17 2.5v6M14 5.5h6"></path>
+                        </svg>
+                    </span>
+                    <span>Añadir GVR</span>
+                </a>
+
+                <a href="enviar-gvr.html" class="accion-wallet enviar">
+                    <span class="icono-accion-wallet" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="m21.5 2.5-7.2 19-4.1-8.1-8.2-4.1 19.5-6.8Z"></path>
+                            <path d="M10.2 13.4 21.5 2.5"></path>
+                            <path d="m10.2 13.4-.5 6.1"></path>
+                        </svg>
+                    </span>
+                    <span>Enviar GVR</span>
+                </a>
+            </nav>
 
             <section class="movimientos">
 
