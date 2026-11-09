@@ -1247,6 +1247,156 @@
 
 
 
+ 
+        /* Composición Wallet inspirada en el nuevo resumen móvil de GGT */
+        .acciones-wallet {
+            margin: 0 0 18px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .accion-wallet {
+            min-height: 66px;
+            padding: 12px 14px;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+            border-radius: 14px;
+            font-size: 14px;
+            background: linear-gradient(105deg, #087cff, #08a98e);
+            border-color: rgba(32, 197, 255, .25);
+            box-shadow: 0 8px 22px rgba(0, 124, 255, .16);
+        }
+
+        .accion-wallet svg {
+            width: 23px;
+            height: 23px;
+            flex-basis: 23px;
+            stroke: #ffffff;
+        }
+
+        .accion-wallet.enviar {
+            background: linear-gradient(145deg, #0c2039, #0a2940);
+            border-color: rgba(32, 197, 255, .2);
+        }
+
+        .accion-wallet.enviar svg {
+            stroke: #58dcff;
+        }
+
+        .saldo {
+            min-height: 190px;
+            margin: 0 0 16px;
+            padding: 24px 22px;
+            align-items: center;
+            background:
+                radial-gradient(circle at 88% 28%, rgba(32, 197, 255, .16), transparent 38%),
+                linear-gradient(135deg, #0c1b31, #0a2940 72%, #092a32);
+            border: 1px solid rgba(88, 220, 255, .2);
+            border-radius: 20px;
+            box-shadow: 0 14px 34px rgba(0, 0, 0, .2), inset 0 1px rgba(255,255,255,.035);
+        }
+
+        .saldo-titulo {
+            color: #9db2c9;
+            background: transparent;
+            border: 0;
+            padding: 0;
+            margin-bottom: 15px;
+            font-size: 13px;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+        }
+
+        .saldo-valor {
+            font-size: clamp(31px, 7vw, 43px);
+            letter-spacing: -1px;
+        }
+
+        .saldo-emblema,
+        .gvr-escudo-wallet {
+            width: 76px;
+            height: 76px;
+            object-fit: contain;
+            flex: 0 0 76px;
+            margin: 0;
+            padding: 12px;
+            border-radius: 18px;
+            background: rgba(32, 197, 255, .08);
+            border: 1px solid rgba(32, 197, 255, .15);
+            box-shadow: none;
+        }
+
+        .estadisticas-mes {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            width: 100%;
+            margin: 0 0 8px;
+            overflow: visible;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+        }
+
+        .estadistica-mes {
+            min-height: 128px;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 17px 15px;
+            text-align: left;
+            border: 1px solid rgba(105, 158, 215, .18);
+            border-radius: 17px;
+            background: linear-gradient(145deg, #0c1a2d, #0a1425);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, .12);
+        }
+
+        .estadistica-mes + .estadistica-mes {
+            border-left: 1px solid rgba(105, 158, 215, .18);
+        }
+
+        .estadistica-valor {
+            font-size: clamp(17px, 4.2vw, 22px);
+        }
+
+        .estadistica-etiqueta {
+            color: #91a6c0;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .movimientos {
+            margin-top: 25px;
+        }
+
+        .movimiento {
+            background: linear-gradient(125deg, #0c1a2d, #0a1628);
+            border-color: rgba(105, 158, 215, .16);
+        }
+
+        @media (max-width: 400px) {
+            .acciones-wallet { gap: 8px; }
+            .accion-wallet {
+                min-height: 62px;
+                padding: 10px 7px;
+                gap: 7px;
+                font-size: 12px;
+            }
+            .saldo { padding: 20px 15px; }
+            .saldo-emblema, .gvr-escudo-wallet {
+                width: 62px;
+                height: 62px;
+                flex-basis: 62px;
+                padding: 9px;
+            }
+            .estadistica-mes { min-height: 118px; padding: 14px 11px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .accion-wallet { transition: none; }
+        }
+
 </style>
  
 <script>
@@ -1296,47 +1446,6 @@
                 Consulta tu saldo y administra tus GVR.
             </p>
 
-            <section class="saldo" aria-label="Saldo disponible">
-
-
-                <div class="saldo-contenido">
-                    <div class="saldo-titulo">
-                        Saldo disponible
-                    </div>
-
-                    <div
-                        class="saldo-valor"
-                        id="saldoGVR"
-                        aria-live="polite">
-                        Cargando...
-                    </div>
-                </div>
-
-                <img
-                    class="gvr-escudo-wallet"
-                    src="./gvr-escudo.svg"
-                    alt=""
-                    aria-hidden="true"
-                    width="43"
-                    height="48">
-
-                <div class="estadisticas-mes" aria-label="Resumen del mes">
-                    <div class="estadistica-mes">
-                        <strong class="estadistica-valor entrada-mes" id="entradasMes">Cargando...</strong>
-                        <span class="estadistica-etiqueta" id="etiquetaEntradasMes">Entró este mes</span>
-                    </div>
-                    <div class="estadistica-mes">
-                        <strong class="estadistica-valor salida-mes" id="gastosMes">Cargando...</strong>
-                        <span class="estadistica-etiqueta" id="etiquetaGastosMes">Gastado este mes</span>
-                    </div>
-                    <div class="estadistica-mes">
-                        <strong class="estadistica-valor" id="movimientosMes">—</strong>
-                        <span class="estadistica-etiqueta">Movimientos</span>
-                    </div>
-                </div>
-
-            </section>
-
             <nav class="acciones-wallet" aria-label="Acciones de la wallet">
                 <a href="recargar-gvr.html" class="accion-wallet">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1354,6 +1463,35 @@
                     <span>Enviar GVR</span>
                 </a>
             </nav>
+
+            <section class="saldo" aria-label="Saldo disponible">
+                <div class="saldo-contenido">
+                    <div class="saldo-titulo">Saldo disponible</div>
+                    <div class="saldo-valor" id="saldoGVR" aria-live="polite">Cargando...</div>
+                </div>
+                <img
+                    class="gvr-escudo-wallet"
+                    src="./gvr-escudo.svg"
+                    alt=""
+                    aria-hidden="true"
+                    width="43"
+                    height="48">
+            </section>
+
+            <section class="estadisticas-mes" aria-label="Resumen del mes">
+                <div class="estadistica-mes">
+                    <strong class="estadistica-valor entrada-mes" id="entradasMes">Cargando...</strong>
+                    <span class="estadistica-etiqueta" id="etiquetaEntradasMes">Entró este mes</span>
+                </div>
+                <div class="estadistica-mes">
+                    <strong class="estadistica-valor salida-mes" id="gastosMes">Cargando...</strong>
+                    <span class="estadistica-etiqueta" id="etiquetaGastosMes">Gastado este mes</span>
+                </div>
+                <div class="estadistica-mes">
+                    <strong class="estadistica-valor" id="movimientosMes">—</strong>
+                    <span class="estadistica-etiqueta">Movimientos</span>
+                </div>
+            </section>
 
             <section class="movimientos">
 
