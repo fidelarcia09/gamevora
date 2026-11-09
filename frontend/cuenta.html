@@ -2027,6 +2027,38 @@
     }
 
 
+    /* Medidas de referencia para los dos botones principales del perfil */
+    .datos-resumen-perfil > .avatar-acciones {
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        gap: 12px;
+        width: min(100%, 520px);
+        max-width: 520px;
+        margin: 8px auto 12px;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .datos-resumen-perfil > .avatar-acciones .avatar-accion {
+        flex: 1 1 0 !important;
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0;
+        min-height: 82px;
+        padding: 14px 16px;
+        gap: 9px;
+        border-radius: 25px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .datos-resumen-perfil > .avatar-acciones .icono-accion {
+        width: 24px;
+        height: 24px;
+        flex: 0 0 24px;
+    }
+
     /* Ajuste de dimensiones de botones: conserva intacta la paleta GGT */
     .avatar-acciones {
         gap: 12px;
