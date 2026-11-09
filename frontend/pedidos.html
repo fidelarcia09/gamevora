@@ -373,7 +373,13 @@
     const rutaImagen = item.tipo === "juego" ? rutaImagenJuego(item.titulo) : "";
     const visualJuego = document.createElement("span");
     visualJuego.className = "icono-juego";
-    if (rutaImagen) {
+    if (item.tipo === "gvr_solicitud" || item.tipo === "gvr_anterior") {
+      const escudo = document.createElement("img");
+      escudo.src = "./gvr-escudo.svg";
+      escudo.alt = "";
+      escudo.loading = "lazy";
+      visualJuego.appendChild(escudo);
+    } else if (rutaImagen) {
       const imagen = document.createElement("img");
       imagen.src = rutaImagen;
       imagen.alt = "";
