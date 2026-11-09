@@ -2140,7 +2140,7 @@
             <button type="button" id="botonQuitarFoto" class="avatar-accion quitar">Quitar imagen</button>
         </div>
 
-        <section class="seccion-negocio" aria-labelledby="tituloTuNegocio">
+        <section class="seccion-negocio" aria-labelledby="tituloTuNegocio" hidden>
             <h2 class="seccion-negocio-titulo" id="tituloTuNegocio">Tu negocio</h2>
             <div class="accesos-cuenta" aria-label="Accesos de tu negocio">
                 <a class="acceso-referidos" href="referidos.html" aria-label="Abrir programa de referidos">
@@ -3573,7 +3573,11 @@ let usuarioCuentaIdParaRango = null;
 async function actualizarRangoPerfilRevendedor(usuarioId) {
     const etiquetaRevendedor = document.getElementById("etiquetaRevendedor");
     const rangoPerfil = document.getElementById("rangoPerfilResumen");
-    if (!etiquetaRevendedor || !rangoPerfil || !usuarioId) return;
+    const seccionNegocio = document.querySelector(".seccion-negocio");
+    if (!etiquetaRevendedor || !rangoPerfil || !seccionNegocio || !usuarioId) return;
+
+    // La sección de negocio solo se muestra a cuentas con rol Revendedor activo.
+    seccionNegocio.hidden = true;
 
     try {
         const { data: perfilRevendedor, error: errorPerfilRevendedor } =
@@ -3592,6 +3596,8 @@ async function actualizarRangoPerfilRevendedor(usuarioId) {
             rangoPerfil.replaceChildren();
             return;
         }
+
+        seccionNegocio.hidden = false;
 
         const { data: stats, error: errorStats } =
             await supabaseClient.rpc("get_reseller_dashboard_stats");
