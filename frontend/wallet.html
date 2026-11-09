@@ -1822,17 +1822,17 @@
             </p>
 
             <section class="saldo" aria-label="Saldo disponible">
-                <div class="saldo-contenido">
-                    <div class="saldo-titulo">Saldo disponible</div>
-                    <div class="saldo-valor" id="saldoGVR" aria-live="polite">Cargando...</div>
-                </div>
                 <img
                     class="gvr-escudo-wallet"
                     src="./gvr-escudo.svg"
                     alt=""
                     aria-hidden="true"
-                    width="43"
-                    height="48">
+                    width="56"
+                    height="62">
+                <div class="saldo-contenido">
+                    <div class="saldo-titulo">Saldo disponible</div>
+                    <div class="saldo-valor" id="saldoGVR" aria-live="polite">Cargando...</div>
+                </div>
             </section>
 
             <section class="estadisticas-mes" aria-label="Resumen del mes">
@@ -1841,8 +1841,9 @@
                         <span class="estadistica-etiqueta" id="etiquetaEntradasMes">Entró este mes</span>
                         <span class="icono-estadistica" aria-hidden="true">
                             <svg viewBox="0 0 24 24">
-                                <path d="M5 12.5 9.5 17 19 7.5"></path>
-                                <circle cx="12" cy="12" r="9"></circle>
+                                <path d="M12 2.8 19 5.6v5.1c0 4.8-2.9 8.4-7 10.5-4.1-2.1-7-5.7-7-10.5V5.6l7-2.8Z"></path>
+                                <path d="m8.3 12.1 2.4 2.4 5-5.2"></path>
+                                <path d="M8.2 6.9 12 5.4l3.8 1.5"></path>
                             </svg>
                         </span>
                     </div>
@@ -1860,18 +1861,6 @@
                         </span>
                     </div>
                     <strong class="estadistica-valor salida-mes" id="gastosMes">Cargando...</strong>
-                </div>
-                <div class="estadistica-mes estadistica-movimientos">
-                    <div class="estadistica-cabecera">
-                        <span class="estadistica-etiqueta">Movimientos</span>
-                        <span class="icono-estadistica" aria-hidden="true">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M7 3h8l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"></path>
-                                <path d="M15 3v5h5M9 13h6M9 17h6"></path>
-                            </svg>
-                        </span>
-                    </div>
-                    <strong class="estadistica-valor" id="movimientosMes">—</strong>
                 </div>
             </section>
 
@@ -2175,7 +2164,6 @@
         async function cargarEstadisticasMes(usuarioId) {
             const entradasElemento = document.getElementById("entradasMes");
             const gastosElemento = document.getElementById("gastosMes");
-            const movimientosElemento = document.getElementById("movimientosMes");
             const etiquetaEntradas = document.getElementById("etiquetaEntradasMes");
             const etiquetaGastos = document.getElementById("etiquetaGastosMes");
 
@@ -2198,7 +2186,6 @@
                 console.error("Error consultando el reinicio de estadísticas:", errorBase);
                 entradasElemento.textContent = "—";
                 gastosElemento.textContent = "—";
-                movimientosElemento.textContent = "—";
                 return;
             }
 
@@ -2287,7 +2274,6 @@
 
             entradasElemento.textContent = `+${formatoCantidad(totalEntradas)} GVR`;
             gastosElemento.textContent = `−${formatoCantidad(totalGastos)} GVR`;
-            movimientosElemento.textContent = String(registros.length);
         }
 
         async function cargarWallet() {
@@ -2531,3 +2517,100 @@
 <script src="./tema-global.js?v=20261023-1" defer></script>
 </body>
                     </html>
+
+
+        /* Ajuste final solicitado: saldo centrado con escudo y verificación refinada */
+        .saldo {
+            min-height: 0;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 23px 18px 25px;
+            text-align: center;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(0, 183, 255, .22), transparent 58%),
+                linear-gradient(135deg, #08244a, #063467);
+            border: 1px solid #168cff;
+            border-radius: 16px;
+            box-shadow: 0 0 18px rgba(0, 140, 255, .2), inset 0 0 20px rgba(0, 183, 255, .07);
+        }
+
+        .saldo-contenido {
+            flex: 0 0 auto;
+            width: 100%;
+            text-align: center;
+        }
+
+        .gvr-escudo-wallet {
+            display: block;
+            width: 54px;
+            height: 60px;
+            flex: 0 0 auto;
+            padding: 0;
+            margin: 0 auto 2px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(0, 190, 255, .38));
+        }
+
+        .saldo-titulo {
+            display: block;
+            margin: 0 0 8px;
+            padding: 0;
+            color: #b9dcff;
+            background: transparent;
+            border: 0;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .saldo-valor {
+            font-size: clamp(30px, 7vw, 40px);
+            line-height: 1.15;
+            letter-spacing: -.7px;
+            text-align: center;
+        }
+
+        .estadisticas-mes {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .estadistica-movimientos {
+            display: none !important;
+        }
+
+        .estadistica-mes {
+            border: 1px solid rgba(105, 158, 215, .16);
+        }
+
+        .estadistica-mes + .estadistica-mes {
+            border-left: 1px solid rgba(105, 158, 215, .16);
+        }
+
+        .icono-estadistica {
+            width: auto;
+            height: auto;
+            flex: 0 0 auto;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .icono-estadistica svg {
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            stroke: #55ddcb;
+            stroke-width: 1.9;
+            filter: drop-shadow(0 0 5px rgba(85, 221, 203, .2));
+        }
+
+        @media (max-width: 400px) {
+            .saldo { padding: 21px 14px 23px; }
+            .gvr-escudo-wallet { width: 49px; height: 55px; }
+            .icono-estadistica svg { width: 32px; height: 32px; }
+        }
