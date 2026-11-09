@@ -2132,6 +2132,84 @@
         }
     }
 
+
+    /* Ajustes finales: título Ayuda y paneles con el mismo tamaño de las opciones */
+    .titulo-seccion-cuenta.titulo-ayuda {
+        margin-top: 8px;
+        padding-left: 12px;
+        font-size: 18px;
+        letter-spacing: -.2px;
+    }
+
+    #panelAdministracion summary {
+        min-height: 64px;
+        padding: 9px 12px;
+        gap: 11px;
+    }
+
+    #panelAdministracion .icono-opcion {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        padding: 7px;
+        border-radius: 10px;
+    }
+
+    #panelAdministracion .opcion-texto {
+        font-size: 14px;
+        line-height: 1.25;
+    }
+
+    #panelAdministracion .icono-flecha {
+        width: 17px;
+        height: 17px;
+    }
+
+    .accesos-cuenta .acceso-panel-revendedor {
+        min-height: 64px;
+        padding: 9px 12px;
+        gap: 11px;
+        border-radius: 13px;
+        font-size: 14px;
+    }
+
+    .accesos-cuenta .acceso-panel-revendedor svg:first-child {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+        padding: 7px;
+        border-radius: 10px;
+    }
+
+    .acceso-panel-revendedor .flecha-panel-revendedor {
+        width: 17px;
+        height: 17px;
+        flex-basis: 17px;
+    }
+
+    @media (max-width: 400px) {
+        #panelAdministracion summary {
+            min-height: 60px;
+            padding: 8px 10px;
+            gap: 9px;
+        }
+
+        #panelAdministracion .icono-opcion,
+        .accesos-cuenta .acceso-panel-revendedor svg:first-child {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            flex-basis: 32px;
+            padding: 6px;
+        }
+
+        .accesos-cuenta .acceso-panel-revendedor {
+            min-height: 60px;
+            padding: 8px 10px;
+            gap: 9px;
+        }
+    }
+
 </style>
  
 <script>
@@ -2387,7 +2465,7 @@
             </details>
             </div>
 
-            <h2 class="titulo-seccion-cuenta">Ayuda</h2>
+            <h2 class="titulo-seccion-cuenta titulo-ayuda">Ayuda</h2>
 
             <!-- SOPORTE Y LEGAL: accesos agrupados como las opciones de Mi cuenta -->
             <div class="grupo-cuenta">
