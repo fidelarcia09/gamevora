@@ -1977,6 +1977,22 @@
         padding: 5px 14px 2px 88px;
     }
 
+    /* Unificar el fondo de todos los accesos de Cuenta con Panel de ventas. */
+    .accesos-cuenta .acceso-panel-revendedor,
+    .accesos-cuenta .acceso-referidos,
+    .grupo-cuenta,
+    .grupo-cuenta > .acordeon,
+    .grupo-cuenta > .acceso-ayuda-directo {
+        background: linear-gradient(145deg, #103b65, #08203b);
+    }
+
+    .acceso-panel-revendedor:hover,
+    .acceso-referidos:hover,
+    .acceso-ayuda-directo:hover {
+        background: linear-gradient(145deg, #103b65, #08203b);
+        filter: brightness(1.08);
+    }
+
     @media (max-width: 400px) {
         .accesos-cuenta {
             gap: 9px;
