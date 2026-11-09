@@ -2037,6 +2037,106 @@
             }
         }
 
+        
+        /* MOVIMIENTOS: diseño de tarjetas agrupadas por fecha */
+        .movimientos-cabecera h2 {
+            color: #f4f8ff;
+        }
+        .grupos-movimientos {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+        .grupo-movimientos {
+            min-width: 0;
+        }
+        .grupo-fecha {
+            margin: 0 0 11px 6px;
+            color: #aab8ca;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: .45px;
+            text-transform: uppercase;
+        }
+        .grupo-tarjeta {
+            overflow: hidden;
+            padding: 4px 16px;
+            border: 1px solid rgba(132, 169, 210, .22);
+            border-radius: 20px;
+            background: linear-gradient(145deg, #ffffff, #f7f9fd);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .17);
+        }
+        .grupo-tarjeta .movimiento {
+            min-height: 88px;
+            padding: 13px 2px;
+            gap: 13px;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            animation: none;
+        }
+        .grupo-tarjeta .movimiento + .movimiento {
+            border-top: 1px solid #e6eaf1;
+        }
+        .grupo-tarjeta .movimiento:hover {
+            transform: none;
+            background: transparent;
+        }
+        .grupo-tarjeta .movimiento-icono {
+            width: 48px;
+            height: 48px;
+            flex: 0 0 48px;
+            border: 0;
+            border-radius: 16px;
+            background: #e5edff;
+            color: #3479ed;
+            box-shadow: none;
+        }
+        .grupo-tarjeta .movimiento-icono svg {
+            width: 25px;
+            height: 25px;
+            stroke-width: 2.2;
+        }
+        .grupo-tarjeta .movimiento-titulo {
+            margin-bottom: 4px;
+            color: #171b24;
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .grupo-tarjeta .movimiento-fecha {
+            color: #858b97;
+            font-size: 12px;
+        }
+        .grupo-tarjeta .movimiento-monto {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+            color: #171b24;
+            font-size: 15px;
+            font-weight: 800;
+        }
+        .grupo-tarjeta .movimiento-monto .saldo-despues {
+            color: #858b97;
+            font-size: 12px;
+            font-weight: 400;
+        }
+        .grupo-tarjeta .positivo,
+        .grupo-tarjeta .negativo {
+            color: #171b24;
+        }
+        .movimientos .boton-movimientos {
+            margin-top: 14px;
+        }
+        @media (max-width: 380px) {
+            .grupo-tarjeta { padding: 3px 11px; }
+            .grupo-tarjeta .movimiento { gap: 9px; padding: 12px 1px; }
+            .grupo-tarjeta .movimiento-icono { width: 42px; height: 42px; flex-basis: 42px; }
+            .grupo-tarjeta .movimiento-titulo,
+            .grupo-tarjeta .movimiento-monto { font-size: 13px; }
+        }
+
         </style>
  
 <script>
@@ -2376,52 +2476,60 @@
 
         function renderizarMovimiento(movimiento) {
             const entrada = esEntrada(movimiento);
-
-            const cantidad = Math.abs(
-                Number(movimiento.amount) || 0
-            );
-
+            const cantidad = Math.abs(Number(movimiento.amount) || 0);
             const elemento = document.createElement("article");
-
-            elemento.className =
-                `movimiento ${entrada ? "entrada" : "salida"}`;
+            elemento.className = `movimiento ${entrada ? "entrada" : "salida"}`;
 
             const icono = document.createElement("div");
-
             icono.className = "movimiento-icono";
-
-            icono.innerHTML = entrada
-                ? iconoEntrada
-                : iconoSalida;
+            icono.innerHTML = iconoSalida;
 
             const info = document.createElement("div");
-
             info.className = "movimiento-info";
 
             const titulo = document.createElement("div");
-
             titulo.className = "movimiento-titulo";
             titulo.textContent = nombreMovimiento(movimiento);
 
             const fecha = document.createElement("div");
-
             fecha.className = "movimiento-fecha";
-            fecha.textContent = formatoFecha(movimiento.created_at);
-
+            const fechaObjeto = new Date(movimiento.created_at);
+            fecha.textContent = "Movimiento · " + (
+                Number.isNaN(fechaObjeto.getTime())
+                    ? "Hora no disponible"
+                    : fechaObjeto.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })
+            );
             info.append(titulo, fecha);
 
             const monto = document.createElement("div");
-
-            monto.className =
-                "movimiento-monto " +
-                (entrada ? "positivo" : "negativo");
-
-            monto.textContent =
-                `${entrada ? "+" : "−"}${formatoCantidad(cantidad)} GVR`;
-
+            monto.className = "movimiento-monto";
+            const importe = document.createElement("span");
+            importe.textContent = `${entrada ? "+" : "−"}${formatoCantidad(cantidad)} GVR`;
+            const saldo = document.createElement("span");
+            saldo.className = "saldo-despues";
+            const saldoFinal = Number(movimiento.balance_after);
+            saldo.textContent = Number.isFinite(saldoFinal)
+                ? `Saldo ${formatoCantidad(saldoFinal)} GVR`
+                : "";
+            monto.append(importe, saldo);
             elemento.append(icono, info, monto);
-
             return elemento;
+        }
+
+        function claveFechaMovimiento(fecha) {
+            const d = new Date(fecha);
+            if (Number.isNaN(d.getTime())) return "sin-fecha";
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+        }
+
+        function tituloFechaMovimiento(fecha) {
+            if (fecha === "sin-fecha") return "Fecha no disponible";
+            const [anio, mes, dia] = fecha.split("-").map(Number);
+            const d = new Date(anio, mes - 1, dia);
+            return d.toLocaleDateString("es-ES", {
+                day: "2-digit",
+                month: "long"
+            }).toLocaleUpperCase("es-ES");
         }
 
         async function cargarEstadisticasMes(usuarioId) {
@@ -2688,69 +2796,42 @@
                 return;
             }
 
-            // Renderizar los movimientos recibidos de Supabase.
-            const fragmento = document.createDocumentFragment();
-
+            // Agrupar los movimientos por día, manteniendo el orden más reciente.
+            const grupos = new Map();
             movimientos.forEach(movimiento => {
-                fragmento.appendChild(
-                    renderizarMovimiento(movimiento)
-                );
+                const clave = claveFechaMovimiento(movimiento.created_at);
+                if (!grupos.has(clave)) grupos.set(clave, []);
+                grupos.get(clave).push(movimiento);
             });
 
-            listaElemento.appendChild(fragmento);
+            const fragmento = document.createDocumentFragment();
+            const contenedorGrupos = document.createElement("div");
+            contenedorGrupos.className = "grupos-movimientos";
 
-            const elementos =
-                listaElemento.querySelectorAll(".movimiento");
+            grupos.forEach((registros, clave) => {
+                const grupo = document.createElement("section");
+                grupo.className = "grupo-movimientos";
 
-            // Si solo hay un movimiento, no se necesita desplegable.
-            if (elementos.length <= 1) {
-                botonMovimientos.hidden = true;
-                return;
-            }
+                const encabezado = document.createElement("h3");
+                encabezado.className = "grupo-fecha";
+                encabezado.textContent = tituloFechaMovimiento(clave);
 
-            // Mostrar el más reciente y ocultar los restantes.
-            elementos.forEach((elemento, indice) => {
-                elemento.classList.toggle(
-                    "movimiento-oculto",
-                    indice > 0
-                );
-            });
+                const tarjeta = document.createElement("div");
+                tarjeta.className = "grupo-tarjeta";
 
-            botonMovimientos.hidden = false;
-
-            botonMovimientos.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-            textoBotonMovimientos.textContent =
-                `Ver los demás movimientos (${elementos.length - 1})`;
-
-            // Alternar entre mostrar y ocultar los otros movimientos.
-            botonMovimientos.onclick = () => {
-                const expandido =
-                    botonMovimientos.getAttribute("aria-expanded") === "true";
-
-                const mostrarTodos = !expandido;
-
-                botonMovimientos.setAttribute(
-                    "aria-expanded",
-                    String(mostrarTodos)
-                );
-
-                elementos.forEach((elemento, indice) => {
-                    if (indice > 0) {
-                        elemento.classList.toggle(
-                            "movimiento-oculto",
-                            !mostrarTodos
-                        );
-                    }
+                registros.forEach(movimiento => {
+                    tarjeta.appendChild(renderizarMovimiento(movimiento));
                 });
 
-                textoBotonMovimientos.textContent = mostrarTodos
-                    ? "Ocultar movimientos"
-                    : `Ver los demás movimientos (${elementos.length - 1})`;
-            };
+                grupo.append(encabezado, tarjeta);
+                contenedorGrupos.appendChild(grupo);
+            });
+
+            fragmento.appendChild(contenedorGrupos);
+            listaElemento.appendChild(fragmento);
+
+            // Los seis movimientos recientes se muestran agrupados por fecha.
+            botonMovimientos.hidden = true;
         }
 
         cargarWallet().catch(error => {
