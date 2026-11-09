@@ -2265,7 +2265,7 @@
             }
 
             return numero.toLocaleString("es-ES", {
-                maximumFractionDigits: 4
+                maximumFractionDigits: 2
             });
         }
 
@@ -2438,7 +2438,16 @@
             const inicioMesSiguiente = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 1);
             const nombreMes = ahora.toLocaleDateString("es-ES", { month: "long" });
 
-            etiquetaEntradas.textContent = `Entró en ${nombreMes}`;
+            const mesConMayuscula =
+                nombreMes.charAt(0).toLocaleUpperCase("es-ES") +
+                nombreMes.slice(1);
+
+            etiquetaEntradas.replaceChildren(
+                document.createTextNode("Entró en"),
+                document.createElement("br"),
+                document.createTextNode(mesConMayuscula)
+            );
+
             etiquetaGastos.textContent = `Gastado en ${nombreMes}`;
 
             // El reinicio queda guardado en Supabase y no borra el historial.
