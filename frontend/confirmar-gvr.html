@@ -791,18 +791,9 @@ window.addEventListener("pageshow",(evento) => {
 
 archivoComprobante.addEventListener("change",() => {
     /*
-     * Si ya se creó una solicitud, conservamos el archivo original
-     * para que el usuario pueda reintentar la misma operación.
+     * La solicitud se crea al entrar en esta página. Eso no debe
+     * impedir seleccionar el comprobante que se adjuntará a ella.
      */
-    if (solicitudId && !envioCompletado) {
-        archivoComprobante.value = "";
-        mostrarMensaje(
-            "Ya hay una solicitud en proceso. Se conservará el comprobante seleccionado para permitir el reintento.",
-            "info"
-        );
-        return;
-    }
-
     const archivo = archivoComprobante.files?.[0] || null;
     archivoSeleccionado = null;
 
