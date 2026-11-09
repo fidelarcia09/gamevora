@@ -1969,6 +1969,72 @@
             }
         }
 
+
+        /* Acciones Wallet: ambos botones usan el tono turquesa de Enviar GVR. */
+        .acciones-wallet .accion-wallet,
+        .acciones-wallet .accion-wallet.enviar {
+            color: #eafffb;
+            border: 1px solid rgba(65, 231, 194, .42);
+            background: linear-gradient(135deg, #087e76 0%, #079d89 52%, #087f79 100%);
+            box-shadow: 0 7px 18px rgba(0, 0, 0, .18), inset 0 1px rgba(255,255,255,.12);
+        }
+
+        .acciones-wallet .accion-wallet:hover,
+        .acciones-wallet .accion-wallet.enviar:hover {
+            border-color: rgba(112, 255, 220, .72);
+            background: linear-gradient(135deg, #09988b 0%, #0bb99c 52%, #07998d 100%);
+            box-shadow: 0 8px 22px rgba(0, 180, 150, .2);
+        }
+
+        .acciones-wallet .icono-accion-wallet,
+        .acciones-wallet .accion-wallet.enviar .icono-accion-wallet {
+            display: inline-flex;
+            width: auto;
+            height: auto;
+            flex: 0 0 auto;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .acciones-wallet .icono-accion-wallet svg,
+        .acciones-wallet .accion-wallet.enviar .icono-accion-wallet svg {
+            display: block;
+            width: 31px;
+            height: 31px;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            fill: none;
+            stroke: #f0fffb;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 1px 3px rgba(0, 35, 31, .2));
+        }
+
+        .acciones-wallet .accion-wallet.enviar .icono-accion-wallet svg {
+            width: 33px;
+            height: 33px;
+            stroke-width: 1.75;
+        }
+
+        @media (max-width: 400px) {
+            .acciones-wallet .icono-accion-wallet svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            .acciones-wallet .accion-wallet.enviar .icono-accion-wallet svg {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
 </style>
  
 <script>
@@ -2019,11 +2085,6 @@
             </p>
 
             <section class="saldo" aria-label="Saldo disponible">
-                <span class="saldo-icono-referencia" aria-hidden="true">
-                    <svg viewBox="0 0 48 48" focusable="false">
-                        <path d="M36 9H17l-8 8v14l8 8h18l7-7V22H25v8h9v1H19l-4-5V20l5-5h16z"></path>
-                    </svg>
-                </span>
                 <div class="saldo-contenido">
                     <div class="saldo-titulo">Saldo disponible</div>
                     <div class="saldo-valor" id="saldoGVR" aria-live="polite">Cargando...</div>
@@ -2083,9 +2144,10 @@
                 <a href="enviar-gvr.html" class="accion-wallet enviar">
                     <span class="icono-accion-wallet" aria-hidden="true">
                         <svg viewBox="0 0 24 24">
-                            <path d="m21.5 2.5-7.2 19-4.1-8.1-8.2-4.1 19.5-6.8Z"></path>
-                            <path d="M10.2 13.4 21.5 2.5"></path>
-                            <path d="m10.2 13.4-.5 6.1"></path>
+                            <path d="M21.6 2.4 14.1 21.5l-3.9-7.7-7.8-3.9 19.2-7.5Z"></path>
+                            <path d="m10.2 13.8 11.4-11.4"></path>
+                            <path d="m14.1 21.5 1.8-8.1"></path>
+                            <path d="m2.4 9.9 7.8 3.9"></path>
                         </svg>
                     </span>
                     <span>Enviar GVR</span>
