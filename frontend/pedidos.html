@@ -294,7 +294,8 @@
   function subtituloVisible(item) {
     const datos = item.datos || {};
     if (item.tipo === "juego") {
-      const juego = datos.game_products?.game || "Recarga de juego";
+      const producto = Array.isArray(datos.game_products) ? datos.game_products[0] : datos.game_products;
+      const juego = producto?.game || String(item.titulo || "").split(" · ")[0] || "Recarga de juego";
       return datos.player_id ? `${juego} · ID ${datos.player_id}` : juego;
     }
     if (item.tipo === "gvr_anterior") return `Compra de saldo · ${datos.metodo_pago || "GVR"}`;
