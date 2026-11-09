@@ -2038,7 +2038,7 @@
         }
 
         
-        /* MOVIMIENTOS: diseño de tarjetas agrupadas por fecha */
+        /* MOVIMIENTOS: tarjetas agrupadas por fecha con colores Gamers Gold */
         .movimientos-cabecera h2 {
             color: #f4f8ff;
         }
@@ -2052,7 +2052,7 @@
         }
         .grupo-fecha {
             margin: 0 0 11px 6px;
-            color: #aab8ca;
+            color: #9aadc4;
             font-size: 13px;
             font-weight: 800;
             letter-spacing: .45px;
@@ -2061,10 +2061,12 @@
         .grupo-tarjeta {
             overflow: hidden;
             padding: 4px 16px;
-            border: 1px solid rgba(132, 169, 210, .22);
+            border: 1px solid rgba(32, 197, 255, .2);
             border-radius: 20px;
-            background: linear-gradient(145deg, #ffffff, #f7f9fd);
-            box-shadow: 0 10px 24px rgba(0, 0, 0, .17);
+            background:
+                radial-gradient(ellipse at 95% 0%, rgba(0, 183, 255, .09), transparent 45%),
+                linear-gradient(145deg, #0c1a2d, #081426 75%);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, .2), inset 0 1px rgba(255,255,255,.025);
         }
         .grupo-tarjeta .movimiento {
             min-height: 88px;
@@ -2077,21 +2079,21 @@
             animation: none;
         }
         .grupo-tarjeta .movimiento + .movimiento {
-            border-top: 1px solid #e6eaf1;
+            border-top: 1px solid rgba(137, 170, 207, .15);
         }
         .grupo-tarjeta .movimiento:hover {
             transform: none;
-            background: transparent;
+            background: rgba(0, 183, 255, .035);
         }
         .grupo-tarjeta .movimiento-icono {
             width: 48px;
             height: 48px;
             flex: 0 0 48px;
-            border: 0;
+            border: 1px solid rgba(32, 197, 255, .17);
             border-radius: 16px;
-            background: #e5edff;
-            color: #3479ed;
-            box-shadow: none;
+            background: linear-gradient(145deg, rgba(8, 124, 255, .2), rgba(0, 183, 255, .08));
+            color: #55caff;
+            box-shadow: inset 0 1px rgba(255,255,255,.035), 0 0 14px rgba(0, 140, 255, .08);
         }
         .grupo-tarjeta .movimiento-icono svg {
             width: 25px;
@@ -2100,12 +2102,12 @@
         }
         .grupo-tarjeta .movimiento-titulo {
             margin-bottom: 4px;
-            color: #171b24;
+            color: #f4f8ff;
             font-size: 15px;
             font-weight: 700;
         }
         .grupo-tarjeta .movimiento-fecha {
-            color: #858b97;
+            color: #91a6c0;
             font-size: 12px;
         }
         .grupo-tarjeta .movimiento-monto {
@@ -2113,18 +2115,20 @@
             flex-direction: column;
             align-items: flex-end;
             gap: 5px;
-            color: #171b24;
+            color: #f4f8ff;
             font-size: 15px;
             font-weight: 800;
         }
         .grupo-tarjeta .movimiento-monto .saldo-despues {
-            color: #858b97;
+            color: #91a6c0;
             font-size: 12px;
             font-weight: 400;
         }
-        .grupo-tarjeta .positivo,
+        .grupo-tarjeta .positivo {
+            color: #39dda0;
+        }
         .grupo-tarjeta .negativo {
-            color: #171b24;
+            color: #ff8585;
         }
         .movimientos .boton-movimientos {
             margin-top: 14px;
