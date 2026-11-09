@@ -678,12 +678,12 @@
             align-items: center;
             justify-content: center;
             gap: 9px;
-            border: 1px solid #17649a;
+            border: 1px solid rgba(0, 183, 255, .42);
             border-radius: 15px;
-            background: linear-gradient(145deg, #103b65, #08203b);
+            background: linear-gradient(145deg, #0b315a, #071329);
             color: #fff;
             text-decoration: none;
-            box-shadow: 0 0 18px rgba(0, 140, 255, .12);
+            box-shadow: 0 0 18px rgba(0, 183, 255, .14), inset 0 0 14px rgba(0, 140, 255, .05);
             font-size: 12px;
             font-weight: 800;
             line-height: 1.3;
@@ -697,15 +697,16 @@
             height: 28px;
             flex: 0 0 28px;
             fill: none;
-            stroke: #4bcaff;
+            stroke: #00c8ff;
             stroke-width: 1.8;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
 
         .accion-wallet:hover {
-            border-color: #28a9ff;
-            background: linear-gradient(145deg, #145184, #09294b);
+            border-color: #00b7ff;
+            background: linear-gradient(145deg, #104675, #083b70);
+            box-shadow: 0 0 20px rgba(0, 183, 255, .22), inset 0 0 14px rgba(0, 140, 255, .08);
             transform: translateY(-1px);
         }
 
@@ -715,8 +716,8 @@
         }
 
         .accion-wallet.enviar {
-            border-color: #17649a;
-            background: linear-gradient(145deg, #103b65, #08203b);
+            border-color: rgba(0, 183, 255, .42);
+            background: linear-gradient(145deg, #0b315a, #071329);
         }
 
         .accion-wallet.enviar svg {
@@ -724,8 +725,9 @@
         }
 
         .accion-wallet.enviar:hover {
-            border-color: #28a9ff;
-            background: linear-gradient(145deg, #145184, #09294b);
+            border-color: #00b7ff;
+            background: linear-gradient(145deg, #104675, #083b70);
+            box-shadow: 0 0 20px rgba(0, 183, 255, .22), inset 0 0 14px rgba(0, 140, 255, .08);
         }
 
         @media (max-width: 350px) {
