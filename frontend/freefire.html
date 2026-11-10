@@ -1452,9 +1452,49 @@ async function verificarPedidoGuardado(userId) {
     }
 
     if (!data) {
+        // La referencia puede haber quedado guardada aunque el registro local ya no exista.
+        // Antes de liberar el bloqueo, consultar al proveedor con la misma buyer_ref.
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        const accessToken = sessionData?.session?.access_token;
+
+        if (sessionError || !accessToken) {
+            throw new Error("No se pudo validar la sesión para revisar el pedido anterior.");
+        }
+
+        const recuperacion = await llamarFuncion(
+            URL_CONSULTAR_PEDIDO,
+            accessToken,
+            { game_order_id: idVerificado }
+        );
+
+        if (recuperacion?.orphaned && recuperacion?.safe_to_clear === true) {
+            if (pedidoPendienteId === idVerificado) {
+                borrarPedidoPendiente();
+            }
+            actualizarBoton();
+            mostrarEstado(
+                recuperacion.message ||
+                "RechargeGames confirmó que no existe una recarga anterior. Ya puedes iniciar una nueva compra.",
+                "aviso"
+            );
+            return false;
+        }
+
+        if (recuperacion?.orphaned && recuperacion?.safe_to_clear === false) {
+            accionPendiente = "consultar";
+            guardarPedidoPendiente();
+            actualizarBoton();
+            mostrarEstado(
+                recuperacion.message ||
+                "Encontramos el pedido en RechargeGames, pero falta su registro local. No hagas otra recarga; soporte debe reconciliarlo.",
+                "error"
+            );
+            return true;
+        }
+
         throw new Error(
-            "No pudimos confirmar el pedido anterior en la base de datos. " +
-            "No hagas otra recarga hasta aclarar su estado."
+            recuperacion?.error ||
+            "No pudimos confirmar el pedido anterior. El bloqueo se mantiene por seguridad."
         );
     }
 
