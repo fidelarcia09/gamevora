@@ -1725,6 +1725,19 @@ async function descargarComprobante() {
                     tarjeta.style.boxShadow = "none";
                     tarjeta.style.width = `${tarjetaComprobante.getBoundingClientRect().width}px`;
                 }
+                /* html2canvas puede perder el texto con background-clip:text.
+                   En la imagen se usa un color sólido luminoso para que el título
+                   de recarga completada siempre sea legible. */
+                const titulo = documentoClonado.getElementById("tituloEstado");
+                if (titulo && titulo.classList.contains("resaltado")) {
+                    titulo.style.setProperty("background", "none", "important");
+                    titulo.style.setProperty("background-clip", "border-box", "important");
+                    titulo.style.setProperty("-webkit-background-clip", "border-box", "important");
+                    titulo.style.setProperty("color", "#65e7ff", "important");
+                    titulo.style.setProperty("-webkit-text-fill-color", "#65e7ff", "important");
+                    titulo.style.setProperty("text-shadow", "0 0 18px rgba(0, 183, 255, .35)", "important");
+                }
+
                 /* El escudo está incrustado como SVG vectorial para evitar fallos
                    al convertir una imagen SVG externa en el PNG del comprobante. */
                 const contenedorEscudo = documentoClonado.querySelector(".escudo-gvr-flotante");
