@@ -1712,7 +1712,8 @@ async function descargarComprobante() {
 
         const canvas = await html2canvas(tarjetaComprobante, {
             backgroundColor: "#030817",
-            scale: Math.min(3, Math.max(2, window.devicePixelRatio || 1)),
+            /* Más resolución para conservar los degradados, el fondo y la base del escudo al exportar. */
+            scale: Math.min(4, Math.max(3, window.devicePixelRatio || 1)),
             useCORS: true,
             logging: false,
             async onclone(documentoClonado) {
