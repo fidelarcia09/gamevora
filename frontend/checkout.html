@@ -959,123 +959,138 @@ body>header{
 @media(prefers-reduced-motion:reduce){
  .ficha-pedido::after{animation:none!important}
 }
-
-
-/* DISEÑO VISUAL DEL COMPROBANTE — inspirado en la referencia Gamers Gold */
+/* CHECKOUT — composición ajustada a la referencia 1024 × 1536 */
+html,body{width:100%;min-height:100%;background:#020817!important}
 body{
- min-height:100vh!important;
+ min-height:1536px!important;color:#f5f9ff!important;overflow-x:hidden!important;
  background:
-  radial-gradient(ellipse at 50% 18%,rgba(0,93,255,.18),transparent 42%),
-  radial-gradient(ellipse at 0% 62%,rgba(0,88,255,.16),transparent 32%),
-  radial-gradient(ellipse at 100% 58%,rgba(0,126,255,.14),transparent 34%),
+  radial-gradient(ellipse at 50% 26%,rgba(0,77,190,.19),transparent 42%),
+  radial-gradient(ellipse at 0% 54%,rgba(0,82,255,.17),transparent 30%),
+  radial-gradient(ellipse at 100% 59%,rgba(0,100,255,.16),transparent 32%),
   #020817!important;
 }
 body::before{
- opacity:.62!important;
+ position:fixed!important;inset:0!important;opacity:.5!important;
  background:
-  linear-gradient(125deg,transparent 46%,rgba(0,130,255,.2) 47%,transparent 48%) 0 0/150px 150px,
-  linear-gradient(55deg,transparent 47%,rgba(0,130,255,.13) 48%,transparent 49%) 0 0/190px 190px!important;
+  linear-gradient(135deg,transparent 47%,rgba(0,127,255,.18) 48%,transparent 49%) 0 0/160px 160px,
+  linear-gradient(45deg,transparent 47%,rgba(0,127,255,.12) 48%,transparent 49%) 0 0/190px 190px!important;
+ mask-image:linear-gradient(to bottom,#000 0%,#000 82%,transparent 100%)!important;
 }
 body>header{display:none!important}
-main{max-width:880px!important;padding:24px 18px 12px!important}
+main{
+ position:relative!important;z-index:1!important;width:100%!important;max-width:1024px!important;
+ margin:0 auto!important;padding:35px 35px 0!important;
+}
 .tarjeta.comprobante-nuevo{
- overflow:visible!important;
- border:0!important;border-radius:0!important;
+ position:relative!important;width:100%!important;max-width:none!important;margin:0 auto!important;
+ overflow:visible!important;border:0!important;border-radius:0!important;
  background:transparent!important;box-shadow:none!important;
 }
 .tarjeta.comprobante-nuevo::before,.tarjeta.comprobante-nuevo::after{display:none!important}
 .comprobante-hero{
- min-height:0!important;padding:18px 16px 24px!important;
- text-align:center!important;
+ position:relative!important;overflow:visible!important;min-height:0!important;
+ padding:0 10px 0!important;text-align:center!important;color:#fff!important;
  background:transparent!important;
 }
+.comprobante-hero::after{display:none!important}
 .comprobante-cabecera{display:none!important}
-.identidad-checkout{margin:0 auto 24px!important}
+.identidad-checkout{
+ position:relative!important;display:block!important;margin:0 auto!important;
+ padding:0!important;text-align:center!important;
+}
 .identidad-nombre{
- font-size:clamp(34px,6vw,58px)!important;
- font-weight:1000!important;font-style:italic!important;
- letter-spacing:-1.5px!important;line-height:.95!important;
- text-shadow:0 0 24px rgba(0,154,255,.35)!important;
+ color:#f7fbff!important;font-size:clamp(38px,5.7vw,58px)!important;
+ font-weight:1000!important;font-style:italic!important;letter-spacing:-1.5px!important;
+ line-height:.92!important;text-shadow:0 0 22px rgba(0,143,255,.35)!important;
 }
 .identidad-nombre span{
- display:block!important;margin-top:5px!important;
- color:#08caff!important;font-size:clamp(38px,7vw,66px)!important;
- letter-spacing:2px!important;
+ display:block!important;margin-top:7px!important;color:#08caff!important;
+ font-size:1.12em!important;letter-spacing:2px!important;
 }
 .identidad-checkout .claim-marca{
- margin:13px auto 0!important;color:#b8cce7!important;
- font-size:clamp(10px,1.5vw,14px)!important;
- letter-spacing:clamp(3px,.65vw,6px)!important;font-weight:700!important;
+ margin:13px auto 0!important;color:#c2d7f2!important;
+ font-size:clamp(11px,1.4vw,15px)!important;font-weight:700!important;
+ letter-spacing:clamp(3px,.62vw,6px)!important;line-height:1.4!important;
 }
 .producto-visual{
- position:relative!important;width:204px!important;height:204px!important;
- margin:8px auto 19px!important;display:grid!important;place-items:center!important;
+ position:relative!important;width:210px!important;height:210px!important;
+ margin:37px auto 18px!important;display:grid!important;place-items:center!important;
 }
 .producto-orbita{
- position:absolute!important;inset:4px!important;border:2px solid rgba(0,255,119,.78)!important;
- border-radius:50%!important;
- box-shadow:0 0 15px rgba(0,255,119,.55),0 0 38px rgba(0,255,119,.26),inset 0 0 22px rgba(0,255,119,.16)!important;
+ position:absolute!important;inset:7px!important;width:auto!important;height:auto!important;
+ border:5px solid #22ff83!important;border-radius:50%!important;
+ background:radial-gradient(circle,rgba(0,255,120,.13),rgba(0,80,45,.06) 63%,transparent 70%)!important;
+ box-shadow:0 0 13px rgba(0,255,125,.75),0 0 32px rgba(0,255,125,.4),inset 0 0 23px rgba(0,255,125,.18)!important;
+ filter:none!important;
 }
 .producto-orbita::before{
- content:""!important;position:absolute!important;inset:11px!important;border:1px solid rgba(76,255,153,.3)!important;border-radius:50%!important;
-}
-.producto-check{
- position:relative!important;z-index:2!important;
- width:166px!important;height:166px!important;display:grid!important;place-items:center!important;
- border:0!important;border-radius:50%!important;
- color:#eafff1!important;background:radial-gradient(circle,rgba(0,255,119,.24),rgba(0,100,50,.12) 65%,transparent 70%)!important;
- font-size:126px!important;font-weight:500!important;line-height:1!important;
- text-shadow:0 0 18px #20ff83,0 0 38px rgba(0,255,119,.72)!important;
- filter:drop-shadow(0 0 12px rgba(0,255,119,.42))!important;
+ content:""!important;position:absolute!important;inset:10px!important;
+ border:1px solid rgba(111,255,170,.42)!important;border-radius:50%!important;
 }
 .producto-cristal{display:none!important}
+.producto-check{
+ position:relative!important;inset:auto!important;z-index:2!important;
+ display:grid!important;place-items:center!important;width:166px!important;height:166px!important;
+ border:0!important;border-radius:50%!important;
+ background:radial-gradient(circle,rgba(0,255,120,.22),rgba(0,110,55,.08) 66%,transparent 70%)!important;
+ color:#eafff1!important;font-size:128px!important;font-weight:500!important;line-height:1!important;
+ text-shadow:0 0 15px #24ff85,0 0 35px rgba(0,255,120,.75)!important;
+ box-shadow:none!important;filter:drop-shadow(0 0 12px rgba(0,255,120,.5))!important;
+}
+.producto-resumen{position:relative!important;z-index:2!important;margin:0 auto!important}
 .producto-resumen h1{
- margin:0 auto 8px!important;color:#f7fbff!important;
- font-size:clamp(34px,6vw,58px)!important;font-weight:1000!important;
- font-style:italic!important;letter-spacing:-1px!important;line-height:1.02!important;
- text-shadow:0 4px 22px rgba(0,130,255,.25)!important;
+ max-width:740px!important;margin:0 auto 10px!important;
+ color:#f8fbff!important;font-size:clamp(38px,5.6vw,58px)!important;
+ font-weight:1000!important;font-style:italic!important;letter-spacing:-1.4px!important;
+ line-height:1.02!important;text-transform:uppercase!important;
+ text-shadow:0 4px 22px rgba(0,133,255,.28)!important;
 }
 .producto-resumen h1.resaltado{
- background:linear-gradient(180deg,#fff 0%,#d9f6ff 40%,#00bfff 100%)!important;
+ background:linear-gradient(180deg,#fff 0%,#e0f8ff 42%,#00baff 100%)!important;
  -webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;
 }
 .producto-resumen .subtitulo{
- max-width:620px!important;margin:12px auto 0!important;
- color:#b9d3f3!important;font-size:clamp(13px,2vw,18px)!important;line-height:1.55!important;
+ max-width:660px!important;margin:12px auto 0!important;
+ color:#c0d8f5!important;font-size:clamp(14px,1.8vw,19px)!important;
+ line-height:1.55!important;
 }
 .estado-tiempo{display:none!important}
 .comprobante-cuerpo{
- display:flex!important;flex-direction:column!important;
- width:100%!important;padding:0 10px 18px!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ width:100%!important;padding:34px 0 0!important;
+ background:transparent!important;color:#f5f9ff!important;
 }
 .ficha-pedido{
- display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(190px,.65fr)!important;
- align-items:stretch!important;gap:0!important;min-height:0!important;
- padding:16px!important;border:2px solid #078fff!important;border-radius:19px!important;
- background:linear-gradient(110deg,rgba(3,17,42,.97),rgba(3,18,43,.92) 57%,rgba(2,14,34,.82))!important;
- box-shadow:0 0 24px rgba(0,128,255,.24),inset 0 0 25px rgba(0,128,255,.06)!important;
+ display:grid!important;grid-template-columns:minmax(0,1.32fr) minmax(220px,.68fr)!important;
+ align-items:stretch!important;gap:0!important;
+ width:100%!important;max-width:804px!important;min-height:472px!important;
+ margin:0 auto!important;padding:17px 18px!important;
+ border:2px solid #078fff!important;border-radius:20px!important;
+ background:linear-gradient(105deg,rgba(3,17,42,.98),rgba(3,18,43,.96) 58%,rgba(2,14,34,.94))!important;
+ box-shadow:0 0 22px rgba(0,128,255,.27),0 0 48px rgba(0,100,255,.12),inset 0 0 25px rgba(0,128,255,.07)!important;
 }
 .ficha-datos{
  display:flex!important;flex-direction:column!important;justify-content:center!important;
- min-width:0!important;padding:0 12px 0 4px!important;
+ min-width:0!important;padding:0 10px 0 4px!important;
 }
 .ficha-fila{
- display:flex!important;align-items:center!important;gap:13px!important;
- min-height:70px!important;padding:9px 8px!important;
+ display:flex!important;align-items:center!important;gap:14px!important;
+ min-height:70px!important;padding:9px 9px!important;
  border:0!important;border-bottom:1px solid rgba(0,139,255,.22)!important;
- background:none!important;
+ background:transparent!important;
 }
 .ficha-fila:last-child{border-bottom:0!important}
 .ficha-icono-svg{
+ display:flex!important;align-items:center!important;justify-content:center!important;
  width:48px!important;height:48px!important;flex:0 0 48px!important;
- border:1px solid rgba(0,181,255,.66)!important;border-radius:50%!important;
- background:linear-gradient(145deg,rgba(0,132,255,.22),rgba(0,35,90,.34))!important;
- color:#25caff!important;box-shadow:0 0 13px rgba(0,140,255,.18)!important;
+ border:1px solid rgba(0,181,255,.72)!important;border-radius:50%!important;
+ background:linear-gradient(145deg,rgba(0,132,255,.22),rgba(0,35,90,.36))!important;
+ color:#25caff!important;box-shadow:0 0 13px rgba(0,140,255,.2)!important;
 }
 .ficha-icono-svg svg{width:25px!important;height:25px!important}
-.ficha-info{min-width:0!important}
+.ficha-info{display:block!important;flex:1!important;min-width:0!important}
 .ficha-info>span{
- display:block!important;margin-bottom:4px!important;color:#8eb7e8!important;
+ display:block!important;margin:0 0 4px!important;color:#8eb7e8!important;
  font-size:12px!important;letter-spacing:.65px!important;font-weight:700!important;
 }
 .ficha-info>strong{
@@ -1085,37 +1100,35 @@ main{max-width:880px!important;padding:24px 18px 12px!important}
 .ficha-info>strong.precio{color:#f6f9ff!important;font-size:19px!important}
 .ficha-info small{display:block!important;margin-top:3px!important;color:#8eb7e8!important;font-size:11px!important}
 .logo-juego{
- min-width:126px!important;max-width:155px!important;min-height:74px!important;
- margin-left:auto!important;padding:10px!important;display:flex!important;
+ display:flex!important;flex:0 0 155px!important;min-width:130px!important;max-width:155px!important;
+ min-height:78px!important;margin-left:auto!important;padding:10px!important;
  flex-direction:column!important;align-items:center!important;justify-content:center!important;
- border:1px solid rgba(0,132,255,.42)!important;border-radius:12px!important;
- background:linear-gradient(145deg,rgba(2,9,25,.96),rgba(5,24,54,.9))!important;
- color:#f4f9ff!important;box-shadow:0 0 14px rgba(0,100,255,.12)!important;
- text-align:center!important;
+ border:1px solid rgba(0,132,255,.48)!important;border-radius:12px!important;
+ background:linear-gradient(145deg,rgba(2,9,25,.98),rgba(5,24,54,.94))!important;
+ color:#f4f9ff!important;box-shadow:0 0 14px rgba(0,100,255,.14)!important;text-align:center!important;
 }
 .logo-juego span{font-size:15px!important;font-weight:1000!important;letter-spacing:.5px!important}
 .logo-juego small{font-size:9px!important;letter-spacing:2px!important}
 .ficha-arte{
- display:grid!important;place-items:center!important;min-height:290px!important;
- background:radial-gradient(ellipse at center,rgba(0,111,255,.2),transparent 68%)!important;
+ position:relative!important;display:grid!important;place-items:center!important;
+ min-width:0!important;min-height:100%!important;overflow:hidden!important;
+ background:radial-gradient(ellipse at center,rgba(0,111,255,.23),transparent 69%)!important;
 }
 .ficha-arte::before{
- width:88%!important;max-width:260px!important;
- border-color:rgba(0,161,255,.22)!important;
- background:radial-gradient(circle,rgba(0,129,255,.15),transparent 69%)!important;
- box-shadow:0 0 25px rgba(0,135,255,.13)!important;
+ content:""!important;position:absolute!important;width:90%!important;max-width:260px!important;
+ aspect-ratio:1!important;border:1px solid rgba(0,161,255,.25)!important;border-radius:50%!important;
+ background:radial-gradient(circle,rgba(0,129,255,.16),transparent 69%)!important;
+ box-shadow:0 0 25px rgba(0,135,255,.14)!important;
 }
 .ficha-arte::after{opacity:.2!important}
 .escudo-gvr-flotante{
- width:min(76%,205px)!important;max-width:205px!important;
- filter:drop-shadow(0 0 16px rgba(0,157,255,.5)) drop-shadow(0 0 32px rgba(0,103,255,.28))!important;
+ position:relative!important;z-index:1!important;width:min(78%,205px)!important;max-width:205px!important;
+ filter:drop-shadow(0 0 16px rgba(0,157,255,.52)) drop-shadow(0 0 32px rgba(0,103,255,.3))!important;
 }
-.verificacion-comprobante{
- display:none!important;
-}
+.verificacion-comprobante{display:none!important}
 .comprobante-cuerpo>.nota{
- margin:13px auto 0!important;padding:0!important;border:0!important;
- background:transparent!important;color:#a9c5e8!important;
+ width:100%!important;max-width:804px!important;margin:13px auto 0!important;padding:0!important;
+ border:0!important;background:transparent!important;color:#a9c5e8!important;
  font-size:12px!important;text-align:center!important;
 }
 .comprobante-cuerpo>.nota.completado{color:#9bdcba!important}
@@ -1124,638 +1137,1052 @@ main{max-width:880px!important;padding:24px 18px 12px!important}
  width:100%!important;max-width:680px!important;gap:12px!important;margin:18px auto 0!important;
 }
 #accionesNavegacion .boton,#accionesComprobante .boton{
- min-height:60px!important;padding:12px 18px!important;border:2px solid #08baff!important;
- border-radius:19px!important;color:#f5fbff!important;font-size:16px!important;
- font-weight:800!important;letter-spacing:.6px!important;
+ min-height:68px!important;padding:13px 18px!important;
+ border:2px solid #08baff!important;border-radius:19px!important;
+ color:#f5fbff!important;font-size:17px!important;font-weight:800!important;letter-spacing:.6px!important;
  background:linear-gradient(100deg,#006dff,#00bfff)!important;
- box-shadow:0 0 20px rgba(0,139,255,.24),inset 0 1px rgba(255,255,255,.25)!important;
+ box-shadow:0 0 20px rgba(0,139,255,.26),inset 0 1px rgba(255,255,255,.25)!important;
 }
 #accionesNavegacion .boton-secundario{
- background:rgba(0,19,48,.7)!important;color:#25caff!important;
+ background:rgba(0,19,48,.76)!important;color:#25caff!important;
 }
 #accionesComprobante .boton{background:linear-gradient(100deg,#006dff,#00bfff)!important}
-#accionesNavegacion .boton-icono,#accionesComprobante .boton-icono{font-size:23px!important}
+#accionesNavegacion .boton-icono,#accionesComprobante .boton-icono{font-size:25px!important}
 .pie{
- display:block!important;max-width:880px!important;width:100%!important;
- margin:0 auto!important;padding:26px 12px 16px!important;
+ display:block!important;width:100%!important;max-width:880px!important;
+ margin:0 auto!important;padding:38px 12px 18px!important;
+ color:#9bb5d7!important;text-align:center!important;
 }
 .pie-marca{display:none!important}
 .pie .ventajas{
  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
- gap:12px!important;margin:0 auto 26px!important;
+ gap:0!important;margin:0 auto 28px!important;
 }
-.ventaja{
- display:grid!important;grid-template-columns:34px 1fr!important;align-items:center!important;
- column-gap:9px!important;min-width:0!important;padding:0 7px!important;
- border-right:1px solid rgba(0,150,255,.25)!important;
- color:#9eb6d6!important;font-size:10px!important;
+.pie .ventaja{
+ display:grid!important;grid-template-columns:36px 1fr!important;
+ grid-template-rows:auto auto!important;align-items:center!important;justify-items:start!important;
+ column-gap:10px!important;min-width:0!important;padding:0 12px!important;
+ border-right:1px solid rgba(0,150,255,.28)!important;text-align:left!important;
 }
-.ventaja:last-child{border-right:0!important}
-.ventaja-icono{grid-row:span 2!important;color:#08bfff!important}
-.ventaja-icono svg{width:29px!important;height:29px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important}
-.ventaja strong{color:#08caff!important;font-size:10px!important;letter-spacing:.3px!important}
-.ventaja>span:last-child{font-size:10px!important}
+.pie .ventaja:last-child{border-right:0!important}
+.pie .ventaja-icono{grid-column:1!important;grid-row:1/3!important;margin:0!important;color:#08bfff!important}
+.pie .ventaja-icono svg{width:31px!important;height:31px!important}
+.pie .ventaja strong{grid-column:2!important;grid-row:1!important;color:#08caff!important;font-size:12px!important;letter-spacing:.3px!important}
+.pie .ventaja>span:last-child{grid-column:2!important;grid-row:2!important;margin-top:3px!important;color:#b3c8e4!important;font-size:12px!important}
 .pie .copyright{
- display:block!important;padding-top:17px!important;border-top:1px solid rgba(0,130,255,.22)!important;
- color:#9bb5d7!important;font-size:11px!important;letter-spacing:4px!important;text-align:center!important;
+ display:block!important;padding-top:18px!important;border-top:1px solid rgba(0,130,255,.23)!important;
+ color:#9bb5d7!important;font-size:12px!important;letter-spacing:5px!important;text-align:center!important;
 }
-@media(max-width:620px){
- main{padding:12px 10px 8px!important}
- .comprobante-hero{padding:15px 5px 19px!important}
- .identidad-checkout{margin-bottom:19px!important}
- .identidad-nombre{font-size:32px!important}
- .identidad-nombre span{font-size:42px!important}
- .identidad-checkout .claim-marca{font-size:9px!important;letter-spacing:2px!important}
- .producto-visual{width:150px!important;height:150px!important;margin:5px auto 15px!important}
- .producto-check{width:122px!important;height:122px!important;font-size:91px!important}
- .producto-resumen h1{font-size:clamp(29px,8vw,42px)!important}
- .producto-resumen .subtitulo{font-size:12px!important}
- .comprobante-cuerpo{padding:0 2px 12px!important}
+@media(max-width:700px){
+ body{min-height:100vh!important}
+ main{padding:27px 14px 0!important}
+ .identidad-nombre{font-size:clamp(34px,8vw,48px)!important}
+ .identidad-nombre span{font-size:1.08em!important}
+ .identidad-checkout .claim-marca{font-size:clamp(9px,2.3vw,12px)!important;letter-spacing:2.2px!important}
+ .producto-visual{width:176px!important;height:176px!important;margin:27px auto 14px!important}
+ .producto-orbita{border-width:4px!important}
+ .producto-check{width:140px!important;height:140px!important;font-size:106px!important}
+ .producto-resumen h1{max-width:520px!important;font-size:clamp(32px,7vw,45px)!important}
+ .producto-resumen .subtitulo{font-size:clamp(12px,2.6vw,15px)!important}
+ .comprobante-cuerpo{padding-top:26px!important}
  .ficha-pedido{
-  grid-template-columns:minmax(0,1fr) 112px!important;gap:0!important;
-  padding:9px 7px!important;border-radius:15px!important;
+  grid-template-columns:minmax(0,1fr) 125px!important;max-width:100%!important;
+  min-height:0!important;padding:10px 8px!important;border-radius:16px!important;
  }
- .ficha-datos{padding:0 3px 0 0!important}
- .ficha-fila{min-height:62px!important;gap:7px!important;padding:7px 2px!important}
- .ficha-icono-svg{width:32px!important;height:32px!important;flex-basis:32px!important}
- .ficha-icono-svg svg{width:17px!important;height:17px!important}
- .ficha-info>span{font-size:8px!important;letter-spacing:.35px!important}
- .ficha-info>strong{font-size:11px!important}
- .ficha-info>strong.precio{font-size:12px!important}
+ .ficha-datos{padding:0 4px 0 0!important}
+ .ficha-fila{min-height:64px!important;gap:8px!important;padding:7px 3px!important}
+ .ficha-icono-svg{width:34px!important;height:34px!important;flex-basis:34px!important}
+ .ficha-icono-svg svg{width:18px!important;height:18px!important}
+ .ficha-info>span{font-size:9px!important;letter-spacing:.35px!important}
+ .ficha-info>strong{font-size:12px!important}
+ .ficha-info>strong.precio{font-size:13px!important}
  .ficha-info small{font-size:8px!important}
- .logo-juego{min-width:0!important;width:100%!important;min-height:54px!important;margin:0 0 5px!important;padding:5px!important}
+ .logo-juego{flex:0 0 94px!important;min-width:0!important;width:94px!important;min-height:52px!important;padding:5px!important}
  .logo-juego span{font-size:10px!important}
  .logo-juego small{font-size:7px!important}
  .ficha-arte{min-height:210px!important}
- .escudo-gvr-flotante{width:100%!important;max-width:115px!important}
+ .escudo-gvr-flotante{width:100%!important;max-width:112px!important}
  #accionesNavegacion,#accionesComprobante{max-width:100%!important;gap:10px!important}
- #accionesNavegacion .boton,#accionesComprobante .boton{min-height:53px!important;font-size:13px!important;border-radius:15px!important}
- .pie{padding:24px 2px 12px!important}
- .pie .ventajas{gap:4px!important;margin-bottom:19px!important}
- .ventaja{grid-template-columns:1fr!important;justify-items:center!important;text-align:center!important;gap:4px!important;padding:0 2px!important}
- .ventaja-icono{grid-row:auto!important}
- .ventaja-icono svg{width:23px!important;height:23px!important}
- .ventaja strong,.ventaja>span:last-child{font-size:7px!important}
- .pie .copyright{font-size:8px!important;letter-spacing:2px!important}
+ #accionesNavegacion .boton,#accionesComprobante .boton{min-height:56px!important;font-size:14px!important;border-radius:15px!important}
+ .pie{padding:28px 0 14px!important}
+ .pie .ventajas{margin-bottom:20px!important}
+ .pie .ventaja{grid-template-columns:1fr!important;grid-template-rows:auto auto auto!important;justify-items:center!important;text-align:center!important;gap:4px!important;padding:0 3px!important}
+ .pie .ventaja-icono{grid-column:1!important;grid-row:1!important}
+ .pie .ventaja strong{grid-column:1!important;grid-row:2!important;font-size:8px!important}
+ .pie .ventaja>span:last-child{grid-column:1!important;grid-row:3!important;font-size:8px!important}
+ .pie .ventaja-icono svg{width:23px!important;height:23px!important}
+ .pie .copyright{font-size:9px!important;letter-spacing:2px!important}
 }
-@media(max-width:380px){
- .ficha-pedido{grid-template-columns:minmax(0,1fr) 92px!important}
- .ficha-arte{min-height:190px!important}
- .escudo-gvr-flotante{max-width:95px!important}
+@media(max-width:390px){
+ main{padding-left:10px!important;padding-right:10px!important}
+ .ficha-pedido{grid-template-columns:minmax(0,1fr) 88px!important}
+ .ficha-fila{gap:6px!important}
+ .ficha-icono-svg{width:29px!important;height:29px!important;flex-basis:29px!important}
+ .ficha-info>span{font-size:8px!important}
  .ficha-info>strong{font-size:10px!important}
+ .logo-juego{flex-basis:78px!important;width:78px!important}
+ .ficha-arte{min-height:175px!important}
+ .escudo-gvr-flotante{max-width:86px!important}
 }
 
-    </style>
-</head>
-<body>
-<header>
-    <div class="barra">
-        <a class="encabezado-pagina" href="../index.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Estado de pedidos</span></a>
-        <div class="etiqueta">ESTADO DEL PEDIDO</div>
-    </div>
-</header>
+    </style>PE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#030817">
+    <meta name="description" content="Consulta el estado de tu recarga en Gamers Gold Top-Up.">
+    <title>Estado de tu pedido | Gamers Gold Top-Up</title>
 
-<main>
-    <section class="tarjeta comprobante-nuevo" id="tarjetaComprobante">
-        <span class="checkout-light-sweep" aria-hidden="true"></span>
-        <div class="comprobante-hero">
-            <span class="checkout-border-effect" aria-hidden="true"></span>
-            <div id="iconoEstado" class="oculto" aria-hidden="true">…</div>
-            <div class="comprobante-cabecera">
-                <div class="marca-ggt"><span class="marca-simbolo">G</span><span class="marca-nombre"><b>GAMERS GOLD</b><strong>TOP-UP</strong></span></div>
-                <div class="estado estado-comprobante" id="etiquetaEstado"><span class="punto"></span><span id="textoEstado">CONSULTANDO</span></div>
-            </div>
-            <div class="identidad-checkout">
-                <div class="identidad-nombre">GAMERS GOLD <span>TOP-UP</span></div>
-                <div class="claim-marca">TU MUNDO GAMING. UN SOLO LUGAR.</div>
-            </div>
-            <div class="producto-visual" aria-hidden="true">
-                <div class="producto-orbita"></div>
-                <div class="producto-cristal">◆</div>
-                <div class="producto-check" id="selloVisual">✓</div>
-            </div>
-            <div class="producto-resumen">
-                <h1 id="tituloEstado">Consultando tu pedido</h1>
-                <p class="subtitulo" id="descripcionEstado">Estamos buscando la información de tu recarga.</p>
-                <div class="estado-tiempo" id="estadoVisual">✦ RECARGA GAMERS GOLD</div>
-            </div>
-        </div>
-
-        <div class="comprobante-cuerpo">
-            <div class="ficha-pedido">
-                <div class="ficha-datos">
-                    <div class="ficha-fila juego-fila">
-                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8h11a4 4 0 0 1 3.8 5.2l-.8 2.5a2 2 0 0 1-3.3.8l-2-2H8.8l-2 2a2 2 0 0 1-3.3-.8l-.8-2.5A4 4 0 0 1 6.5 8Z"/><path d="M8 10.5v4M6 12.5h4M16.5 11.5h.01M18.5 13.5h.01"/></svg></span>
-                        <div class="ficha-info"><span>JUEGO</span><strong id="juego">CARGANDO JUEGO</strong></div>
-                        <div class="logo-juego" aria-hidden="true"><span id="logoJuegoTexto">GAMING</span><small>MOBILE</small></div>
-                    </div>
-                    <div class="ficha-fila">
-                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 5v8l-8 5-8-5V8l8-5Z"/><path d="m4 8 8 5 8-5M12 13v8"/></svg></span>
-                        <div class="ficha-info"><span>PRODUCTO</span><strong id="producto">Cargando producto...</strong><small>CANTIDAD: <b id="cantidad">Cargando...</b></small></div>
-                    </div>
-                    <div class="ficha-fila">
-                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0Z"/></svg></span>
-                        <div class="ficha-info"><span>ID DEL JUGADOR</span><strong id="idJugador">Cargando...</strong></div>
-                    </div>
-                    <div class="ficha-fila">
-                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h5M8 16h8"/></svg></span>
-                        <div class="ficha-info"><span>TOTAL PAGADO</span><strong id="precio" class="precio">Cargando...</strong></div>
-                    </div>
-                    <div class="ficha-fila">
-                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h2M14 14h2"/></svg></span>
-                        <div class="ficha-info"><span>FECHA</span><strong id="fecha">Cargando...</strong></div>
-                    </div>
-                    <div class="ficha-fila">
-                        <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3 7 21M17 3l-2 18M4 9h16M3 15h16"/></svg></span>
-                        <div class="ficha-info"><span>NÚMERO DE PEDIDO</span><strong id="numeroPedido">Cargando...</strong></div>
-                    </div>
-                </div>
-                <div class="ficha-arte" aria-hidden="true">
-                    <div class="arte-anillo"></div>
-                    <div class="escudo-gvr-flotante" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 180" role="img" aria-label="Emblema GVR azul en forma de escudo">
-<defs>
- <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e4fbff"/><stop offset=".2" stop-color="#29d3ff"/><stop offset=".55" stop-color="#087cff"/><stop offset="1" stop-color="#063baf"/></linearGradient>
- <linearGradient id="face" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#123d78"/><stop offset=".5" stop-color="#061b3d"/><stop offset="1" stop-color="#020b1d"/></linearGradient>
- <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-</defs>
-<g filter="url(#glow)">
- <path d="M80 5 148 34 144 96Q137 137 80 171 23 137 16 96L12 34Z" fill="#04132b" stroke="#087cff" stroke-width="3"/>
- <path d="M80 12 139 38 135 95Q128 130 80 158 32 130 25 95L21 38Z" fill="url(#face)" stroke="url(#metal)" stroke-width="4"/>
- <path d="M80 12 139 38 80 49 21 38Z" fill="url(#metal)" opacity=".95"/>
- <path d="M27 43 80 53 80 153Q37 128 31 94Z" fill="url(#metal)" opacity=".18"/>
- <path d="M105 53 91 68H69L54 82V108L80 126 101 112V101H80L94 86H119V120L80 143 41 117V76L62 56Z" fill="url(#metal)" stroke="#a4efff" stroke-width="2.5" stroke-linejoin="round"/>
- <path d="M80 59 68 71H89L102 58Z" fill="#e4fbff" opacity=".85"/>
- <path d="M80 143 91 126 80 131 69 126Z" fill="#0abfff"/>
-</g>
-</svg></div>
-                    <div class="arte-brillo"></div>
-                </div>
-            </div>
-
-            <div class="verificacion-comprobante"><span class="verificacion-icono">✓</span><span>Comprobante de Gamers Gold Top-Up</span></div>
-            <p class="nota" id="notaEstado">Estamos consultando la información de tu pedido.</p>
-            <div class="acciones oculto" id="accionesComprobante">
-                <button class="boton boton-principal" type="button" id="guardarComprobante"><span class="boton-icono" aria-hidden="true">↓</span> GUARDAR COMPROBANTE</button>
-            </div>
-            <div class="acciones" id="accionesNavegacion">
-                <a class="boton boton-principal" href="../index.html"><span class="boton-icono" aria-hidden="true">⌂</span> VOLVER AL INICIO</a>
-                <a class="boton boton-secundario" href="pedidos.html"><span class="boton-icono" aria-hidden="true">▤</span> VER MIS PEDIDOS</a>
-            </div>
-            <p class="mensaje error oculto" id="mensajeError"></p>
-            <p class="mensaje oculto" id="mensajeActualizacion"></p>
-        </div>
-    </section>
-
-    <footer class="pie">
-        <div class="pie-marca"><span class="pie-escudo">♢</span><div><strong>Gamers Gold Top-Up</strong><small>TU MEJOR OPCIÓN</small></div></div>
-        <div class="ventajas">
-            <div class="ventaja"><span class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4.5 13h6l-.8 9L19.5 10h-6z"/></svg></span><strong>ENTREGA</strong><span>RÁPIDA</span></div>
-            <div class="ventaja"><span class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m8.5 12 2.3 2.3 4.8-5"/></svg></span><strong>PAGO SEGURO</strong><span>Y CONFIABLE</span></div>
-            <div class="ventaja"><span class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 13v-2a8 8 0 0 1 16 0v2"/><path d="M4 13h3v6H6a2 2 0 0 1-2-2zM20 13h-3v6h1a2 2 0 0 0 2-2z"/><path d="M17 19a5 5 0 0 1-5 3h-1"/></svg></span><strong>SOPORTE</strong><span>24/7</span></div>
-            <div class="ventaja"><span class="ventaja-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 2 2.8 6 6.5.8-4.8 4.5 1.3 6.4L12 16.5l-5.8 3.2 1.3-6.4-4.8-4.5L9.2 8z"/></svg></span><strong>LOS MEJORES</strong><span>PRECIOS</span></div>
-        </div>
-        <div class="copyright">GAMERS GOLD TOP-UP · © 2026</div>
-    </footer>
-</main>
-
-
-
-<script type="module">
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-"use strict";
-
-const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
-const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
-const INTERVALO_ACTUALIZACION = 8000;
-
-const JUEGOS_PERMITIDOS = new Set([
-    "free-fire", "mobile-legends", "pubg-mobile", "arena-breakout",
-    "honor-of-kings", "genshin-impact", "blood-strike"
-]);
-
-const parametros = new URLSearchParams(location.search);
-const idPedido = parametros.get("id") || parametros.get("pedido") || parametros.get("order");
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-});
-
-const $ = id => document.getElementById(id);
-const iconoEstado = $("iconoEstado");
-const tituloEstado = $("tituloEstado");
-const descripcionEstado = $("descripcionEstado");
-const etiquetaEstado = $("etiquetaEstado");
-const textoEstado = $("textoEstado");
-const elementoJuego = $("juego");
-const elementoProducto = $("producto");
-const elementoCantidad = $("cantidad");
-const elementoJugador = $("idJugador");
-const elementoPrecio = $("precio");
-const elementoFecha = $("fecha");
-const elementoNumeroPedido = $("numeroPedido");
-const notaEstado = $("notaEstado");
-const mensajeError = $("mensajeError");
-const accionesComprobante = $("accionesComprobante");
-const botonGuardarComprobante = $("guardarComprobante");
-const tarjetaComprobante = $("tarjetaComprobante");
-
-let usuarioId = null;
-let pedidoActual = null;
-let intervalo = null;
-let canalPedido = null;
-let consultando = false;
-let detenido = false;
-let productoCargado = null;
-let generacionConsulta = 0;
-let errorSesionMostrado = false;
-let html2canvasPromise = null;
-let descargaEnCurso = false;
-
-function mostrarError(mensaje) {
-    mensajeError.textContent = mensaje;
-    mensajeError.classList.remove("oculto");
-}
-function ocultarError() {
-    mensajeError.textContent = "";
-    mensajeError.classList.add("oculto");
-}
-function formatearFecha(fecha) {
-    if (!fecha) return "Pendiente";
-    const valor = new Date(fecha);
-    if (Number.isNaN(valor.getTime())) return "Pendiente";
-    return valor.toLocaleString("es-ES", { dateStyle: "long", timeStyle: "short" });
-}
-function normalizarEstado(pedido) {
-    const db = String(pedido?.status || "").trim().toLowerCase();
-    const proveedor = String(pedido?.provider_status || "").trim().toUpperCase();
-    if (db === "completed" || proveedor === "COMPLETED") return "completed";
-    if (db === "refunded" || proveedor === "REFUNDED") return "refunded";
-    if (db === "failed" || proveedor === "FAILED") return "failed";
-    if (db === "processing" || proveedor === "PROCESSING") return "processing";
-    return "pending";
-}
-function esEstadoFinal(estado) {
-    return ["completed", "failed", "refunded"].includes(estado);
-}
-
-function esErrorIdJugador(pedido) {
-    const error = String(pedido?.provider_error || "").toLowerCase();
-
-    if (!error) return false;
-
-    const codigoInvalido =
-        /player_id_invalid|invalid_player_id|player_not_found|invalid_uid|uid_invalid|invalid_user_id|user_not_found|account_not_found|invalid_account/.test(error);
-
-    if (codigoInvalido) return true;
-
-    const mencionaCuenta =
-        /player|jugador|user|usuario|uid|account|cuenta|character|personaje|role|rol/.test(error);
-
-    const indicaInvalido =
-        /invalid|not found|does not exist|incorrect|no existe|inv[aá]lido|incorrecto|no encontrado/.test(error);
-
-    return mencionaCuenta && indicaInvalido;
-}
-function detenerIntervalo() {
-    if (intervalo !== null) {
-        clearInterval(intervalo);
-        intervalo = null;
-    }
-}
-async function cerrarCanalRealtime() {
-    const canal = canalPedido;
-    canalPedido = null;
-    if (canal) {
-        try { await supabase.removeChannel(canal); }
-        catch (error) { console.warn("No se pudo cerrar la suscripción Realtime."); }
-    }
-}
-async function detenerActualizacion() {
-    detenido = true;
-    detenerIntervalo();
-    await cerrarCanalRealtime();
-}
-
-function mostrarEstadoPedido(pedido) {
-    const estado = normalizarEstado(pedido);
-    const detalleEstado = document.getElementById("estadoDetalle");
-    if (detalleEstado) detalleEstado.textContent = ({completed:"Completada",processing:"En proceso",pending:"Pendiente",failed:"Fallida",refunded:"Reembolsada"})[estado] || "En consulta";
-    const estadoVisual = document.getElementById("estadoVisual");
-    if (estadoVisual) estadoVisual.textContent = estado === "completed" ? "✓ RECARGA ENTREGADA" : estado === "processing" ? "↻ RECARGA EN PROCESO" : estado === "failed" ? "! RECARGA NO COMPLETADA" : estado === "refunded" ? "↩ PEDIDO REEMBOLSADO" : "✦ PEDIDO RECIBIDO";
-    const selloVisual = document.getElementById("selloVisual");
-    if (selloVisual) selloVisual.textContent = estado === "completed" ? "✓" : estado === "failed" || estado === "refunded" ? "!" : "…";
-    const estados = {
-        completed: {
-            titulo: "¡Recarga completada!",
-            descripcion: "Tu pedido ha sido procesado correctamente.",
-            etiqueta: "RECARGA COMPLETADA", icono: "✓",
-            nota: "La recarga figura como completada. Gracias por comprar en Gamers Gold Top-Up."
-        },
-        failed: {
-            titulo: "Pedido no completado",
-            descripcion: "No se pudo completar tu recarga.",
-            etiqueta: "PEDIDO FALLIDO", icono: "!",
-            nota: "Tu pedido figura como fallido. Si corresponde un reembolso, comprueba el saldo de tu cuenta."
-        },
-        refunded: {
-            titulo: "Pedido reembolsado",
-            descripcion: "El pedido figura como reembolsado.",
-            etiqueta: "REEMBOLSADO", icono: "↩",
-            nota: "Comprueba el saldo de tu cuenta para verificar el reembolso."
-        },
-        processing: {
-            titulo: "Tu recarga está en proceso",
-            descripcion: "Estamos gestionando tu pedido.",
-            etiqueta: "EN PROCESO", icono: "…",
-            nota: "El estado de tu pedido se actualizará cuando haya novedades."
-        },
-        pending: {
-            titulo: "Pedido recibido",
-            descripcion: "Tu pedido está pendiente de procesamiento.",
-            etiqueta: "PENDIENTE", icono: "…",
-            nota: "Te mostraremos aquí cualquier cambio en el estado de tu pedido."
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
+        :root {
+            --fondo: #030817; --panel: rgba(5, 15, 35, .97); --azul: #087cff;
+            --cian: #00d9ff; --texto: #f5f9ff; --secundario: #9cb5d9;
+            --verde: #39ff88; --rojo: #ff656f; --dorado: #ffd36a;
         }
-    };
-    const idJugadorInvalido = esErrorIdJugador(pedido);
-    const info = idJugadorInvalido
-        ? {
-            titulo: "ID del jugador inválido",
-            descripcion: "Gamers Gold Top-Up indica que este ID no es válido. Por favor, compruébalo de nuevo.",
-            etiqueta: "COMPROBAR ID",
-            icono: "!",
-            nota: "Comprueba el ID del jugador y la zona o servidor, si corresponde. Si este pedido sigue pendiente, consulta su estado antes de intentar otra recarga."
+        body {
+            min-height: 100vh; color: var(--texto);
+            background: radial-gradient(ellipse at 50% 12%, rgba(0, 100, 255, .19), transparent 42%),
+                radial-gradient(ellipse at 0% 50%, rgba(0, 75, 255, .09), transparent 35%),
+                radial-gradient(ellipse at 100% 75%, rgba(0, 190, 255, .08), transparent 35%), var(--fondo);
+            overflow-x: hidden;
         }
-        : estados[estado];
+        body::before {
+            content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .32;
+            background: linear-gradient(135deg, transparent 47%, rgba(0, 133, 255, .12) 48%, transparent 49%) 0 0 / 110px 110px,
+                linear-gradient(45deg, transparent 47%, rgba(0, 133, 255, .08) 48%, transparent 49%) 0 0 / 150px 150px;
+            mask-image: linear-gradient(to bottom, black, transparent 85%);
+        }
+        header {
+            position: relative; z-index: 1; padding: 19px 16px;
+            border-bottom: 1px solid rgba(0, 190, 255, .32); background: rgba(3, 9, 24, .88);
+            box-shadow: 0 5px 25px rgba(0, 91, 255, .08);
+        }
+        .barra { width: 100%; max-width: 850px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .logo { font-size: 18px; font-weight: 900; font-style: italic; letter-spacing: 1px; text-shadow: 0 0 18px rgba(0, 157, 255, .18); }
+        .logo span { color: var(--cian); }
+        .etiqueta { padding: 8px 12px; border: 1px solid rgba(0, 205, 255, .5); border-radius: 5px; color: var(--cian); background: rgba(0, 120, 255, .08); font-size: 10px; font-weight: 800; letter-spacing: 1.4px; white-space: nowrap; }
+        main { position: relative; z-index: 1; width: 100%; max-width: 690px; padding: 24px 16px 20px; margin: auto; }
+        .tarjeta {
+            position: relative; overflow: hidden; border: 1px solid rgba(0, 177, 255, .8); border-radius: 15px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(0, 100, 255, .11), transparent 48%), linear-gradient(155deg, rgba(7, 19, 43, .99), rgba(2, 8, 21, .99));
+            box-shadow: 0 0 24px rgba(0, 111, 255, .17), 0 0 65px rgba(0, 111, 255, .06), inset 0 0 25px rgba(0, 110, 255, .035);
+        }
+        .tarjeta::before, .tarjeta::after { content: ""; position: absolute; width: 75px; height: 2px; background: var(--cian); box-shadow: 0 0 13px var(--cian); pointer-events: none; }
+        .tarjeta::before { top: 0; left: 30px; } .tarjeta::after { bottom: 0; right: 30px; }
+        .cabecera-tarjeta { position: relative; padding: 25px 20px 19px; text-align: center; border-bottom: 1px solid rgba(0, 185, 255, .18); }
+        .marca { margin-bottom: 17px; color: #f6f9ff; font-size: 13px; font-weight: 900; font-style: italic; letter-spacing: 5px; }
+        .marca span { display: block; margin-top: 4px; color: var(--cian); font-size: 11px; letter-spacing: 8px; }
+        .icono { width: 76px; height: 76px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; border: 2px solid var(--cian); border-radius: 50%; color: var(--cian); background: rgba(0, 145, 255, .08); box-shadow: 0 0 12px rgba(0, 200, 255, .3), inset 0 0 22px rgba(0, 200, 255, .09); font-size: 40px; font-weight: 900; transition: .25s ease; }
+        .icono.completado { color: var(--verde); border-color: var(--verde); background: rgba(0, 255, 115, .07); box-shadow: 0 0 16px rgba(0, 255, 115, .35), inset 0 0 22px rgba(0, 255, 115, .1); }
+        .icono.error { color: var(--rojo); border-color: var(--rojo); box-shadow: 0 0 16px rgba(255, 65, 90, .25); }
+        h1 { margin-bottom: 8px; font-size: clamp(23px, 5.5vw, 34px); font-weight: 900; font-style: italic; line-height: 1.2; text-transform: uppercase; text-shadow: 0 0 24px rgba(0, 122, 255, .18); }
+        h1.resaltado { color: var(--cian); }
+        .subtitulo { max-width: 440px; margin: auto; color: #bed1ee; font-size: 13px; line-height: 1.6; }
+        .estado { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; padding: 8px 13px; border: 1px solid rgba(0, 199, 255, .48); border-radius: 4px; background: rgba(0, 145, 255, .08); color: var(--cian); font-size: 10px; font-weight: 900; letter-spacing: 1.3px; }
+        .punto { width: 7px; height: 7px; flex-shrink: 0; border-radius: 50%; background: currentColor; box-shadow: 0 0 9px currentColor; }
+        .estado.completado { color: var(--verde); border-color: rgba(57, 255, 136, .6); background: rgba(57, 255, 136, .06); }
+        .estado.procesando { color: var(--cian); } .estado.error { color: var(--rojo); border-color: rgba(255, 101, 111, .55); }
+        .separador { width: 70px; height: 2px; margin: 16px auto 0; background: linear-gradient(90deg, transparent, var(--cian), transparent); box-shadow: 0 0 10px rgba(0, 200, 255, .4); }
+        .contenido { padding: 18px 18px 20px; }
+        .titulo-seccion { display: flex; align-items: center; gap: 9px; margin-bottom: 12px; color: #f4f9ff; font-size: 12px; font-weight: 900; letter-spacing: 1.4px; text-transform: uppercase; }
+        .titulo-seccion::before { content: ""; display: block; width: 3px; height: 18px; flex-shrink: 0; border-radius: 2px; background: var(--cian); box-shadow: 0 0 12px rgba(0, 217, 255, .65); }
+        .lista-datos {
+            position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: hidden;
+            border: 1px solid rgba(0, 190, 255, .62); border-radius: 8px;
+            background: linear-gradient(135deg, rgba(0, 105, 255, .07), transparent 42%), linear-gradient(160deg, rgba(4, 17, 39, .98), rgba(2, 8, 22, .99));
+            box-shadow: 0 0 18px rgba(0, 125, 255, .09), inset 0 0 20px rgba(0, 135, 255, .035);
+        }
+        .lista-datos::before { content: ""; position: absolute; top: 0; left: 16px; width: 48px; height: 2px; background: var(--cian); box-shadow: 0 0 12px var(--cian); z-index: 1; }
+        .dato { position: relative; display: flex; align-items: center; gap: 9px; min-width: 0; padding: 11px 10px; border-bottom: 1px solid rgba(0, 150, 255, .18); transition: background .2s ease; }
+        .dato:nth-child(odd) { border-right: 1px solid rgba(0, 150, 255, .18); } .dato:hover { background: rgba(0, 132, 255, .09); }
+        .dato-icono { width: 31px; height: 31px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(0, 196, 255, .4); border-radius: 6px; color: var(--cian); background: linear-gradient(145deg, rgba(0, 134, 255, .15), rgba(0, 35, 90, .18)); font-size: 14px; font-weight: 900; }
+        .dato-info { flex: 1; min-width: 0; }
+        .dato span { display: block; margin-bottom: 4px; color: #91afd7; font-size: 9px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; }
+        .dato strong { display: block; color: #f5f9ff; font-size: 12px; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+        .dato .precio { color: var(--dorado); font-size: 15px; font-weight: 900; text-shadow: 0 0 14px rgba(255, 211, 106, .14); }
+        .nota { margin-top: 12px; padding: 11px 12px; border: 1px solid rgba(0, 145, 255, .17); border-left: 3px solid var(--cian); border-radius: 5px; background: rgba(0, 100, 210, .055); color: var(--secundario); font-size: 11px; line-height: 1.6; }
+        .nota.completado { border-left-color: var(--verde); } .nota.error { border-left-color: var(--rojo); }
+        .acciones { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 14px; }
+        .boton { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 11px 9px; border: 1px solid var(--cian); border-radius: 6px; text-align: center; text-decoration: none; font-size: 10px; font-weight: 900; letter-spacing: .6px; transition: transform .2s ease, filter .2s ease, box-shadow .2s ease; }
+        .boton-principal { color: white; background: linear-gradient(100deg, #006bff, #00bfff); box-shadow: 0 0 19px rgba(0, 142, 255, .19), inset 0 1px rgba(255, 255, 255, .2); }
+        .boton-secundario { color: var(--cian); background: rgba(0, 90, 190, .06); }
+        .boton:hover { transform: translateY(-2px); filter: brightness(1.12); box-shadow: 0 0 22px rgba(0, 174, 255, .25); }
+        .boton-icono { font-size: 17px; }
+        button.boton { width: 100%; font-family: Arial, Helvetica, sans-serif; cursor: pointer; }
+        button.boton:disabled { opacity: .65; cursor: wait; transform: none; }
+        #accionesComprobante { margin-top: 12px; }
+#accionesNavegacion{grid-template-columns:1fr}
+        #accionesComprobante .boton { grid-column: 1 / -1; min-height: 48px; }
+        .mensaje { margin-top: 11px; color: var(--secundario); font-size: 12px; text-align: center; line-height: 1.6; }
+        .mensaje.error { color: var(--rojo); }
+        .pie { padding: 22px 5px 10px; color: #8ca5c8; text-align: center; }
+        .ventajas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-bottom: 20px; }
+        .ventaja { padding: 5px 8px; border-right: 1px solid rgba(0, 153, 255, .3); text-align: center; }
+        .ventaja:last-child { border-right: none; }
+        .ventaja-icono { display: flex; align-items: center; justify-content: center; margin: 0 auto 7px; color: var(--cian); } .ventaja-icono svg { display: block; width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 5px rgba(0, 217, 255, .35)); }
+        .ventaja strong { display: block; color: var(--cian); font-size: 9px; letter-spacing: .5px; }
+        .ventaja span { display: block; margin-top: 4px; color: #9db2d0; font-size: 9px; }
+        .copyright { padding-top: 16px; border-top: 1px solid rgba(0, 157, 255, .17); color: #8ca4c7; font-size: 10px; letter-spacing: 2px; }
+        .oculto { display: none !important; }
+        @media (max-width: 480px) {
+            header { padding: 15px 11px; } .logo { font-size: 13px; letter-spacing: .4px; }
+            .etiqueta { padding: 7px; font-size: 8px; letter-spacing: .5px; }
+            main { padding: 17px 10px 12px; } .cabecera-tarjeta { padding: 23px 12px 17px; }
+            .marca { margin-bottom: 14px; font-size: 11px; } .marca span { font-size: 10px; letter-spacing: 6px; }
+            .icono { width: 68px; height: 68px; margin-bottom: 13px; font-size: 36px; }
+            h1 { font-size: 24px; } .subtitulo { font-size: 12px; }
+            .estado { margin-top: 12px; padding: 7px 10px; font-size: 9px; }
+            .contenido { padding: 15px 10px 16px; }
+            .titulo-seccion { gap: 8px; margin-bottom: 10px; font-size: 10px; letter-spacing: 1px; }
+            .lista-datos { grid-template-columns: minmax(0, 1fr); }
+            .dato { display: grid; grid-template-columns: 30px minmax(78px, .85fr) minmax(0, 1.4fr); align-items: center; gap: 8px; padding: 9px 8px; border-right: none !important; border-bottom: 1px solid rgba(0, 150, 255, .18); }
+            .dato:last-child { border-bottom: none; } .dato-icono { width: 29px; height: 29px; font-size: 13px; }
+            .dato-info { display: contents; } .dato span { margin-bottom: 0; font-size: 8px; letter-spacing: .5px; line-height: 1.35; }
+            .dato strong { font-size: 11px; line-height: 1.35; text-align: right; } .dato .precio { font-size: 14px; }
+            .nota { margin-top: 10px; padding: 10px; font-size: 10px; }
+            .acciones { grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 12px; }
+            .boton { min-height: 43px; padding: 9px 5px; gap: 5px; font-size: 9px; letter-spacing: .2px; }
+            .boton-icono { font-size: 15px; } .ventaja { padding: 4px 3px; }
+            .ventaja-icono svg { width: 21px; height: 21px; } .ventaja strong, .ventaja span { font-size: 8px; }
+            .copyright { font-size: 9px; letter-spacing: 1.5px; }
+        }
+        @media (max-width: 350px) {
+            .acciones { grid-template-columns: 1fr; }
+            .dato { grid-template-columns: 27px minmax(68px, .8fr) minmax(0, 1.4fr); gap: 6px; padding: 9px 6px; }
+            .dato-icono { width: 26px; height: 26px; } .dato span { font-size: 7px; } .dato strong { font-size: 10px; }
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .icono.completado { animation: aparecer .5s ease-out; }
+            @keyframes aparecer { from { transform: scale(.86); opacity: .5; } to { transform: scale(1); opacity: 1; } }
+        }
+    
+/* Botón Atrás: icono en cuadrado con identidad visual de cuenta.html */
+.boton-atras{display:inline-flex;align-items:center;justify-content:flex-start;align-self:flex-start;gap:9px;width:fit-content;max-width:100%;margin:0 auto 0 0;padding:0;background:transparent;border:0;color:#eaf7ff;text-decoration:none;font-size:13px;font-weight:800;line-height:1;-webkit-tap-highlight-color:transparent}
+.icono-atras{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.45)}
+.icono-atras svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.boton-atras:hover .icono-atras{border-color:#28a9ff;background:linear-gradient(145deg,#145184,#09294b)}
+.boton-atras:focus-visible{outline:2px solid #75d7ff;outline-offset:3px;border-radius:8px}
 
-    tituloEstado.textContent = info.titulo;
-    tituloEstado.classList.toggle("resaltado", estado === "completed" && !idJugadorInvalido);
-    descripcionEstado.textContent = info.descripcion;
-    textoEstado.textContent = info.etiqueta;
-    iconoEstado.textContent = info.icono;
-    notaEstado.textContent = info.nota;
-    iconoEstado.classList.toggle("completado", estado === "completed" && !idJugadorInvalido);
-    iconoEstado.classList.toggle("error", idJugadorInvalido || estado === "failed" || estado === "refunded");
-    etiquetaEstado.className = "estado estado-comprobante";
-    if (estado === "completed" && !idJugadorInvalido) etiquetaEstado.classList.add("completado");
-    else if (estado === "processing" && !idJugadorInvalido) etiquetaEstado.classList.add("procesando");
-    else if (idJugadorInvalido || estado === "failed" || estado === "refunded") etiquetaEstado.classList.add("error");
-    notaEstado.className = "nota";
-    if (estado === "completed" && !idJugadorInvalido) notaEstado.classList.add("completado");
-    else if (idJugadorInvalido || estado === "failed" || estado === "refunded") notaEstado.classList.add("error");
-    return estado;
+
+/* Encabezado unificado con flecha y nombre de página */
+.encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras,header .encabezado-pagina~.boton-atras,.header .encabezado-pagina~.boton-atras{display:none!important}
+
+/* Rediseño tipo comprobante premium para Gamers Gold Top-Up */
+.comprobante-nuevo{
+ width:100%;max-width:640px;margin:0 auto;border:1px solid rgba(31,145,255,.5);
+ border-radius:30px;background:#071a37;color:#f5f9ff;overflow:hidden;
+ box-shadow:0 18px 48px rgba(0,18,55,.2);
+}
+.comprobante-nuevo::before,.comprobante-nuevo::after{display:none}
+.comprobante-hero{
+ position:relative;overflow:hidden;min-height:520px;padding:27px 22px 34px;
+ color:#fff;text-align:center;
+ background:
+  linear-gradient(rgba(36,143,255,.08) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(36,143,255,.08) 1px,transparent 1px),
+  radial-gradient(ellipse at 50% 55%,rgba(0,190,255,.22),transparent 44%),
+  radial-gradient(ellipse at 50% 100%,rgba(0,75,255,.22),transparent 50%),
+  linear-gradient(145deg,#06152e,#071a37 52%,#030918);
+ background-size:34px 34px,34px 34px,auto,auto,auto;
+}
+.comprobante-hero::after{content:"";position:absolute;inset:auto -10% -90px;height:190px;background:radial-gradient(ellipse,rgba(0,161,255,.22),transparent 68%);pointer-events:none}
+.comprobante-cabecera{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.marca-ggt{font-size:15px;font-weight:1000;letter-spacing:.4px;text-align:left}
+.marca-ggt span,.marca-ggt{color:#fff}
+.marca-ggt span{color:#39caff}
+.marca-ggt{ text-shadow:0 0 16px rgba(0,180,255,.25)}
+.estado-comprobante{margin:0;padding:9px 13px;border-radius:99px;border:1px solid rgba(32,210,139,.45);background:rgba(21,190,119,.13);color:#75ffc1;font-size:10px;letter-spacing:.4px}
+.producto-visual{position:relative;width:190px;height:175px;margin:46px auto 18px;display:grid;place-items:center}
+.producto-orbita{position:absolute;bottom:9px;width:155px;height:34px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,206,255,.34),transparent 70%);filter:blur(5px)}
+.producto-cristal{position:relative;display:grid;place-items:center;width:132px;height:132px;border-radius:34px;transform:rotate(45deg);font-size:100px;color:#62dfff;text-shadow:0 0 8px #fff,0 0 22px #008dff,0 0 42px #006dff;filter:drop-shadow(0 14px 15px rgba(0,0,0,.45))}
+.producto-check{position:absolute;right:13px;bottom:20px;width:57px;height:57px;display:grid;place-items:center;border:5px solid #06152e;border-radius:50%;background:#16c879;color:#fff;font-size:29px;font-weight:900;box-shadow:0 0 18px rgba(22,200,121,.45)}
+.producto-resumen{position:relative;z-index:1}
+.juego-etiqueta{margin-bottom:9px;color:#9bb8d9;font-size:13px;font-weight:800;letter-spacing:3px;text-transform:uppercase}
+.producto-titulo{margin:0 auto 12px;color:#fff;font-size:clamp(25px,6vw,36px);font-weight:900;line-height:1.15}
+.comprobante-nuevo h1{margin:0 0 7px;color:#65e7ff;font-size:16px;font-style:normal;letter-spacing:.2px;text-transform:none;text-shadow:0 0 15px rgba(0,185,255,.3)}
+.comprobante-nuevo .subtitulo{color:#a8bed9;font-size:12px}
+.estado-tiempo{display:inline-flex;margin-top:17px;padding:10px 17px;border:1px solid rgba(43,214,255,.25);border-radius:99px;background:rgba(0,155,255,.12);color:#6de3ff;font-size:12px;font-weight:800;letter-spacing:.3px}
+.comprobante-cuerpo{padding:24px 22px 25px;background:linear-gradient(155deg,#0a2347,#06152e 72%,#030b1c);color:#f5f9ff}
+.total-pagado{display:flex;align-items:center;gap:17px;padding:19px 18px;margin-bottom:18px;border:1px solid rgba(55,174,255,.45);border-radius:22px;background:linear-gradient(110deg,rgba(16,67,119,.92),rgba(5,28,59,.98));box-shadow:inset 0 0 20px rgba(0,145,255,.12),0 5px 18px rgba(0,0,0,.15)}
+.total-emblema{width:55px;height:55px;flex:0 0 55px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(145deg,#35caff,#0757d9 65%,#062d7b);border:2px solid #9cecff;box-shadow:0 5px 14px rgba(0,98,220,.25);overflow:hidden}.total-emblema img{display:block;width:46px;height:46px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,15,55,.45))}
+.total-texto{min-width:0}
+.total-texto>span{display:block;margin-bottom:5px;color:#9fc8ec;font-size:11px;font-weight:900;letter-spacing:2px}
+.total-texto .precio{display:block;color:#ffffff;font-size:clamp(25px,6vw,34px);font-weight:1000;line-height:1.1;overflow-wrap:anywhere;text-shadow:0 0 15px rgba(0,174,255,.18)}
+.datos-comprobante{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.dato-claro{display:block;min-width:0;padding:15px 14px;border:1px solid rgba(43,151,230,.38);border-radius:18px;background:linear-gradient(145deg,rgba(13,48,88,.98),rgba(5,23,49,.98));text-align:left;box-shadow:inset 0 0 18px rgba(0,132,255,.06)}
+.dato-claro span{display:block;margin-bottom:7px;color:#9bb9da;font-size:11px;font-weight:700;letter-spacing:.1px;text-transform:none}
+.dato-claro strong{display:block;color:#f5f9ff;font-size:15px;font-weight:800;line-height:1.35;overflow-wrap:anywhere}
+.orden-comprobante{display:flex;align-items:center;gap:17px;margin:22px -22px 0;padding:20px 22px 16px;border-top:1px dashed rgba(77,166,230,.38)}
+.codigo-barras{height:48px;flex:0 0 34%;display:flex;align-items:stretch;gap:3px;overflow:hidden}
+.codigo-barras i{display:block;width:2px;background:#9bc9ee}
+.codigo-barras i:nth-child(3n){width:4px}.codigo-barras i:nth-child(4n){width:1px}.codigo-barras i:nth-child(5n){margin-right:3px}
+.orden-texto{min-width:0;flex:1}
+.orden-texto span{display:block;margin-bottom:5px;color:#9bb9da;font-size:10px;font-weight:800;letter-spacing:1.7px}
+.orden-texto strong{display:block;color:#f5f9ff;font-size:15px;font-weight:900;overflow-wrap:anywhere}
+.verificacion-comprobante{display:flex;align-items:center;justify-content:center;gap:8px;color:#c5dcf4;font-size:12px;font-weight:700;text-align:center}
+.verificacion-icono{width:19px;height:19px;display:grid;place-items:center;border:2px solid #39caff;border-radius:50%;color:#39caff;font-size:12px;font-weight:900}
+.comprobante-nuevo .nota{margin-top:10px;padding:10px 12px;border:0;background:rgba(11,48,87,.78);color:#b7cce5;font-size:11px;text-align:center}
+.comprobante-nuevo .nota.completado{color:#17794f;background:rgba(17,117,79,.18)}
+.comprobante-nuevo .nota.error{color:#b42332;background:rgba(180,35,50,.18)}
+.comprobante-nuevo .acciones{margin-top:13px}
+.comprobante-nuevo .boton{border-radius:13px;font-size:11px;letter-spacing:.2px}
+.comprobante-nuevo .boton-atras{justify-content:center;margin:0;padding:8px 10px;background:linear-gradient(145deg,#103b65,#08203b);border:1px solid #287bb5;color:#bfeaff}
+.comprobante-nuevo .icono-atras{width:28px;height:28px;flex-basis:28px;border-radius:8px}
+.comprobante-nuevo .boton-secundario{background:linear-gradient(145deg,#103b65,#08203b);border-color:#287bb5;color:#bfeaff}
+@media(max-width:480px){
+ .comprobante-nuevo{border-radius:26px}
+ .comprobante-hero{min-height:480px;padding:22px 14px 28px}
+ .marca-ggt{font-size:12px}
+ .estado-comprobante{padding:8px 10px;font-size:9px}
+ .producto-visual{width:160px;height:150px;margin:39px auto 14px}
+ .producto-cristal{width:112px;height:112px;font-size:83px}
+ .producto-check{right:8px;bottom:14px;width:50px;height:50px;font-size:25px}
+ .juego-etiqueta{font-size:11px;letter-spacing:2.5px}
+ .producto-titulo{font-size:28px}
+ .comprobante-cuerpo{padding:18px 14px 20px}
+ .total-pagado{gap:13px;padding:16px 13px;border-radius:19px}
+ .total-emblema{width:48px;height:48px;flex-basis:48px;font-size:29px}
+ .total-texto>span{font-size:9px;letter-spacing:1.5px}
+ .total-texto .precio{font-size:27px}
+ .datos-comprobante{gap:8px}
+ .dato-claro{padding:13px 11px;border-radius:16px}
+ .dato-claro span{font-size:9px}
+ .dato-claro strong{font-size:13px}
+ .orden-comprobante{gap:12px;margin:18px -14px 0;padding:17px 14px 14px}
+ .codigo-barras{height:40px;flex-basis:30%;gap:2px}
+ .orden-texto span{font-size:8px;letter-spacing:1.2px}
+ .orden-texto strong{font-size:12px}
+ .verificacion-comprobante{font-size:10px}
+}
+@media(max-width:350px){
+ .comprobante-cabecera{align-items:flex-start}
+ .marca-ggt{max-width:105px;line-height:1.35}
+ .estado-comprobante{font-size:8px}
+ .datos-comprobante{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.producto-check{animation:none}}
+
+
+
+/* ===== Checkout: composición fiel al comprobante de referencia ===== */
+html,body{width:100%;max-width:100%;min-height:100%;overflow-x:hidden}
+body{margin:0;background:#030a18;color:#f4f8ff}
+main{width:100%;max-width:940px;margin:0 auto;padding:18px 20px 24px;box-sizing:border-box}
+.tarjeta.comprobante-nuevo{width:100%;max-width:860px;margin:0 auto;border:1px solid rgba(0,136,255,.55);border-radius:22px;background:linear-gradient(155deg,#06152d,#020918 72%);overflow:hidden;box-shadow:0 0 28px rgba(0,104,255,.2)}
+.checkout-light-sweep,.checkout-border-effect{display:none!important;animation:none!important}
+.comprobante-hero{min-height:0;padding:26px 24px 28px;text-align:center;background:radial-gradient(ellipse at 50% 62%,rgba(0,139,255,.17),transparent 48%),linear-gradient(145deg,#06152e,#071a37 55%,#030918)}
+.comprobante-cabecera{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.marca-ggt{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:.9}
+.marca-ggt .marca-principal{font-size:clamp(30px,5vw,43px);font-weight:1000}
+.marca-ggt .marca-gold{font-size:clamp(48px,7vw,68px);font-weight:1000}
+.marca-ggt .marca-topup{font-size:13px;letter-spacing:8px;margin-left:8px}
+.estado-comprobante{margin-top:7px}
+.claim-marca{margin:13px auto 0;font-size:clamp(9px,1.5vw,13px);letter-spacing:clamp(2px,.5vw,5px);text-align:center}
+.producto-visual{width:190px;height:170px;margin:25px auto 16px;display:grid;place-items:center}
+.producto-check{width:142px;height:142px;display:grid;place-items:center;border:7px solid #27f68d;border-radius:50%;background:radial-gradient(circle,rgba(0,255,130,.16),rgba(0,20,34,.8));color:#dffff0;font-size:94px;line-height:1;box-shadow:0 0 18px #00e879,0 0 48px rgba(0,255,120,.4),inset 0 0 22px rgba(0,255,130,.18)}
+.producto-orbita,.producto-cristal{display:none!important}
+.producto-resumen h1{margin:12px auto 10px;font-size:clamp(30px,5.2vw,53px);line-height:1.02;text-align:center;overflow-wrap:anywhere}
+.producto-resumen .subtitulo{max-width:680px;margin:0 auto;font-size:clamp(12px,1.7vw,16px);line-height:1.55;text-align:center}
+.estado-tiempo{display:none!important}
+.comprobante-cuerpo{width:100%;padding:0 26px 24px;box-sizing:border-box;background:transparent;border:0;box-shadow:none}
+.ficha-pedido{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(220px,.82fr);gap:12px;align-items:stretch;width:100%;height:auto;min-height:440px;max-height:none;padding:12px;box-sizing:border-box;border:1px solid #078fff;border-radius:17px;background:linear-gradient(145deg,rgba(4,19,43,.98),rgba(2,9,24,.99));box-shadow:0 0 20px rgba(0,119,255,.24),inset 0 0 22px rgba(0,126,255,.05);overflow:hidden}
+.ficha-datos{display:flex;flex-direction:column;justify-content:stretch;min-width:0;min-height:0}
+.ficha-fila{display:flex;flex:1 1 auto;align-items:center;gap:12px;min-width:0;min-height:64px;padding:7px 9px;box-sizing:border-box;border-bottom:1px solid rgba(0,137,255,.19)}
+.ficha-fila:last-of-type{border-bottom:0}
+.ficha-icono{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;border:1px solid #087ee6;border-radius:50%;background:linear-gradient(145deg,rgba(0,112,255,.18),rgba(0,25,65,.35));color:#19caff;font-size:25px}
+.ficha-info{min-width:0;flex:1;overflow:hidden}
+.ficha-info>span{display:block;margin-bottom:4px;color:#8fb5e8;font-size:11px;letter-spacing:.7px}
+.ficha-info>strong{display:block;color:#f6f9ff;font-size:16px;font-weight:700;line-height:1.23;overflow-wrap:anywhere;word-break:break-word}
+.ficha-info>strong.precio{font-size:17px}
+.ficha-info>small{display:block;margin-top:4px;color:#9bbce7;font-size:10px}
+.ficha-info>small b{color:#fff;font-size:11px}
+.logo-juego{width:130px;min-height:65px;flex:0 0 130px}
+.ficha-arte{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:100%;overflow:hidden;background:radial-gradient(ellipse at 50% 62%,rgba(0,117,255,.2),transparent 67%)}
+.escudo-gvr-flotante{position:relative;z-index:2;width:min(78%,180px);aspect-ratio:160/180;display:flex;align-items:center;justify-content:center;animation:walletEscudoFlota 3.2s ease-in-out infinite;filter:drop-shadow(0 0 13px rgba(0,157,255,.48))}
+.escudo-gvr-flotante svg{display:block;width:100%;height:100%;overflow:visible}
+@keyframes walletEscudoFlota{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.arte-anillo{position:absolute;z-index:1;bottom:12%;width:90%;height:45px;border:2px solid rgba(0,155,255,.8);border-radius:50%;transform:perspective(180px) rotateX(62deg);box-shadow:0 0 16px #008cff,0 0 34px rgba(0,117,255,.45),inset 0 0 12px #008cff}
+.arte-brillo{position:absolute;z-index:0;bottom:10%;width:70%;height:24px;border-radius:50%;background:#008dff;filter:blur(20px);opacity:.6}
+.comprobante-cuerpo>.nota{margin:16px 0 0;padding:15px 18px;border-left:4px solid #16caff;border-radius:10px;background:rgba(0,92,180,.1);color:#b8cce7;text-align:center;line-height:1.55}
+#accionesComprobante,#accionesNavegacion{display:grid;grid-template-columns:1fr;width:100%;max-width:680px;gap:11px;margin:17px auto 0}
+#accionesComprobante .boton,#accionesNavegacion .boton{width:100%;min-height:58px;box-sizing:border-box}
+#accionesNavegacion{margin-top:12px}
+.mensaje{max-width:680px;margin:10px auto 0;text-align:center;overflow-wrap:anywhere}
+.pie{max-width:860px;margin:0 auto;padding:22px 24px 12px}
+.ventajas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+.ventaja{min-width:0}
+.copyright{text-align:center;overflow-wrap:anywhere}
+@media(max-width:620px){
+ main{padding:10px 9px 18px}
+ .tarjeta.comprobante-nuevo{border-radius:16px}
+ .comprobante-hero{padding:20px 12px 20px}
+ .marca-ggt .marca-principal{font-size:29px}
+ .marca-ggt .marca-gold{font-size:48px}
+ .marca-ggt .marca-topup{font-size:10px;letter-spacing:6px}
+ .claim-marca{font-size:8px;letter-spacing:2px;margin-top:10px}
+ .producto-visual{width:150px;height:140px;margin:17px auto 12px}
+ .producto-check{width:112px;height:112px;border-width:6px;font-size:73px}
+ .producto-resumen h1{font-size:clamp(27px,7vw,39px);margin:9px auto}
+ .producto-resumen .subtitulo{font-size:12px;line-height:1.45}
+ .comprobante-cuerpo{padding:0 10px 17px}
+ .ficha-pedido{grid-template-columns:minmax(0,1.48fr) minmax(100px,.72fr);gap:4px;min-height:0;padding:7px;border-radius:14px}
+ .ficha-datos{min-height:0}
+ .ficha-fila{min-height:62px;padding:5px 3px;gap:6px}
+ .ficha-icono{width:31px;height:31px;flex-basis:31px;font-size:17px}
+ .ficha-info>span{font-size:8px;letter-spacing:.35px;margin-bottom:3px}
+ .ficha-info>strong{font-size:clamp(10px,2.8vw,12px);line-height:1.2}
+ .ficha-info>strong.precio{font-size:12px}
+ .ficha-info>small{font-size:8px;margin-top:3px}
+ .ficha-info>small b{font-size:9px}
+ .logo-juego{display:none}
+ .ficha-arte{min-height:100%;overflow:hidden}
+ .escudo-gvr-flotante{width:min(90%,116px);animation-duration:3.8s}
+ .arte-anillo{bottom:13%;height:24px}
+ .arte-brillo{bottom:11%;height:15px}
+ .comprobante-cuerpo>.nota{margin-top:12px;padding:12px 9px;font-size:11px}
+ #accionesComprobante,#accionesNavegacion{margin-top:12px;gap:9px}
+ #accionesComprobante .boton,#accionesNavegacion .boton{min-height:53px;font-size:13px}
+ .pie{padding:18px 8px 10px}
+ .ventajas{gap:3px}
+ .ventaja{padding:3px 1px}
+ .ventaja-icono svg{width:21px;height:21px}
+ .ventaja strong,.ventaja span{font-size:7px;line-height:1.2}
+ .copyright{font-size:8px;letter-spacing:1.5px}
+}
+@media(max-width:370px){
+ .ficha-pedido{grid-template-columns:minmax(0,1.4fr) minmax(88px,.7fr);padding:5px}
+ .ficha-fila{gap:4px;padding:4px 1px}
+ .ficha-icono{width:27px;height:27px;flex-basis:27px}
+ .ficha-info>strong{font-size:10px}
+ .escudo-gvr-flotante{width:88%}
+}
+@media(prefers-reduced-motion:reduce){.escudo-gvr-flotante{animation:none}}
+
+
+/* ===== Interior de la ficha calcado a la referencia enviada ===== */
+.ficha-pedido{
+ grid-template-columns:minmax(0,1.55fr) minmax(205px,.85fr)!important;
+ grid-template-rows:1fr!important;
+ align-items:stretch!important;
+ min-height:470px!important;
+ padding:14px!important;
+ gap:12px!important;
+ border:2px solid #078fff!important;
+ border-radius:19px!important;
+ background:linear-gradient(145deg,#03132d 0%,#020a1b 65%,#04132a 100%)!important;
+ box-shadow:0 0 22px rgba(0,128,255,.26),inset 0 0 25px rgba(0,128,255,.06)!important;
+}
+.ficha-datos{
+ display:grid!important;
+ grid-template-rows:repeat(6,minmax(0,1fr))!important;
+ align-content:stretch!important;
+ justify-content:stretch!important;
+ height:100%!important;
+ min-height:0!important;
+ border:1px solid rgba(0,116,255,.24)!important;
+ border-radius:12px!important;
+ background:rgba(1,9,24,.46)!important;
+ overflow:hidden!important;
+}
+.ficha-fila{
+ display:grid!important;
+ grid-template-columns:58px minmax(0,1fr) auto!important;
+ align-items:center!important;
+ min-height:0!important;
+ height:auto!important;
+ padding:7px 10px!important;
+ gap:12px!important;
+ border-bottom:1px solid rgba(0,120,255,.2)!important;
+ background:transparent!important;
+}
+.ficha-fila:last-of-type{border-bottom:0!important}
+.ficha-icono{
+ width:52px!important;height:52px!important;flex:0 0 52px!important;
+ border:1.5px solid #087ee6!important;border-radius:50%!important;
+ background:linear-gradient(145deg,rgba(0,122,255,.2),rgba(0,19,48,.45))!important;
+ color:#18caff!important;font-size:27px!important;
+ box-shadow:inset 0 0 12px rgba(0,138,255,.1),0 0 9px rgba(0,115,255,.12)!important;
+}
+.ficha-info{min-width:0!important;overflow:visible!important}
+.ficha-info>span{display:block!important;color:#8fb8ec!important;font-size:11px!important;letter-spacing:.55px!important;margin:0 0 4px!important}
+.ficha-info>strong{display:block!important;color:#f6f9ff!important;font-size:16px!important;line-height:1.2!important;font-weight:650!important;overflow-wrap:anywhere!important;word-break:break-word!important}
+.ficha-info>strong.precio{font-size:17px!important}
+.ficha-info>small{display:block!important;color:#9abbe6!important;font-size:10px!important;margin-top:4px!important}
+.logo-juego{
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ width:142px!important;min-height:70px!important;height:70px!important;flex:0 0 142px!important;
+ padding:6px!important;box-sizing:border-box!important;text-align:center!important;
+ border:1px solid rgba(0,129,255,.65)!important;border-radius:12px!important;
+ background:linear-gradient(145deg,rgba(2,17,39,.98),rgba(0,7,20,.98))!important;
+ color:#fff!important;font-size:14px!important;font-weight:900!important;line-height:1.1!important;
+ box-shadow:0 0 12px rgba(0,120,255,.12)!important;
+}
+.logo-juego small{display:block!important;font-size:10px!important;letter-spacing:3px!important;color:#b9dfff!important;margin-top:4px!important}
+.ficha-arte{
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ min-width:0!important;min-height:0!important;height:100%!important;
+ border:0!important;border-radius:12px!important;overflow:hidden!important;
+ background:radial-gradient(ellipse at 50% 70%,rgba(0,106,255,.23),transparent 65%)!important;
+}
+.escudo-gvr-flotante{width:min(94%,230px)!important;max-width:230px!important;aspect-ratio:160/180!important;flex:0 1 auto!important;filter:drop-shadow(0 0 18px rgba(0,135,255,.55))!important}
+.escudo-gvr-flotante img{width:100%!important;height:100%!important;object-fit:contain!important}
+.arte-anillo{bottom:9%!important;width:94%!important;height:42px!important}
+.arte-brillo{bottom:8%!important}
+@media(max-width:620px){
+ .ficha-pedido{
+  grid-template-columns:minmax(0,1.55fr) minmax(104px,.78fr)!important;
+  min-height:0!important;height:auto!important;max-height:none!important;
+  padding:7px!important;gap:5px!important;border-radius:14px!important;
+ }
+ .ficha-datos{
+  grid-template-rows:repeat(6,minmax(57px,auto))!important;
+  height:auto!important;min-height:0!important;
+ }
+ .ficha-fila{
+  grid-template-columns:32px minmax(0,1fr) auto!important;
+  min-height:57px!important;padding:5px 3px!important;gap:6px!important;
+ }
+ .ficha-icono{width:29px!important;height:29px!important;flex-basis:29px!important;font-size:16px!important}
+ .ficha-info>span{font-size:8px!important;letter-spacing:.3px!important;margin-bottom:3px!important}
+ .ficha-info>strong{font-size:clamp(10px,2.8vw,12px)!important;line-height:1.18!important}
+ .ficha-info>strong.precio{font-size:12px!important}
+ .ficha-info>small{font-size:8px!important;margin-top:3px!important}
+ .logo-juego{
+  width:100%!important;max-width:76px!important;min-height:43px!important;height:43px!important;
+  flex-basis:76px!important;padding:3px!important;border-radius:7px!important;font-size:8px!important;
+ }
+ .logo-juego small{font-size:6px!important;letter-spacing:1px!important;margin-top:2px!important}
+ .ficha-arte{align-self:stretch!important;min-height:100%!important;overflow:hidden!important}
+ .escudo-gvr-flotante{width:100%!important;max-width:125px!important;animation-duration:3.8s!important}
+ .arte-anillo{height:22px!important;bottom:12%!important}
+ .arte-brillo{height:13px!important;bottom:10%!important}
+}
+@media(max-width:370px){
+ .ficha-pedido{grid-template-columns:minmax(0,1.52fr) minmax(88px,.72fr)!important;padding:5px!important;gap:3px!important}
+ .ficha-datos{grid-template-rows:repeat(6,minmax(54px,auto))!important}
+ .ficha-fila{grid-template-columns:27px minmax(0,1fr) auto!important;min-height:54px!important;padding:4px 2px!important;gap:4px!important}
+ .ficha-icono{width:25px!important;height:25px!important;flex-basis:25px!important;font-size:14px!important}
+ .ficha-info>strong{font-size:10px!important}
+ .logo-juego{max-width:64px!important;flex-basis:64px!important}
+ .escudo-gvr-flotante{max-width:105px!important}
 }
 
-async function cargarProducto(pedido, version) {
-    if (!pedido?.product_id || productoCargado === pedido.product_id) return;
-    const { data, error } = await supabase
-        .from("game_products")
-        .select("game, product_name, game_currency_amount")
-        .eq("id", pedido.product_id)
-        .maybeSingle();
 
-    if (version !== generacionConsulta || detenido) return;
-    if (error) {
-        console.error("Error consultando el producto:", error);
-        return;
-    }
-    if (!data) {
-        elementoJuego.textContent = "No disponible";
-        elementoProducto.textContent = "No disponible";
-        elementoCantidad.textContent = "No disponible";
-        return;
-    }
-    const juegoNormalizado = String(data.game || "").trim().toLowerCase().replace(/[\s_]+/g, "-");
-    if (!JUEGOS_PERMITIDOS.has(juegoNormalizado)) {
-        elementoJuego.textContent = data.game || "No disponible";
-        elementoProducto.textContent = data.product_name || "No disponible";
-        elementoCantidad.textContent = data.game_currency_amount ?? "No disponible";
-        productoCargado = pedido.product_id;
-        return;
-    }
-    productoCargado = pedido.product_id;
-    elementoJuego.textContent = data.game || "No disponible";
-    elementoProducto.textContent = data.product_name || "Producto de juego";
-    elementoCantidad.textContent = data.game_currency_amount ?? "No disponible";
+
+
+/* Corrección visual: ficha sin cortes y ambos botones con el mismo acabado */
+.ficha-pedido{
+ border:1px solid rgba(0,137,255,.62)!important;
+ background:linear-gradient(145deg,#03132d 0%,#020a1b 65%,#04132a 100%)!important;
+ gap:0!important;
+}
+.ficha-datos{
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-arte{
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-arte::before,.ficha-arte::after,.ficha-datos::before,.ficha-datos::after{
+ content:none!important;
+ display:none!important;
+}
+.escudo-gvr-flotante{
+ background:transparent!important;
+ border:0!important;
+ box-shadow:none!important;
+}
+#accionesComprobante .boton,#accionesNavegacion .boton{
+ width:100%!important;
+ min-height:40px!important;
+ padding:8px 12px!important;
+ border-radius:8px!important;
+ font-size:11px!important;
+ letter-spacing:.25px!important;
+}
+#accionesComprobante{
+ grid-template-columns:minmax(0,220px)!important;
+ justify-content:center!important;
+ max-width:260px!important;
+ margin:16px auto 0!important;
+}
+#accionesNavegacion{
+ grid-template-columns:repeat(2,minmax(0,220px))!important;
+ justify-content:center!important;
+ justify-items:stretch!important;
+ max-width:480px!important;
+ gap:12px!important;
+ margin:12px auto 0!important;
+}
+@media(max-width:480px){
+ #accionesComprobante,#accionesNavegacion{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  max-width:390px!important;
+  gap:8px!important;
+ }
+ #accionesComprobante{grid-template-columns:minmax(0,190px)!important}
+ #accionesComprobante .boton,#accionesNavegacion .boton{
+  min-height:38px!important;
+  padding:7px 6px!important;
+  font-size:9px!important;
+  letter-spacing:.1px!important;
+ }
+}
+@media(max-width:350px){
+ #accionesNavegacion{grid-template-columns:1fr!important;max-width:230px!important}
 }
 
-/* GENERACIÓN Y DESCARGA DEL COMPROBANTE */
-function cargarHtml2Canvas() {
-    if (!html2canvasPromise) {
-        html2canvasPromise = import("https://esm.sh/html2canvas@1.4.1")
-            .then(modulo => modulo.default)
-            .catch(error => {
-                html2canvasPromise = null;
-                throw error;
-            });
-    }
-    return html2canvasPromise;
+
+/* Ajuste solicitado: sin marcos exteriores ni separación visual del escudo */
+.tarjeta.comprobante-nuevo{
+ border:0!important;
+ outline:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+ background:transparent!important;
+}
+.tarjeta.comprobante-nuevo::before,
+.tarjeta.comprobante-nuevo::after,
+.comprobante-hero::before,
+.comprobante-hero::after,
+.checkout-border-effect,
+.checkout-light-sweep{
+ display:none!important;
+ content:none!important;
+}
+.ficha-pedido{
+ border:0!important;
+ outline:0!important;
+ border-radius:0!important;
+ padding:0!important;
+ gap:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-datos{
+ border:0!important;
+ outline:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-arte{
+ border:0!important;
+ outline:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.arte-anillo,.arte-brillo{display:none!important}
+.escudo-gvr-flotante{
+ border:0!important;
+ outline:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+@media(max-width:620px){
+ .tarjeta.comprobante-nuevo{border:0!important;border-radius:0!important;box-shadow:none!important}
+ .ficha-pedido{padding:0!important;gap:0!important}
 }
 
-async function descargarComprobante() {
-    if (descargaEnCurso || !pedidoActual) return;
-    if (normalizarEstado(pedidoActual) !== "completed") {
-        mostrarError("El comprobante estará disponible cuando la recarga figure como completada.");
-        return;
-    }
 
-    descargaEnCurso = true;
-    botonGuardarComprobante.disabled = true;
-    botonGuardarComprobante.textContent = "GENERANDO COMPROBANTE...";
-    ocultarError();
 
-    try {
-        const html2canvas = await cargarHtml2Canvas();
-        if (normalizarEstado(pedidoActual) !== "completed") {
-            throw new Error("El pedido ya no figura como completado.");
-        }
-
-        const canvas = await html2canvas(tarjetaComprobante, {
-            backgroundColor: "#030817",
-            scale: Math.min(2, Math.max(1, window.devicePixelRatio || 1)),
-            useCORS: true,
-            logging: false,
-            async onclone(documentoClonado) {
-                ["accionesComprobante", "accionesNavegacion", "mensajeError", "mensajeActualizacion"].forEach(id => {
-                    const elemento = documentoClonado.getElementById(id);
-                    if (elemento) elemento.style.display = "none";
-                });
-                const tarjeta = documentoClonado.getElementById("tarjetaComprobante");
-                if (tarjeta) {
-                    tarjeta.style.boxShadow = "none";
-                    tarjeta.style.width = `${tarjetaComprobante.getBoundingClientRect().width}px`;
-                }
-                /* El escudo está incrustado como SVG vectorial para evitar fallos
-                   al convertir una imagen SVG externa en el PNG del comprobante. */
-                const contenedorEscudo = documentoClonado.querySelector(".escudo-gvr-flotante");
-                const escudo = contenedorEscudo?.querySelector("svg");
-                if (contenedorEscudo && escudo) {
-                    contenedorEscudo.style.animation = "none";
-                    contenedorEscudo.style.transform = "none";
-                    contenedorEscudo.style.filter = "none";
-                    contenedorEscudo.style.overflow = "visible";
-                    escudo.style.display = "block";
-                    escudo.style.visibility = "visible";
-                    escudo.style.opacity = "1";
-                    escudo.style.width = "100%";
-                    escudo.style.height = "100%";
-                    escudo.style.overflow = "visible";
-                    /* html2canvas no reproduce de forma fiable los filtros SVG;
-                       se conserva el escudo completo, sus trazos y degradados. */
-                    escudo.querySelectorAll("[filter]").forEach(elemento => elemento.removeAttribute("filter"));
-                }
-            }
-        });
-
-        const blob = await new Promise((resolve, reject) => {
-            canvas.toBlob(resultado => resultado ? resolve(resultado) : reject(new Error("No se pudo crear el PNG.")), "image/png");
-        });
-
-        const urlImagen = URL.createObjectURL(blob);
-        const enlace = document.createElement("a");
-        const idSeguro = String(pedidoActual.id || "pedido").replace(/[^a-zA-Z0-9_-]/g, "");
-        enlace.href = urlImagen;
-        enlace.download = `Gamers-Gold-Comprobante-${idSeguro}.png`;
-        enlace.style.display = "none";
-        document.body.appendChild(enlace);
-        enlace.click();
-        enlace.remove();
-        window.setTimeout(() => URL.revokeObjectURL(urlImagen), 60000);
-    } catch (error) {
-        console.error("Error generando el comprobante:", error);
-        mostrarError("No pudimos generar la imagen. Comprueba tu conexión e inténtalo de nuevo.");
-    } finally {
-        descargaEnCurso = false;
-        botonGuardarComprobante.disabled = false;
-        botonGuardarComprobante.innerHTML = '<span class="boton-icono" aria-hidden="true">↓</span> GUARDAR COMPROBANTE';
-    }
+/* Distribución continua: el escudo comparte el mismo espacio que los datos */
+main{
+ width:100%!important;
+ max-width:690px!important;
+ margin:0 auto!important;
+ padding:24px 16px 24px!important;
 }
-botonGuardarComprobante.addEventListener("click", () => void descargarComprobante());
-
-async function cargarPedido() {
-    if (consultando || detenido || !idPedido) return;
-    consultando = true;
-    const version = ++generacionConsulta;
-
-    try {
-        const { data: { session }, error: errorSesion } = await supabase.auth.getSession();
-        if (version !== generacionConsulta || detenido) return;
-        if (errorSesion) throw errorSesion;
-
-        if (!session?.user) {
-            if (!errorSesionMostrado) {
-                mostrarError("Inicia sesión con la cuenta que realizó este pedido para consultar su estado.");
-                errorSesionMostrado = true;
-            }
-            return;
-        }
-
-        usuarioId = session.user.id;
-        const { data: pedido, error } = await supabase
-            .from("game_orders")
-            .select(`
-                id, user_id, product_id, status, provider_status, provider_error, player_id, zone_id,
-                price_gvr, created_at, completed_at, provider_order_id, provider_client_reference
-            `)
-            .eq("id", idPedido)
-            .eq("user_id", usuarioId)
-            .maybeSingle();
-
-        if (version !== generacionConsulta || detenido) return;
-        if (error) {
-            console.error("Error consultando el pedido:", error);
-            return;
-        }
-        if (!pedido) {
-            mostrarError("No encontramos este pedido en tu cuenta.");
-            detenerIntervalo();
-            await cerrarCanalRealtime();
-            return;
-        }
-
-        errorSesionMostrado = false;
-        ocultarError();
-        pedidoActual = pedido;
-
-        elementoJugador.textContent = pedido.player_id || "No disponible";
-        elementoPrecio.textContent = pedido.price_gvr != null ? `${pedido.price_gvr} GVR` : "No disponible";
-        elementoFecha.textContent = formatearFecha(pedido.created_at);
-        elementoNumeroPedido.textContent = pedido.id;
-
-        const estado = mostrarEstadoPedido(pedido);
-        await cargarProducto(pedido, version);
-        if (version !== generacionConsulta || detenido) return;
-
-        if (estado === "completed") {
-            // Mostrar el botón únicamente; la imagen se genera al pulsarlo.
-            accionesComprobante.classList.remove("oculto");
-        } else {
-            accionesComprobante.classList.add("oculto");
-        }
-
-        if (esEstadoFinal(estado)) {
-            detenerIntervalo();
-            await cerrarCanalRealtime();
-        }
-    } catch (error) {
-        console.error("Error inesperado consultando el pedido:", error);
-    } finally {
-        consultando = false;
-    }
+.tarjeta.comprobante-nuevo{
+ width:100%!important;
+ max-width:100%!important;
+ margin:0 auto!important;
+ border:0!important;
+ border-radius:0!important;
+ outline:0!important;
+ box-shadow:none!important;
+}
+.ficha-pedido{
+ position:relative!important;
+ display:block!important;
+ width:100%!important;
+ min-height:470px!important;
+ padding:0!important;
+ margin:0!important;
+ border:0!important;
+ border-radius:0!important;
+ outline:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+ overflow:hidden!important;
+}
+.ficha-datos{
+ position:relative!important;
+ z-index:2!important;
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr)!important;
+ grid-template-rows:repeat(6,minmax(0,1fr))!important;
+ width:100%!important;
+ min-height:470px!important;
+ padding-right:clamp(112px,28%,210px)!important;
+ border:0!important;
+ border-radius:0!important;
+ outline:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-fila{
+ position:relative!important;
+ z-index:2!important;
+ width:100%!important;
+ background:transparent!important;
+}
+.ficha-arte{
+ position:absolute!important;
+ z-index:1!important;
+ top:0!important;
+ right:0!important;
+ bottom:0!important;
+ width:28%!important;
+ min-width:105px!important;
+ height:100%!important;
+ margin:0!important;
+ padding:0!important;
+ border:0!important;
+ border-left:0!important;
+ border-radius:0!important;
+ outline:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.escudo-gvr-flotante{
+ width:min(100%,190px)!important;
+ max-width:190px!important;
+ border:0!important;
+ border-radius:0!important;
+ outline:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+ filter:drop-shadow(0 0 15px rgba(0,157,255,.38))!important;
+}
+.arte-anillo,.arte-brillo{display:none!important}
+@media(max-width:620px){
+ main{padding:18px 12px 20px!important}
+ .ficha-pedido{min-height:0!important}
+ .ficha-datos{
+  min-height:0!important;
+  grid-template-rows:repeat(6,minmax(57px,auto))!important;
+  padding-right:clamp(94px,29%,120px)!important;
+ }
+ .ficha-arte{width:29%!important;min-width:88px!important}
+ .escudo-gvr-flotante{width:100%!important;max-width:116px!important}
+}
+@media(max-width:370px){
+ main{padding-right:10px!important;padding-left:10px!important}
+ .ficha-datos{padding-right:88px!important}
+ .ficha-arte{width:88px!important;min-width:88px!important}
+ .escudo-gvr-flotante{max-width:82px!important}
 }
 
-async function iniciarRealtime() {
-    if (!usuarioId || !idPedido || detenido || canalPedido) return;
-    const canal = supabase
-        .channel(`checkout-pedido-${idPedido}`)
-        .on("postgres_changes", {
-            event: "UPDATE", schema: "public", table: "game_orders", filter: `id=eq.${idPedido}`
-        }, payload => {
-            const nuevo = payload.new;
-            if (!nuevo || nuevo.user_id !== usuarioId) return;
-            pedidoActual = nuevo;
-            void cargarPedido();
-        })
-        .subscribe(estado => {
-            if (canalPedido !== canal || detenido) return;
-            if (estado === "SUBSCRIBED") void cargarPedido();
-        });
-    canalPedido = canal;
+
+/* ===== Nuevo diseño móvil premium aprobado: checkout Gamers Gold ===== */
+html,body{min-height:100%;width:100%;overflow-x:hidden}
+body{
+ background:
+  linear-gradient(135deg,transparent 0 47%,rgba(0,91,255,.12) 48%,transparent 49%) 0 0/120px 120px,
+  radial-gradient(ellipse at 50% 22%,rgba(0,92,255,.2),transparent 42%),
+  radial-gradient(ellipse at 50% 78%,rgba(0,113,255,.12),transparent 42%),
+  #020817!important;
+}
+body::before{opacity:.55;background:linear-gradient(135deg,transparent 46%,rgba(0,115,255,.22) 48%,transparent 50%) 0 0/145px 145px,linear-gradient(45deg,transparent 46%,rgba(0,183,255,.12) 48%,transparent 50%) 0 0/170px 170px}
+body>header{display:none!important}
+main{max-width:560px!important;padding:14px 16px 22px!important}
+.tarjeta.comprobante-nuevo{max-width:100%!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}
+.comprobante-hero{min-height:0!important;padding:12px 2px 24px!important;background:transparent!important;overflow:visible!important}
+.comprobante-cabecera{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;min-height:58px}
+.marca-ggt{display:flex!important;flex-direction:row!important;align-items:center!important;gap:10px!important;min-width:0;text-align:left!important;line-height:1!important}
+.marca-simbolo{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border:2px solid #08baff;border-radius:14px 4px 14px 4px;background:linear-gradient(145deg,#087dff,#031b50);color:#fff!important;font-size:37px;font-weight:1000;font-style:italic;box-shadow:0 0 22px rgba(0,166,255,.48);transform:skew(-7deg)}
+.marca-nombre{display:flex;flex-direction:column;gap:3px;white-space:nowrap}
+.marca-nombre b{color:#fff;font-size:clamp(14px,4vw,20px);font-style:italic;font-weight:1000;letter-spacing:.2px}
+.marca-nombre strong{color:#08caff;font-size:clamp(19px,5vw,26px);font-style:italic;font-weight:1000;letter-spacing:1px}
+.inicio-checkout{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;padding:10px 13px;border:1px solid rgba(44,139,255,.45);border-radius:15px;background:linear-gradient(145deg,#102b53,#07162f);color:#f3f8ff;text-decoration:none;font-size:13px;font-weight:800;box-shadow:0 5px 18px rgba(0,0,0,.2)}
+.inicio-checkout span{font-size:20px}
+.estado-comprobante{display:none!important}
+.claim-marca{margin:12px auto 0!important;color:#8ba8cc;font-size:9px!important;letter-spacing:3px!important}
+.producto-visual{width:150px!important;height:145px!important;margin:22px auto 16px!important}
+.producto-check{width:126px!important;height:126px!important;border:7px solid #36ff8b!important;border-radius:50%!important;background:radial-gradient(circle,rgba(0,255,130,.16),rgba(0,20,34,.82))!important;color:#dffff0!important;font-size:84px!important;box-shadow:0 0 20px #00e879,0 0 52px rgba(0,255,120,.4),inset 0 0 22px rgba(0,255,130,.18)!important}
+.producto-resumen h1{margin:7px auto 12px!important;color:#fff!important;font-size:clamp(29px,7.5vw,43px)!important;font-weight:1000!important;font-style:italic!important;line-height:1.02!important;text-transform:uppercase!important;text-shadow:0 0 20px rgba(0,147,255,.28)!important}
+.producto-resumen h1::first-line{color:#fff}
+.producto-resumen .subtitulo{max-width:390px!important;color:#b9cbe4!important;font-size:14px!important;line-height:1.5!important}
+.comprobante-cuerpo{padding:0!important;background:transparent!important}
+.ficha-pedido{
+ position:relative!important;display:block!important;width:100%!important;min-height:0!important;height:auto!important;
+ padding:12px 10px!important;margin:0!important;overflow:hidden!important;
+ border:2px solid #087fff!important;border-radius:25px!important;
+ background:linear-gradient(145deg,rgba(3,17,42,.98),rgba(2,9,25,.99))!important;
+ box-shadow:0 0 22px rgba(0,130,255,.23),inset 0 0 22px rgba(0,115,255,.07)!important;
+}
+.ficha-datos{
+ position:relative!important;z-index:2!important;display:grid!important;
+ grid-template-columns:minmax(0,1fr)!important;grid-template-rows:repeat(6,minmax(66px,auto))!important;
+ width:100%!important;min-height:0!important;height:auto!important;padding:0 34% 0 0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;
+}
+.ficha-fila{
+ display:grid!important;grid-template-columns:34px minmax(72px,.72fr) minmax(0,1fr)!important;
+ align-items:center!important;gap:7px!important;min-width:0!important;min-height:66px!important;
+ padding:7px 5px!important;border:0!important;border-bottom:1px solid rgba(0,135,255,.25)!important;background:transparent!important;
+}
+.ficha-fila:last-of-type{border-bottom:0!important}
+.ficha-icono{width:31px!important;height:31px!important;flex:0 0 31px!important;border:0!important;border-radius:50%!important;background:linear-gradient(145deg,#09b9ff,#0065d9)!important;color:#03142f!important;font-size:17px!important;box-shadow:0 0 13px rgba(0,160,255,.22)!important}
+.ficha-info{display:contents!important}
+.ficha-info>span{grid-column:2!important;grid-row:1!important;align-self:center!important;margin:0!important;color:#9db3d2!important;font-size:clamp(9px,2.5vw,12px)!important;font-weight:500!important;letter-spacing:0!important;line-height:1.2!important}
+.ficha-info>strong{grid-column:3!important;grid-row:1!important;align-self:center!important;margin:0!important;color:#f5f8ff!important;font-size:clamp(10px,2.8vw,14px)!important;font-weight:800!important;line-height:1.25!important;text-align:left!important;overflow-wrap:anywhere!important}
+.ficha-info>strong.precio{color:#fff!important;font-size:clamp(13px,3.5vw,17px)!important}
+.ficha-info>small{grid-column:3!important;grid-row:2!important;margin:-14px 0 0!important;color:#83caff!important;font-size:8px!important;line-height:1.1!important}
+.logo-juego{display:none!important}
+.ficha-arte{
+ position:absolute!important;z-index:1!important;top:0!important;right:0!important;bottom:0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:36%!important;min-width:0!important;height:100%!important;margin:0!important;padding:0!important;
+ border:0!important;border-radius:0!important;background:radial-gradient(ellipse at 50% 55%,rgba(0,112,255,.24),transparent 68%)!important;box-shadow:none!important;
+}
+.escudo-gvr-flotante{width:100%!important;max-width:190px!important;aspect-ratio:160/180!important;filter:drop-shadow(0 0 18px rgba(0,143,255,.62))!important;animation:walletEscudoFlota 3.2s ease-in-out infinite}
+.escudo-gvr-flotante img{width:100%!important;height:100%!important;object-fit:contain!important}
+.arte-anillo,.arte-brillo{display:none!important}
+.verificacion-comprobante{display:none!important}
+.comprobante-cuerpo>.nota{margin:13px 0 0!important;padding:11px 13px!important;border:0!important;border-radius:10px!important;background:rgba(10,47,84,.5)!important;color:#b8cce7!important;font-size:11px!important;text-align:center!important}
+.comprobante-cuerpo>.nota.completado{color:#57eaa0!important;background:rgba(12,113,70,.16)!important}
+#accionesNavegacion,#accionesComprobante{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:350px!important;gap:10px!important;margin:17px auto 0!important}
+#accionesNavegacion{order:2!important}
+#accionesComprobante{order:3!important}
+.comprobante-cuerpo{display:flex!important;flex-direction:column!important}
+.ficha-pedido{order:0!important}
+.comprobante-cuerpo>.nota{order:1!important}
+#accionesNavegacion .boton,#accionesComprobante .boton{
+ width:100%!important;min-height:51px!important;padding:10px 15px!important;
+ border:2px solid #078fff!important;border-radius:99px!important;
+ background:linear-gradient(100deg,rgba(0,67,160,.32),rgba(0,27,74,.52))!important;
+ color:#f3f8ff!important;font-size:14px!important;font-weight:800!important;letter-spacing:0!important;
+ box-shadow:0 0 14px rgba(0,135,255,.16),inset 0 0 12px rgba(0,130,255,.08)!important;
+}
+#accionesNavegacion .boton-principal{background:linear-gradient(100deg,rgba(0,90,205,.32),rgba(0,33,91,.48))!important}
+#accionesNavegacion .boton-secundario{color:#f3f8ff!important}
+#accionesComprobante .boton{border-color:#08baff!important;color:#fff!important}
+#accionesComprobante .boton-icono,#accionesNavegacion .boton-icono{font-size:20px!important}
+.mensaje{max-width:350px!important;margin:10px auto 0!important}
+.pie{max-width:560px!important;padding:32px 8px 12px!important}
+.pie-marca{display:flex;align-items:center;justify-content:center;gap:12px;color:#09baff;text-align:left}
+.pie-escudo{width:42px;height:46px;display:grid;place-items:center;border:3px solid #08baff;border-radius:12px 4px 12px 4px;font-size:32px;font-weight:900;line-height:1;box-shadow:0 0 14px rgba(0,178,255,.24)}
+.pie-marca strong{display:block;color:#08baff;font-size:19px;font-weight:900}
+.pie-marca small{display:block;margin-top:5px;color:#9bb1ce;font-size:10px;letter-spacing:5px}
+.pie .ventajas,.pie .copyright{display:none!important}
+@media(max-width:390px){
+ main{padding:12px 12px 20px!important}
+ .marca-simbolo{width:41px;height:41px;flex-basis:41px;font-size:31px}
+ .marca-nombre b{font-size:13px}.marca-nombre strong{font-size:18px}
+ .inicio-checkout{padding:8px 10px;font-size:12px}
+ .producto-check{width:112px!important;height:112px!important;font-size:74px!important}
+ .ficha-pedido{padding:8px 6px!important;border-radius:20px!important}
+ .ficha-datos{padding-right:32%!important;grid-template-rows:repeat(6,minmax(61px,auto))!important}
+ .ficha-fila{grid-template-columns:29px minmax(62px,.72fr) minmax(0,1fr)!important;gap:5px!important;min-height:61px!important;padding:5px 2px!important}
+ .ficha-icono{width:27px!important;height:27px!important;flex-basis:27px!important;font-size:15px!important}
+ .ficha-info>span{font-size:8px!important}
+ .ficha-info>strong{font-size:10px!important}
+ .ficha-info>strong.precio{font-size:12px!important}
+ .escudo-gvr-flotante{max-width:125px!important}
+ #accionesNavegacion,#accionesComprobante{max-width:310px!important}
+ #accionesNavegacion .boton,#accionesComprobante .boton{min-height:47px!important;font-size:12px!important}
 }
 
-async function iniciarCheckout() {
-    if (!idPedido) {
-        tituloEstado.textContent = "Pedido no identificado";
-        descripcionEstado.textContent = "Abre el enlace de tu pedido para consultar su estado.";
-        iconoEstado.textContent = "!";
-        mostrarError("Falta el identificador del pedido en el enlace.");
-        return;
-    }
 
-    intervalo = setInterval(() => {
-        if (!detenido) void cargarPedido();
-    }, INTERVALO_ACTUALIZACION);
-
-    await cargarPedido();
-    if (detenido || !usuarioId || !pedidoActual) return;
-    if (!esEstadoFinal(normalizarEstado(pedidoActual))) await iniciarRealtime();
+/* Ajuste solicitado: encabezado común del sitio y escudo GVR con rayos */
+body>header{
+ display:block!important;position:relative!important;z-index:5!important;
+ padding:13px 16px!important;border:0!important;border-bottom:1px solid rgba(0,153,255,.2)!important;
+ background:rgba(3,9,24,.72)!important;box-shadow:none!important;
+}
+.barra{max-width:560px!important;justify-content:flex-start!important}
+.encabezado-pagina{gap:11px!important;color:#edf7ff!important;font-size:15px!important;font-weight:800!important}
+.encabezado-pagina-icono{
+ width:39px!important;height:39px!important;flex:0 0 39px!important;
+ border:1px solid #17649a!important;border-radius:11px!important;
+ background:linear-gradient(145deg,#103b65,#08203b)!important;color:#4bcaff!important;
+ box-shadow:0 5px 15px rgba(0,21,45,.35)!important;
+}
+.encabezado-pagina-icono svg{width:21px!important;height:21px!important}
+.encabezado-pagina-titulo{font-size:15px!important;letter-spacing:.1px!important}
+.comprobante-cabecera .marca-ggt,.comprobante-cabecera .marca-simbolo,.comprobante-cabecera .marca-nombre,.inicio-checkout{display:none!important}
+.pie-marca{display:none!important}
+.ficha-arte{
+ isolation:isolate!important;
+ background:transparent!important;
+}
+.ficha-arte::before{
+ content:""!important;display:block!important;position:absolute!important;z-index:0!important;
+ width:88%!important;max-width:225px!important;aspect-ratio:1!important;
+ border:1px solid rgba(0,164,255,.36)!important;border-radius:50%!important;
+ background:
+  radial-gradient(circle,rgba(0,129,255,.22) 0 22%,rgba(0,70,190,.12) 42%,transparent 68%)!important;
+ box-shadow:0 0 22px rgba(0,135,255,.18),inset 0 0 22px rgba(0,135,255,.12)!important;
+}
+.ficha-arte::after{
+ content:""!important;display:block!important;position:absolute!important;z-index:0!important;
+ width:100%!important;height:100%!important;inset:0!important;
+ background:
+  repeating-conic-gradient(from 0deg at 50% 50%,transparent 0deg 8deg,rgba(0,178,255,.72) 8.5deg 9.3deg,transparent 10deg 20deg)!important;
+ mask-image:radial-gradient(ellipse at center,transparent 0 30%,#000 43%,transparent 72%)!important;
+ opacity:.52!important;filter:drop-shadow(0 0 7px rgba(0,156,255,.72))!important;
+ pointer-events:none!important;
+}
+.escudo-gvr-flotante{z-index:2!important;filter:drop-shadow(0 0 13px rgba(0,157,255,.58)) drop-shadow(0 0 28px rgba(0,103,255,.34))!important}
+@media(max-width:620px){
+ body>header{padding:11px 13px!important}
+ .barra{max-width:100%!important}
+ .encabezado-pagina-titulo{font-size:14px!important}
+ .ficha-arte::before{width:92%!important}
+ .ficha-arte::after{opacity:.48!important}
 }
 
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible" && !detenido) void cargarPedido();
-});
-window.addEventListener("pagehide", () => {
-    detenido = true;
-    detenerIntervalo();
-    if (canalPedido) {
-        void supabase.removeChannel(canalPedido);
-        canalPedido = null;
-    }
-});
 
-void iniciarCheckout();
-</script>
-    <script src="./goldi-widget.js?v=20261023-2" defer></script>
+/* Refinamiento solicitado: identidad superior, iconos profesionales y fondo continuo */
+.identidad-checkout{position:relative;z-index:1;margin:2px auto 0;text-align:center}
+.identidad-nombre{color:#f4f9ff;font-size:clamp(19px,5vw,25px);font-weight:1000;font-style:italic;letter-spacing:.8px;line-height:1.1;text-shadow:0 0 18px rgba(0,156,255,.3)}
+.identidad-nombre span{color:#08caff}
+.identidad-checkout .claim-marca{margin:7px auto 0!important;color:#a8bed9!important;font-size:10px!important;font-weight:800!important;letter-spacing:2px!important;line-height:1.4}
+.ficha-icono-svg{width:34px!important;height:34px!important;display:grid!important;place-items:center!important;border:1px solid rgba(45,190,255,.5)!important;border-radius:11px!important;background:linear-gradient(145deg,rgba(12,156,255,.22),rgba(0,53,125,.3))!important;color:#65dfff!important;box-shadow:0 0 12px rgba(0,150,255,.18),inset 0 0 9px rgba(0,180,255,.08)!important}
+.ficha-icono-svg svg{width:19px!important;height:19px!important;display:block!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+.ficha-pedido{
+ /* El fondo se desvanece de forma progresiva en toda la tarjeta, también desde la izquierda */
+ background:linear-gradient(90deg,
+  rgba(3,17,42,.76) 0%,
+  rgba(3,17,42,.64) 24%,
+  rgba(3,17,42,.43) 48%,
+  rgba(3,17,42,.22) 70%,
+  rgba(3,17,42,.04) 100%)!important;
+}
+.ficha-arte{
+ background:radial-gradient(ellipse at 58% 50%,
+  rgba(0,119,255,.15) 0%,
+  rgba(0,95,220,.07) 42%,
+  transparent 74%)!important;
+}
+@media(max-width:480px){
+ .identidad-nombre{font-size:20px}
+ .identidad-checkout .claim-marca{font-size:9px!important;letter-spacing:1.5px!important}
+ .ficha-icono-svg{width:30px!important;height:30px!important;border-radius:10px!important}
+ .ficha-icono-svg svg{width:17px!important;height:17px!important}
+}
 
-</body>
-</html>
+
+/* Fondo de la ficha casi transparente: sin bloque oscuro en la zona de datos */
+.ficha-pedido{
+ background:transparent!important;
+ background-color:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-datos{
+ background:transparent!important;
+ background-color:transparent!important;
+}
+.ficha-arte{
+ background:transparent!important;
+}
+.ficha-arte::before{
+ background:radial-gradient(circle,rgba(0,129,255,.035) 0 22%,rgba(0,70,190,.018) 42%,transparent 68%)!important;
+ border-color:rgba(0,164,255,.10)!important;
+ box-shadow:0 0 8px rgba(0,135,255,.05),inset 0 0 8px rgba(0,180,255,.03)!important;
+}
+.ficha-arte::after{
+ opacity:.08!important;
+ filter:drop-shadow(0 0 2px rgba(0,156,255,.12))!important;
+}
+.escudo-gvr-flotante{
+ filter:drop-shadow(0 0 8px rgba(0,157,255,.25)) drop-shadow(0 0 14px rgba(0,103,255,.14))!important;
+}
+
+/* Líneas de separación suaves: se desvanecen hacia el escudo GVR */
+.ficha-fila{
+ border-bottom:0!important;
+ background-image:linear-gradient(to right,
+   rgba(0,151,255,.34) 0%,
+   rgba(0,139,255,.22) 42%,
+   rgba(0,125,255,.10) 68%,
+   rgba(0,125,255,0) 100%)!important;
+ background-repeat:no-repeat!important;
+ background-position:left bottom!important;
+ background-size:100% 1px!important;
+}
+.ficha-fila:last-of-type{
+ background-image:none!important;
+}
+/* Se conserva el espacio reservado al escudo GVR. */
+
+
+/* Una sola superficie continua para datos y escudo GVR */
+.ficha-pedido{
+ background:linear-gradient(115deg,#03132d 0%,#041832 48%,#061a35 100%)!important;
+ border:2px solid #078fff!important;
+ box-shadow:0 0 22px rgba(0,128,255,.22),inset 0 0 22px rgba(0,128,255,.035)!important;
+ gap:0!important;
+}
+.ficha-datos{
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-arte{
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+.ficha-arte::before{
+ border-color:rgba(0,164,255,.12)!important;
+ background:radial-gradient(circle,rgba(0,129,255,.06) 0 22%,rgba(0,70,190,.025) 42%,transparent 68%)!important;
+ box-shadow:none!important;
+}
+.ficha-arte::after{opacity:.10!important}
+
+
+/* Destello azul que recorre únicamente el contorno de la ficha de pedido */
+.ficha-pedido{
+ position:relative!important;
+ isolation:isolate!important;
+}
+.ficha-pedido::after{
+ content:""!important;
+ position:absolute!important;
+ inset:0!important;
+ z-index:10!important;
+ padding:2px!important;
+ border-radius:inherit!important;
+ pointer-events:none!important;
+ background:conic-gradient(from 0deg,
+  transparent 0deg 270deg,
+  rgba(0,145,255,.08) 292deg,
+  rgba(0,190,255,.95) 310deg,
+  #d8f8ff 318deg,
+  rgba(0,135,255,.9) 326deg,
+  transparent 345deg 360deg)!important;
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0)!important;
+ -webkit-mask-composite:xor!important;
+ mask-composite:exclude!important;
+ animation:destelloBordeFicha 4.2s linear infinite!important;
+}
+@keyframes destelloBordeFicha{
+ from{transform:rotate(0deg)}
+ to{transform:rotate(360deg)}
+}
+@media(prefers-reduced-motion:reduce){
+ .ficha-pedido::after{animation:none!important}
+}
