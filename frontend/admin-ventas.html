@@ -481,7 +481,7 @@ function actualizarEstadisticas() {
         if (venta.estado !== "completado") return total;
         return total + (Number(venta.gvr_comprado) || 0);
     }, 0);
-    document.getElementById("gvrVendidos").textContent = gvrVendidos;
+    document.getElementById("gvrVendidos").textContent = gvrVendidos.toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function escaparHTML(valor) {
