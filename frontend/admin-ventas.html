@@ -564,7 +564,7 @@ function crearVentaHTML(venta) {
                 ${camposGVR}
                 <div class="dato"><small>Importe / precio</small><div>${escaparHTML(venta.precio)} ${escaparHTML(venta.moneda)}</div></div>
                 <div class="dato"><small>Método de pago</small><div>${escaparHTML(venta.metodo_pago)}</div></div>
-                <div class="dato"><small>Proveedor</small><div>${escaparHTML(venta.proveedor)}</div></div>
+                ${(esSolicitudGVR || venta.tipo === "gvr") ? `<div class="dato"><small>Proveedor</small><div>${escaparHTML(venta.proveedor)}</div></div>` : ""}
                 <div class="dato"><small>ID orden proveedor</small><div>${escaparHTML(venta.id_orden_proveedor)}</div></div>
                 <div class="dato"><small>Fecha de registro</small><div>${escaparHTML(fecha)}</div></div>
             </div>
