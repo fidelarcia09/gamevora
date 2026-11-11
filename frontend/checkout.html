@@ -960,7 +960,252 @@ body>header{
  .ficha-pedido::after{animation:none!important}
 }
 
-</style>
+
+/* DISEÑO VISUAL DEL COMPROBANTE — inspirado en la referencia Gamers Gold */
+body{
+ min-height:100vh!important;
+ background:
+  radial-gradient(ellipse at 50% 18%,rgba(0,93,255,.18),transparent 42%),
+  radial-gradient(ellipse at 0% 62%,rgba(0,88,255,.16),transparent 32%),
+  radial-gradient(ellipse at 100% 58%,rgba(0,126,255,.14),transparent 34%),
+  #020817!important;
+}
+body::before{
+ opacity:.62!important;
+ background:
+  linear-gradient(125deg,transparent 46%,rgba(0,130,255,.2) 47%,transparent 48%) 0 0/150px 150px,
+  linear-gradient(55deg,transparent 47%,rgba(0,130,255,.13) 48%,transparent 49%) 0 0/190px 190px!important;
+}
+body>header{display:none!important}
+main{max-width:880px!important;padding:24px 18px 12px!important}
+.tarjeta.comprobante-nuevo{
+ overflow:visible!important;
+ border:0!important;border-radius:0!important;
+ background:transparent!important;box-shadow:none!important;
+}
+.tarjeta.comprobante-nuevo::before,.tarjeta.comprobante-nuevo::after{display:none!important}
+.comprobante-hero{
+ min-height:0!important;padding:18px 16px 24px!important;
+ text-align:center!important;
+ background:transparent!important;
+}
+.comprobante-cabecera{display:none!important}
+.identidad-checkout{margin:0 auto 24px!important}
+.identidad-nombre{
+ font-size:clamp(34px,6vw,58px)!important;
+ font-weight:1000!important;font-style:italic!important;
+ letter-spacing:-1.5px!important;line-height:.95!important;
+ text-shadow:0 0 24px rgba(0,154,255,.35)!important;
+}
+.identidad-nombre span{
+ display:block!important;margin-top:5px!important;
+ color:#08caff!important;font-size:clamp(38px,7vw,66px)!important;
+ letter-spacing:2px!important;
+}
+.identidad-checkout .claim-marca{
+ margin:13px auto 0!important;color:#b8cce7!important;
+ font-size:clamp(10px,1.5vw,14px)!important;
+ letter-spacing:clamp(3px,.65vw,6px)!important;font-weight:700!important;
+}
+.producto-visual{
+ position:relative!important;width:204px!important;height:204px!important;
+ margin:8px auto 19px!important;display:grid!important;place-items:center!important;
+}
+.producto-orbita{
+ position:absolute!important;inset:4px!important;border:2px solid rgba(0,255,119,.78)!important;
+ border-radius:50%!important;
+ box-shadow:0 0 15px rgba(0,255,119,.55),0 0 38px rgba(0,255,119,.26),inset 0 0 22px rgba(0,255,119,.16)!important;
+}
+.producto-orbita::before{
+ content:""!important;position:absolute!important;inset:11px!important;border:1px solid rgba(76,255,153,.3)!important;border-radius:50%!important;
+}
+.producto-check{
+ position:relative!important;z-index:2!important;
+ width:166px!important;height:166px!important;display:grid!important;place-items:center!important;
+ border:0!important;border-radius:50%!important;
+ color:#eafff1!important;background:radial-gradient(circle,rgba(0,255,119,.24),rgba(0,100,50,.12) 65%,transparent 70%)!important;
+ font-size:126px!important;font-weight:500!important;line-height:1!important;
+ text-shadow:0 0 18px #20ff83,0 0 38px rgba(0,255,119,.72)!important;
+ filter:drop-shadow(0 0 12px rgba(0,255,119,.42))!important;
+}
+.producto-cristal{display:none!important}
+.producto-resumen h1{
+ margin:0 auto 8px!important;color:#f7fbff!important;
+ font-size:clamp(34px,6vw,58px)!important;font-weight:1000!important;
+ font-style:italic!important;letter-spacing:-1px!important;line-height:1.02!important;
+ text-shadow:0 4px 22px rgba(0,130,255,.25)!important;
+}
+.producto-resumen h1.resaltado{
+ background:linear-gradient(180deg,#fff 0%,#d9f6ff 40%,#00bfff 100%)!important;
+ -webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;
+}
+.producto-resumen .subtitulo{
+ max-width:620px!important;margin:12px auto 0!important;
+ color:#b9d3f3!important;font-size:clamp(13px,2vw,18px)!important;line-height:1.55!important;
+}
+.estado-tiempo{display:none!important}
+.comprobante-cuerpo{
+ display:flex!important;flex-direction:column!important;
+ width:100%!important;padding:0 10px 18px!important;
+}
+.ficha-pedido{
+ display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(190px,.65fr)!important;
+ align-items:stretch!important;gap:0!important;min-height:0!important;
+ padding:16px!important;border:2px solid #078fff!important;border-radius:19px!important;
+ background:linear-gradient(110deg,rgba(3,17,42,.97),rgba(3,18,43,.92) 57%,rgba(2,14,34,.82))!important;
+ box-shadow:0 0 24px rgba(0,128,255,.24),inset 0 0 25px rgba(0,128,255,.06)!important;
+}
+.ficha-datos{
+ display:flex!important;flex-direction:column!important;justify-content:center!important;
+ min-width:0!important;padding:0 12px 0 4px!important;
+}
+.ficha-fila{
+ display:flex!important;align-items:center!important;gap:13px!important;
+ min-height:70px!important;padding:9px 8px!important;
+ border:0!important;border-bottom:1px solid rgba(0,139,255,.22)!important;
+ background:none!important;
+}
+.ficha-fila:last-child{border-bottom:0!important}
+.ficha-icono-svg{
+ width:48px!important;height:48px!important;flex:0 0 48px!important;
+ border:1px solid rgba(0,181,255,.66)!important;border-radius:50%!important;
+ background:linear-gradient(145deg,rgba(0,132,255,.22),rgba(0,35,90,.34))!important;
+ color:#25caff!important;box-shadow:0 0 13px rgba(0,140,255,.18)!important;
+}
+.ficha-icono-svg svg{width:25px!important;height:25px!important}
+.ficha-info{min-width:0!important}
+.ficha-info>span{
+ display:block!important;margin-bottom:4px!important;color:#8eb7e8!important;
+ font-size:12px!important;letter-spacing:.65px!important;font-weight:700!important;
+}
+.ficha-info>strong{
+ display:block!important;color:#f6f9ff!important;font-size:18px!important;
+ font-weight:700!important;line-height:1.3!important;overflow-wrap:anywhere!important;
+}
+.ficha-info>strong.precio{color:#f6f9ff!important;font-size:19px!important}
+.ficha-info small{display:block!important;margin-top:3px!important;color:#8eb7e8!important;font-size:11px!important}
+.logo-juego{
+ min-width:126px!important;max-width:155px!important;min-height:74px!important;
+ margin-left:auto!important;padding:10px!important;display:flex!important;
+ flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ border:1px solid rgba(0,132,255,.42)!important;border-radius:12px!important;
+ background:linear-gradient(145deg,rgba(2,9,25,.96),rgba(5,24,54,.9))!important;
+ color:#f4f9ff!important;box-shadow:0 0 14px rgba(0,100,255,.12)!important;
+ text-align:center!important;
+}
+.logo-juego span{font-size:15px!important;font-weight:1000!important;letter-spacing:.5px!important}
+.logo-juego small{font-size:9px!important;letter-spacing:2px!important}
+.ficha-arte{
+ display:grid!important;place-items:center!important;min-height:290px!important;
+ background:radial-gradient(ellipse at center,rgba(0,111,255,.2),transparent 68%)!important;
+}
+.ficha-arte::before{
+ width:88%!important;max-width:260px!important;
+ border-color:rgba(0,161,255,.22)!important;
+ background:radial-gradient(circle,rgba(0,129,255,.15),transparent 69%)!important;
+ box-shadow:0 0 25px rgba(0,135,255,.13)!important;
+}
+.ficha-arte::after{opacity:.2!important}
+.escudo-gvr-flotante{
+ width:min(76%,205px)!important;max-width:205px!important;
+ filter:drop-shadow(0 0 16px rgba(0,157,255,.5)) drop-shadow(0 0 32px rgba(0,103,255,.28))!important;
+}
+.verificacion-comprobante{
+ display:none!important;
+}
+.comprobante-cuerpo>.nota{
+ margin:13px auto 0!important;padding:0!important;border:0!important;
+ background:transparent!important;color:#a9c5e8!important;
+ font-size:12px!important;text-align:center!important;
+}
+.comprobante-cuerpo>.nota.completado{color:#9bdcba!important}
+#accionesNavegacion,#accionesComprobante{
+ display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ width:100%!important;max-width:680px!important;gap:12px!important;margin:18px auto 0!important;
+}
+#accionesNavegacion .boton,#accionesComprobante .boton{
+ min-height:60px!important;padding:12px 18px!important;border:2px solid #08baff!important;
+ border-radius:19px!important;color:#f5fbff!important;font-size:16px!important;
+ font-weight:800!important;letter-spacing:.6px!important;
+ background:linear-gradient(100deg,#006dff,#00bfff)!important;
+ box-shadow:0 0 20px rgba(0,139,255,.24),inset 0 1px rgba(255,255,255,.25)!important;
+}
+#accionesNavegacion .boton-secundario{
+ background:rgba(0,19,48,.7)!important;color:#25caff!important;
+}
+#accionesComprobante .boton{background:linear-gradient(100deg,#006dff,#00bfff)!important}
+#accionesNavegacion .boton-icono,#accionesComprobante .boton-icono{font-size:23px!important}
+.pie{
+ display:block!important;max-width:880px!important;width:100%!important;
+ margin:0 auto!important;padding:26px 12px 16px!important;
+}
+.pie-marca{display:none!important}
+.pie .ventajas{
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ gap:12px!important;margin:0 auto 26px!important;
+}
+.ventaja{
+ display:grid!important;grid-template-columns:34px 1fr!important;align-items:center!important;
+ column-gap:9px!important;min-width:0!important;padding:0 7px!important;
+ border-right:1px solid rgba(0,150,255,.25)!important;
+ color:#9eb6d6!important;font-size:10px!important;
+}
+.ventaja:last-child{border-right:0!important}
+.ventaja-icono{grid-row:span 2!important;color:#08bfff!important}
+.ventaja-icono svg{width:29px!important;height:29px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important}
+.ventaja strong{color:#08caff!important;font-size:10px!important;letter-spacing:.3px!important}
+.ventaja>span:last-child{font-size:10px!important}
+.pie .copyright{
+ display:block!important;padding-top:17px!important;border-top:1px solid rgba(0,130,255,.22)!important;
+ color:#9bb5d7!important;font-size:11px!important;letter-spacing:4px!important;text-align:center!important;
+}
+@media(max-width:620px){
+ main{padding:12px 10px 8px!important}
+ .comprobante-hero{padding:15px 5px 19px!important}
+ .identidad-checkout{margin-bottom:19px!important}
+ .identidad-nombre{font-size:32px!important}
+ .identidad-nombre span{font-size:42px!important}
+ .identidad-checkout .claim-marca{font-size:9px!important;letter-spacing:2px!important}
+ .producto-visual{width:150px!important;height:150px!important;margin:5px auto 15px!important}
+ .producto-check{width:122px!important;height:122px!important;font-size:91px!important}
+ .producto-resumen h1{font-size:clamp(29px,8vw,42px)!important}
+ .producto-resumen .subtitulo{font-size:12px!important}
+ .comprobante-cuerpo{padding:0 2px 12px!important}
+ .ficha-pedido{
+  grid-template-columns:minmax(0,1fr) 112px!important;gap:0!important;
+  padding:9px 7px!important;border-radius:15px!important;
+ }
+ .ficha-datos{padding:0 3px 0 0!important}
+ .ficha-fila{min-height:62px!important;gap:7px!important;padding:7px 2px!important}
+ .ficha-icono-svg{width:32px!important;height:32px!important;flex-basis:32px!important}
+ .ficha-icono-svg svg{width:17px!important;height:17px!important}
+ .ficha-info>span{font-size:8px!important;letter-spacing:.35px!important}
+ .ficha-info>strong{font-size:11px!important}
+ .ficha-info>strong.precio{font-size:12px!important}
+ .ficha-info small{font-size:8px!important}
+ .logo-juego{min-width:0!important;width:100%!important;min-height:54px!important;margin:0 0 5px!important;padding:5px!important}
+ .logo-juego span{font-size:10px!important}
+ .logo-juego small{font-size:7px!important}
+ .ficha-arte{min-height:210px!important}
+ .escudo-gvr-flotante{width:100%!important;max-width:115px!important}
+ #accionesNavegacion,#accionesComprobante{max-width:100%!important;gap:10px!important}
+ #accionesNavegacion .boton,#accionesComprobante .boton{min-height:53px!important;font-size:13px!important;border-radius:15px!important}
+ .pie{padding:24px 2px 12px!important}
+ .pie .ventajas{gap:4px!important;margin-bottom:19px!important}
+ .ventaja{grid-template-columns:1fr!important;justify-items:center!important;text-align:center!important;gap:4px!important;padding:0 2px!important}
+ .ventaja-icono{grid-row:auto!important}
+ .ventaja-icono svg{width:23px!important;height:23px!important}
+ .ventaja strong,.ventaja>span:last-child{font-size:7px!important}
+ .pie .copyright{font-size:8px!important;letter-spacing:2px!important}
+}
+@media(max-width:380px){
+ .ficha-pedido{grid-template-columns:minmax(0,1fr) 92px!important}
+ .ficha-arte{min-height:190px!important}
+ .escudo-gvr-flotante{max-width:95px!important}
+ .ficha-info>strong{font-size:10px!important}
+}
+
+    </style>
 </head>
 <body>
 <header>
