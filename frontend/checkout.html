@@ -1275,31 +1275,26 @@ main{position:relative!important;z-index:1!important;width:100%!important;max-wi
  filter:drop-shadow(0 0 5px #35ff8c) drop-shadow(0 0 15px rgba(36,255,129,.9))!important;
 }
 #tarjetaComprobante{position:relative!important;isolation:isolate!important}
-#tarjetaComprobante::before{
- content:""!important;display:block!important;position:absolute!important;
- inset:0!important;z-index:0!important;pointer-events:none!important;
- border:0!important;border-radius:0!important;background-color:transparent!important;
- background-image:
- linear-gradient(135deg,transparent 0 39%,rgba(0,143,255,.95) 40% 42%,transparent 43%) left top/92px 92px no-repeat,
- linear-gradient(225deg,transparent 0 39%,rgba(0,143,255,.95) 40% 42%,transparent 43%) right top/92px 92px no-repeat,
- linear-gradient(45deg,transparent 0 39%,rgba(0,143,255,.9) 40% 42%,transparent 43%) left bottom/92px 92px no-repeat,
- linear-gradient(315deg,transparent 0 39%,rgba(0,143,255,.9) 40% 42%,transparent 43%) right bottom/92px 92px no-repeat,
- linear-gradient(90deg,transparent,rgba(0,136,255,.65),transparent) left top/2px 78px no-repeat,
- linear-gradient(180deg,transparent,rgba(0,136,255,.65),transparent) left top/78px 2px no-repeat,
- linear-gradient(90deg,transparent,rgba(0,136,255,.65),transparent) right top/2px 78px no-repeat,
- linear-gradient(180deg,transparent,rgba(0,136,255,.65),transparent) right top/78px 2px no-repeat;
- filter:drop-shadow(0 0 7px rgba(0,143,255,.55))!important;
-}
+#tarjetaComprobante::before{content:none!important;display:none!important}
 #tarjetaComprobante>*{position:relative!important;z-index:1!important}
 @media(max-width:700px){
  .producto-visual{width:clamp(108px,28vw,140px)!important;height:clamp(108px,28vw,140px)!important;margin:10px auto 7px!important}
- #tarjetaComprobante::before{
-  background-size:58px 58px,58px 58px,58px 58px,58px 58px,2px 48px,48px 2px,2px 48px,48px 2px!important;
- }
 }
 @media(max-width:390px){
  .producto-visual{width:104px!important;height:104px!important;margin:8px auto 5px!important}
 }
+
+
+/* Estado visual del sello: puntos animados mientras el pedido espera */
+.puntos-carga{display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;width:100%!important;height:100%!important}
+.puntos-carga i{display:block!important;width:13px!important;height:13px!important;border-radius:50%!important;background:#eafff0!important;box-shadow:0 0 9px #27ff91,0 0 18px rgba(39,255,145,.75)!important;animation:puntosRecarga 1.15s ease-in-out infinite!important}
+.puntos-carga i:nth-child(2){animation-delay:.16s!important}
+.puntos-carga i:nth-child(3){animation-delay:.32s!important}
+@keyframes puntosRecarga{0%,60%,100%{transform:translateY(0);opacity:.42}30%{transform:translateY(-9px);opacity:1}}
+.producto-check.sello-pendiente{border:0!important;background:radial-gradient(circle,rgba(0,255,130,.13),rgba(0,20,34,.72) 68%,transparent 72%)!important;box-shadow:0 0 22px rgba(0,255,120,.24)!important}
+.producto-check.sello-pendiente svg{display:none!important}
+#tarjetaComprobante::before{content:none!important;display:none!important}
+@media(prefers-reduced-motion:reduce){.puntos-carga i{animation:none!important;opacity:1!important}}
 
 </style>
 </head>
@@ -1343,7 +1338,7 @@ main{position:relative!important;z-index:1!important;width:100%!important;max-wi
                     <div class="ficha-fila juego-fila">
                         <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8h11a4 4 0 0 1 3.8 5.2l-.8 2.5a2 2 0 0 1-3.3.8l-2-2H8.8l-2 2a2 2 0 0 1-3.3-.8l-.8-2.5A4 4 0 0 1 6.5 8Z"/><path d="M8 10.5v4M6 12.5h4M16.5 11.5h.01M18.5 13.5h.01"/></svg></span>
                         <div class="ficha-info"><span>JUEGO</span><strong id="juego">CARGANDO JUEGO</strong></div>
-                        <div class="logo-juego" aria-hidden="true"><span id="logoJuegoTexto">GAMING</span><small>MOBILE</small></div>
+                        
                     </div>
                     <div class="ficha-fila">
                         <span class="ficha-icono ficha-icono-svg" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 5v8l-8 5-8-5V8l8-5Z"/><path d="m4 8 8 5 8-5M12 13v8"/></svg></span>
@@ -1540,7 +1535,21 @@ function mostrarEstadoPedido(pedido) {
     const estadoVisual = document.getElementById("estadoVisual");
     if (estadoVisual) estadoVisual.textContent = estado === "completed" ? "✓ RECARGA ENTREGADA" : estado === "processing" ? "↻ RECARGA EN PROCESO" : estado === "failed" ? "! RECARGA NO COMPLETADA" : estado === "refunded" ? "↩ PEDIDO REEMBOLSADO" : "✦ PEDIDO RECIBIDO";
     const selloVisual = document.getElementById("selloVisual");
-    if (selloVisual) selloVisual.textContent = estado === "completed" ? "✓" : estado === "failed" || estado === "refunded" ? "!" : "…";
+    if (selloVisual) {
+        if (estado === "completed" && !esErrorIdJugador(pedido)) {
+            selloVisual.innerHTML = '<svg viewBox="0 0 200 200" role="img" aria-label="Recarga verificada"><circle class="check-ring-outer" cx="100" cy="100" r="88"/><circle class="check-ring-inner" cx="100" cy="100" r="76"/><path class="check-tick" d="M55 103 85 132 148 67"/></svg>';
+            selloVisual.setAttribute("aria-label", "Recarga completada");
+            selloVisual.classList.remove("sello-pendiente");
+        } else if (estado === "failed" || estado === "refunded" || esErrorIdJugador(pedido)) {
+            selloVisual.textContent = "!";
+            selloVisual.setAttribute("aria-label", "Pedido con incidencia");
+            selloVisual.classList.remove("sello-pendiente");
+        } else {
+            selloVisual.innerHTML = '<span class="puntos-carga" aria-label="Pendiente"><i></i><i></i><i></i></span>';
+            selloVisual.setAttribute("aria-label", estado === "processing" ? "Recarga en proceso" : "Recarga pendiente");
+            selloVisual.classList.add("sello-pendiente");
+        }
+    }
     const estados = {
         completed: {
             titulo: "¡Recarga completada!",
