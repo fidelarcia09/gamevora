@@ -1703,6 +1703,8 @@ async function descargarComprobante() {
     ocultarError();
 
     try {
+        /* Esperar a que las fuentes estén listas evita capturar textos con tipografías de sustitución. */
+        if (document.fonts?.ready) await document.fonts.ready;
         const html2canvas = await cargarHtml2Canvas();
         if (normalizarEstado(pedidoActual) !== "completed") {
             throw new Error("El pedido ya no figura como completado.");
@@ -1710,7 +1712,7 @@ async function descargarComprobante() {
 
         const canvas = await html2canvas(tarjetaComprobante, {
             backgroundColor: "#030817",
-            scale: Math.min(2, Math.max(1, window.devicePixelRatio || 1)),
+            scale: Math.min(3, Math.max(2, window.devicePixelRatio || 1)),
             useCORS: true,
             logging: false,
             async onclone(documentoClonado) {
@@ -1746,7 +1748,9 @@ async function descargarComprobante() {
         });
 
         const blob = await new Promise((resolve, reject) => {
-            canvas.toBlob(resultado => resultado ? resolve(resultado) : reject(new Error("No se pudo crear el PNG.")), "image/png");
+            canvas.toBlob(resultado => resultado && resultado.type === "image/png" && resultado.size > 0
+                ? resolve(resultado)
+                : reject(new Error("No se pudo crear un PNG válido.")), "image/png");
         });
 
         const urlImagen = URL.createObjectURL(blob);
