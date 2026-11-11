@@ -35,6 +35,10 @@ Deno.serve(async (req: Request) => {
   const authClient = createClient(supabaseUrl, anonKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
+  const caller = createClient(supabaseUrl, anonKey, {
+    global: { headers: { Authorization: authorization } },
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
   const admin = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
@@ -50,10 +54,26 @@ Deno.serve(async (req: Request) => {
     const { data: order, error: orderError } = await admin
       .from("game_orders")
       .select("id,user_id,status,provider_order_id,provider_client_reference,provider_status,provider_error,product_id")
-      .eq("id", orderId).eq("user_id", authData.user.id).maybeSingle();
+      .eq("id", orderId).maybeSingle();
 
     if (orderError) return json({ ok: false, error: "No se pudo consultar el pedido local." }, 500);
-    if (!order) return json({ ok: false, error: "Pedido no encontrado." }, 404);
+    if (!order) {
+      // No consultar endpoints no confirmados ni permitir una recarga duplicada.
+      return json({
+        ok: false,
+        error: "No pudimos confirmar el pedido anterior en el sistema. No hagas otra recarga; soporte debe revisar el estado antes de continuar.",
+        reconciliation_required: true,
+      }, 409);
+    }
+
+    // El propietario consulta su pedido. Soporte solo puede consultar pedidos ajenos
+    // si is_support_admin confirma su rol usando el JWT del propio usuario.
+    if (order.user_id !== authData.user.id) {
+      const { data: isSupportAdmin, error: roleError } = await caller.rpc("is_support_admin");
+      if (roleError || isSupportAdmin !== true) {
+        return json({ ok: false, error: "Pedido no encontrado." }, 404);
+      }
+    }
     if (order.status === "completed" || order.status === "refunded") {
       return json({ ok: true, game_order_id: order.id, status: order.status, provider_status: order.provider_status });
     }
