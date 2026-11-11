@@ -110,7 +110,7 @@ Deno.serve(async (req: Request) => {
     }
 
     const playerId = String(order.player_id).trim();
-    const gameKey = String(product.game ?? "").toLowerCase().replace(/[\\s_-]/g, "");
+    const gameKey = String(product.game ?? "").toLowerCase().replace(/[\s_-]/g, "");
     const serverId = String(body?.zone_id ?? body?.server_id ?? order.zone_id ?? "").trim();
     const wutheringServers = ["os_asia", "os_usa", "os_euro", "os_sea", "os_cht"];
     if (gameKey === "wutheringwaves" && !wutheringServers.includes(serverId)) {
@@ -135,7 +135,7 @@ Deno.serve(async (req: Request) => {
           provider_error: "Envío a RechargeGames pendiente de confirmar.",
           ...(serverId ? { zone_id: serverId } : {}),
         })
-        .eq("id", order.id).eq("user_id", authData.user.id)
+        .eq("id", order.id).eq("user_id", order.user_id)
         .eq("status", "pending").is("provider_client_reference", null)
         .is("provider_order_id", null).select("id").maybeSingle();
 
@@ -233,7 +233,7 @@ Deno.serve(async (req: Request) => {
         provider_submitted_at: new Date().toISOString(),
         ...(serverId ? { zone_id: serverId } : {}),
       })
-      .eq("id", order.id).eq("user_id", authData.user.id)
+      .eq("id", order.id).eq("user_id", order.user_id)
       .eq("provider_client_reference", buyerRef)
       .is("provider_order_id", null).select("id").maybeSingle();
 
