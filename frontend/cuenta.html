@@ -2335,6 +2335,141 @@
         }
     }
 
+
+    /* Métodos de acceso: tarjetas GGT azul marino y cian */
+    #pantallaMetodosAcceso .metodos-acceso-intro {
+        margin: 2px 0 17px;
+        color: #91a8c3;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+    #pantallaMetodosAcceso .metodos-seguridad-resumen {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 0 0 18px;
+        padding: 19px 17px;
+        border: 1px solid rgba(0, 183, 255, .34);
+        border-radius: 20px;
+        background: linear-gradient(145deg, #0c2443, #071329 72%);
+        box-shadow: 0 10px 28px rgba(0, 8, 24, .28), inset 0 0 22px rgba(0, 183, 255, .045);
+    }
+    #pantallaMetodosAcceso .metodos-seguridad-anillo {
+        width: 82px;
+        height: 82px;
+        flex: 0 0 82px;
+        display: grid;
+        place-items: center;
+        border: 7px solid rgba(0, 183, 255, .18);
+        border-top-color: #00b7ff;
+        border-right-color: #087cff;
+        border-radius: 50%;
+        color: #55d7ff;
+        box-shadow: 0 0 18px rgba(0, 183, 255, .12);
+    }
+    #pantallaMetodosAcceso .metodos-seguridad-anillo svg { width: 34px; height: 34px; }
+    #pantallaMetodosAcceso .metodos-seguridad-info { flex: 1; min-width: 0; }
+    #pantallaMetodosAcceso .metodos-seguridad-etiqueta {
+        display: block;
+        color: #42caff;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 1.35px;
+    }
+    #pantallaMetodosAcceso .metodos-seguridad-info strong {
+        display: block;
+        margin-top: 4px;
+        color: #f4f8ff;
+        font-size: 21px;
+        font-weight: 900;
+        line-height: 1.2;
+    }
+    #pantallaMetodosAcceso .metodos-seguridad-barra {
+        height: 8px;
+        margin: 11px 0 8px;
+        overflow: hidden;
+        border-radius: 20px;
+        background: #263a54;
+    }
+    #pantallaMetodosAcceso .metodos-seguridad-barra span {
+        display: block;
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #37d5ff, #087cff);
+        box-shadow: 0 0 12px rgba(0, 183, 255, .45);
+        transition: width .3s ease;
+    }
+    #pantallaMetodosAcceso .metodos-seguridad-detalle {
+        display: block;
+        color: #a7bad0;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+    #pantallaMetodosAcceso .metodos-acceso-panel {
+        display: grid;
+        gap: 12px;
+        padding: 0;
+        overflow: visible;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+    #pantallaMetodosAcceso .metodo-acceso {
+        min-height: 88px;
+        gap: 13px;
+        padding: 15px 14px;
+        border: 1px solid #1b4167;
+        border-radius: 18px;
+        background: linear-gradient(145deg, #0b1d35, #071329);
+        box-shadow: 0 8px 22px rgba(0, 8, 24, .2), inset 0 0 16px rgba(0, 183, 255, .025);
+    }
+    #pantallaMetodosAcceso .metodo-acceso + .metodo-acceso { border-top: 1px solid #1b4167; }
+    #pantallaMetodosAcceso .metodo-acceso-icono {
+        width: 54px;
+        height: 54px;
+        flex-basis: 54px;
+        border: 1px solid rgba(0, 183, 255, .34);
+        border-radius: 15px;
+        background: linear-gradient(145deg, #104477, #08264a);
+        box-shadow: 0 6px 16px rgba(0, 107, 255, .18);
+    }
+    #pantallaMetodosAcceso .metodo-acceso-icono svg { width: 27px; height: 27px; }
+    #pantallaMetodosAcceso .metodo-acceso-nombre { font-size: 15px; color: #f5f9ff; }
+    #pantallaMetodosAcceso .metodo-acceso-detalle { margin-top: 4px; font-size: 12px; color: #a4b8d0; }
+    #pantallaMetodosAcceso .metodo-acceso-estado {
+        max-width: 120px;
+        padding: 6px 10px;
+        border: 1px solid #31506f;
+        border-radius: 22px;
+        background: #0b1b31;
+        color: #b7cce2;
+        font-size: 10px;
+    }
+    #pantallaMetodosAcceso .metodo-acceso-estado.verificado {
+        border-color: rgba(0, 215, 160, .32);
+        background: rgba(0, 170, 125, .13);
+        color: #55e2b2;
+    }
+    #pantallaMetodosAcceso .metodo-acceso-estado.pendiente {
+        border-color: rgba(255, 190, 82, .32);
+        background: rgba(140, 91, 20, .14);
+        color: #ffc66e;
+    }
+    #pantallaMetodosAcceso .metodo-acceso-estado.proximamente {
+        border-color: rgba(0, 183, 255, .24);
+        border-style: dashed;
+        color: #8fb5d7;
+    }
+    @media (max-width: 380px) {
+        #pantallaMetodosAcceso .metodos-seguridad-resumen { gap: 11px; padding: 15px 12px; }
+        #pantallaMetodosAcceso .metodos-seguridad-anillo { width: 66px; height: 66px; flex-basis: 66px; border-width: 6px; }
+        #pantallaMetodosAcceso .metodos-seguridad-info strong { font-size: 18px; }
+        #pantallaMetodosAcceso .metodo-acceso { gap: 9px; padding: 13px 10px; }
+        #pantallaMetodosAcceso .metodo-acceso-icono { width: 46px; height: 46px; flex-basis: 46px; }
+        #pantallaMetodosAcceso .metodo-acceso-estado { max-width: 94px; padding: 5px 7px; font-size: 9px; }
+    }
+
 </style>
  
 <script>
@@ -2894,7 +3029,23 @@
 
         <section id="pantallaMetodosAcceso" class="pantalla-datos-personales" hidden aria-labelledby="tituloPantallaMetodosAcceso">
             <h1 id="tituloPantallaMetodosAcceso" style="text-align:left;font-size:24px;margin:4px 0 8px;">Métodos de acceso</h1>
-            
+            <p class="metodos-acceso-intro">Administra las opciones que protegen y permiten entrar a tu cuenta.</p>
+
+            <div class="metodos-seguridad-resumen">
+                <div class="metodos-seguridad-anillo" id="anilloSeguridadMetodos" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2.5 19 5v5.7c0 5.1-3.4 8.7-7 10.8-3.6-2.1-7-5.7-7-10.8V5l7-2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="m9 11.8 2 2 4-4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="metodos-seguridad-info">
+                    <span class="metodos-seguridad-etiqueta">SEGURIDAD DE TU CUENTA</span>
+                    <strong id="tituloNivelSeguridad">Protección de cuenta</strong>
+                    <div class="metodos-seguridad-barra"><span id="barraSeguridadMetodos"></span></div>
+                    <span class="metodos-seguridad-detalle" id="detalleSeguridadMetodos">Comprobando tus métodos activos...</span>
+                </div>
+            </div>
+
             <div class="datos-panel metodos-acceso-panel">
                 <div class="metodo-acceso" id="metodoCorreo">
                     <span class="metodo-acceso-icono" aria-hidden="true">
@@ -4457,7 +4608,8 @@ async function actualizarEstadoMetodosAcceso() {
 
         const usuario = usuarioData.user;
         correoDetalle.textContent = usuario.email || "No hay un correo asociado";
-        if (usuario.email_confirmed_at) {
+        const correoVerificado = Boolean(usuario.email_confirmed_at);
+        if (correoVerificado) {
             correoEstado.textContent = "Verificado";
             correoEstado.classList.add("verificado");
         } else {
@@ -4491,6 +4643,17 @@ async function actualizarEstadoMetodosAcceso() {
             googleEstado.textContent = "No vinculado";
             googleEstado.classList.add("pendiente");
         }
+
+        const metodosActivos = Number(correoVerificado) + Number(Boolean(identidadGoogle));
+        const porcentaje = metodosActivos * 25;
+        const barraSeguridad = document.getElementById("barraSeguridadMetodos");
+        const detalleSeguridad = document.getElementById("detalleSeguridadMetodos");
+        const tituloSeguridad = document.getElementById("tituloNivelSeguridad");
+        const anilloSeguridad = document.getElementById("anilloSeguridadMetodos");
+        if (barraSeguridad) barraSeguridad.style.width = porcentaje + "%";
+        if (detalleSeguridad) detalleSeguridad.textContent = metodosActivos + " de 4 métodos activos · vincula otro para reforzar tu cuenta";
+        if (tituloSeguridad) tituloSeguridad.textContent = metodosActivos >= 3 ? "Muy protegida" : metodosActivos === 2 ? "Buena protección" : "Protección básica";
+        if (anilloSeguridad) anilloSeguridad.style.borderTopColor = porcentaje >= 75 ? "#00d7a0" : "#00b7ff";
     } catch (error) {
         console.error("No se pudieron consultar los métodos de acceso:", error);
         googleDetalle.textContent = "No se pudo comprobar la vinculación";
