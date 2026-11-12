@@ -2615,11 +2615,79 @@ iniciar();
 }
 </style>
 <style id="gg-wuthering-layout">
+/* Mantiene las dos categorías visibles y oculta el paquete de nivel, igual que Free Fire. */
 .selector-categorias{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 #pestanaNivel,#vistaNivel{display:none!important}
-.region-opciones{grid-template-columns:1fr!important}
-.region-opcion{cursor:default!important}
-</style>
+/* Las tres regiones permanecen en una sola fila y son seleccionables. */
+.selector-region-wrap .region-opciones{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:7px!important;
+  width:100%!important;
+}
+.selector-region-wrap .region-opcion{
+  min-width:0!important;
+  cursor:pointer!important;
+}
+@media(max-width:380px){
+  .selector-region-wrap .region-opcion{gap:3px!important;padding:8px 3px!important;font-size:10px!important}
+}
+/* Ofertas especiales: misma cuadrícula y presentación compacta que Free Fire. */
+#catalogoOfertas{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  align-items:stretch!important;
+}
+#catalogoOfertas .producto.producto-oferta{
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:stretch!important;
+  gap:2px!important;
+  width:100%!important;
+  height:76px!important;
+  min-height:76px!important;
+  max-height:76px!important;
+  min-width:0!important;
+  padding:8px!important;
+  overflow:hidden!important;
+  text-align:left!important;
+}
+#catalogoOfertas .producto-oferta>.producto-nombre{
+  display:block!important;
+  width:100%!important;
+  margin:0!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+  text-align:left!important;
+  overflow-wrap:anywhere!important;
+}
+#catalogoOfertas .producto-oferta>.producto-precio{
+  display:block!important;
+  width:100%!important;
+  margin:0!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  line-height:1.15!important;
+  text-align:left!important;
+  overflow-wrap:anywhere!important;
+}
+#catalogoOfertas .producto-oferta>.producto-estado{
+  display:block!important;
+  width:100%!important;
+  margin:0!important;
+  font-size:9px!important;
+  font-weight:600!important;
+  line-height:1.1!important;
+  text-align:left!important;
+  overflow-wrap:anywhere!important;
+}
+@media(max-width:360px){
+  #catalogoOfertas{gap:6px!important}
+}</style>
 
 <style id="gg-sticky-purchase-design">
 body.gg-has-sticky-purchase{padding-bottom:calc(112px + env(safe-area-inset-bottom))!important}
