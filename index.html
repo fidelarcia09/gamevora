@@ -688,9 +688,9 @@
             <div class="gamevora-carrusel"><div class="gamevora-track" id="gamevoraTrack">
                 <a href="frontend/reseñas.html" class="gamevora-slide gamevora-slide-link"><div class="gamevora-slide-text"><div class="gamevora-slide-label">GAMERS GOLD TOP-UP COMMUNITY</div><h3>Tu opinión cuenta</h3><p>Comparte tu experiencia y ayúdanos a seguir mejorando.</p></div><div class="gamevora-slide-icon"></div></a>
                 <div class="gamevora-slide"><div class="gamevora-slide-text"><div class="gamevora-slide-label">NOVEDADES</div><h3>Nuevas actualizaciones</h3><p>Mantente atento a las novedades de Gamers Gold Top-Up.</p></div><div class="gamevora-slide-icon"></div></div>
-                <a href="frontend/informacion-gvr.html" class="gamevora-slide gamevora-slide-link"><div class="gamevora-slide-text"><div class="gamevora-slide-label">GVR</div><h3>Conoce nuestro saldo virtual</h3><p>Consulta la información de GVR y cómo funciona.</p></div><div class="gamevora-slide-icon"></div></a>
+                <a href="frontend/informacion-gvr.html" class="gamevora-slide gamevora-slide-link" hidden><div class="gamevora-slide-text"><div class="gamevora-slide-label">GVR</div><h3>Conoce nuestro saldo virtual</h3><p>Consulta la información de GVR y cómo funciona.</p></div><div class="gamevora-slide-icon"></div></a>
             </div></div>
-            <div class="gamevora-dots" aria-label="Controles del carrusel"><button class="gamevora-dot activo" type="button" aria-label="Banner 1"></button><button class="gamevora-dot" type="button" aria-label="Banner 2"></button><button class="gamevora-dot" type="button" aria-label="Banner 3"></button></div>
+            <div class="gamevora-dots" aria-label="Controles del carrusel"><button class="gamevora-dot activo" type="button" aria-label="Banner 1"></button><button class="gamevora-dot" type="button" aria-label="Banner 2"></button><button class="gamevora-dot" type="button" aria-label="Banner 3" hidden></button></div>
         </section>
         
         <!-- TORNEOS -->
@@ -711,7 +711,7 @@
             </a>
         </section>
 
-        <section class="seccion"><div class="seccion-encabezado"><div><h2>Saldo Virtual</h2></div></div><div class="gvr-panel"><div><h2>Conoce GVR</h2><p>Descubre cómo funciona nuestro saldo virtual y consulta la información disponible antes de realizar tus compras.</p><a href="frontend/informacion-gvr.html" class="gvr-enlace">Información sobre GVR <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div><div class="gvr-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3 1.5 0 2.9-.2 4-.6"/><path d="M20 11v3"/><path d="m16 17 2 2 4-4"/></svg></div></div></section>
+        <section class="seccion" hidden><div class="seccion-encabezado"><div><h2>Saldo Virtual</h2></div></div><div class="gvr-panel"><div><h2>Conoce GVR</h2><p>Descubre cómo funciona nuestro saldo virtual y consulta la información disponible antes de realizar tus compras.</p><a href="frontend/informacion-gvr.html" class="gvr-enlace">Información sobre GVR <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div><div class="gvr-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3 1.5 0 2.9-.2 4-.6"/><path d="M20 11v3"/><path d="m16 17 2 2 4-4"/></svg></div></div></section>
 
         <section class="seccion"><div class="seccion-encabezado"><div><h2>¿Por qué elegirnos?</h2></div></div>
             <div class="ventajas-grid">
@@ -822,7 +822,7 @@
         actualizarMenu();
 
         const gamevoraTrack = document.getElementById("gamevoraTrack");
-        const gamevoraDots = document.querySelectorAll(".gamevora-dot");
+        const gamevoraDots = document.querySelectorAll(".gamevora-dot:not([hidden])");
         let gamevoraActual = 0;
         function cambiarBannerGamevora(numero) {
             if (!gamevoraTrack || numero < 0 || numero >= gamevoraDots.length) return;
