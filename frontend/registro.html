@@ -44,6 +44,28 @@ input:focus{border-color:#28baff;box-shadow:0 0 0 3px rgba(40,186,255,.12)}
 .correo-mostrado{margin-top:7px;color:#43c7ff!important;font-weight:800;word-break:break-word}
 @media(max-width:480px){body{padding:18px 18px}.registro{padding:8px 2px 16px;background:transparent;border:0;border-radius:0;box-shadow:none}.marca{margin-bottom:22px}.titulo{font-size:25px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+
+/* Botón Crear cuenta: acabado de Wallet, conservando sus medidas originales. */
+.crear{
+  min-height:49px;
+  padding:13px 16px;
+  border:1px solid rgba(0,183,255,.42);
+  border-radius:11px;
+  background:linear-gradient(145deg,#0b315a,#071329);
+  color:#fff;
+  box-shadow:0 0 18px rgba(0,183,255,.14),inset 0 0 14px rgba(0,140,255,.05);
+  font-size:15px;
+  font-weight:900;
+  transition:border-color .2s,background .2s,transform .2s,box-shadow .2s;
+}
+.crear:hover{
+  border-color:#00b7ff;
+  background:linear-gradient(145deg,#104675,#083b70);
+  box-shadow:0 0 20px rgba(0,183,255,.22),inset 0 0 14px rgba(0,140,255,.08);
+  transform:translateY(-1px);
+}
+.crear:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
 </style>
 </head>
 
