@@ -1061,6 +1061,100 @@ iniciar();
   overflow-wrap:anywhere!important;
 }
 </style>
+
+<style id="gg-sticky-purchase-design">
+body.gg-has-sticky-purchase{padding-bottom:calc(112px + env(safe-area-inset-bottom))!important}
+#ggStickyPurchase{position:fixed;z-index:10000;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(520px,calc(100% - 24px));display:none;align-items:center;justify-content:space-between;gap:12px;padding:11px 12px;border:1px solid rgba(32,197,255,.38);border-radius:15px;background:linear-gradient(135deg,rgba(9,26,53,.97),rgba(5,15,32,.98));box-shadow:0 12px 34px rgba(0,0,0,.48),0 0 22px rgba(0,153,255,.13);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+#ggStickyPurchase.visible{display:flex}
+#ggStickyPurchase .gg-sticky-summary{display:flex;flex:1 1 auto;min-width:0;flex-direction:column;gap:4px}
+#ggStickyPurchase .gg-sticky-label{color:#83a4c5;font-size:9px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase}
+#ggStickyPurchase .gg-sticky-name{overflow:hidden;color:#f4f8ff;font-size:11px;font-weight:800;line-height:1.25;text-overflow:ellipsis;white-space:nowrap}
+#ggStickyPurchase .gg-sticky-price{color:#f2c66d;font-size:16px;font-weight:900;line-height:1.15;white-space:nowrap}
+#ggStickyPurchase .gg-sticky-actions{display:flex;flex:0 0 auto;align-items:center;justify-content:flex-end;gap:7px}
+#ggStickyPurchase .boton.continuar{display:flex;flex:0 1 auto;align-items:center;justify-content:center;width:auto;min-width:128px;max-width:48%;min-height:45px;margin:0!important;padding:10px 13px;border:1px solid rgba(76,190,255,.38);border-radius:11px;background:linear-gradient(100deg,#087cff,#00aaff);box-shadow:0 5px 16px rgba(0,119,255,.22);color:#fff;font-size:12px;font-weight:900;letter-spacing:.25px;line-height:1.2;text-align:center;white-space:normal}
+#ggStickyPurchase .boton.continuar:disabled{opacity:.56;box-shadow:none}
+@media(max-width:380px){#ggStickyPurchase{gap:8px;padding:9px 10px}#ggStickyPurchase .gg-sticky-price{font-size:14px}#ggStickyPurchase .boton.continuar{min-width:112px;padding:9px 10px;font-size:11px}}
+</style>
+
+
+<script id="gg-sticky-purchase-design-script">
+(function(){
+  function iniciarBarraCompra(){
+    if(document.getElementById("ggStickyPurchase"))return;
+    var botonPrincipal=document.getElementById("botonContinuar");
+    var botonOferta=document.getElementById("continuarBtn");
+    if(!botonPrincipal&&!botonOferta)return;
+
+    var barra=document.createElement("div");
+    barra.id="ggStickyPurchase";
+    barra.innerHTML='<div class="gg-sticky-summary"><span class="gg-sticky-label">PAQUETE SELECCIONADO</span><strong class="gg-sticky-name">Selecciona un paquete</strong><span class="gg-sticky-price"></span></div><div class="gg-sticky-actions"></div>';
+    var resumenNombre=barra.querySelector(".gg-sticky-name");
+    var resumenPrecio=barra.querySelector(".gg-sticky-price");
+    var resumenEtiqueta=barra.querySelector(".gg-sticky-label");
+    var acciones=barra.querySelector(".gg-sticky-actions");
+
+    if(botonPrincipal){botonPrincipal.classList.add("gg-sticky-action");acciones.appendChild(botonPrincipal);}
+    if(botonOferta){botonOferta.classList.add("gg-sticky-action");acciones.appendChild(botonOferta);}
+    document.body.appendChild(barra);
+    document.body.classList.add("gg-has-sticky-purchase");
+
+    function visible(elemento){
+      return !!elemento&&elemento.getClientRects().length>0;
+    }
+    function actualizar(){
+      var vistaOfertas=document.getElementById("vistaOfertas");
+      var ofertasActivas=!!(botonOferta&&vistaOfertas&&!vistaOfertas.classList.contains("vista-oculta")&&getComputedStyle(vistaOfertas).display!=="none");
+      var botonActivo=ofertasActivas?botonOferta:(botonPrincipal||botonOferta);
+      [botonPrincipal,botonOferta].forEach(function(b){
+        if(b)b.style.display=b===botonActivo?"flex":"none";
+      });
+
+      var selectores="#catalogo .producto.seleccionado,#catalogoOfertas .producto.seleccionado,#listaOfertas .boton-oferta.seleccionada,#listaOfertas .boton-oferta.seleccionado,#catalogo .seleccionado,#catalogoOfertas .seleccionado";
+      var tarjeta=Array.prototype.slice.call(document.querySelectorAll(selectores)).find(visible);
+      var textoBoton=botonActivo?botonActivo.textContent.trim():"";
+      var pedidoPendiente=/PEDIDO|PROCESANDO/i.test(textoBoton);
+
+      if(!tarjeta&&!pedidoPendiente){
+        barra.classList.remove("visible");
+        return;
+      }
+
+      if(tarjeta){
+        var nombreElemento=tarjeta.querySelector(".producto-nombre,.nombre-oferta,.oferta-nombre");
+        var precioElemento=tarjeta.querySelector(".producto-precio,.precio-oferta");
+        var nombre=nombreElemento?nombreElemento.textContent.trim():"";
+        var precio=precioElemento?precioElemento.textContent.trim():"";
+
+        if(ofertasActivas){
+          var nombreConfirmacion=document.getElementById("nombreOfertaConfirmacion");
+          var precioOferta=document.getElementById("precio");
+          if(nombreConfirmacion&&nombreConfirmacion.textContent.trim()&&nombreConfirmacion.textContent.trim()!=="—")nombre=nombreConfirmacion.textContent.trim();
+          if(!precio&&precioOferta)precio=precioOferta.textContent.trim();
+          resumenEtiqueta.textContent="OFERTA SELECCIONADA";
+        }else{
+          resumenEtiqueta.textContent="PAQUETE SELECCIONADO";
+        }
+
+        if(!nombre)nombre=tarjeta.textContent.trim().split(/\n+/).map(function(t){return t.trim();}).filter(Boolean)[0]||"Paquete seleccionado";
+        resumenNombre.textContent=nombre;
+        resumenPrecio.textContent=precio;
+      }else{
+        resumenEtiqueta.textContent="ESTADO DEL PEDIDO";
+        resumenNombre.textContent="Pedido pendiente";
+        resumenPrecio.textContent="";
+      }
+      barra.classList.add("visible");
+    }
+
+    var observador=new MutationObserver(actualizar);
+    observador.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:["class","disabled","style","aria-selected"]});
+    actualizar();
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",iniciarBarraCompra,{once:true});
+  else iniciarBarraCompra();
+})();
+</script>
+
 </body>
 </html>
 
