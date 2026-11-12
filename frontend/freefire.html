@@ -1866,7 +1866,7 @@ async function validarJugador() {
         } else if (estado === "INVALID") {
             mostrarEstadoValidacion("No se encontró ese ID de Free Fire. Compruébalo e inténtalo de nuevo.", "error");
         } else {
-            mostrarEstadoValidacion("RechargeGames no pudo confirmar este ID ahora mismo. Compruébalo directamente en Free Fire antes de continuar.", "aviso");
+            mostrarEstadoValidacion("El ID de Free Fire es inválido o no se pudo verificar. Compruébalo e inténtalo de nuevo.", "error");
         }
         actualizarBoton();
     } catch (error) {
