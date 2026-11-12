@@ -2823,6 +2823,7 @@ body.gg-has-sticky-purchase{padding-bottom:calc(112px + env(safe-area-inset-bott
 
 
 <script id="gg-sticky-purchase-design-script">
+
 (function(){
   function iniciarBarraCompra(){
     if(document.getElementById("ggStickyPurchase"))return;
@@ -2837,21 +2838,20 @@ body.gg-has-sticky-purchase{padding-bottom:calc(112px + env(safe-area-inset-bott
     var resumenPrecio=barra.querySelector(".gg-sticky-price");
     var resumenEtiqueta=barra.querySelector(".gg-sticky-label");
     var acciones=barra.querySelector(".gg-sticky-actions");
+    function ponerTexto(elemento,valor){if(elemento&&elemento.textContent!==valor)elemento.textContent=valor;}
 
     if(botonPrincipal){botonPrincipal.classList.add("gg-sticky-action");acciones.appendChild(botonPrincipal);}
     if(botonOferta){botonOferta.classList.add("gg-sticky-action");acciones.appendChild(botonOferta);}
     document.body.appendChild(barra);
     document.body.classList.add("gg-has-sticky-purchase");
 
-    function visible(elemento){
-      return !!elemento&&elemento.getClientRects().length>0;
-    }
+    function visible(elemento){return !!elemento&&elemento.getClientRects().length>0;}
     function actualizar(){
       var vistaOfertas=document.getElementById("vistaOfertas");
       var ofertasActivas=!!(botonOferta&&vistaOfertas&&!vistaOfertas.classList.contains("vista-oculta")&&getComputedStyle(vistaOfertas).display!=="none");
       var botonActivo=ofertasActivas?botonOferta:(botonPrincipal||botonOferta);
       [botonPrincipal,botonOferta].forEach(function(b){
-        if(b)b.style.display=b===botonActivo?"flex":"none";
+        if(b){var display=b===botonActivo?"flex":"none";if(b.style.display!==display)b.style.display=display;}
       });
 
       var selectores="#catalogo .producto.seleccionado,#catalogoOfertas .producto.seleccionado,#listaOfertas .boton-oferta.seleccionada,#listaOfertas .boton-oferta.seleccionado,#catalogo .seleccionado,#catalogoOfertas .seleccionado";
@@ -2860,7 +2860,7 @@ body.gg-has-sticky-purchase{padding-bottom:calc(112px + env(safe-area-inset-bott
       var pedidoPendiente=/PEDIDO|PROCESANDO/i.test(textoBoton);
 
       if(!tarjeta&&!pedidoPendiente){
-        barra.classList.remove("visible");
+        if(barra.classList.contains("visible"))barra.classList.remove("visible");
         return;
       }
 
@@ -2875,20 +2875,20 @@ body.gg-has-sticky-purchase{padding-bottom:calc(112px + env(safe-area-inset-bott
           var precioOferta=document.getElementById("precio");
           if(nombreConfirmacion&&nombreConfirmacion.textContent.trim()&&nombreConfirmacion.textContent.trim()!=="—")nombre=nombreConfirmacion.textContent.trim();
           if(!precio&&precioOferta)precio=precioOferta.textContent.trim();
-          resumenEtiqueta.textContent="OFERTA SELECCIONADA";
+          ponerTexto(resumenEtiqueta,"OFERTA SELECCIONADA");
         }else{
-          resumenEtiqueta.textContent="PAQUETE SELECCIONADO";
+          ponerTexto(resumenEtiqueta,"PAQUETE SELECCIONADO");
         }
 
         if(!nombre)nombre=tarjeta.textContent.trim().split(/\n+/).map(function(t){return t.trim();}).filter(Boolean)[0]||"Paquete seleccionado";
-        resumenNombre.textContent=nombre;
-        resumenPrecio.textContent=precio;
+        ponerTexto(resumenNombre,nombre);
+        ponerTexto(resumenPrecio,precio);
       }else{
-        resumenEtiqueta.textContent="ESTADO DEL PEDIDO";
-        resumenNombre.textContent="Pedido pendiente";
-        resumenPrecio.textContent="";
+        ponerTexto(resumenEtiqueta,"ESTADO DEL PEDIDO");
+        ponerTexto(resumenNombre,"Pedido pendiente");
+        ponerTexto(resumenPrecio,"");
       }
-      barra.classList.add("visible");
+      if(!barra.classList.contains("visible"))barra.classList.add("visible");
     }
 
     var observador=new MutationObserver(actualizar);
@@ -2898,6 +2898,7 @@ body.gg-has-sticky-purchase{padding-bottom:calc(112px + env(safe-area-inset-bott
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",iniciarBarraCompra,{once:true});
   else iniciarBarraCompra();
 })();
+
 </script>
 
 </body>
