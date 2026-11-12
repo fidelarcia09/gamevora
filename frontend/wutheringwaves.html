@@ -2689,7 +2689,7 @@ iniciar();
 
 <style id="gg-sticky-purchase-design">
 body.gg-has-sticky-purchase{padding-bottom:calc(180px + env(safe-area-inset-bottom))!important}
-#ggStickyPurchase{position:fixed;z-index:10000;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(520px,calc(100% - 24px));display:none;align-items:center;justify-content:space-between;gap:12px;padding:11px 12px;border:1px solid rgba(32,197,255,.38);border-radius:15px;background:linear-gradient(135deg,rgba(9,26,53,.97),rgba(5,15,32,.98));box-shadow:0 12px 34px rgba(0,0,0,.48),0 0 22px rgba(0,153,255,.13);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+#ggStickyPurchase{position:fixed;z-index:10000;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(520px,calc(100% - 24px));display:none;align-items:center;justify-content:space-between;gap:12px;padding:11px 12px;border:1px solid rgba(32,197,255,.38);border-radius:15px;background:linear-gradient(135deg,rgba(9,26,53,.97),rgba(5,15,32,.98));box-shadow:0 12px 34px rgba(0,0,0,.48),0 0 22px rgba(0,153,255,.13);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 #ggStickyPurchase.visible{display:flex}
 #ggStickyPurchase .gg-sticky-summary{display:flex;flex:1 1 auto;min-width:0;flex-direction:column;gap:4px}
 #ggStickyPurchase .gg-sticky-label{color:#83a4c5;font-size:9px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase}
@@ -2719,6 +2719,39 @@ body.gg-has-sticky-purchase{padding-bottom:calc(180px + env(safe-area-inset-bott
     var resumenEtiqueta=barra.querySelector(".gg-sticky-label");
     var acciones=barra.querySelector(".gg-sticky-actions");
     function ponerTexto(elemento,valor){if(elemento&&elemento.textContent!==valor)elemento.textContent=valor;}
+    var animacionPrecio=0;
+    var ultimoPrecioObjetivo="";
+    function ponerPrecioAnimado(valor){
+      valor=String(valor||"").trim();
+      if(!resumenPrecio||resumenPrecio.textContent===valor||ultimoPrecioObjetivo===valor)return;
+      ultimoPrecioObjetivo=valor;
+      if(animacionPrecio)cancelAnimationFrame(animacionPrecio);
+      var actualTexto=resumenPrecio.textContent.trim();
+      var extraerNumero=function(texto){
+        var coincidencia=String(texto).match(/-?[\\d.,]+/);
+        if(!coincidencia)return null;
+        var numero=Number(coincidencia[0].replace(/\\./g,"").replace(",","."));
+        return Number.isFinite(numero)?numero:null;
+      };
+      var inicio=extraerNumero(actualTexto);
+      var destino=extraerNumero(valor);
+      if(inicio===null||destino===null){
+        ponerTexto(resumenPrecio,valor);
+        return;
+      }
+      var sufijo=(valor.match(/[A-Za-zÁÉÍÓÚáéíóú]+(?:\\s+[A-Za-z]+)?$/)||[""])[0];
+      var comienzo=performance.now();
+      var duracion=120;
+      function avanzar(ahora){
+        var progreso=Math.min(1,(ahora-comienzo)/duracion);
+        var suavizado=progreso<1?1-Math.pow(1-progreso,3):1;
+        var numero=inicio+(destino-inicio)*suavizado;
+        ponerTexto(resumenPrecio,numero.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+(sufijo?" "+sufijo:""));
+        if(progreso<1)animacionPrecio=requestAnimationFrame(avanzar);
+        else {animacionPrecio=0;ponerTexto(resumenPrecio,valor);}
+      }
+      animacionPrecio=requestAnimationFrame(avanzar);
+    }
 
     if(botonPrincipal){botonPrincipal.classList.add("gg-sticky-action");acciones.appendChild(botonPrincipal);}
     if(botonOferta){botonOferta.classList.add("gg-sticky-action");acciones.appendChild(botonOferta);}
@@ -2762,7 +2795,7 @@ body.gg-has-sticky-purchase{padding-bottom:calc(180px + env(safe-area-inset-bott
 
         if(!nombre)nombre=tarjeta.textContent.trim().split(/\n+/).map(function(t){return t.trim();}).filter(Boolean)[0]||"Paquete seleccionado";
         ponerTexto(resumenNombre,nombre);
-        ponerTexto(resumenPrecio,precio);
+        ponerPrecioAnimado(precio);
       }else{
         ponerTexto(resumenEtiqueta,"ESTADO DEL PEDIDO");
         ponerTexto(resumenNombre,"Pedido pendiente");
