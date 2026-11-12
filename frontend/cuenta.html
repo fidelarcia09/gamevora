@@ -4652,7 +4652,7 @@ async function actualizarEstadoMetodosAcceso() {
         const anilloSeguridad = document.getElementById("anilloSeguridadMetodos");
         if (barraSeguridad) barraSeguridad.style.width = porcentaje + "%";
         if (detalleSeguridad) detalleSeguridad.textContent = metodosActivos + " de 4 métodos activos · vincula otro para reforzar tu cuenta";
-        if (tituloSeguridad) tituloSeguridad.textContent = metodosActivos >= 3 ? "Muy protegida" : metodosActivos === 2 ? "Buena protección" : "Protección básica";
+        if (tituloSeguridad) tituloSeguridad.textContent = metodosActivos >= 2 ? "Muy protegida" : "Protección básica";
         if (anilloSeguridad) anilloSeguridad.style.borderTopColor = porcentaje >= 75 ? "#00d7a0" : "#00b7ff";
     } catch (error) {
         console.error("No se pudieron consultar los métodos de acceso:", error);
