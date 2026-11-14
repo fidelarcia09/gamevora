@@ -183,11 +183,8 @@
       const registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
       await navigator.serviceWorker.ready;
       await guardarSuscripcionPush(registration);
-      pushCard.hidden = false;
-      activarPush.hidden = true;
-      activarPush.disabled = false;
-      activarPush.textContent = "Activar notificaciones";
-      mostrarEstado(pushStatus, "Las notificaciones están activadas en este dispositivo.", "ok");
+      // Ya quedó suscrito y registrado: ocultamos toda la tarjeta de activación.
+      pushCard.hidden = true;
     }
 
     async function iniciarNotificacionesPush() {
@@ -224,8 +221,9 @@
               .eq("endpoint", subscription.endpoint)
               .maybeSingle();
             if (!error && data?.endpoint) {
-              activarPush.hidden = true;
-              mostrarEstado(pushStatus, "Las notificaciones están activadas en este dispositivo.", "ok");
+              // Permiso concedido + suscripción Push activa + registro de esta cuenta.
+              // En ese caso no mostramos la tarjeta de activación.
+              pushCard.hidden = true;
               return;
             }
             if (error) console.warn("No se pudo comprobar la suscripción push:", error);
