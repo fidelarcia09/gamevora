@@ -378,14 +378,16 @@
 
     function iconoNotificacion(item) {
       if (item.system_type === "maintenance") {
-        const tituloMantenimiento = String(item.title || "").trim().toLowerCase();
-        const finalizado = /finalizad|disponible|tienda ya est[aá] abierta/.test(tituloMantenimiento);
+        const tituloMantenimiento = String(item.title || "").normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").trim().toLowerCase();
+        const finalizado = tituloMantenimiento.includes("finalizado") || tituloMantenimiento.includes("finalizada");
         const color = finalizado ? "#35e39a" : "#ffb347";
+        const fondo = finalizado ? "rgba(20,205,125,.24)" : "rgba(255,166,40,.24)";
+        const brillo = finalizado ? "rgba(20,205,125,.34)" : "rgba(255,166,40,.30)";
         return {
           color,
-          bg: finalizado ? "rgba(20,205,125,.22)" : "rgba(255,166,40,.22)",
-          shadow: finalizado ? "rgba(20,205,125,.24)" : "rgba(255,166,40,.22)",
-          svg: '<svg viewBox="0 0 24 24" aria-hidden="true" style="color:' + color + '" stroke="' + color + '"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3.5 17.5a2.1 2.1 0 0 0 3 3l4.8-4.8a5 5 0 0 0 6.4-6.4l-3 3-3.1-.8-.8-3.1 3-3Z" stroke="' + color + '"/></svg>'
+          bg: fondo,
+          shadow: brillo,
+          svg: '<svg viewBox="0 0 24 24" aria-hidden="true" style="color:' + color + ';stroke:' + color + '"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3.5 17.5a2.1 2.1 0 0 0 3 3l4.8-4.8a5 5 0 0 0 6.4-6.4l-3 3-3.1-.8-.8-3.1 3-3Z" style="stroke:' + color + ';fill:none"/></svg>'
         };
       }
       const texto = ((item.title || "") + " " + (item.message || "")).toLowerCase();
