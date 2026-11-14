@@ -65,7 +65,7 @@ html.gg-maintenance-pending body{visibility:hidden!important}
 @media(max-width:420px){.gg-maintenance-root{align-items:flex-start;padding:12px 8px}.gg-maintenance-scene{padding:18px 11px 20px}.gg-maintenance-brandline{margin-bottom:12px}.gg-maintenance-hero{min-height:230px}.gg-maintenance-messagebox{padding:19px 12px 21px}.gg-maintenance-heading{gap:8px;margin-bottom:13px}.gg-maintenance-hazard{margin-top:-15px;margin-bottom:14px}.gg-maintenance-footer{margin-top:20px}}
 @media(min-height:850px) and (min-width:421px){.gg-maintenance-root{padding-top:28px;padding-bottom:28px}}
 /* Rediseño inspirado en el cartel futurista de Gamers Gold */
-.gg-maintenance-root{align-items:flex-start;padding:0;overflow-x:hidden;overflow-y:auto;background:radial-gradient(ellipse at 50% 38%,rgba(0,92,255,.25),transparent 43%),radial-gradient(ellipse at 0 50%,rgba(0,119,255,.18),transparent 35%),radial-gradient(ellipse at 100% 60%,rgba(0,119,255,.18),transparent 35%),#01040c}
+.gg-maintenance-root{position:fixed;inset:0;z-index:2147483647;width:100%;height:100%;min-height:100%;align-items:flex-start;padding:0;overflow-x:hidden;overflow-y:auto;background:radial-gradient(ellipse at 50% 38%,rgba(0,92,255,.25),transparent 43%),radial-gradient(ellipse at 0 50%,rgba(0,119,255,.18),transparent 35%),radial-gradient(ellipse at 100% 60%,rgba(0,119,255,.18),transparent 35%),#01040c}
 .gg-maintenance-root:before{inset:0;opacity:.9;background:linear-gradient(132deg,transparent 0 10%,rgba(0,93,255,.14) 10.2%,transparent 10.8% 89%,rgba(0,93,255,.14) 89.2%,transparent 90%),repeating-linear-gradient(0deg,transparent 0 42px,rgba(0,143,255,.035) 43px,transparent 44px 86px)}
 .gg-maintenance-root:after{display:none}
 .gg-maintenance-scene{width:min(100%,720px);min-height:100svh;margin:0 auto;padding:clamp(26px,6vw,48px) clamp(14px,4vw,34px) 30px;overflow:hidden;clip-path:none;border:0;border-left:1px solid rgba(0,136,255,.4);border-right:1px solid rgba(0,136,255,.4);background:linear-gradient(180deg,rgba(0,5,17,.94),rgba(0,9,28,.88) 52%,rgba(0,5,18,.98)),radial-gradient(ellipse at 50% 38%,rgba(0,101,255,.25),transparent 55%);box-shadow:0 0 38px rgba(0,100,255,.25),inset 0 0 65px rgba(0,84,255,.12)}
@@ -152,8 +152,9 @@ html.gg-maintenance-pending body{visibility:hidden!important}
         }
 
         if (maintenanceVisible) {
-          location.reload();
+          removeMaintenanceScreen();
         }
+        document.documentElement.classList.remove("gg-maintenance-pending");
       })
       .subscribe((status, error) => {
         if (status !== "SUBSCRIBED") {
@@ -231,8 +232,9 @@ html.gg-maintenance-pending body{visibility:hidden!important}
         return;
       }
       if (!active) {
-        note.textContent = "Mantenimiento desactivado. Recargando…";
-        location.reload();
+        note.textContent = "Mantenimiento desactivado correctamente.";
+        note.className = "gg-maintenance-status ok";
+        removeMaintenanceScreen();
         return;
       }
       note.textContent = "Mensaje actualizado correctamente.";
@@ -246,9 +248,13 @@ html.gg-maintenance-pending body{visibility:hidden!important}
     host.appendChild(panel);
     return panel;
   }
+  function removeMaintenanceScreen() {
+    document.querySelector(".gg-maintenance-root")?.remove();
+    document.documentElement.classList.remove("gg-maintenance-pending");
+  }
+
   function renderMaintenance(client, isAdmin, message) {
-    document.body.replaceChildren();
-    document.body.style.margin = "0";
+    if (document.querySelector(".gg-maintenance-root")) return;
     const root = el("main", "gg-maintenance-root");
     const scene = el("div", "gg-maintenance-scene");
     ["tl","tr","bl","br"].forEach(position => {
@@ -292,7 +298,7 @@ html.gg-maintenance-pending body{visibility:hidden!important}
       navigate.type = "button";
       navigate.addEventListener("click", () => {
         sessionStorage.setItem("gg_admin_maintenance_navigation", "1");
-        location.reload();
+        removeMaintenanceScreen();
       });
       scene.append(navigate);
       const toggle = el("button", "gg-maintenance-admin", "Admin");
