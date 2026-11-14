@@ -1268,71 +1268,73 @@
 
     /* Título de sección: mismo indicador visual que Anuncios en Inicio */
 
-    /* Datos personales: diseño claro inspirado en la referencia, manteniendo la cabecera global */
-    #pantallaDatosPersonales {
-        min-height: calc(100vh - 90px);
-        margin: 0 -14px;
-        padding: 18px 14px 30px;
+ 
+    /* Rediseño fiel a la referencia, con la paleta oficial Gamers Gold */
+    #pantallaDatosPersonales.gg-datos-v2 {
+        min-height:calc(100vh - 82px);margin:0 -14px;padding:18px 14px 32px;
+        color:#f4f8ff;
         background:
-            linear-gradient(rgba(20,95,170,.035) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(20,95,170,.035) 1px, transparent 1px),
-            linear-gradient(145deg,#fbfcff 0%,#f2f6ff 100%);
-        background-size: 36px 36px,36px 36px,auto;
-        color: #17243a;
-        animation: aparecer .2s ease;
+          radial-gradient(ellipse at 50% 8%,rgba(0,174,255,.16),transparent 34%),
+          linear-gradient(145deg,#050b18 0%,#081a35 58%,#061226 100%);
+        animation:aparecer .2s ease;
     }
     #pantallaDatosPersonales .gg-datos-titulo-accesible {
         position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
     }
-    #pantallaDatosPersonales .gg-datos-avatar {
-        display:flex;flex-direction:column;align-items:center;justify-content:center;
-        gap:12px;margin:0 auto 28px;text-align:center;
-    }
-    #ggDatosAvatarDestino {display:flex;align-items:center;justify-content:center;min-height:150px}
+    #pantallaDatosPersonales .gg-datos-avatar {display:flex;flex-direction:column;align-items:center;gap:12px;margin:0 auto 26px;text-align:center}
+    #ggDatosAvatarDestino {display:flex;align-items:center;justify-content:center;min-height:154px}
     #ggDatosAvatarDestino .datos-avatar-marco {
-        width:144px;height:144px;flex:0 0 144px;margin:0;
-        border:3px solid #168cff;border-radius:50%;
-        background:linear-gradient(145deg,#0b2d55,#06152c);
-        box-shadow:0 0 0 4px rgba(25,132,255,.12),0 0 24px rgba(20,116,255,.22);
+        width:144px;height:144px;flex:0 0 144px;margin:0;border:3px solid #20c5ff;border-radius:50%;
+        background:linear-gradient(145deg,#103b65,#050b18);
+        box-shadow:0 0 0 4px rgba(32,197,255,.13),0 0 28px rgba(0,174,255,.36);
     }
-    #ggDatosAvatarDestino .avatar-contenedor,
-    #ggDatosAvatarDestino .avatar {width:100%;height:100%;border-radius:50%}
-    #ggDatosAvatarDestino .avatar-camara {background:#1267f1;border-color:#fff}
-    #ggDatosAvatarDestino .gg-datos-avatar-placeholder {display:none}
-    #pantallaDatosPersonales .gg-datos-avatar p {margin:0;color:#707b8d;font-size:14px}
-    #pantallaDatosPersonales .datos-panel {
-        overflow:visible;border:0;border-radius:0;background:transparent;box-shadow:none;
+    #ggDatosAvatarDestino .avatar-contenedor,#ggDatosAvatarDestino .avatar {width:100%;height:100%;border-radius:50%}
+    #ggDatosAvatarDestino .avatar-camara {background:#087cff;border:2px solid #20c5ff;box-shadow:0 0 14px rgba(0,124,255,.6)}
+    #pantallaDatosPersonales .gg-datos-avatar p {margin:0;color:#a9c5df;font-size:14px}
+    #pantallaDatosPersonales .gg-datos-formulario {display:flex;flex-direction:column;gap:20px}
+    #pantallaDatosPersonales .gg-datos-grupo {min-width:0}
+    #pantallaDatosPersonales .gg-datos-grupo>label {display:block;margin:0 0 8px;color:#c6d9ed;font-size:14px;font-weight:600}
+    #pantallaDatosPersonales .gg-datos-input-wrap {
+        display:flex;align-items:center;gap:12px;min-height:70px;padding:10px 14px;
+        border:1px solid rgba(32,197,255,.25);border-radius:22px;
+        background:linear-gradient(145deg,#fff 0%,#f4f8ff 100%);
+        box-shadow:0 5px 18px rgba(0,0,0,.2),inset 0 1px 0 #fff;
     }
-    #pantallaDatosPersonales .datos-campo {
-        position:relative;display:flex;align-items:center;gap:12px;
-        min-height:78px;margin:0 0 8px;padding:12px 14px;
-        border:1px solid #e0e5ee;border-radius:23px;
-        background:rgba(255,255,255,.94);
-        box-shadow:0 5px 16px rgba(18,42,78,.055);
+    #pantallaDatosPersonales .gg-datos-input-wrap>svg {
+        width:25px;height:25px;flex:0 0 25px;fill:none;stroke:#087cff;stroke-width:1.9;
+        stroke-linecap:round;stroke-linejoin:round;
     }
-    #pantallaDatosPersonales .datos-campo + .datos-campo {border-top:1px solid #e0e5ee}
-    #pantallaDatosPersonales .datos-campo-info {min-width:0}
-    #pantallaDatosPersonales .datos-campo-etiqueta {color:#737e8f;font-size:13px;font-weight:600}
-    #pantallaDatosPersonales .datos-campo-valor {color:#202b3d;font-size:15px;font-weight:500}
+    #pantallaDatosPersonales .gg-datos-input-wrap .datos-campo-valor,
+    #pantallaDatosPersonales .gg-datos-input-wrap>input {
+        flex:1;min-width:0;color:#17243a;font-size:15px;font-weight:500;overflow-wrap:anywhere;
+    }
+    #pantallaDatosPersonales .gg-datos-input-wrap>input {width:100%;border:0;outline:0;background:transparent;padding:8px 0}
+    #pantallaDatosPersonales .gg-datos-input-wrap>input::placeholder {color:#8994a4}
     #pantallaDatosPersonales .datos-editar {
-        min-height:36px;padding:8px 11px;border:0;border-radius:10px;
-        background:#eaf2ff;color:#1267e8;font-size:12px;font-weight:800;
+        flex:0 0 auto;min-height:36px;padding:7px 10px;border:0;border-radius:10px;
+        color:#087cff;background:#e5f0ff;font-size:12px;font-weight:800;
     }
-    #pantallaDatosPersonales .datos-editor {padding:4px 5px 18px}
+    #pantallaDatosPersonales .gg-datos-grupo>small {display:block;margin-top:7px;color:#a9bdd3;font-size:12px;line-height:1.45}
+    #pantallaDatosPersonales .datos-editor {padding:10px 2px 0}
     #pantallaDatosPersonales .datos-editor input {
-        min-height:50px;border:1px solid #d9e2f0;border-radius:15px;
+        width:100%;min-height:50px;padding:12px 14px;border:1px solid rgba(32,197,255,.32);border-radius:14px;
         background:#fff;color:#17243a;
     }
-    #pantallaDatosPersonales .datos-editor input:focus {border-color:#1677f5;box-shadow:0 0 0 3px rgba(22,119,245,.12)}
-    #pantallaDatosPersonales .datos-seguridad {
-        border:1px solid #dce7f8;border-radius:16px;background:#edf4ff;color:#52627a;
+    #pantallaDatosPersonales .datos-editor input:focus {outline:none;border-color:#087cff;box-shadow:0 0 0 3px rgba(8,124,255,.18)}
+    #pantallaDatosPersonales .texto-ayuda {color:#b9cce0}
+    #pantallaDatosPersonales .datos-estado {color:#d8eaff}
+    #pantallaDatosPersonales .gg-datos-guardar {
+        width:100%;min-height:62px;margin-top:2px;border:1px solid #36caff;border-radius:18px;
+        color:#fff;font-size:17px;font-weight:800;
+        background:linear-gradient(110deg,#087cff 0%,#0757e8 100%);
+        box-shadow:0 8px 24px rgba(0,105,255,.32),inset 0 1px 0 rgba(255,255,255,.25);
     }
-    #pantallaDatosPersonales .datos-seguridad svg {color:#176ff0}
-    @media (max-width:420px) {
-        #pantallaDatosPersonales {margin:0 -12px;padding:16px 12px 26px}
-        #pantallaDatosPersonales .datos-campo {min-height:74px;padding:11px 12px;border-radius:21px}
+    #pantallaDatosPersonales .gg-datos-guardar:disabled {opacity:.6}
+    @media(max-width:420px) {
+      #pantallaDatosPersonales.gg-datos-v2 {margin:0 -12px;padding:16px 12px 26px}
+      #pantallaDatosPersonales .gg-datos-input-wrap {min-height:66px;padding:9px 12px;border-radius:20px;gap:10px}
+      #pantallaDatosPersonales .gg-datos-input-wrap .datos-campo-valor {font-size:14px}
     }
-
     /* Pantalla independiente de Datos personales */
     .pantalla-datos-personales {
         animation: aparecer .2s ease;
@@ -2954,64 +2956,48 @@
 
     </main>
 
-    <section id="pantallaDatosPersonales" class="pantalla-datos-personales" hidden aria-labelledby="tituloDatosPersonales">
+    <section id="pantallaDatosPersonales" class="pantalla-datos-personales gg-datos-v2" hidden aria-labelledby="tituloDatosPersonales">
         <h1 id="tituloDatosPersonales" class="gg-datos-titulo-accesible">Datos personales</h1>
         <div class="gg-datos-avatar">
             <div id="ggDatosAvatarDestino"></div>
             <p>Toca la foto para cambiarla</p>
         </div>
 
-        <div class="datos-panel">
-            <div class="datos-campo">
-                <div class="datos-campo-info">
-                    <span class="datos-campo-etiqueta">Nombre de usuario</span>
+        <div class="gg-datos-formulario">
+            <div class="gg-datos-grupo">
+                <label for="ggNombreCompleto">Nombre completo</label>
+                <div class="gg-datos-input-wrap">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg>
+                    <input id="ggNombreCompleto" type="text" maxlength="80" autocomplete="name" placeholder="Como apareces en tus documentos">
+                </div>
+                <small>Este dato nos ayuda a identificarte si hay algún problema con un pago.</small>
+            </div>
+
+            <div class="gg-datos-grupo">
+                <label for="nombreDatosPersonales">Nombre de usuario</label>
+                <div class="gg-datos-input-wrap">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg>
                     <div class="datos-campo-valor" id="nombreDatosPersonales">Cargando...</div>
+                    <button class="datos-editar" id="editarNombreDatos" type="button">Editar</button>
                 </div>
-                <button class="datos-editar" id="editarNombreDatos" type="button">Editar</button>
-            </div>
-            <div class="datos-editor" id="editorNombreDatos">
-                <form id="formEditarNombreDatos">
-                    <input id="nuevoNombreDatos" type="text" maxlength="30" autocomplete="nickname" placeholder="Nuevo nombre de usuario" required>
-                    <div class="datos-editor-acciones">
-                        <button class="boton" type="submit">Guardar nombre</button>
-                        <button class="boton-secundario-datos" type="button" data-cancelar="editorNombreDatos">Cancelar</button>
-                    </div>
-                    <p class="datos-estado" id="estadoNombreDatos" role="status" aria-live="polite"></p>
-                </form>
-            </div>
-
-            <div class="datos-campo">
-                <div class="datos-campo-info">
-                    <span class="datos-campo-etiqueta">Gmail</span>
-                    <div class="datos-campo-valor" id="correoDatosPersonales">Cargando...</div>
-                </div>
-                <button class="datos-editar" id="editarCorreoDatos" type="button">Cambiar</button>
-            </div>
-            <div class="datos-editor" id="editorCorreoDatos">
-                <form id="formEditarCorreoDatos">
-                    <input id="nuevoCorreoDatos" type="email" maxlength="254" autocomplete="email" placeholder="Nuevo Gmail" required>
-                    <p class="texto-ayuda">Primero enviaremos un código al correo actual. Después tendrás que confirmar el nuevo correo según las instrucciones de Supabase.</p>
-                    <div class="datos-editor-acciones">
-                        <button class="boton" id="enviarCodigoCorreoDatos" type="button">Enviar código al Gmail actual</button>
-                        <button class="boton-secundario-datos" type="button" data-cancelar="editorCorreoDatos">Cancelar</button>
-                    </div>
-                    <div id="pasoCodigoCorreoDatos" hidden>
-                        <input id="codigoCorreoDatos" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Código de 8 dígitos">
+                <div class="datos-editor" id="editorNombreDatos">
+                    <form id="formEditarNombreDatos">
+                        <input id="nuevoNombreDatos" type="text" maxlength="30" autocomplete="nickname" placeholder="Nuevo nombre de usuario" required>
                         <div class="datos-editor-acciones">
-                            <button class="boton" id="confirmarCorreoDatos" type="button">Verificar y cambiar Gmail</button>
+                            <button class="boton" type="submit">Guardar nombre</button>
+                            <button class="boton-secundario-datos" type="button" data-cancelar="editorNombreDatos">Cancelar</button>
                         </div>
-                    </div>
-                    <p class="datos-estado" id="estadoCorreoDatos" role="status" aria-live="polite"></p>
-                </form>
+                        <p class="datos-estado" id="estadoNombreDatos" role="status" aria-live="polite"></p>
+                    </form>
+                </div>
             </div>
 
-            <div id="contenedorTelefonoDatos">
-                <div class="datos-campo">
-                    <div class="datos-campo-info">
-                        <span class="datos-campo-etiqueta">Número de teléfono</span>
-                        <div class="datos-campo-valor" id="telefonoDatosPersonales">Aún no registrado</div>
-                    </div>
-                    <button class="datos-editar" id="editarTelefonoDatos" type="button">Cambiar</button>
+            <div class="gg-datos-grupo">
+                <label for="nuevoTelefonoDatos">Número de móvil</label>
+                <div class="gg-datos-input-wrap">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm4 15h2"/></svg>
+                    <div class="datos-campo-valor" id="telefonoDatosPersonales">Aún no registrado</div>
+                    <button class="datos-editar" id="editarTelefonoDatos" type="button">Verificar</button>
                 </div>
                 <div class="datos-editor" id="editorTelefonoDatos">
                     <form id="formEditarTelefonoDatos">
@@ -3027,12 +3013,37 @@
                         <p class="datos-estado" id="estadoTelefonoDatos" role="status" aria-live="polite"></p>
                     </form>
                 </div>
+                <small>Verifícalo para entrar y recuperar tu cuenta por SMS.</small>
             </div>
-        </div>
 
-        <div class="datos-seguridad">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"></path><path d="m9 12 2 2 4-4"></path></svg>
-            <span>Los cambios de Gmail y teléfono requieren confirmar un código enviado al Gmail que tienes actualmente registrado.</span>
+            <div class="gg-datos-grupo">
+                <label for="nuevoCorreoDatos">Correo electrónico</label>
+                <div class="gg-datos-input-wrap">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 7 9-7"/></svg>
+                    <div class="datos-campo-valor" id="correoDatosPersonales">Cargando...</div>
+                    <button class="datos-editar" id="editarCorreoDatos" type="button">Cambiar</button>
+                </div>
+                <div class="datos-editor" id="editorCorreoDatos">
+                    <form id="formEditarCorreoDatos">
+                        <input id="nuevoCorreoDatos" type="email" maxlength="254" autocomplete="email" placeholder="Nuevo Gmail" required>
+                        <p class="texto-ayuda">Primero enviaremos un código al correo actual. Después tendrás que confirmar el nuevo correo según las instrucciones de Supabase.</p>
+                        <div class="datos-editor-acciones">
+                            <button class="boton" id="enviarCodigoCorreoDatos" type="button">Enviar código al Gmail actual</button>
+                            <button class="boton-secundario-datos" type="button" data-cancelar="editorCorreoDatos">Cancelar</button>
+                        </div>
+                        <div id="pasoCodigoCorreoDatos" hidden>
+                            <input id="codigoCorreoDatos" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Código de 8 dígitos">
+                            <div class="datos-editor-acciones">
+                                <button class="boton" id="confirmarCorreoDatos" type="button">Verificar y cambiar Gmail</button>
+                            </div>
+                        </div>
+                        <p class="datos-estado" id="estadoCorreoDatos" role="status" aria-live="polite"></p>
+                    </form>
+                </div>
+                <small>Para cambiarlo, tendrás que verificarlo de nuevo.</small>
+            </div>
+            <button class="gg-datos-guardar" id="guardarNombreCompleto" type="button">Guardar cambios</button>
+            <p class="datos-estado" id="estadoNombreCompleto" role="status" aria-live="polite"></p>
         </div>
     </section>
 
@@ -4652,6 +4663,7 @@ function abrirPantallaDatosPersonales() {
     const correo = document.getElementById("correoUsuario")?.textContent || "Sin correo";
     const numeroWhatsApp = document.getElementById("whatsappRegistrado")?.textContent || "";
     document.getElementById("nombreDatosPersonales").textContent = nombre;
+    document.getElementById("ggNombreCompleto").value = usuarioDatosActual?.user_metadata?.full_name || "";
     document.getElementById("correoDatosPersonales").textContent = correo;
     document.getElementById("telefonoDatosPersonales").textContent = numeroWhatsApp || "Aún no registrado";
     // No trasladar el bloque antiguo de WhatsApp: el número se muestra una sola vez
@@ -4875,6 +4887,36 @@ document.getElementById("formEditarNombreDatos").addEventListener("submit", asyn
         cerrarEditorDatos("editorNombreDatos");
     } catch (error) {
         mostrarEstadoDatos("estadoNombreDatos", error.message || "No se pudo actualizar el nombre.", "error");
+    } finally {
+        boton.disabled = false;
+    }
+});
+
+document.getElementById("guardarNombreCompleto").addEventListener("click", async () => {
+    const input = document.getElementById("ggNombreCompleto");
+    const nombreCompleto = input.value.trim().replace(/\\s+/g, " ");
+    const boton = document.getElementById("guardarNombreCompleto");
+    if (!nombreCompleto) {
+        mostrarEstadoDatos("estadoNombreCompleto", "Escribe tu nombre completo.", "error");
+        input.focus();
+        return;
+    }
+    if (nombreCompleto.length < 3 || nombreCompleto.length > 80) {
+        mostrarEstadoDatos("estadoNombreCompleto", "El nombre debe tener entre 3 y 80 caracteres.", "error");
+        return;
+    }
+    if (!usuarioDatosActual) return;
+    boton.disabled = true;
+    mostrarEstadoDatos("estadoNombreCompleto", "Guardando cambios...");
+    try {
+        const { data, error } = await supabaseClient.auth.updateUser({
+            data: { ...usuarioDatosActual.user_metadata, full_name: nombreCompleto }
+        });
+        if (error) throw error;
+        usuarioDatosActual = data.user;
+        mostrarEstadoDatos("estadoNombreCompleto", "Nombre completo guardado.", "exito");
+    } catch (error) {
+        mostrarEstadoDatos("estadoNombreCompleto", error.message || "No se pudo guardar el nombre.", "error");
     } finally {
         boton.disabled = false;
     }
