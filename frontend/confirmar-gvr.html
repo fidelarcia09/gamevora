@@ -368,7 +368,7 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
 <main>
 <div class="contenedor">
     <div class="encabezado">
-        <div class="etiqueta">RECARGA DE SALDO GVR</div>
+        <div class="etiqueta">RECARGA SALDO</div>
         <h1>Completa tu pago</h1>
         <p class="subtitulo">Sigue los pasos para finalizar tu recarga.</p>
     </div>
@@ -383,8 +383,8 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
         <section class="resumen-pedido resumen-compacto">
             <div class="resumen-cabecera">
                 <div class="resumen-titulos">
-                    <span class="resumen-etiqueta">RECARGA DE SALDO</span>
-                    <h2>Depósito de <span id="mostrarCantidad" class="cantidad">Cargando...</span></h2>
+                    <span class="resumen-etiqueta">RECARGA SALDO</span>
+                    <h2>Recarga de <span id="mostrarCantidad" class="cantidad">Cargando...</span></h2>
                     <span class="resumen-estado resumen-id" id="resumenId">ID pendiente</span><span id="estadoCompra" class="oculto">Pendiente</span>
                 </div>
                 <span class="resumen-icono" aria-hidden="true">G</span>
@@ -399,14 +399,10 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
         </section>
         <div id="panelSaldo" class="pago-panel oculto">
             <h3>Pago mediante saldo móvil</h3>
-            <p class="descripcion">
-                Envía exactamente el importe indicado al siguiente número y guarda la captura del pago.
-            </p>
-            <div class="titulo">Número receptor</div>
+            <div class="titulo">Número para transferir</div>
             <div class="direccion">63638032</div>
             <button class="boton-secundario" type="button" id="copiarSaldo">Copiar número</button>
-            <label class="campo-txid" for="numeroOrigenSaldo"><span>Número desde el que transferiste</span><input type="tel" id="numeroOrigenSaldo" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="Escribe tu número de teléfono"></label>
-            <p class="ayuda">Introduce exactamente el número de teléfono desde el que realizaste la transferencia. Lo usaremos para comprobar el pago.</p>
+            <label class="campo-txid" for="numeroOrigenSaldo"><span>Número del que transferiste</span><input type="tel" id="numeroOrigenSaldo" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="Tu número de teléfono"></label>
         </div>
 
         <div id="panelUsdt" class="pago-panel oculto">
@@ -434,24 +430,17 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
 
         <div class="temporizador-usdt" id="temporizadorUsdt"><div class="tiempo-label" id="tiempoLabel">Tiempo disponible para completar el pago</div><div class="tiempo" id="tiempoRestante">10:00</div></div>
 
-        <div class="aviso">
-            <strong>Importante:</strong> enviar una imagen no confirma por sí solo el pago.
-            La solicitud será revisada por el personal autorizado.
-            Los GVR no se acreditarán hasta que la compra sea aprobada.
-        </div>
-
-        <section class="comprobante-card">
-        <div class="paso-titulo"><span class="numero-paso">1</span><div><h2 class="seccion-titulo">Adjunta tu comprobante</h2><p>Sube una captura clara para que podamos verificar tu pago.</p></div></div>
+         <section class="comprobante-card">
+        <div class="paso-titulo"><span class="numero-paso">1</span><div><h2 class="seccion-titulo">Captura de la transferencia</h2></div></div>
 
         <label class="subida" for="archivoComprobante">
-            Selecciona la captura del pago
+            Captura de la transferencia
             <input
                 type="file"
                 id="archivoComprobante"
                 accept="image/jpeg,image/png,image/webp">
         </label>
 
-        <p class="ayuda">Formatos permitidos: JPG, PNG y WEBP. Tamaño máximo: 5 MB.</p>
 
         <div class="preview-contenedor" id="previewContenedor">
             <img id="previewImagen" alt="Vista previa del comprobante">
