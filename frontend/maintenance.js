@@ -89,18 +89,55 @@ html.gg-maintenance-pending body{visibility:hidden!important}
     style.textContent = CSS;
     document.head.appendChild(style);
   }
+  function startMaintenanceRealtime(client, isAdmin) {
+    if (window.__ggMaintenanceRealtimeChannel) return;
+    const channel = client
+      .channel("site-maintenance-status")
+      .on("broadcast", { event: "maintenance_status_changed" }, (event) => {
+        const update = event?.payload && typeof event.payload === "object" ? event.payload : event;
+        if (!update || typeof update.active !== "boolean") return;
+        const nextMessage = typeof update.message === "string" && update.message.trim()
+          ? update.message
+          : MESSAGE_DEFAULT;
+        const maintenanceVisible = !!document.querySelector(".gg-maintenance-root");
+        const adminNavigationKey = "gg_admin_maintenance_navigation";
+        const adminChoseToNavigate = isAdmin && sessionStorage.getItem(adminNavigationKey) === "1";
+
+        if (update.active) {
+          if (maintenanceVisible) {
+            const copy = document.querySelector(".gg-maintenance-copy");
+            if (copy) copy.textContent = nextMessage;
+            return;
+          }
+          if (!adminChoseToNavigate) {
+            renderMaintenance(client, isAdmin, nextMessage);
+          }
+          return;
+        }
+
+        if (maintenanceVisible) {
+          location.reload();
+        }
+      })
+      .subscribe((status, error) => {
+        if (status !== "SUBSCRIBED") {
+          console.warn("Realtime de mantenimiento:", status, error || "");
+        }
+      });
+    window.__ggMaintenanceRealtimeChannel = channel;
+  }
+
   async function init() {
     addStyles();
     const sdk = await loadSupabase();
     const client = window.__ggMaintenanceSupabaseClient || sdk.createClient(SUPABASE_URL, SUPABASE_KEY, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
-    const [{ data: sessionData }, { data: statusData, error: statusError }] = await Promise.all([
-      client.auth.getSession(),
-      client.rpc("get_site_maintenance_status")
-    ]);
+    const { data: sessionData } = await client.auth.getSession();
     const session = sessionData?.session;
     const isAdmin = String(session?.user?.email || "").trim().toLowerCase() === "fidelarciatamayo99@gmail.com";
+    startMaintenanceRealtime(client, isAdmin);
+    const { data: statusData, error: statusError } = await client.rpc("get_site_maintenance_status");
     if (statusError || !statusData) {
       document.documentElement.classList.remove("gg-maintenance-pending");
       console.error("No se pudo comprobar el mantenimiento:", statusError);
