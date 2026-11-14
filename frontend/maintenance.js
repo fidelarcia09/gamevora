@@ -65,24 +65,20 @@
       client.rpc("get_site_maintenance_status")
     ]);
     const session = sessionData?.session;
-    let isAdmin = false;
-    if (session?.user) {
-      const { data } = await client.rpc("is_support_admin");
-      isAdmin = data === true;
-    }
+    const isAdmin = String(session?.user?.email || "").trim().toLowerCase() === "fidelarciatamayo99@gmail.com";
     if (statusError || !statusData) {
       document.documentElement.classList.remove("gg-maintenance-pending");
       console.error("No se pudo comprobar el mantenimiento:", statusError);
       return;
     }
     const status = typeof statusData === "string" ? JSON.parse(statusData) : statusData;
-    if (status.active === true) {
-      renderMaintenance(client, isAdmin, status.message || MESSAGE_DEFAULT);
-    } else {
-      document.documentElement.classList.remove("gg-maintenance-pending");
-      if (isAdmin && location.pathname.endsWith("/notificaciones.html")) {
-        addLiveAdminControls(client);
-      }
+    if (status.active === true && !isAdmin) {
+      renderMaintenance(client, false, status.message || MESSAGE_DEFAULT);
+      return;
+    }
+    document.documentElement.classList.remove("gg-maintenance-pending");
+    if (isAdmin && location.pathname.endsWith("/notificaciones.html")) {
+      addLiveAdminControls(client, status);
     }
   }
   function createAdminPanel(client, host, initialMessage, onClose) {
@@ -170,45 +166,46 @@
     document.body.append(root);
     document.documentElement.classList.remove("gg-maintenance-pending");
   }
-  function addLiveAdminControls(client) {
+  function addLiveAdminControls(client, currentStatus) {
     const adminCard = document.getElementById("adminCard");
     if (!adminCard || document.getElementById("ggMaintenanceLiveControls")) return;
     const section = el("section", "gg-maintenance-admin-controls");
     section.id = "ggMaintenanceLiveControls";
     section.append(el("h3", "", "Modo mantenimiento"));
-    section.append(el("p", "", "Al activarlo, todos verán la pantalla de mantenimiento, incluidos los administradores. Solo las cuentas administradoras tendrán el botón Admin para desactivarlo."));
+    section.append(el("p", "", "Solo fidelarciatamayo99@gmail.com puede navegar durante el mantenimiento y controlar su activación. Los demás usuarios verán únicamente la pantalla de mantenimiento."));
     const label = el("label", "gg-maintenance-label", "Mensaje que verán los usuarios");
     const area = el("textarea", "gg-maintenance-textarea");
     area.maxLength = 500;
-    area.value = MESSAGE_DEFAULT;
+    area.value = currentStatus?.message || MESSAGE_DEFAULT;
     label.appendChild(area);
     const actions = el("div", "gg-maintenance-actions");
-    const activate = el("button", "gg-maintenance-action", "Activar mantenimiento");
-    activate.type = "button";
+    const toggle = el("button", "gg-maintenance-action", currentStatus?.active ? "Desactivar mantenimiento" : "Activar mantenimiento");
+    toggle.type = "button";
     const note = el("p", "gg-maintenance-status");
-    activate.addEventListener("click", async () => {
+    toggle.addEventListener("click", async () => {
       const message = area.value.trim();
       if (!message) {
         note.textContent = "Escribe un mensaje para los usuarios.";
         note.className = "gg-maintenance-status error";
         return;
       }
-      activate.disabled = true;
+      const nextActive = currentStatus?.active !== true;
+      toggle.disabled = true;
       note.className = "gg-maintenance-status";
-      note.textContent = "Activando mantenimiento…";
+      note.textContent = nextActive ? "Activando mantenimiento…" : "Desactivando mantenimiento…";
       const { data, error } = await client.rpc("set_site_maintenance", {
-        p_active: true,
+        p_active: nextActive,
         p_message: message
       });
       if (error || data?.ok !== true) {
-        note.textContent = error?.message || "No se pudo activar el mantenimiento.";
+        note.textContent = error?.message || "No se pudo actualizar el mantenimiento.";
         note.className = "gg-maintenance-status error";
-        activate.disabled = false;
+        toggle.disabled = false;
         return;
       }
       location.reload();
     });
-    actions.append(activate);
+    actions.append(toggle);
     section.append(label, actions, note);
     adminCard.append(section);
   }
