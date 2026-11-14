@@ -645,7 +645,7 @@ body{padding:0!important}
 
 <section id="vistaOfertas" class="vista-oculta">
 <div id="pantallaOfertas" class="pantalla-motor activa">
-<div id="descripcionOfertas">Selecciona una oferta especial de Arena Breakout.</div>
+
 <div id="estadoProductos" class="estado" aria-live="polite">Cargando ofertas...</div>
 <div id="listaOfertas" class="catalogo"></div>
 <div id="precioSeleccionado"></div>
@@ -1124,6 +1124,10 @@ elemento=document.createElement("div");
 elemento.className=clase;
 card.appendChild(elemento);
 }
+if(ES_ARENA_BREAKOUT){
+const alias={"nombre-oferta":"producto-nombre","precio-oferta":"producto-precio","estado-oferta":"producto-estado"}[clase];
+if(alias)elemento.classList.add(alias);
+}
 if(elemento.textContent!==texto)elemento.textContent=texto;
 return elemento;
 }
@@ -1155,7 +1159,7 @@ oferta=>String(oferta.id).trim()===configId
 if(config){
 nombre=config.nombre;
 const n=document.createElement("div");
-n.className="nombre-oferta";
+n.className="nombre-oferta producto-nombre";
 n.textContent=nombre;
 card.prepend(n);
 }
@@ -1170,7 +1174,7 @@ const producto=config?obtenerProductoOferta(nombre):null;
 let nombreElemento=card.querySelector(":scope > .nombre-oferta");
 if(!nombreElemento){
 nombreElemento=document.createElement("div");
-nombreElemento.className="nombre-oferta";
+nombreElemento.className="nombre-oferta producto-nombre";
 nombreElemento.textContent=nombre;
 }else{
 nombreElemento.textContent=nombre;
@@ -1850,14 +1854,14 @@ body.gg-has-sticky-purchase{padding-bottom:calc(192px + env(safe-area-inset-bott
 
 
 <style id="gg-arenabreakout-special-offers-card-fix-20261114">
-/* Arena Breakout: mismo diseño de Ofertas Especiales que Wuthering Waves. */
+/* Arena Breakout: mismas clases visuales y medidas que las ofertas de Wuthering Waves. */
 #listaOfertas{
   display:grid!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
   gap:8px!important;
   align-items:stretch!important;
 }
-#listaOfertas .boton-oferta{
+#listaOfertas .boton-oferta.producto.producto-oferta{
   position:relative!important;
   display:flex!important;
   flex-direction:column!important;
@@ -1878,17 +1882,16 @@ body.gg-has-sticky-purchase{padding-bottom:calc(192px + env(safe-area-inset-bott
   background:linear-gradient(145deg,#10294d 0%,#0a1b35 58%,#071326 100%)!important;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 7px 18px rgba(0,0,0,.24)!important;
 }
-#listaOfertas .boton-oferta .foto-oferta,
-#listaOfertas .boton-oferta .oferta-icono,
-#listaOfertas .boton-oferta .oferta-imagen{
-  display:none!important;width:0!important;height:0!important;min-width:0!important;min-height:0!important;
+#listaOfertas .boton-oferta.producto.producto-oferta .foto-oferta,
+#listaOfertas .boton-oferta.producto.producto-oferta .oferta-icono,
+#listaOfertas .boton-oferta.producto.producto-oferta .oferta-imagen{
+  display:none!important;
 }
-#listaOfertas .boton-oferta .nombre-oferta,
-#listaOfertas .boton-oferta .gg-reseller-original-price,
-#listaOfertas .boton-oferta .precio-oferta,
-#listaOfertas .boton-oferta .estado-oferta{
+#listaOfertas .boton-oferta.producto.producto-oferta .producto-nombre,
+#listaOfertas .boton-oferta.producto.producto-oferta .gg-reseller-original-price,
+#listaOfertas .boton-oferta.producto.producto-oferta .producto-precio,
+#listaOfertas .boton-oferta.producto.producto-oferta .producto-estado{
   display:block!important;
-  box-sizing:border-box!important;
   width:100%!important;
   max-width:100%!important;
   min-width:0!important;
@@ -1897,13 +1900,13 @@ body.gg-has-sticky-purchase{padding-bottom:calc(192px + env(safe-area-inset-bott
   overflow-wrap:anywhere!important;
   align-self:center!important;
 }
-#listaOfertas .boton-oferta .nombre-oferta{
+#listaOfertas .boton-oferta.producto.producto-oferta .producto-nombre{
   color:#eaf5ff!important;font-size:13px!important;font-weight:800!important;line-height:1.25!important;
 }
-#listaOfertas .boton-oferta .gg-reseller-original-price{
+#listaOfertas .boton-oferta.producto.producto-oferta .gg-reseller-original-price{
   color:#a8bad0!important;font-size:11px!important;line-height:1.2!important;text-decoration:line-through!important;
 }
-#listaOfertas .boton-oferta .precio-oferta{
+#listaOfertas .boton-oferta.producto.producto-oferta .producto-precio{
   display:inline-flex!important;align-items:center!important;justify-content:center!important;
   width:auto!important;min-width:112px!important;max-width:100%!important;
   padding:8px 15px!important;border:1px solid rgba(170,225,255,.38)!important;border-radius:999px!important;
@@ -1911,13 +1914,15 @@ body.gg-has-sticky-purchase{padding-bottom:calc(192px + env(safe-area-inset-bott
   color:#fff!important;font-size:17px!important;font-weight:900!important;line-height:1.15!important;
   box-shadow:0 4px 13px rgba(0,124,255,.3),inset 0 1px 0 rgba(255,255,255,.2)!important;
 }
-#listaOfertas .boton-oferta .estado-oferta{color:#69cfff!important;font-size:10px!important;line-height:1.2!important}
-#listaOfertas .boton-oferta .gg-reseller-discount-badge{
+#listaOfertas .boton-oferta.producto.producto-oferta .producto-estado{
+  color:#69cfff!important;font-size:10px!important;line-height:1.2!important;
+}
+#listaOfertas .boton-oferta.producto.producto-oferta .gg-reseller-discount-badge{
   top:0!important;right:0!important;left:auto!important;z-index:8!important;
 }
 @media(max-width:360px){
   #listaOfertas{gap:6px!important}
-  #listaOfertas .boton-oferta{min-height:152px!important;padding:22px 9px 12px!important;gap:5px!important}
-  #listaOfertas .boton-oferta .precio-oferta{min-width:104px!important;padding:7px 10px!important;font-size:15px!important}
+  #listaOfertas .boton-oferta.producto.producto-oferta{min-height:152px!important;padding:22px 9px 12px!important;gap:5px!important}
+  #listaOfertas .boton-oferta.producto.producto-oferta .producto-precio{min-width:104px!important;padding:7px 10px!important;font-size:15px!important}
 }
 </style>
