@@ -130,6 +130,7 @@ html.gg-maintenance-pending body{visibility:hidden!important}
 
     const applyStatus = (update) => {
       if (!update || typeof update.active !== "boolean") return;
+      window.dispatchEvent(new CustomEvent("gg:maintenance-status", { detail: update }));
       const nextMessage = typeof update.message === "string" && update.message.trim()
         ? update.message
         : MESSAGE_DEFAULT;
@@ -210,6 +211,7 @@ html.gg-maintenance-pending body{visibility:hidden!important}
       return;
     }
     const status = typeof statusData === "string" ? JSON.parse(statusData) : statusData;
+    window.dispatchEvent(new CustomEvent("gg:maintenance-status", { detail: status }));
     const adminNavigationKey = "gg_admin_maintenance_navigation";
     const adminChoseToNavigate = isAdmin && sessionStorage.getItem(adminNavigationKey) === "1";
     if (status.active === true && !adminChoseToNavigate) {
