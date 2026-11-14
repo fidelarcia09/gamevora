@@ -94,6 +94,21 @@ main{max-width:690px;margin:12px auto 22px;padding:0 16px}
 footer{padding:0 16px 28px;color:#7186a3}
 @media(max-width:440px){main{padding:0 12px}.resumen-pedido,.comprobante-card{padding:16px 14px;border-radius:19px}.resumen-datos{grid-template-columns:1fr}.resumen-datos .dato:last-child{grid-column:auto}.pasos-gvr{margin:21px 0 24px}.paso-gvr small{font-size:11px}.resumen-cabecera h2{font-size:19px}}
 
+
+/* Resumen compacto: misma jerarquía visual que la referencia */
+.resumen-pedido.resumen-compacto{padding:20px 18px;border:1px solid #183b61;border-radius:23px;background:linear-gradient(125deg,#0c1a31 0%,#050a13 72%,#061a2c 100%);box-shadow:0 15px 34px rgba(0,0,0,.3)}
+.resumen-compacto .resumen-cabecera{align-items:center;padding:0 0 16px}
+.resumen-compacto .resumen-titulos{min-width:0}
+.resumen-compacto .resumen-etiqueta{margin-bottom:7px;color:#a4b5ca;font-size:11px;font-weight:800;letter-spacing:2px}
+.resumen-compacto .resumen-cabecera h2{font-size:clamp(20px,5vw,25px);font-weight:900;line-height:1.25}
+.resumen-compacto .resumen-cabecera h2 .cantidad{font-size:inherit;color:#fff}
+.resumen-compacto .resumen-estado{display:inline-block;margin-top:9px;padding:5px 10px;border:1px solid rgba(255,190,50,.25);border-radius:30px;background:rgba(255,190,50,.09);color:#ffd27a;font-size:10px;font-weight:800;letter-spacing:0}
+.resumen-compacto .resumen-total{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding-top:17px;border-top:1px dashed rgba(170,200,230,.22)}
+.resumen-compacto .resumen-metodo{display:flex;flex-direction:column;gap:6px;min-width:0}
+.resumen-compacto .resumen-metodo .resumen-etiqueta{margin:0}
+.resumen-compacto .resumen-metodo-valor{color:#a9bad2;font-size:14px;font-weight:700}
+.resumen-compacto .resumen-precio{color:#f4f8ff;font-size:clamp(20px,5vw,27px);font-weight:900;text-align:right;overflow-wrap:anywhere}
+@media(max-width:440px){.resumen-pedido.resumen-compacto{padding:18px 15px;border-radius:19px}.resumen-compacto .resumen-total{align-items:flex-end}.resumen-compacto .resumen-precio{font-size:21px}}
 </style><script src="./maintenance.js" defer></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -364,44 +379,23 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
     </div>
 
     <section class="card">
-        <section class="resumen-pedido">
-        <div class="resumen-cabecera">
-            <div><span class="resumen-etiqueta">RECARGA DE SALDO</span><h2>Depósito de <span id="resumenCantidad">GVR</span></h2></div>
-            <span class="resumen-icono" aria-hidden="true">G</span>
-        </div>
-        <div class="resumen-linea"><span>DETALLES DE LA RECARGA</span><span class="resumen-estado">Pendiente</span></div>
-        <div class="resumen-datos">
-        <div class="dato">
-            <div class="dato-info">
-                <div class="titulo">Cantidad solicitada</div>
-                <div class="valor cantidad" id="mostrarCantidad">Cargando...</div>
+        <section class="resumen-pedido resumen-compacto">
+            <div class="resumen-cabecera">
+                <div class="resumen-titulos">
+                    <span class="resumen-etiqueta">RECARGA DE SALDO</span>
+                    <h2>Depósito de <span id="mostrarCantidad" class="cantidad">Cargando...</span></h2>
+                    <span class="resumen-estado" id="estadoCompra">Pendiente</span>
+                </div>
+                <span class="resumen-icono" aria-hidden="true">G</span>
             </div>
-        </div>
-
-        <div class="dato">
-            <div class="dato-info">
-                <div class="titulo">Método de pago</div>
-                <div class="valor" id="mostrarMetodo">Cargando...</div>
+            <div class="resumen-total">
+                <div class="resumen-metodo">
+                    <span class="resumen-etiqueta">TOTAL A PAGAR</span>
+                    <span class="resumen-metodo-valor" id="mostrarMetodo">Cargando...</span>
+                </div>
+                <strong class="resumen-precio" id="mostrarPrecio">Calculando...</strong>
             </div>
-        </div>
-
-        <div class="dato">
-            <div class="dato-info">
-                <div class="titulo">Importe exacto</div>
-                <div class="valor" id="mostrarPrecio">Calculando...</div>
-            </div>
-        </div>
-
-        <div class="dato">
-            <div class="dato-info">
-                <div class="titulo">Estado</div>
-                <div class="valor">Esperando comprobante</div>
-            </div>
-            <span class="estado" id="estadoCompra">Sin enviar</span>
-        </div>
-
-        </div>
-        </div>
+        </section>
         <div id="panelSaldo" class="pago-panel oculto">
             <h3>Pago mediante saldo móvil</h3>
             <p class="descripcion">
