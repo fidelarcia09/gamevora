@@ -29,6 +29,8 @@
     .flecha-item svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     .punto{position:absolute;top:12px;left:12px;width:7px;height:7px;border-radius:50%;background:var(--cian);box-shadow:0 0 9px rgba(32,197,255,.7)}
 
+    .admin-toggle{flex-shrink:0;padding:10px 14px;border:1px solid rgba(32,197,255,.42);border-radius:9px;background:linear-gradient(105deg,rgba(8,124,255,.22),rgba(32,197,255,.1));color:#75dcff;font-size:11px;font-weight:900;letter-spacing:.3px;cursor:pointer;box-shadow:0 0 14px rgba(0,124,255,.1)}
+    .admin-toggle[hidden]{display:none}
     .marcar{flex-shrink:0;padding:10px 13px;border:1px solid rgba(32,197,255,.25);border-radius:9px;background:rgba(0,119,255,.1);color:var(--cian);font-size:11px;font-weight:800;cursor:pointer}
     .acciones-notificaciones{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0;flex-wrap:wrap}
     .marcar,.limpiar{padding:10px 13px;border:1px solid rgba(32,197,255,.25);border-radius:9px;background:rgba(0,119,255,.1);color:var(--cian);font-size:11px;font-weight:800;cursor:pointer}
@@ -90,6 +92,7 @@
 
     <div class="encabezado">
       <div class="acciones-notificaciones">
+        <button id="adminToggle" class="admin-toggle" type="button" aria-expanded="false" aria-controls="adminCard" hidden>Admin</button>
         <button id="marcarTodas" class="marcar" type="button" disabled>Marcar como leídas</button>
         <button id="limpiarTodas" class="limpiar" type="button" disabled>Limpiar todas</button>
       </div>
@@ -113,6 +116,7 @@
     const activarPush = document.getElementById("activarPush");
     const pushStatus = document.getElementById("pushStatus");
     const adminCard = document.getElementById("adminCard");
+    const adminToggle = document.getElementById("adminToggle");
     const adminForm = document.getElementById("adminForm");
     const adminStatus = document.getElementById("adminStatus");
     const enviarAviso = document.getElementById("enviarAviso");
@@ -239,9 +243,17 @@
         console.error("Error activando notificaciones:", error);
       }
     });
+    adminToggle.addEventListener("click", function () {
+      const abrir = adminCard.hidden;
+      adminCard.hidden = !abrir;
+      adminToggle.setAttribute("aria-expanded", String(abrir));
+      adminToggle.textContent = abrir ? "Cerrar admin" : "Admin";
+      if (abrir) adminCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
     async function comprobarAdministrador() {
       const { data, error } = await supabaseClient.rpc("is_support_admin");
-      if (!error && data === true) adminCard.hidden = false;
+      if (!error && data === true) adminToggle.hidden = false;
     }
 
     function crearElemento(tag, clase, texto) {
