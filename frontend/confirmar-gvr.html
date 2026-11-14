@@ -1,7 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<script>document.documentElement.classList.add("gg-maintenance-pending")</script><style>html.gg-maintenance-pending body{visibility:hidden!important}</style><script src="./maintenance.js" defer></script>
+<script>document.documentElement.classList.add("gg-maintenance-pending")</script><style>html.gg-maintenance-pending body{visibility:hidden!important}
+/* Rediseño visual inspirado en la referencia, conservando la identidad Gamers Gold */
+main{max-width:650px;margin:14px auto 22px;padding:0 16px}
+.encabezado{margin:12px 0 20px}
+.etiqueta{padding:7px 13px;border:1px solid rgba(40,217,255,.28);border-radius:999px;background:rgba(0,170,255,.10);color:#28d9ff;letter-spacing:1.2px}
+h1{font-size:clamp(26px,6vw,35px);letter-spacing:-.5px}
+.subtitulo{font-size:13px;line-height:1.55;color:#a9bad2}
+.card{padding:0;background:transparent;border:0;border-radius:0;box-shadow:none}
+.seccion-titulo{display:flex;align-items:center;gap:9px;margin:21px 0 12px;font-size:16px;font-weight:800;letter-spacing:.1px}
+.seccion-titulo:first-child{margin-top:0}
+.dato{position:relative;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:15px;margin:0 0 10px;border:1px solid #17365c;border-radius:16px;background:linear-gradient(150deg,#0c1d39 0%,#08162c 100%);box-shadow:0 8px 22px rgba(0,0,0,.18)}
+.dato-info{min-width:0}
+.titulo{color:#9aacc5;font-size:11px;font-weight:700;letter-spacing:.35px;margin-bottom:7px}
+.valor{font-size:16px;font-weight:800;line-height:1.35;color:#f4f8ff}
+.cantidad{font-size:22px;color:#28d9ff}
+.estado{padding:7px 11px;border:1px solid rgba(255,190,50,.28);border-radius:999px;background:rgba(255,190,50,.10);color:#ffd27a;font-size:11px;font-weight:800}
+.pago-panel{padding:17px;margin-top:13px;border:1px solid #1b4770;border-radius:18px;background:linear-gradient(155deg,#0d2140 0%,#08162c 100%);box-shadow:0 10px 26px rgba(0,0,0,.2)}
+.pago-panel h3{display:flex;align-items:center;gap:9px;margin-bottom:10px;font-size:16px;font-weight:800}
+.descripcion{margin-bottom:14px;color:#a9bad2;font-size:12px;line-height:1.65}
+.direccion{padding:14px;border:1px solid rgba(40,217,255,.28);border-radius:13px;background:rgba(0,145,255,.09);color:#53dfff;font-size:15px;line-height:1.55;letter-spacing:.15px}
+.boton-secundario{min-height:45px;margin-top:11px;border:1px solid rgba(40,217,255,.34);border-radius:12px;background:linear-gradient(110deg,rgba(0,170,255,.18),rgba(40,217,255,.09));color:#eaf8ff;font-size:13px;font-weight:800;transition:transform .18s,border-color .18s}
+.boton-secundario:active,.boton:active{transform:scale(.985)}
+.campo-txid{margin-top:16px}
+.campo-txid span{font-size:11px;letter-spacing:.2px}
+.campo-txid input{min-height:48px;border:1px solid #25496f;border-radius:13px;background:#061329;color:#f4f8ff}
+.campo-txid input:focus{border-color:#28d9ff;box-shadow:0 0 0 3px rgba(40,217,255,.12)}
+.aviso{margin-top:15px;padding:14px;border:1px solid rgba(0,170,255,.24);border-radius:15px;background:linear-gradient(120deg,rgba(0,145,255,.12),rgba(40,217,255,.045));color:#c6d7ed;font-size:12px;line-height:1.65}
+.subida{margin-top:12px;padding:16px;border:1px dashed rgba(40,217,255,.48);border-radius:15px;background:rgba(0,145,255,.07);color:#eaf8ff;font-size:13px;font-weight:700;transition:border-color .18s,background .18s}
+.subida:focus-within{border-color:#28d9ff;background:rgba(0,145,255,.12)}
+.subida input{font-size:12px}
+.ayuda{color:#91a4c0;font-size:11px;line-height:1.6}
+.preview-contenedor img{border:1px solid #1b4770;border-radius:15px;box-shadow:0 8px 22px rgba(0,0,0,.2)}
+.boton{min-height:50px;margin-top:18px;border-radius:14px;background:linear-gradient(105deg,#00aaff,#28d9ff);color:#031426;font-size:14px;font-weight:900;box-shadow:0 8px 22px rgba(0,170,255,.2)}
+.temporizador-usdt{padding:15px;border:1px solid rgba(40,217,255,.27);border-radius:15px;background:linear-gradient(110deg,rgba(0,125,255,.15),rgba(40,217,255,.06))}
+.temporizador-usdt .tiempo{color:#28d9ff}
+.mensaje{border-radius:14px;padding:14px}
+footer{padding:0 16px 28px;color:#7186a3}
+@media(max-width:420px){
+ main{padding:0 12px}
+ .dato{padding:14px;border-radius:15px}
+ .pago-panel{padding:15px;border-radius:16px}
+ .valor{font-size:15px}
+ .cantidad{font-size:21px}
+ .direccion{font-size:14px}
+}
+
+</style><script src="./maintenance.js" defer></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#020817">
