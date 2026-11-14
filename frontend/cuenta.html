@@ -1268,6 +1268,71 @@
 
     /* Título de sección: mismo indicador visual que Anuncios en Inicio */
 
+    /* Datos personales: diseño claro inspirado en la referencia, manteniendo la cabecera global */
+    #pantallaDatosPersonales {
+        min-height: calc(100vh - 90px);
+        margin: 0 -14px;
+        padding: 18px 14px 30px;
+        background:
+            linear-gradient(rgba(20,95,170,.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(20,95,170,.035) 1px, transparent 1px),
+            linear-gradient(145deg,#fbfcff 0%,#f2f6ff 100%);
+        background-size: 36px 36px,36px 36px,auto;
+        color: #17243a;
+        animation: aparecer .2s ease;
+    }
+    #pantallaDatosPersonales .gg-datos-titulo-accesible {
+        position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+    }
+    #pantallaDatosPersonales .gg-datos-avatar {
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:12px;margin:0 auto 28px;text-align:center;
+    }
+    #ggDatosAvatarDestino {display:flex;align-items:center;justify-content:center;min-height:150px}
+    #ggDatosAvatarDestino .datos-avatar-marco {
+        width:144px;height:144px;flex:0 0 144px;margin:0;
+        border:3px solid #168cff;border-radius:50%;
+        background:linear-gradient(145deg,#0b2d55,#06152c);
+        box-shadow:0 0 0 4px rgba(25,132,255,.12),0 0 24px rgba(20,116,255,.22);
+    }
+    #ggDatosAvatarDestino .avatar-contenedor,
+    #ggDatosAvatarDestino .avatar {width:100%;height:100%;border-radius:50%}
+    #ggDatosAvatarDestino .avatar-camara {background:#1267f1;border-color:#fff}
+    #ggDatosAvatarDestino .gg-datos-avatar-placeholder {display:none}
+    #pantallaDatosPersonales .gg-datos-avatar p {margin:0;color:#707b8d;font-size:14px}
+    #pantallaDatosPersonales .datos-panel {
+        overflow:visible;border:0;border-radius:0;background:transparent;box-shadow:none;
+    }
+    #pantallaDatosPersonales .datos-campo {
+        position:relative;display:flex;align-items:center;gap:12px;
+        min-height:78px;margin:0 0 8px;padding:12px 14px;
+        border:1px solid #e0e5ee;border-radius:23px;
+        background:rgba(255,255,255,.94);
+        box-shadow:0 5px 16px rgba(18,42,78,.055);
+    }
+    #pantallaDatosPersonales .datos-campo + .datos-campo {border-top:1px solid #e0e5ee}
+    #pantallaDatosPersonales .datos-campo-info {min-width:0}
+    #pantallaDatosPersonales .datos-campo-etiqueta {color:#737e8f;font-size:13px;font-weight:600}
+    #pantallaDatosPersonales .datos-campo-valor {color:#202b3d;font-size:15px;font-weight:500}
+    #pantallaDatosPersonales .datos-editar {
+        min-height:36px;padding:8px 11px;border:0;border-radius:10px;
+        background:#eaf2ff;color:#1267e8;font-size:12px;font-weight:800;
+    }
+    #pantallaDatosPersonales .datos-editor {padding:4px 5px 18px}
+    #pantallaDatosPersonales .datos-editor input {
+        min-height:50px;border:1px solid #d9e2f0;border-radius:15px;
+        background:#fff;color:#17243a;
+    }
+    #pantallaDatosPersonales .datos-editor input:focus {border-color:#1677f5;box-shadow:0 0 0 3px rgba(22,119,245,.12)}
+    #pantallaDatosPersonales .datos-seguridad {
+        border:1px solid #dce7f8;border-radius:16px;background:#edf4ff;color:#52627a;
+    }
+    #pantallaDatosPersonales .datos-seguridad svg {color:#176ff0}
+    @media (max-width:420px) {
+        #pantallaDatosPersonales {margin:0 -12px;padding:16px 12px 26px}
+        #pantallaDatosPersonales .datos-campo {min-height:74px;padding:11px 12px;border-radius:21px}
+    }
+
     /* Pantalla independiente de Datos personales */
     .pantalla-datos-personales {
         animation: aparecer .2s ease;
@@ -2890,7 +2955,11 @@
     </main>
 
     <section id="pantallaDatosPersonales" class="pantalla-datos-personales" hidden aria-labelledby="tituloDatosPersonales">
-        <h1 id="tituloDatosPersonales" style="text-align:left;font-size:24px;margin:4px 0 8px;">Datos personales</h1>
+        <h1 id="tituloDatosPersonales" class="gg-datos-titulo-accesible">Datos personales</h1>
+        <div class="gg-datos-avatar">
+            <div id="ggDatosAvatarDestino"></div>
+            <p>Toca la foto para cambiarla</p>
+        </div>
 
         <div class="datos-panel">
             <div class="datos-campo">
@@ -4571,7 +4640,14 @@ document.getElementById("botonCompartirReferido").addEventListener("click", asyn
     }
 });
 
+let ggDatosAvatarOriginal = null;
 function abrirPantallaDatosPersonales() {
+    const avatarMarco = document.querySelector(".datos-perfil-lateral .datos-avatar-marco");
+    const avatarDestino = document.getElementById("ggDatosAvatarDestino");
+    if (avatarMarco && avatarDestino && avatarMarco.parentElement !== avatarDestino) {
+        ggDatosAvatarOriginal = { parent: avatarMarco.parentElement, next: avatarMarco.nextSibling };
+        avatarDestino.appendChild(avatarMarco);
+    }
     const nombre = document.getElementById("nombreUsuario")?.textContent || "Usuario";
     const correo = document.getElementById("correoUsuario")?.textContent || "Sin correo";
     const numeroWhatsApp = document.getElementById("whatsappRegistrado")?.textContent || "";
@@ -4687,6 +4763,17 @@ function abrirPantallaSeguridad() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 function volverAMiCuenta() {
+    if (ggDatosAvatarOriginal) {
+        const avatarMarco = document.querySelector("#ggDatosAvatarDestino .datos-avatar-marco");
+        if (avatarMarco) {
+            if (ggDatosAvatarOriginal.next && ggDatosAvatarOriginal.next.parentNode === ggDatosAvatarOriginal.parent) {
+                ggDatosAvatarOriginal.parent.insertBefore(avatarMarco, ggDatosAvatarOriginal.next);
+            } else {
+                ggDatosAvatarOriginal.parent.appendChild(avatarMarco);
+            }
+        }
+        ggDatosAvatarOriginal = null;
+    }
     pantallaDatosPersonales.hidden = true;
     pantallaSeguridad.hidden = true;
     pantallaMetodosAcceso.hidden = true;
