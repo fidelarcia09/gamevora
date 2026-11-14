@@ -678,6 +678,7 @@ function crearTarjetaOferta(oferta, proveedor) {
 
     tarjeta.type = "button";
     tarjeta.className = "boton-oferta";
+    if (ES_ARENA_BREAKOUT) tarjeta.classList.add("producto", "producto-oferta");
     tarjeta.dataset.ggProductId = local?.id || "";
     tarjeta.disabled = !comprable;
 
@@ -720,7 +721,9 @@ function crearTarjetaOferta(oferta, proveedor) {
 
     const nombre = document.createElement("div");
 
-    nombre.className = "nombre-oferta";
+    nombre.className = ES_ARENA_BREAKOUT
+        ? "nombre-oferta producto-nombre"
+        : "nombre-oferta";
     nombre.textContent =
         oferta.nombre || obtenerNombreProveedor(proveedor);
 
@@ -729,7 +732,9 @@ function crearTarjetaOferta(oferta, proveedor) {
     const detalle = document.createElement("div");
     // Identificadores usados por pagos-manuales-juegos.js para mostrar
     // las tarifas exactas de USDT y Saldo móvil de este producto.
-    detalle.className = "precio-oferta";
+    detalle.className = ES_ARENA_BREAKOUT
+        ? "precio-oferta producto-precio"
+        : "precio-oferta";
 
     detalle.style.cssText =
         "padding:9px;font-size:13px;background:#061226;" +
@@ -1816,8 +1821,13 @@ function inicializar() {
     }
 
     if (el("descripcionOfertas")) {
-        el("descripcionOfertas").textContent =
-            `Elige una oferta especial de ${NOMBRE_JUEGO || "este juego"}.`;
+        if (ES_ARENA_BREAKOUT) {
+            el("descripcionOfertas").textContent = "";
+            el("descripcionOfertas").style.display = "none";
+        } else {
+            el("descripcionOfertas").textContent =
+                `Elige una oferta especial de ${NOMBRE_JUEGO || "este juego"}.`;
+        }
     }
 
     if (el("notaOfertas")) {
