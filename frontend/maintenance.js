@@ -177,38 +177,56 @@
     section.id = "ggMaintenanceLiveControls";
     section.append(el("h3", "", "Modo mantenimiento"));
     section.append(el("p", "", "Al activarlo, todos verán la pantalla de mantenimiento, incluidos los administradores. Solo las cuentas administradoras tendrán el botón Admin para desactivarlo."));
-    const host = el("div", "");
-    createAdminPanel(client, host, MESSAGE_DEFAULT);
-    const panel = host.firstElementChild;
-    const save = panel.querySelector(".gg-maintenance-actions button:first-child");
-    const off = panel.querySelector(".gg-maintenance-actions button:last-child");
-    save.remove();
-    off.textContent = "Activar mantenimiento";
-    off.addEventListener("click", async () => {
-      const area = panel.querySelector("textarea");
-      const note = panel.querySelector(".gg-maintenance-status");
+    const label = el("label", "gg-maintenance-label", "Mensaje que verán los usuarios");
+    const area = el("textarea", "gg-maintenance-textarea");
+    area.maxLength = 500;
+    area.value = MESSAGE_DEFAULT;
+    label.appendChild(area);
+    const actions = el("div", "gg-maintenance-actions");
+    const activate = el("button", "gg-maintenance-action", "Activar mantenimiento");
+    activate.type = "button";
+    const note = el("p", "gg-maintenance-status");
+    activate.addEventListener("click", async () => {
       const message = area.value.trim();
       if (!message) {
         note.textContent = "Escribe un mensaje para los usuarios.";
         note.className = "gg-maintenance-status error";
         return;
       }
-      off.disabled = true;
+      activate.disabled = true;
+      note.className = "gg-maintenance-status";
       note.textContent = "Activando mantenimiento…";
-      const { data, error } = await client.rpc("set_site_maintenance", { p_active: true, p_message: message });
+      const { data, error } = await client.rpc("set_site_maintenance", {
+        p_active: true,
+        p_message: message
+      });
       if (error || data?.ok !== true) {
         note.textContent = error?.message || "No se pudo activar el mantenimiento.";
         note.className = "gg-maintenance-status error";
-        off.disabled = false;
+        activate.disabled = false;
         return;
       }
       location.reload();
     });
-    section.append(host);
+    actions.append(activate);
+    section.append(label, actions, note);
     adminCard.append(section);
   }
   init().catch(error => {
     console.error("Error iniciando el modo mantenimiento:", error);
+    addStyles();
+    document.body.replaceChildren();
+    const root = el("main", "gg-maintenance-root");
+    const card = el("section", "gg-maintenance-card");
+    card.append(el("div", "gg-maintenance-brand", "GAMERS GOLD TOP-UP"));
+    card.append(el("h1", "gg-maintenance-title", "No podemos verificar el servicio"));
+    card.append(el("p", "gg-maintenance-copy", "No se pudo comprobar el estado de Gamers Gold. Por seguridad, vuelve a intentarlo antes de continuar."));
+    const retry = el("button", "gg-maintenance-admin", "Reintentar");
+    retry.type = "button";
+    retry.addEventListener("click", () => location.reload());
+    card.append(retry);
+    root.append(card);
+    document.body.append(root);
     document.documentElement.classList.remove("gg-maintenance-pending");
   });
 })();
