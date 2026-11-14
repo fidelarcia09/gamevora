@@ -125,7 +125,8 @@
     const enviarAviso = document.getElementById("enviarAviso");
     let usuarioActual = null;
     let notificaciones = [];
-    let estadoMantenimientoActual = null;
+    let estadosMantenimiento = [];
+    const MAINTENANCE_HISTORY_KEY = "gg_maintenance_notification_history_v1";
 
     const VAPID_PUBLIC_KEY = "BOTEc5uNWGMOVSZicoL3lqSEgQZdcOgQMiZF_JKbk-Yg9dmtU9Yp2yEuONOl3Y3IU42K0DevmR8vmSTCkpq69Ig";
 
@@ -278,19 +279,58 @@
       if (!error && data === true) adminToggle.hidden = false;
     }
 
+    function leerHistorialMantenimiento() {
+      try {
+        const guardado = localStorage.getItem(MAINTENANCE_HISTORY_KEY);
+        if (!guardado) return null;
+        const item = JSON.parse(guardado);
+        if (!item || item.system_type !== "maintenance" || item.title !== "Estamos en mantenimiento") return null;
+        return item;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function guardarHistorialMantenimiento(item) {
+      try {
+        localStorage.setItem(MAINTENANCE_HISTORY_KEY, JSON.stringify(item));
+      } catch (error) {
+        console.warn("No se pudo guardar el historial local de mantenimiento:", error);
+      }
+    }
+
     function aplicarEstadoMantenimiento(status) {
       if (!status || typeof status.active !== "boolean") return;
-      estadoMantenimientoActual = {
-        system_type: "maintenance",
-        title: status.active ? "Estamos en mantenimiento" : "Mantenimiento finalizado",
-        message: status.active
-          ? (typeof status.message === "string" && status.message.trim() ? status.message : "Estamos realizando mejoras para ofrecerte un mejor servicio.")
-          : "Gamers Gold Top-Up está disponible nuevamente. ¡Gracias por tu paciencia!",
-        is_read: true,
-        target_url: null,
-        created_at: status.updated_at || new Date().toISOString()
-      };
-      if (typeof lista !== "undefined" && lista) renderizar();
+
+      if (status.active) {
+        const avisoActivo = {
+          system_type: "maintenance",
+          title: "Estamos en mantenimiento",
+          message: typeof status.message === "string" && status.message.trim()
+            ? status.message
+            : "Estamos realizando mejoras para ofrecerte un mejor servicio.",
+          is_read: true,
+          target_url: null,
+          created_at: status.updated_at || new Date().toISOString()
+        };
+        guardarHistorialMantenimiento(avisoActivo);
+        estadosMantenimiento = [avisoActivo];
+      } else {
+        const avisoFinalizado = {
+          system_type: "maintenance",
+          title: "Mantenimiento finalizado",
+          message: "Gamers Gold Top-Up está disponible nuevamente. ¡Gracias por tu paciencia!",
+          is_read: true,
+          target_url: null,
+          created_at: status.updated_at || new Date().toISOString()
+        };
+        const avisoAnterior = leerHistorialMantenimiento();
+        estadosMantenimiento = avisoAnterior
+          ? [avisoFinalizado, avisoAnterior]
+          : [avisoFinalizado];
+      }
+
+      if (lista) renderizar();
     }
 
     async function cargarEstadoMantenimiento() {
@@ -372,9 +412,7 @@
 
     function renderizar() {
       lista.replaceChildren();
-      const itemsVisibles = estadoMantenimientoActual
-        ? [estadoMantenimientoActual, ...notificaciones]
-        : notificaciones.slice();
+      const itemsVisibles = [...estadosMantenimiento, ...notificaciones];
       const pendientes = notificaciones.filter(item => !item.is_read).length;
       marcarTodas.disabled = pendientes === 0;
       marcarTodas.textContent = pendientes ? "Marcar como leídas (" + pendientes + ")" : "Todo leído";
