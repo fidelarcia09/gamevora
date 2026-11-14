@@ -352,12 +352,10 @@ html.gg-maintenance-pending body{visibility:hidden!important}
       }
       currentStatus = { ...currentStatus, active, message };
       toggle.textContent = active ? "Desactivar mantenimiento" : "Activar mantenimiento";
-      note.textContent = reloadAfter ? "Estado actualizado. Recargando…" : "Mensaje guardado correctamente.";
+      note.textContent = reloadAfter
+        ? (active ? "Mantenimiento activado correctamente." : "Mantenimiento desactivado correctamente.")
+        : "Mensaje guardado correctamente.";
       note.className = "gg-maintenance-status ok";
-      if (reloadAfter && active && sessionStorage.getItem("gg_admin_maintenance_navigation") !== "1") {
-        renderMaintenance(client, true, message);
-        return;
-      }
       save.disabled = false;
       toggle.disabled = false;
     }
