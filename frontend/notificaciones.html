@@ -548,6 +548,7 @@
     });
 
     (async function iniciarCentroNotificaciones() {
+      escucharEstadoMantenimiento();
       const { data, error } = await supabaseClient.auth.getUser();
       if (error || !data.user) {
         estado.hidden = false;
@@ -563,7 +564,6 @@
       }
 
       usuarioActual = data.user;
-      escucharEstadoMantenimiento();
       await Promise.all([cargarNotificaciones(), iniciarNotificacionesPush(), comprobarAdministrador()]);
 
       supabaseClient
