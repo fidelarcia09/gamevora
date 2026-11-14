@@ -64,6 +64,42 @@ html,body{margin:0;min-height:100%;background:#020611}
 html.gg-maintenance-pending body{visibility:hidden!important}
 @media(max-width:420px){.gg-maintenance-root{align-items:flex-start;padding:12px 8px}.gg-maintenance-scene{padding:18px 11px 20px}.gg-maintenance-brandline{margin-bottom:12px}.gg-maintenance-hero{min-height:230px}.gg-maintenance-messagebox{padding:19px 12px 21px}.gg-maintenance-heading{gap:8px;margin-bottom:13px}.gg-maintenance-hazard{margin-top:-15px;margin-bottom:14px}.gg-maintenance-footer{margin-top:20px}}
 @media(min-height:850px) and (min-width:421px){.gg-maintenance-root{padding-top:28px;padding-bottom:28px}}
+/* Rediseño inspirado en el cartel futurista de Gamers Gold */
+.gg-maintenance-root{align-items:flex-start;padding:0;overflow-x:hidden;overflow-y:auto;background:radial-gradient(ellipse at 50% 38%,rgba(0,92,255,.25),transparent 43%),radial-gradient(ellipse at 0 50%,rgba(0,119,255,.18),transparent 35%),radial-gradient(ellipse at 100% 60%,rgba(0,119,255,.18),transparent 35%),#01040c}
+.gg-maintenance-root:before{inset:0;opacity:.9;background:linear-gradient(132deg,transparent 0 10%,rgba(0,93,255,.14) 10.2%,transparent 10.8% 89%,rgba(0,93,255,.14) 89.2%,transparent 90%),repeating-linear-gradient(0deg,transparent 0 42px,rgba(0,143,255,.035) 43px,transparent 44px 86px)}
+.gg-maintenance-root:after{display:none}
+.gg-maintenance-scene{width:min(100%,720px);min-height:100svh;margin:0 auto;padding:clamp(26px,6vw,48px) clamp(14px,4vw,34px) 30px;overflow:hidden;clip-path:none;border:0;border-left:1px solid rgba(0,136,255,.4);border-right:1px solid rgba(0,136,255,.4);background:linear-gradient(180deg,rgba(0,5,17,.94),rgba(0,9,28,.88) 52%,rgba(0,5,18,.98)),radial-gradient(ellipse at 50% 38%,rgba(0,101,255,.25),transparent 55%);box-shadow:0 0 38px rgba(0,100,255,.25),inset 0 0 65px rgba(0,84,255,.12)}
+.gg-maintenance-scene:before{content:"";position:absolute;inset:10px 8px;z-index:0;pointer-events:none;border:2px solid rgba(0,154,255,.72);clip-path:polygon(0 2%,4% 0,96% 0,100% 2%,100% 98%,96% 100%,4% 100%,0 98%);box-shadow:inset 0 0 22px rgba(0,128,255,.14),0 0 18px rgba(0,140,255,.3)}
+.gg-maintenance-scene:after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.65;background:linear-gradient(135deg,transparent 0 8%,rgba(0,125,255,.2) 8.2%,transparent 8.7%),linear-gradient(315deg,transparent 0 8%,rgba(0,125,255,.18) 8.2%,transparent 8.7%)}
+.gg-maintenance-scene>*{z-index:1}
+.gg-maintenance-corner{z-index:3;width:110px;height:110px;filter:drop-shadow(0 0 9px #087cff)}
+.gg-maintenance-brandline{gap:14px;margin:clamp(26px,7vw,58px) auto 10px;min-height:95px}
+.gg-maintenance-bolt{width:clamp(64px,16vw,108px);height:clamp(70px,18vw,120px);filter:drop-shadow(0 0 16px #008cff)}
+.gg-maintenance-brandtext{font-size:clamp(28px,7.4vw,54px);letter-spacing:-1.8px;line-height:.88;text-shadow:0 0 20px rgba(0,132,255,.65)}
+.gg-maintenance-brandtext span{color:#12dfff}
+.gg-maintenance-brandtext small{margin-top:12px;font-size:.43em;letter-spacing:.48em;text-align:center}
+.gg-maintenance-hero{min-height:clamp(265px,74vw,440px);margin:0 auto -8px}
+.gg-maintenance-gear{width:min(78%,390px);filter:drop-shadow(0 0 20px rgba(0,111,255,.95))}
+.gg-maintenance-gear svg{overflow:visible}
+.gg-maintenance-orbit{width:min(88%,500px);height:clamp(55px,16vw,105px);border-width:4px;border-color:#05caff;box-shadow:0 0 10px #008dff,0 0 28px rgba(0,151,255,.8),inset 0 0 16px rgba(0,162,255,.7)}
+.gg-maintenance-wrench{width:clamp(180px,56vw,300px);transform:rotate(-8deg);filter:drop-shadow(0 0 9px #007dff) drop-shadow(0 0 2px #fff)}
+.gg-maintenance-hazard{z-index:4;width:82%;height:clamp(34px,8vw,56px);margin:-8px auto 22px;border:2px solid #ffc12c;border-radius:3px;background:repeating-linear-gradient(125deg,#101827 0 25px,#ffb000 26px 51px);box-shadow:0 0 20px rgba(0,136,255,.55),0 9px 18px rgba(0,0,0,.7);transform:skewX(-5deg)}
+.gg-maintenance-cone{z-index:5;right:7%;bottom:auto;top:clamp(390px,110vw,610px);width:clamp(76px,21vw,130px);filter:drop-shadow(0 0 13px #008cff)}
+.gg-maintenance-messagebox{z-index:2;margin:0 auto;padding:clamp(25px,6vw,46px) clamp(15px,5vw,40px) clamp(28px,6vw,48px);border:2px solid #087cff;border-radius:0;clip-path:polygon(0 3%,5% 0,95% 0,100% 3%,100% 97%,95% 100%,5% 100%,0 97%);background:linear-gradient(145deg,rgba(0,8,25,.98),rgba(0,5,17,.99));box-shadow:0 0 14px #006eff,0 0 34px rgba(0,106,255,.3),inset 0 0 35px rgba(0,101,255,.13)}
+.gg-maintenance-messagebox:before{inset:7px;border:1px solid rgba(0,190,255,.25)}
+.gg-maintenance-heading{justify-content:center;gap:clamp(9px,3vw,22px);margin:0 0 25px;font-size:clamp(24px,6.5vw,48px);font-style:italic;letter-spacing:-.8px;line-height:1.02;text-shadow:0 0 15px rgba(0,131,255,.55)}
+.gg-maintenance-heading>div{text-align:left}
+.gg-maintenance-heading span{color:#11d9ff}
+.gg-maintenance-alert{width:clamp(55px,15vw,100px);filter:drop-shadow(0 0 12px #008cff)}
+.gg-maintenance-copy{max-width:580px;font-size:clamp(16px,4.2vw,25px);font-weight:500;line-height:1.55;text-align:center}
+.gg-maintenance-line{width:clamp(130px,38vw,230px);height:5px;margin:clamp(23px,6vw,40px) auto;background:linear-gradient(90deg,#087cff,#12eaff);box-shadow:0 0 12px #00bfff,0 0 25px rgba(0,191,255,.5)}
+.gg-maintenance-thanks{font-size:clamp(19px,5vw,30px);font-style:italic;color:#10d9ff;text-shadow:0 0 15px rgba(0,180,255,.65)}
+.gg-maintenance-footer{margin:clamp(36px,8vw,62px) auto 20px;font-size:clamp(23px,6vw,36px);letter-spacing:-1px;text-shadow:0 0 18px rgba(0,137,255,.75)}
+.gg-maintenance-footer small{letter-spacing:.55em}
+.gg-maintenance-navigation{z-index:5;width:min(82%,320px);margin:18px auto 0;box-shadow:0 0 22px rgba(0,181,255,.55)}
+.gg-maintenance-admin{z-index:5}
+@media(max-width:420px){.gg-maintenance-scene{padding:18px 12px 25px}.gg-maintenance-brandline{margin-top:35px;min-height:80px}.gg-maintenance-hero{min-height:clamp(255px,78vw,330px)}.gg-maintenance-cone{top:clamp(360px,112vw,470px)}.gg-maintenance-messagebox{padding:25px 12px 29px}.gg-maintenance-heading{margin-bottom:20px}.gg-maintenance-footer{margin-top:34px}}
+@media(min-width:700px){.gg-maintenance-scene{padding-left:38px;padding-right:38px}}
 `;
 
   function loadSupabase() {
