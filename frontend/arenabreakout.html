@@ -722,11 +722,11 @@ window.CONFIG_OFERTAS = {
     placeholderId:"Introduce tu ID de Arena Breakout",
     habilitarCompras:true,
     ofertas:[
-        {id:"fz-arena_breakout-beginner_select",nombre:"Beginner Select"},
-        {id:"fz-arena_breakout-bulletproof_case_30d",nombre:"Bulletproof Case (30d)"},
-        {id:"fz-arena_breakout-bulletproof_case_privileges",nombre:"Bulletproof Case Privileges"},
-        {id:"fz-arena_breakout-composite_case_privileges",nombre:"Composite Case Privileges"},
-        {id:"fz-arena_breakout-composition_case_30d",nombre:"Composition Case (30d)"}
+        {id:"topup/arena-breakout/global/Beginner Select",nombre:"Beginner Select"},
+        {id:"topup/arena-breakout/global/Bulletproof Case (30d)",nombre:"Bulletproof Case (30d)"},
+        {id:"topup/arena-breakout/global/Bulletproof Case Privileges",nombre:"Bulletproof Case Privileges"},
+        {id:"topup/arena-breakout/global/Composite Case Privileges",nombre:"Composite Case Privileges"},
+        {id:"topup/arena-breakout/global/Composition Case (30d)",nombre:"Composition Case (30d)"}
     ]
 };</script>
 
@@ -1456,9 +1456,10 @@ const producto=mapaProductosOferta.get(String(oferta.id).trim());
 return producto&&producto.active===true&&producto.provider==="rechargegames"&&Number.isFinite(Number(producto.price_gvr))&&Number(producto.price_gvr)>0;
 }).length;
 
-estadoProductos.textContent=disponibles?disponibles+" ofertas disponibles.":"No hay ofertas configuradas y disponibles para comprar.";
-estadoProductos.classList.toggle("error",disponibles===0);
-estadoProductos.classList.toggle("correcto",disponibles>0);
+// No mostrar un contador de ofertas en la interfaz.
+estadoProductos.textContent="";
+estadoProductos.style.display="none";
+estadoProductos.classList.remove("error","correcto");
 }
 
 cargarPreciosOfertas().catch(error=>{
