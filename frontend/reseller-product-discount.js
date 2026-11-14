@@ -197,6 +197,9 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
         badge.setAttribute("aria-label", "Descuento GVR");
         card.appendChild(badge);
       }
+      badge.style.left = "auto";
+      badge.style.right = "0";
+      badge.style.top = "0";
       badge.textContent = "-" + discountPercent + "%";
       badge.setAttribute("aria-label", "Descuento GVR: " + discountPercent + "%");
     });
