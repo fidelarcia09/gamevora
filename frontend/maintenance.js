@@ -1,5 +1,7 @@
 (() => {
   "use strict";
+  // La página nunca debe ocultarse mientras se consulta el estado de mantenimiento.
+  document.documentElement.classList.remove("gg-maintenance-pending");
   const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
   const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
   const MESSAGE_DEFAULT = "Estamos realizando mejoras para ofrecerte un mejor servicio. Volveremos pronto.";
@@ -61,7 +63,6 @@ html,body{margin:0;min-height:100%;background:#020611}
 .gg-maintenance-admin-controls{margin-top:18px;padding:16px;border:1px solid rgba(32,197,255,.26);border-radius:14px;background:rgba(5,18,36,.78)}
 .gg-maintenance-admin-controls h3{color:#eaf7ff;font-size:14px}
 .gg-maintenance-admin-controls p{margin:5px 0 12px;color:#9aadc4;font-size:11px;line-height:1.5}
-html.gg-maintenance-pending body{visibility:hidden!important}
 @media(max-width:420px){.gg-maintenance-root{align-items:flex-start;padding:12px 8px}.gg-maintenance-scene{padding:18px 11px 20px}.gg-maintenance-brandline{margin-bottom:12px}.gg-maintenance-hero{min-height:230px}.gg-maintenance-messagebox{padding:19px 12px 21px}.gg-maintenance-heading{gap:8px;margin-bottom:13px}.gg-maintenance-hazard{margin-top:-15px;margin-bottom:14px}.gg-maintenance-footer{margin-top:20px}}
 @media(min-height:850px) and (min-width:421px){.gg-maintenance-root{padding-top:28px;padding-bottom:28px}}
 /* Rediseño inspirado en el cartel futurista de Gamers Gold */
@@ -193,12 +194,6 @@ html.gg-maintenance-pending body{visibility:hidden!important}
       });
     }
   }
-
-  // Evita dejar la página completamente negra si la red o Supabase tardan en responder.
-  // La comprobación sigue activa y, si mantenimiento está habilitado, mostrará el aviso al recibir el estado.
-  const pendingFallback = window.setTimeout(() => {
-    document.documentElement.classList.remove("gg-maintenance-pending");
-  }, 1500);
 
   async function init() {
     addStyles();
