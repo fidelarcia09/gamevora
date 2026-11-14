@@ -49,6 +49,15 @@
     .login-link{display:inline-flex;margin-top:14px;padding:11px 16px;border-radius:9px;background:linear-gradient(100deg,#087cff,#00aeea);color:#fff;text-decoration:none;font-weight:800;font-size:12px}
     .error{color:#ff9ba8}
     .push-card,.admin-card{margin:0 0 16px;padding:17px;border:1px solid rgba(32,197,255,.22);border-radius:15px;background:linear-gradient(145deg,rgba(12,31,54,.96),rgba(7,16,30,.98));box-shadow:0 12px 30px rgba(0,0,0,.12)}
+    .maintenance-status{display:flex;align-items:center;gap:12px;margin:0 0 16px;padding:14px 16px;border:1px solid rgba(47,220,137,.35);border-radius:14px;background:linear-gradient(120deg,rgba(15,83,59,.28),rgba(7,25,29,.96));}
+    .maintenance-status.active{border-color:rgba(255,173,55,.55);background:linear-gradient(120deg,rgba(117,67,12,.3),rgba(30,20,9,.96))}
+    .maintenance-status-icon{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(47,220,137,.35);border-radius:12px;background:rgba(47,220,137,.1);color:#55e69b}
+    .maintenance-status.active .maintenance-status-icon{border-color:rgba(255,173,55,.5);background:rgba(255,173,55,.12);color:#ffb347}
+    .maintenance-status-icon svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .maintenance-status-title{color:#70edac;font-size:13px;font-weight:900}
+    .maintenance-status.active .maintenance-status-title{color:#ffc36b}
+    .maintenance-status-copy{margin-top:4px;color:#aebfd0;font-size:11px;line-height:1.5}
+    .accion[hidden],.push-card[hidden],.admin-card[hidden]{display:none!important}
     .push-head{display:flex;align-items:center;gap:12px}.push-icon{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(32,197,255,.24);border-radius:12px;background:rgba(0,119,255,.12);color:var(--cian)}.push-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
     .push-title{font-size:14px;font-weight:800}.push-copy{margin-top:4px;color:var(--muted);font-size:12px;line-height:1.55}
     .accion{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:13px;min-height:40px;padding:0 15px;border:1px solid rgba(32,197,255,.35);border-radius:10px;background:linear-gradient(100deg,#087cff,#00aeea);color:#fff;font-size:12px;font-weight:800;cursor:pointer}
@@ -63,6 +72,10 @@
 </head>
 <body>
   <main>
+    <section id="maintenanceStatus" class="maintenance-status" aria-live="polite">
+      <span class="maintenance-status-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3.5 17.5a2.1 2.1 0 0 0 3 3l4.8-4.8a5 5 0 0 0 6.4-6.4l-3 3-3.1-.8-.8-3.1 3-3Z"/></svg></span>
+      <div><div id="maintenanceStatusTitle" class="maintenance-status-title">Comprobando mantenimiento…</div><p id="maintenanceStatusCopy" class="maintenance-status-copy">Consultando el estado del servicio.</p></div>
+    </section>
     <section id="pushCard" class="push-card" hidden aria-labelledby="pushTitle">
       <div class="push-head">
         <span class="push-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg></span>
@@ -117,6 +130,9 @@
     const pushCard = document.getElementById("pushCard");
     const activarPush = document.getElementById("activarPush");
     const pushStatus = document.getElementById("pushStatus");
+    const maintenanceStatus = document.getElementById("maintenanceStatus");
+    const maintenanceStatusTitle = document.getElementById("maintenanceStatusTitle");
+    const maintenanceStatusCopy = document.getElementById("maintenanceStatusCopy");
     const adminCard = document.getElementById("adminCard");
     const adminToggle = document.getElementById("adminToggle");
     const adminForm = document.getElementById("adminForm");
@@ -166,10 +182,11 @@
       const registration = await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
       await navigator.serviceWorker.ready;
       await guardarSuscripcionPush(registration);
-      pushCard.hidden = true;
+      pushCard.hidden = false;
+      activarPush.hidden = true;
       activarPush.disabled = false;
       activarPush.textContent = "Activar notificaciones";
-      mostrarEstado(pushStatus, "");
+      mostrarEstado(pushStatus, "Las notificaciones están activadas en este dispositivo.", "ok");
     }
 
     async function iniciarNotificacionesPush() {
@@ -187,19 +204,36 @@
         return;
       }
 
-      if (Notification.permission === "granted") {
-        try {
-          await registrarDispositivoPush();
-        } catch (error) {
-          activarPush.textContent = "Reintentar activación";
-          mostrarEstado(pushStatus, "El permiso está concedido, pero este dispositivo no quedó registrado. Pulsa para reintentarlo.", "error");
-          console.error("Error registrando push:", error);
-        }
+      if (Notification.permission === "denied") {
+        mostrarEstado(pushStatus, "El permiso está bloqueado. Actívalo desde los ajustes del sitio en tu navegador y después vuelve a esta página.");
         return;
       }
 
-      if (Notification.permission === "denied") {
-        mostrarEstado(pushStatus, "El permiso está bloqueado. Actívalo desde los ajustes del sitio en tu navegador y después vuelve a esta página.");
+      // No se registra automáticamente: el usuario debe pulsar Activar.
+      // Solo ocultamos el botón si la suscripción del navegador también existe en la cuenta.
+      if (Notification.permission === "granted") {
+        try {
+          const registration = await navigator.serviceWorker.getRegistration("./");
+          const subscription = registration ? await registration.pushManager.getSubscription() : null;
+          if (subscription) {
+            const { data, error } = await supabaseClient
+              .from("user_push_subscriptions")
+              .select("endpoint")
+              .eq("user_id", usuarioActual.id)
+              .eq("endpoint", subscription.endpoint)
+              .maybeSingle();
+            if (!error && data?.endpoint) {
+              activarPush.hidden = true;
+              mostrarEstado(pushStatus, "Las notificaciones están activadas en este dispositivo.", "ok");
+              return;
+            }
+            if (error) console.warn("No se pudo comprobar la suscripción push:", error);
+          }
+          mostrarEstado(pushStatus, "El permiso del navegador está concedido, pero este dispositivo todavía no está registrado en tu cuenta. Pulsa Activar notificaciones.");
+        } catch (error) {
+          console.warn("No se pudo comprobar el registro push:", error);
+          mostrarEstado(pushStatus, "Este dispositivo todavía no está confirmado en tu cuenta. Pulsa Activar notificaciones.");
+        }
         return;
       }
 
@@ -256,6 +290,35 @@
     async function comprobarAdministrador() {
       const { data, error } = await supabaseClient.rpc("is_support_admin");
       if (!error && data === true) adminToggle.hidden = false;
+    }
+
+    function aplicarEstadoMantenimiento(status) {
+      if (!status || typeof status.active !== "boolean") return;
+      const activo = status.active;
+      maintenanceStatus.classList.toggle("active", activo);
+      maintenanceStatusTitle.textContent = activo ? "Estamos en mantenimiento" : "Estamos fuera de mantenimiento";
+      maintenanceStatusCopy.textContent = activo
+        ? (typeof status.message === "string" && status.message.trim() ? status.message : "Estamos realizando mejoras para ofrecerte un mejor servicio.")
+        : "El servicio está disponible con normalidad.";
+      maintenanceStatus.setAttribute("data-active", String(activo));
+    }
+
+    async function cargarEstadoMantenimiento() {
+      try {
+        const { data, error } = await supabaseClient.rpc("get_site_maintenance_status");
+        if (error || !data) throw error || new Error("Sin datos de mantenimiento");
+        aplicarEstadoMantenimiento(typeof data === "string" ? JSON.parse(data) : data);
+      } catch (error) {
+        maintenanceStatusTitle.textContent = "Estado de mantenimiento no disponible";
+        maintenanceStatusCopy.textContent = "No se pudo consultar el estado del servicio.";
+        console.warn("No se pudo cargar el estado de mantenimiento:", error);
+      }
+    }
+
+    function escucharEstadoMantenimiento() {
+      // maintenance.js publica este evento después de recibir cada cambio por Realtime.
+      window.addEventListener("gg:maintenance-status", event => aplicarEstadoMantenimiento(event.detail));
+      cargarEstadoMantenimiento();
     }
 
     function crearElemento(tag, clase, texto) {
@@ -500,6 +563,7 @@
       }
 
       usuarioActual = data.user;
+      escucharEstadoMantenimiento();
       await Promise.all([cargarNotificaciones(), iniciarNotificacionesPush(), comprobarAdministrador()]);
 
       supabaseClient
