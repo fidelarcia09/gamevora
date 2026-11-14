@@ -140,7 +140,9 @@
     let usuarioActual = null;
     let notificaciones = [];
     let estadosMantenimiento = [];
+    let estadoMantenimientoActual = null;
     const MAINTENANCE_HISTORY_KEY = "gg_maintenance_notification_history_v1";
+    const MAINTENANCE_DISMISSED_KEY = "gg_maintenance_notification_dismissed_v1";
 
     const VAPID_PUBLIC_KEY = "BOTEc5uNWGMOVSZicoL3lqSEgQZdcOgQMiZF_JKbk-Yg9dmtU9Yp2yEuONOl3Y3IU42K0DevmR8vmSTCkpq69Ig";
 
@@ -313,6 +315,15 @@
 
     function aplicarEstadoMantenimiento(status) {
       if (!status || typeof status.active !== "boolean") return;
+      estadoMantenimientoActual = status;
+      const tokenEstado = String(status.active) + "|" + String(status.updated_at || status.message || "estado-sin-fecha");
+      let tokenDescartado = "";
+      try { tokenDescartado = localStorage.getItem(MAINTENANCE_DISMISSED_KEY) || ""; } catch (_) {}
+      if (tokenDescartado === tokenEstado) {
+        estadosMantenimiento = [];
+        if (lista) renderizar();
+        return;
+      }
 
       if (status.active) {
         const avisoActivo = {
@@ -432,7 +443,7 @@
       const pendientes = notificaciones.filter(item => !item.is_read).length;
       marcarTodas.disabled = pendientes === 0;
       marcarTodas.textContent = pendientes ? "Marcar como leídas (" + pendientes + ")" : "Todo leído";
-      limpiarTodas.disabled = notificaciones.length === 0;
+      limpiarTodas.disabled = notificaciones.length === 0 && estadosMantenimiento.length === 0;
 
       if (!itemsVisibles.length) {
         estado.hidden = false;
@@ -537,18 +548,22 @@
     });
 
     limpiarTodas.addEventListener("click", async function () {
-      if (!usuarioActual || !notificaciones.length) return;
-      const confirmar = window.confirm("¿Seguro que quieres eliminar todas tus notificaciones? Esta acción no se puede deshacer.");
+      if (!usuarioActual || (!notificaciones.length && !estadosMantenimiento.length)) return;
+      const confirmar = window.confirm("¿Seguro que quieres eliminar todas tus notificaciones, incluidos los avisos de mantenimiento? Esta acción no se puede deshacer.");
       if (!confirmar) return;
 
       limpiarTodas.disabled = true;
       limpiarTodas.textContent = "Limpiando…";
 
-      const { data, error } = await supabaseClient
-        .from("user_notifications")
-        .delete()
-        .eq("user_id", usuarioActual.id)
-        .select("id");
+      let error = null;
+      if (notificaciones.length) {
+        const resultado = await supabaseClient
+          .from("user_notifications")
+          .delete()
+          .eq("user_id", usuarioActual.id)
+          .select("id");
+        error = resultado.error;
+      }
 
       if (error) {
         console.error("No se pudieron limpiar las notificaciones:", error.message);
@@ -561,6 +576,16 @@
       }
 
       notificaciones = [];
+      estadosMantenimiento = [];
+      try {
+        localStorage.removeItem(MAINTENANCE_HISTORY_KEY);
+        if (estadoMantenimientoActual && typeof estadoMantenimientoActual.active === "boolean") {
+          const tokenEstado = String(estadoMantenimientoActual.active) + "|" + String(estadoMantenimientoActual.updated_at || estadoMantenimientoActual.message || "estado-sin-fecha");
+          localStorage.setItem(MAINTENANCE_DISMISSED_KEY, tokenEstado);
+        }
+      } catch (storageError) {
+        console.warn("No se pudo guardar el estado de limpieza de mantenimiento:", storageError);
+      }
       renderizar();
       limpiarTodas.textContent = "Limpiar todas";
     });
