@@ -90,7 +90,7 @@ html.gg-maintenance-pending body{visibility:hidden!important}
   async function init() {
     addStyles();
     const sdk = await loadSupabase();
-    const client = sdk.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    const client = window.__ggMaintenanceSupabaseClient || sdk.createClient(SUPABASE_URL, SUPABASE_KEY, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
     const [{ data: sessionData }, { data: statusData, error: statusError }] = await Promise.all([
