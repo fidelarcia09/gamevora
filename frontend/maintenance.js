@@ -194,6 +194,12 @@ html.gg-maintenance-pending body{visibility:hidden!important}
     }
   }
 
+  // Evita dejar la página completamente negra si la red o Supabase tardan en responder.
+  // La comprobación sigue activa y, si mantenimiento está habilitado, mostrará el aviso al recibir el estado.
+  const pendingFallback = window.setTimeout(() => {
+    document.documentElement.classList.remove("gg-maintenance-pending");
+  }, 1500);
+
   async function init() {
     addStyles();
     const sdk = await loadSupabase();
@@ -404,19 +410,7 @@ html.gg-maintenance-pending body{visibility:hidden!important}
   }
   init().catch(error => {
     console.error("Error iniciando el modo mantenimiento:", error);
-    addStyles();
-    document.body.replaceChildren();
-    const root = el("main", "gg-maintenance-root");
-    const card = el("section", "gg-maintenance-card");
-    card.append(el("div", "gg-maintenance-brand", "GAMERS GOLD TOP-UP"));
-    card.append(el("h1", "gg-maintenance-title", "No podemos verificar el servicio"));
-    card.append(el("p", "gg-maintenance-copy", "No se pudo comprobar el estado de Gamers Gold. Por seguridad, vuelve a intentarlo antes de continuar."));
-    const retry = el("button", "gg-maintenance-admin", "Reintentar");
-    retry.type = "button";
-    retry.addEventListener("click", () => location.reload());
-    card.append(retry);
-    root.append(card);
-    document.body.append(root);
+    // Si falla la comprobación, no destruir el contenido de la página ni dejarla negra.
     document.documentElement.classList.remove("gg-maintenance-pending");
   });
 })();
