@@ -652,20 +652,24 @@ async function recuperarSolicitudDeRecarga(usuario) {
 
     const metodoDB = metodoTexto === "SALDO MOVIL" ? "SALDO_MOVIL" : metodoTexto;
     const {data,error} = await supabaseClient.from("gvr_purchase_requests")
-        .select("id,expires_at")
+        .select("id,expires_at,proof_path")
         .eq("id",idGuardado)
         .eq("user_id",usuario.id)
         .eq("payment_method",metodoDB)
         .eq("status","pending")
-        .is("proof_path",null)
         .maybeSingle();
 
     if (error || !data) return null;
+
+    // Si ya se envió el comprobante, la solicitud permanece pendiente
+    // de revisión y no debe volver a iniciar ni mostrar el temporizador.
+    if (data.proof_path) return {solicitud:data,enviado:true,reloj:null};
+
     const lectura = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:data.id});
     if (lectura.error || !lectura.data?.server_now || !lectura.data?.expires_at) return null;
     // Aunque el plazo haya vencido, recuperamos la misma solicitud.
     // Así una recarga no crea otra ni reinicia los 10 minutos.
-    return {solicitud:data,reloj:lectura.data};
+    return {solicitud:data,enviado:false,reloj:lectura.data};
 }
 
 function iniciarCuentaRegresiva(fechaVencimiento, fechaServidor) {
@@ -729,6 +733,21 @@ async function prepararSolicitudPago() {
         solicitudId = solicitud.id;
         const resumenId = document.getElementById("resumenId");
         if (resumenId) resumenId.textContent = "ID " + solicitudId;
+
+        if (recuperada?.enviado) {
+            envioCompletado = true;
+            if (intervaloTemporizador) clearInterval(intervaloTemporizador);
+            document.getElementById("estadoCompra").textContent = "Pendiente de revisión";
+            archivoComprobante.disabled = true;
+            if (txidUsdt) txidUsdt.disabled = true;
+            botonContinuar.disabled = true;
+            botonContinuar.textContent = "Comprobante enviado";
+            tiempoRestante.textContent = "En revisión";
+            temporizadorUsdt.classList.add("vencido");
+            mostrarMensaje("Tu comprobante ya fue enviado. La solicitud continúa pendiente de revisión; el plazo ya no se aplica.","exito");
+            return;
+        }
+
         const pagoVigente = iniciarCuentaRegresiva(reloj.expires_at,reloj.server_now);
         if (pagoVigente) {
             botonContinuar.disabled = false;
