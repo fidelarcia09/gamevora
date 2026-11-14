@@ -13,6 +13,11 @@
     body{min-height:100vh;background:radial-gradient(ellipse at 50% -15%,rgba(0,119,255,.13),transparent 42%),var(--fondo);color:var(--texto)}
     a{color:inherit}
     main{width:min(100% - 28px,760px);margin:22px auto 60px}
+    .header{display:flex;align-items:center;justify-content:flex-start;gap:12px;width:100%;min-height:62px;margin:0 0 20px;padding:8px 0;border-bottom:1px solid rgba(105,158,215,.1)}
+    .encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}
+    .encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}
+    .encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .encabezado-pagina-titulo{overflow-wrap:anywhere}
     .encabezado{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-bottom:20px}
     .grupo-dia{margin:0 0 22px}
     .titulo-dia{display:flex;align-items:center;gap:10px;margin:0 0 11px;color:#dcecff;font-size:13px;font-weight:900;letter-spacing:.35px}
@@ -64,6 +69,15 @@
 </head>
 <body>
   <main>
+    <header class="header">
+      <a class="encabezado-pagina" href="../index.html" aria-label="Volver atrás">
+        <span class="encabezado-pagina-icono" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg>
+        </span>
+        <span class="encabezado-pagina-titulo">Notificaciones</span>
+      </a>
+    </header>
+
     <section id="pushCard" class="push-card" hidden aria-labelledby="pushTitle">
       <div class="push-head">
         <span class="push-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg></span>
