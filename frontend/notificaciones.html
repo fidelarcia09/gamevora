@@ -391,23 +391,23 @@
       if (item.system_type === "maintenance") {
         const tituloMantenimiento = String(item.title || "").trim().toLowerCase();
         const finalizado = tituloMantenimiento.includes("finaliz");
-        const color = finalizado ? "#35e39a" : "#ffb347";
-        const fondo = finalizado ? "rgba(20,205,125,.24)" : "rgba(255,166,40,.24)";
-        const brillo = finalizado ? "rgba(20,205,125,.34)" : "rgba(255,166,40,.30)";
+        const color = finalizado ? "#00ff91" : "#ffb000";
+        const fondo = finalizado ? "rgba(0,255,145,.24)" : "rgba(255,176,0,.24)";
+        const brillo = finalizado ? "rgba(0,255,145,.72)" : "rgba(255,176,0,.72)";
         return {
           color,
           bg: fondo,
           shadow: brillo,
-          svg: '<svg viewBox="0 0 24 24" aria-hidden="true" style="color:' + color + ';stroke:' + color + '"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3.5 17.5a2.1 2.1 0 0 0 3 3l4.8-4.8a5 5 0 0 0 6.4-6.4l-3 3-3.1-.8-.8-3.1 3-3Z" style="stroke:' + color + ';fill:none"/></svg>'
+          svg: '<svg viewBox="0 0 24 24" aria-hidden="true" style="color:#ffffff;stroke:#ffffff"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3.5 17.5a2.1 2.1 0 0 0 3 3l4.8-4.8a5 5 0 0 0 6.4-6.4l-3 3-3.1-.8-.8-3.1 3-3Z" style="stroke:#ffffff;fill:none"/></svg>'
         };
       }
       const texto = ((item.title || "") + " " + (item.message || "")).toLowerCase();
-      if (/entregad|completad|recarga exitosa|acreditad/.test(texto)) return {color:"#35e39a",bg:"rgba(20,205,125,.22)",shadow:"rgba(20,205,125,.24)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16.5 9"/></svg>'};
-      if (/revisi|pendient|verific|procesando/.test(texto)) return {color:"#ffc45e",bg:"rgba(255,166,40,.22)",shadow:"rgba(255,166,40,.22)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'};
-      if (/dep[oó]sit|wallet|saldo|transfer|nx[cx]/.test(texto)) return {color:"#66aaff",bg:"rgba(34,119,255,.24)",shadow:"rgba(34,119,255,.25)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h14a2 2 0 0 1 2 2v10H5a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2h13"/><path d="M16 12h4M16 12a1.5 1.5 0 1 0 0 3h4v-3Z"/></svg>'};
-      if (/revendedor|reseller|descuento|nivel|etiqueta/.test(texto)) return {color:"#ff9a45",bg:"rgba(255,126,35,.23)",shadow:"rgba(255,126,35,.23)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13 13 20a2 2 0 0 1-2.8 0L3 12.8V4h8.8L20 12.2a.6.6 0 0 1 0 .8Z"/><circle cx="7.5" cy="8.5" r="1"/></svg>'};
-      if (/api|acceso|clave|seguridad/.test(texto)) return {color:"#61c9ff",bg:"rgba(42,166,255,.23)",shadow:"rgba(42,166,255,.23)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg>'};
-      return {color:"#55d5ff",bg:"rgba(0,153,255,.2)",shadow:"rgba(0,153,255,.2)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg>'};
+      if (/entregad|completad|recarga exitosa|acreditad/.test(texto)) return {color:"#39ff88",bg:"rgba(57,255,136,.22)",shadow:"rgba(57,255,136,.72)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16.5 9"/></svg>'};
+      if (/revisi|pendient|verific|procesando/.test(texto)) return {color:"#ffe34d",bg:"rgba(255,227,77,.22)",shadow:"rgba(255,227,77,.72)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'};
+      if (/dep[oó]sit|wallet|saldo|transfer|nx[cx]/.test(texto)) return {color:"#39a7ff",bg:"rgba(57,167,255,.24)",shadow:"rgba(57,167,255,.75)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h14a2 2 0 0 1 2 2v10H5a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2h13"/><path d="M16 12h4M16 12a1.5 1.5 0 1 0 0 3h4v-3Z"/></svg>'};
+      if (/revendedor|reseller|descuento|nivel|etiqueta/.test(texto)) return {color:"#ff7a18",bg:"rgba(255,122,24,.23)",shadow:"rgba(255,122,24,.78)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13 13 20a2 2 0 0 1-2.8 0L3 12.8V4h8.8L20 12.2a.6.6 0 0 1 0 .8Z"/><circle cx="7.5" cy="8.5" r="1"/></svg>'};
+      if (/api|acceso|clave|seguridad/.test(texto)) return {color:"#00eaff",bg:"rgba(0,234,255,.22)",shadow:"rgba(0,234,255,.78)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg>'};
+      return {color:"#00eaff",bg:"rgba(0,234,255,.2)",shadow:"rgba(0,234,255,.72)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg>'};
     }
 
     function etiquetaDia(valor) {
@@ -482,7 +482,8 @@
           if (href) tarjeta.href = href;
           const icono = iconoNotificacion(item);
           const simbolo = crearElemento("span","simbolo");
-          simbolo.style.setProperty("--icon-color",icono.color);
+          simbolo.style.setProperty("--icon-color","#ffffff");
+          simbolo.style.color = "#ffffff";
           simbolo.style.setProperty("--icon-bg",icono.bg);
           simbolo.style.setProperty("--icon-shadow",icono.shadow);
           simbolo.style.setProperty("--icon-border",icono.color);
