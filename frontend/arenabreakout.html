@@ -626,7 +626,7 @@ body{padding:0!important}
 <div class="player-id-card">
 <label class="etiqueta" for="idJugador">ID del jugador</label>
 <input type="text" id="idJugador" placeholder="Introduce tu ID de Arena Breakout" autocomplete="off" maxlength="50">
-<p class="ayuda">Comprueba tu ID antes de confirmar la compra.</p>
+
 <div id="estadoValidacion" class="estado-validacion" aria-live="polite" role="status"></div>
 </div>
 
@@ -723,16 +723,12 @@ window.CONFIG_OFERTAS = {
     habilitarCompras:true,
     ofertas:[
         {id:"fz-arena_breakout-beginner_select",nombre:"Beginner Select"},
-        {id:"fz-arena_breakout-monthly_advanced_battle_pass_activation_pass",nombre:"Monthly Advanced Battle Pass"},
-        {id:"fz-arena_breakout-bulletproof_case_30d",nombre:"Bulletproof Case 30D"},
+        {id:"fz-arena_breakout-bulletproof_case_30d",nombre:"Bulletproof Case (30d)"},
         {id:"fz-arena_breakout-bulletproof_case_privileges",nombre:"Bulletproof Case Privileges"},
-        {id:"fz-arena_breakout-monthly_premium_battle_pass_activation_pass",nombre:"Monthly Premium Battle Pass"},
-        {id:"fz-arena_breakout-composition_case_30d",nombre:"Composition Case 30D"},
         {id:"fz-arena_breakout-composite_case_privileges",nombre:"Composite Case Privileges"},
-        {id:"fz-arena_breakout-quarterly_premium_battle_pass_bundle_activation_pass_bundle",nombre:"Quarterly Premium Battle Pass Bundle"}
+        {id:"fz-arena_breakout-composition_case_30d",nombre:"Composition Case (30d)"}
     ]
-};
-</script>
+};</script>
 
 <!-- MOTOR ORIGINAL DE BONDS -->
 <script type="module">
@@ -1849,5 +1845,74 @@ body.gg-has-sticky-purchase{padding-bottom:calc(192px + env(safe-area-inset-bott
   #catalogo .producto,#catalogoOfertas .producto{min-height:152px!important;padding:22px 9px 12px!important;gap:5px!important}
   #catalogo .producto > .producto-informacion,#catalogoOfertas .producto > .producto-informacion{gap:5px!important}
   #catalogo .producto .producto-precio,#catalogoOfertas .producto .producto-precio{min-width:104px!important;padding:7px 10px!important;font-size:15px!important}
+}
+</style>
+
+
+<style id="gg-arenabreakout-special-offers-card-fix-20261114">
+/* Ofertas Arena Breakout: tarjetas con el mismo formato centrado y compacto de GGT. */
+#listaOfertas{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  align-items:stretch!important;
+}
+#listaOfertas .boton-oferta{
+  position:relative!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:156px!important;
+  height:auto!important;
+  max-height:none!important;
+  padding:23px 12px 13px!important;
+  gap:6px!important;
+  overflow:hidden!important;
+  text-align:center!important;
+  border:1px solid rgba(32,197,255,.48)!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,#10294d 0%,#0a1b35 58%,#071326 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 7px 18px rgba(0,0,0,.24)!important;
+}
+#listaOfertas .boton-oferta .foto-oferta{
+  display:none!important;width:0!important;height:0!important;min-width:0!important;min-height:0!important;
+}
+#listaOfertas .boton-oferta .nombre-oferta,
+#listaOfertas .boton-oferta .precio-oferta,
+#listaOfertas .boton-oferta .estado-oferta{
+  display:block!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:center!important;
+  overflow-wrap:anywhere!important;
+  align-self:center!important;
+}
+#listaOfertas .boton-oferta .nombre-oferta{
+  color:#eaf5ff!important;font-size:13px!important;font-weight:800!important;line-height:1.25!important;
+}
+#listaOfertas .boton-oferta .precio-oferta{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  width:auto!important;min-width:112px!important;max-width:100%!important;
+  padding:8px 15px!important;border:1px solid rgba(170,225,255,.38)!important;border-radius:999px!important;
+  background:linear-gradient(105deg,#0868ed 0%,#087cff 55%,#159fe9 100%)!important;
+  color:#fff!important;font-size:17px!important;font-weight:900!important;line-height:1.15!important;
+  box-shadow:0 4px 13px rgba(0,124,255,.3),inset 0 1px 0 rgba(255,255,255,.2)!important;
+}
+#listaOfertas .boton-oferta .estado-oferta{color:#69cfff!important;font-size:10px!important;line-height:1.2!important}
+#listaOfertas .boton-oferta .gg-reseller-discount-badge{
+  top:0!important;right:0!important;left:auto!important;z-index:8!important;
+}
+@media(max-width:360px){
+  #listaOfertas{gap:6px!important}
+  #listaOfertas .boton-oferta{min-height:152px!important;padding:22px 9px 12px!important;gap:5px!important}
+  #listaOfertas .boton-oferta .precio-oferta{min-width:104px!important;padding:7px 10px!important;font-size:15px!important}
 }
 </style>
