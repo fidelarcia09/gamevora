@@ -47,6 +47,53 @@ footer{padding:0 16px 28px;color:#7186a3}
  .direccion{font-size:14px}
 }
 
+
+/* Diseño de confirmación inspirado en la referencia Next Level, adaptado a Gamers Gold */
+main{max-width:690px;margin:12px auto 22px;padding:0 16px}
+.contenedor{max-width:100%}
+.encabezado{text-align:left;margin:12px 0 18px}
+.encabezado .etiqueta{display:inline-block;margin:0 0 10px;padding:0;border:0;background:none;color:#42d5ff;font-size:11px;font-weight:900;letter-spacing:2px}
+.encabezado h1{font-size:clamp(27px,6vw,35px);font-weight:900;letter-spacing:-.6px;margin-bottom:7px}
+.encabezado .subtitulo{max-width:none;margin:0;color:#a9bad2;font-size:14px}
+.pasos-gvr{display:grid;grid-template-columns:repeat(4,1fr);position:relative;margin:24px 5px 28px}
+.pasos-gvr:before{content:"";position:absolute;left:12.5%;right:12.5%;top:17px;height:3px;background:#1b3556}
+.paso-gvr{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;color:#91a4c0}
+.paso-gvr span{width:37px;height:37px;display:grid;place-items:center;border:1px solid #294766;border-radius:50%;background:#0a1930;color:#9bb1ca;font-size:14px;font-weight:900}
+.paso-gvr small{font-size:12px;font-weight:700}
+.paso-gvr.completado span,.paso-gvr.actual span{border-color:#28d9ff;background:linear-gradient(140deg,#087cff,#28d9ff);color:#041326;box-shadow:0 5px 18px rgba(0,174,255,.22)}
+.paso-gvr.actual small{color:#42d5ff}
+.resumen-pedido{margin:0 0 16px;padding:20px 18px;border:1px solid #183b61;border-radius:23px;background:linear-gradient(125deg,#0c1a31 0%,#050a13 72%,#061a2c 100%);box-shadow:0 15px 34px rgba(0,0,0,.3)}
+.resumen-cabecera{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:16px}
+.resumen-etiqueta{display:block;margin-bottom:7px;color:#a4b5ca;font-size:11px;font-weight:800;letter-spacing:2px}
+.resumen-cabecera h2{font-size:clamp(19px,5vw,25px);font-weight:900;color:#fff}
+.resumen-icono{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border:1px solid rgba(40,217,255,.3);border-radius:15px;background:rgba(0,145,255,.12);color:#42d5ff;font-size:23px;font-weight:900}
+.resumen-linea{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 0;border-top:1px solid rgba(170,200,230,.17);color:#9aacc5;font-size:11px;font-weight:800;letter-spacing:1px}
+.resumen-estado{padding:6px 10px;border:1px solid rgba(255,190,50,.25);border-radius:30px;background:rgba(255,190,50,.09);color:#ffd27a;font-size:10px;letter-spacing:0}
+.resumen-datos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.resumen-datos .dato{display:block;min-width:0;margin:0;padding:12px;border:1px solid rgba(125,169,210,.16);border-radius:13px;background:rgba(255,255,255,.045);box-shadow:none}
+.resumen-datos .dato .valor{font-size:16px;overflow-wrap:anywhere}
+.resumen-datos .dato .cantidad{font-size:20px;color:#42d5ff}
+.resumen-datos .dato:last-child{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.seccion-titulo{margin:0 0 13px;font-size:17px;font-weight:900}
+.pago-panel{margin:14px 0;padding:19px;border:1px solid #1c4268;border-radius:21px;background:linear-gradient(155deg,#0d2140,#081326);box-shadow:0 10px 28px rgba(0,0,0,.2)}
+.pago-panel h3{font-size:17px;margin-bottom:9px}
+.descripcion{font-size:13px;color:#a9bad2;line-height:1.65}
+.direccion{padding:15px;border:1px solid rgba(40,217,255,.28);border-radius:14px;background:rgba(0,145,255,.1);color:#53dfff;font-size:16px}
+.boton-secundario{min-height:46px;border-radius:13px;background:rgba(0,145,255,.14);color:#eaf8ff;font-weight:900}
+.campo-txid input{min-height:52px;padding:15px;border:1px solid #25496f;border-radius:14px;background:#061329;font-size:16px}
+.temporizador-usdt{margin:15px 0;padding:15px;border-radius:16px;background:linear-gradient(110deg,rgba(0,125,255,.16),rgba(40,217,255,.06))}
+.aviso{margin:14px 0;padding:14px;border:1px solid rgba(0,170,255,.23);border-radius:15px;background:rgba(0,145,255,.08);font-size:12px}
+.comprobante-card{margin-top:17px;padding:18px;border:1px solid #1b3d62;border-radius:21px;background:linear-gradient(155deg,#0c1d37,#071326);box-shadow:0 10px 28px rgba(0,0,0,.2)}
+.paso-titulo{display:flex;align-items:flex-start;gap:13px;margin-bottom:17px}
+.numero-paso{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(140deg,#087cff,#28d9ff);color:#031426;font-size:16px;font-weight:900;box-shadow:0 6px 17px rgba(0,145,255,.22)}
+.paso-titulo .seccion-titulo{margin:1px 0 5px}
+.paso-titulo p{color:#a9bad2;font-size:12px;line-height:1.6}
+.subida{margin-top:0;padding:17px;border:1px dashed rgba(40,217,255,.48);border-radius:15px;background:rgba(0,145,255,.07);font-weight:800}
+.boton{min-height:53px;border-radius:14px;background:linear-gradient(100deg,#00aaff,#28d9ff);color:#031426;font-size:15px;font-weight:900;box-shadow:0 8px 22px rgba(0,170,255,.2)}
+.mensaje{border-radius:14px}
+footer{padding:0 16px 28px;color:#7186a3}
+@media(max-width:440px){main{padding:0 12px}.resumen-pedido,.comprobante-card{padding:16px 14px;border-radius:19px}.resumen-datos{grid-template-columns:1fr}.resumen-datos .dato:last-child{grid-column:auto}.pasos-gvr{margin:21px 0 24px}.paso-gvr small{font-size:11px}.resumen-cabecera h2{font-size:19px}}
+
 </style><script src="./maintenance.js" defer></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -305,16 +352,25 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
 <main>
 <div class="contenedor">
     <div class="encabezado">
-        <div class="etiqueta">Compra de GVR</div>
-        <h1>Confirma tu compra</h1>
-        <p class="subtitulo">
-            Realiza el pago con los datos indicados y adjunta una imagen del comprobante.
-        </p>
+        <div class="etiqueta">RECARGA DE SALDO GVR</div>
+        <h1>Completa tu pago</h1>
+        <p class="subtitulo">Sigue los pasos para finalizar tu recarga.</p>
+    </div>
+    <div class="pasos-gvr" aria-label="Progreso de la recarga">
+        <div class="paso-gvr completado"><span>✓</span><small>Recarga</small></div>
+        <div class="paso-gvr completado"><span>✓</span><small>Saldo</small></div>
+        <div class="paso-gvr actual"><span>3</span><small>Pago</small></div>
+        <div class="paso-gvr"><span>4</span><small>Listo</small></div>
     </div>
 
     <section class="card">
-        <h2 class="seccion-titulo">Resumen de la compra</h2>
-
+        <section class="resumen-pedido">
+        <div class="resumen-cabecera">
+            <div><span class="resumen-etiqueta">RECARGA DE SALDO</span><h2>Depósito de <span id="resumenCantidad">GVR</span></h2></div>
+            <span class="resumen-icono" aria-hidden="true">G</span>
+        </div>
+        <div class="resumen-linea"><span>DETALLES DE LA RECARGA</span><span class="resumen-estado">Pendiente</span></div>
+        <div class="resumen-datos">
         <div class="dato">
             <div class="dato-info">
                 <div class="titulo">Cantidad solicitada</div>
@@ -344,6 +400,8 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
             <span class="estado" id="estadoCompra">Sin enviar</span>
         </div>
 
+        </div>
+        </div>
         <div id="panelSaldo" class="pago-panel oculto">
             <h3>Pago mediante saldo móvil</h3>
             <p class="descripcion">
@@ -387,7 +445,8 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
             Los GVR no se acreditarán hasta que la compra sea aprobada.
         </div>
 
-        <h2 class="seccion-titulo">Comprobante de pago</h2>
+        <section class="comprobante-card">
+        <div class="paso-titulo"><span class="numero-paso">1</span><div><h2 class="seccion-titulo">Adjunta tu comprobante</h2><p>Sube una captura clara para que podamos verificar tu pago.</p></div></div>
 
         <label class="subida" for="archivoComprobante">
             Selecciona la captura del pago
@@ -409,6 +468,7 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
         </button>
 
         <div id="mensaje" class="mensaje" role="status" aria-live="polite"></div>
+        </section>
     </section>
 </div>
 </main>
