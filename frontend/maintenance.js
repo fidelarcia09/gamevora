@@ -127,41 +127,70 @@ html.gg-maintenance-pending body{visibility:hidden!important}
   }
   function startMaintenanceRealtime(client, isAdmin) {
     if (window.__ggMaintenanceRealtimeChannel) return;
-    const channel = client
-      .channel("site-maintenance-status")
-      .on("broadcast", { event: "maintenance_status_changed" }, (event) => {
-        const update = event?.payload && typeof event.payload === "object" ? event.payload : event;
-        if (!update || typeof update.active !== "boolean") return;
-        const nextMessage = typeof update.message === "string" && update.message.trim()
-          ? update.message
-          : MESSAGE_DEFAULT;
-        const maintenanceVisible = !!document.querySelector(".gg-maintenance-root");
-        const adminNavigationKey = "gg_admin_maintenance_navigation";
-        const adminChoseToNavigate = isAdmin && sessionStorage.getItem(adminNavigationKey) === "1";
 
-        if (update.active) {
-          if (maintenanceVisible) {
-            const copy = document.querySelector(".gg-maintenance-copy");
-            if (copy) copy.textContent = nextMessage;
-            return;
-          }
-          if (!adminChoseToNavigate) {
-            renderMaintenance(client, isAdmin, nextMessage);
-          }
+    const applyStatus = (update) => {
+      if (!update || typeof update.active !== "boolean") return;
+      const nextMessage = typeof update.message === "string" && update.message.trim()
+        ? update.message
+        : MESSAGE_DEFAULT;
+      const maintenanceVisible = !!document.querySelector(".gg-maintenance-root");
+      const adminNavigationKey = "gg_admin_maintenance_navigation";
+      const adminChoseToNavigate = isAdmin && sessionStorage.getItem(adminNavigationKey) === "1";
+
+      if (update.active) {
+        if (maintenanceVisible) {
+          const copy = document.querySelector(".gg-maintenance-copy");
+          if (copy) copy.textContent = nextMessage;
           return;
         }
+        if (!adminChoseToNavigate) renderMaintenance(client, isAdmin, nextMessage);
+        return;
+      }
 
-        if (maintenanceVisible) {
-          removeMaintenanceScreen();
+      if (maintenanceVisible) removeMaintenanceScreen();
+      document.documentElement.classList.remove("gg-maintenance-pending");
+    };
+
+    const syncCurrentStatus = async () => {
+      try {
+        const { data, error } = await client.rpc("get_site_maintenance_status");
+        if (error || !data) {
+          console.warn("No se pudo sincronizar el mantenimiento:", error || "Sin datos");
+          return;
         }
-        document.documentElement.classList.remove("gg-maintenance-pending");
+        const status = typeof data === "string" ? JSON.parse(data) : data;
+        applyStatus(status);
+      } catch (error) {
+        console.warn("Error sincronizando mantenimiento:", error);
+      }
+    };
+
+    // El topic debe coincidir exactamente con el usado por realtime.send() en PostgreSQL.
+    const channel = client
+      .channel("site-maintenance")
+      .on("broadcast", { event: "maintenance_status_changed" }, (payload) => {
+        const update = payload?.payload && typeof payload.payload === "object"
+          ? payload.payload
+          : payload;
+        applyStatus(update);
       })
       .subscribe((status, error) => {
-        if (status !== "SUBSCRIBED") {
+        if (status === "SUBSCRIBED") {
+          syncCurrentStatus();
+        } else {
           console.warn("Realtime de mantenimiento:", status, error || "");
         }
       });
+
     window.__ggMaintenanceRealtimeChannel = channel;
+
+    if (!window.__ggMaintenanceSyncListeners) {
+      window.__ggMaintenanceSyncListeners = true;
+      window.addEventListener("online", syncCurrentStatus);
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") syncCurrentStatus();
+      });
+    }
   }
 
   async function init() {
