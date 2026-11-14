@@ -45,6 +45,8 @@ html,body{margin:0;min-height:100%;background:#020611}
 .gg-maintenance-footer span{color:#20d4ff}
 .gg-maintenance-footer small{display:block;margin-top:5px;font-size:.55em;letter-spacing:.35em}
 .gg-maintenance-admin{position:relative;display:block;margin:20px auto 0;padding:10px 18px;border:1px solid rgba(32,197,255,.48);border-radius:10px;background:rgba(0,124,255,.14);color:#8be1ff;font-size:12px;font-weight:900;cursor:pointer}
+.gg-maintenance-navigation{position:relative;display:block;width:min(86%,320px);min-height:48px;margin:14px auto 0;padding:12px 20px;border:1px solid #52e7ff;border-radius:12px;background:linear-gradient(100deg,#087cff,#00c5ed);box-shadow:0 0 18px rgba(0,181,255,.42),inset 0 1px 0 rgba(255,255,255,.3);color:#fff;font-size:15px;font-weight:1000;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.gg-maintenance-navigation:active{transform:translateY(1px);filter:brightness(1.12)}
 .gg-maintenance-panel{position:relative;margin:14px auto 0;padding:17px;border:1px solid rgba(32,197,255,.25);border-radius:14px;background:rgba(3,12,26,.95);text-align:left}
 .gg-maintenance-panel[hidden]{display:none}
 .gg-maintenance-label{display:block;margin:0 0 8px;color:#c5d8eb;font-size:12px;font-weight:800}
@@ -105,8 +107,10 @@ html.gg-maintenance-pending body{visibility:hidden!important}
       return;
     }
     const status = typeof statusData === "string" ? JSON.parse(statusData) : statusData;
-    if (status.active === true && !isAdmin) {
-      renderMaintenance(client, false, status.message || MESSAGE_DEFAULT);
+    const adminNavigationKey = "gg_admin_maintenance_navigation";
+    const adminChoseToNavigate = isAdmin && sessionStorage.getItem(adminNavigationKey) === "1";
+    if (status.active === true && !adminChoseToNavigate) {
+      renderMaintenance(client, isAdmin, status.message || MESSAGE_DEFAULT);
       return;
     }
     document.documentElement.classList.remove("gg-maintenance-pending");
@@ -211,6 +215,13 @@ html.gg-maintenance-pending body{visibility:hidden!important}
     footer.innerHTML = 'GAMERS <span>GOLD</span><small>TOP-UP</small>';
     scene.append(brand, hero, hazard, cone, messageBox, footer);
     if (isAdmin) {
+      const navigate = el("button", "gg-maintenance-navigation", "NAVEGAR");
+      navigate.type = "button";
+      navigate.addEventListener("click", () => {
+        sessionStorage.setItem("gg_admin_maintenance_navigation", "1");
+        location.reload();
+      });
+      scene.append(navigate);
       const toggle = el("button", "gg-maintenance-admin", "Admin");
       toggle.type = "button";
       toggle.setAttribute("aria-expanded", "false");
