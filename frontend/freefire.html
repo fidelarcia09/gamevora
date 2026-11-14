@@ -3228,3 +3228,62 @@ body.gg-has-sticky-purchase{padding-bottom:calc(192px + env(safe-area-inset-bott
   #catalogo .producto .producto-precio,#catalogoOfertas .producto .producto-precio{min-width:104px!important;padding:7px 10px!important;font-size:15px!important}
 }
 </style>
+
+
+<style id="gg-freefire-cards-match-other-games-20261114">
+/* Free Fire: igualar las tarjetas de diamantes al diseño común de los otros juegos.
+   Sobrescribe el layout especial antiguo que las dejaba alineadas a la izquierda. */
+#catalogo .producto.producto-con-diamantes{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:center!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:156px!important;
+  height:auto!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+  padding:23px 12px 13px!important;
+  gap:6px!important;
+  text-align:center!important;
+  overflow:hidden!important;
+}
+#catalogo .producto.producto-con-diamantes > .producto-imagen{
+  display:none!important;
+  width:0!important;height:0!important;min-width:0!important;min-height:0!important;
+}
+#catalogo .producto.producto-con-diamantes > .producto-informacion{
+  display:flex!important;
+  flex:1 1 auto!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  grid-column:auto!important;grid-row:auto!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;min-height:0!important;
+  margin:0!important;gap:6px!important;text-align:center!important;
+}
+#catalogo .producto.producto-con-diamantes .producto-nombre,
+#catalogo .producto.producto-con-diamantes .gg-reseller-original-price,
+#catalogo .producto.producto-con-diamantes .producto-precio,
+#catalogo .producto.producto-con-diamantes .producto-estado{
+  align-self:center!important;
+  justify-self:center!important;
+  width:100%!important;max-width:100%!important;
+  margin:0!important;text-align:center!important;
+}
+#catalogo .producto.producto-con-diamantes .producto-precio{
+  width:auto!important;min-width:112px!important;max-width:100%!important;
+  padding:8px 15px!important;font-size:17px!important;line-height:1.15!important;
+}
+#catalogo .producto.producto-con-diamantes .gg-reseller-discount-badge{
+  top:0!important;right:0!important;left:auto!important;
+}
+@media(max-width:360px){
+  #catalogo .producto.producto-con-diamantes{min-height:152px!important;padding:22px 9px 12px!important;gap:5px!important}
+  #catalogo .producto.producto-con-diamantes > .producto-informacion{gap:5px!important}
+  #catalogo .producto.producto-con-diamantes .producto-precio{min-width:104px!important;padding:7px 10px!important;font-size:15px!important}
+}
+</style>
