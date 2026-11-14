@@ -36,7 +36,7 @@ html,body{margin:0;min-height:100%;background:#020611}
 .gg-maintenance-messagebox:before{position:absolute;inset:6px;content:"";border:1px solid rgba(0,188,255,.16);clip-path:inherit;pointer-events:none}
 .gg-maintenance-heading{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 18px;font-size:clamp(25px,6.5vw,42px);font-style:italic;font-weight:1000;line-height:1.08;text-transform:uppercase;text-shadow:0 0 18px rgba(0,140,255,.4)}
 .gg-maintenance-heading span{display:block;color:#17d4ff}
-.gg-maintenance-alert{width:clamp(48px,12vw,78px);height:auto;flex:0 0 auto;filter:drop-shadow(0 0 9px #008cff}
+.gg-maintenance-alert{width:clamp(48px,12vw,78px);height:auto;flex:0 0 auto;filter:drop-shadow(0 0 9px #008cff)}
 .gg-maintenance-alert svg{display:block;width:100%;height:auto}
 .gg-maintenance-copy{position:relative;margin:0 auto;color:#f1f7ff;font-size:clamp(14px,3.8vw,20px);font-weight:600;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
 .gg-maintenance-line{width:clamp(105px,25vw,180px);height:4px;margin:22px auto;border-radius:8px;background:linear-gradient(90deg,#087cff,#20e6ff);box-shadow:0 0 14px #00bfff}
