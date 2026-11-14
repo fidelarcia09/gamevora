@@ -925,32 +925,35 @@ async function cargarOfertas() {
             cantidad++;
         });
 
-        // Añade también las ofertas nuevas del catálogo RechargeGames que todavía
-        // no estén en la configuración visual antigua de esta página.
-        catalogoProveedor.forEach(productoProveedor => {
-            const idProveedor = obtenerIdProveedor(productoProveedor);
-            if (!idProveedor || productosMostrados[idProveedor]) return;
-            if (
-                productoProveedor.available === false ||
-                productoProveedor.available === "false"
-            ) return;
+        // En Arena Breakout solo se muestran las ofertas autorizadas
+        // explícitamente en CONFIG_OFERTAS. No añadir automáticamente
+        // otros productos del catálogo del proveedor.
+        if (!ES_ARENA_BREAKOUT) {
+            catalogoProveedor.forEach(productoProveedor => {
+                const idProveedor = obtenerIdProveedor(productoProveedor);
+                if (!idProveedor || productosMostrados[idProveedor]) return;
+                if (
+                    productoProveedor.available === false ||
+                    productoProveedor.available === "false"
+                ) return;
 
-            const ofertaCatalogo = {
-                id: idProveedor,
-                nombre: obtenerNombreProveedor(productoProveedor),
-                emoji: "🎁"
-            };
+                const ofertaCatalogo = {
+                    id: idProveedor,
+                    nombre: obtenerNombreProveedor(productoProveedor),
+                    emoji: "🎁"
+                };
 
-            productosMostrados[idProveedor] = {
-                ...ofertaCatalogo,
-                productoProveedor
-            };
+                productosMostrados[idProveedor] = {
+                    ...ofertaCatalogo,
+                    productoProveedor
+                };
 
-            lista.appendChild(
-                crearTarjetaOferta(ofertaCatalogo, productoProveedor)
-            );
-            cantidad++;
-        });
+                lista.appendChild(
+                    crearTarjetaOferta(ofertaCatalogo, productoProveedor)
+                );
+                cantidad++;
+            });
+        }
 
         if (!cantidad) {
             actualizarEstadoCarga(
