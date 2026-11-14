@@ -3049,6 +3049,32 @@ body.gg-has-sticky-purchase{padding-bottom:calc(192px + env(safe-area-inset-bott
 
 </script>
 
+
+<style id="gg-selected-card-highlight-20261114">
+/* Resaltar claramente el paquete u oferta que el usuario ha seleccionado. */
+#catalogo .producto.seleccionado,
+#catalogoOfertas .producto.seleccionado,
+#catalogo .producto.seleccionada,
+#catalogoOfertas .producto.seleccionada,
+#listaOfertas .boton-oferta.seleccionado,
+#listaOfertas .boton-oferta.seleccionada,
+.producto.seleccionado,
+.producto.seleccionada,
+.boton-oferta.seleccionado,
+.boton-oferta.seleccionada{
+  border:2px solid #35d8ff!important;
+  outline:2px solid rgba(53,216,255,.72)!important;
+  outline-offset:1px!important;
+  background:linear-gradient(145deg,#123d68 0%,#0b2949 58%,#08203b 100%)!important;
+  box-shadow:
+    0 0 0 2px rgba(0,186,255,.22),
+    0 0 15px rgba(0,186,255,.72),
+    0 0 28px rgba(0,140,255,.38),
+    inset 0 0 14px rgba(0,186,255,.16)!important;
+  position:relative!important;
+  z-index:2!important;
+}
+</style>
 </body>
     </html>
 
