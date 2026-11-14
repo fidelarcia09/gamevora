@@ -95,6 +95,7 @@ footer{padding:0 16px 28px;color:#7186a3}
 @media(max-width:440px){main{padding:0 12px}.resumen-pedido,.comprobante-card{padding:16px 14px;border-radius:19px}.resumen-datos{grid-template-columns:1fr}.resumen-datos .dato:last-child{grid-column:auto}.pasos-gvr{margin:21px 0 24px}.paso-gvr small{font-size:11px}.resumen-cabecera h2{font-size:19px}}
 
 
+.resumen-compacto .resumen-id{display:inline-block;margin-top:9px;padding:5px 11px;border:0;border-radius:30px;background:rgba(255,255,255,.12);color:#cbd6e5;font-size:12px;font-weight:700;letter-spacing:.2px}.resumen-compacto .resumen-id:empty{display:none}
 /* Resumen compacto: misma jerarquía visual que la referencia */
 .resumen-pedido.resumen-compacto{padding:20px 18px;border:1px solid #183b61;border-radius:23px;background:linear-gradient(125deg,#0c1a31 0%,#050a13 72%,#061a2c 100%);box-shadow:0 15px 34px rgba(0,0,0,.3)}
 .resumen-compacto .resumen-cabecera{align-items:center;padding:0 0 16px}
@@ -384,7 +385,7 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
                 <div class="resumen-titulos">
                     <span class="resumen-etiqueta">RECARGA DE SALDO</span>
                     <h2>Depósito de <span id="mostrarCantidad" class="cantidad">Cargando...</span></h2>
-                    <span class="resumen-estado" id="estadoCompra">Pendiente</span>
+                    <span class="resumen-estado resumen-id" id="resumenId">ID pendiente</span><span id="estadoCompra" class="oculto">Pendiente</span>
                 </div>
                 <span class="resumen-icono" aria-hidden="true">G</span>
             </div>
@@ -732,6 +733,8 @@ async function prepararSolicitudPago() {
         }
         try { sessionStorage.setItem(claveSolicitudSesion(),solicitud.id); } catch (_) {}
         solicitudId = solicitud.id;
+        const resumenId = document.getElementById("resumenId");
+        if (resumenId) resumenId.textContent = "ID " + solicitudId;
         iniciarCuentaRegresiva(reloj.expires_at,reloj.server_now);
         botonContinuar.disabled = false;
         botonContinuar.textContent = "Enviar comprobante";
@@ -991,6 +994,8 @@ botonContinuar.addEventListener("click",async () => {
             botonContinuar.textContent = "Registrando solicitud...";
             const nuevaSolicitud = await crearSolicitud(usuario);
             solicitudId = nuevaSolicitud.id;
+            const resumenId = document.getElementById("resumenId");
+            if (resumenId) resumenId.textContent = "ID " + solicitudId;
         }
 
         if (!rutaComprobanteSubido) {
