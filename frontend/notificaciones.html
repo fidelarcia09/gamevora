@@ -11,13 +11,24 @@
     *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
     body{min-height:100vh;background:radial-gradient(ellipse at 50% -15%,rgba(0,119,255,.13),transparent 42%),var(--fondo);color:var(--texto)}
     a{color:inherit}
-    header{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:14px;min-height:66px;padding:12px max(16px,calc((100% - 900px)/2));border-bottom:1px solid var(--borde);background:rgba(5,11,24,.94);backdrop-filter:blur(14px)}
-    .volver{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex:0 0 38px;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35);text-decoration:none;-webkit-tap-highlight-color:transparent}.volver svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.volver:focus-visible{outline:2px solid #75d7ff;outline-offset:3px}
-    .marca{min-width:0}.marca strong{display:block;font-size:15px;letter-spacing:.2px}.marca span{display:block;margin-top:3px;color:var(--muted);font-size:11px}
-    main{width:min(100% - 28px,760px);margin:32px auto 60px}
-    .encabezado{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:20px}
-    h1{font-size:clamp(25px,5vw,32px);letter-spacing:-.7px}
-    .subtitulo{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.6}
+    main{width:min(100% - 28px,760px);margin:22px auto 60px}
+    .encabezado{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-bottom:20px}
+    .grupo-dia{margin:0 0 22px}
+    .titulo-dia{display:flex;align-items:center;gap:10px;margin:0 0 11px;color:#dcecff;font-size:13px;font-weight:900;letter-spacing:.35px}
+    .titulo-dia::before{content:"";width:3px;height:17px;border-radius:4px;background:linear-gradient(180deg,var(--cian),var(--azul));box-shadow:0 0 10px rgba(32,197,255,.45)}
+    .lista{display:grid;gap:11px}
+    .item{position:relative;display:flex;align-items:center;gap:13px;min-height:88px;padding:14px 15px;border:1px solid rgba(112,151,193,.2);border-radius:19px 7px 19px 19px;background:linear-gradient(115deg,rgba(13,30,53,.98),rgba(7,17,33,.98));text-decoration:none;transition:border-color .2s ease,transform .2s ease,background .2s ease;box-shadow:0 7px 20px rgba(0,0,0,.16)}
+    .item::after{content:"";position:absolute;top:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,rgba(32,197,255,.22),transparent)}
+    .item[href]:hover{transform:translateY(-2px);border-color:rgba(32,197,255,.55)}
+    .item.no-leida{border-color:rgba(32,197,255,.42);background:linear-gradient(115deg,rgba(12,43,72,.98),rgba(7,17,33,.98));box-shadow:0 0 20px rgba(0,124,255,.09)}
+    .simbolo{display:grid;place-items:center;width:58px;height:58px;flex:0 0 58px;border:1px solid var(--icon-border,rgba(32,197,255,.3));border-radius:16px;background:linear-gradient(145deg,var(--icon-bg,rgba(0,119,255,.2)),rgba(5,18,36,.92));color:var(--icon-color,var(--cian));box-shadow:0 7px 18px var(--icon-shadow,rgba(0,124,255,.18)),inset 0 1px 0 rgba(255,255,255,.12)}
+    .simbolo svg{width:29px;height:29px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .contenido{min-width:0;flex:1}.titulo{color:#f4f8ff;font-size:14px;font-weight:850;line-height:1.4}.mensaje{margin-top:5px;color:#b4c4d8;font-size:12px;line-height:1.6;overflow-wrap:anywhere}.fecha{display:block;margin-top:6px;color:#7890aa;font-size:10px}
+    .fecha-relativa{align-self:flex-start;margin:3px 0 0 4px;color:#9aadc4;font-size:11px;white-space:nowrap}
+    .flecha-item{width:18px;height:18px;flex:0 0 18px;color:#9fb3c9}
+    .flecha-item svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .punto{position:absolute;top:12px;left:12px;width:7px;height:7px;border-radius:50%;background:var(--cian);box-shadow:0 0 9px rgba(32,197,255,.7)}
+
     .marcar{flex-shrink:0;padding:10px 13px;border:1px solid rgba(32,197,255,.25);border-radius:9px;background:rgba(0,119,255,.1);color:var(--cian);font-size:11px;font-weight:800;cursor:pointer}
     .acciones-notificaciones{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0;flex-wrap:wrap}
     .marcar,.limpiar{padding:10px 13px;border:1px solid rgba(32,197,255,.25);border-radius:9px;background:rgba(0,119,255,.1);color:var(--cian);font-size:11px;font-weight:800;cursor:pointer}
@@ -43,15 +54,11 @@
     .admin-input,.admin-textarea{display:block;width:100%;padding:12px;border:1px solid rgba(105,158,215,.22);border-radius:10px;outline:none;background:#071326;color:#f4f8ff;font-size:13px}
     .admin-input:focus,.admin-textarea:focus{border-color:#20c5ff;box-shadow:0 0 0 3px rgba(32,197,255,.09)}.admin-textarea{min-height:105px;resize:vertical;line-height:1.5}
     .contador{margin-top:5px;color:#7189a3;text-align:right;font-size:10px}
-    @media(max-width:520px){header{min-height:60px;padding:10px 14px}main{margin-top:25px}.encabezado{align-items:flex-start;flex-direction:column}.acciones-notificaciones{align-self:flex-end}.item{padding:14px;gap:11px}}
+    @media(max-width:520px){main{margin-top:18px}.encabezado{align-items:center}.acciones-notificaciones{align-self:flex-end}.item{min-height:82px;padding:12px;gap:10px;border-radius:17px 6px 17px 17px}.simbolo{width:52px;height:52px;flex-basis:52px;border-radius:14px}.simbolo svg{width:26px;height:26px}.titulo{font-size:13px}.mensaje{font-size:12px}.fecha-relativa{font-size:10px;margin-left:0}.flecha-item{width:16px;height:16px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
   </style>
 </head>
 <body>
-  <header>
-    <a class="volver" href="../index.html" aria-label="Volver atrás"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></a>
-    <div class="marca"><strong>Gamers Gold Top-Up</strong><span>Centro de notificaciones</span></div>
-  </header>
   <main>
     <section id="pushCard" class="push-card" hidden aria-labelledby="pushTitle">
       <div class="push-head">
@@ -82,7 +89,6 @@
     </section>
 
     <div class="encabezado">
-      <div><h1>Notificaciones</h1></div>
       <div class="acciones-notificaciones">
         <button id="marcarTodas" class="marcar" type="button" disabled>Marcar como leídas</button>
         <button id="limpiarTodas" class="limpiar" type="button" disabled>Limpiar todas</button>
@@ -254,6 +260,43 @@
       }).format(fecha);
     }
 
+    function iconoNotificacion(item) {
+      const texto = ((item.title || "") + " " + (item.message || "")).toLowerCase();
+      if (/entregad|completad|recarga exitosa|acreditad/.test(texto)) return {color:"#35e39a",bg:"rgba(20,205,125,.22)",shadow:"rgba(20,205,125,.24)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16.5 9"/></svg>'};
+      if (/revisi|pendient|verific|procesando/.test(texto)) return {color:"#ffc45e",bg:"rgba(255,166,40,.22)",shadow:"rgba(255,166,40,.22)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'};
+      if (/dep[oó]sit|wallet|saldo|transfer|nx[cx]/.test(texto)) return {color:"#66aaff",bg:"rgba(34,119,255,.24)",shadow:"rgba(34,119,255,.25)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h14a2 2 0 0 1 2 2v10H5a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2h13"/><path d="M16 12h4M16 12a1.5 1.5 0 1 0 0 3h4v-3Z"/></svg>'};
+      if (/revendedor|reseller|descuento|nivel|etiqueta/.test(texto)) return {color:"#ff9a45",bg:"rgba(255,126,35,.23)",shadow:"rgba(255,126,35,.23)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13 13 20a2 2 0 0 1-2.8 0L3 12.8V4h8.8L20 12.2a.6.6 0 0 1 0 .8Z"/><circle cx="7.5" cy="8.5" r="1"/></svg>'};
+      if (/api|acceso|clave|seguridad/.test(texto)) return {color:"#61c9ff",bg:"rgba(42,166,255,.23)",shadow:"rgba(42,166,255,.23)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg>'};
+      return {color:"#55d5ff",bg:"rgba(0,153,255,.2)",shadow:"rgba(0,153,255,.2)",svg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg>'};
+    }
+
+    function etiquetaDia(valor) {
+      const fecha = new Date(valor);
+      const ahora = new Date();
+      const inicioHoy = new Date(ahora.getFullYear(),ahora.getMonth(),ahora.getDate());
+      const inicioFecha = new Date(fecha.getFullYear(),fecha.getMonth(),fecha.getDate());
+      const dias = Math.round((inicioHoy - inicioFecha) / 86400000);
+      if (dias === 0) return "Hoy";
+      if (dias === 1) return "Ayer";
+      if (dias >= 2 && dias <= 6) return "Esta semana";
+      if (dias >= 7 && dias <= 29) return "Este mes";
+      return new Intl.DateTimeFormat("es-ES",{day:"numeric",month:"long",year:fecha.getFullYear() !== ahora.getFullYear() ? "numeric" : undefined}).format(fecha);
+    }
+
+    function tiempoRelativo(valor) {
+      const fecha = new Date(valor);
+      const segundos = Math.max(0,Math.floor((Date.now()-fecha.getTime())/1000));
+      if (segundos < 60) return "ahora";
+      const minutos = Math.floor(segundos/60);
+      if (minutos < 60) return "hace " + minutos + " min";
+      const horas = Math.floor(minutos/60);
+      if (horas < 24) return "hace " + horas + " h";
+      const dias = Math.floor(horas/24);
+      if (dias < 30) return "hace " + dias + (dias === 1 ? " día" : " días");
+      const meses = Math.floor(dias/30);
+      return "hace " + meses + (meses === 1 ? " mes" : " meses");
+    }
+
     function renderizar() {
       lista.replaceChildren();
       const pendientes = notificaciones.filter(item => !item.is_read).length;
@@ -274,26 +317,52 @@
       }
 
       estado.hidden = true;
+      const grupos = new Map();
       notificaciones.forEach(item => {
-        const href = (() => {
-          if (!item.target_url) return null;
-          try {
-            const destino = new URL(item.target_url, window.location.href);
-            return destino.origin === window.location.origin ? destino.href : null;
-          } catch (_) { return null; }
-        })();
+        const grupo = etiquetaDia(item.created_at);
+        if (!grupos.has(grupo)) grupos.set(grupo,[]);
+        grupos.get(grupo).push(item);
+      });
 
-        const tarjeta = crearElemento(href ? "a" : "article", "item" + (item.is_read ? "" : " no-leida"));
-        if (href) tarjeta.href = href;
+      grupos.forEach((items,dia) => {
+        const seccion = crearElemento("section","grupo-dia");
+        seccion.appendChild(crearElemento("h2","titulo-dia",dia));
+        const listaDia = crearElemento("div","lista");
+        items.forEach(item => {
+          const href = (() => {
+            if (!item.target_url) return null;
+            try {
+              const destino = new URL(item.target_url, window.location.href);
+              return destino.origin === window.location.origin ? destino.href : null;
+            } catch (_) { return null; }
+          })();
 
-        tarjeta.appendChild(crearElemento("span","simbolo","✦"));
-        const contenido = crearElemento("div","contenido");
-        contenido.appendChild(crearElemento("div","titulo",item.title));
-        contenido.appendChild(crearElemento("p","mensaje",item.message));
-        contenido.appendChild(crearElemento("time","fecha",fechaLegible(item.created_at)));
-        tarjeta.appendChild(contenido);
-        if (!item.is_read) tarjeta.appendChild(crearElemento("span","punto"));
-        lista.appendChild(tarjeta);
+          const tarjeta = crearElemento(href ? "a" : "article", "item" + (item.is_read ? "" : " no-leida"));
+          if (href) tarjeta.href = href;
+          const icono = iconoNotificacion(item);
+          const simbolo = crearElemento("span","simbolo");
+          simbolo.style.setProperty("--icon-color",icono.color);
+          simbolo.style.setProperty("--icon-bg",icono.bg);
+          simbolo.style.setProperty("--icon-shadow",icono.shadow);
+          simbolo.style.setProperty("--icon-border",icono.color+"66");
+          simbolo.innerHTML = icono.svg;
+          tarjeta.appendChild(simbolo);
+
+          const contenido = crearElemento("div","contenido");
+          contenido.appendChild(crearElemento("div","titulo",item.title));
+          contenido.appendChild(crearElemento("p","mensaje",item.message));
+          contenido.appendChild(crearElemento("time","fecha",fechaLegible(item.created_at)));
+          tarjeta.appendChild(contenido);
+          tarjeta.appendChild(crearElemento("span","fecha-relativa",tiempoRelativo(item.created_at)));
+          const flecha = crearElemento("span","flecha-item");
+          flecha.setAttribute("aria-hidden","true");
+          flecha.innerHTML = '<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>';
+          tarjeta.appendChild(flecha);
+          if (!item.is_read) tarjeta.appendChild(crearElemento("span","punto"));
+          listaDia.appendChild(tarjeta);
+        });
+        seccion.appendChild(listaDia);
+        lista.appendChild(seccion);
       });
     }
 
