@@ -4894,7 +4894,7 @@ document.getElementById("formEditarNombreDatos").addEventListener("submit", asyn
 
 document.getElementById("guardarNombreCompleto").addEventListener("click", async () => {
     const input = document.getElementById("ggNombreCompleto");
-    const nombreCompleto = input.value.trim().replace(/\\s+/g, " ");
+    const nombreCompleto = input.value.trim().replace(/\s+/g, " ");
     const boton = document.getElementById("guardarNombreCompleto");
     if (!nombreCompleto) {
         mostrarEstadoDatos("estadoNombreCompleto", "Escribe tu nombre completo.", "error");
