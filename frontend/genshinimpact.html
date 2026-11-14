@@ -588,7 +588,7 @@
   line-height:1.1!important;
 }
 
-.datos-jugador-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr);gap:10px;align-items:start}.campo-dato{min-width:0}.campo-dato .etiqueta{margin-top:12px}.campo-dato input,.campo-dato select{min-width:0}.campo-dato .ayuda{min-height:30px}@media(max-width:340px){.datos-jugador-grid{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:7px}.campo-dato input,.campo-dato select{font-size:12px;padding:9px 7px}}
+.datos-jugador-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:10px;align-items:end}.campo-dato{min-width:0}.campo-dato .etiqueta{margin-top:12px}.campo-dato input,.campo-dato select{min-width:0}.campo-dato .ayuda{min-height:30px}@media(max-width:340px){.datos-jugador-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:7px}.campo-dato input,.campo-dato select{font-size:12px;padding:9px 7px}}
 
 
 /* SERVER ID DENTRO DEL MISMO BLOQUE PRINCIPAL DE ID DEL JUGADOR */
@@ -1589,5 +1589,31 @@ body.gg-has-sticky-purchase{padding-bottom:calc(192px + env(safe-area-inset-bott
   #catalogo .producto,#catalogoOfertas .producto{min-height:152px!important;padding:22px 9px 12px!important;gap:5px!important}
   #catalogo .producto > .producto-informacion,#catalogoOfertas .producto > .producto-informacion{gap:5px!important}
   #catalogo .producto .producto-precio,#catalogoOfertas .producto .producto-precio{min-width:104px!important;padding:7px 10px!important;font-size:15px!important}
+}
+</style>
+
+
+<style id="gg-genshin-serverid-alignment-mobilelegends-20261114">
+/* UID y Server ID: misma proporción y alineación inferior que ID y Zone ID en Mobile Legends. */
+.datos-jugador-grid{
+  grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr)!important;
+  align-items:end!important;
+  gap:10px!important;
+  margin:0 0 12px!important;
+}
+.datos-jugador-grid .campo-dato{min-width:0!important}
+.datos-jugador-grid .campo-dato .etiqueta{margin:0 0 7px!important}
+.datos-jugador-grid input,
+.datos-jugador-grid select{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:42px!important;
+  height:42px!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:340px){
+  .datos-jugador-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)!important;gap:7px!important}
+  .datos-jugador-grid input,.datos-jugador-grid select{font-size:12px!important;padding:9px 7px!important}
 }
 </style>
