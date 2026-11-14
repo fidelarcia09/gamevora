@@ -863,6 +863,13 @@ mostrarCantidad.textContent = cantidadValida
     ? new Intl.NumberFormat("es-ES", {maximumFractionDigits:1}).format(cantidad) + " GVR"
     : "Cantidad no válida";
 
+const resumenCantidad = document.getElementById("resumenCantidad");
+if (resumenCantidad) {
+    resumenCantidad.textContent = cantidadValida
+        ? new Intl.NumberFormat("es-ES", {maximumFractionDigits:1}).format(cantidad) + " GVR"
+        : "GVR";
+}
+
 mostrarMetodo.textContent = metodo ? metodo.nombre : "Método no válido";
 
 mostrarPrecio.textContent = cantidadValida && metodo
