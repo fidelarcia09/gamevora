@@ -979,10 +979,15 @@ async function cargarOfertas() {
         actualizarEstadoCarga("", false);
 
         if (el("notaOfertas")) {
-            el("notaOfertas").textContent =
-                ES_VENTAS_HABILITADAS
-                    ? "Precios en GVR. Comprueba tu ID antes de confirmar."
-                    : "Las ventas de este juego aún no están habilitadas.";
+            if (ES_ARENA_BREAKOUT) {
+                el("notaOfertas").textContent = "";
+                el("notaOfertas").style.display = "none";
+            } else {
+                el("notaOfertas").textContent =
+                    ES_VENTAS_HABILITADAS
+                        ? "Precios en GVR. Comprueba tu ID antes de confirmar."
+                        : "Las ventas de este juego aún no están habilitadas.";
+            }
         }
 
     } catch (error) {
@@ -1816,10 +1821,15 @@ function inicializar() {
     }
 
     if (el("notaOfertas")) {
-        el("notaOfertas").textContent =
-            ES_VENTAS_HABILITADAS
-                ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
-                : "Las ventas de este juego aún no están habilitadas.";
+        if (ES_ARENA_BREAKOUT) {
+            el("notaOfertas").textContent = "";
+            el("notaOfertas").style.display = "none";
+        } else {
+            el("notaOfertas").textContent =
+                ES_VENTAS_HABILITADAS
+                    ? "Precios en GVR. Comprueba tu ID de jugador antes de confirmar."
+                    : "Las ventas de este juego aún no están habilitadas.";
+        }
     }
 
     inicializarModalConfirmacion();
