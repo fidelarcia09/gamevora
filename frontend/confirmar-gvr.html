@@ -457,7 +457,7 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
 </div>
 </main>
 
-<footer>Gamers Gold Top-Up · Compras de GVR</footer>
+
 
 <script>
 "use strict";
@@ -677,7 +677,7 @@ function iniciarCuentaRegresiva(fechaVencimiento, fechaServidor) {
     inicioMonotonic = performance.now();
     vencimientoPago = inicioMonotonic + restanteInicialMs;
     duracionPagoMinutos = 10;
-    document.getElementById("tiempoLabel").textContent = "Tiempo disponible para completar el pago (" + duracionPagoMinutos + " minutos)";
+    document.getElementById("tiempoLabel").textContent = "Tiempo disponible para completar el pago";
     if (intervaloTemporizador) clearInterval(intervaloTemporizador);
     const actualizar = () => {
         const restante = Math.max(0,restanteInicialMs - (performance.now() - inicioMonotonic));
@@ -727,7 +727,7 @@ async function prepararSolicitudPago() {
         iniciarCuentaRegresiva(reloj.expires_at,reloj.server_now);
         botonContinuar.disabled = false;
         botonContinuar.textContent = "Enviar comprobante";
-        mostrarMensaje("Tu plazo de pago de " + duracionPagoMinutos + " minutos ya está activo. Completa el pago dentro de ese tiempo y envía el comprobante" + (metodoTexto === "USDT" ? " junto con el TxID." : "."),"info");
+
     } catch (error) {
         console.error("No se pudo preparar la solicitud de pago:",error);
         botonContinuar.disabled = true;
