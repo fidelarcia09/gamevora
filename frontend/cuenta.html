@@ -1284,11 +1284,20 @@
     #pantallaDatosPersonales .gg-datos-avatar {display:flex;flex-direction:column;align-items:center;gap:12px;margin:0 auto 26px;text-align:center}
     #ggDatosAvatarDestino {display:flex;align-items:center;justify-content:center;min-height:154px}
     #ggDatosAvatarDestino .datos-avatar-marco {
+        display:flex;align-items:center;justify-content:center;
         width:144px;height:144px;flex:0 0 144px;margin:0;border:3px solid #20c5ff;border-radius:50%;
         background:linear-gradient(145deg,#103b65,#050b18);
         box-shadow:0 0 0 4px rgba(32,197,255,.13),0 0 28px rgba(0,174,255,.36);
     }
-    #ggDatosAvatarDestino .avatar-contenedor,#ggDatosAvatarDestino .avatar {width:100%;height:100%;border-radius:50%}
+    #ggDatosAvatarDestino .avatar-contenedor {position:relative;width:100%;height:100%;flex:0 0 100%;margin:0}
+    #ggDatosAvatarDestino .avatar {
+        top:0;left:0;width:100%;height:100%;margin:0;border:0;border-radius:50%;
+        overflow:hidden;box-shadow:none;
+    }
+    #ggDatosAvatarDestino .avatar img {
+        display:block;width:100%;height:100%;max-width:none;max-height:none;
+        object-fit:cover;object-position:center;border-radius:50%;
+    }
     #ggDatosAvatarDestino .avatar-camara {background:#087cff;border:2px solid #20c5ff;box-shadow:0 0 14px rgba(0,124,255,.6)}
     #pantallaDatosPersonales .gg-datos-avatar p {margin:0;color:#a9c5df;font-size:14px}
     #pantallaDatosPersonales .gg-datos-formulario {display:flex;flex-direction:column;gap:20px}
@@ -1296,9 +1305,9 @@
     #pantallaDatosPersonales .gg-datos-grupo>label {display:block;margin:0 0 8px;color:#c6d9ed;font-size:14px;font-weight:600}
     #pantallaDatosPersonales .gg-datos-input-wrap {
         display:flex;align-items:center;gap:12px;min-height:70px;padding:10px 14px;
-        border:1px solid rgba(32,197,255,.25);border-radius:22px;
-        background:linear-gradient(145deg,#fff 0%,#f4f8ff 100%);
-        box-shadow:0 5px 18px rgba(0,0,0,.2),inset 0 1px 0 #fff;
+        border:1px solid rgba(32,197,255,.48);border-radius:22px;
+        background:linear-gradient(145deg,#103b65 0%,#081a35 58%,#050b18 100%);
+        box-shadow:0 5px 18px rgba(0,0,0,.28),0 0 16px rgba(0,174,255,.10),inset 0 1px 0 rgba(255,255,255,.06);
     }
     #pantallaDatosPersonales .gg-datos-input-wrap>svg {
         width:25px;height:25px;flex:0 0 25px;fill:none;stroke:#087cff;stroke-width:1.9;
@@ -1306,20 +1315,24 @@
     }
     #pantallaDatosPersonales .gg-datos-input-wrap .datos-campo-valor,
     #pantallaDatosPersonales .gg-datos-input-wrap>input {
-        flex:1;min-width:0;color:#17243a;font-size:15px;font-weight:500;overflow-wrap:anywhere;
+        flex:1;min-width:0;color:#f4f8ff;font-size:15px;font-weight:600;overflow-wrap:anywhere;
     }
     #pantallaDatosPersonales .gg-datos-input-wrap>input {width:100%;border:0;outline:0;background:transparent;padding:8px 0}
-    #pantallaDatosPersonales .gg-datos-input-wrap>input::placeholder {color:#8994a4}
+    #pantallaDatosPersonales .gg-datos-input-wrap>input::placeholder {color:#9bbbd8}
     #pantallaDatosPersonales .datos-editar {
-        flex:0 0 auto;min-height:36px;padding:7px 10px;border:0;border-radius:10px;
-        color:#087cff;background:#e5f0ff;font-size:12px;font-weight:800;
+        flex:0 0 auto;min-height:36px;padding:7px 10px;border:1px solid rgba(75,202,255,.55);border-radius:10px;
+        color:#ffffff;background:linear-gradient(135deg,#087cff,#0757c8);font-size:12px;font-weight:800;
+        box-shadow:0 0 12px rgba(0,174,255,.18);
     }
     #pantallaDatosPersonales .gg-datos-grupo>small {display:block;margin-top:7px;color:#a9bdd3;font-size:12px;line-height:1.45}
     #pantallaDatosPersonales .datos-editor {padding:10px 2px 0}
     #pantallaDatosPersonales .datos-editor input {
-        width:100%;min-height:50px;padding:12px 14px;border:1px solid rgba(32,197,255,.32);border-radius:14px;
-        background:#fff;color:#17243a;
+        width:100%;min-height:50px;padding:12px 14px;border:1px solid rgba(32,197,255,.48);border-radius:14px;
+        background:linear-gradient(145deg,#103b65,#081a35);color:#f4f8ff;
     }
+    #pantallaDatosPersonales .datos-editor input::placeholder {color:#9bbbd8}
+    #pantallaDatosPersonales .datos-editor input:focus {border-color:#20c5ff;box-shadow:0 0 0 3px rgba(32,197,255,.16)}
+
     #pantallaDatosPersonales .datos-editor input:focus {outline:none;border-color:#087cff;box-shadow:0 0 0 3px rgba(8,124,255,.18)}
     #pantallaDatosPersonales .texto-ayuda {color:#b9cce0}
     #pantallaDatosPersonales .datos-estado {color:#d8eaff}
