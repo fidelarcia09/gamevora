@@ -9,10 +9,15 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.Gravity
 import android.view.ViewGroup
+import android.webkit.CookieManager
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import org.json.JSONTokener
 import java.util.concurrent.Executors
 
 class LoginActivity : Activity() {
@@ -25,6 +30,9 @@ class LoginActivity : Activity() {
     private lateinit var passwordInput: EditText
     private lateinit var status: TextView
     private lateinit var loginButton: TextView
+    private lateinit var turnstileWebView: WebView
+    private var captchaPageLoaded = false
+    private var loginInProgress = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +89,58 @@ class LoginActivity : Activity() {
         }
         panel.addView(passwordInput, matchWrap())
 
+        panel.addView(text("VERIFICACIÓN DE SEGURIDAD", 11f, cyan, true).apply {
+            setPadding(0, dp(18), 0, dp(4))
+        })
+        turnstileWebView = WebView(this).apply {
+            setBackgroundColor(Color.TRANSPARENT)
+            isVerticalScrollBarEnabled = false
+            isHorizontalScrollBarEnabled = false
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+            settings.javaScriptCanOpenWindowsAutomatically = false
+            settings.allowFileAccess = false
+            settings.allowContentAccess = false
+            settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_NEVER_ALLOW
+            CookieManager.getInstance().setAcceptCookie(true)
+            CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String) {
+                    captchaPageLoaded = true
+                }
+
+                override fun shouldOverrideUrlLoading(
+                    view: WebView,
+                    request: WebResourceRequest
+                ): Boolean {
+                    // El documento principal solo debe permanecer en el hostname autorizado.
+                    return request.url.host != TURNSTILE_HOSTNAME
+                }
+
+                override fun onReceivedError(
+                    view: WebView,
+                    request: WebResourceRequest,
+                    error: android.webkit.WebResourceError
+                ) {
+                    if (request.isForMainFrame) {
+                        captchaPageLoaded = false
+                        showStatus("No se pudo cargar la verificación. Comprueba tu conexión e inténtalo de nuevo.")
+                    }
+                }
+            }
+            loadDataWithBaseURL(
+                "https://$TURNSTILE_HOSTNAME/",
+                turnstileHtml(),
+                "text/html",
+                "UTF-8",
+                null
+            )
+        }
+        panel.addView(turnstileWebView, LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            dp(105)
+        ))
+
         loginButton = TextView(this).apply {
             text = "Iniciar sesión"
             textSize = 15f
@@ -97,21 +157,26 @@ class LoginActivity : Activity() {
             setOnClickListener { signIn() }
         }
         panel.addView(loginButton, matchWrap().apply {
-            topMargin = dp(16)
+            topMargin = dp(10)
             bottomMargin = dp(8)
         })
 
         status = text(
-            "La contraseña se usa solo para iniciar sesión y no se guarda en el dispositivo.",
+            "Completa la verificación de seguridad y después inicia sesión.",
             12f,
             muted
         )
         panel.addView(status)
         panel.addView(text(
-            "El servidor comprobará que la cuenta siga siendo administradora activa antes de aceptar cada sincronización.",
+            "La contraseña y el token CAPTCHA solo se envían para autenticar esta sesión. El token no se guarda.",
             12f,
             muted
         ).apply { setPadding(0, dp(14), 0, 0) })
+        panel.addView(text(
+            "El servidor comprobará que la cuenta siga siendo administradora activa antes de aceptar cada sincronización.",
+            12f,
+            muted
+        ).apply { setPadding(0, dp(8), 0, 0) })
 
         root.addView(panel, LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -125,6 +190,61 @@ class LoginActivity : Activity() {
         setContentView(scroll)
     }
 
+    private fun turnstileHtml(): String = """
+        <!doctype html>
+        <html lang="es">
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+          <meta charset="utf-8">
+          <style>
+            html, body {
+              margin: 0; padding: 0; width: 100%; height: 100%;
+              background: transparent; overflow: hidden;
+              display: flex; align-items: center; justify-content: center;
+            }
+            #captcha { min-height: 65px; }
+          </style>
+          <script>
+            window.turnstileReady = false;
+            function onCaptchaSuccess(token) {
+              document.getElementById('captcha-token').value = token || '';
+            }
+            function onCaptchaExpired() {
+              document.getElementById('captcha-token').value = '';
+            }
+            function onCaptchaError() {
+              document.getElementById('captcha-token').value = '';
+            }
+            function onTurnstileLoaded() {
+              window.turnstileReady = true;
+            }
+          </script>
+          <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoaded&render=explicit" async defer></script>
+        </head>
+        <body>
+          <input id="captcha-token" type="hidden" value="">
+          <div id="captcha"></div>
+          <script>
+            function renderCaptchaWhenReady() {
+              if (window.turnstile && window.turnstileReady) {
+                window.turnstile.render('#captcha', {
+                  sitekey: '$TURNSTILE_SITE_KEY',
+                  theme: 'dark',
+                  language: 'es',
+                  callback: onCaptchaSuccess,
+                  'expired-callback': onCaptchaExpired,
+                  'error-callback': onCaptchaError
+                });
+              } else {
+                window.setTimeout(renderCaptchaWhenReady, 150);
+              }
+            }
+            renderCaptchaWhenReady();
+          </script>
+        </body>
+        </html>
+    """.trimIndent()
+
     private fun restoreExistingSession() {
         loginButton.isEnabled = false
         showStatus("Comprobando sesión segura…")
@@ -134,32 +254,72 @@ class LoginActivity : Activity() {
                 if (session != null) openReader()
                 else {
                     loginButton.isEnabled = true
-                    showStatus("Inicia sesión con la cuenta administradora.")
+                    showStatus("Completa Turnstile e inicia sesión con la cuenta administradora.")
                 }
             }
         }
     }
 
     private fun signIn() {
+        if (loginInProgress) return
         val password = passwordInput.text?.toString().orEmpty()
         if (password.isBlank()) {
             showStatus("Escribe la contraseña de tu cuenta Supabase.")
             return
         }
+        if (!captchaPageLoaded) {
+            showStatus("La verificación todavía está cargando. Espera un momento.")
+            return
+        }
+
+        loginInProgress = true
         loginButton.isEnabled = false
-        showStatus("Conectando con Supabase…")
-        executor.execute {
-            try {
-                SupabaseAuthClient(this).signIn(SupabaseAuthClient.ADMIN_EMAIL, password)
-                runOnUiThread { openReader() }
-            } catch (error: Exception) {
-                runOnUiThread {
-                    loginButton.isEnabled = true
-                    showStatus(error.message ?: "No se pudo iniciar sesión.")
+        showStatus("Comprobando verificación de seguridad…")
+        turnstileWebView.evaluateJavascript(
+            "document.getElementById('captcha-token')?.value || ''"
+        ) { result ->
+            val captchaToken = try {
+                JSONTokener(result ?: "\"\"").nextValue() as? String
+            } catch (_: Exception) {
+                null
+            }.orEmpty()
+
+            if (captchaToken.isBlank()) {
+                loginInProgress = false
+                loginButton.isEnabled = true
+                showStatus("Completa el desafío de Cloudflare Turnstile antes de continuar.")
+                return@evaluateJavascript
+            }
+
+            showStatus("Conectando con Supabase…")
+            executor.execute {
+                try {
+                    SupabaseAuthClient(this).signIn(
+                        SupabaseAuthClient.ADMIN_EMAIL,
+                        password,
+                        captchaToken
+                    )
+                    runOnUiThread { openReader() }
+                } catch (error: Exception) {
+                    runOnUiThread {
+                        loginInProgress = false
+                        loginButton.isEnabled = true
+                        resetTurnstile()
+                        showStatus(error.message ?: "No se pudo iniciar sesión.")
+                    }
                 }
             }
         }
         passwordInput.setText("")
+    }
+
+    private fun resetTurnstile() {
+        if (!captchaPageLoaded) return
+        turnstileWebView.evaluateJavascript(
+            "if (window.turnstile) { window.turnstile.reset(); }" +
+                "document.getElementById('captcha-token').value = '';",
+            null
+        )
     }
 
     private fun openReader() {
@@ -194,7 +354,17 @@ class LoginActivity : Activity() {
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
 
     override fun onDestroy() {
+        if (::turnstileWebView.isInitialized) {
+            turnstileWebView.stopLoading()
+            turnstileWebView.destroy()
+        }
         executor.shutdownNow()
         super.onDestroy()
+    }
+
+    companion object {
+        // Sitekey pública: no es el secreto de validación de Cloudflare.
+        private const val TURNSTILE_SITE_KEY = "0x4AAAAAAFkQPUoJGVxIGYNB"
+        private const val TURNSTILE_HOSTNAME = "fidelarcia09.github.io"
     }
 }
