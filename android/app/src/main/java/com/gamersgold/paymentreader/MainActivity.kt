@@ -156,6 +156,7 @@ class MainActivity : Activity() {
         addText(privacy, "• No guarda el texto completo de los SMS en el diagnóstico.", 13f, white)
         addText(privacy, "• Los pagos reconocidos quedan pendientes de revisión manual.", 13f, white)
         addText(privacy, "• No envía datos a Internet ni acredita GVR automáticamente.", 13f, amber, true)
+        addButton(privacy, "Cerrar sesión") { logout() }
         content.addView(privacy)
 
         addText(content, "GAMERS GOLD TOP-UP  ·  UNIVERSO GAMING", 11f, muted, true, Gravity.CENTER)
@@ -346,6 +347,16 @@ class MainActivity : Activity() {
             topMargin = dp(12)
             bottomMargin = dp(10)
         })
+    }
+
+    private fun logout() {
+        Thread {
+            SupabaseAuthClient(this).signOut()
+            runOnUiThread {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+        }.start()
     }
 
     private fun count(prefs: android.content.SharedPreferences, key: String): Int =
