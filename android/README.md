@@ -45,7 +45,9 @@ La clave pública se obtiene desde la configuración API del proyecto Supabase. 
 
 ## Backend de sincronización
 
-- Código de Edge Function: `supabase/functions/gvr-payment-reader-sync/index.ts`.
+- Código de Edge Function de sincronización: `supabase/functions/gvr-payment-reader-sync/index.ts`.
+- Código de Edge Function de consulta administrativa: `supabase/functions/gvr-payment-reader-events/index.ts`.
+- El panel `frontend/confirmaciones-gvr.html` muestra los últimos eventos recibidos y sus coincidencias sugeridas, siempre pendientes de revisión manual.
 - SQL propuesto: `docs/gvr-payment-notification-events.sql`.
 - La función comprueba JWT, correo y rol activo de administrador antes de aceptar el lote. También exige `capturePackage` igual al paquete configurado de Google Messages, únicamente como control de consistencia del cliente.
 - PAGOxMOVIL se deduplica mediante su referencia de transacción única; ETECSA solo tiene deduplicación local por dispositivo.
