@@ -51,6 +51,16 @@ internal class SupabaseAuthClient(context: Context) {
         }
     }
 
+    fun sessionForSync(): SupabaseSession? {
+        val session = store.load() ?: return null
+        if (session.expiresAtMillis > System.currentTimeMillis() + 60_000L) return session
+        return try {
+            refresh(session.refreshToken)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
     fun signOut() {
         val session = store.load()
         try {
