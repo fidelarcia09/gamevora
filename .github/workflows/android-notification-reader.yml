@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/gvr-android-notification-reader
+      - feature/gvr-payment-sync
     paths:
       - "android/**"
       - ".github/workflows/android-notification-reader.yml"
@@ -45,7 +46,7 @@ jobs:
       - name: Install Android SDK packages
         run: sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
 
-      - name: Run parser unit tests and build debug APK
+      - name: Run unit tests and build debug APK
         run: gradle -p android testDebugUnitTest assembleDebug
 
       - name: Upload debug APK
