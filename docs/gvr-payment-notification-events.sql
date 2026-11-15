@@ -1,6 +1,6 @@
 -- Copia de referencia del esquema aplicado en Supabase.
 -- Migración canónica: supabase/migrations/20261115233616_create_gvr_payment_notification_events.sql
--- El índice adicional synced_by está en 20261115233700_index_gvr_payment_notification_synced_by.sql.
+-- El índice adicional synced_by está en 20261115233659_index_gvr_payment_notification_synced_by.sql.
 
 begin;
 
