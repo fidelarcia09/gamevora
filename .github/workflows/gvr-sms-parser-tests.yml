@@ -1,0 +1,34 @@
+name: GVR SMS parser tests
+
+on:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "supabase/functions/_shared/gvr-sms-parser.ts"
+      - "supabase/functions/_shared/gvr-sms-parser.test.ts"
+      - ".github/workflows/gvr-sms-parser-tests.yml"
+  pull_request:
+    paths:
+      - "supabase/functions/_shared/gvr-sms-parser.ts"
+      - "supabase/functions/_shared/gvr-sms-parser.test.ts"
+      - ".github/workflows/gvr-sms-parser-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  parser-tests:
+    name: Deno parser tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Run GVR SMS parser tests
+        run: deno test supabase/functions/_shared/gvr-sms-parser.test.ts

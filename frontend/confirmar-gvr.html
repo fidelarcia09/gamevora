@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<meta charset="UTF-8">
 <script>document.documentElement.classList.add("gg-maintenance-pending")</script><style>html.gg-maintenance-pending body{visibility:hidden!important}
 /* Rediseño visual inspirado en la referencia, conservando la identidad Gamers Gold */
 main{max-width:650px;margin:14px auto 22px;padding:0 16px}
@@ -111,7 +112,7 @@ footer{padding:0 16px 28px;color:#7186a3}
 .resumen-compacto .resumen-precio{color:#f4f8ff;font-size:clamp(20px,5vw,27px);font-weight:900;text-align:right;overflow-wrap:anywhere}
 @media(max-width:440px){.resumen-pedido.resumen-compacto{padding:18px 15px;border-radius:19px}.resumen-compacto .resumen-total{align-items:flex-end}.resumen-compacto .resumen-precio{font-size:21px}}
 </style><script src="./maintenance.js" defer></script>
-<meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#020817">
 <title>Confirmar compra | Gamers Gold Top-Up</title>
@@ -639,7 +640,7 @@ async function recuperarSolicitudPago(usuario) {
 }
 
 function claveSolicitudSesion() {
-    return "gvr_solicitud_pago_" + metodoTexto.replace(/\\s+/g,"_") + "_" + cantidad;
+    return "gvr_solicitud_pago_" + metodoTexto.replace(/\s+/g,"_") + "_" + cantidad;
 }
 
 async function recuperarSolicitudDeRecarga(usuario) {
@@ -801,6 +802,12 @@ async function vincularComprobante(idSolicitud,usuario,ruta,txid=null) {
 
     if (error) {
         console.error("Error vinculando comprobante:",error);
+        if (error.code === "23505") {
+            throw new Error("Este TxID ya fue utilizado en otra solicitud. Revisa que hayas copiado el TxID completo y solicita ayuda antes de volver a pagar.");
+        }
+        if (error.code === "23514") {
+            throw new Error(error.message || "Los datos del pago no son válidos. Revisa el TxID o el número de teléfono.");
+        }
         throw new Error(
             "La imagen se subió, pero no se pudo vincular. " +
             "No hagas otro pago. Solicitud: " + idSolicitud
@@ -967,14 +974,14 @@ botonContinuar.addEventListener("click",async () => {
         mostrarMensaje("Espera a que se prepare tu solicitud de pago.","info");
         return;
     }
-    if (metodoTexto === "USDT" && !txidUsdt.value.trim()) {
-        mostrarMensaje("Introduce el TxID de la transferencia USDT.","error");
+    if (metodoTexto === "USDT" && !/^0x[0-9a-fA-F]{64}$/.test(txidUsdt.value.trim())) {
+        mostrarMensaje("El TxID debe empezar por 0x y tener 66 caracteres. Cópialo completo desde tu billetera.","error");
         txidUsdt.focus();
         return;
     }
     if (metodoTexto === "SALDO MOVIL") {
         const numeroEmisor = numeroOrigenSaldo.value.trim();
-        const digitosEmisor = numeroEmisor.replace(/\\D/g,"");
+        const digitosEmisor = numeroEmisor.replace(/\D/g,"");
         if (digitosEmisor.length < 8 || digitosEmisor.length > 15) {
             mostrarMensaje("Introduce el número de teléfono desde el que realizaste la transferencia (entre 8 y 15 dígitos).","error");
             numeroOrigenSaldo.focus();
@@ -1022,7 +1029,23 @@ botonContinuar.addEventListener("click",async () => {
 
         botonContinuar.textContent = "Confirmando envío...";
 
-        await vincularComprobante(solicitudId,usuario,rutaComprobanteSubido,metodoTexto === "USDT" ? txidUsdt.value.trim() : null);
+        await vincularComprobante(solicitudId,usuario,rutaComprobanteSubido,metodoTexto === "USDT" ? txidUsdt.value.trim().toLowerCase() : null);
+
+        /*
+         * Verificación USDT en modo sombra:
+         * consulta la blockchain, pero nunca aprueba ni acredita GVR.
+         * Si el RPC no responde, la solicitud manual sigue su curso.
+         */
+        if (metodoTexto === "USDT") {
+            // Modo sombra: no bloquea la notificación ni la confirmación manual.
+            supabaseClient.functions
+                .invoke("gvr-usdt-verificar",{ body:{ request_id: solicitudId } })
+                .then(({data,error}) => {
+                    if (error) console.warn("Verificación USDT en modo sombra no disponible:",error);
+                    else console.info("Resultado verificación USDT (modo sombra):",data);
+                })
+                .catch(e => console.warn("No se pudo ejecutar la verificación USDT en modo sombra:",e));
+        }
 
         /*
          * La solicitud y el comprobante ya están guardados.
