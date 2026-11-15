@@ -8,6 +8,7 @@ on:
       - "supabase/functions/_shared/gvr-sms-parser.ts"
       - "supabase/functions/_shared/gvr-sms-parser.test.ts"
       - "supabase/functions/gvr-payment-reader-sync/index.ts"
+      - "supabase/functions/gvr-payment-reader-events/index.ts"
       - "docs/gvr-payment-notification-events.sql"
       - ".github/workflows/gvr-sms-parser-tests.yml"
   pull_request:
@@ -36,6 +37,9 @@ jobs:
 
       - name: Type-check GVR payment sync Edge Function
         run: deno check supabase/functions/gvr-payment-reader-sync/index.ts
+
+      - name: Type-check GVR payment events Edge Function
+        run: deno check supabase/functions/gvr-payment-reader-events/index.ts
 
       - name: Run GVR SMS parser tests
         run: deno test supabase/functions/_shared/gvr-sms-parser.test.ts
