@@ -25,6 +25,15 @@ Mantén `GVR_SYNC_ENABLED=false` hasta que el SQL haya sido revisado y aplicado,
 
 La clave pública se obtiene desde la configuración API del proyecto Supabase. No pegues aquí una clave `service_role`, `secret` ni contraseña. Si las propiedades no están configuradas, la pantalla de acceso permanecerá deshabilitada.
 
+## Preparación de CUP en la web
+
+- La cuenta visible al cliente se configura en `frontend/gvr-payment-config.js`, propiedad `cupReceiverAccount`.
+- Ese archivo es público y nunca debe contener secretos.
+- El valor privado de comparación se configura por separado en Supabase como `GVR_CUP_RECEIVER_ACCOUNT`.
+- Ambos valores deben coincidir.
+- `cupAutomationReady` permanece en `false` hasta que la tabla, la Edge Function, los secretos y las pruebas estén completados.
+- No se habilita CUP solo por introducir la tarjeta.
+
 ## Lector y cola sin conexión
 
 - Utiliza el permiso concedido por el usuario de Notification Listener; no solicita `READ_SMS` ni `RECEIVE_SMS`.
