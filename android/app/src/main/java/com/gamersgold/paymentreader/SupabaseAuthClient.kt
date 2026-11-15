@@ -12,15 +12,21 @@ internal class SupabaseAuthClient(context: Context) {
 
     fun isConfigured(): Boolean = baseUrl.startsWith("https://") && anonKey.isNotBlank()
 
-    fun signIn(email: String, password: String): SupabaseSession {
+    fun signIn(email: String, password: String, captchaToken: String): SupabaseSession {
         requireConfigured()
         require(email.equals(ADMIN_EMAIL, ignoreCase = true)) {
             "Esta aplicación solo admite la cuenta administradora configurada."
         }
+        require(captchaToken.isNotBlank()) {
+            "Completa la verificación de Cloudflare Turnstile."
+        }
         val response = request(
             "POST",
             "/auth/v1/token?grant_type=password",
-            JSONObject().put("email", email.trim()).put("password", password)
+            JSONObject()
+                .put("email", email.trim())
+                .put("password", password)
+                .put("captcha_token", captchaToken)
         )
         val user = response.optJSONObject("user") ?: JSONObject()
         val returnedEmail = user.optString("email")
@@ -127,7 +133,9 @@ internal class SupabaseAuthClient(context: Context) {
             if (status !in 200..299) {
                 val message = try {
                     val error = JSONObject(responseText)
-                    error.optString("msg").ifBlank { error.optString("message") }
+                    error.optString("msg")
+                        .ifBlank { error.optString("message") }
+                        .ifBlank { error.optString("error_description") }
                 } catch (_: Exception) {
                     ""
                 }
