@@ -42,11 +42,15 @@ class MainActivity : Activity() {
             window.isStatusBarContrastEnforced = false
         }
         render()
+        GvrPaymentSyncScheduler.enqueue(this)
     }
 
     override fun onResume() {
         super.onResume()
-        if (::content.isInitialized) render()
+        if (::content.isInitialized) {
+            GvrPaymentSyncScheduler.enqueue(this)
+            render()
+        }
     }
 
     private fun render() {
@@ -123,6 +127,7 @@ class MainActivity : Activity() {
         }
         content.addView(payments)
 
+        addSyncSection()
         addCompletedPaymentsSection()
 
         val activity = card()
@@ -161,6 +166,32 @@ class MainActivity : Activity() {
 
         addText(content, "GAMERS GOLD TOP-UP  ·  UNIVERSO GAMING", 11f, muted, true, Gravity.CENTER)
         setContentView(scroll)
+    }
+
+    private fun addSyncSection() {
+        val panel = card()
+        addText(panel, "SINCRONIZACIÓN SEGURA", 12f, cyan, true)
+        val store = PaymentEventStore(this)
+        val pending: Int
+        val synced: Int
+        try {
+            pending = store.pendingSyncCount()
+            synced = store.syncedCount()
+        } finally {
+            store.close()
+        }
+        addMetric(panel, "Eventos pendientes de enviar", pending)
+        addMetric(panel, "Eventos recibidos por el servidor", synced)
+        addButton(panel, "Sincronizar ahora") {
+            GvrPaymentSyncScheduler.enqueue(this)
+        }
+        addText(
+            panel,
+            "La sincronización se ejecuta cuando hay Internet. Los eventos siguen pendientes de revisión manual; recibirlos en el servidor no confirma el pago.",
+            11f,
+            amber
+        )
+        content.addView(panel)
     }
 
     private fun addCompletedPaymentsSection() {
