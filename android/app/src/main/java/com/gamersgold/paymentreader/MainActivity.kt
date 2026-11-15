@@ -7,6 +7,9 @@ import android.provider.Settings
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : Activity() {
     private lateinit var root: LinearLayout
@@ -40,9 +43,16 @@ class MainActivity : Activity() {
             })
         }
 
+        fun count(key: String): Int = prefs.getInt(key, 0)
+        fun time(key: String): String {
+            val millis = prefs.getLong(key, 0L)
+            return if (millis <= 0L) "ninguna" else
+                SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(Date(millis))
+        }
+
         addText("GAMERS GOLD", 24f)
         addText("Lector privado de confirmaciones", 17f, 0xFF55DFFF.toInt())
-        addText("Android 15 · diagnóstico 0.1.0", 13f, 0xFFB7C7D9.toInt())
+        addText("Android 15 · diagnóstico 0.2.0", 13f, 0xFFB7C7D9.toInt())
 
         val granted = NotificationCaptureService.isAccessGranted(this)
         addText(
@@ -60,7 +70,7 @@ class MainActivity : Activity() {
 
         addText("Aplicaciones que han mostrado notificaciones", 16f)
         addText(
-            "Se guardan únicamente los nombres de paquete detectados. El texto de otras notificaciones no se guarda.",
+            "Solo se guardan nombres de paquetes y contadores. El texto de SMS no se guarda en el diagnóstico.",
             12f,
             0xFFB7C7D9.toInt()
         )
@@ -86,6 +96,20 @@ class MainActivity : Activity() {
             }
         }
 
+        addText("Diagnóstico de notificaciones", 18f, 0xFF55DFFF.toInt())
+        addText("Notificaciones recibidas por Android: ${count(NotificationCaptureService.KEY_TOTAL_NOTIFICATIONS)}")
+        addText("Recibidas desde la app seleccionada: ${count(NotificationCaptureService.KEY_SELECTED_NOTIFICATIONS)}")
+        addText("Sin título o contenido visible: ${count(NotificationCaptureService.KEY_NO_CONTENT_NOTIFICATIONS)}")
+        addText("Contenido recibido, formato no reconocido: ${count(NotificationCaptureService.KEY_UNRECOGNIZED_NOTIFICATIONS)}")
+        addText("Pagos reconocidos por el lector: ${count(NotificationCaptureService.KEY_RECOGNIZED_PAYMENTS)}")
+        addText("Último paquete recibido: ${prefs.getString(NotificationCaptureService.KEY_LAST_NOTIFICATION_PACKAGE, "ninguno")}")
+        addText("Hora de última notificación: ${time(NotificationCaptureService.KEY_LAST_NOTIFICATION_AT)}")
+        addText(
+            "Último diagnóstico: ${prefs.getString(NotificationCaptureService.KEY_LAST_DIAGNOSTIC, "Aún no se ha recibido una notificación de la app seleccionada.")}",
+            14f,
+            0xFFFFD166.toInt()
+        )
+
         addText("Eventos locales reconocidos", 16f)
         val store = PaymentEventStore(this)
         try {
@@ -101,7 +125,7 @@ class MainActivity : Activity() {
             0xFFFFD166.toInt()
         )
         addText(
-            "Selecciona como fuente la aplicación Mensajes cuando aparezca en la lista.",
+            "Selecciona Google Messages (com.google.android.apps.messaging) como fuente y vuelve aquí después de recibir una notificación.",
             13f,
             0xFFB7C7D9.toInt()
         )
