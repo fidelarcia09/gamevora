@@ -35,6 +35,11 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (SecureSessionStore(this).load() == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
         window.statusBarColor = navy
         window.navigationBarColor = navy
         if (android.os.Build.VERSION.SDK_INT >= 29) {
@@ -47,6 +52,11 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        if (SecureSessionStore(this).load() == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
         if (::content.isInitialized) {
             GvrPaymentSyncScheduler.enqueue(this)
             render()
@@ -160,7 +170,7 @@ class MainActivity : Activity() {
         addText(privacy, "• No lee notificaciones de otras aplicaciones.", 13f, white)
         addText(privacy, "• No guarda el texto completo de los SMS en el diagnóstico.", 13f, white)
         addText(privacy, "• Los pagos reconocidos quedan pendientes de revisión manual.", 13f, white)
-        addText(privacy, "• No envía datos a Internet ni acredita GVR automáticamente.", 13f, amber, true)
+        addText(privacy, "• Solo sincroniza campos estructurados; nunca acredita GVR automáticamente.", 13f, amber, true)
         addButton(privacy, "Cerrar sesión") { logout() }
         content.addView(privacy)
 
@@ -259,7 +269,7 @@ class MainActivity : Activity() {
         )
         addText(
             panel,
-            "La sincronización con el historial del servidor aún está pendiente.",
+            "Este resumen local no sustituye el historial administrativo del servidor.",
             11f,
             muted
         )
