@@ -13,6 +13,7 @@ const MAX_BATCH_SIZE = 50;
 
 type IncomingEvent = {
   localEventKey: string;
+  capturePackage: string;
   method: "SALDO_MOVIL" | "CUP";
   amountMinorUnits: number;
   senderPhone: string;
@@ -37,6 +38,7 @@ function validateEvent(value: unknown): IncomingEvent | null {
   if (typeof event.localEventKey !== "string" ||
       event.localEventKey.trim().length < 1 ||
       event.localEventKey.length > 256) return null;
+  if (event.capturePackage !== SOURCE_PACKAGE) return null;
   if (event.method !== "SALDO_MOVIL" && event.method !== "CUP") return null;
   if (typeof event.amountMinorUnits !== "number" ||
       !Number.isSafeInteger(event.amountMinorUnits) ||
@@ -53,6 +55,7 @@ function validateEvent(value: unknown): IncomingEvent | null {
   if (event.method === "SALDO_MOVIL") {
     return {
       localEventKey: event.localEventKey,
+      capturePackage: SOURCE_PACKAGE,
       method: "SALDO_MOVIL",
       amountMinorUnits: Number(event.amountMinorUnits),
       senderPhone: event.senderPhone,
@@ -73,6 +76,7 @@ function validateEvent(value: unknown): IncomingEvent | null {
 
   return {
     localEventKey: event.localEventKey,
+    capturePackage: SOURCE_PACKAGE,
     method: "CUP",
     amountMinorUnits: Number(event.amountMinorUnits),
     senderPhone: event.senderPhone,
@@ -205,7 +209,7 @@ Deno.serve(async (req: Request) => {
       local_event_key: event.localEventKey,
       method: event.method,
       source_label: event.method === "SALDO_MOVIL" ? "ETECSA" : "PAGOxMOVIL",
-      source_package: SOURCE_PACKAGE,
+      capture_package: event.capturePackage,
       amount_minor_units: event.amountMinorUnits,
       currency: "CUP",
       sender_phone: event.senderPhone,
