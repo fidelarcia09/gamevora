@@ -51,7 +51,7 @@ internal object PaymentNotificationParser {
             val reference = match.groupValues[4].uppercase(Locale.ROOT)
             return ParsedPaymentEvent(
                 "CUP", amount, match.groupValues[1], match.groupValues[2],
-                reference, match.groupValues[5].trim(), receivedAtMillis,
+                reference, match.groupValues[5].trim().trimEnd('.', ',', ';'), receivedAtMillis,
                 "PM-$reference"
             )
         }
