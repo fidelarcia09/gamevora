@@ -26,7 +26,9 @@ Proyecto Supabase: `gsuhzcavghsiolmipnzi`
 - El dispositivo previsto es Samsung A05. Los SMS se reciben aunque el teléfono no tenga datos móviles.
 - Remitente identificado: `ETECSA`.
 - **Regla de conciliación confirmada por el operador del proyecto:** identificar el pago por el **número telefónico desde el que se envía la transferencia de saldo**. Ese número debe coincidir exactamente, tras normalización internacional/nacional segura, con el número emisor asociado a la solicitud. El importe también debe coincidir con la solicitud. No usar el número de destino como identidad del pagador.
-- No se dispone de un ejemplo literal del SMS, ni del formato exacto de importe, número emisor/destino, identificador o comisión. No se debe inventar un parser.
+- **SMS real recibido y formato confirmado por el operador:** `Usted ha recibido 268.0 CUP del numero 50591030.Saldo principal 3087.28 CUP, linea activa hasta 2027-09-27, vence 2028-03-25`.
+- Campos identificados en este formato: importe transferido `268.0 CUP`; teléfono de origen `50591030`. `Saldo principal` es el saldo restante de la línea y NO debe confundirse con el importe recibido. Las fechas de vigencia tampoco son fechas de la transferencia.
+- El ejemplo no contiene un identificador único del movimiento. La app debe guardar el ID local del SMS y su fecha/hora de recepción, generar una huella determinista para deduplicación y marcar posibles colisiones como ambiguas; esa huella no demuestra por sí sola unicidad bancaria.
 - La solución prevista requiere cola local sin conexión, deduplicación y sincronización HTTPS al recuperar internet. El APK nunca debe contener una clave `service_role`.
 
 ### CUP / Transfermóvil
@@ -35,7 +37,10 @@ Proyecto Supabase: `gsuhzcavghsiolmipnzi`
 - La tasa vigente está validada por el trigger: **1.150 CUP por cada GVR**.
 - Remitente SMS identificado: `PAGO×MOVIL`.
 - **Regla de conciliación confirmada por el operador del proyecto:** identificar cada pago CUP mediante el **número de transacción único que aparece en el SMS de confirmación de PAGO×MOVIL**. Debe guardarse y tratarse como referencia única, además de comprobar el importe y los datos de la cuenta receptora que aparezcan en el mensaje. No reutilizar el TXID de USDT para este identificador CUP.
-- No se ha confirmado la tarjeta/cuenta receptora que debe recibir el CUP ni se dispone de un ejemplo literal del SMS de confirmación. No activar CUP ni inventar esos datos.
+- **Cuenta receptora CUP confirmada por el operador:** el número de cuenta que aparece en el SMS real suministrado es la cuenta receptora de Gamers Gold. El valor completo se mantiene fuera de esta documentación de auditoría para no publicar un dato financiero; deberá configurarse como secreto/configuración protegida del backend y compararse exactamente.
+- **SMS real recibido y formato confirmado por el operador:** `El titular del telefono 5359350941 le ha realizado una transferencia a la cuenta 9224069992533592 de 3500.00 CUP. Nro. Transaccion KW6023ZJ0Z999. Fecha: 9/11/2026.`
+- Campos identificados: teléfono de origen `5359350941`; cuenta receptora; importe `3500.00 CUP`; referencia `KW6023ZJ0Z999`; fecha textual `9/11/2026`.
+- La referencia CUP debe almacenarse separadamente de `payment_txid`, con unicidad. La fecha se conserva inicialmente como texto original porque `9/11/2026` es ambigua sin confirmar si el formato es D/M/YYYY o M/D/YYYY.
 - No se ha confirmado una API oficial de Transfermóvil para conciliación automática.
 
 ## 2. Esquema y seguridad consultados en Supabase
@@ -96,10 +101,7 @@ No realizado:
 ## 4. Bloqueos concretos para completar saldo móvil y CUP
 
 Para construir el parser sin adivinar, hacen falta ejemplos reales anonimizados:
-1. SMS completo recibido de `ETECSA` después de una transferencia de saldo.
-2. SMS completo recibido de `PAGO×MOVIL` después de un pago CUP.
-3. Ocultar números personales, saldos ajenos y cualquier dato que no sea necesario, pero conservar literalmente etiquetas, orden, separadores y formato de importe.
-4. Confirmar los datos oficiales de la tarjeta/cuenta receptora CUP que debe mostrarse al cliente.
+Los ejemplos reales de ETECSA y PAGO×MOVIL ya fueron recibidos. La cuenta receptora CUP también fue confirmada por el operador. Queda pendiente verificar la política de privacidad para almacenar el identificador receptor y configurar su valor protegido fuera del repositorio.
 
 No se debe aceptar como prueba suficiente una captura aportada por el cliente ni un SMS reenviado manualmente. El diseño debe comprobar remitente del sistema, importe, identificador único de operación, destino cuando esté disponible, ventana temporal, duplicados y conciliación administrativa. La app debe capturar solo los remitentes autorizados y pedir permisos Android explícitos.
 
@@ -183,8 +185,10 @@ Veredicto inicial esperado: USDT solo APTO PARA PRUEBAS CONTROLADAS EN MODO SOMB
 - [x] Definir el identificador de conciliación: número telefónico desde el que se envía la transferencia de saldo, cotejado con el número emisor declarado en la solicitud.
 
 **Pendiente**
-- [ ] Recibir un SMS real de confirmación de ETECSA, anonimizado pero con formato literal intacto.
-- [ ] Confirmar cómo aparece el número de origen en el SMS y cómo se expresa el importe; no asumir que el texto incluye ambos.
+- [x] Recibir un SMS real de confirmación ETECSA y documentar su estructura.
+- [x] Identificar el teléfono de origen después de `del numero` y el importe después de `Usted ha recibido`.
+- [ ] Implementar y probar parser estricto contra el formato recibido; no usar `Saldo principal` como importe transferido.
+- [ ] Definir deduplicación y manejo de colisiones, ya que este SMS no incluye una referencia única de operación.
 - [ ] Diseñar y construir la app Android con permiso SMS explícito y filtrado del remitente autorizado.
 - [ ] Implementar almacenamiento local persistente y cola offline.
 - [ ] Implementar emparejamiento/revocación del dispositivo y autenticación segura del envío al backend.
@@ -202,9 +206,11 @@ Veredicto inicial esperado: USDT solo APTO PARA PRUEBAS CONTROLADAS EN MODO SOMB
 - [x] Definir el identificador de conciliación: número de transacción único que aparece en el SMS de PAGO×MOVIL.
 
 **Pendiente**
-- [ ] Confirmar los datos oficiales de la tarjeta/cuenta receptora que deben mostrarse al cliente.
-- [ ] Recibir un SMS real de confirmación PAGO×MOVIL, anonimizado y con formato literal intacto.
-- [ ] Confirmar cómo aparece el número de transacción, el importe y la cuenta receptora en el SMS.
+- [x] Confirmar con el operador la cuenta receptora CUP; mantener su valor fuera del repositorio y configurarlo de forma protegida.
+- [x] Recibir un SMS real de confirmación PAGO×MOVIL y documentar su estructura.
+- [x] Identificar teléfono de origen, cuenta receptora, importe, referencia de transacción y fecha textual.
+- [ ] Implementar y probar parser estricto contra el formato recibido.
+- [ ] Confirmar si la fecha `9/11/2026` usa D/M/YYYY o M/D/YYYY; hasta entonces conservar el texto original.
 - [ ] Diseñar un campo/registro separado para la referencia CUP; no reutilizar `payment_txid`, reservado al TXID USDT, ni asumir una columna inexistente.
 - [ ] Aplicar unicidad de la referencia CUP una vez confirmado su formato y alcance.
 - [ ] Verificar si existe una vía oficial y autorizada de consulta/conciliación; no asumir que existe una API.
@@ -274,3 +280,68 @@ El operador confirmó explícitamente las claves de conciliación para la automa
 - Antes de implementar el almacenamiento CUP hay que inspeccionar el esquema completo y los consumidores existentes, luego proponer una columna/referencia propia y un índice único mediante migración revisable. No asumir que esa columna ya existe.
 - No se ha implementado la app Android, la cola offline, el endpoint de SMS, la conciliación de CUP ni una acreditación automática.
 - Claude debe auditar estas reglas además de los controles técnicos y emitir un veredicto separado por método.
+
+## 10. Ejemplos SMS reales recibidos y especificación inicial de parser (15-11-2026)
+
+Los siguientes vectores están anonimizados para no publicar teléfonos personales ni el número completo de la cuenta receptora. Se conserva el orden y la estructura del texto original.
+
+### ETECSA — vector positivo
+
+```text
+Usted ha recibido 268.0 CUP del numero 50000000.Saldo principal 3087.28 CUP, linea activa hasta 2027-09-27, vence 2028-03-25
+```
+
+Extracción esperada:
+- `amount`: decimal `268.00` CUP (la fuente puede mostrar una cifra decimal).
+- `origin_phone`: `50000000`.
+- `remaining_balance`: `3087.28` CUP, solo informativo; nunca usar como importe pagado.
+- `line_active_until`: `2027-09-27`, informativo.
+- `line_expiry_date`: `2028-03-25`, informativo.
+- El teléfono de origen se coteja con `gvr_purchase_requests.payment_sender_phone` después de normalización conservadora. El importe debe coincidir exactamente con `payment_amount` y moneda CUP.
+
+Validaciones negativas:
+- Rechazar si no aparece la frase de recepción, falta el número de origen o el importe.
+- Rechazar importes negativos, cero, formatos numéricos ambiguos o más de un candidato.
+- No interpretar `Saldo principal` como pago.
+- No confiar en el cuerpo del mensaje si el remitente real del SMS no coincide con el remitente permitido ETECSA.
+- Si llegan mensajes duplicados o dos operaciones indistinguibles (mismo origen/importe y sin referencia del proveedor), marcar para revisión manual; no acreditar.
+
+### PAGO×MOVIL — vector positivo
+
+```text
+El titular del telefono 5350000000 le ha realizado una transferencia a la cuenta 9224000000000000 de 3500.00 CUP. Nro. Transaccion KW0000ZJ0Z000. Fecha: 9/11/2026.
+```
+
+Extracción esperada:
+- `origin_phone`: `5350000000`.
+- `recipient_account`: valor anonimizado del vector; comparar con la cuenta receptora protegida configurada para Gamers Gold.
+- `amount`: decimal `3500.00` CUP.
+- `transaction_reference`: `KW0000ZJ0Z000`, preservar mayúsculas y letras/números; aplicar unicidad en almacenamiento CUP independiente.
+- `date_raw`: `9/11/2026`; no convertir a fecha normalizada hasta confirmar convención día/mes.
+- Aceptar solo cuando el remitente real del SMS sea el identificador permitido PAGO×MOVIL, el destino coincida con la cuenta configurada, la referencia no exista y el importe coincida con la solicitud pendiente.
+
+Validaciones negativas:
+- Rechazar remitente real distinto de PAGO×MOVIL.
+- Rechazar cuenta destinataria distinta de la configurada.
+- Rechazar referencia ausente, mal formada, duplicada o ya conciliada.
+- Rechazar importe ausente, cero, negativo o distinto de la solicitud.
+- Rechazar textos truncados, múltiples coincidencias o estructura desconocida; mandar a revisión manual, no intentar adivinar.
+- No reutilizar `payment_txid`; ese campo permanece reservado al hash TXID de USDT.
+
+### Reglas comunes de captura y seguridad
+
+- La app Android debe leer el remitente real y el timestamp del SMS desde el sistema, no deducirlos del texto.
+- Guardar el evento localmente antes de sincronizar; mantener cola durable offline, reintentos idempotentes y acuse del servidor antes de marcarlo sincronizado.
+- No confiar en SMS reenviados, capturas, texto pegado ni mensajes cuyo remitente de sistema no esté permitido.
+- El SMS ETECSA de ejemplo no incluye referencia de transacción: una huella local sirve para deduplicar reenvíos/relecturas, pero no prueba unicidad del movimiento.
+- Para CUP, la referencia de transacción es el identificador de deduplicación global y debe tener restricción única en el backend.
+- Los eventos se mantienen en modo sombra y conciliación administrativa. No cambiar estado de solicitudes, `wallets` ni `transactions`, y no acreditar GVR automáticamente.
+- Los importes se procesan como decimal exacto (no `float` binario); normalizar el separador decimal solo cuando el formato sea inequívoco.
+- El número completo de la cuenta receptora CUP no se incluye en GitHub. Configurarlo en secreto/variable protegida del backend; nunca en el APK ni en JavaScript público.
+
+### Estado actualizado tras recibir los SMS y confirmar la cuenta
+
+- SALDO_MOVIL: formato real recibido; listo para diseñar parser estricto y pruebas unitarias, pero aún no implementado ni probado en Android.
+- CUP: formato real recibido y cuenta receptora confirmada; listo para diseñar parser y esquema de referencia independiente, pero aún no implementado ni habilitado en la web.
+- USDT: sin cambios; continúa en modo sombra y requiere pruebas autenticadas de runtime.
+- Los tres métodos continúan sin acreditación automática.
