@@ -13,8 +13,19 @@ internal data class CompletedPaymentMonthStats(
     val cupCount: Int
 )
 
+internal data class PaymentEventForSync(
+    val localDedupeKey: String,
+    val method: String,
+    val amountMinorUnits: Long,
+    val senderPhone: String,
+    val recipientAccount: String?,
+    val transactionReference: String?,
+    val rawDate: String?,
+    val receivedAtMillis: Long
+)
+
 internal class PaymentEventStore(context: Context) :
-    SQLiteOpenHelper(context, "gvr_payment_events.db", null, 1) {
+    SQLiteOpenHelper(context, "gvr_payment_events.db", null, 2) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -29,14 +40,21 @@ internal class PaymentEventStore(context: Context) :
                 transaction_reference TEXT,
                 raw_date TEXT,
                 received_at_millis INTEGER NOT NULL,
-                review_status TEXT NOT NULL DEFAULT 'PENDING_MANUAL_REVIEW'
+                review_status TEXT NOT NULL DEFAULT 'PENDING_MANUAL_REVIEW',
+                sync_status TEXT NOT NULL DEFAULT 'LOCAL_PENDING',
+                server_event_id TEXT
             )
             """.trimIndent()
         )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // No destructive migration is performed automatically.
+        if (oldVersion < 2) {
+            db.execSQL(
+                "ALTER TABLE payment_events ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'LOCAL_PENDING'"
+            )
+            db.execSQL("ALTER TABLE payment_events ADD COLUMN server_event_id TEXT")
+        }
     }
 
     fun insertIfNew(event: ParsedPaymentEvent): Boolean {
@@ -50,16 +68,63 @@ internal class PaymentEventStore(context: Context) :
             put("raw_date", event.rawDate)
             put("received_at_millis", event.receivedAtMillis)
             put("review_status", "PENDING_MANUAL_REVIEW")
+            put("sync_status", "LOCAL_PENDING")
         }
         return writableDatabase.insertWithOnConflict(
             "payment_events", null, values, SQLiteDatabase.CONFLICT_IGNORE
         ) != -1L
     }
 
-    fun count(): Int {
-        readableDatabase.rawQuery("SELECT COUNT(*) FROM payment_events", null).use { cursor ->
-            return if (cursor.moveToFirst()) cursor.getInt(0) else 0
+    fun count(): Int = scalarCount("SELECT COUNT(*) FROM payment_events")
+
+    fun pendingSyncCount(): Int =
+        scalarCount("SELECT COUNT(*) FROM payment_events WHERE sync_status = 'LOCAL_PENDING'")
+
+    fun syncedCount(): Int =
+        scalarCount("SELECT COUNT(*) FROM payment_events WHERE sync_status = 'SYNCED'")
+
+    fun pendingSyncEvents(limit: Int): List<PaymentEventForSync> {
+        val safeLimit = limit.coerceIn(1, 100)
+        val events = mutableListOf<PaymentEventForSync>()
+        readableDatabase.rawQuery(
+            """
+            SELECT dedupe_key, method, amount_minor_units, sender_phone,
+                   recipient_account, transaction_reference, raw_date, received_at_millis
+            FROM payment_events
+            WHERE sync_status = 'LOCAL_PENDING'
+            ORDER BY id ASC
+            LIMIT $safeLimit
+            """.trimIndent(),
+            null
+        ).use { cursor ->
+            while (cursor.moveToNext()) {
+                events += PaymentEventForSync(
+                    localDedupeKey = cursor.getString(0),
+                    method = cursor.getString(1),
+                    amountMinorUnits = cursor.getLong(2),
+                    senderPhone = cursor.getString(3),
+                    recipientAccount = cursor.getString(4),
+                    transactionReference = cursor.getString(5),
+                    rawDate = cursor.getString(6),
+                    receivedAtMillis = cursor.getLong(7)
+                )
+            }
         }
+        return events
+    }
+
+    fun markSynced(localDedupeKey: String, serverEventId: String?) {
+        val values = ContentValues().apply {
+            put("sync_status", "SYNCED")
+            if (serverEventId.isNullOrBlank()) putNull("server_event_id")
+            else put("server_event_id", serverEventId)
+        }
+        writableDatabase.update(
+            "payment_events",
+            values,
+            "dedupe_key = ? AND sync_status = 'LOCAL_PENDING'",
+            arrayOf(localDedupeKey)
+        )
     }
 
     fun latestSummary(): String? {
@@ -95,6 +160,12 @@ internal class PaymentEventStore(context: Context) :
                 etecsaCount = cursor.getInt(2),
                 cupCount = cursor.getInt(3)
             )
+        }
+    }
+
+    private fun scalarCount(sql: String): Int {
+        readableDatabase.rawQuery(sql, null).use { cursor ->
+            return if (cursor.moveToFirst()) cursor.getInt(0) else 0
         }
     }
 }
