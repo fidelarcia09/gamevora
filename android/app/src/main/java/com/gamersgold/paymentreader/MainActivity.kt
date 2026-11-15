@@ -100,7 +100,7 @@ class MainActivity : Activity() {
         val diagnostics = card()
         addText(diagnostics, "DIAGNÓSTICO", 12f, cyan, true)
         addMetric(diagnostics, "Notificaciones únicas de Mensajes", count(prefs, NotificationCaptureService.KEY_TOTAL_NOTIFICATIONS))
-        addMetric(diagnostics, "Actualizaciones repetidas ignoradas", count(prefs, NotificationCaptureService.KEY_DUPLICATE_NOTIFICATIONS))
+        addMetric(diagnostics, "Actualizaciones de notificación detectadas", count(prefs, NotificationCaptureService.KEY_DUPLICATE_NOTIFICATIONS))
         addMetric(diagnostics, "Sin título o contenido visible", count(prefs, NotificationCaptureService.KEY_NO_CONTENT_NOTIFICATIONS))
         addMetric(diagnostics, "Formato no reconocido", count(prefs, NotificationCaptureService.KEY_UNRECOGNIZED_NOTIFICATIONS))
         content.addView(diagnostics)
