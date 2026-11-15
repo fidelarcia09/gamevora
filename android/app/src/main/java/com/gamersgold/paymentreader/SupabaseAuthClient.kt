@@ -26,7 +26,7 @@ internal class SupabaseAuthClient(context: Context) {
             JSONObject()
                 .put("email", email.trim())
                 .put("password", password)
-                .put("captcha_token", captchaToken)
+                .put("gotrue_meta_security", JSONObject().put("captcha_token", captchaToken))
         )
         val user = response.optJSONObject("user") ?: JSONObject()
         val returnedEmail = user.optString("email")
