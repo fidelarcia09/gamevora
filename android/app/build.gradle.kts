@@ -19,6 +19,11 @@ val supabaseUrl = localProperties.getProperty("SUPABASE_URL")
 val supabaseAnonKey = localProperties.getProperty("SUPABASE_ANON_KEY")
     ?: System.getenv("SUPABASE_ANON_KEY")
     ?: ""
+val gvrSyncEnabled = (
+    localProperties.getProperty("GVR_SYNC_ENABLED")
+        ?: System.getenv("GVR_SYNC_ENABLED")
+        ?: "false"
+).toBooleanStrictOrNull() ?: false
 
 android {
     namespace = "com.gamersgold.paymentreader"
@@ -32,6 +37,7 @@ android {
         versionName = "0.4.0"
         buildConfigField("String", "SUPABASE_URL", buildConfigString(supabaseUrl))
         buildConfigField("String", "SUPABASE_ANON_KEY", buildConfigString(supabaseAnonKey))
+        buildConfigField("boolean", "GVR_SYNC_ENABLED", gvrSyncEnabled.toString())
     }
 
     buildFeatures { buildConfig = true }
