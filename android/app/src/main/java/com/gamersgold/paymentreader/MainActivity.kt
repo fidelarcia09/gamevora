@@ -192,15 +192,25 @@ class MainActivity : Activity() {
         }
         addMetric(panel, "Eventos pendientes de enviar", pending)
         addMetric(panel, "Eventos recibidos por el servidor", synced)
-        addButton(panel, "Sincronizar ahora") {
-            GvrPaymentSyncScheduler.enqueue(this)
+        if (BuildConfig.GVR_SYNC_ENABLED) {
+            addButton(panel, "Sincronizar ahora") {
+                GvrPaymentSyncScheduler.enqueue(this)
+            }
+            addText(
+                panel,
+                "La sincronización se ejecuta cuando hay Internet. Los eventos siguen pendientes de revisión manual; recibirlos en el servidor no confirma el pago.",
+                11f,
+                amber
+            )
+        } else {
+            addText(
+                panel,
+                "Sincronización desactivada por seguridad. Se habilitará cuando el esquema y la Edge Function estén desplegados y revisados.",
+                12f,
+                amber,
+                true
+            )
         }
-        addText(
-            panel,
-            "La sincronización se ejecuta cuando hay Internet. Los eventos siguen pendientes de revisión manual; recibirlos en el servidor no confirma el pago.",
-            11f,
-            amber
-        )
         content.addView(panel)
     }
 
