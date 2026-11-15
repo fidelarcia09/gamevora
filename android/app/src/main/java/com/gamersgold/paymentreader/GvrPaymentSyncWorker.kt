@@ -16,7 +16,9 @@ class GvrPaymentSyncWorker(
     override fun doWork(): Result {
         val auth = SupabaseAuthClient(applicationContext)
         if (!auth.isConfigured()) return Result.failure()
-        val session = auth.sessionForSync() ?: return Result.failure()
+        val session = auth.sessionForSync() ?: return if (
+            SecureSessionStore(applicationContext).load() != null
+        ) Result.retry() else Result.failure()
         if (session.expiresAtMillis <= System.currentTimeMillis() + 15_000L) return Result.retry()
 
         val store = PaymentEventStore(applicationContext)
