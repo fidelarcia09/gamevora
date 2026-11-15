@@ -6,6 +6,13 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import java.util.Locale
 
+internal data class CompletedPaymentMonthStats(
+    val count: Int,
+    val totalMinorUnits: Long,
+    val etecsaCount: Int,
+    val cupCount: Int
+)
+
 internal class PaymentEventStore(context: Context) :
     SQLiteOpenHelper(context, "gvr_payment_events.db", null, 1) {
 
@@ -63,6 +70,31 @@ internal class PaymentEventStore(context: Context) :
             if (!cursor.moveToFirst()) return null
             val amount = cursor.getLong(1) / 100.0
             return "${cursor.getString(0)} · ${String.format(Locale.US, "%.2f", amount)} CUP"
+        }
+    }
+
+    fun completedStats(startInclusiveMillis: Long, endExclusiveMillis: Long): CompletedPaymentMonthStats {
+        readableDatabase.rawQuery(
+            """
+            SELECT
+                COUNT(*) AS total_count,
+                COALESCE(SUM(amount_minor_units), 0) AS total_amount,
+                COALESCE(SUM(CASE WHEN method = 'SALDO_MOVIL' THEN 1 ELSE 0 END), 0) AS etecsa_count,
+                COALESCE(SUM(CASE WHEN method = 'CUP' THEN 1 ELSE 0 END), 0) AS cup_count
+            FROM payment_events
+            WHERE review_status = 'COMPLETED'
+              AND received_at_millis >= ?
+              AND received_at_millis < ?
+            """.trimIndent(),
+            arrayOf(startInclusiveMillis.toString(), endExclusiveMillis.toString())
+        ).use { cursor ->
+            if (!cursor.moveToFirst()) return CompletedPaymentMonthStats(0, 0L, 0, 0)
+            return CompletedPaymentMonthStats(
+                count = cursor.getInt(0),
+                totalMinorUnits = cursor.getLong(1),
+                etecsaCount = cursor.getInt(2),
+                cupCount = cursor.getInt(3)
+            )
         }
     }
 }
