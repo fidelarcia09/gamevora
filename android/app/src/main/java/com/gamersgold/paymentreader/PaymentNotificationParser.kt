@@ -22,8 +22,7 @@ internal object PaymentNotificationParser {
 
         val normalizedTitle = normalize(title)
         val etecsa = normalizedTitle.contains("ETECSA")
-        val pagoMovil = normalizedTitle.contains("PAGO×MOVIL") ||
-            normalizedTitle.contains("PAGO MOVIL")
+        val pagoMovil = normalizedTitle.contains("PAGOXMOVIL")
 
         if (etecsa) {
             val match = Regex(
