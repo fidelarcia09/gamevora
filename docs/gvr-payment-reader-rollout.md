@@ -17,6 +17,11 @@ Este documento describe el orden de activación de la lectura de notificaciones 
 - La cuenta administradora configurada sigue activa en `support_agents`.
 - El panel `frontend/confirmaciones-gvr.html` puede consultar los últimos 100 eventos mediante la función administrativa.
 
+## Migraciones aplicadas
+
+- `20261115233616_create_gvr_payment_notification_events.sql`
+- `20261115233659_index_gvr_payment_notification_synced_by.sql`
+
 ## Datos CUP: dos configuraciones distintas
 
 La tarjeta receptora es información pública porque el cliente necesita verla para transferir. Se configura en:
