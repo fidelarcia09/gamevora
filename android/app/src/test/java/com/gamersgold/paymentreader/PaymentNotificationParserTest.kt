@@ -50,7 +50,7 @@ class PaymentNotificationParserTest {
     @Test
     fun parsesPagoMovilTransactionReferenceAndRawDate() {
         val event = PaymentNotificationParser.parse(
-            title = "PAGO×MOVIL",
+            title = "PAGOxMOVIL",
             body = "El titular del telefono 5359350941 le ha realizado una transferencia a la cuenta 9224069992533592 de 3500.00 CUP. Nro. Transaccion KW6023ZJ0Z999. Fecha: 9/11/2026.",
             receivedAtMillis = receivedAt
         )
@@ -67,7 +67,7 @@ class PaymentNotificationParserTest {
     @Test
     fun acceptsPagoMovilTitleWithoutSpecialCharacter() {
         val event = PaymentNotificationParser.parse(
-            title = "PAGO MOVIL",
+            title = "PAGOxMOVIL",
             body = "El titular del telefono 5359350941 le ha realizado una transferencia a la cuenta 9224069992533592 de 3500.00 CUP. Nro. Transaccion KW6023ZJ0Z999. Fecha: 9/11/2026",
             receivedAtMillis = receivedAt
         )
@@ -89,7 +89,7 @@ class PaymentNotificationParserTest {
     @Test
     fun rejectsTruncatedPagoMovilMessage() {
         val event = PaymentNotificationParser.parse(
-            title = "PAGO×MOVIL",
+            title = "PAGOxMOVIL",
             body = "El titular del telefono 5359350941 le ha realizado una transferencia",
             receivedAtMillis = receivedAt
         )
