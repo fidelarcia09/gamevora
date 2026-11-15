@@ -17,7 +17,7 @@ internal data class ParsedPaymentEvent(
 )
 
 internal object PaymentNotificationParser {
-    fun parse(title: String, body: String, receivedAtMillis: Long): ParsedPaymentEvent? {
+    fun parse(\n        title: String,\n        body: String,\n        receivedAtMillis: Long,\n        notificationKey: String = receivedAtMillis.toString()\n    ): ParsedPaymentEvent? {
         if (title.isBlank() || body.isBlank() || receivedAtMillis <= 0L) return null
 
         val normalizedTitle = normalize(title)
@@ -33,7 +33,7 @@ internal object PaymentNotificationParser {
             val phone = match.groupValues[2]
             return ParsedPaymentEvent(
                 "SALDO_MOVIL", amount, phone, null, null, null,
-                receivedAtMillis, "ET-$receivedAtMillis-$phone-$amount"
+                receivedAtMillis, "ET-$notificationKey-$phone-$amount"
             )
         }
 
