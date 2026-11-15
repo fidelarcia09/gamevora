@@ -22,14 +22,14 @@ Proyecto Supabase: `gsuhzcavghsiolmipnzi`
 - La web permite crear la solicitud, muestra el destino de pago, solicita el número emisor y una captura.
 - El trigger SQL exige un teléfono emisor de 8 a 15 dígitos al vincular el comprobante.
 - La tasa vigente está validada por el trigger: **340 unidades de saldo móvil por cada GVR**.
-- No existe todavía una app Android ni un lector de SMS en este repositorio.
+- No existe todavía una app Android ni un lector de SMS en este repositorio. Se añadió `supabase/functions/_shared/gvr-sms-parser.ts`, un parser puro y estricto para el formato ETECSA, más pruebas sintéticas en `gvr-sms-parser.test.ts`; aún no está conectado a una app ni a una función receptora.
 - El dispositivo previsto es Samsung A05. Los SMS se reciben aunque el teléfono no tenga datos móviles.
 - Remitente identificado: `ETECSA`.
 - **Regla de conciliación confirmada por el operador del proyecto:** identificar el pago por el **número telefónico desde el que se envía la transferencia de saldo**. Ese número debe coincidir exactamente, tras normalización internacional/nacional segura, con el número emisor asociado a la solicitud. El importe también debe coincidir con la solicitud. No usar el número de destino como identidad del pagador.
 - **SMS real recibido y formato confirmado por el operador:** `Usted ha recibido 268.0 CUP del numero 50000000.Saldo principal 3087.28 CUP, linea activa hasta 2027-09-27, vence 2028-03-25`.
 - Campos identificados en este formato: importe transferido `268.0 CUP`; teléfono de origen `50000000`. `Saldo principal` es el saldo restante de la línea y NO debe confundirse con el importe recibido. Las fechas de vigencia tampoco son fechas de la transferencia.
 - El ejemplo no contiene un identificador único del movimiento. La app debe guardar el ID local del SMS y su fecha/hora de recepción, generar una huella determinista para deduplicación y marcar posibles colisiones como ambiguas; esa huella no demuestra por sí sola unicidad bancaria.
-- La solución prevista requiere cola local sin conexión, deduplicación y sincronización HTTPS al recuperar internet. El APK nunca debe contener una clave `service_role`.
+- La solución prevista requiere cola local sin conexión, deduplicación y sincronización HTTPS al recuperar internet. El parser solo recibe el remitente de sistema desde metadatos Android y lo compara con una lista permitida inyectada; los IDs reales todavía deben confirmarse en el Samsung A05. El APK nunca debe contener una clave `service_role`.
 
 ### CUP / Transfermóvil
 - `frontend/confirmar-gvr.html` muestra el panel CUP como no disponible y deshabilita el botón de continuar cuando el método es CUP.
@@ -41,7 +41,7 @@ Proyecto Supabase: `gsuhzcavghsiolmipnzi`
 - **SMS real recibido y formato confirmado por el operador:** `El titular del telefono 5350000000 le ha realizado una transferencia a la cuenta 9224000000000000 de 3500.00 CUP. Nro. Transaccion KW0000ZJ0Z000. Fecha: 9/11/2026.`
 - Campos identificados: teléfono de origen `5350000000`; cuenta receptora; importe `3500.00 CUP`; referencia `KW0000ZJ0Z000`; fecha textual `9/11/2026`.
 - La referencia CUP debe almacenarse separadamente de `payment_txid`, con unicidad. La fecha se conserva inicialmente como texto original porque `9/11/2026` es ambigua sin confirmar si el formato es D/M/YYYY o M/D/YYYY.
-- No se ha confirmado una API oficial de Transfermóvil para conciliación automática.
+- No se ha confirmado una API oficial de Transfermóvil para conciliación automática. Se añadió un parser puro y estricto para el formato documentado en `supabase/functions/_shared/gvr-sms-parser.ts`, con pruebas sintéticas en `gvr-sms-parser.test.ts`; todavía no hay persistencia ni conciliación en backend.
 
 ## 2. Esquema y seguridad consultados en Supabase
 
@@ -107,7 +107,7 @@ No se debe aceptar como prueba suficiente una captura aportada por el cliente ni
 ## 5. Arquitectura propuesta (todavía no implementada)
 
 1. App Android local para Samsung A05, con permiso SMS explícito y lista permitida de remitentes.
-2. Parser basado en ejemplos reales de ETECSA y PAGO×MOVIL; no usar expresiones aproximadas hasta conocer los formatos.
+2. Parser puro estricto para ETECSA y PAGO×MOVIL implementado en `supabase/functions/_shared/gvr-sms-parser.ts`; la lista de remitentes se inyecta desde backend y falta confirmar los IDs reales en Android.
 3. Cola local persistente y protegida; sincronizar al volver la conexión y borrar el evento local solo después de recibir confirmación del servidor.
 4. Identidad de dispositivo emparejada y revocable. Guardar solo hash del token del dispositivo en servidor; nunca incluir service role en el APK.
 5. Edge Function de recepción autenticada que valide el dispositivo y registre eventos deduplicados; mantenerlos en modo sombra.
@@ -186,7 +186,7 @@ Veredicto inicial esperado (actualizado tras recibir muestras): USDT solo APTO P
 **Pendiente**
 - [x] Recibir un SMS real de confirmación ETECSA y documentar su estructura.
 - [x] Identificar el teléfono de origen después de `del numero` y el importe después de `Usted ha recibido`.
-- [ ] Implementar y probar parser estricto contra el formato recibido; no usar `Saldo principal` como importe transferido.
+- [x] Implementar parser puro estricto contra el formato recibido; no usar `Saldo principal` como importe transferido.\n- [ ] Ejecutar las pruebas unitarias Deno sintéticas y validar los metadatos reales del remitente en Android.
 - [ ] Definir deduplicación y manejo de colisiones, ya que este SMS no incluye una referencia única de operación.
 - [ ] Diseñar y construir la app Android con permiso SMS explícito y filtrado del remitente autorizado.
 - [ ] Implementar almacenamiento local persistente y cola offline.
@@ -208,7 +208,7 @@ Veredicto inicial esperado (actualizado tras recibir muestras): USDT solo APTO P
 - [x] Confirmar con el operador la cuenta receptora CUP; mantener su valor fuera del repositorio y configurarlo de forma protegida.
 - [x] Recibir un SMS real de confirmación PAGO×MOVIL y documentar su estructura.
 - [x] Identificar teléfono de origen, cuenta receptora, importe, referencia de transacción y fecha textual.
-- [ ] Implementar y probar parser estricto contra el formato recibido.
+- [x] Implementar parser puro estricto contra el formato recibido.\n- [ ] Ejecutar las pruebas unitarias Deno sintéticas y validar el remitente real de PAGO×MOVIL en Android.
 - [ ] Confirmar si la fecha `9/11/2026` usa D/M/YYYY o M/D/YYYY; hasta entonces conservar el texto original.
 - [ ] Diseñar un campo/registro separado para la referencia CUP; no reutilizar `payment_txid`, reservado al TXID USDT, ni asumir una columna inexistente.
 - [ ] Aplicar unicidad de la referencia CUP una vez confirmado su formato y alcance.
