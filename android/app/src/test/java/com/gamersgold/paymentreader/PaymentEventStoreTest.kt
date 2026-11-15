@@ -16,7 +16,7 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35])
 class PaymentEventStoreTest {
-    private val context = RuntimeEnvironment.getApplication<android.app.Application>()
+    private val context = RuntimeEnvironment.getApplication()
 
     @Before
     fun cleanDatabaseBeforeTest() {
