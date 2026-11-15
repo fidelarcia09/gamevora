@@ -9,11 +9,11 @@ Aplicación Android privada para el lector de notificaciones de Gamers Gold Top-
 - El access token y refresh token se guardan cifrados con AES-GCM usando una clave protegida por Android Keystore.
 - La app permite cerrar sesión; al hacerlo intenta cerrar la sesión remota y siempre borra la copia local.
 - El APK solo contiene la URL del proyecto y la clave pública de cliente (publishable/anon). Nunca debe contener `service_role` ni una clave secreta.
-- La cuenta y el rol deben volver a comprobarse en el backend para cada operación privilegiada. El inicio de sesión por sí solo no concede permisos administrativos.
+- La Edge Function vuelve a validar el JWT, el correo autorizado y que `support_agents` mantenga `role='admin'` y `active=true`.
 
 ### Configuración local
 
-Crea `android/local.properties` (este archivo no debe subirse a Git) con:
+Crea `android/local.properties` (ignorado por Git) con:
 
 ```properties
 SUPABASE_URL=https://gsuhzcavghsiolmipnzi.supabase.co
@@ -22,27 +22,35 @@ SUPABASE_ANON_KEY=PEGA_AQUI_LA_CLAVE_PUBLICA_PUBLISHABLE_O_ANON
 
 La clave pública se obtiene desde la configuración API del proyecto Supabase. No pegues aquí una clave `service_role`, `secret` ni contraseña. Si las propiedades no están configuradas, la pantalla de acceso permanecerá deshabilitada.
 
-## Lector de notificaciones
+## Lector y cola sin conexión
 
 - Utiliza el permiso concedido por el usuario de Notification Listener; no solicita `READ_SMS` ni `RECEIVE_SMS`.
 - Solo procesa notificaciones procedentes del paquete de Mensajes configurado en el código.
 - Reconoce los formatos documentados de ETECSA y PAGOxMOVIL cuando el título y el cuerpo contienen los datos esperados.
-- Persiste los campos extraídos en una base SQLite privada del dispositivo.
-- No guarda el texto completo de la notificación ni lo escribe en logs.
-- Cada evento queda en `PENDING_MANUAL_REVIEW`.
+- Persiste los campos extraídos en una base SQLite privada del dispositivo; el texto completo de la notificación no se guarda ni se sincroniza.
+- Los eventos nuevos empiezan como `LOCAL_PENDING`; WorkManager los envía por HTTPS cuando hay conexión y los marca `SYNCED` tras recibir confirmación de almacenamiento.
+- El identificador del dispositivo se genera localmente y se usa para deduplicar eventos ETECSA dentro de ese dispositivo.
 
-## Estado de sincronización
+## Backend de sincronización
 
-La autenticación de Supabase y la sesión local cifrada están preparadas en esta rama. La sincronización de eventos, su tabla de auditoría y la validación de administrador en una Edge Function todavía no están conectadas. Hasta que esa parte se implemente y pruebe, los eventos permanecen únicamente en el teléfono.
+- Código de Edge Function: `supabase/functions/gvr-payment-reader-sync/index.ts`.
+- SQL propuesto: `docs/gvr-payment-notification-events.sql`.
+- La función comprueba JWT, correo y rol activo de administrador antes de aceptar el lote.
+- PAGOxMOVIL se deduplica mediante su referencia de transacción única; ETECSA solo tiene deduplicación local por dispositivo.
+- La coincidencia con una solicitud es una sugerencia: ETECSA compara teléfono emisor, importe y ventana temporal; CUP compara cuenta receptora configurada, importe y ventana temporal.
+- Para comparar la cuenta receptora CUP se necesita configurar el secreto `GVR_CUP_RECEIVER_ACCOUNT` en Supabase. Su valor no debe entrar en Git ni en el APK.
+- El SQL es solo una propuesta: **no se ha aplicado en Supabase**, y la Edge Function **no se ha desplegado** todavía.
+- Hasta aplicar el esquema y desplegar la función, la cola permanece local y los intentos de sincronización no completarán.
 
-## Restricciones de seguridad
+## Límites de seguridad
 
+- Los metadatos de una notificación de Google Messages no demuestran por sí solos el remitente SMS original ni que el pago sea auténtico.
+- Los eventos se almacenan como `PENDING_MANUAL_REVIEW`; una coincidencia no aprueba una solicitud.
+- No se modifica `wallets`, `transactions` ni el estado de `gvr_purchase_requests`.
 - No se acredita GVR automáticamente.
-- No se aprueban pagos por el solo hecho de detectar una notificación.
 - No se realizan transferencias reales para probar.
-- Los metadatos de una notificación no prueban por sí solos que el proveedor haya enviado el SMS original.
 - No incluir credenciales, claves secretas, cuentas receptoras completas ni datos personales de pagos en el repositorio.
 
 ## Construcción
 
-Abrir `android/` como proyecto Gradle en Android Studio, con JDK 17 y Android SDK Platform 35. El workflow de GitHub ejecuta las pruebas unitarias y genera un APK debug. Para iniciar sesión desde el APK, configura las dos propiedades anteriores antes de compilar.
+Abrir `android/` como proyecto Gradle en Android Studio, con JDK 17 y Android SDK Platform 35. El workflow de GitHub ejecuta pruebas unitarias y genera un APK debug. Para iniciar sesión desde el APK, configura las dos propiedades anteriores antes de compilar.
