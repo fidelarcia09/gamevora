@@ -27,7 +27,7 @@ Proyecto Supabase: `gsuhzcavghsiolmipnzi`
 - Remitente identificado: `ETECSA`.
 - **Regla de conciliación confirmada por el operador del proyecto:** identificar el pago por el **número telefónico desde el que se envía la transferencia de saldo**. Ese número debe coincidir exactamente, tras normalización internacional/nacional segura, con el número emisor asociado a la solicitud. El importe también debe coincidir con la solicitud. No usar el número de destino como identidad del pagador.
 - **SMS real recibido y formato confirmado por el operador:** `Usted ha recibido 268.0 CUP del numero 50000000.Saldo principal 3087.28 CUP, linea activa hasta 2027-09-27, vence 2028-03-25`.
-- Campos identificados en este formato: importe transferido `268.0 CUP`; teléfono de origen `50591030`. `Saldo principal` es el saldo restante de la línea y NO debe confundirse con el importe recibido. Las fechas de vigencia tampoco son fechas de la transferencia.
+- Campos identificados en este formato: importe transferido `268.0 CUP`; teléfono de origen `50000000`. `Saldo principal` es el saldo restante de la línea y NO debe confundirse con el importe recibido. Las fechas de vigencia tampoco son fechas de la transferencia.
 - El ejemplo no contiene un identificador único del movimiento. La app debe guardar el ID local del SMS y su fecha/hora de recepción, generar una huella determinista para deduplicación y marcar posibles colisiones como ambiguas; esa huella no demuestra por sí sola unicidad bancaria.
 - La solución prevista requiere cola local sin conexión, deduplicación y sincronización HTTPS al recuperar internet. El APK nunca debe contener una clave `service_role`.
 
@@ -39,7 +39,7 @@ Proyecto Supabase: `gsuhzcavghsiolmipnzi`
 - **Regla de conciliación confirmada por el operador del proyecto:** identificar cada pago CUP mediante el **número de transacción único que aparece en el SMS de confirmación de PAGO×MOVIL**. Debe guardarse y tratarse como referencia única, además de comprobar el importe y los datos de la cuenta receptora que aparezcan en el mensaje. No reutilizar el TXID de USDT para este identificador CUP.
 - **Cuenta receptora CUP confirmada por el operador:** el número de cuenta que aparece en el SMS real suministrado es la cuenta receptora de Gamers Gold. El valor completo se mantiene fuera de esta documentación de auditoría para no publicar un dato financiero; deberá configurarse como secreto/configuración protegida del backend y compararse exactamente.
 - **SMS real recibido y formato confirmado por el operador:** `El titular del telefono 5350000000 le ha realizado una transferencia a la cuenta 9224000000000000 de 3500.00 CUP. Nro. Transaccion KW0000ZJ0Z000. Fecha: 9/11/2026.`
-- Campos identificados: teléfono de origen `5359350941`; cuenta receptora; importe `3500.00 CUP`; referencia `KW6023ZJ0Z999`; fecha textual `9/11/2026`.
+- Campos identificados: teléfono de origen `5350000000`; cuenta receptora; importe `3500.00 CUP`; referencia `KW0000ZJ0Z000`; fecha textual `9/11/2026`.
 - La referencia CUP debe almacenarse separadamente de `payment_txid`, con unicidad. La fecha se conserva inicialmente como texto original porque `9/11/2026` es ambigua sin confirmar si el formato es D/M/YYYY o M/D/YYYY.
 - No se ha confirmado una API oficial de Transfermóvil para conciliación automática.
 
