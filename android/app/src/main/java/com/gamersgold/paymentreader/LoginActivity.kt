@@ -114,7 +114,7 @@ class LoginActivity : Activity() {
                     request: WebResourceRequest
                 ): Boolean {
                     // El documento principal solo debe permanecer en el hostname autorizado.
-                    return request.url.host != TURNSTILE_HOSTNAME
+                    return request.isForMainFrame && request.url.host != TURNSTILE_HOSTNAME
                 }
 
                 override fun onReceivedError(
