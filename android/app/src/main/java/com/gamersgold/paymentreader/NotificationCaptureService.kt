@@ -9,7 +9,7 @@ import android.service.notification.StatusBarNotification
 class NotificationCaptureService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         val prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        val packageName = sbn.packageName ?: return
+        val packageName = sbn.packageName
 
         // Store package identifiers only, never text from unrelated notifications.
         val observed = prefs.getStringSet(KEY_OBSERVED_PACKAGES, emptySet())
@@ -40,8 +40,11 @@ class NotificationCaptureService : NotificationListenerService() {
             receivedAtMillis = sbn.postTime
         ) ?: return
 
-        PaymentEventStore(applicationContext).use { store ->
+        val store = PaymentEventStore(applicationContext)
+        try {
             store.insertIfNew(event)
+        } finally {
+            store.close()
         }
         prefs.edit()
             .putString(KEY_LAST_CAPTURE, event.method)
