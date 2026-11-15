@@ -1025,6 +1025,29 @@ botonContinuar.addEventListener("click",async () => {
         await vincularComprobante(solicitudId,usuario,rutaComprobanteSubido,metodoTexto === "USDT" ? txidUsdt.value.trim() : null);
 
         /*
+         * Verificación USDT en modo sombra:
+         * consulta la blockchain, pero nunca aprueba ni acredita GVR.
+         * Si el RPC no responde, la solicitud manual sigue su curso.
+         */
+        if (metodoTexto === "USDT") {
+            try {
+                const {data:verificacion,error:errorVerificacion} =
+                    await supabaseClient.functions.invoke(
+                        "gvr-usdt-verificar",
+                        { body: { request_id: solicitudId } }
+                    );
+
+                if (errorVerificacion) {
+                    console.warn("Verificación USDT en modo sombra no disponible:", errorVerificacion);
+                } else {
+                    console.info("Resultado verificación USDT (modo sombra):", verificacion);
+                }
+            } catch (errorVerificacion) {
+                console.warn("No se pudo ejecutar la verificación USDT en modo sombra:", errorVerificacion);
+            }
+        }
+
+        /*
          * La solicitud y el comprobante ya están guardados.
          * La notificación se gestiona por separado: un fallo al
          * notificar no debe provocar que el usuario repita el pago.
