@@ -135,7 +135,7 @@ class NotificationCaptureService : NotificationListenerService() {
         title: String,
         body: String
     ): Boolean = synchronized(DEDUP_LOCK) {
-        val normalized = "$notificationKey\\u0000${title.trim()}\\u0000${body.trim().replace(Regex("\\\\s+"), " ")}"
+        val normalized = "$notificationKey|${title.trim()}|${body.trim().replace(Regex("\\s+"), " ")}"
         val fingerprint = sha256(normalized)
         val recent = prefs.getStringSet(KEY_RECENT_FINGERPRINTS, emptySet())
             ?.toMutableSet() ?: mutableSetOf()
