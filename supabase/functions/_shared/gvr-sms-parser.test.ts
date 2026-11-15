@@ -4,7 +4,7 @@ const allowlist = {
   // Etiquetas que el operador confirmó que aparecen como remitente.
   // La app aún debe verificar qué valor entrega Android en originatingAddress.
   etecsa: ["ETECSA"],
-  pagoMovil: ["PAGO×MOVIL"],
+  pagoMovil: ["PAGOxMOVIL"],
 };
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -38,13 +38,13 @@ Deno.test("ETECSA: no confunde saldo principal con importe recibido", () => {
   assert(result.amount === "268.00", "El saldo principal no debe alterar el importe");
 });
 
-Deno.test("PAGO×MOVIL: extrae referencia y conserva la fecha textual", () => {
+Deno.test("PAGOxMOVIL: extrae referencia y conserva la fecha textual", () => {
   const result = parseGvrSms(input({
-    systemSender: "PAGO×MOVIL",
+    systemSender: "PAGOxMOVIL",
     body: "El titular del telefono 5350000000 le ha realizado una transferencia a la cuenta 9224000000000000 de 3500.00 CUP. Nro. Transaccion KW0000ZJ0Z000. Fecha: 9/11/2026.",
   }), allowlist);
 
-  assert(result.ok, "El SMS PAGO×MOVIL de prueba debe reconocerse");
+  assert(result.ok, "El SMS PAGOxMOVIL de prueba debe reconocerse");
   assert(result.method === "CUP", "Debe identificar CUP");
   assert(result.amount === "3500.00", "Debe extraer el importe exacto");
   assert(result.senderPhone === "5350000000", "Debe extraer el teléfono de origen");
@@ -52,7 +52,7 @@ Deno.test("PAGO×MOVIL: extrae referencia y conserva la fecha textual", () => {
   assert(result.transactionReference === "KW0000ZJ0Z000", "Debe extraer la referencia");
   assert(result.uniqueProviderReference === "KW0000ZJ0Z000", "La referencia debe ser la clave de deduplicación");
   assert(result.rawDate === "9/11/2026.", "Debe conservar la fecha sin interpretarla");
-  assert(result.requiresManualReview, "PAGO×MOVIL permanece en revisión humana");
+  assert(result.requiresManualReview, "PAGOxMOVIL permanece en revisión humana");
 });
 
 Deno.test("rechaza remitentes que no estén en la lista permitida", () => {
@@ -67,9 +67,9 @@ Deno.test("no acepta un SMS ETECSA si solo aparece un saldo sin frase de transfe
   assert(!result.ok && result.code === "UNRECOGNIZED_MESSAGE", "Debe rechazar un formato que no sea confirmación");
 });
 
-Deno.test("no interpreta la fecha ambigua de PAGO×MOVIL", () => {
+Deno.test("no interpreta la fecha ambigua de PAGOxMOVIL", () => {
   const result = parseGvrSms(input({
-    systemSender: "PAGO×MOVIL",
+    systemSender: "PAGOxMOVIL",
     body: "El titular del telefono 5350000000 le ha realizado una transferencia a la cuenta 9224000000000000 de 3500.00 CUP. Nro. Transaccion KW0000ZJ0Z000. Fecha: 9/11/2026.",
   }), allowlist);
   assert(

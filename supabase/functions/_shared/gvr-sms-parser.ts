@@ -8,7 +8,7 @@
  * Importante:
  * - ETECSA no incluye referencia única; el ID local del SMS solo ayuda a deduplicar
  *   dentro del dispositivo y no demuestra unicidad del pago.
- * - PAGO×MOVIL conserva la fecha textual sin interpretarla.
+ * - PAGOxMOVIL conserva la fecha textual sin interpretarla.
  * - Ambos resultados requieren revisión humana.
  */
 
