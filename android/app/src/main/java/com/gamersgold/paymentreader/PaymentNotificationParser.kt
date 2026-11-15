@@ -17,7 +17,12 @@ internal data class ParsedPaymentEvent(
 )
 
 internal object PaymentNotificationParser {
-    fun parse(\n        title: String,\n        body: String,\n        receivedAtMillis: Long,\n        notificationKey: String = receivedAtMillis.toString()\n    ): ParsedPaymentEvent? {
+    fun parse(
+        title: String,
+        body: String,
+        receivedAtMillis: Long,
+        notificationKey: String = receivedAtMillis.toString()
+    ): ParsedPaymentEvent? {
         if (title.isBlank() || body.isBlank() || receivedAtMillis <= 0L) return null
 
         val normalizedTitle = normalize(title)
