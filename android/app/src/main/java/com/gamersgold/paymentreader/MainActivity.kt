@@ -87,9 +87,12 @@ class MainActivity : Activity() {
         }
 
         addText("Eventos locales reconocidos", 16f)
-        PaymentEventStore(this).use { store ->
+        val store = PaymentEventStore(this)
+        try {
             addText("Pendientes de revisión manual: ${store.count()}")
             addText("Último evento: ${store.latestSummary() ?: "ninguno"}")
+        } finally {
+            store.close()
         }
 
         addText(
