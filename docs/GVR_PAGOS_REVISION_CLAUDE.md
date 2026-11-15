@@ -67,7 +67,7 @@ El historial remoto de Supabase registra:
 - `20261115172521_gvr_usdt_txid_unique`
 - `20261115172525_gvr_usdt_verifications`
 
-Los archivos de la rama se renombraron para coincidir con esas versiones remotas. Esta corrección fue solo en GitHub; no se aplicó ninguna migración nueva en esta revisión.
+Los archivos de la rama se renombraron para coincidir con esas versiones remotas (`20261115172521_gvr_usdt_txid_unique.sql` y `20261115172525_gvr_usdt_verifications.sql`). Esta corrección fue solo en GitHub; no se aplicó ninguna migración nueva en esta revisión.
 
 ## 3. Pruebas realizadas y no realizadas
 
@@ -78,7 +78,7 @@ Realizado:
 - Verificación de grants de las tres RPC de GVR.
 - Conteo de solicitudes existentes: 1 SALDO_MOVIL aprobada con comprobante, 9 SALDO_MOVIL rechazadas y 3 USDT rechazadas; no se encontraron TXID en esas solicitudes.
 - `gvr_usdt_verifications` tiene 0 filas.
-- PR #3 está abierta y GitHub actualmente informa `mergeable=true`; no está fusionada.
+- PR #3 está abierta y GitHub actualmente informa `mergeable=true`; no está fusionada. Incluye los archivos de auditoría y los nombres de migración alineados con el historial remoto.
 - No hay GitHub Actions check-runs para el commit consultado.
 
 No realizado:
