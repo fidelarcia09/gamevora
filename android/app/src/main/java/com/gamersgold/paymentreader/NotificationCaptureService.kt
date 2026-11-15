@@ -29,18 +29,27 @@ class NotificationCaptureService : NotificationListenerService() {
                 .apply()
         }
 
-        // Android can repost the same notification when its card is updated.
-        // Store only a SHA-256 fingerprint, never the raw notification text.
-        if (!markNotificationAsNew(prefs, sbn.key, title, body)) {
+        // Count each Android notification key once, but still inspect updated content.
+        // This matters because Google Messages can update a card after first posting it.
+        val isFirstPostForKey = markNotificationKeyAsNew(prefs, sbn.key)
+        if (isFirstPostForKey) {
+            prefs.edit()
+                .putInt(KEY_TOTAL_NOTIFICATIONS, prefs.getInt(KEY_TOTAL_NOTIFICATIONS, 0) + 1)
+                .apply()
+        } else {
             prefs.edit()
                 .putInt(KEY_DUPLICATE_NOTIFICATIONS, prefs.getInt(KEY_DUPLICATE_NOTIFICATIONS, 0) + 1)
                 .apply()
-            diagnostic("Actualización repetida de la misma notificación; ignorada.")
+        }
+
+        // Ignore only byte-for-byte-equivalent content updates. Changed content is still parsed,
+        // while the local payment database independently prevents duplicate payment records.
+        if (!markNotificationContentAsNew(prefs, sbn.key, title, body)) {
+            diagnostic("Repetición exacta de una notificación; ignorada.")
             return
         }
 
         prefs.edit()
-            .putInt(KEY_TOTAL_NOTIFICATIONS, prefs.getInt(KEY_TOTAL_NOTIFICATIONS, 0) + 1)
             .putString(KEY_LAST_NOTIFICATION_PACKAGE, sbn.packageName)
             .putLong(KEY_LAST_NOTIFICATION_AT, now)
             .apply()
@@ -105,17 +114,29 @@ class NotificationCaptureService : NotificationListenerService() {
         }
     }
 
-    private fun markNotificationAsNew(
+    private fun markNotificationKeyAsNew(
+        prefs: android.content.SharedPreferences,
+        notificationKey: String
+    ): Boolean = synchronized(DEDUP_LOCK) {
+        val keyHash = sha256(notificationKey)
+        val recentKeys = prefs.getStringSet(KEY_RECENT_NOTIFICATION_KEYS, emptySet())
+            ?.toMutableSet() ?: mutableSetOf()
+        if (keyHash in recentKeys) return@synchronized false
+
+        recentKeys.add(keyHash)
+        while (recentKeys.size > MAX_RECENT_FINGERPRINTS) recentKeys.remove(recentKeys.first())
+        prefs.edit().putStringSet(KEY_RECENT_NOTIFICATION_KEYS, recentKeys).apply()
+        true
+    }
+
+    private fun markNotificationContentAsNew(
         prefs: android.content.SharedPreferences,
         notificationKey: String,
         title: String,
         body: String
     ): Boolean = synchronized(DEDUP_LOCK) {
-        val normalized = "$notificationKey\u0000${title.trim()}\u0000${body.trim().replace(Regex("\\s+"), " ")}"
-        val fingerprint = MessageDigest.getInstance("SHA-256")
-            .digest(normalized.toByteArray(Charsets.UTF_8))
-            .joinToString("") { "%02x".format(it) }
-
+        val normalized = "$notificationKey\\u0000${title.trim()}\\u0000${body.trim().replace(Regex("\\\\s+"), " ")}"
+        val fingerprint = sha256(normalized)
         val recent = prefs.getStringSet(KEY_RECENT_FINGERPRINTS, emptySet())
             ?.toMutableSet() ?: mutableSetOf()
         if (fingerprint in recent) return@synchronized false
@@ -125,6 +146,11 @@ class NotificationCaptureService : NotificationListenerService() {
         prefs.edit().putStringSet(KEY_RECENT_FINGERPRINTS, recent).apply()
         true
     }
+
+    private fun sha256(value: String): String =
+        MessageDigest.getInstance("SHA-256")
+            .digest(value.toByteArray(Charsets.UTF_8))
+            .joinToString("") { "%02x".format(it) }
 
     companion object {
         const val TARGET_PACKAGE = "com.google.android.apps.messaging"
@@ -141,6 +167,7 @@ class NotificationCaptureService : NotificationListenerService() {
         const val KEY_LAST_NOTIFICATION_AT = "diag_v3_last_notification_at"
         const val KEY_LAST_DIAGNOSTIC = "diag_v3_last_message"
         private const val KEY_RECENT_FINGERPRINTS = "diag_v3_recent_notification_fingerprints"
+        private const val KEY_RECENT_NOTIFICATION_KEYS = "diag_v3_recent_notification_keys"
         private const val MAX_RECENT_FINGERPRINTS = 400
         private val DEDUP_LOCK = Any()
 
