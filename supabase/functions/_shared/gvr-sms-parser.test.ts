@@ -1,10 +1,10 @@
 import { parseGvrSms, type GvrSmsInput } from "./gvr-sms-parser.ts";
 
 const allowlist = {
-  // IDs ficticios de prueba. Sustituir por los remitentes exactos verificados
-  // en los metadatos Android antes de desplegar integración.
-  etecsa: ["ETECSA_TEST"],
-  pagoMovil: ["PAGOMOVIL_TEST"],
+  // Etiquetas que el operador confirmó que aparecen como remitente.
+  // La app aún debe verificar qué valor entrega Android en originatingAddress.
+  etecsa: ["ETECSA"],
+  pagoMovil: ["PAGO×MOVIL"],
 };
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -13,7 +13,7 @@ function assert(condition: unknown, message: string): asserts condition {
 
 function input(overrides: Partial<GvrSmsInput> = {}): GvrSmsInput {
   return {
-    systemSender: "ETECSA_TEST",
+    systemSender: "ETECSA",
     body: "Usted ha recibido 268.0 CUP del numero 50000000.Saldo principal 3087.28 CUP, linea activa hasta 2027-09-27, vence 2028-03-25",
     localMessageId: "android-sms-test-001",
     receivedAt: "2026-11-15T12:00:00.000Z",
@@ -40,7 +40,7 @@ Deno.test("ETECSA: no confunde saldo principal con importe recibido", () => {
 
 Deno.test("PAGO×MOVIL: extrae referencia y conserva la fecha textual", () => {
   const result = parseGvrSms(input({
-    systemSender: "PAGOMOVIL_TEST",
+    systemSender: "PAGO×MOVIL",
     body: "El titular del telefono 5350000000 le ha realizado una transferencia a la cuenta 9224000000000000 de 3500.00 CUP. Nro. Transaccion KW0000ZJ0Z000. Fecha: 9/11/2026.",
   }), allowlist);
 
@@ -69,7 +69,7 @@ Deno.test("no acepta un SMS ETECSA si solo aparece un saldo sin frase de transfe
 
 Deno.test("no interpreta la fecha ambigua de PAGO×MOVIL", () => {
   const result = parseGvrSms(input({
-    systemSender: "PAGOMOVIL_TEST",
+    systemSender: "PAGO×MOVIL",
     body: "El titular del telefono 5350000000 le ha realizado una transferencia a la cuenta 9224000000000000 de 3500.00 CUP. Nro. Transaccion KW0000ZJ0Z000. Fecha: 9/11/2026.",
   }), allowlist);
   assert(result.ok && result.rawDate === "9/11/2026.", "La fecha debe permanecer como texto original");
