@@ -9,10 +9,10 @@ class PaymentNotificationParserTest {
     private val receivedAt = 1_800_000_000_000L
 
     @Test
-    fun parsesEtecsaAndIgnoresRemainingBalance() {
+    fun parsesEtecsaSampleAndIgnoresRemainingBalanceAndValidityDates() {
         val event = PaymentNotificationParser.parse(
             title = "ETECSA",
-            body = "Usted ha recibido 268.0 CUP del numero 50591030.Saldo principal 3087.28 CUP, linea activa hasta 2027-09-27",
+            body = "Usted ha recibido 268.0 CUP del numero 50591030.Saldo principal 3087.28 CUP, linea activa hasta 2027-09-27, vence 2028-03-25",
             receivedAtMillis = receivedAt
         )
         assertNotNull(event)
@@ -24,7 +24,6 @@ class PaymentNotificationParserTest {
         assertNull(event?.rawDate)
         assertEquals("ET-$receivedAt-50591030-26800", event?.localDedupeKey)
     }
-
 
     @Test
     fun usesStableNotificationKeyForEtecsaUpdates() {
@@ -68,7 +67,7 @@ class PaymentNotificationParserTest {
     }
 
     @Test
-    fun parsesPagoMovilTransactionReferenceAndRawDate() {
+    fun parsesExactPagoMovilSampleAndRemovesOnlyFinalPunctuationFromDate() {
         val event = PaymentNotificationParser.parse(
             title = "PAGOxMOVIL",
             body = "El titular del telefono 5359350941 le ha realizado una transferencia a la cuenta 9224069992533592 de 3500.00 CUP. Nro. Transaccion KW6023ZJ0Z999. Fecha: 9/11/2026.",
@@ -80,20 +79,48 @@ class PaymentNotificationParserTest {
         assertEquals("5359350941", event?.senderPhone)
         assertEquals("9224069992533592", event?.recipientAccount)
         assertEquals("KW6023ZJ0Z999", event?.transactionReference)
-        assertEquals("9/11/2026.", event?.rawDate)
+        assertEquals("9/11/2026", event?.rawDate)
         assertEquals("PM-KW6023ZJ0Z999", event?.localDedupeKey)
     }
 
     @Test
-    fun acceptsPagoMovilTitleWithoutSpecialCharacter() {
+    fun acceptsPagoMovilDateWithoutFinalPunctuation() {
         val event = PaymentNotificationParser.parse(
             title = "PAGOxMOVIL",
             body = "El titular del telefono 5359350941 le ha realizado una transferencia a la cuenta 9224069992533592 de 3500.00 CUP. Nro. Transaccion KW6023ZJ0Z999. Fecha: 9/11/2026",
             receivedAtMillis = receivedAt
         )
         assertNotNull(event)
-        assertEquals("CUP", event?.method)
         assertEquals("9/11/2026", event?.rawDate)
+    }
+
+    @Test
+    fun samePagoMovilTransactionAlwaysUsesSameDedupeKey() {
+        val first = PaymentNotificationParser.parse(
+            title = "PAGOxMOVIL",
+            body = "El titular del telefono 5359350941 le ha realizado una transferencia a la cuenta 9224069992533592 de 3500.00 CUP. Nro. Transaccion KW6023ZJ0Z999. Fecha: 9/11/2026.",
+            receivedAtMillis = receivedAt,
+            notificationKey = "notification-one"
+        )
+        val repeated = PaymentNotificationParser.parse(
+            title = "PAGOxMOVIL",
+            body = "El titular del telefono 5359350941 le ha realizado una transferencia a la cuenta 9224069992533592 de 3500.00 CUP. Nro. Transaccion KW6023ZJ0Z999. Fecha: 9/11/2026.",
+            receivedAtMillis = receivedAt + 60000,
+            notificationKey = "notification-two"
+        )
+        assertNotNull(first)
+        assertNotNull(repeated)
+        assertEquals(first?.localDedupeKey, repeated?.localDedupeKey)
+    }
+
+    @Test
+    fun rejectsPagoMovilAmountWithMoreThanTwoDecimalPlaces() {
+        val event = PaymentNotificationParser.parse(
+            title = "PAGOxMOVIL",
+            body = "El titular del telefono 5359350941 le ha realizado una transferencia a la cuenta 9224069992533592 de 3500.001 CUP. Nro. Transaccion KW6023ZJ0Z999. Fecha: 9/11/2026.",
+            receivedAtMillis = receivedAt
+        )
+        assertNull(event)
     }
 
     @Test
@@ -123,6 +150,24 @@ class PaymentNotificationParserTest {
                 title = "ETECSA",
                 body = "Usted ha recibido 268.0 CUP del numero 50591030.",
                 receivedAtMillis = 0L
+            )
+        )
+    }
+
+    @Test
+    fun rejectsBlankTitleOrBody() {
+        assertNull(
+            PaymentNotificationParser.parse(
+                title = " ",
+                body = "Usted ha recibido 268.0 CUP del numero 50591030.",
+                receivedAtMillis = receivedAt
+            )
+        )
+        assertNull(
+            PaymentNotificationParser.parse(
+                title = "ETECSA",
+                body = " ",
+                receivedAtMillis = receivedAt
             )
         )
     }
