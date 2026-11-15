@@ -31,4 +31,4 @@ jobs:
           deno-version: v2.x
 
       - name: Run GVR SMS parser tests
-        run: deno test --no-check supabase/functions/_shared/gvr-sms-parser.test.ts
+        run: deno test supabase/functions/_shared/gvr-sms-parser.test.ts
