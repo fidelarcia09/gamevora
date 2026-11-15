@@ -25,7 +25,8 @@ Proyecto Supabase: `gsuhzcavghsiolmipnzi`
 - No existe todavía una app Android ni un lector de SMS en este repositorio.
 - El dispositivo previsto es Samsung A05. Los SMS se reciben aunque el teléfono no tenga datos móviles.
 - Remitente identificado: `ETECSA`.
-- No se dispone de un ejemplo literal del SMS, ni del formato exacto de importe, número remitente, identificador o comisión. No se debe inventar un parser.
+- **Regla de conciliación confirmada por el operador del proyecto:** identificar el pago por el **número telefónico desde el que se envía la transferencia de saldo**. Ese número debe coincidir exactamente, tras normalización internacional/nacional segura, con el número emisor asociado a la solicitud. El importe también debe coincidir con la solicitud. No usar el número de destino como identidad del pagador.
+- No se dispone de un ejemplo literal del SMS, ni del formato exacto de importe, número emisor/destino, identificador o comisión. No se debe inventar un parser.
 - La solución prevista requiere cola local sin conexión, deduplicación y sincronización HTTPS al recuperar internet. El APK nunca debe contener una clave `service_role`.
 
 ### CUP / Transfermóvil
@@ -33,6 +34,7 @@ Proyecto Supabase: `gsuhzcavghsiolmipnzi`
 - El texto de la propia página indica que falta configurar la tarjeta receptora. El número mostrado como “Número de confirmación” no debe tratarse como una tarjeta receptora confirmada.
 - La tasa vigente está validada por el trigger: **1.150 CUP por cada GVR**.
 - Remitente SMS identificado: `PAGO×MOVIL`.
+- **Regla de conciliación confirmada por el operador del proyecto:** identificar cada pago CUP mediante el **número de transacción único que aparece en el SMS de confirmación de PAGO×MOVIL**. Debe guardarse y tratarse como referencia única, además de comprobar el importe y los datos de la cuenta receptora que aparezcan en el mensaje. No reutilizar el TXID de USDT para este identificador CUP.
 - No se ha confirmado la tarjeta/cuenta receptora que debe recibir el CUP ni se dispone de un ejemplo literal del SMS de confirmación. No activar CUP ni inventar esos datos.
 - No se ha confirmado una API oficial de Transfermóvil para conciliación automática.
 
@@ -132,7 +134,6 @@ G. Veredicto separado para USDT, SALDO_MOVIL y CUP: APTO PARA PRUEBAS / NO APTO 
 
 Veredicto inicial esperado: USDT solo APTO PARA PRUEBAS CONTROLADAS EN MODO SOMBRA, sujeto a prueba autenticada y auditoría; SALDO_MOVIL NO APTO PARA PRUEBAS de parser hasta recibir ejemplos SMS; CUP NO APTO hasta configurar la cuenta receptora y recibir un SMS real anonimizado. Ningún método está autorizado para acreditar GVR automáticamente.
 
-
 ## 7. Hoja de ruta paso a paso: completado y pendiente
 
 ### Fase 1 — Auditoría y protección del sistema actual
@@ -179,10 +180,11 @@ Veredicto inicial esperado: USDT solo APTO PARA PRUEBAS CONTROLADAS EN MODO SOMB
 - [x] Confirmar que la web actualmente solicita número emisor y comprobante.
 - [x] Identificar el teléfono Android previsto para la integración: Samsung A05.
 - [x] Definir que los SMS pueden recibirse sin datos y deben guardarse localmente hasta recuperar conexión.
+- [x] Definir el identificador de conciliación: número telefónico desde el que se envía la transferencia de saldo, cotejado con el número emisor declarado en la solicitud.
 
 **Pendiente**
 - [ ] Recibir un SMS real de confirmación de ETECSA, anonimizado pero con formato literal intacto.
-- [ ] Definir con ese ejemplo cómo identificar remitente, importe, número de origen/destino e identificador de operación, solo si aparecen en el mensaje.
+- [ ] Confirmar cómo aparece el número de origen en el SMS y cómo se expresa el importe; no asumir que el texto incluye ambos.
 - [ ] Diseñar y construir la app Android con permiso SMS explícito y filtrado del remitente autorizado.
 - [ ] Implementar almacenamiento local persistente y cola offline.
 - [ ] Implementar emparejamiento/revocación del dispositivo y autenticación segura del envío al backend.
@@ -197,11 +199,14 @@ Veredicto inicial esperado: USDT solo APTO PARA PRUEBAS CONTROLADAS EN MODO SOMB
 - [x] Identificar la tasa CUP vigente de 1.150 por GVR.
 - [x] Confirmar que el método CUP permanece deshabilitado en la página.
 - [x] Identificar el remitente SMS esperado como `PAGO×MOVIL`, pendiente de confirmarlo con un mensaje real.
+- [x] Definir el identificador de conciliación: número de transacción único que aparece en el SMS de PAGO×MOVIL.
 
 **Pendiente**
 - [ ] Confirmar los datos oficiales de la tarjeta/cuenta receptora que deben mostrarse al cliente.
 - [ ] Recibir un SMS real de confirmación PAGO×MOVIL, anonimizado y con formato literal intacto.
-- [ ] Confirmar qué datos del SMS permiten identificar importe, referencia, cuenta receptora y operación.
+- [ ] Confirmar cómo aparece el número de transacción, el importe y la cuenta receptora en el SMS.
+- [ ] Diseñar un campo/registro separado para la referencia CUP; no reutilizar `payment_txid`, reservado al TXID USDT, ni asumir una columna inexistente.
+- [ ] Aplicar unicidad de la referencia CUP una vez confirmado su formato y alcance.
 - [ ] Verificar si existe una vía oficial y autorizada de consulta/conciliación; no asumir que existe una API.
 - [ ] Implementar recepción, deduplicación, registro y conciliación administrativa de eventos.
 - [ ] Probar pagos repetidos, importes incorrectos, mensajes tardíos, operaciones no conciliadas y falta de conexión.
@@ -211,6 +216,8 @@ Veredicto inicial esperado: USDT solo APTO PARA PRUEBAS CONTROLADAS EN MODO SOMB
 
 **Pendiente**
 - [ ] Mostrar a soporte las solicitudes GVR y los eventos recibidos de USDT, ETECSA y PAGO×MOVIL.
+- [ ] Para SALDO_MOVIL, comparar el número de origen de la transferencia con el número declarado por el usuario y el importe.
+- [ ] Para CUP, comparar el número de transacción único con el importe y los datos receptores.
 - [ ] Mostrar coincidencias, discrepancias, duplicados y eventos sin solicitud asociada.
 - [ ] Mantener trazabilidad de quién revisó y qué decisión tomó.
 - [ ] Impedir que un evento ya conciliado pueda volver a acreditar la misma solicitud.
@@ -241,7 +248,6 @@ Veredicto inicial esperado: USDT solo APTO PARA PRUEBAS CONTROLADAS EN MODO SOMB
 
 **Regla de seguridad:** no se acredita GVR por una captura, por un SMS reenviado manualmente ni por una respuesta aislada del verificador. La acreditación solo podrá considerarse cuando exista una operación auténtica, única, conciliada, autorizada y registrada.
 
-
 ## 8. Revalidación directa del entorno (15-11-2026)
 
 Comprobaciones adicionales realizadas después de redactar esta hoja de ruta:
@@ -257,3 +263,14 @@ Comprobaciones adicionales realizadas después de redactar esta hoja de ruta:
 - No se encontraron ejecuciones de GitHub Actions asociadas al commit consultado.
 
 **Límites de esta revalidación:** no se pudo inspeccionar el valor ni confirmar la presencia efectiva de `SUPABASE_SERVICE_ROLE_KEY` en los secretos; tampoco se ejecutó una petición HTTP autenticada. La coincidencia del código desplegado con el de GitHub no sustituye una prueba de runtime.
+
+## 9. Aclaración funcional recibida del operador del proyecto (15-11-2026)
+
+El operador confirmó explícitamente las claves de conciliación para la automatización por SMS:
+
+- **SALDO_MOVIL / ETECSA:** la clave de identidad del pago es el número telefónico desde el que se envía la transferencia de saldo. La conciliación debe cotejar ese número de origen con el teléfono emisor registrado en la solicitud y verificar también el importe. No confundirlo con el número destinatario.
+- **CUP / PAGO×MOVIL:** la clave de identidad del pago es el número de transacción que aparece en el SMS de confirmación. Debe ser una referencia independiente, única y no reutilizable, cotejada junto con el importe y, cuando el SMS lo incluya, la cuenta receptora. No reutilizar `payment_txid`, que corresponde al hash TXID de USDT.
+- Esta aclaración define la lógica funcional, pero **no sustituye los SMS reales anonimizados**. Todavía no permite escribir un parser fiable porque se desconoce el formato exacto del texto y dónde aparecen esos campos.
+- Antes de implementar el almacenamiento CUP hay que inspeccionar el esquema completo y los consumidores existentes, luego proponer una columna/referencia propia y un índice único mediante migración revisable. No asumir que esa columna ya existe.
+- No se ha implementado la app Android, la cola offline, el endpoint de SMS, la conciliación de CUP ni una acreditación automática.
+- Claude debe auditar estas reglas además de los controles técnicos y emitir un veredicto separado por método.
