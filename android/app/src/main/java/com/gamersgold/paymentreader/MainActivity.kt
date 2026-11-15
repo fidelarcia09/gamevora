@@ -6,19 +6,23 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import android.provider.Settings
 import java.text.SimpleDateFormat
+import java.time.YearMonth
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
 class MainActivity : Activity() {
     private lateinit var content: LinearLayout
+    private var selectedMonth: YearMonth = YearMonth.now()
 
     private val navy = Color.rgb(5, 11, 24)
     private val cardNavy = Color.rgb(8, 26, 53)
@@ -52,7 +56,8 @@ class MainActivity : Activity() {
             isVerticalScrollBarEnabled = true
             clipToPadding = false
             setBackgroundColor(navy)
-            setPadding(dp(16), dp(14), dp(16), dp(28))
+            // Match the 22 px horizontal section margins used by the website indexes.
+            setPadding(dp(22), dp(24), dp(22), dp(28))
         }
         content = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -118,6 +123,8 @@ class MainActivity : Activity() {
         }
         content.addView(payments)
 
+        addCompletedPaymentsSection()
+
         val activity = card()
         addText(activity, "ÚLTIMA ACTIVIDAD", 12f, cyan, true)
         addText(
@@ -154,6 +161,101 @@ class MainActivity : Activity() {
         addText(content, "GAMERS GOLD TOP-UP  ·  UNIVERSO GAMING", 11f, muted, true, Gravity.CENTER)
         setContentView(scroll)
     }
+
+    private fun addCompletedPaymentsSection() {
+        val panel = card()
+        addText(panel, "PAGOS COMPLETADOS", 12f, cyan, true)
+        addText(panel, "Historial mensual de pagos confirmados", 14f, muted)
+
+        val monthRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, dp(8), 0, dp(12))
+        }
+        addMonthButton(monthRow, "‹") {
+            selectedMonth = selectedMonth.minusMonths(1)
+            render()
+        }
+        val monthLabel = TextView(this).apply {
+            text = selectedMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale("es", "ES")))
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale("es", "ES")) else it.toString() }
+            textSize = 15f
+            setTextColor(white)
+            setTypeface(typeface, Typeface.BOLD)
+            gravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+        }
+        monthRow.addView(monthLabel)
+        addMonthButton(monthRow, "›") {
+            if (selectedMonth.isBefore(YearMonth.now())) {
+                selectedMonth = selectedMonth.plusMonths(1)
+                render()
+            }
+        }.apply {
+            isEnabled = selectedMonth.isBefore(YearMonth.now())
+            alpha = if (isEnabled) 1f else 0.4f
+        }
+        panel.addView(monthRow)
+
+        val start = selectedMonth.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val end = selectedMonth.plusMonths(1).atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val store = PaymentEventStore(this)
+        val stats = try {
+            store.completedStats(start, end)
+        } finally {
+            store.close()
+        }
+
+        addText(panel, "${formatCup(stats.totalMinorUnits)} CUP", 27f, green, true)
+        addText(panel, "${stats.count} pagos completados", 13f, muted)
+        addMetric(panel, "ETECSA", stats.etecsaCount)
+        addMetric(panel, "PAGOxMOVIL", stats.cupCount)
+
+        if (stats.count == 0) {
+            addText(
+                panel,
+                "Todavía no hay pagos completados registrados en este mes.",
+                13f,
+                muted
+            )
+        }
+        addText(
+            panel,
+            "Solo se mostrarán aquí pagos cuya confirmación final esté registrada. Las notificaciones detectadas o pendientes no cuentan como completadas.",
+            11f,
+            amber
+        )
+        addText(
+            panel,
+            "La sincronización con el historial del servidor aún está pendiente.",
+            11f,
+            muted
+        )
+        content.addView(panel)
+    }
+
+    private fun addMonthButton(parent: LinearLayout, label: String, action: () -> Unit): TextView {
+        val button = TextView(this).apply {
+            text = label
+            textSize = 24f
+            setTextColor(cyan)
+            gravity = Gravity.CENTER
+            background = GradientDrawable().apply {
+                setColor(0x2235AFFF)
+                cornerRadius = dp(10).toFloat()
+                setStroke(dp(1), 0x6655DFFF)
+            }
+            isClickable = true
+            isFocusable = true
+            setOnClickListener { action() }
+            layoutParams = LinearLayout.LayoutParams(dp(42), dp(40))
+        }
+        parent.addView(button)
+        return button
+    }
+
+    private fun formatCup(minorUnits: Long): String =
+        String.format(Locale("es", "ES"), "%,.2f", minorUnits / 100.0)
 
     private fun card(background: GradientDrawable? = null): LinearLayout {
         val drawable = background ?: GradientDrawable().apply {
