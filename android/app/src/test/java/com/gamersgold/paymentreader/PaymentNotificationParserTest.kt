@@ -25,6 +25,26 @@ class PaymentNotificationParserTest {
         assertEquals("ET-$receivedAt-50591030-26800", event?.localDedupeKey)
     }
 
+
+    @Test
+    fun usesStableNotificationKeyForEtecsaUpdates() {
+        val first = PaymentNotificationParser.parse(
+            title = "ETECSA",
+            body = "Usted ha recibido 268.0 CUP del numero 50591030.",
+            receivedAtMillis = receivedAt,
+            notificationKey = "google-messages|sms|42"
+        )
+        val updated = PaymentNotificationParser.parse(
+            title = "ETECSA",
+            body = "Usted ha recibido 268.0 CUP del numero 50591030. Saldo principal 3087.28 CUP",
+            receivedAtMillis = receivedAt + 5000,
+            notificationKey = "google-messages|sms|42"
+        )
+        assertNotNull(first)
+        assertNotNull(updated)
+        assertEquals(first?.localDedupeKey, updated?.localDedupeKey)
+    }
+
     @Test
     fun parsesEtecsaWithCommaDecimal() {
         val event = PaymentNotificationParser.parse(
