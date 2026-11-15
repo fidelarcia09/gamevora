@@ -13,7 +13,7 @@ internal object GvrPaymentSyncScheduler {
     private const val UNIQUE_WORK_NAME = "gvr-payment-notification-sync"
 
     fun enqueue(context: Context) {
-        if (!SupabaseAuthClient(context).isConfigured()) return
+        if (!BuildConfig.GVR_SYNC_ENABLED || !SupabaseAuthClient(context).isConfigured()) return
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
