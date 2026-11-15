@@ -4,7 +4,7 @@ const allowlist = {
   // Etiquetas que el operador confirmó que aparecen como remitente.
   // La app aún debe verificar qué valor entrega Android en originatingAddress.
   etecsa: ["ETECSA"],
-  pagoMovil: ["PAGO×MOVIL"],
+  pagoMovil: ["PAGOxMOVIL"],
 };
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -38,9 +38,9 @@ Deno.test("ETECSA: no confunde saldo principal con importe recibido", () => {
   assert(result.amount === "268.00", "El saldo principal no debe alterar el importe");
 });
 
-Deno.test("PAGO×MOVIL: extrae referencia y conserva la fecha textual", () => {
+Deno.test("PAGOxMOVIL: extrae referencia y conserva la fecha textual", () => {
   const result = parseGvrSms(input({
-    systemSender: "PAGO×MOVIL",
+    systemSender: "PAGOxMOVIL",
     body: "El titular del telefono 5350000000 le ha realizado una transferencia a la cuenta 9224000000000000 de 3500.00 CUP. Nro. Transaccion KW0000ZJ0Z000. Fecha: 9/11/2026.",
   }), allowlist);
 
@@ -69,7 +69,7 @@ Deno.test("no acepta un SMS ETECSA si solo aparece un saldo sin frase de transfe
 
 Deno.test("no interpreta la fecha ambigua de PAGO×MOVIL", () => {
   const result = parseGvrSms(input({
-    systemSender: "PAGO×MOVIL",
+    systemSender: "PAGOxMOVIL",
     body: "El titular del telefono 5350000000 le ha realizado una transferencia a la cuenta 9224000000000000 de 3500.00 CUP. Nro. Transaccion KW0000ZJ0Z000. Fecha: 9/11/2026.",
   }), allowlist);
   assert(
