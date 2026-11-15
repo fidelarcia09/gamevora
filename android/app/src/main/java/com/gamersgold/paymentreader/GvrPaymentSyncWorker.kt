@@ -21,39 +21,44 @@ class GvrPaymentSyncWorker(
 
         val store = PaymentEventStore(applicationContext)
         try {
-            val events = store.pendingSyncEvents(MAX_BATCH_SIZE)
-            if (events.isEmpty()) return Result.success()
+            var batchesProcessed = 0
+            while (batchesProcessed < MAX_BATCHES_PER_RUN) {
+                val events = store.pendingSyncEvents(MAX_BATCH_SIZE)
+                if (events.isEmpty()) return Result.success()
 
-            val payload = JSONObject()
-                .put("deviceId", DeviceIdentity.get(applicationContext))
-                .put("events", JSONArray().apply {
-                    events.forEach { event ->
-                        put(
-                            JSONObject()
-                                .put("localEventKey", event.localDedupeKey)
-                                .put("method", event.method)
-                                .put("amountMinorUnits", event.amountMinorUnits)
-                                .put("senderPhone", event.senderPhone)
-                                .put("recipientAccount", event.recipientAccount ?: JSONObject.NULL)
-                                .put("transactionReference", event.transactionReference ?: JSONObject.NULL)
-                                .put("rawDate", event.rawDate ?: JSONObject.NULL)
-                                .put("receivedAtMillis", event.receivedAtMillis)
-                        )
+                val payload = JSONObject()
+                    .put("deviceId", DeviceIdentity.get(applicationContext))
+                    .put("events", JSONArray().apply {
+                        events.forEach { event ->
+                            put(
+                                JSONObject()
+                                    .put("localEventKey", event.localDedupeKey)
+                                    .put("method", event.method)
+                                    .put("amountMinorUnits", event.amountMinorUnits)
+                                    .put("senderPhone", event.senderPhone)
+                                    .put("recipientAccount", event.recipientAccount ?: JSONObject.NULL)
+                                    .put("transactionReference", event.transactionReference ?: JSONObject.NULL)
+                                    .put("rawDate", event.rawDate ?: JSONObject.NULL)
+                                    .put("receivedAtMillis", event.receivedAtMillis)
+                            )
+                        }
+                    })
+
+                val response = postSync(payload, session.accessToken)
+                val results = response.optJSONArray("results") ?: return Result.retry()
+                var accepted = 0
+                for (index in 0 until results.length()) {
+                    val item = results.optJSONObject(index) ?: continue
+                    val localKey = item.optString("localEventKey")
+                    if (localKey.isNotBlank() && item.optBoolean("stored", false)) {
+                        store.markSynced(localKey, item.optString("eventId").ifBlank { null })
+                        accepted++
                     }
-                })
-
-            val response = postSync(payload, session.accessToken)
-            val results = response.optJSONArray("results") ?: return Result.retry()
-            var accepted = 0
-            for (index in 0 until results.length()) {
-                val item = results.optJSONObject(index) ?: continue
-                val localKey = item.optString("localEventKey")
-                if (localKey.isNotBlank() && item.optBoolean("stored", false)) {
-                    store.markSynced(localKey, item.optString("eventId").ifBlank { null })
-                    accepted++
                 }
+                if (accepted != events.size) return Result.retry()
+                batchesProcessed++
             }
-            return if (accepted == events.size) Result.success() else Result.retry()
+            return if (store.pendingSyncCount() == 0) Result.success() else Result.retry()
         } catch (_: AuthRejectedException) {
             return Result.failure()
         } catch (_: Exception) {
@@ -83,10 +88,10 @@ class GvrPaymentSyncWorker(
             }
             val status = connection.responseCode
             val stream = if (status in 200..299) connection.inputStream else connection.errorStream
-            val text = stream?.bufferedReader(Charsets.UTF_8)?.use { it.readText() }.orEmpty()
+            val responseText = stream?.bufferedReader(Charsets.UTF_8)?.use { it.readText() }.orEmpty()
             if (status == 401 || status == 403) throw AuthRejectedException()
             if (status !in 200..299) throw IllegalStateException("Sync HTTP $status")
-            val json = JSONObject(text)
+            val json = JSONObject(responseText)
             if (!json.optBoolean("ok", false)) throw IllegalStateException("Sync rechazó el lote")
             return json
         } finally {
@@ -98,5 +103,6 @@ class GvrPaymentSyncWorker(
 
     companion object {
         private const val MAX_BATCH_SIZE = 50
+        private const val MAX_BATCHES_PER_RUN = 5
     }
 }
