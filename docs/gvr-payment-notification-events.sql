@@ -10,7 +10,7 @@ create table if not exists public.gvr_payment_notification_events (
     local_event_key text not null,
     method text not null check (method in ('SALDO_MOVIL', 'CUP')),
     source_label text not null check (source_label in ('ETECSA', 'PAGOxMOVIL')),
-    source_package text not null check (source_package = 'com.google.android.apps.messaging'),
+    capture_package text not null check (capture_package = 'com.google.android.apps.messaging'),
     amount_minor_units bigint not null check (amount_minor_units > 0),
     currency text not null default 'CUP' check (currency = 'CUP'),
     sender_phone text not null,
@@ -55,6 +55,6 @@ revoke all on table public.gvr_payment_notification_events from anon, authentica
 grant all on table public.gvr_payment_notification_events to service_role;
 
 comment on table public.gvr_payment_notification_events is
-    'Eventos detectados en notificaciones Android. Son evidencia no verificada y siempre requieren revisión manual; nunca acreditan GVR.';
+    'Eventos detectados en notificaciones Android. capture_package identifica la app que publicó la notificación, no el remitente SMS ni la autenticidad del pago. Siempre requieren revisión manual; nunca acreditan GVR.';
 
 commit;
