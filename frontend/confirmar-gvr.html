@@ -913,14 +913,14 @@ const copiarCup = document.getElementById("copiarCup");
 const estadoCup = document.getElementById("estadoCup");
 
 if (cuentaCupElemento) {
-    cuentaCupElemento.textContent = CUP_ACCOUNT_CONFIGURED
+    cuentaCupElemento.textContent = CUP_AVAILABLE
         ? CUP_RECEIVER_ACCOUNT
-        : "Tarjeta pendiente de configuración.";
+        : "Método temporalmente no disponible.";
 }
 if (copiarCup) {
-    copiarCup.disabled = !CUP_ACCOUNT_CONFIGURED;
+    copiarCup.disabled = !CUP_AVAILABLE;
     copiarCup.addEventListener("click", () => {
-        if (CUP_ACCOUNT_CONFIGURED) copiarTexto(CUP_RECEIVER_ACCOUNT);
+        if (CUP_AVAILABLE) copiarTexto(CUP_RECEIVER_ACCOUNT);
     });
 }
 if (estadoCup) {
