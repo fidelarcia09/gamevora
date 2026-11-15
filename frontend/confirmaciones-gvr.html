@@ -385,6 +385,44 @@
 .boton-atras{display:inline-flex;align-items:center;gap:9px;width:fit-content;max-width:100%;margin:0 auto 0 0;color:#eaf7ff;text-decoration:none;font-size:13px;font-weight:800;line-height:1}.icono-atras{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.45)}.icono-atras svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.boton-atras:hover .icono-atras{border-color:#28a9ff;background:linear-gradient(145deg,#145184,#09294b)}.boton-atras:focus-visible{outline:2px solid #75d7ff;outline-offset:3px;border-radius:8px}
 
 .encabezado-pagina{display:inline-flex;align-items:center;gap:10px;min-width:0;margin:0;color:#eaf7ff;text-decoration:none;font-size:15px;font-weight:800;line-height:1.2}.encabezado-pagina-icono{width:38px;height:38px;flex:0 0 38px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #17649a;border-radius:11px;background:linear-gradient(145deg,#103b65,#08203b);color:#4bcaff;box-shadow:0 5px 15px rgba(0,21,45,.35)}.encabezado-pagina-icono svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.encabezado-pagina-titulo{overflow-wrap:anywhere}.encabezado-pagina~.boton-atras{display:none!important}
+    .panel-eventos {
+        margin: 0 0 22px;
+        padding: 18px;
+        border: 1px solid #173d67;
+        border-radius: 16px;
+        background: linear-gradient(145deg, #0a1a32, #071326);
+    }
+    .panel-eventos-cabecera {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    .panel-eventos h2 { font-size: 16px; color: #eaf7ff; }
+    .panel-eventos p { margin-top: 6px; color: #8da4c0; font-size: 12px; line-height: 1.5; }
+    .evento-pago {
+        margin-top: 10px;
+        padding: 13px;
+        border: 1px solid #244261;
+        border-radius: 12px;
+        background: rgba(2, 13, 31, .7);
+        overflow-wrap: anywhere;
+    }
+    .evento-pago strong { color: #39c5ff; font-size: 14px; }
+    .evento-pago .evento-detalle { margin-top: 7px; color: #b5c8df; font-size: 12px; line-height: 1.65; }
+    .evento-pago .evento-estado { margin-top: 8px; color: #ffdb69; font-size: 11px; font-weight: 800; }
+    .boton-eventos {
+        padding: 9px 12px;
+        border: 1px solid #168bd1;
+        border-radius: 9px;
+        background: #0b3155;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+    }
 </style>
 </head>
 
@@ -419,6 +457,19 @@
     <div class="resumen-card">
         <div class="resumen-label">Rechazadas</div>
         <div class="resumen-numero" id="totalRechazadas">—</div>
+    </div>
+</section>
+
+<section class="panel-eventos" aria-labelledby="tituloEventosPago">
+    <div class="panel-eventos-cabecera">
+        <div>
+            <h2 id="tituloEventosPago">Notificaciones de pago detectadas</h2>
+            <p>Eventos recibidos desde el lector Android. Son indicios para revisión, no pagos verificados ni acreditaciones automáticas.</p>
+        </div>
+        <button class="boton-eventos" id="actualizarEventosPago" type="button">Actualizar</button>
+    </div>
+    <div id="listaEventosPago" aria-live="polite">
+        <p>Comprobando disponibilidad de la sincronización...</p>
     </div>
 </section>
 
@@ -502,7 +553,10 @@ async function iniciar() {
             return;
         }
 
-        await cargarSolicitudes();
+        await Promise.all([
+            cargarEventosPago(),
+            cargarSolicitudes()
+        ]);
 
     } catch (error) {
         console.error(error);
@@ -510,6 +564,88 @@ async function iniciar() {
         mostrarError(
             "No se pudo comprobar tu acceso. Intenta nuevamente."
         );
+    }
+}
+
+
+/* =========================
+   EVENTOS DEL LECTOR ANDROID
+========================= */
+
+const listaEventosPago = document.getElementById("listaEventosPago");
+const botonActualizarEventosPago = document.getElementById("actualizarEventosPago");
+
+botonActualizarEventosPago?.addEventListener("click", cargarEventosPago);
+
+async function cargarEventosPago() {
+    if (!listaEventosPago) return;
+
+    listaEventosPago.textContent = "Consultando eventos recibidos por Supabase...";
+
+    try {
+        const { data, error } = await supabaseClient.functions.invoke(
+            "gvr-payment-reader-events",
+            { body: {} }
+        );
+
+        if (error) throw error;
+        if (!data?.ok || !Array.isArray(data.events)) {
+            throw new Error(data?.error || "Respuesta no válida del servidor.");
+        }
+
+        listaEventosPago.replaceChildren();
+
+        if (data.events.length === 0) {
+            const vacio = document.createElement("p");
+            vacio.textContent = "Todavía no hay notificaciones sincronizadas.";
+            listaEventosPago.appendChild(vacio);
+            return;
+        }
+
+        for (const evento of data.events) {
+            const tarjeta = document.createElement("article");
+            tarjeta.className = "evento-pago";
+
+            const titulo = document.createElement("strong");
+            const importe = Number(evento.amount_minor_units) / 100;
+            const importeTexto = Number.isFinite(importe)
+                ? new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(importe)
+                : "Importe no disponible";
+            titulo.textContent = (evento.source_label || "Notificación") + " · " + importeTexto + " CUP";
+
+            const detalle = document.createElement("div");
+            detalle.className = "evento-detalle";
+            const fecha = evento.received_at
+                ? new Date(evento.received_at).toLocaleString("es-ES")
+                : "Fecha no disponible";
+            const lineas = [
+                "Teléfono emisor: " + (evento.sender_phone || "No disponible"),
+                "Recibida: " + fecha
+            ];
+
+            if (evento.method === "CUP") {
+                lineas.push("Cuenta receptora: " + (evento.recipient_account || "No disponible"));
+                lineas.push("Referencia PAGOxMOVIL: " + (evento.transaction_reference || "No disponible"));
+                lineas.push("Fecha del mensaje: " + (evento.raw_date || "No disponible"));
+            }
+
+            lineas.push("Coincidencia: " + (evento.match_status || "NO_MATCH"));
+            if (evento.matched_request_id) {
+                lineas.push("Solicitud sugerida: " + evento.matched_request_id);
+            }
+            detalle.textContent = lineas.join("\n");
+
+            const estado = document.createElement("div");
+            estado.className = "evento-estado";
+            estado.textContent = "PENDIENTE DE REVISIÓN MANUAL · " + (evento.review_status || "PENDING_MANUAL_REVIEW");
+
+            tarjeta.append(titulo, detalle, estado);
+            listaEventosPago.appendChild(tarjeta);
+        }
+    } catch (error) {
+        console.warn("No se pudieron cargar los eventos Android:", error);
+        listaEventosPago.textContent =
+            "Los eventos todavía no están disponibles. Comprueba que la tabla SQL y la Edge Function gvr-payment-reader-events estén desplegadas. Las solicitudes GVR siguen funcionando normalmente.";
     }
 }
 
