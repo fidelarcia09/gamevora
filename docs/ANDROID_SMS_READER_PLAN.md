@@ -1,61 +1,60 @@
-# Gamers Gold — plan técnico del lector Android de SMS
+# Gamers Gold — lector Android de confirmaciones
 
-Estado: diseño previo a implementación. No hay APK ni aplicación Android construida todavía.
+Estado: prototipo Android creado en la rama `feature/gvr-android-notification-reader`. Todavía no hay APK generado ni prueba física en el Samsung Galaxy A05.
 
 ## Objetivo
 
-Aplicación privada para el Samsung Galaxy A05, instalada mediante APK fuera de Google Play. Su única función es recibir confirmaciones de pagos de Gamers Gold, extraer los campos mínimos necesarios y sincronizarlos con un backend cuando exista conexión.
+Aplicación privada para el Samsung Galaxy A05 con Android 15, distribuida mediante APK fuera de Google Play. La primera etapa comprueba si se pueden detectar notificaciones de la aplicación Mensajes y reconocer localmente los dos formatos de confirmación.
 
-## Alcance de la primera versión
+## Implementación inicial en el repositorio
 
-- Detectar únicamente SMS que coincidan con los formatos esperados de ETECSA y PAGO×MOVIL.
-- Validar el remitente con metadatos reales entregados por Android; no confiar en el nombre escrito dentro del cuerpo.
-- Procesar localmente el SMS y conservar solo los campos necesarios para conciliación.
-- Guardar eventos pendientes en almacenamiento local privado de la aplicación.
-- Sincronizar mediante HTTPS cuando haya conexión, con reintentos y backoff.
-- No enviar el SMS completo ni otros mensajes personales al servidor.
-- No acreditar GVR ni aprobar solicitudes: toda coincidencia queda en revisión humana.
-- No incluir claves service_role, secretos de proveedor ni credenciales administrativas en el APK.
+La carpeta `android/` contiene un proyecto Android nativo Kotlin:
 
-## Diseño Android propuesto
+- Pantalla de diagnóstico para conceder acceso especial a notificaciones.
+- Lista de paquetes que han publicado notificaciones, almacenando solo sus identificadores.
+- Selección explícita del paquete correspondiente a la aplicación Mensajes.
+- Servicio `NotificationListenerService` que procesa únicamente notificaciones del paquete seleccionado.
+- Parser local para los formatos documentados ETECSA y PAGO×MOVIL.
+- SQLite privado para guardar únicamente los campos extraídos y el estado `PENDING_MANUAL_REVIEW`.
+- Sin permisos `READ_SMS` ni `RECEIVE_SMS`.
+- Sin llamadas de red, integración Supabase, aprobación ni acreditación GVR.
 
-1. BroadcastReceiver para el evento de SMS entrante, sujeto a que Android permita conceder RECEIVE_SMS a la app instalada.
-2. Validación de remitente, formato, importe y campos de origen.
-3. Persistencia local idempotente antes de terminar el receptor.
-4. WorkManager con restricción de red para vaciar la cola local y reintentar fallos.
-5. Pantalla de estado: permiso, último SMS reconocido, pendientes, último intento de sincronización y errores.
-6. Configuración explícita para activar/desactivar lectura y sincronización.
+## Limitaciones importantes
 
-## Bloqueo que debe resolverse antes de programar el receptor
+1. El acceso a notificaciones no equivale al acceso directo a SMS. Android o la aplicación Mensajes pueden entregar texto recortado, agrupar mensajes o no incluir el título/remitente esperado.
+2. El paquete Android y el título de la notificación no prueban la identidad del remitente bancario ni sustituyen el originatingAddress del SMS. Esta vía es solo una señal de conciliación que requiere revisión humana.
+3. El prototipo reconoce ETECSA si el título contiene la etiqueta ETECSA y el cuerpo comienza con el formato acordado. Para PAGO×MOVIL requiere la etiqueta en el título y el formato completo en el cuerpo.
+4. Los eventos ETECSA no tienen referencia bancaria única. Su clave local solo reduce repeticiones dentro del dispositivo; no garantiza unicidad global.
+5. No se debe añadir sincronización hasta definir autenticación del dispositivo, endpoint, idempotencia del servidor y validación independiente de todos los campos.
 
-La documentación oficial de Android clasifica RECEIVE_SMS como permiso peligroso y de acceso restringido: no puede concederse hasta que el instalador registrado incluya el permiso en su lista permitida. Por tanto, instalar un APK manualmente no garantiza que el permiso pueda concederse. Debe comprobarse en el Samsung A05 real antes de prometer recepción automática.
+## Seguridad y privacidad
 
-No se debe intentar eludir esta restricción. Si el instalador del dispositivo no permite conceder el permiso, habrá que evaluar una alternativa explícita y consentida, como captura de notificaciones con acceso especial del usuario, explicando que no garantiza recibir todos los SMS y depende de las notificaciones de la app de mensajes. Otra opción sería replantear la distribución/rol de la aplicación, con una revisión completa de requisitos.
+- El usuario concede el acceso especial de Android de forma explícita.
+- No se solicita acceso a la bandeja completa de SMS.
+- El servicio observa paquetes para que el usuario elija la aplicación fuente; solo conserva nombres de paquete, no el texto de otras notificaciones.
+- El texto de una notificación seleccionada se procesa en memoria y se descarta. Solo los campos extraídos se guardan en la base local privada.
+- No almacenar SMS completos, contraseñas, tokens, service_role, secretos ni datos reales de cuentas receptoras en el APK o en el repositorio.
+- No cambiar wallets, transactions, solicitudes ni estados de pago.
 
-## Datos de remitente
+## Pruebas pendientes
 
-El operador del proyecto confirmó que en la aplicación de mensajes aparecen las etiquetas ETECSA y PAGO×MOVIL. Esto no demuestra que Android entregue esas mismas cadenas como originatingAddress: el valor real de metadatos debe comprobarse en el dispositivo. No se almacenarán números privados ni muestras financieras reales en este repositorio.
+1. Abrir el proyecto en Android Studio con JDK 17 y Android SDK Platform 35.
+2. Generar el APK de depuración.
+3. Instalarlo en el Samsung Galaxy A05 y conceder Notification Listener access.
+4. Identificar y seleccionar el paquete real de la aplicación Mensajes.
+5. Comprobar si Android entrega el título ETECSA/PAGO×MOVIL y el cuerpo completo en los extras de la notificación.
+6. Probar formatos válidos, texto recortado, remitente desconocido, notificaciones agrupadas y notificaciones ajenas.
+7. Verificar que los eventos quedan en SQLite y que el texto original no se guarda.
+8. Revisar el comportamiento con la aplicación cerrada y tras reiniciar el teléfono.
 
-## Persistencia y conciliación
+## Próxima etapa
 
-- ETECSA: teléfono de origen + importe + hora de recepción + ID local; sin referencia bancaria única, por lo que siempre requiere revisión humana y no se considera deduplicación global.
-- PAGO×MOVIL: referencia de transacción del proveedor como clave idempotente; validar importe y cuenta receptora configurada en backend.
-- El servidor debe autenticar el dispositivo y validar todo de nuevo. Nunca confiar en importes, remitentes o referencias solo porque los envió el APK.
-- La cola debe conservar los eventos ante falta de Internet, cierre del proceso y reinicio del teléfono.
-- No realizar cambios en wallet, transacciones ni estado de solicitudes durante esta fase.
-
-## Criterios de aceptación
-
-- Permiso de SMS comprobado en el Samsung A05 sin trucos ni bypass.
-- Recibe SMS de prueba con la app cerrada y registra metadatos reales del remitente.
-- No captura mensajes que no pertenezcan a los dos formatos autorizados.
-- La cola sobrevive al cierre forzado razonable y al reinicio del teléfono.
-- Sincroniza al volver la conexión y no duplica eventos.
-- Ninguna clave administrativa ni SMS completo se incorpora al APK o a logs públicos.
-- Conciliación y acreditación siguen desactivadas hasta completar pruebas y revisión independiente.
+Añadir pruebas automatizadas del parser Kotlin y una compilación Android en CI. Después de verificar el APK, probar únicamente notificaciones de muestra en el dispositivo. La sincronización a Supabase seguirá fuera de alcance hasta completar una revisión de seguridad.
 
 ## Referencias oficiales
 
-- Android Manifest.permission: https://developer.android.com/reference/android/Manifest.permission
+- Android NotificationListenerService: https://developer.android.com/reference/android/service/notification/NotificationListenerService
+- Android notification listener access: https://developer.android.com/reference/android/provider/Settings#ACTION_NOTIFICATION_LISTENER_SETTINGS
 - Android WorkManager: https://developer.android.com/develop/background-work/background-tasks/persistent
 - Android offline-first: https://developer.android.com/topic/architecture/data-layer/offline-first
+- Android Manifest.permission: https://developer.android.com/reference/android/Manifest.permission
