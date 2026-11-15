@@ -423,10 +423,13 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
         <div id="panelCup" class="pago-panel oculto">
             <h3>Pago mediante CUP</h3>
             <p class="descripcion">
-                Este método todavía no está disponible porque falta configurar la tarjeta receptora.
+                Transfiere únicamente cuando el método esté habilitado. Comprueba que la tarjeta receptora
+                y el importe sean correctos antes de realizar cualquier operación.
             </p>
-            <div class="titulo">Número de confirmación</div>
-            <div class="direccion">63638032</div>
+            <div class="titulo">Tarjeta receptora de Gamers Gold</div>
+            <div class="direccion" id="cuentaCup">Tarjeta pendiente de configuración.</div>
+            <button class="boton-secundario" type="button" id="copiarCup" disabled>Copiar tarjeta</button>
+            <p class="ayuda" id="estadoCup">CUP todavía no está disponible. Te avisaremos cuando esté listo.</p>
         </div>
 
         <div class="temporizador-usdt" id="temporizadorUsdt"><div class="tiempo-label" id="tiempoLabel">Tiempo disponible para completar el pago</div><div class="tiempo" id="tiempoRestante">10:00</div></div>
@@ -460,8 +463,15 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
 
 
 
+<script src="./gvr-payment-config.js"></script>
 <script>
 "use strict";
+
+const CUP_CONFIG = window.GVR_PAYMENT_CONFIG || {};
+const CUP_RECEIVER_ACCOUNT = String(CUP_CONFIG.cupReceiverAccount || "").replace(/\D/g, "");
+const CUP_ACCOUNT_CONFIGURED = /^\d{10,24}$/.test(CUP_RECEIVER_ACCOUNT);
+const CUP_AUTOMATION_READY = CUP_CONFIG.cupAutomationReady === true;
+const CUP_AVAILABLE = CUP_ACCOUNT_CONFIGURED && CUP_AUTOMATION_READY;
 
 const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
@@ -898,15 +908,38 @@ mostrarPrecio.textContent = cantidadValida && metodo
 
 mostrarPanelMetodo();
 
-if (metodoTexto === "CUP") {
+const cuentaCupElemento = document.getElementById("cuentaCup");
+const copiarCup = document.getElementById("copiarCup");
+const estadoCup = document.getElementById("estadoCup");
+
+if (cuentaCupElemento) {
+    cuentaCupElemento.textContent = CUP_ACCOUNT_CONFIGURED
+        ? CUP_RECEIVER_ACCOUNT
+        : "Tarjeta pendiente de configuración.";
+}
+if (copiarCup) {
+    copiarCup.disabled = !CUP_ACCOUNT_CONFIGURED;
+    copiarCup.addEventListener("click", () => {
+        if (CUP_ACCOUNT_CONFIGURED) copiarTexto(CUP_RECEIVER_ACCOUNT);
+    });
+}
+if (estadoCup) {
+    estadoCup.textContent = !CUP_ACCOUNT_CONFIGURED
+        ? "La tarjeta receptora todavía no está configurada."
+        : !CUP_AUTOMATION_READY
+            ? "La automatización CUP todavía está en preparación. No transfieras todavía."
+            : "Verifica el importe y transfiere únicamente a esta tarjeta.";
+}
+
+if (metodoTexto === "CUP" && !CUP_AVAILABLE) {
     botonContinuar.disabled = true;
-    mostrarMensaje("El pago mediante CUP todavía no está disponible.","error");
+    mostrarMensaje("El pago mediante CUP todavía no está disponible. No realices transferencias.","error");
 } else if (!cantidadValida || !metodo) {
     botonContinuar.disabled = true;
     mostrarMensaje("Los datos de esta compra no son válidos.","error");
 }
 
-if (cantidadValida && metodo && metodoTexto !== "CUP") prepararSolicitudPago();
+if (cantidadValida && metodo && (metodoTexto !== "CUP" || CUP_AVAILABLE)) prepararSolicitudPago();
 
 // No reiniciamos ni borramos la solicitud al volver desde la caché del navegador.
 // El temporizador usa el vencimiento del servidor y conserva el estado original.
@@ -960,7 +993,7 @@ document.getElementById("copiarUsdt").addEventListener("click",() =>
 botonContinuar.addEventListener("click",async () => {
     if (enviando || envioCompletado) return;
 
-    if (!cantidadValida || !metodo || metodoTexto === "CUP") {
+    if (!cantidadValida || !metodo || (metodoTexto === "CUP" && !CUP_AVAILABLE)) {
         mostrarMensaje("Revisa la cantidad y el método de pago.","error");
         return;
     }
