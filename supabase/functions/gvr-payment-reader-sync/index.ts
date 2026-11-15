@@ -231,16 +231,51 @@ Deno.serve(async (req: Request) => {
 
     if (insertError) {
       if (insertError.code === "23505") {
-        results.push({
-          localEventKey: event.localEventKey,
-          stored: true,
-          duplicate: true,
-          reviewStatus: "PENDING_MANUAL_REVIEW",
-        });
-      } else {
-        console.error("GVR payment reader sync: no se pudo guardar un evento:", insertError.code);
-        results.push({ localEventKey: event.localEventKey, stored: false, error: "EVENT_INSERT_FAILED" });
+        // A unique conflict is acknowledged only after confirming that the existing
+        // row represents the same notification/payment. Never silently swallow a
+        // conflicting transaction reference or a reused local key.
+        const { data: localDuplicate } = await admin
+          .from("gvr_payment_notification_events")
+          .select("method,amount_minor_units,sender_phone,recipient_account,transaction_reference,received_at")
+          .eq("device_id", body.deviceId)
+          .eq("local_event_key", event.localEventKey)
+          .maybeSingle();
+
+        if (localDuplicate) {
+          const sameLocalEvent =
+            localDuplicate.method === event.method &&
+            Number(localDuplicate.amount_minor_units) === event.amountMinorUnits &&
+            localDuplicate.sender_phone === event.senderPhone &&
+            (localDuplicate.recipient_account ?? null) === (event.recipientAccount ?? null) &&
+            (localDuplicate.transaction_reference ?? null) === (event.transactionReference ?? null) &&
+            new Date(localDuplicate.received_at).getTime() === event.receivedAtMillis;
+          results.push(sameLocalEvent
+            ? { localEventKey: event.localEventKey, stored: true, duplicate: true, reviewStatus: "PENDING_MANUAL_REVIEW" }
+            : { localEventKey: event.localEventKey, stored: false, error: "DUPLICATE_LOCAL_KEY_CONFLICT" });
+          continue;
+        }
+
+        if (event.method === "CUP" && event.transactionReference) {
+          const { data: referenceDuplicate } = await admin
+            .from("gvr_payment_notification_events")
+            .select("method,amount_minor_units,sender_phone,recipient_account")
+            .eq("transaction_reference", event.transactionReference)
+            .maybeSingle();
+          if (referenceDuplicate) {
+            const samePayment =
+              referenceDuplicate.method === "CUP" &&
+              Number(referenceDuplicate.amount_minor_units) === event.amountMinorUnits &&
+              referenceDuplicate.sender_phone === event.senderPhone &&
+              referenceDuplicate.recipient_account === event.recipientAccount;
+            results.push(samePayment
+              ? { localEventKey: event.localEventKey, stored: true, duplicate: true, reviewStatus: "PENDING_MANUAL_REVIEW" }
+              : { localEventKey: event.localEventKey, stored: false, error: "DUPLICATE_CUP_REFERENCE_CONFLICT" });
+            continue;
+          }
+        }
       }
+      console.error("GVR payment reader sync: no se pudo guardar un evento:", insertError.code);
+      results.push({ localEventKey: event.localEventKey, stored: false, error: "EVENT_INSERT_FAILED" });
       continue;
     }
 
