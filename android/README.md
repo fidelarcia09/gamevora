@@ -38,7 +38,7 @@ La clave pública se obtiene desde la configuración API del proyecto Supabase. 
 
 - Código de Edge Function: `supabase/functions/gvr-payment-reader-sync/index.ts`.
 - SQL propuesto: `docs/gvr-payment-notification-events.sql`.
-- La función comprueba JWT, correo y rol activo de administrador antes de aceptar el lote.
+- La función comprueba JWT, correo y rol activo de administrador antes de aceptar el lote. También exige `capturePackage` igual al paquete configurado de Google Messages, únicamente como control de consistencia del cliente.
 - PAGOxMOVIL se deduplica mediante su referencia de transacción única; ETECSA solo tiene deduplicación local por dispositivo.
 - La coincidencia con una solicitud es una sugerencia: ETECSA compara teléfono emisor, importe y ventana temporal; CUP compara cuenta receptora configurada, importe y ventana temporal.
 - Para comparar la cuenta receptora CUP se necesita configurar el secreto `GVR_CUP_RECEIVER_ACCOUNT` en Supabase. Su valor no debe entrar en Git ni en el APK.
@@ -47,7 +47,7 @@ La clave pública se obtiene desde la configuración API del proyecto Supabase. 
 
 ## Límites de seguridad
 
-- Los metadatos de una notificación de Google Messages no demuestran por sí solos el remitente SMS original ni que el pago sea auténtico.
+- `capture_package` identifica la aplicación Android que publicó la notificación; no demuestra el remitente SMS original ni que el pago sea auténtico. El valor enviado por la APK es metadato de captura y no una prueba criptográfica.
 - Los eventos se almacenan como `PENDING_MANUAL_REVIEW`; una coincidencia no aprueba una solicitud.
 - No se modifica `wallets`, `transactions` ni el estado de `gvr_purchase_requests`.
 - No se acredita GVR automáticamente.
