@@ -14,6 +14,7 @@ class GvrPaymentSyncWorker(
 ) : Worker(appContext, workerParams) {
 
     override fun doWork(): Result {
+        if (!BuildConfig.GVR_SYNC_ENABLED) return Result.failure()
         val auth = SupabaseAuthClient(applicationContext)
         if (!auth.isConfigured()) return Result.failure()
         val session = auth.sessionForSync() ?: return if (
