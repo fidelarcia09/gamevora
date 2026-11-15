@@ -245,8 +245,8 @@ Veredicto inicial esperado: USDT solo APTO PARA PRUEBAS CONTROLADAS EN MODO SOMB
 ### Orden recomendado de ejecución
 
 1. Cerrar revisión técnica de USDT y sus pruebas en modo sombra.
-2. Obtener los SMS reales anonimizados de ETECSA y PAGO×MOVIL.
-3. Confirmar la cuenta receptora CUP.
+2. Implementar y probar parsers estrictos con los vectores SMS ya documentados.
+3. Inspeccionar esquema/consumidores y diseñar la referencia CUP independiente con índice único.
 4. Construir la app Android y la recepción segura de SMS.
 5. Construir la conciliación administrativa conjunta.
 6. Ejecutar pruebas integrales y revisión de Claude.
@@ -276,7 +276,7 @@ El operador confirmó explícitamente las claves de conciliación para la automa
 
 - **SALDO_MOVIL / ETECSA:** la clave de identidad del pago es el número telefónico desde el que se envía la transferencia de saldo. La conciliación debe cotejar ese número de origen con el teléfono emisor registrado en la solicitud y verificar también el importe. No confundirlo con el número destinatario.
 - **CUP / PAGO×MOVIL:** la clave de identidad del pago es el número de transacción que aparece en el SMS de confirmación. Debe ser una referencia independiente, única y no reutilizable, cotejada junto con el importe y, cuando el SMS lo incluya, la cuenta receptora. No reutilizar `payment_txid`, que corresponde al hash TXID de USDT.
-- Esta aclaración define la lógica funcional, pero **no sustituye los SMS reales anonimizados**. Todavía no permite escribir un parser fiable porque se desconoce el formato exacto del texto y dónde aparecen esos campos.
+- Esta aclaración define la lógica funcional. Posteriormente, el operador suministró los SMS reales; sus formatos y vectores de prueba anonimizados están documentados en la sección 10.
 - Antes de implementar el almacenamiento CUP hay que inspeccionar el esquema completo y los consumidores existentes, luego proponer una columna/referencia propia y un índice único mediante migración revisable. No asumir que esa columna ya existe.
 - No se ha implementado la app Android, la cola offline, el endpoint de SMS, la conciliación de CUP ni una acreditación automática.
 - Claude debe auditar estas reglas además de los controles técnicos y emitir un veredicto separado por método.
