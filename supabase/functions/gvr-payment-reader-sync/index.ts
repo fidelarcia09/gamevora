@@ -38,13 +38,17 @@ function validateEvent(value: unknown): IncomingEvent | null {
       event.localEventKey.trim().length < 1 ||
       event.localEventKey.length > 256) return null;
   if (event.method !== "SALDO_MOVIL" && event.method !== "CUP") return null;
-  if (!Number.isSafeInteger(event.amountMinorUnits) ||
-      Number(event.amountMinorUnits) <= 0 ||
-      Number(event.amountMinorUnits) > 100_000_000_000) return null;
+  if (typeof event.amountMinorUnits !== "number" ||
+      !Number.isSafeInteger(event.amountMinorUnits) ||
+      event.amountMinorUnits <= 0 ||
+      event.amountMinorUnits > 100_000_000_000) return null;
   if (typeof event.senderPhone !== "string" ||
       !/^\d{8,15}$/.test(event.senderPhone)) return null;
-  if (!Number.isSafeInteger(event.receivedAtMillis) ||
-      Number(event.receivedAtMillis) <= 0) return null;
+  if (typeof event.receivedAtMillis !== "number" ||
+      !Number.isSafeInteger(event.receivedAtMillis) ||
+      event.receivedAtMillis <= 0 ||
+      !Number.isFinite(new Date(event.receivedAtMillis).getTime()) ||
+      event.receivedAtMillis > Date.now() + 5 * 60 * 1000) return null;
 
   if (event.method === "SALDO_MOVIL") {
     return {
