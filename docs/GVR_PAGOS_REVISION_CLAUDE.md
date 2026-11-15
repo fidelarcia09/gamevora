@@ -131,3 +131,112 @@ F. Datos externos que faltan.
 G. Veredicto separado para USDT, SALDO_MOVIL y CUP: APTO PARA PRUEBAS / NO APTO PARA PRUEBAS / APTO PARA PRODUCCIÓN.
 
 Veredicto inicial esperado: USDT solo APTO PARA PRUEBAS CONTROLADAS EN MODO SOMBRA, sujeto a prueba autenticada y auditoría; SALDO_MOVIL NO APTO PARA PRUEBAS de parser hasta recibir ejemplos SMS; CUP NO APTO hasta configurar la cuenta receptora y recibir un SMS real anonimizado. Ningún método está autorizado para acreditar GVR automáticamente.
+
+
+## 7. Hoja de ruta paso a paso: completado y pendiente
+
+### Fase 1 — Auditoría y protección del sistema actual
+
+**Completado**
+- [x] Localizar el flujo actual de solicitudes GVR en `confirmar-gvr.html`.
+- [x] Identificar la tabla `gvr_purchase_requests`, los campos de pago y los estados.
+- [x] Revisar RLS, políticas, triggers, constraints, índices y permisos de las RPC.
+- [x] Confirmar las tasas vigentes: CUP 1.150, USDT 1 y SALDO_MOVIL 340 por cada GVR.
+- [x] Identificar que la aprobación administrativa activa utiliza `admin_review_gvr_purchase_request`.
+- [x] Mantener la acreditación automática desactivada.
+
+**Pendiente**
+- [ ] Revisar con Claude el código completo y las diferencias de las RPC antiguas.
+- [ ] Decidir, con pruebas de compatibilidad, si se retira o actualiza la RPC obsoleta `create_gvr_purchase_request`; no hacerlo antes de comprobar clientes antiguos.
+- [ ] Añadir pruebas automatizadas para solicitudes, permisos, vencimiento, duplicados y aprobación manual.
+
+### Fase 2 — Verificador USDT BEP20
+
+**Completado**
+- [x] Crear y desplegar `gvr-usdt-verificar` en modo sombra.
+- [x] Exigir JWT y comprobar que la solicitud pertenece al usuario autenticado.
+- [x] Verificar red BSC, contrato USDT configurado, recibo exitoso, destinatario, importe y confirmaciones.
+- [x] Añadir restricción única para impedir reclamar el mismo TXID más de una vez.
+- [x] Crear tabla de auditoría `gvr_usdt_verifications` y política de lectura para soporte.
+- [x] Corregir el bloque `catch` sobrante del frontend.
+- [x] Corregir normalización de entradas y validación del formato TXID.
+- [x] Alinear en la rama los nombres de los archivos de migración con las versiones que ya constan en Supabase.
+
+**Pendiente**
+- [ ] Confirmar que `SUPABASE_SERVICE_ROLE_KEY` está configurada en los secretos de Edge Functions, sin mostrar ni compartir su valor.
+- [ ] Ejecutar prueba HTTP autenticada controlada con una solicitud propia de prueba y TXID válido, sin acreditar saldo.
+- [ ] Probar casos negativos: sin sesión, solicitud ajena, TXID inexistente, red equivocada, contrato incorrecto, importe incorrecto, destinatario incorrecto, recibo fallido, pocas confirmaciones, TXID repetido y RPC caído.
+- [ ] Confirmar que cada intento queda registrado en `gvr_usdt_verifications`.
+- [ ] Incorporar redundancia de RPC, timeout/reintentos seguros y reconsulta de transacciones con pocas confirmaciones.
+- [ ] Resolver el riesgo de atribución: un TXID público puede ser reclamado por otra persona si coincide el importe. Mantener revisión humana hasta tener un mecanismo fiable de vincular pagador y solicitud.
+- [ ] Pedir a Claude revisión de seguridad y resultado de pruebas.
+- [ ] Solo después, diseñar por separado cualquier posible acreditación automática; requiere autorización explícita y pruebas adicionales.
+
+### Fase 3 — Automatización de saldo móvil (ETECSA)
+
+**Completado**
+- [x] Identificar el método `SALDO_MOVIL` y su tasa vigente de 340 por GVR.
+- [x] Confirmar que la web actualmente solicita número emisor y comprobante.
+- [x] Identificar el teléfono Android previsto para la integración: Samsung A05.
+- [x] Definir que los SMS pueden recibirse sin datos y deben guardarse localmente hasta recuperar conexión.
+
+**Pendiente**
+- [ ] Recibir un SMS real de confirmación de ETECSA, anonimizado pero con formato literal intacto.
+- [ ] Definir con ese ejemplo cómo identificar remitente, importe, número de origen/destino e identificador de operación, solo si aparecen en el mensaje.
+- [ ] Diseñar y construir la app Android con permiso SMS explícito y filtrado del remitente autorizado.
+- [ ] Implementar almacenamiento local persistente y cola offline.
+- [ ] Implementar emparejamiento/revocación del dispositivo y autenticación segura del envío al backend.
+- [ ] Crear endpoint/Edge Function de recepción que valide, deduplique y registre cada evento.
+- [ ] Crear vista de conciliación administrativa entre SMS recibidos y solicitudes GVR.
+- [ ] Probar SMS repetidos, eventos tardíos, falta de internet, reinicio del teléfono, duplicados, mensajes inválidos y reintentos.
+- [ ] Ejecutar pruebas en modo sombra antes de considerar cualquier aprobación automática.
+
+### Fase 4 — Automatización de CUP / Transfermóvil
+
+**Completado**
+- [x] Identificar la tasa CUP vigente de 1.150 por GVR.
+- [x] Confirmar que el método CUP permanece deshabilitado en la página.
+- [x] Identificar el remitente SMS esperado como `PAGO×MOVIL`, pendiente de confirmarlo con un mensaje real.
+
+**Pendiente**
+- [ ] Confirmar los datos oficiales de la tarjeta/cuenta receptora que deben mostrarse al cliente.
+- [ ] Recibir un SMS real de confirmación PAGO×MOVIL, anonimizado y con formato literal intacto.
+- [ ] Confirmar qué datos del SMS permiten identificar importe, referencia, cuenta receptora y operación.
+- [ ] Verificar si existe una vía oficial y autorizada de consulta/conciliación; no asumir que existe una API.
+- [ ] Implementar recepción, deduplicación, registro y conciliación administrativa de eventos.
+- [ ] Probar pagos repetidos, importes incorrectos, mensajes tardíos, operaciones no conciliadas y falta de conexión.
+- [ ] Mantener CUP deshabilitado hasta completar pruebas y validar los datos receptores.
+
+### Fase 5 — Panel de soporte y conciliación conjunta
+
+**Pendiente**
+- [ ] Mostrar a soporte las solicitudes GVR y los eventos recibidos de USDT, ETECSA y PAGO×MOVIL.
+- [ ] Mostrar coincidencias, discrepancias, duplicados y eventos sin solicitud asociada.
+- [ ] Mantener trazabilidad de quién revisó y qué decisión tomó.
+- [ ] Impedir que un evento ya conciliado pueda volver a acreditar la misma solicitud.
+- [ ] Probar permisos: usuario normal, soporte y administrador.
+- [ ] Mantener la aprobación manual existente como mecanismo de respaldo.
+
+### Fase 6 — Pruebas finales, revisión de Claude y publicación
+
+**Pendiente**
+- [ ] Ejecutar pruebas unitarias, de integración, seguridad y regresión.
+- [ ] Revisar que los tres métodos calculan exactamente la tasa vigente y que no se mezclan monedas.
+- [ ] Confirmar que ninguna clave privilegiada se incluye en HTML, JavaScript público o APK.
+- [ ] Entregar a Claude la PR y este documento para auditoría independiente.
+- [ ] Corregir todos los hallazgos críticos y altos.
+- [ ] Repetir las pruebas y obtener veredicto por separado para USDT, saldo móvil y CUP.
+- [ ] Revisar y aprobar explícitamente la PR antes de fusionar.
+- [ ] Publicar primero en modo manual/sombra; no habilitar acreditación automática sin autorización y controles aprobados.
+
+### Orden recomendado de ejecución
+
+1. Cerrar revisión técnica de USDT y sus pruebas en modo sombra.
+2. Obtener los SMS reales anonimizados de ETECSA y PAGO×MOVIL.
+3. Confirmar la cuenta receptora CUP.
+4. Construir la app Android y la recepción segura de SMS.
+5. Construir la conciliación administrativa conjunta.
+6. Ejecutar pruebas integrales y revisión de Claude.
+7. Publicar manteniendo aprobación manual hasta que cada método tenga un veredicto APTO PARA PRODUCCIÓN.
+
+**Regla de seguridad:** no se acredita GVR por una captura, por un SMS reenviado manualmente ni por una respuesta aislada del verificador. La acreditación solo podrá considerarse cuando exista una operación auténtica, única, conciliada, autorizada y registrada.
