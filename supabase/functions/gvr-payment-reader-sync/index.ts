@@ -84,7 +84,7 @@ function validateEvent(value: unknown): IncomingEvent | null {
 }
 
 async function findRequestMatch(
-  admin: ReturnType<typeof createClient>,
+  admin: ReturnType<typeof createClient<any>>,
   event: IncomingEvent,
 ): Promise<{ status: string; requestId: string | null }> {
   if (event.method === "CUP") {
