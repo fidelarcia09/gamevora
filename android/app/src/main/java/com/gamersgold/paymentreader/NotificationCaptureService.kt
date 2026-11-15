@@ -97,6 +97,7 @@ class NotificationCaptureService : NotificationListenerService() {
                 store.close()
             }
             if (inserted) {
+                GvrPaymentSyncScheduler.enqueue(applicationContext)
                 prefs.edit()
                     .putInt(KEY_RECOGNIZED_PAYMENTS, prefs.getInt(KEY_RECOGNIZED_PAYMENTS, 0) + 1)
                     .putString(KEY_LAST_CAPTURE, event.method)
