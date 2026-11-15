@@ -1,6 +1,6 @@
--- Propuesta de esquema para eventos Android de confirmación GVR.
--- Este archivo NO se ha ejecutado en Supabase. Convertirlo en migración con Supabase CLI
--- después de revisión; no aplicar a producción hasta autorizarlo.
+-- Copia de referencia del esquema aplicado en Supabase.
+-- Migración canónica: supabase/migrations/20261115233616_create_gvr_payment_notification_events.sql
+-- El índice adicional synced_by está en 20261115233700_index_gvr_payment_notification_synced_by.sql.
 
 begin;
 
