@@ -18,7 +18,10 @@ Crea `android/local.properties` (ignorado por Git) con:
 ```properties
 SUPABASE_URL=https://gsuhzcavghsiolmipnzi.supabase.co
 SUPABASE_ANON_KEY=PEGA_AQUI_LA_CLAVE_PUBLICA_PUBLISHABLE_O_ANON
+GVR_SYNC_ENABLED=false
 ```
+
+Mantén `GVR_SYNC_ENABLED=false` hasta que el SQL haya sido revisado y aplicado, la Edge Function esté desplegada y el secreto de la cuenta CUP esté configurado. Solo entonces se podrá cambiar a `true` y reconstruir el APK.
 
 La clave pública se obtiene desde la configuración API del proyecto Supabase. No pegues aquí una clave `service_role`, `secret` ni contraseña. Si las propiedades no están configuradas, la pantalla de acceso permanecerá deshabilitada.
 
