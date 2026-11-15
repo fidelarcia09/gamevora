@@ -36,6 +36,7 @@ class GvrPaymentSyncWorker(
                             put(
                                 JSONObject()
                                     .put("localEventKey", event.localDedupeKey)
+                                    .put("capturePackage", NotificationCaptureService.TARGET_PACKAGE)
                                     .put("method", event.method)
                                     .put("amountMinorUnits", event.amountMinorUnits)
                                     .put("senderPhone", event.senderPhone)
