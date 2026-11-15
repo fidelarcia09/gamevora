@@ -12,6 +12,7 @@ Este documento describe el orden de activación de la lectura de notificaciones 
 - No acredita GVR automáticamente.
 - No se deben hacer transferencias reales para probar el sistema.
 - El SQL de `docs/gvr-payment-notification-events.sql` es una propuesta y debe revisarse antes de aplicarse.
+- La Edge Function `gvr-payment-reader-events` y el panel de eventos de `frontend/confirmaciones-gvr.html` están preparados para consultar los últimos 100 eventos desde la cuenta administradora.
 
 ## Datos CUP: dos configuraciones distintas
 
@@ -42,7 +43,8 @@ La propiedad `cupAutomationReady` debe permanecer en `false` hasta completar tod
 8. Ejecutar pruebas sintéticas de ETECSA y PAGOxMOVIL, incluyendo duplicados, referencia CUP repetida, cuenta receptora incorrecta, importes distintos, evento vencido, usuario no autorizado y lote inválido.
 9. Comprobar que los eventos quedan pendientes de revisión manual y que no se producen cambios en saldos ni transacciones.
 10. Construir e instalar un APK nuevo con la configuración pública Supabase correcta y `GVR_SYNC_ENABLED=true`, solo después de que la revisión de seguridad y las pruebas estén aprobadas.
-11. Para habilitar CUP al cliente, introducir la tarjeta en `cupReceiverAccount`, confirmar que coincide con el secreto y cambiar `cupAutomationReady` a `true` únicamente cuando todos los pasos anteriores estén completos.
+11. Verificar desde `frontend/confirmaciones-gvr.html` que el panel administrativo puede consultar los eventos sincronizados.
+12. Para habilitar CUP al cliente, introducir la tarjeta en `cupReceiverAccount`, confirmar que coincide con el secreto y cambiar `cupAutomationReady` a `true` únicamente cuando todos los pasos anteriores estén completos.
 
 ## Reglas de interpretación
 
@@ -69,7 +71,7 @@ La propiedad `cupAutomationReady` debe permanecer en `false` hasta completar tod
 - El parser Android actual depende del título visible de la notificación para clasificar ETECSA/PAGOxMOVIL. Hay que verificar los títulos reales en el Samsung antes de activar la sincronización.
 - La cuenta CUP todavía no existe/configura; por tanto, no se puede verificar el destino real.
 - La Edge Function y la tabla aún no están desplegadas/aplicadas en el proyecto.
-- El flujo administrativo de revisión de eventos todavía necesita una revisión funcional antes de considerar el proceso completo para producción.
+- El panel administrativo de eventos está implementado, pero no podrá consultar datos hasta desplegar `gvr-payment-reader-events` y aplicar el SQL.
 
 ## Criterio de finalización
 
