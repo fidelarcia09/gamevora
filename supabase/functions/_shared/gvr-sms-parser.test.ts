@@ -72,5 +72,8 @@ Deno.test("no interpreta la fecha ambigua de PAGO×MOVIL", () => {
     systemSender: "PAGO×MOVIL",
     body: "El titular del telefono 5350000000 le ha realizado una transferencia a la cuenta 9224000000000000 de 3500.00 CUP. Nro. Transaccion KW0000ZJ0Z000. Fecha: 9/11/2026.",
   }), allowlist);
-  assert(result.ok && result.rawDate === "9/11/2026.", "La fecha debe permanecer como texto original");
+  assert(
+    result.ok && result.method === "CUP" && result.rawDate === "9/11/2026.",
+    "La fecha debe permanecer como texto original",
+  );
 });
