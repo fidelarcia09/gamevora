@@ -11,8 +11,11 @@ Este documento describe el orden de activación de la lectura de notificaciones 
 - Este flujo NO cambia `wallets`, `transactions` ni el estado de `gvr_purchase_requests`.
 - No acredita GVR automáticamente.
 - No se deben hacer transferencias reales para probar el sistema.
-- El SQL de `docs/gvr-payment-notification-events.sql` es una propuesta y debe revisarse antes de aplicarse.
-- La Edge Function `gvr-payment-reader-events` y el panel de eventos de `frontend/confirmaciones-gvr.html` están preparados para consultar los últimos 100 eventos desde la cuenta administradora.
+- El esquema `public.gvr_payment_notification_events` ya está aplicado en Supabase, con RLS activado y sin acceso directo para `anon` ni `authenticated`.
+- `gvr-payment-reader-sync` está desplegada (versión 2, JWT obligatorio).
+- `gvr-payment-reader-events` está desplegada (versión 1, JWT obligatorio).
+- La cuenta administradora configurada sigue activa en `support_agents`.
+- El panel `frontend/confirmaciones-gvr.html` puede consultar los últimos 100 eventos mediante la función administrativa.
 
 ## Datos CUP: dos configuraciones distintas
 
@@ -64,6 +67,14 @@ La propiedad `cupAutomationReady` debe permanecer en `false` hasta completar tod
 - Usar la referencia de transacción para detectar duplicados.
 - Una referencia repetida con datos diferentes debe rechazarse como conflicto.
 - Siempre requiere revisión humana.
+
+## Estado de despliegue verificado (15 de noviembre de 2026)
+
+- La tabla existe y está vacía; todavía no se han enviado eventos sintéticos ni notificaciones reales.
+- Los permisos directos de `anon` y `authenticated` están revocados; solo el backend con `service_role` opera sobre la tabla.
+- No se configuró `GVR_CUP_RECEIVER_ACCOUNT` porque aún no existe la tarjeta definitiva.
+- `frontend/gvr-payment-config.js` mantiene `cupReceiverAccount` vacío y `cupAutomationReady` en `false`.
+- La sincronización del APK permanece desactivada por defecto (`GVR_SYNC_ENABLED=false`).
 
 ## Limitaciones conocidas que bloquean la activación
 
