@@ -240,3 +240,20 @@ Veredicto inicial esperado: USDT solo APTO PARA PRUEBAS CONTROLADAS EN MODO SOMB
 7. Publicar manteniendo aprobación manual hasta que cada método tenga un veredicto APTO PARA PRODUCCIÓN.
 
 **Regla de seguridad:** no se acredita GVR por una captura, por un SMS reenviado manualmente ni por una respuesta aislada del verificador. La acreditación solo podrá considerarse cuando exista una operación auténtica, única, conciliada, autorizada y registrada.
+
+
+## 8. Revalidación directa del entorno (15-11-2026)
+
+Comprobaciones adicionales realizadas después de redactar esta hoja de ruta:
+
+- La Edge Function remota `gvr-usdt-verificar` está ACTIVE, versión 1 y con `verify_jwt=true`.
+- El código remoto de la Edge Function coincide exactamente con `supabase/functions/gvr-usdt-verificar/index.ts` de esta rama.
+- Las migraciones `20261115172521_gvr_usdt_txid_unique` y `20261115172525_gvr_usdt_verifications` aparecen en el historial remoto.
+- La tabla `gvr_usdt_verifications` existe.
+- El índice único `gvr_purchase_requests_payment_txid_unique` existe y normaliza el TXID con `lower(btrim(...))`.
+- La tabla de auditoría tiene RLS habilitado; `authenticated` tiene SELECT y `service_role` tiene INSERT. La política de SELECT llama a `is_support_admin()`.
+- En esta consulta: 0 filas en `gvr_usdt_verifications` y 0 solicitudes USDT con TXID. Por tanto, todavía no hay una verificación real registrada.
+- La PR #3 sigue abierta, no fusionada y GitHub informa `mergeable=true` en la última consulta. No tiene revisiones ni comentarios de revisión.
+- No se encontraron ejecuciones de GitHub Actions asociadas al commit consultado.
+
+**Límites de esta revalidación:** no se pudo inspeccionar el valor ni confirmar la presencia efectiva de `SUPABASE_SERVICE_ROLE_KEY` en los secretos; tampoco se ejecutó una petición HTTP autenticada. La coincidencia del código desplegado con el de GitHub no sustituye una prueba de runtime.
