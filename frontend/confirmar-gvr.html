@@ -1120,18 +1120,23 @@ botonContinuar.addEventListener("click",async () => {
 
         await vincularComprobante(solicitudId,usuario,rutaComprobanteSubido,metodoTexto === "USDT" ? txidUsdt.value.trim() : null);
 
-        // Reintenta la coincidencia cuando el evento pudo llegar antes de guardar
-        // el teléfono emisor y, para CUP, el número de transacción.
+        // Reintenta la conciliación cuando el evento llegó antes de guardar
+        // los datos del titular o el número de transacción.
+        let resultadoConciliacion = null;
         if (metodoTexto === "SALDO MOVIL" || metodoTexto === "CUP") {
             try {
                 const { data: matchResult, error: matchError } = await supabaseClient.functions.invoke(
                     "gvr-payment-reader-rematch",
                     { body: { request_id: solicitudId } }
                 );
-                if (matchError) console.warn("No se pudo reintentar la coincidencia del pago:", matchError);
-                else console.info("Resultado de coincidencia de pago:", matchResult);
+                if (matchError) {
+                    console.warn("No se pudo reintentar la conciliación del pago:", matchError);
+                } else {
+                    resultadoConciliacion = matchResult;
+                    console.info("Resultado de conciliación GVR:", matchResult);
+                }
             } catch (matchError) {
-                console.warn("No se pudo reintentar la coincidencia del pago:", matchError);
+                console.warn("No se pudo reintentar la conciliación del pago:", matchError);
             }
         }
 
@@ -1224,8 +1229,11 @@ botonContinuar.addEventListener("click",async () => {
          */
         envioCompletado = true;
 
-        document.getElementById("estadoCompra").textContent =
-            "Pendiente de revisión";
+        const pagoAcreditado = resultadoConciliacion?.credited === true ||
+            resultadoConciliacion?.reviewStatus === "AUTO_APPROVED";
+        document.getElementById("estadoCompra").textContent = pagoAcreditado
+            ? "Pago confirmado automáticamente"
+            : "Pendiente de conciliación";
 
         archivoComprobante.disabled = true;
         if (txidUsdt) txidUsdt.disabled = true;
@@ -1237,10 +1245,13 @@ botonContinuar.addEventListener("click",async () => {
         botonContinuar.textContent = "Comprobante enviado";
 
         mostrarMensaje(
-            "¡Solicitud registrada correctamente! Identificador: " +
-            solicitudId +
-            ". Tu compra está pendiente de revisión. " +
-            "Todavía no se han acreditado GVR.",
+            pagoAcreditado
+                ? "¡Pago conciliado correctamente! Se acreditaron " + cantidad +
+                  " GVR en tu billetera. Identificador: " + solicitudId + "."
+                : "¡Solicitud registrada correctamente! Identificador: " +
+                  solicitudId +
+                  ". El sistema seguirá buscando la notificación correspondiente. " +
+                  "Si los datos no coinciden o el evento no ha llegado, la solicitud permanecerá pendiente.",
             "exito"
         );
 
