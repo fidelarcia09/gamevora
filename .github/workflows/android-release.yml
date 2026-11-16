@@ -69,6 +69,9 @@ jobs:
           test -s "$KEYSTORE_PATH"
           keytool -list -storetype PKCS12 -keystore "$KEYSTORE_PATH" -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null
           echo "ANDROID_KEYSTORE_FILE=$KEYSTORE_PATH" >> "$GITHUB_ENV"
+          echo "ANDROID_KEYSTORE_PASSWORD=$ANDROID_KEYSTORE_PASSWORD" >> "$GITHUB_ENV"
+          echo "ANDROID_KEY_ALIAS=$ANDROID_KEY_ALIAS" >> "$GITHUB_ENV"
+          echo "ANDROID_KEY_PASSWORD=$ANDROID_KEY_PASSWORD" >> "$GITHUB_ENV"
           echo "SUPABASE_URL=$SUPABASE_URL" >> "$GITHUB_ENV"
           echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> "$GITHUB_ENV"
           echo "GVR_SYNC_ENABLED=true" >> "$GITHUB_ENV"
