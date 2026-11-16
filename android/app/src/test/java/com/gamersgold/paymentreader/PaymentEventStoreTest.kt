@@ -106,7 +106,7 @@ class PaymentEventStoreTest {
             assertEquals(1, pending.size)
             assertEquals("ET-notification-42-50591030-26800", pending.first().localDedupeKey)
 
-            store.markSynced(pending.first().localDedupeKey, "server-event-1")
+            store.markSynced(pending.first().localDedupeKey, "server-event-1", "PENDING_MANUAL_REVIEW")
             assertEquals(0, store.pendingSyncCount())
             assertEquals(1, store.syncedCount())
             store.readableDatabase.rawQuery(
@@ -115,6 +115,25 @@ class PaymentEventStoreTest {
             ).use { cursor ->
                 assertTrue(cursor.moveToFirst())
                 assertEquals("server-event-1", cursor.getString(0))
+            }
+        } finally {
+            store.close()
+        }
+    }
+
+    @Test
+    fun autoApprovedEventIsMarkedCompletedLocally() {
+        val store = PaymentEventStore(context)
+        try {
+            assertTrue(store.insertIfNew(etecsaEvent()))
+            val pending = store.pendingSyncEvents(10).single()
+            store.markSynced(pending.localDedupeKey, "server-event-auto", "AUTO_APPROVED")
+            store.readableDatabase.rawQuery(
+                "SELECT review_status FROM payment_events WHERE server_event_id = ?",
+                arrayOf("server-event-auto")
+            ).use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertEquals("COMPLETED", cursor.getString(0))
             }
         } finally {
             store.close()
