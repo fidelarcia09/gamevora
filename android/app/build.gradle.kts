@@ -53,8 +53,8 @@ android {
         applicationId = "com.gamersgold.paymentreader"
         minSdk = 26
         targetSdk = 35
-        versionCode = 6
-        versionName = "0.5.2"
+        versionCode = 7
+        versionName = "0.5.3"
         buildConfigField("String", "SUPABASE_URL", buildConfigString(supabaseUrl))
         buildConfigField("String", "SUPABASE_ANON_KEY", buildConfigString(supabaseAnonKey))
         buildConfigField("boolean", "GVR_SYNC_ENABLED", gvrSyncEnabled.toString())
