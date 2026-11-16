@@ -10,12 +10,18 @@ on:
       - "supabase/functions/gvr-payment-reader-sync/index.ts"
       - "supabase/functions/gvr-payment-reader-events/index.ts"
       - "docs/gvr-payment-notification-events.sql"
+      - "scripts/check-gvr-payment-html.mjs"
+      - "frontend/confirmar-gvr.html"
+      - "frontend/confirmaciones-gvr.html"
       - ".github/workflows/gvr-sms-parser-tests.yml"
   pull_request:
     paths:
       - "supabase/functions/_shared/gvr-sms-parser.ts"
       - "supabase/functions/_shared/gvr-sms-parser.test.ts"
       - "supabase/functions/gvr-payment-reader-sync/index.ts"
+      - "frontend/confirmar-gvr.html"
+      - "frontend/confirmaciones-gvr.html"
+      - "scripts/check-gvr-payment-html.mjs"
       - "docs/gvr-payment-notification-events.sql"
       - ".github/workflows/gvr-sms-parser-tests.yml"
 
