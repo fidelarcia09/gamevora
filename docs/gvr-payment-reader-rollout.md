@@ -23,7 +23,7 @@ Este documento describe el orden de activación de la lectura de notificaciones 
 
 - `20261115233616_create_gvr_payment_notification_events.sql`
 - `20261115233659_index_gvr_payment_notification_synced_by.sql`
-- `20261115234500_gvr_payment_one_event_per_request.sql` (aplicada; incluye unicidad de evento por solicitud e índices de búsqueda)
+- `20261116012226_gvr_payment_one_event_per_request.sql` (aplicada; incluye unicidad de evento por solicitud e índices de búsqueda)
 
 ## Datos CUP: dos configuraciones distintas
 
