@@ -65,6 +65,10 @@ Deno.serve(async (req: Request) => {
   if (method !== "SALDO_MOVIL" && method !== "CUP") {
     return reply({ ok: true, matchStatus: "NOT_APPLICABLE" });
   }
+  const expectedCurrency = method === "CUP" ? "CUP" : "SALDO_MOVIL";
+  if (request.payment_currency !== expectedCurrency) {
+    return reply({ ok: false, error: "La moneda no corresponde al método de pago." }, 409);
+  }
 
   const phone = String(request.payment_sender_phone ?? "").replace(/\D/g, "");
   if (!/^\d{8,15}$/.test(phone)) {
