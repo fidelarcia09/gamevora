@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import android.provider.Settings
 import java.text.SimpleDateFormat
 import java.time.YearMonth
@@ -194,7 +195,25 @@ class MainActivity : Activity() {
         addMetric(panel, "Eventos recibidos por el servidor", synced)
         if (BuildConfig.GVR_SYNC_ENABLED) {
             addButton(panel, "Sincronizar ahora") {
-                GvrPaymentSyncScheduler.enqueue(this)
+                when {
+                    pending == 0 -> Toast.makeText(
+                        this,
+                        "No hay eventos pendientes. La desinstalación anterior borró los datos locales de esa instalación.",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    GvrPaymentSyncScheduler.enqueue(this) -> Toast.makeText(
+                        this,
+                        "Sincronización programada. Se ejecutará cuando haya conexión.",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    else -> Toast.makeText(
+                        this,
+                        "No se pudo programar la sincronización. Revisa la configuración de la aplicación.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
             addText(
                 panel,
