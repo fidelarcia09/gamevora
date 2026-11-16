@@ -101,7 +101,10 @@ class GvrPaymentSyncWorker(
             }
             val status = connection.responseCode
             if (status == 401 || status == 403) throw AuthRejectedException()
-            if (status !in 200..299) throw IllegalStateException("HTTP_$status")
+            if (status !in 200..299) {
+                recordDiagnostic("http", "http_$status")
+                throw IllegalStateException("HTTP_$status")
+            }
             val responseText = connection.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
             val json = JSONObject(responseText)
             if (!json.optBoolean("ok", false)) throw IllegalStateException("SYNC_REJECTED")
