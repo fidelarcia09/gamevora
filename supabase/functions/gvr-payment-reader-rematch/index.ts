@@ -162,13 +162,18 @@ Deno.serve(async (req: Request) => {
   const { data: matchingRequests, error: matchingRequestsError } = await requestQuery;
   if (matchingRequestsError) return reply({ ok: false, error: "No se pudo verificar la unicidad del pedido." }, 503);
 
-  if (!matchingRequests || matchingRequests.length !== 1 ||
-      matchingRequests[0].id !== request.id) {
+  if (!matchingRequests || matchingRequests.length === 0) {
+    return reply({ ok: true, matchStatus: "NO_MATCH" });
+  }
+  if (matchingRequests.length > 1) {
     await admin.from("gvr_payment_notification_events")
       .update({ match_status: "AMBIGUOUS" })
       .eq("id", event.id)
       .is("matched_request_id", null);
-    return reply({ ok: true, matchStatus: "AMBIGUOUS", candidateRequests: matchingRequests?.length ?? 0 });
+    return reply({ ok: true, matchStatus: "AMBIGUOUS", candidateRequests: matchingRequests.length });
+  }
+  if (matchingRequests[0].id !== request.id) {
+    return reply({ ok: true, matchStatus: "NO_MATCH" });
   }
 
   // Conditional update makes concurrent attempts one-to-one: only one request can claim an event.
@@ -180,7 +185,16 @@ Deno.serve(async (req: Request) => {
     .select("id")
     .maybeSingle();
 
-  if (linkError) return reply({ ok: false, error: "No se pudo vincular la notificación." }, 503);
+  if (linkError) {
+    if (linkError.code === "23505") {
+      await admin.from("gvr_payment_notification_events")
+        .update({ match_status: "AMBIGUOUS" })
+        .eq("id", event.id)
+        .is("matched_request_id", null);
+      return reply({ ok: true, matchStatus: "ALREADY_CLAIMED" });
+    }
+    return reply({ ok: false, error: "No se pudo vincular la notificación." }, 503);
+  }
   if (!linked) return reply({ ok: true, matchStatus: "ALREADY_CLAIMED" });
 
   return reply({
