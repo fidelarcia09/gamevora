@@ -26,7 +26,7 @@ class PaymentNotificationParserTest {
     }
 
     @Test
-    fun usesStableNotificationKeyForEtecsaUpdates() {
+    fun sameConversationAndAmountAtDifferentTimesAreSeparateEtecsaPayments() {
         val first = PaymentNotificationParser.parse(
             title = "ETECSA",
             body = "Usted ha recibido 268.0 CUP del numero 50591030.",
@@ -41,7 +41,26 @@ class PaymentNotificationParserTest {
         )
         assertNotNull(first)
         assertNotNull(updated)
-        assertEquals(first?.localDedupeKey, updated?.localDedupeKey)
+        org.junit.Assert.assertNotEquals(first?.localDedupeKey, updated?.localDedupeKey)
+    }
+
+    @Test
+    fun sameEtecsaNotificationTimeKeepsTheSameDedupeKey() {
+        val first = PaymentNotificationParser.parse(
+            title = "ETECSA",
+            body = "Usted ha recibido 268.0 CUP del numero 50591030.",
+            receivedAtMillis = receivedAt,
+            notificationKey = "google-messages|sms|42"
+        )
+        val repeatedCallback = PaymentNotificationParser.parse(
+            title = "ETECSA",
+            body = "Usted ha recibido 268.0 CUP del numero 50591030.",
+            receivedAtMillis = receivedAt,
+            notificationKey = "google-messages|sms|42"
+        )
+        assertNotNull(first)
+        assertNotNull(repeatedCallback)
+        assertEquals(first?.localDedupeKey, repeatedCallback?.localDedupeKey)
     }
 
     @Test
