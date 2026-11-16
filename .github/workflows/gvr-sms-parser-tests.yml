@@ -10,6 +10,7 @@ on:
       - "supabase/functions/_shared/gvr-payment-matching.ts"
       - "supabase/functions/_shared/gvr-payment-matching.test.ts"
       - "supabase/functions/gvr-payment-reader-sync/index.ts"
+      - "supabase/functions/gvr-payment-reader-rematch/index.ts"
       - "supabase/functions/gvr-payment-reader-events/index.ts"
       - "docs/gvr-payment-notification-events.sql"
       - "scripts/check-gvr-payment-html.mjs"
