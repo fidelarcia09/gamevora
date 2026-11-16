@@ -49,6 +49,23 @@ class PaymentEventStoreTest {
     }
 
     @Test
+    fun storesTwoEtecsaPaymentsWithSameSenderAndAmountWhenNotificationTimesDiffer() {
+        val store = PaymentEventStore(context)
+        try {
+            val first = etecsaEvent()
+            val second = first.copy(
+                receivedAtMillis = first.receivedAtMillis + 30_000L,
+                localDedupeKey = "ET-notification-43-50591030-26800"
+            )
+            assertTrue(store.insertIfNew(first))
+            assertTrue(store.insertIfNew(second))
+            assertEquals(2, store.count())
+        } finally {
+            store.close()
+        }
+    }
+
+    @Test
     fun doesNotInsertTheSamePagoMovilTransactionTwice() {
         val store = PaymentEventStore(context)
         try {
