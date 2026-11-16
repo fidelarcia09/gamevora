@@ -1,0 +1,73 @@
+name: Android notification reader
+
+on:
+  push:
+    branches:
+      - feature/gvr-android-notification-reader
+      - feature/gvr-payment-sync
+    paths:
+      - "android/**"
+      - ".github/workflows/android-notification-reader.yml"
+  pull_request:
+    paths:
+      - "android/**"
+      - ".github/workflows/android-notification-reader.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      GVR_SYNC_ENABLED: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate public Supabase build configuration
+        shell: bash
+        run: |
+          if [[ -z "$SUPABASE_URL" || -z "$SUPABASE_ANON_KEY" ]]; then
+            echo "::error::Missing SUPABASE_URL or SUPABASE_ANON_KEY repository Actions secret."
+            exit 1
+          fi
+          if [[ "$SUPABASE_URL" != https://*.supabase.co ]]; then
+            echo "::error::SUPABASE_URL must be the HTTPS URL of the Supabase project."
+            exit 1
+          fi
+          echo "Supabase public configuration is present. GVR sync is enabled for this test APK; payments remain manual-review only."
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Add Android SDK tools to PATH
+        run: |
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+          echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
+
+      - name: Install Android SDK packages
+        run: sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+
+      - name: Run unit tests and build debug APK
+        run: gradle -p android testDebugUnitTest assembleDebug
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: gamers-gold-payment-reader-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
