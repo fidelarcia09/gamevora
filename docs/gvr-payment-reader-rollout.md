@@ -17,13 +17,14 @@ Este documento describe el orden de activación de la lectura de notificaciones 
 - `gvr-payment-reader-rematch` está desplegada (versión 1, JWT obligatorio).
 - `gvr-payment-reader-events` está desplegada (versión 1, JWT obligatorio).
 - La cuenta administradora configurada sigue activa en `support_agents`.
-- El panel `frontend/confirmaciones-gvr.html` puede consultar los últimos 100 eventos mediante la función administrativa.
+- El panel `frontend/confirmaciones-gvr.html` consulta los últimos 100 eventos y, en esta rama, también muestra el teléfono declarado y el TXID/referencia guardados en cada pedido mediante un RPC admin-only.
 
 ## Migraciones aplicadas
 
 - `20261115233616_create_gvr_payment_notification_events.sql`
 - `20261115233659_index_gvr_payment_notification_synced_by.sql`
 - `20261116012226_gvr_payment_one_event_per_request.sql` (aplicada; incluye unicidad de evento por solicitud e índices de búsqueda)
+- `20261116012608_admin_list_gvr_purchase_requests_v2.sql` (aplicada; expone teléfono y referencia de pago solo al panel admin)
 
 ## Datos CUP: dos configuraciones distintas
 
