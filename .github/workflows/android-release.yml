@@ -78,7 +78,7 @@ jobs:
 
       - name: Build signed release APK
         working-directory: android
-        run: gradle --no-daemon :app:clean :app:assembleRelease
+        run: gradle --no-daemon :app:clean :app:testDebugUnitTest :app:assembleRelease
 
       - name: Verify APK signature
         shell: bash
