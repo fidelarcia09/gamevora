@@ -93,7 +93,7 @@ jobs:
       - name: Upload signed APK
         uses: actions/upload-artifact@v4
         with:
-          name: gamers-gold-payment-reader-0.5.1
+          name: gamers-gold-payment-reader-0.5.2
           path: android/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 14
