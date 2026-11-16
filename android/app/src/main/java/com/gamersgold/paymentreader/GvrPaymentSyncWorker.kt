@@ -59,7 +59,11 @@ class GvrPaymentSyncWorker(
                     val item = results.optJSONObject(index) ?: continue
                     val localKey = item.optString("localEventKey")
                     if (localKey.isNotBlank() && item.optBoolean("stored", false)) {
-                        store.markSynced(localKey, item.optString("eventId").ifBlank { null })
+                        store.markSynced(
+                            localKey,
+                            item.optString("eventId").ifBlank { null },
+                            item.optString("reviewStatus", "PENDING_MANUAL_REVIEW")
+                        )
                         accepted++
                     }
                 }
