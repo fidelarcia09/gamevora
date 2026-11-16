@@ -90,7 +90,7 @@ class MainActivity : Activity() {
         addText(header, "⚡  GAMERS GOLD", 25f, cyan, true)
         addText(header, "PAYMENT READER", 12f, white, true)
         addText(header, "Lector privado de confirmaciones", 15f, muted)
-        addText(header, "DIAGNÓSTICO  ·  VERSIÓN 0.3.0", 11f, cyan, true)
+        addText(header, "DIAGNÓSTICO  ·  VERSIÓN 0.5.1", 11f, cyan, true)
         content.addView(header)
 
         val accessGranted = NotificationCaptureService.isAccessGranted(this)
@@ -126,7 +126,7 @@ class MainActivity : Activity() {
 
         val payments = card()
         addText(payments, "CONFIRMACIONES DE PAGO", 12f, cyan, true)
-        addMetric(payments, "Pagos guardados para revisión manual", count(prefs, NotificationCaptureService.KEY_RECOGNIZED_PAYMENTS))
+        addMetric(payments, "Pagos detectados y guardados", count(prefs, NotificationCaptureService.KEY_RECOGNIZED_PAYMENTS))
         addMetric(payments, "Pagos repetidos evitados", count(prefs, NotificationCaptureService.KEY_DUPLICATE_PAYMENTS))
         val store = PaymentEventStore(this)
         try {
@@ -169,8 +169,8 @@ class MainActivity : Activity() {
         addText(privacy, "PRIVACIDAD Y SEGURIDAD", 12f, cyan, true)
         addText(privacy, "• No lee notificaciones de otras aplicaciones.", 13f, white)
         addText(privacy, "• No guarda el texto completo de los SMS en el diagnóstico.", 13f, white)
-        addText(privacy, "• Los pagos reconocidos quedan pendientes de revisión manual.", 13f, white)
-        addText(privacy, "• Solo sincroniza campos estructurados; nunca acredita GVR automáticamente.", 13f, amber, true)
+        addText(privacy, "• El servidor compara importe, teléfono, método y plazo de cada solicitud.", 13f, white)
+        addText(privacy, "• Una coincidencia única y completa acredita GVR una sola vez; las ambiguas quedan pendientes.", 13f, amber, true)
         addButton(privacy, "Cerrar sesión") { logout() }
         content.addView(privacy)
 
@@ -208,7 +208,7 @@ class MainActivity : Activity() {
             )
             addText(
                 panel,
-                "La recepción en el servidor no confirma el pago ni acredita GVR: todos los eventos siguen sujetos a revisión manual.",
+                "El servidor compara los datos del evento con la solicitud. Si la coincidencia es única y la solicitud está completada, acredita GVR una sola vez; si falta información o hay ambigüedad, queda pendiente.",
                 11f,
                 amber
             )
