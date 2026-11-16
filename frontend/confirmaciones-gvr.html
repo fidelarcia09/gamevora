@@ -490,6 +490,8 @@ const supabaseClient = window.supabase.createClient(
 const lista = document.getElementById("listaSolicitudes");
 
 let solicitudes = [];
+// Solo se ocultan de esta bandeja las solicitudes acreditadas por el flujo automático.
+let solicitudesAutoAprobadas = new Set();
 let filtroActual = "pending";
 let procesando = new Set();
 
@@ -552,6 +554,13 @@ async function cargarEventosPago() {
         const { data, error } = await supabaseClient.functions.invoke("gvr-payment-reader-events", { body: {} });
         if (error) throw error;
         if (!data?.ok || !Array.isArray(data.events)) throw new Error(data?.error || "Respuesta no válida del servidor.");
+        solicitudesAutoAprobadas = new Set(
+            data.events
+                .filter(evento => evento.review_status === "AUTO_APPROVED" && evento.matched_request_id)
+                .map(evento => String(evento.matched_request_id))
+        );
+        actualizarResumen();
+        mostrarSolicitudes();
         listaEventosPago.replaceChildren();
         if (data.events.length === 0) {
             const vacio = document.createElement("p");
@@ -590,6 +599,10 @@ async function cargarEventosPago() {
         }
     } catch (error) {
         console.warn("No se pudieron cargar los eventos Android:", error);
+        // Si no podemos verificar el estado automático, no ocultamos solicitudes.
+        solicitudesAutoAprobadas = new Set();
+        actualizarResumen();
+        mostrarSolicitudes();
         listaEventosPago.textContent = "Los eventos todavía no están disponibles. Comprueba que la tabla SQL y la Edge Function gvr-payment-reader-events estén desplegadas. Las solicitudes GVR siguen funcionando normalmente.";
     }
 }
@@ -636,14 +649,16 @@ async function cargarSolicitudes() {
 ========================= */
 
 function actualizarResumen() {
+    const solicitudesManuales = solicitudes.filter(s => !solicitudesAutoAprobadas.has(String(s.id)));
+
     document.getElementById("totalPendientes").textContent =
-        solicitudes.filter(s => s.status === "pending").length;
+        solicitudesManuales.filter(s => s.status === "pending").length;
 
     document.getElementById("totalAprobadas").textContent =
-        solicitudes.filter(s => s.status === "approved").length;
+        solicitudesManuales.filter(s => s.status === "approved").length;
 
     document.getElementById("totalRechazadas").textContent =
-        solicitudes.filter(s => s.status === "rejected").length;
+        solicitudesManuales.filter(s => s.status === "rejected").length;
 }
 
 
@@ -653,8 +668,10 @@ function actualizarResumen() {
 
 async function mostrarSolicitudes() {
     const visibles = solicitudes.filter(s => {
-        return filtroActual === "all" ||
-            s.status === filtroActual;
+        // Las compras autoacreditadas se conservan en Supabase, pero no aparecen
+        // en ninguna categoría de la bandeja de revisión manual.
+        if (solicitudesAutoAprobadas.has(String(s.id))) return false;
+        return filtroActual === "all" || s.status === filtroActual;
     });
 
     if (visibles.length === 0) {
