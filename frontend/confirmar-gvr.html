@@ -430,6 +430,8 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
             <div class="direccion" id="cuentaCup">Tarjeta pendiente de configuración.</div>
             <button class="boton-secundario" type="button" id="copiarCup" disabled>Copiar tarjeta</button>
             <p class="ayuda" id="estadoCup">CUP todavía no está disponible. Te avisaremos cuando esté listo.</p>
+            <label class="campo-txid" for="numeroOrigenCup"><span>Número del titular que realizó la transferencia</span><input type="tel" id="numeroOrigenCup" maxlength="15" inputmode="numeric" autocomplete="tel" placeholder="Número que aparece en la notificación"></label>
+            <label class="campo-txid" for="numeroTransaccionCup"><span>Número de transacción Transfermóvil</span><input type="text" id="numeroTransaccionCup" maxlength="32" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="Ej. KW6023ZJ0Z999"></label>
         </div>
 
         <div class="temporizador-usdt" id="temporizadorUsdt"><div class="tiempo-label" id="tiempoLabel">Tiempo disponible para completar el pago</div><div class="tiempo" id="tiempoRestante">10:00</div></div>
@@ -534,6 +536,8 @@ let duracionPagoMinutos = 10;
 let intervaloTemporizador = null;
 let plazoVencido = false;
 const txidUsdt = document.getElementById("txidUsdt");
+const numeroOrigenCup = document.getElementById("numeroOrigenCup");
+const numeroTransaccionCup = document.getElementById("numeroTransaccionCup");
 const numeroOrigenSaldo = document.getElementById("numeroOrigenSaldo");
 const tiempoRestante = document.getElementById("tiempoRestante");
 const temporizadorUsdt = document.getElementById("temporizadorUsdt");
@@ -663,7 +667,7 @@ async function recuperarSolicitudDeRecarga(usuario) {
 
     const metodoDB = metodoTexto === "SALDO MOVIL" ? "SALDO_MOVIL" : metodoTexto;
     const {data,error} = await supabaseClient.from("gvr_purchase_requests")
-        .select("id,expires_at,proof_path")
+        .select("id,expires_at,proof_path,payment_sender_phone,payment_txid")
         .eq("id",idGuardado)
         .eq("user_id",usuario.id)
         .eq("payment_method",metodoDB)
@@ -742,6 +746,16 @@ async function prepararSolicitudPago() {
         }
         try { sessionStorage.setItem(claveSolicitudSesion(),solicitud.id); } catch (_) {}
         solicitudId = solicitud.id;
+        if (metodoTexto === "SALDO MOVIL" && recuperada?.solicitud?.payment_sender_phone) {
+            numeroOrigenSaldo.value = recuperada.solicitud.payment_sender_phone;
+        }
+        if (metodoTexto === "CUP" && recuperada?.solicitud) {
+            numeroOrigenCup.value = recuperada.solicitud.payment_sender_phone || "";
+            numeroTransaccionCup.value = recuperada.solicitud.payment_txid || "";
+        }
+        if (metodoTexto === "USDT" && recuperada?.solicitud?.payment_txid) {
+            txidUsdt.value = recuperada.solicitud.payment_txid;
+        }
         const resumenId = document.getElementById("resumenId");
         if (resumenId) resumenId.textContent = "ID " + solicitudId;
 
@@ -751,6 +765,9 @@ async function prepararSolicitudPago() {
             document.getElementById("estadoCompra").textContent = "Pendiente de revisión";
             archivoComprobante.disabled = true;
             if (txidUsdt) txidUsdt.disabled = true;
+            if (numeroOrigenSaldo) numeroOrigenSaldo.disabled = true;
+            if (numeroOrigenCup) numeroOrigenCup.disabled = true;
+            if (numeroTransaccionCup) numeroTransaccionCup.disabled = true;
             botonContinuar.disabled = true;
             botonContinuar.textContent = "Comprobante enviado";
             tiempoRestante.textContent = "En revisión";
@@ -802,7 +819,11 @@ async function vincularComprobante(idSolicitud,usuario,ruta,txid=null) {
         .update({
             proof_path:ruta,
             ...(metodoTexto === "USDT" ? {payment_txid:txid} : {}),
-            ...(metodoTexto === "SALDO MOVIL" ? {payment_sender_phone:numeroOrigenSaldo.value.trim()} : {})
+            ...(metodoTexto === "SALDO MOVIL" ? {payment_sender_phone:numeroOrigenSaldo.value.replace(/\\D/g,"")} : {}),
+            ...(metodoTexto === "CUP" ? {
+                payment_sender_phone:numeroOrigenCup.value.replace(/\\D/g,""),
+                payment_txid:numeroTransaccionCup.value.trim().toUpperCase()
+            } : {})
         })
         .eq("id",idSolicitud)
         .eq("user_id",usuario.id)
@@ -1021,6 +1042,20 @@ botonContinuar.addEventListener("click",async () => {
             return;
         }
     }
+    if (metodoTexto === "CUP") {
+        const phone = numeroOrigenCup.value.replace(/\\D/g,"");
+        const reference = numeroTransaccionCup.value.trim().toUpperCase();
+        if (!/^\\d{8,15}$/.test(phone)) {
+            mostrarMensaje("Introduce el número del titular exactamente como aparece en la notificación de Transfermóvil.","error");
+            numeroOrigenCup.focus();
+            return;
+        }
+        if (!/^[A-Z0-9]{6,32}$/.test(reference)) {
+            mostrarMensaje("Introduce el número de transacción completo de Transfermóvil.","error");
+            numeroTransaccionCup.focus();
+            return;
+        }
+    }
     if (!archivoSeleccionado) {
         mostrarMensaje("Selecciona primero la captura del pago.","error");
         return;
@@ -1063,6 +1098,22 @@ botonContinuar.addEventListener("click",async () => {
         botonContinuar.textContent = "Confirmando envío...";
 
         await vincularComprobante(solicitudId,usuario,rutaComprobanteSubido,metodoTexto === "USDT" ? txidUsdt.value.trim().toLowerCase() : null);
+
+        // Reintenta la asociación cuando el cliente ya guardó el teléfono y,
+        // en CUP, el identificador de Transfermóvil. El evento puede haber
+        // llegado antes que estos datos; el servidor vuelve a comparar todo.
+        if (metodoTexto === "SALDO MOVIL" || metodoTexto === "CUP") {
+            try {
+                const {data:matchResult,error:matchError} = await supabaseClient.functions.invoke(
+                    "gvr-payment-reader-rematch",
+                    {body:{request_id:solicitudId}}
+                );
+                if (matchError) console.warn("No se pudo reintentar la coincidencia del pago:",matchError);
+                else console.info("Resultado de coincidencia de pago:",matchResult);
+            } catch (matchError) {
+                console.warn("No se pudo reintentar la coincidencia del pago:",matchError);
+            }
+        }
 
         /*
          * Verificación USDT en modo sombra:
@@ -1174,6 +1225,9 @@ botonContinuar.addEventListener("click",async () => {
 
         archivoComprobante.disabled = true;
         if (txidUsdt) txidUsdt.disabled = true;
+        if (numeroOrigenSaldo) numeroOrigenSaldo.disabled = true;
+        if (numeroOrigenCup) numeroOrigenCup.disabled = true;
+        if (numeroTransaccionCup) numeroTransaccionCup.disabled = true;
         if (intervaloTemporizador) clearInterval(intervaloTemporizador);
         botonContinuar.disabled = true;
         botonContinuar.textContent = "Comprobante enviado";
