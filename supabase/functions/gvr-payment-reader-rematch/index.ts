@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import { resolveGvrPaymentMatch } from "../_shared/gvr-payment-matching.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -149,7 +150,7 @@ Deno.serve(async (req: Request) => {
   const event = events[0];
   let requestQuery = admin
     .from("gvr_purchase_requests")
-    .select("id")
+    .select("id,status,payment_method,payment_currency,payment_amount,payment_sender_phone,payment_txid,created_at,expires_at")
     .eq("status", "pending")
     .eq("payment_method", method)
     .eq("payment_currency", method === "CUP" ? "CUP" : "SALDO_MOVIL")
@@ -157,7 +158,7 @@ Deno.serve(async (req: Request) => {
     .eq("payment_sender_phone", phone)
     .lte("created_at", event.received_at)
     .gte("expires_at", event.received_at)
-    .limit(2);
+    .limit(1000);
 
   if (method === "CUP") {
     requestQuery = requestQuery.eq("payment_txid", transactionReference);
@@ -169,14 +170,50 @@ Deno.serve(async (req: Request) => {
   if (!matchingRequests || matchingRequests.length === 0) {
     return reply({ ok: true, matchStatus: "NO_MATCH" });
   }
-  if (matchingRequests.length > 1) {
+  if (matchingRequests.length >= 1000) {
     await admin.from("gvr_payment_notification_events")
       .update({ match_status: "AMBIGUOUS" })
       .eq("id", event.id)
       .is("matched_request_id", null);
-    return reply({ ok: true, matchStatus: "AMBIGUOUS", candidateRequests: matchingRequests.length });
+    return reply({ ok: true, matchStatus: "AMBIGUOUS", reason: "CANDIDATE_LIMIT_REACHED" });
   }
-  if (matchingRequests[0].id !== request.id) {
+
+  const candidateRequestIds = matchingRequests.map((candidate: { id: string }) => candidate.id);
+  const { data: linkedCandidateEvents, error: linkedCandidateError } = await admin
+    .from("gvr_payment_notification_events")
+    .select("matched_request_id")
+    .in("matched_request_id", candidateRequestIds);
+  if (linkedCandidateError) {
+    return reply({ ok: false, error: "No se pudo comprobar si los pedidos ya tienen una notificación vinculada." }, 503);
+  }
+  const linkedCandidateIds = new Set(
+    (linkedCandidateEvents ?? [])
+      .map((item: { matched_request_id: string | null }) => item.matched_request_id)
+      .filter((id: string | null): id is string => Boolean(id)),
+  );
+
+  const resolved = resolveGvrPaymentMatch(
+    {
+      method,
+      amountMinorUnits,
+      senderPhone: phone,
+      recipientAccount: event.recipient_account,
+      transactionReference: event.transaction_reference,
+      receivedAt: event.received_at,
+    },
+    matchingRequests,
+    linkedCandidateIds,
+    receiverAccount,
+  );
+
+  if (resolved.status === "AMBIGUOUS") {
+    await admin.from("gvr_payment_notification_events")
+      .update({ match_status: "AMBIGUOUS" })
+      .eq("id", event.id)
+      .is("matched_request_id", null);
+    return reply({ ok: true, matchStatus: "AMBIGUOUS", candidateRequests: matchingRequests.length - linkedCandidateIds.size });
+  }
+  if (resolved.status !== "MATCHED" || resolved.requestId !== request.id) {
     return reply({ ok: true, matchStatus: "NO_MATCH" });
   }
 
