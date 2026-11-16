@@ -106,7 +106,7 @@ h2{font-size:17px;margin-bottom:14px}
 const SUPABASE_URL="https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-const tarifas={CUP:1150,USDT:1,"Saldo móvil":340};
+const tarifas={CUP:1150,USDT:1,"Saldo móvil":1};
 const input=document.getElementById("cantidad"),rapidas=[...document.querySelectorAll(".rapida")],metodos=[...document.querySelectorAll(".metodo-opcion input[data-metodo]")];
 const recibe=document.getElementById("recibes"),botonPagar=document.getElementById("pagar"),mensaje=document.getElementById("mensaje");
 let metodo="USDT";
