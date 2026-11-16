@@ -25,7 +25,7 @@ jobs:
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-      GVR_SYNC_ENABLED: "false"
+      GVR_SYNC_ENABLED: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,7 +41,7 @@ jobs:
             echo "::error::SUPABASE_URL must be the HTTPS URL of the Supabase project."
             exit 1
           fi
-          echo "Supabase public configuration is present. GVR sync remains disabled."
+          echo "Supabase public configuration is present. GVR sync is enabled for this test APK; payments remain manual-review only."
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
