@@ -819,9 +819,9 @@ async function vincularComprobante(idSolicitud,usuario,ruta,txid=null) {
         .update({
             proof_path:ruta,
             ...(metodoTexto === "USDT" ? {payment_txid:txid} : {}),
-            ...(metodoTexto === "SALDO MOVIL" ? {payment_sender_phone:numeroOrigenSaldo.value.replace(/\\D/g,"")} : {}),
+            ...(metodoTexto === "SALDO MOVIL" ? {payment_sender_phone:numeroOrigenSaldo.value.replace(/\D/g,"")} : {}),
             ...(metodoTexto === "CUP" ? {
-                payment_sender_phone:numeroOrigenCup.value.replace(/\\D/g,""),
+                payment_sender_phone:numeroOrigenCup.value.replace(/\D/g,""),
                 payment_txid:numeroTransaccionCup.value.trim().toUpperCase()
             } : {})
         })
@@ -1043,9 +1043,9 @@ botonContinuar.addEventListener("click",async () => {
         }
     }
     if (metodoTexto === "CUP") {
-        const phone = numeroOrigenCup.value.replace(/\\D/g,"");
+        const phone = numeroOrigenCup.value.replace(/\D/g,"");
         const reference = numeroTransaccionCup.value.trim().toUpperCase();
-        if (!/^\\d{8,15}$/.test(phone)) {
+        if (!/^\d{8,15}$/.test(phone)) {
             mostrarMensaje("Introduce el número del titular exactamente como aparece en la notificación de Transfermóvil.","error");
             numeroOrigenCup.focus();
             return;
