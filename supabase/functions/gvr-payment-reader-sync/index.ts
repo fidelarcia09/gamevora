@@ -278,6 +278,43 @@ Deno.serve(async (req: Request) => {
           }
         }
       }
+
+      // A request may be claimed by only one notification. If another distinct
+      // notification races for the same request, preserve it as ambiguous instead
+      // of dropping it or associating two payments with one order.
+      if (match.requestId) {
+        const { data: alreadyClaimed } = await admin
+          .from("gvr_payment_notification_events")
+          .select("id")
+          .eq("matched_request_id", match.requestId)
+          .maybeSingle();
+
+        if (alreadyClaimed) {
+          const { data: ambiguousEvent, error: ambiguousInsertError } = await admin
+            .from("gvr_payment_notification_events")
+            .insert({
+              ...row,
+              matched_request_id: null,
+              match_status: "AMBIGUOUS",
+            })
+            .select("id")
+            .single();
+
+          if (!ambiguousInsertError && ambiguousEvent) {
+            results.push({
+              localEventKey: event.localEventKey,
+              stored: true,
+              duplicate: false,
+              eventId: ambiguousEvent.id,
+              matchStatus: "AMBIGUOUS",
+              matchedRequestId: null,
+              reviewStatus: "PENDING_MANUAL_REVIEW",
+            });
+            continue;
+          }
+        }
+      }
+
       console.error("GVR payment reader sync: no se pudo guardar un evento:", insertError.code);
       results.push({ localEventKey: event.localEventKey, stored: false, error: "EVENT_INSERT_FAILED" });
       continue;
