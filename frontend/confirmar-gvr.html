@@ -422,11 +422,12 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
 
         <div id="panelCup" class="pago-panel oculto">
             <h3>Pago mediante CUP</h3>
-            <p class="descripcion">
-                Este método todavía no está disponible porque falta configurar la tarjeta receptora.
+            <p class="descripcion" id="descripcionCup">
+                Este método todavía no está disponible porque falta configurar la cuenta receptora definitiva.
             </p>
-            <div class="titulo">Número de confirmación</div>
-            <div class="direccion">63638032</div>
+            <div class="titulo">Cuenta receptora</div>
+            <div class="direccion" id="cuentaReceptoraCup">Pendiente de configuración</div>
+            <button class="boton-secundario" type="button" id="copiarCuentaCup" disabled>Copiar cuenta</button>
             <label class="campo-txid" for="numeroOrigenCup"><span>Número del titular que realizó la transferencia</span><input type="tel" id="numeroOrigenCup" maxlength="15" inputmode="numeric" autocomplete="tel" placeholder="Número que aparece en la notificación"></label>
             <label class="campo-txid" for="numeroTransaccionCup"><span>Número de transacción Transfermóvil</span><input type="text" id="numeroTransaccionCup" maxlength="32" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="Ej. KW6023ZJ0Z999"></label>
         </div>
@@ -531,6 +532,19 @@ const txidUsdt = document.getElementById("txidUsdt");
 const numeroOrigenSaldo = document.getElementById("numeroOrigenSaldo");
 const numeroOrigenCup = document.getElementById("numeroOrigenCup");
 const numeroTransaccionCup = document.getElementById("numeroTransaccionCup");
+const cuentaReceptoraCup = document.getElementById("cuentaReceptoraCup");
+const descripcionCup = document.getElementById("descripcionCup");
+const copiarCuentaCup = document.getElementById("copiarCuentaCup");
+const cuentaCupConfigurada = String(GVR_PAYMENT_CONFIG.cupReceiverAccount || "").trim();
+
+if (CUP_PAYMENT_READY) {
+    cuentaReceptoraCup.textContent = cuentaCupConfigurada;
+    descripcionCup.textContent = "Transfiere a esta cuenta y luego introduce el teléfono del titular y el número de transacción que aparecen en la notificación.";
+    copiarCuentaCup.disabled = false;
+} else {
+    cuentaReceptoraCup.textContent = "Pendiente de configuración";
+    copiarCuentaCup.disabled = true;
+}
 const tiempoRestante = document.getElementById("tiempoRestante");
 const temporizadorUsdt = document.getElementById("temporizadorUsdt");
 
@@ -971,6 +985,10 @@ document.getElementById("copiarSaldo").addEventListener("click",() =>
     copiarTexto("63638032")
 );
 
+copiarCuentaCup?.addEventListener("click", () => {
+    if (CUP_PAYMENT_READY && cuentaCupConfigurada) copiarTexto(cuentaCupConfigurada);
+});
+
 document.getElementById("copiarUsdt").addEventListener("click",() =>
     copiarTexto("0xd2364c69d339bbd96915BC80b4dbAc23c9209f9C")
 );
@@ -980,8 +998,12 @@ document.getElementById("copiarUsdt").addEventListener("click",() =>
 botonContinuar.addEventListener("click",async () => {
     if (enviando || envioCompletado) return;
 
-    if (!cantidadValida || !metodo || metodoTexto === "CUP") {
+    if (!cantidadValida || !metodo) {
         mostrarMensaje("Revisa la cantidad y el método de pago.","error");
+        return;
+    }
+    if (metodoTexto === "CUP" && !CUP_PAYMENT_READY) {
+        mostrarMensaje("El pago mediante CUP sigue deshabilitado hasta configurar y verificar la cuenta receptora definitiva.","error");
         return;
     }
 
