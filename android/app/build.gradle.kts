@@ -26,6 +26,7 @@ val gvrSyncEnabled = (
         ?: "false"
 ).toBooleanStrictOrNull() ?: false
 
+// Firma estable para que las actualizaciones futuras conserven la identidad de la app.
 // La clave privada nunca se guarda en Git. Se carga desde variables de entorno
 // de GitHub Actions o desde android/local.properties en un entorno local.
 val signingStoreFile = localProperties.getProperty("ANDROID_KEYSTORE_FILE")
