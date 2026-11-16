@@ -116,6 +116,7 @@ footer{padding:0 16px 28px;color:#7186a3}
 <meta name="theme-color" content="#020817">
 <title>Confirmar compra | Gamers Gold Top-Up</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./gvr-payment-config.js"></script>
 
 <style>
 :root {
@@ -467,6 +468,8 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
 const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
 const BUCKET_COMPROBANTES = "gvr-payment-proofs";
+const GVR_PAYMENT_CONFIG = window.GVR_PAYMENT_CONFIG || {};
+const CUP_PAYMENT_READY = GVR_PAYMENT_CONFIG.cupAutomationReady === true && /^\d{10,24}$/.test(String(GVR_PAYMENT_CONFIG.cupReceiverAccount || ""));
 
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
@@ -592,6 +595,9 @@ async function obtenerUsuario() {
 }
 
 async function crearSolicitud(usuario) {
+    if (metodoTexto === "CUP" && !CUP_PAYMENT_READY) {
+        throw new Error("El pago mediante CUP todavía no está habilitado. Espera a que se configure y verifique la cuenta receptora.");
+    }
     const metodoDB = metodoTexto === "SALDO MOVIL"
         ? "SALDO_MOVIL"
         : metodoTexto;
