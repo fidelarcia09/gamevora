@@ -131,6 +131,19 @@ internal class PaymentEventStore(context: Context) :
         )
     }
 
+    fun updateServerReviewStatus(serverEventId: String, reviewStatus: String) {
+        if (serverEventId.isBlank() || reviewStatus != "AUTO_APPROVED") return
+        val values = ContentValues().apply {
+            put("review_status", "COMPLETED")
+        }
+        writableDatabase.update(
+            "payment_events",
+            values,
+            "server_event_id = ?",
+            arrayOf(serverEventId)
+        )
+    }
+
     fun latestSummary(): String? {
         readableDatabase.rawQuery(
             "SELECT method, amount_minor_units FROM payment_events ORDER BY id DESC LIMIT 1",
