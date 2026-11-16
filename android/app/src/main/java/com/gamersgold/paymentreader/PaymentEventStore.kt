@@ -113,9 +113,13 @@ internal class PaymentEventStore(context: Context) :
         return events
     }
 
-    fun markSynced(localDedupeKey: String, serverEventId: String?) {
+    fun markSynced(localDedupeKey: String, serverEventId: String?, reviewStatus: String) {
         val values = ContentValues().apply {
             put("sync_status", "SYNCED")
+            put(
+                "review_status",
+                if (reviewStatus == "AUTO_APPROVED") "COMPLETED" else "PENDING_MANUAL_REVIEW"
+            )
             if (serverEventId.isNullOrBlank()) putNull("server_event_id")
             else put("server_event_id", serverEventId)
         }
