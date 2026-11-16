@@ -6,7 +6,7 @@ Este documento describe el orden de activación de la lectura de notificaciones 
 
 - El código de Android mantiene los eventos en una cola local cuando no hay Internet.
 - La sincronización usa `gvr-payment-reader-sync` (versión 3) y JWT obligatorio.
-- `gvr-payment-reader-rematch` (versión 1, JWT obligatorio) vuelve a comparar eventos cuando el cliente guarda los identificadores y el comprobante.
+- `gvr-payment-reader-rematch` (versión 2, JWT obligatorio) vuelve a comparar eventos cuando el cliente guarda los identificadores y el comprobante.
 - Los eventos se guardan como `PENDING_MANUAL_REVIEW`.
 - Una coincidencia enlaza como máximo un evento con una solicitud; no aprueba ni acredita.
 - Este flujo NO cambia `wallets`, `transactions` ni el estado de `gvr_purchase_requests`.
@@ -84,7 +84,7 @@ La propiedad `cupAutomationReady` debe permanecer en `false` hasta completar tod
 - Los permisos directos de `anon` y `authenticated` están revocados; solo el backend con `service_role` opera sobre la tabla.
 - La migración de unicidad impide que una solicitud quede asociada a más de un evento.
 - Se añadieron índices para búsquedas por importe, teléfono, referencia CUP, cuenta receptora y ventana temporal.
-- `gvr-payment-reader-sync` está activa en versión 3 y `gvr-payment-reader-rematch` en versión 1; ambas requieren JWT.
+- `gvr-payment-reader-sync` está activa en versión 3 y `gvr-payment-reader-rematch` en versión 2; ambas requieren JWT.
 - No se configuró `GVR_CUP_RECEIVER_ACCOUNT`; `cupReceiverAccount` sigue vacío y `cupAutomationReady=false`, por lo que CUP continúa deshabilitado al cliente.
 - Los ejemplos ETECSA y PAGOxMOVIL están cubiertos por pruebas unitarias existentes del parser Android.
 
