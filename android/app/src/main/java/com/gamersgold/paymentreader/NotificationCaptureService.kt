@@ -44,7 +44,7 @@ class NotificationCaptureService : NotificationListenerService() {
 
         // Ignore only byte-for-byte-equivalent content updates. Changed content is still parsed,
         // while the local payment database independently prevents duplicate payment records.
-        if (!markNotificationContentAsNew(prefs, sbn.key, title, body)) {
+        if (!markNotificationContentAsNew(prefs, sbn.key, now, title, body)) {
             diagnostic("Repetición exacta de una notificación; ignorada.")
             return
         }
@@ -79,7 +79,8 @@ class NotificationCaptureService : NotificationListenerService() {
             title = title,
             body = body,
             receivedAtMillis = now,
-            notificationKey = sbn.key
+            // Android reuses a notification key for a conversation; postTime distinguishes each SMS.
+            notificationKey = "${sbn.key}|${now}"
         )
         if (event == null) {
             prefs.edit()
@@ -133,10 +134,11 @@ class NotificationCaptureService : NotificationListenerService() {
     private fun markNotificationContentAsNew(
         prefs: android.content.SharedPreferences,
         notificationKey: String,
+        notificationPostTime: Long,
         title: String,
         body: String
     ): Boolean = synchronized(DEDUP_LOCK) {
-        val normalized = "$notificationKey|${title.trim()}|${body.trim().replace(Regex("\\s+"), " ")}"
+        val normalized = "$notificationKey|$notificationPostTime|${title.trim()}|${body.trim().replace(Regex("\\s+"), " ")}"
         val fingerprint = sha256(normalized)
         val recent = prefs.getStringSet(KEY_RECENT_FINGERPRINTS, emptySet())
             ?.toMutableSet() ?: mutableSetOf()
