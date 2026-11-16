@@ -113,9 +113,13 @@ internal class PaymentEventStore(context: Context) :
         return events
     }
 
-    fun markSynced(localDedupeKey: String, serverEventId: String?) {
+    fun markSynced(localDedupeKey: String, serverEventId: String?, reviewStatus: String) {
         val values = ContentValues().apply {
             put("sync_status", "SYNCED")
+            put(
+                "review_status",
+                if (reviewStatus == "AUTO_APPROVED") "COMPLETED" else "PENDING_MANUAL_REVIEW"
+            )
             if (serverEventId.isNullOrBlank()) putNull("server_event_id")
             else put("server_event_id", serverEventId)
         }
@@ -124,6 +128,19 @@ internal class PaymentEventStore(context: Context) :
             values,
             "dedupe_key = ? AND sync_status = 'LOCAL_PENDING'",
             arrayOf(localDedupeKey)
+        )
+    }
+
+    fun updateServerReviewStatus(serverEventId: String, reviewStatus: String) {
+        if (serverEventId.isBlank() || reviewStatus != "AUTO_APPROVED") return
+        val values = ContentValues().apply {
+            put("review_status", "COMPLETED")
+        }
+        writableDatabase.update(
+            "payment_events",
+            values,
+            "server_event_id = ?",
+            arrayOf(serverEventId)
         )
     }
 

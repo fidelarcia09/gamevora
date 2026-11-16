@@ -438,7 +438,7 @@
     <div class="panel-eventos-cabecera">
         <div>
             <h2 id="tituloEventosPago">Notificaciones de pago detectadas</h2>
-            <p>Eventos recibidos desde el lector Android. Son indicios para revisión, no pagos verificados ni acreditaciones automáticas.</p>
+            <p>Eventos recibidos desde Android. El servidor compara importe, teléfono y plazo con la solicitud; las coincidencias únicas completadas se acreditan automáticamente.</p>
         </div>
         <button class="boton-eventos" id="actualizarEventosPago" type="button">Actualizar</button>
     </div>
@@ -580,7 +580,11 @@ async function cargarEventosPago() {
             detalle.textContent = lineas.join("\n");
             const estado = document.createElement("div");
             estado.className = "evento-estado";
-            estado.textContent = "PENDIENTE DE REVISIÓN MANUAL · " + (evento.review_status || "PENDING_MANUAL_REVIEW");
+            const acreditado = evento.review_status === "AUTO_APPROVED";
+            estado.style.color = acreditado ? "#68df8c" : "#ffdb69";
+            estado.textContent = acreditado
+                ? "PAGO CONCILIADO · GVR ACREDITADO AUTOMÁTICAMENTE"
+                : "PENDIENTE · " + (evento.review_status || "PENDING_MANUAL_REVIEW");
             tarjeta.append(titulo, detalle, estado);
             listaEventosPago.appendChild(tarjeta);
         }

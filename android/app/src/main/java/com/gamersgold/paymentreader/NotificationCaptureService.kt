@@ -103,7 +103,7 @@ class NotificationCaptureService : NotificationListenerService() {
                     .putString(KEY_LAST_CAPTURE, event.method)
                     .putLong(KEY_LAST_CAPTURE_AT, event.receivedAtMillis)
                     .apply()
-                diagnostic("Pago reconocido y guardado para revisión manual.")
+                diagnostic("Pago reconocido y guardado para conciliación automática.")
             } else {
                 prefs.edit()
                     .putInt(KEY_DUPLICATE_PAYMENTS, prefs.getInt(KEY_DUPLICATE_PAYMENTS, 0) + 1)

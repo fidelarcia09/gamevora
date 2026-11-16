@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import android.widget.Toast
 import android.provider.Settings
 import java.text.SimpleDateFormat
 import java.time.YearMonth
@@ -91,7 +90,7 @@ class MainActivity : Activity() {
         addText(header, "⚡  GAMERS GOLD", 25f, cyan, true)
         addText(header, "PAYMENT READER", 12f, white, true)
         addText(header, "Lector privado de confirmaciones", 15f, muted)
-        addText(header, "DIAGNÓSTICO  ·  VERSIÓN 0.3.0", 11f, cyan, true)
+        addText(header, "DIAGNÓSTICO  ·  VERSIÓN 0.5.2", 11f, cyan, true)
         content.addView(header)
 
         val accessGranted = NotificationCaptureService.isAccessGranted(this)
@@ -127,7 +126,7 @@ class MainActivity : Activity() {
 
         val payments = card()
         addText(payments, "CONFIRMACIONES DE PAGO", 12f, cyan, true)
-        addMetric(payments, "Pagos guardados para revisión manual", count(prefs, NotificationCaptureService.KEY_RECOGNIZED_PAYMENTS))
+        addMetric(payments, "Pagos detectados y guardados", count(prefs, NotificationCaptureService.KEY_RECOGNIZED_PAYMENTS))
         addMetric(payments, "Pagos repetidos evitados", count(prefs, NotificationCaptureService.KEY_DUPLICATE_PAYMENTS))
         val store = PaymentEventStore(this)
         try {
@@ -170,8 +169,8 @@ class MainActivity : Activity() {
         addText(privacy, "PRIVACIDAD Y SEGURIDAD", 12f, cyan, true)
         addText(privacy, "• No lee notificaciones de otras aplicaciones.", 13f, white)
         addText(privacy, "• No guarda el texto completo de los SMS en el diagnóstico.", 13f, white)
-        addText(privacy, "• Los pagos reconocidos quedan pendientes de revisión manual.", 13f, white)
-        addText(privacy, "• Solo sincroniza campos estructurados; nunca acredita GVR automáticamente.", 13f, amber, true)
+        addText(privacy, "• El servidor compara importe, teléfono, método y plazo de cada solicitud.", 13f, white)
+        addText(privacy, "• Una coincidencia única y completa acredita GVR una sola vez; las ambiguas quedan pendientes.", 13f, amber, true)
         addButton(privacy, "Cerrar sesión") { logout() }
         content.addView(privacy)
 
@@ -194,30 +193,22 @@ class MainActivity : Activity() {
         addMetric(panel, "Eventos pendientes de enviar", pending)
         addMetric(panel, "Eventos recibidos por el servidor", synced)
         if (BuildConfig.GVR_SYNC_ENABLED) {
-            addButton(panel, "Sincronizar ahora") {
-                when {
-                    pending == 0 -> Toast.makeText(
-                        this,
-                        "No hay eventos pendientes. La desinstalación anterior borró los datos locales de esa instalación.",
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                    GvrPaymentSyncScheduler.enqueue(this) -> Toast.makeText(
-                        this,
-                        "Sincronización programada. Se ejecutará cuando haya conexión.",
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                    else -> Toast.makeText(
-                        this,
-                        "No se pudo programar la sincronización. Revisa la configuración de la aplicación.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
             addText(
                 panel,
-                "La sincronización se ejecuta cuando hay Internet. Los eventos siguen pendientes de revisión manual; recibirlos en el servidor no confirma el pago.",
+                "●  Sincronización automática activada",
+                14f,
+                green,
+                true
+            )
+            addText(
+                panel,
+                "Cada pago reconocido se envía automáticamente al servidor. Si no hay Internet, queda en cola y WorkManager reintenta el envío cuando vuelve la conexión. No necesitas pulsar ningún botón.",
+                12f,
+                white
+            )
+            addText(
+                panel,
+                "El servidor compara los datos del evento con la solicitud. Si la coincidencia es única y la solicitud está completada, acredita GVR una sola vez; si falta información o hay ambigüedad, queda pendiente.",
                 11f,
                 amber
             )

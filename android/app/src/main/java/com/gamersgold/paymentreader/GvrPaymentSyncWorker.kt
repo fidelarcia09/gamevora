@@ -1,6 +1,7 @@
 package com.gamersgold.paymentreader
 
 import android.content.Context
+import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import org.json.JSONArray
@@ -49,23 +50,35 @@ class GvrPaymentSyncWorker(
                     })
 
                 val response = postSync(payload, session.accessToken)
-                val results = response.optJSONArray("results") ?: return Result.retry()
+                val results = response.optJSONArray("results") ?: run {
+                    recordDiagnostic("response", "response_missing_results")
+                    return Result.retry()
+                }
                 var accepted = 0
                 for (index in 0 until results.length()) {
                     val item = results.optJSONObject(index) ?: continue
                     val localKey = item.optString("localEventKey")
                     if (localKey.isNotBlank() && item.optBoolean("stored", false)) {
-                        store.markSynced(localKey, item.optString("eventId").ifBlank { null })
+                        store.markSynced(
+                            localKey,
+                            item.optString("eventId").ifBlank { null },
+                            item.optString("reviewStatus", "PENDING_MANUAL_REVIEW")
+                        )
                         accepted++
                     }
                 }
-                if (accepted != events.size) return Result.retry()
+                if (accepted != events.size) {
+                    recordDiagnostic("response", "accepted_count_mismatch_${accepted}_of_${events.size}")
+                    return Result.retry()
+                }
                 batchesProcessed++
             }
             return if (store.pendingSyncCount() == 0) Result.success() else Result.retry()
         } catch (_: AuthRejectedException) {
+            recordDiagnostic("auth", "auth_rejected")
             return Result.failure()
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            recordDiagnostic("exception", e.javaClass.simpleName)
             return Result.retry()
         } finally {
             store.close()
@@ -91,15 +104,33 @@ class GvrPaymentSyncWorker(
                 it.write(payload.toString().toByteArray(Charsets.UTF_8))
             }
             val status = connection.responseCode
-            val stream = if (status in 200..299) connection.inputStream else connection.errorStream
-            val responseText = stream?.bufferedReader(Charsets.UTF_8)?.use { it.readText() }.orEmpty()
             if (status == 401 || status == 403) throw AuthRejectedException()
-            if (status !in 200..299) throw IllegalStateException("Sync HTTP $status")
+            if (status !in 200..299) {
+                recordDiagnostic("http", "http_$status")
+                throw IllegalStateException("HTTP_$status")
+            }
+            val responseText = connection.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
             val json = JSONObject(responseText)
-            if (!json.optBoolean("ok", false)) throw IllegalStateException("Sync rechazó el lote")
+            if (!json.optBoolean("ok", false)) throw IllegalStateException("SYNC_REJECTED")
             return json
         } finally {
             connection.disconnect()
+        }
+    }
+
+    private fun recordDiagnostic(stage: String, code: String) {
+        // Solo códigos/metadatos técnicos; nunca cuerpos HTTP ni datos del evento.
+        Log.w(TAG, "[$stage] $code")
+        try {
+            val prefs = applicationContext.getSharedPreferences(DIAGNOSTICS_PREFS, Context.MODE_PRIVATE)
+            prefs.edit()
+                .putString("last_stage", stage)
+                .putString("last_code", code)
+                .putLong("last_at_millis", System.currentTimeMillis())
+                .putInt("failure_count", prefs.getInt("failure_count", 0) + 1)
+                .apply()
+        } catch (_: Exception) {
+            // El diagnóstico no puede afectar a la sincronización.
         }
     }
 
@@ -108,5 +139,7 @@ class GvrPaymentSyncWorker(
     companion object {
         private const val MAX_BATCH_SIZE = 50
         private const val MAX_BATCHES_PER_RUN = 5
+        private const val TAG = "GvrSync"
+        private const val DIAGNOSTICS_PREFS = "gvr_sync_diagnostics"
     }
 }

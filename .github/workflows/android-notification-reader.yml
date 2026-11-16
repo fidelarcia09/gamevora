@@ -5,6 +5,8 @@ on:
     branches:
       - feature/gvr-android-notification-reader
       - feature/gvr-payment-sync
+      - feature/gvr-android-permanent-signing
+      - release/gvr-payment-verification
     paths:
       - "android/**"
       - ".github/workflows/android-notification-reader.yml"
@@ -26,6 +28,10 @@ jobs:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
       GVR_SYNC_ENABLED: "true"
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -65,9 +71,31 @@ jobs:
       - name: Run unit tests and build debug APK
         run: gradle -p android testDebugUnitTest assembleDebug
 
+      - name: Prepare permanent release signing key
+        if: github.event_name != 'pull_request' && env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          KEYSTORE_PATH="$RUNNER_TEMP/gamers-gold-payment-reader-upload-key.p12"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_PATH"
+          chmod 600 "$KEYSTORE_PATH"
+          echo "ANDROID_KEYSTORE_FILE=$KEYSTORE_PATH" >> "$GITHUB_ENV"
+
+      - name: Build permanently signed release APK
+        if: github.event_name != 'pull_request' && env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != ''
+        run: gradle -p android assembleRelease
+
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: gamers-gold-payment-reader-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+      - name: Upload permanently signed release APK
+        if: github.event_name != 'pull_request' && env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: gamers-gold-payment-reader-signed
+          path: android/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error

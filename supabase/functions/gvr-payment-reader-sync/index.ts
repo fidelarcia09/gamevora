@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
-import { resolveGvrPaymentMatch } from "../_shared/gvr-payment-matching.ts";
+import { resolveGvrPaymentMatch } from "./gvr-payment-matching.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -33,58 +33,94 @@ function isUuid(value: unknown): value is string {
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
 }
 
-function validateEvent(value: unknown): IncomingEvent | null {
-  if (!value || typeof value !== "object") return null;
+function logValidationFailure(
+  validationId: string,
+  scope: "body" | "device" | "batch" | "event",
+  field: string,
+  rule: string,
+  value?: unknown,
+  eventIndex?: number,
+  batchSize?: number,
+): void {
+  try {
+    const entry: Record<string, unknown> = {
+      event: "GVR_SYNC_VALIDATION_FAILED",
+      validationId, scope, field, rule,
+      type: value === undefined ? "undefined" : value === null ? "null" :
+        Array.isArray(value) ? "array" : typeof value,
+    };
+    if (typeof value === "string") entry.length = value.length;
+    if (typeof eventIndex === "number") entry.eventIndex = eventIndex;
+    if (typeof batchSize === "number") entry.batchSize = batchSize;
+    if (field === "receivedAtMillis" && typeof value === "number" && Number.isFinite(value)) {
+      entry.deltaSeconds = Math.round((value - Date.now()) / 1000);
+    }
+    console.warn("GVR_SYNC_VALIDATION_FAILED", JSON.stringify(entry));
+  } catch { /* Diagnostic logging must never affect the HTTP response. */ }
+}
+
+function validateEvent(value: unknown, eventIndex: number): IncomingEvent | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    logValidationFailure("EVENT_NOT_OBJECT", "event", "event", "object", value, eventIndex);
+    return null;
+  }
   const event = value as Record<string, unknown>;
-  if (typeof event.localEventKey !== "string" ||
-      event.localEventKey.trim().length < 1 ||
-      event.localEventKey.length > 256) return null;
-  if (event.capturePackage !== SOURCE_PACKAGE) return null;
-  if (event.method !== "SALDO_MOVIL" && event.method !== "CUP") return null;
-  if (typeof event.amountMinorUnits !== "number" ||
-      !Number.isSafeInteger(event.amountMinorUnits) ||
-      event.amountMinorUnits <= 0 ||
-      event.amountMinorUnits > 100_000_000_000) return null;
-  if (typeof event.senderPhone !== "string" ||
-      !/^\d{8,15}$/.test(event.senderPhone)) return null;
-  if (typeof event.receivedAtMillis !== "number" ||
-      !Number.isSafeInteger(event.receivedAtMillis) ||
-      event.receivedAtMillis <= 0 ||
-      !Number.isFinite(new Date(event.receivedAtMillis).getTime()) ||
-      event.receivedAtMillis > Date.now() + 5 * 60 * 1000) return null;
+  if (typeof event.localEventKey !== "string") {
+    logValidationFailure("EVENT_LOCAL_KEY_TYPE", "event", "localEventKey", "type_string", event.localEventKey, eventIndex); return null;
+  }
+  if (event.localEventKey.trim().length < 1) {
+    logValidationFailure("EVENT_LOCAL_KEY_EMPTY", "event", "localEventKey", "min_length_1", event.localEventKey, eventIndex); return null;
+  }
+  if (event.localEventKey.length > 256) {
+    logValidationFailure("EVENT_LOCAL_KEY_TOO_LONG", "event", "localEventKey", "max_length_256", event.localEventKey, eventIndex); return null;
+  }
+  if (event.capturePackage !== SOURCE_PACKAGE) {
+    logValidationFailure("EVENT_CAPTURE_PACKAGE_MISMATCH", "event", "capturePackage", "exact_value", event.capturePackage, eventIndex); return null;
+  }
+  if (event.method !== "SALDO_MOVIL" && event.method !== "CUP") {
+    logValidationFailure("EVENT_METHOD_INVALID", "event", "method", "allowed_values", event.method, eventIndex); return null;
+  }
+  if (typeof event.amountMinorUnits !== "number" || !Number.isSafeInteger(event.amountMinorUnits) ||
+      event.amountMinorUnits <= 0 || event.amountMinorUnits > 100_000_000_000) {
+    logValidationFailure("EVENT_AMOUNT_INVALID", "event", "amountMinorUnits", "positive_safe_integer_max_100000000000", event.amountMinorUnits, eventIndex); return null;
+  }
+  if (typeof event.senderPhone !== "string" || !/^\d{8,15}$/.test(event.senderPhone)) {
+    logValidationFailure("EVENT_SENDER_PHONE_INVALID", "event", "senderPhone", "digits_8_15", event.senderPhone, eventIndex); return null;
+  }
+  if (typeof event.receivedAtMillis !== "number" || !Number.isSafeInteger(event.receivedAtMillis) ||
+      event.receivedAtMillis <= 0 || !Number.isFinite(new Date(event.receivedAtMillis).getTime())) {
+    logValidationFailure("EVENT_RECEIVED_AT_INVALID", "event", "receivedAtMillis", "positive_safe_integer_valid_date", event.receivedAtMillis, eventIndex); return null;
+  }
+  if (event.receivedAtMillis > Date.now() + 5 * 60 * 1000) {
+    logValidationFailure("EVENT_RECEIVED_AT_FUTURE", "event", "receivedAtMillis", "not_in_future_5min", event.receivedAtMillis, eventIndex); return null;
+  }
 
   if (event.method === "SALDO_MOVIL") {
     return {
-      localEventKey: event.localEventKey,
-      capturePackage: SOURCE_PACKAGE,
-      method: "SALDO_MOVIL",
-      amountMinorUnits: Number(event.amountMinorUnits),
-      senderPhone: event.senderPhone,
-      recipientAccount: null,
-      transactionReference: null,
-      rawDate: null,
+      localEventKey: event.localEventKey, capturePackage: SOURCE_PACKAGE, method: "SALDO_MOVIL",
+      amountMinorUnits: Number(event.amountMinorUnits), senderPhone: event.senderPhone,
+      recipientAccount: null, transactionReference: null, rawDate: null,
       receivedAtMillis: Number(event.receivedAtMillis),
     };
   }
 
-  if (typeof event.recipientAccount !== "string" ||
-      !/^\d{10,24}$/.test(event.recipientAccount) ||
-      typeof event.transactionReference !== "string" ||
-      !/^[A-Z0-9]{6,32}$/.test(event.transactionReference) ||
-      typeof event.rawDate !== "string" ||
-      event.rawDate.trim().length < 1 ||
-      event.rawDate.length > 40) return null;
-
+  if (typeof event.recipientAccount !== "string" || !/^\d{10,24}$/.test(event.recipientAccount)) {
+    logValidationFailure("EVENT_CUP_RECIPIENT_INVALID", "event", "recipientAccount", "digits_10_24", event.recipientAccount, eventIndex); return null;
+  }
+  if (typeof event.transactionReference !== "string" || !/^[A-Z0-9]{6,32}$/.test(event.transactionReference)) {
+    logValidationFailure("EVENT_CUP_REFERENCE_INVALID", "event", "transactionReference", "uppercase_alphanumeric_6_32", event.transactionReference, eventIndex); return null;
+  }
+  if (typeof event.rawDate !== "string") {
+    logValidationFailure("EVENT_CUP_RAW_DATE_TYPE", "event", "rawDate", "type_string", event.rawDate, eventIndex); return null;
+  }
+  if (event.rawDate.trim().length < 1 || event.rawDate.length > 40) {
+    logValidationFailure("EVENT_CUP_RAW_DATE_LENGTH", "event", "rawDate", "length_1_40", event.rawDate, eventIndex); return null;
+  }
   return {
-    localEventKey: event.localEventKey,
-    capturePackage: SOURCE_PACKAGE,
-    method: "CUP",
-    amountMinorUnits: Number(event.amountMinorUnits),
-    senderPhone: event.senderPhone,
-    recipientAccount: event.recipientAccount,
-    transactionReference: event.transactionReference,
-    rawDate: event.rawDate.trim(),
-    receivedAtMillis: Number(event.receivedAtMillis),
+    localEventKey: event.localEventKey, capturePackage: SOURCE_PACKAGE, method: "CUP",
+    amountMinorUnits: Number(event.amountMinorUnits), senderPhone: event.senderPhone,
+    recipientAccount: event.recipientAccount, transactionReference: event.transactionReference,
+    rawDate: event.rawDate.trim(), receivedAtMillis: Number(event.receivedAtMillis),
   };
 }
 
@@ -163,7 +199,7 @@ Deno.serve(async (req: Request) => {
 
   const url = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  const serviceKey = Deno.env.get("GVR_SUPABASE_SERVICE_ROLE_KEY");
   if (!url || !anonKey || !serviceKey) {
     console.error("GVR payment reader sync: faltan secretos Supabase requeridos.");
     return reply({ ok: false, error: "Servicio no configurado." }, 500);
@@ -171,17 +207,35 @@ Deno.serve(async (req: Request) => {
 
   let body: Record<string, unknown>;
   try {
-    body = await req.json();
+    const parsed: unknown = await req.json();
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      logValidationFailure("BODY_SHAPE_INVALID", "body", "body", "object", parsed);
+      return reply({ ok: false, error: "Lote o identificador de dispositivo inválido." }, 400);
+    }
+    body = parsed as Record<string, unknown>;
   } catch {
+    logValidationFailure("BODY_NOT_JSON", "body", "body", "valid_json");
     return reply({ ok: false, error: "JSON inválido." }, 400);
   }
 
-  if (!isUuid(body.deviceId) || !Array.isArray(body.events) ||
-      body.events.length < 1 || body.events.length > MAX_BATCH_SIZE) {
+  if (!isUuid(body.deviceId)) {
+    logValidationFailure("DEVICE_ID_INVALID", "device", "deviceId", "uuid_format", body.deviceId);
+    return reply({ ok: false, error: "Lote o identificador de dispositivo inválido." }, 400);
+  }
+  if (!Array.isArray(body.events)) {
+    logValidationFailure("BATCH_NOT_ARRAY", "batch", "events", "array", body.events);
+    return reply({ ok: false, error: "Lote o identificador de dispositivo inválido." }, 400);
+  }
+  if (body.events.length < 1) {
+    logValidationFailure("BATCH_EMPTY", "batch", "events", "min_items_1", body.events, undefined, body.events.length);
+    return reply({ ok: false, error: "Lote o identificador de dispositivo inválido." }, 400);
+  }
+  if (body.events.length > MAX_BATCH_SIZE) {
+    logValidationFailure("BATCH_TOO_LARGE", "batch", "events", "max_items_50", body.events, undefined, body.events.length);
     return reply({ ok: false, error: "Lote o identificador de dispositivo inválido." }, 400);
   }
 
-  const events = body.events.map(validateEvent);
+  const events = body.events.map((event, index) => validateEvent(event, index));
   if (events.some((event) => event === null)) {
     return reply({ ok: false, error: "Uno o más eventos tienen datos inválidos." }, 400);
   }
