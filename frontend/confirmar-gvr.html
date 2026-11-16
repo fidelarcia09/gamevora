@@ -819,6 +819,9 @@ async function vincularComprobante(idSolicitud,usuario,ruta,txid=null) {
 
     if (error) {
         console.error("Error vinculando comprobante:",error);
+        if (error.code === "23505") {
+            throw new Error("Ese número de transacción ya fue utilizado en otra solicitud. No vuelvas a pagar; verifica el dato y contacta con soporte si crees que es un error.");
+        }
         throw new Error(
             "La imagen se subió, pero no se pudo vincular. " +
             "No hagas otro pago. Solicitud: " + idSolicitud
