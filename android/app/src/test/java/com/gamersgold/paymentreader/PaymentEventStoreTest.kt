@@ -94,6 +94,33 @@ class PaymentEventStoreTest {
         }
     }
 
+
+    @Test
+    fun newEventsStartPendingSyncAndCanBeMarkedSynced() {
+        val store = PaymentEventStore(context)
+        try {
+            assertTrue(store.insertIfNew(etecsaEvent()))
+            assertEquals(1, store.pendingSyncCount())
+            assertEquals(0, store.syncedCount())
+            val pending = store.pendingSyncEvents(10)
+            assertEquals(1, pending.size)
+            assertEquals("ET-notification-42-50591030-26800", pending.first().localDedupeKey)
+
+            store.markSynced(pending.first().localDedupeKey, "server-event-1")
+            assertEquals(0, store.pendingSyncCount())
+            assertEquals(1, store.syncedCount())
+            store.readableDatabase.rawQuery(
+                "SELECT server_event_id FROM payment_events LIMIT 1",
+                null
+            ).use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertEquals("server-event-1", cursor.getString(0))
+            }
+        } finally {
+            store.close()
+        }
+    }
+
     private fun etecsaEvent() = ParsedPaymentEvent(
         method = "SALDO_MOVIL",
         amountMinorUnits = 26800L,

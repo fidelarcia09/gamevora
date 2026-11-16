@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import android.provider.Settings
 import java.text.SimpleDateFormat
 import java.time.YearMonth
@@ -35,6 +36,11 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (SecureSessionStore(this).load() == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
         window.statusBarColor = navy
         window.navigationBarColor = navy
         if (android.os.Build.VERSION.SDK_INT >= 29) {
@@ -42,11 +48,20 @@ class MainActivity : Activity() {
             window.isStatusBarContrastEnforced = false
         }
         render()
+        GvrPaymentSyncScheduler.enqueue(this)
     }
 
     override fun onResume() {
         super.onResume()
-        if (::content.isInitialized) render()
+        if (SecureSessionStore(this).load() == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+        if (::content.isInitialized) {
+            GvrPaymentSyncScheduler.enqueue(this)
+            render()
+        }
     }
 
     private fun render() {
@@ -123,6 +138,7 @@ class MainActivity : Activity() {
         }
         content.addView(payments)
 
+        addSyncSection()
         addCompletedPaymentsSection()
 
         val activity = card()
@@ -155,11 +171,66 @@ class MainActivity : Activity() {
         addText(privacy, "• No lee notificaciones de otras aplicaciones.", 13f, white)
         addText(privacy, "• No guarda el texto completo de los SMS en el diagnóstico.", 13f, white)
         addText(privacy, "• Los pagos reconocidos quedan pendientes de revisión manual.", 13f, white)
-        addText(privacy, "• No envía datos a Internet ni acredita GVR automáticamente.", 13f, amber, true)
+        addText(privacy, "• Solo sincroniza campos estructurados; nunca acredita GVR automáticamente.", 13f, amber, true)
+        addButton(privacy, "Cerrar sesión") { logout() }
         content.addView(privacy)
 
         addText(content, "GAMERS GOLD TOP-UP  ·  UNIVERSO GAMING", 11f, muted, true, Gravity.CENTER)
         setContentView(scroll)
+    }
+
+    private fun addSyncSection() {
+        val panel = card()
+        addText(panel, "SINCRONIZACIÓN SEGURA", 12f, cyan, true)
+        val store = PaymentEventStore(this)
+        val pending: Int
+        val synced: Int
+        try {
+            pending = store.pendingSyncCount()
+            synced = store.syncedCount()
+        } finally {
+            store.close()
+        }
+        addMetric(panel, "Eventos pendientes de enviar", pending)
+        addMetric(panel, "Eventos recibidos por el servidor", synced)
+        if (BuildConfig.GVR_SYNC_ENABLED) {
+            addButton(panel, "Sincronizar ahora") {
+                when {
+                    pending == 0 -> Toast.makeText(
+                        this,
+                        "No hay eventos pendientes. La desinstalación anterior borró los datos locales de esa instalación.",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    GvrPaymentSyncScheduler.enqueue(this) -> Toast.makeText(
+                        this,
+                        "Sincronización programada. Se ejecutará cuando haya conexión.",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    else -> Toast.makeText(
+                        this,
+                        "No se pudo programar la sincronización. Revisa la configuración de la aplicación.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+            addText(
+                panel,
+                "La sincronización se ejecuta cuando hay Internet. Los eventos siguen pendientes de revisión manual; recibirlos en el servidor no confirma el pago.",
+                11f,
+                amber
+            )
+        } else {
+            addText(
+                panel,
+                "Sincronización desactivada por seguridad. Se habilitará cuando el esquema y la Edge Function estén desplegados y revisados.",
+                12f,
+                amber,
+                true
+            )
+        }
+        content.addView(panel)
     }
 
     private fun addCompletedPaymentsSection() {
@@ -227,7 +298,7 @@ class MainActivity : Activity() {
         )
         addText(
             panel,
-            "La sincronización con el historial del servidor aún está pendiente.",
+            "Este resumen local no sustituye el historial administrativo del servidor.",
             11f,
             muted
         )
@@ -346,6 +417,16 @@ class MainActivity : Activity() {
             topMargin = dp(12)
             bottomMargin = dp(10)
         })
+    }
+
+    private fun logout() {
+        Thread {
+            SupabaseAuthClient(this).signOut()
+            runOnUiThread {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+        }.start()
     }
 
     private fun count(prefs: android.content.SharedPreferences, key: String): Int =
