@@ -90,7 +90,7 @@ class MainActivity : Activity() {
         addText(header, "⚡  GAMERS GOLD", 25f, cyan, true)
         addText(header, "PAYMENT READER", 12f, white, true)
         addText(header, "Lector privado de confirmaciones", 15f, muted)
-        addText(header, "DIAGNÓSTICO  ·  VERSIÓN 0.5.1", 11f, cyan, true)
+        addText(header, "DIAGNÓSTICO  ·  VERSIÓN 0.5.2", 11f, cyan, true)
         content.addView(header)
 
         val accessGranted = NotificationCaptureService.isAccessGranted(this)
