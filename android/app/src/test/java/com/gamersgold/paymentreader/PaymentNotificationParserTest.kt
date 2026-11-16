@@ -31,13 +31,13 @@ class PaymentNotificationParserTest {
             title = "ETECSA",
             body = "Usted ha recibido 268.0 CUP del numero 50591030.",
             receivedAtMillis = receivedAt,
-            notificationKey = "google-messages|sms|42"
+            notificationKey = "google-messages|sms|42|$receivedAt"
         )
         val updated = PaymentNotificationParser.parse(
             title = "ETECSA",
             body = "Usted ha recibido 268.0 CUP del numero 50591030. Saldo principal 3087.28 CUP",
             receivedAtMillis = receivedAt + 5000,
-            notificationKey = "google-messages|sms|42"
+            notificationKey = "google-messages|sms|42|${receivedAt + 5000}"
         )
         assertNotNull(first)
         assertNotNull(updated)
@@ -50,13 +50,13 @@ class PaymentNotificationParserTest {
             title = "ETECSA",
             body = "Usted ha recibido 268.0 CUP del numero 50591030.",
             receivedAtMillis = receivedAt,
-            notificationKey = "google-messages|sms|42"
+            notificationKey = "google-messages|sms|42|$receivedAt"
         )
         val repeatedCallback = PaymentNotificationParser.parse(
             title = "ETECSA",
             body = "Usted ha recibido 268.0 CUP del numero 50591030.",
             receivedAtMillis = receivedAt,
-            notificationKey = "google-messages|sms|42"
+            notificationKey = "google-messages|sms|42|$receivedAt"
         )
         assertNotNull(first)
         assertNotNull(repeatedCallback)
