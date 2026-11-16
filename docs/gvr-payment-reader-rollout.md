@@ -5,14 +5,16 @@ Este documento describe el orden de activación de la lectura de notificaciones 
 ## Estado y límites
 
 - El código de Android mantiene los eventos en una cola local cuando no hay Internet.
-- La sincronización usa la Edge Function `gvr-payment-reader-sync`.
+- La sincronización usa `gvr-payment-reader-sync` (versión 3) y JWT obligatorio.
+- `gvr-payment-reader-rematch` (versión 1, JWT obligatorio) vuelve a comparar eventos cuando el cliente guarda los identificadores y el comprobante.
 - Los eventos se guardan como `PENDING_MANUAL_REVIEW`.
-- Una coincidencia con una solicitud GVR es solo una sugerencia.
+- Una coincidencia enlaza como máximo un evento con una solicitud; no aprueba ni acredita.
 - Este flujo NO cambia `wallets`, `transactions` ni el estado de `gvr_purchase_requests`.
 - No acredita GVR automáticamente.
 - No se deben hacer transferencias reales para probar el sistema.
 - El esquema `public.gvr_payment_notification_events` ya está aplicado en Supabase, con RLS activado y sin acceso directo para `anon` ni `authenticated`.
-- `gvr-payment-reader-sync` está desplegada (versión 2, JWT obligatorio).
+- `gvr-payment-reader-sync` está desplegada (versión 3, JWT obligatorio).
+- `gvr-payment-reader-rematch` está desplegada (versión 1, JWT obligatorio).
 - `gvr-payment-reader-events` está desplegada (versión 1, JWT obligatorio).
 - La cuenta administradora configurada sigue activa en `support_agents`.
 - El panel `frontend/confirmaciones-gvr.html` puede consultar los últimos 100 eventos mediante la función administrativa.
@@ -21,6 +23,7 @@ Este documento describe el orden de activación de la lectura de notificaciones 
 
 - `20261115233616_create_gvr_payment_notification_events.sql`
 - `20261115233659_index_gvr_payment_notification_synced_by.sql`
+- `20261115234500_gvr_payment_one_event_per_request.sql` (aplicada; incluye unicidad de evento por solicitud e índices de búsqueda)
 
 ## Datos CUP: dos configuraciones distintas
 
@@ -58,7 +61,8 @@ La propiedad `cupAutomationReady` debe permanecer en `false` hasta completar tod
 
 ### ETECSA / SALDO_MOVIL
 
-- Comparar teléfono emisor, importe y ventana temporal de la solicitud.
+- El cliente declara el número desde el que envió el saldo; debe coincidir exactamente (solo dígitos) con `sender_phone` de la notificación.
+- Comparar además el importe exacto y que `received_at` caiga dentro de la ventana `created_at`–`expires_at` de la solicitud.
 - El saldo principal restante y las fechas de vigencia de la línea no son datos de la transferencia.
 - ETECSA no proporciona una referencia de transacción única en el formato recibido.
 - La deduplicación local del dispositivo no demuestra que el pago sea único.
@@ -66,20 +70,23 @@ La propiedad `cupAutomationReady` debe permanecer en `false` hasta completar tod
 
 ### PAGOxMOVIL / CUP
 
-- Extraer teléfono emisor, cuenta receptora, importe, referencia de transacción y fecha textual.
-- Conservar la fecha como texto hasta confirmar su convención regional.
+- El cliente declara el teléfono del titular y el número de transacción; ambos deben coincidir exactamente con `sender_phone` y `transaction_reference`.
+- Comparar también el importe exacto, la cuenta receptora y la ventana temporal de la solicitud.
+- Conservar `raw_date` como texto hasta confirmar su convención regional.
 - Comprobar que la cuenta receptora coincide con `GVR_CUP_RECEIVER_ACCOUNT`.
-- Usar la referencia de transacción para detectar duplicados.
+- La referencia de transacción es única y no puede reutilizarse.
 - Una referencia repetida con datos diferentes debe rechazarse como conflicto.
 - Siempre requiere revisión humana.
 
-## Estado de despliegue verificado (15 de noviembre de 2026)
+## Estado de despliegue verificado (16 de noviembre de 2026)
 
-- La tabla existe y está vacía; todavía no se han enviado eventos sintéticos ni notificaciones reales.
+- La tabla existe; la cantidad de eventos debe comprobarse antes de cualquier prueba operativa.
 - Los permisos directos de `anon` y `authenticated` están revocados; solo el backend con `service_role` opera sobre la tabla.
-- No se configuró `GVR_CUP_RECEIVER_ACCOUNT` porque aún no existe la tarjeta definitiva.
-- `frontend/gvr-payment-config.js` mantiene `cupReceiverAccount` vacío y `cupAutomationReady` en `false`.
-- La sincronización del APK permanece desactivada por defecto (`GVR_SYNC_ENABLED=false`).
+- La migración de unicidad impide que una solicitud quede asociada a más de un evento.
+- Se añadieron índices para búsquedas por importe, teléfono, referencia CUP, cuenta receptora y ventana temporal.
+- `gvr-payment-reader-sync` está activa en versión 3 y `gvr-payment-reader-rematch` en versión 1; ambas requieren JWT.
+- No se configuró `GVR_CUP_RECEIVER_ACCOUNT`; `cupReceiverAccount` sigue vacío y `cupAutomationReady=false`, por lo que CUP continúa deshabilitado al cliente.
+- Los ejemplos ETECSA y PAGOxMOVIL están cubiertos por pruebas unitarias existentes del parser Android.
 
 ## Limitaciones conocidas que bloquean la activación
 
