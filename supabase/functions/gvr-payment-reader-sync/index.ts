@@ -110,8 +110,12 @@ async function findRequestMatch(
     .gte("expires_at", new Date(event.receivedAtMillis).toISOString())
     .limit(2);
 
-  if (event.method === "SALDO_MOVIL") {
-    query = query.eq("payment_sender_phone", event.senderPhone);
+  // Both payment methods require the sender phone to match the order.
+  query = query.eq("payment_sender_phone", event.senderPhone);
+
+  // CUP additionally requires the exact Transfermóvil transaction reference.
+  if (event.method === "CUP") {
+    query = query.eq("payment_txid", event.transactionReference);
   }
 
   const { data, error } = await query;
