@@ -10,6 +10,7 @@ val localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
     localPropertiesFile.inputStream().use(localProperties::load)
 }
+
 fun buildConfigString(value: String): String =
     "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
@@ -25,6 +26,24 @@ val gvrSyncEnabled = (
         ?: "false"
 ).toBooleanStrictOrNull() ?: false
 
+// La clave privada nunca se guarda en Git. Se carga desde variables de entorno
+// de GitHub Actions o desde android/local.properties en un entorno local.
+val signingStoreFile = localProperties.getProperty("ANDROID_KEYSTORE_FILE")
+    ?: System.getenv("ANDROID_KEYSTORE_FILE")
+val signingStorePassword = localProperties.getProperty("ANDROID_KEYSTORE_PASSWORD")
+    ?: System.getenv("ANDROID_KEYSTORE_PASSWORD")
+val signingKeyAlias = localProperties.getProperty("ANDROID_KEY_ALIAS")
+    ?: System.getenv("ANDROID_KEY_ALIAS")
+val signingKeyPassword = localProperties.getProperty("ANDROID_KEY_PASSWORD")
+    ?: System.getenv("ANDROID_KEY_PASSWORD")
+
+val releaseSigningConfigured = listOf(
+    signingStoreFile,
+    signingStorePassword,
+    signingKeyAlias,
+    signingKeyPassword
+).all { !it.isNullOrBlank() }
+
 android {
     namespace = "com.gamersgold.paymentreader"
     compileSdk = 35
@@ -33,11 +52,31 @@ android {
         applicationId = "com.gamersgold.paymentreader"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.4.0"
+        versionCode = 4
+        versionName = "0.5.0"
         buildConfigField("String", "SUPABASE_URL", buildConfigString(supabaseUrl))
         buildConfigField("String", "SUPABASE_ANON_KEY", buildConfigString(supabaseAnonKey))
         buildConfigField("boolean", "GVR_SYNC_ENABLED", gvrSyncEnabled.toString())
+    }
+
+    signingConfigs {
+        if (releaseSigningConfigured) {
+            create("release") {
+                storeFile = file(requireNotNull(signingStoreFile))
+                storePassword = requireNotNull(signingStorePassword)
+                keyAlias = requireNotNull(signingKeyAlias)
+                keyPassword = requireNotNull(signingKeyPassword)
+            }
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            if (releaseSigningConfigured) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
     }
 
     buildFeatures { buildConfig = true }
