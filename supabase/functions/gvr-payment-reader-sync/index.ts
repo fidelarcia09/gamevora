@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import { resolveGvrPaymentMatch } from "../_shared/gvr-payment-matching.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -91,41 +92,63 @@ async function findRequestMatch(
   admin: ReturnType<typeof createClient<any>>,
   event: IncomingEvent,
 ): Promise<{ status: string; requestId: string | null }> {
-  if (event.method === "CUP") {
-    const configuredAccount = Deno.env.get("GVR_CUP_RECEIVER_ACCOUNT")?.trim();
-    if (!configuredAccount || event.recipientAccount !== configuredAccount) {
-      return { status: "RECIPIENT_MISMATCH", requestId: null };
-    }
+  const configuredAccount = Deno.env.get("GVR_CUP_RECEIVER_ACCOUNT")?.trim() ?? "";
+  if (event.method === "CUP" &&
+      (!configuredAccount || event.recipientAccount !== configuredAccount)) {
+    return { status: "RECIPIENT_MISMATCH", requestId: null };
   }
 
   const amount = event.amountMinorUnits / 100;
   let query = admin
     .from("gvr_purchase_requests")
-    .select("id")
+    .select("id,status,payment_method,payment_currency,payment_amount,payment_sender_phone,payment_txid,created_at,expires_at")
     .eq("status", "pending")
-    .eq("payment_method", event.method === "CUP" ? "CUP" : "SALDO_MOVIL")
+    .eq("payment_method", event.method)
     .eq("payment_currency", event.method === "CUP" ? "CUP" : "SALDO_MOVIL")
     .eq("payment_amount", amount)
+    .eq("payment_sender_phone", event.senderPhone)
     .lte("created_at", new Date(event.receivedAtMillis).toISOString())
     .gte("expires_at", new Date(event.receivedAtMillis).toISOString())
-    .limit(2);
+    .limit(1000);
 
-  // Both payment methods require the sender phone to match the order.
-  query = query.eq("payment_sender_phone", event.senderPhone);
-
-  // CUP additionally requires the exact Transfermóvil transaction reference.
   if (event.method === "CUP") {
+    if (!event.transactionReference) return { status: "NO_MATCH", requestId: null };
     query = query.eq("payment_txid", event.transactionReference);
   }
 
-  const { data, error } = await query;
-  if (error) throw new Error("REQUEST_MATCH_LOOKUP_FAILED");
-  const matches = data ?? [];
-  if (matches.length === 1) {
-    return { status: "MATCHED", requestId: matches[0].id as string };
-  }
-  if (matches.length > 1) return { status: "AMBIGUOUS", requestId: null };
-  return { status: "NO_MATCH", requestId: null };
+  const { data: requests, error: requestError } = await query;
+  if (requestError) throw new Error("REQUEST_MATCH_LOOKUP_FAILED");
+  if (!requests?.length) return { status: "NO_MATCH", requestId: null };
+  // At the query cap, fail closed: there may be more compatible requests.
+  if (requests.length >= 1000) return { status: "AMBIGUOUS", requestId: null };
+
+  const requestIds = requests.map((request: { id: string }) => request.id);
+  const { data: linkedEvents, error: linkedError } = await admin
+    .from("gvr_payment_notification_events")
+    .select("matched_request_id")
+    .in("matched_request_id", requestIds);
+  if (linkedError) throw new Error("REQUEST_MATCH_CLAIM_LOOKUP_FAILED");
+
+  const linkedRequestIds = new Set(
+    (linkedEvents ?? [])
+      .map((item: { matched_request_id: string | null }) => item.matched_request_id)
+      .filter((id: string | null): id is string => Boolean(id)),
+  );
+
+  const result = resolveGvrPaymentMatch(
+    {
+      method: event.method,
+      amountMinorUnits: event.amountMinorUnits,
+      senderPhone: event.senderPhone,
+      recipientAccount: event.recipientAccount,
+      transactionReference: event.transactionReference,
+      receivedAt: event.receivedAtMillis,
+    },
+    requests,
+    linkedRequestIds,
+    configuredAccount || null,
+  );
+  return { status: result.status, requestId: result.requestId };
 }
 
 Deno.serve(async (req: Request) => {
