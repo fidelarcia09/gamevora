@@ -664,7 +664,7 @@ async function cargarSolicitudes() {
     try {
         const { data, error } =
             await supabaseClient.rpc(
-                "admin_list_gvr_purchase_requests"
+                "admin_list_gvr_purchase_requests_v2"
             );
 
         if (error) {
@@ -806,6 +806,20 @@ function crearTarjeta(s) {
                     ${escapar(metodo)}
                 </div>
             </div>
+
+            <div class="dato">
+                <div class="dato-label">Teléfono emisor declarado</div>
+                <div class="dato-valor">
+                    ${escapar(s.payment_sender_phone || "Pendiente de datos")}
+                </div>
+            </div>
+
+            ${s.payment_txid ? `
+                <div class="dato">
+                    <div class="dato-label">${s.payment_method === "CUP" ? "Número de transacción Transfermóvil" : "TXID de pago"}</div>
+                    <div class="dato-valor">${escapar(s.payment_txid)}</div>
+                </div>
+            ` : ""}
 
             <div class="dato">
                 <div class="dato-label">Usuario ID</div>
