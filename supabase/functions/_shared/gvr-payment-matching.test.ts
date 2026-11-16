@@ -89,3 +89,10 @@ Deno.test("CUP normaliza mayúsculas de la referencia, pero exige coincidencia c
   const result = resolveGvrPaymentMatch(cupEvent, [cupRequest()], new Set(), "9224069992533592");
   assert(result.status === "MATCHED", "La referencia debe compararse sin distinguir mayúsculas");
 });
+
+Deno.test("un pedido cancelado o aún no creado no coincide", () => {
+  const cancelled = saldoRequest({ status: "cancelled" });
+  const future = saldoRequest({ created_at: "2026-11-16T12:05:01.000Z" });
+  assert(resolveGvrPaymentMatch(saldoEvent, [cancelled], new Set(), null).status === "NO_MATCH", "No debe aceptar pedidos cancelados");
+  assert(resolveGvrPaymentMatch(saldoEvent, [future], new Set(), null).status === "NO_MATCH", "No debe aceptar pagos anteriores al pedido");
+});
