@@ -81,9 +81,9 @@
     <section id="pushCard" class="push-card" hidden aria-labelledby="pushTitle">
       <div class="push-head">
         <span class="push-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"/><path d="M10 21h4"/></svg></span>
-        <div><div id="pushTitle" class="push-title">Activa las notificaciones</div><p class="push-copy" id="pushDescription">Recibe avisos importantes de Gamers Gold Top-Up directamente en tu teléfono.</p></div>
+        <div><div id="pushTitle" class="push-title">Notificaciones de compras GVR</div><p class="push-copy" id="pushDescription">Actívalas para recibir avisos cuando tu solicitud de compra de GVR sea aprobada o rechazada.</p></div>
       </div>
-      <button id="activarPush" class="accion" type="button">Activar notificaciones</button>
+      <button id="activarPush" class="accion" type="button">Activar notificaciones de compras GVR</button>
       <p id="pushStatus" class="push-status" role="status"></p>
     </section>
 
@@ -193,7 +193,7 @@
       pushCard.hidden = false;
       activarPush.hidden = false;
       activarPush.disabled = false;
-      activarPush.textContent = "Activar notificaciones";
+      activarPush.textContent = "Activar notificaciones de compras GVR";
 
       const compatible = ("serviceWorker" in navigator) &&
         ("PushManager" in window) &&
@@ -238,7 +238,7 @@
         return;
       }
 
-      mostrarEstado(pushStatus, "Activa las notificaciones para recibir avisos de tu cuenta en este dispositivo.");
+      mostrarEstado(pushStatus, "Activa las notificaciones para recibir avisos sobre tus compras GVR en este dispositivo.");
     }
 
     activarPush.addEventListener("click", async function () {
