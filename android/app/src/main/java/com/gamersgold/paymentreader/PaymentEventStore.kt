@@ -21,11 +21,12 @@ internal data class PaymentEventForSync(
     val recipientAccount: String?,
     val transactionReference: String?,
     val rawDate: String?,
-    val receivedAtMillis: Long
+    val receivedAtMillis: Long,
+    val capturedAtMillis: Long
 )
 
 internal class PaymentEventStore(context: Context) :
-    SQLiteOpenHelper(context, "gvr_payment_events.db", null, 2) {
+    SQLiteOpenHelper(context, "gvr_payment_events.db", null, 3) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -40,6 +41,7 @@ internal class PaymentEventStore(context: Context) :
                 transaction_reference TEXT,
                 raw_date TEXT,
                 received_at_millis INTEGER NOT NULL,
+                captured_at_millis INTEGER NOT NULL DEFAULT 0,
                 review_status TEXT NOT NULL DEFAULT 'PENDING_MANUAL_REVIEW',
                 sync_status TEXT NOT NULL DEFAULT 'LOCAL_PENDING',
                 server_event_id TEXT
@@ -55,6 +57,9 @@ internal class PaymentEventStore(context: Context) :
             )
             db.execSQL("ALTER TABLE payment_events ADD COLUMN server_event_id TEXT")
         }
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE payment_events ADD COLUMN captured_at_millis INTEGER NOT NULL DEFAULT 0")
+        }
     }
 
     fun insertIfNew(event: ParsedPaymentEvent): Boolean {
@@ -67,6 +72,7 @@ internal class PaymentEventStore(context: Context) :
             put("transaction_reference", event.transactionReference)
             put("raw_date", event.rawDate)
             put("received_at_millis", event.receivedAtMillis)
+            put("captured_at_millis", event.capturedAtMillis)
             put("review_status", "PENDING_MANUAL_REVIEW")
             put("sync_status", "LOCAL_PENDING")
         }
@@ -89,7 +95,8 @@ internal class PaymentEventStore(context: Context) :
         readableDatabase.rawQuery(
             """
             SELECT dedupe_key, method, amount_minor_units, sender_phone,
-                   recipient_account, transaction_reference, raw_date, received_at_millis
+                   recipient_account, transaction_reference, raw_date, received_at_millis,
+                   captured_at_millis
             FROM payment_events
             WHERE sync_status = 'LOCAL_PENDING'
             ORDER BY id ASC
@@ -106,7 +113,8 @@ internal class PaymentEventStore(context: Context) :
                     recipientAccount = cursor.getString(4),
                     transactionReference = cursor.getString(5),
                     rawDate = cursor.getString(6),
-                    receivedAtMillis = cursor.getLong(7)
+                    receivedAtMillis = cursor.getLong(7),
+                    capturedAtMillis = cursor.getLong(8)
                 )
             }
         }
