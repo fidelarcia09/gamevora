@@ -10,7 +10,7 @@ import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
 internal object GvrPaymentSyncScheduler {
-    private const val UNIQUE_WORK_NAME = "gvr-payment-notification-sync"
+    internal const val UNIQUE_WORK_NAME = "gvr-payment-notification-sync"
 
     fun enqueue(context: Context): Boolean {
         if (!BuildConfig.GVR_SYNC_ENABLED) {
