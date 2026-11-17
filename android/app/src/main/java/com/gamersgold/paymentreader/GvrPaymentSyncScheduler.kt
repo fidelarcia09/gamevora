@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 internal object GvrPaymentSyncScheduler {
     internal const val UNIQUE_WORK_NAME = "gvr-payment-notification-sync"
 
-    fun enqueue(context: Context, replaceExisting: Boolean = false): Boolean {
+    fun enqueue(context: Context, replaceExisting: Boolean = true): Boolean {
         if (!BuildConfig.GVR_SYNC_ENABLED) {
             recordDiagnostic(context, "scheduler", "sync_disabled_in_build")
             return false
@@ -26,10 +26,10 @@ internal object GvrPaymentSyncScheduler {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        // The worker drains the local SQLite queue, so only one unique sync job is needed.
-        // KEEP prevents notification bursts from appending dozens of identical workers.
-        // The app's explicit recovery path uses REPLACE once to discard a stale chain
-        // and start one fresh worker; SQLite payment events are never deleted.
+        // Never append notification-triggered work: APPEND_OR_REPLACE created a long
+        // serial chain where every later worker stayed BLOCKED behind an earlier retry.
+        // REPLACE keeps one active unique worker. The server deduplicates retries by
+        // device_id + local_event_key, and the local SQLite queue is never deleted.
         val request = OneTimeWorkRequestBuilder<GvrPaymentSyncWorker>()
             .setConstraints(constraints)
             .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
