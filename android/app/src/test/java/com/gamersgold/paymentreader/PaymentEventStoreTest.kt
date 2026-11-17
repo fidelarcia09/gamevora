@@ -122,6 +122,7 @@ class PaymentEventStoreTest {
             val pending = store.pendingSyncEvents(10)
             assertEquals(1, pending.size)
             assertEquals("ET-notification-42-50591030-26800", pending.first().localDedupeKey)
+            assertEquals(pending.first().receivedAtMillis, pending.first().capturedAtMillis)
 
             store.markSynced(pending.first().localDedupeKey, "server-event-1", "PENDING_MANUAL_REVIEW")
             assertEquals(0, store.pendingSyncCount())
