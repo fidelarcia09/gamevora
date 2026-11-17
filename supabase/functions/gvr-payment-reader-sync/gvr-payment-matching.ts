@@ -69,9 +69,8 @@ export function resolveGvrPaymentMatch(
     if (phone !== event.senderPhone) return false;
 
     const createdAt = Date.parse(request.created_at);
-    const expiresAt = request.expires_at ? Date.parse(request.expires_at) : NaN;
-    if (!Number.isFinite(createdAt) || !Number.isFinite(expiresAt) ||
-        createdAt > receivedAt || receivedAt > expiresAt) return false;
+    // La solicitud no vence: el evento debe haber ocurrido después de crearla.
+    if (!Number.isFinite(createdAt) || createdAt > receivedAt) return false;
 
     if (event.method === "CUP") {
       const requestReference = String(request.payment_txid ?? "").trim().toUpperCase();
