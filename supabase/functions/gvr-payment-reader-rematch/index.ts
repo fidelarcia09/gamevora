@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
-import { resolveGvrPaymentMatch } from "./gvr-payment-matching.ts";
+import { resolveGvrPaymentMatch } from "../_shared/gvr-payment-matching.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
