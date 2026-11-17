@@ -52,7 +52,7 @@ class NotificationCaptureService : NotificationListenerService() {
 
         prefs.edit()
             .putString(KEY_LAST_NOTIFICATION_PACKAGE, sbn.packageName)
-            .putLong(KEY_LAST_NOTIFICATION_AT, now)
+            .putLong(KEY_LAST_NOTIFICATION_AT, capturedAtMillis)
             .apply()
 
         if ((sbn.notification.flags and Notification.FLAG_ONGOING_EVENT) != 0) {
