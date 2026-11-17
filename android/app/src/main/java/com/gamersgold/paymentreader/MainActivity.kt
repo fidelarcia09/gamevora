@@ -199,7 +199,10 @@ class MainActivity : Activity() {
         val lastStage = syncPrefs.getString("last_stage", "sin_diagnostico") ?: "sin_diagnostico"
         val lastCode = syncPrefs.getString("last_code", "Aún no hay un intento registrado") ?: "Aún no hay un intento registrado"
         val lastAt = syncPrefs.getLong("last_at_millis", 0L)
-        addText(panel, "Último estado técnico: $lastStage · $lastCode", 12f, amber)
+        addText(panel, "Último estado del trabajador: $lastStage · $lastCode", 12f, amber)
+        val schedulerCode = syncPrefs.getString("scheduler_last_code", "sin_registro")
+            ?: "sin_registro"
+        addText(panel, "Última programación: $schedulerCode", 11f, muted)
         syncWorkStatusView = TextView(this).apply {
             text = "Estado real de WorkManager: consultando…"
             textSize = 12f
@@ -258,9 +261,16 @@ class MainActivity : Activity() {
                 val infos = WorkManager.getInstance(applicationContext)
                     .getWorkInfosForUniqueWork(GvrPaymentSyncScheduler.UNIQUE_WORK_NAME)
                     .get()
-                val info = infos.lastOrNull()
+                val activeInfos = infos.filter {
+                    it.state == WorkInfo.State.ENQUEUED ||
+                        it.state == WorkInfo.State.RUNNING ||
+                        it.state == WorkInfo.State.BLOCKED
+                }
+                val info = activeInfos.firstOrNull { it.state == WorkInfo.State.RUNNING }
+                    ?: activeInfos.firstOrNull { it.state == WorkInfo.State.ENQUEUED }
+                    ?: activeInfos.firstOrNull { it.state == WorkInfo.State.BLOCKED }
                 if (info == null) {
-                    "Estado real de WorkManager: SIN_TRABAJO_REGISTRADO"
+                    "Estado real de WorkManager: SIN_TRABAJO_ACTIVO · trabajos activos 0"
                 } else {
                     val detail = when (info.state) {
                         WorkInfo.State.ENQUEUED -> "ENQUEUED · esperando condiciones o turno"
@@ -270,7 +280,7 @@ class MainActivity : Activity() {
                         WorkInfo.State.FAILED -> "FAILED · trabajo fallido"
                         WorkInfo.State.CANCELLED -> "CANCELLED · trabajo cancelado"
                     }
-                    "Estado real de WorkManager: $detail · intentos ${info.runAttemptCount} · trabajos ${infos.size}"
+                    "Estado real de WorkManager: $detail · intentos ${info.runAttemptCount} · trabajos activos ${activeInfos.size}"
                 }
             } catch (error: Exception) {
                 "Estado real de WorkManager: ERROR_${error.javaClass.simpleName}"
