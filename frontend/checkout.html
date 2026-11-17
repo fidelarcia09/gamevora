@@ -1462,6 +1462,12 @@ const JUEGOS_PERMITIDOS = new Set([
 const parametros = new URLSearchParams(location.search);
 const idPedido = parametros.get("id") || parametros.get("pedido") || parametros.get("order");
 
+// Mismo código público que Historial de pedidos; el UUID sigue siendo el ID interno.
+function codigoPedidoVisible(id) {
+    const limpio = String(id ?? "").replaceAll("-", "").toUpperCase();
+    return limpio ? "GT-" + limpio.slice(0, 8) : "No disponible";
+}
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
 });
@@ -1837,7 +1843,7 @@ async function cargarPedido() {
         elementoJugador.textContent = pedido.player_id || "No disponible";
         elementoPrecio.textContent = pedido.price_gvr != null ? `${pedido.price_gvr} GVR` : "No disponible";
         elementoFecha.textContent = formatearFecha(pedido.created_at);
-        elementoNumeroPedido.textContent = pedido.id;
+        elementoNumeroPedido.textContent = codigoPedidoVisible(pedido.id);
 
         const estado = mostrarEstadoPedido(pedido);
         await cargarProducto(pedido, version);
