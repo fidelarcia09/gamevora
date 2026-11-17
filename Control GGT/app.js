@@ -28,16 +28,21 @@ async function guardAdmin(){
   const {data:{user},error}=await db.auth.getUser();
   if(error)throw new Error("No se pudo validar la sesión: "+error.message);
   if(!user){location.replace("../frontend/index.html");return false;}
-  const {data,isError}=await db.rpc("is_support_admin");
-  if(isError)throw new Error("No se pudo comprobar el acceso administrativo.");
+  const {data,error:adminError}=await db.rpc("is_support_admin");
+  if(adminError)throw new Error("No se pudo comprobar el acceso administrativo: "+adminError.message);
   if(data!==true){location.replace("../frontend/cuenta.html");return false;}
   return true;
 }
 
 async function loadSales(){
-  const {data,error}=await db.from("ventas").select("*").order("created_at",{ascending:false}).limit(2000);
-  if(error)throw new Error("No se pudieron leer las ventas de Supabase: "+error.message);
-  sales=(data||[]).map(v=>({...v,usuario_id:clean(v.usuario_id),nombre_usuario:clean(v.nombre_usuario),correo_usuario:clean(v.correo_usuario)}));
+  const pageSize=500,allRows=[];
+  for(let from=0;;from+=pageSize){
+    const {data,error}=await db.from("ventas").select("*").order("created_at",{ascending:false}).range(from,from+pageSize-1);
+    if(error)throw new Error("No se pudieron leer las ventas de Supabase: "+error.message);
+    allRows.push(...(data||[]));
+    if(!data||data.length<pageSize)break;
+  }
+  sales=allRows.map(v=>({...v,usuario_id:clean(v.usuario_id),nombre_usuario:clean(v.nombre_usuario),correo_usuario:clean(v.correo_usuario)}));
   await loadCustomerContacts();
   renderAll();
 }
@@ -125,7 +130,6 @@ function subscribeRealtime(){
 
 document.querySelectorAll(".nav-item").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
 document.querySelectorAll(".filter-chip").forEach(b=>b.addEventListener("click",()=>{activeFilter=b.dataset.filter;document.querySelectorAll(".filter-chip").forEach(x=>x.classList.toggle("active",x===b));renderSales();}));
-$("salesFilters").addEventListener("click",()=>{});
 $("refreshButton").addEventListener("click",()=>loadSales().catch(e=>showError(e.message)));
 $("userSearch").addEventListener("input",e=>renderUsers(e.target.value));
 $("usersList").addEventListener("click",e=>{const b=e.target.closest("[data-user]");if(b)openUser(b.dataset.user);});
