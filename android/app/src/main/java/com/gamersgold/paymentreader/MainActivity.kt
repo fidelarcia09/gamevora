@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
@@ -141,7 +142,7 @@ class MainActivity : Activity() {
                 addMetric(payments, "Pagos repetidos evitados", count(prefs, NotificationCaptureService.KEY_DUPLICATE_PAYMENTS))
                 val store = PaymentEventStore(this)
                 try {
-                    addMetric(payments, "Eventos locales pendientes", store.count())
+                    addMetric(payments, "Eventos locales pendientes", store.pendingSyncCount())
                     addText(payments, "Último evento: ${store.latestSummary() ?: "ninguno"}", 13f, muted)
                 } finally {
                     store.close()
@@ -201,20 +202,25 @@ class MainActivity : Activity() {
         val navigation = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER
-            setPadding(dp(8), dp(7), dp(8), dp(7))
+            setPadding(dp(10), dp(8), dp(10), dp(8))
             setBackgroundColor(cardNavy)
-            elevation = dp(10).toFloat()
+            elevation = dp(12).toFloat()
+            minimumHeight = dp(76)
         }
-        val labels = listOf("Inicio", "Pagos\nCompletados", "Seguridad")
-        val symbols = listOf("⌂", "✓", "◇")
+        val labels = listOf("Inicio", "Ventas", "Seguridad")
+        val icons = listOf(
+            R.drawable.nav_home,
+            R.drawable.nav_sales,
+            R.drawable.nav_security
+        )
         labels.forEachIndexed { index, label ->
             val selected = selectedTab == index
             val item = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
                 gravity = Gravity.CENTER
-                setPadding(dp(4), dp(7), dp(4), dp(7))
+                setPadding(dp(4), dp(5), dp(4), dp(5))
                 background = GradientDrawable().apply {
-                    cornerRadius = dp(13).toFloat()
+                    cornerRadius = dp(14).toFloat()
                     if (selected) {
                         setColor(0x2235AFFF)
                         setStroke(dp(1), 0x6655DFFF)
@@ -224,30 +230,36 @@ class MainActivity : Activity() {
                 }
                 isClickable = true
                 isFocusable = true
+                contentDescription = label
                 setOnClickListener {
                     if (selectedTab != index) {
                         selectedTab = index
                         render()
                     }
                 }
-                layoutParams = LinearLayout.LayoutParams(0, dp(58), 1f).apply {
-                    marginStart = dp(3)
-                    marginEnd = dp(3)
+                layoutParams = LinearLayout.LayoutParams(0, dp(60), 1f).apply {
+                    marginStart = dp(4)
+                    marginEnd = dp(4)
                 }
             }
-            item.addView(TextView(this).apply {
-                text = symbols[index]
-                textSize = 20f
-                setTextColor(if (selected) cyan else muted)
-                gravity = Gravity.CENTER
-            })
+            val icon = ImageView(this).apply {
+                setImageResource(icons[index])
+                setColorFilter(if (selected) cyan else muted)
+                scaleType = ImageView.ScaleType.FIT_CENTER
+                layoutParams = LinearLayout.LayoutParams(dp(23), dp(23)).apply {
+                    bottomMargin = dp(3)
+                }
+                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            }
+            item.addView(icon)
             item.addView(TextView(this).apply {
                 text = label
-                textSize = 10f
+                textSize = 11f
                 setTypeface(typeface, if (selected) Typeface.BOLD else Typeface.NORMAL)
                 setTextColor(if (selected) cyan else muted)
                 gravity = Gravity.CENTER
-                maxLines = 2
+                maxLines = 1
+                includeFontPadding = false
             })
             navigation.addView(item)
         }

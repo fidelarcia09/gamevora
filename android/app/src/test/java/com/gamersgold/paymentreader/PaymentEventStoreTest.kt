@@ -127,6 +127,7 @@ class PaymentEventStoreTest {
             store.markSynced(pending.first().localDedupeKey, "server-event-1", "PENDING_MANUAL_REVIEW")
             assertEquals(0, store.pendingSyncCount())
             assertEquals(1, store.syncedCount())
+            assertEquals("El evento sincronizado debe conservarse en el historial local", 1, store.count())
             store.readableDatabase.rawQuery(
                 "SELECT server_event_id FROM payment_events LIMIT 1",
                 null
