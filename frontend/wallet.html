@@ -2419,6 +2419,28 @@
             display: none;
         }
 
+
+        /* Alinear los tres importes en una misma fila y reservar el mismo espacio para sus etiquetas. */
+        .saldo > .estadisticas-mes > .estadistica-mes .estadistica-valor {
+            display: flex;
+            min-height: 19px;
+            align-items: center;
+            justify-content: center;
+            line-height: 19px;
+        }
+
+        .saldo > .estadisticas-mes > .estadistica-mes .estadistica-cabecera {
+            min-height: 26px;
+            margin-top: 5px;
+        }
+
+        .saldo > .estadisticas-mes > .estadistica-mes .estadistica-etiqueta {
+            min-height: 26px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
     </style>
  
 <script>
