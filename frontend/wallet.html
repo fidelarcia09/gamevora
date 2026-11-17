@@ -2189,6 +2189,89 @@
             transform: translateY(0) scale(.99);
         }
 
+
+        /* Resumen mensual compacto integrado en la tarjeta de saldo. */
+        .saldo-equivalencia {
+            margin-top: 4px;
+            color: #80dfff;
+            font-size: clamp(13px, 3.4vw, 16px);
+            font-weight: 800;
+            letter-spacing: .15px;
+        }
+
+        .saldo > .estadisticas-mes {
+            flex: 0 0 100%;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0;
+            margin: 14px 0 0;
+            border: 1px solid rgba(155, 190, 230, .14);
+            border-radius: 12px;
+            background: rgba(3, 15, 32, .42);
+        }
+
+        .saldo > .estadisticas-mes .estadistica-mes {
+            min-height: 0;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 9px 5px;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            text-align: center;
+        }
+
+        .saldo > .estadisticas-mes .estadistica-mes + .estadistica-mes {
+            border-left: 1px solid rgba(155, 190, 230, .13);
+        }
+
+        .saldo > .estadisticas-mes .estadistica-cabecera {
+            min-height: 0;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .saldo > .estadisticas-mes .estadistica-etiqueta {
+            padding: 0;
+            color: #a9bed5;
+            font-size: clamp(9px, 2.3vw, 10px);
+            line-height: 1.25;
+            font-weight: 700;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .saldo > .estadisticas-mes .icono-estadistica {
+            display: none;
+        }
+
+        .saldo > .estadisticas-mes .estadistica-valor {
+            margin: 0;
+            font-size: clamp(11px, 2.8vw, 13px);
+            line-height: 1.2;
+            overflow-wrap: anywhere;
+        }
+
+        .saldo > .estadisticas-mes .estadistica-movimientos {
+            grid-column: auto;
+            flex-direction: column;
+        }
+
+        @media (max-width: 360px) {
+            .saldo > .estadisticas-mes .estadistica-mes {
+                padding: 8px 3px;
+            }
+            .saldo > .estadisticas-mes .estadistica-etiqueta {
+                font-size: 9px;
+            }
+            .saldo > .estadisticas-mes .estadistica-valor {
+                font-size: 10px;
+            }
+        }
 </style>
  
 <script>
@@ -2238,6 +2321,7 @@
                 <div class="saldo-contenido">
                     <div class="saldo-titulo">Saldo disponible</div>
                     <div class="saldo-valor" id="saldoGVR" aria-live="polite">Cargando...</div>
+                    <div class="saldo-equivalencia" id="saldoCUP" aria-live="polite">≈ — CUP</div>
                 </div>
                 <img
                     class="gvr-escudo-wallet"
@@ -2246,9 +2330,6 @@
                     aria-hidden="true"
                     width="54"
                     height="60">
-            </section>
-
-            <section class="estadisticas-mes" aria-label="Resumen del mes">
                 <div class="estadistica-mes">
                     <div class="estadistica-cabecera">
                         <span class="estadistica-etiqueta" id="etiquetaEntradasMes">Entró este mes</span>
@@ -2275,6 +2356,19 @@
                     </div>
                     <strong class="estadistica-valor salida-mes" id="gastosMes">Cargando...</strong>
                 </div>
+                <div class="estadistica-mes estadistica-movimientos">
+                    <div class="estadistica-cabecera">
+                        <span class="estadistica-etiqueta">Movimientos hechos</span>
+                        <span class="icono-estadistica" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 5h16M4 12h16M4 19h16"></path>
+                                <path d="m7 3-3 2 3 2M17 10l3 2-3 2M7 17l-3 2 3 2"></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <strong class="estadistica-valor" id="movimientosMes">—</strong>
+                </div>
+            </section>
             </section>
 
             <nav class="acciones-wallet" aria-label="Acciones de la wallet">
@@ -2584,6 +2678,7 @@
         async function cargarEstadisticasMes(usuarioId) {
             const entradasElemento = document.getElementById("entradasMes");
             const gastosElemento = document.getElementById("gastosMes");
+            const movimientosElemento = document.getElementById("movimientosMes");
             const etiquetaEntradas = document.getElementById("etiquetaEntradasMes");
             const etiquetaGastos = document.getElementById("etiquetaGastosMes");
 
@@ -2656,6 +2751,7 @@
             let totalEntradas = 0;
             let totalGastos = 0;
             const registros = movimientosMes || [];
+            movimientosElemento.textContent = String(registros.length);
 
             registros.forEach(movimiento => {
                 // En transactions.amount está el importe real del movimiento.
@@ -2709,6 +2805,9 @@
             const saldoElemento =
                 document.getElementById("saldoGVR");
 
+            const saldoCUPElemento =
+                document.getElementById("saldoCUP");
+
             const estadoElemento =
                 document.getElementById("estadoWallet");
 
@@ -2759,6 +2858,7 @@
                 );
 
                 saldoElemento.textContent = "No disponible";
+                saldoCUPElemento.textContent = "≈ — CUP";
 
                 estadoElemento.textContent =
                     "No se pudo consultar el saldo. Inténtalo nuevamente.";
@@ -2767,6 +2867,7 @@
 
             } else if (!wallet) {
                 saldoElemento.textContent = "0 GVR";
+                saldoCUPElemento.textContent = "≈ 0 CUP";
 
                 estadoElemento.textContent =
                     "No se encontró una wallet para esta cuenta.";
@@ -2779,12 +2880,15 @@
                 if (Number.isFinite(saldo)) {
                     saldoElemento.textContent =
                         `${formatoCantidad(saldo)} GVR`;
+                    saldoCUPElemento.textContent =
+                        `≈ ${formatoCantidad(saldo * 1150)} CUP`;
 
                     estadoElemento.textContent = "";
                     estadoElemento.className = "estado";
 
                 } else {
                     saldoElemento.textContent = "No disponible";
+                    saldoCUPElemento.textContent = "≈ — CUP";
 
                     estadoElemento.textContent =
                         "No se pudo interpretar el saldo de la wallet.";
