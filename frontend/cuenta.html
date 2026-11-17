@@ -2643,6 +2643,35 @@
         margin-bottom: 0;
     }
 
+    /* Reducir el espacio entre la tarjeta del perfil y Referir. */
+    .datos-resumen-perfil {
+        margin-bottom: 6px;
+    }
+
+    /* Marco interior del icono, como los iconos de las opciones de cuenta. */
+    .accesos-cuenta.acceso-publico .referir-icono-marco {
+        display: flex;
+        width: 28px;
+        height: 28px;
+        flex: 0 0 28px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #17649a;
+        border-radius: 9px;
+        background: linear-gradient(145deg, #103b65, #08203b);
+        color: #4bcaff;
+    }
+
+    .accesos-cuenta.acceso-publico .referir-icono-marco svg {
+        width: 17px;
+        height: 17px;
+        stroke: currentColor;
+        stroke-width: 1.9;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
     .accesos-cuenta.acceso-publico .acceso-referidos {
         width: 66px;
         min-height: 58px;
@@ -2815,11 +2844,13 @@
 
         <div class="accesos-cuenta acceso-publico" aria-label="Acceso público">
             <a class="acceso-referidos" href="referidos.html" aria-label="Abrir programa de referidos">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="9" cy="8" r="3"></circle>
-                    <path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2a4.5 4.5 0 0 1 4.5 4.5V19"></path>
-                    <path d="M17 8v6M14 11h6"></path>
-                </svg>
+                <span class="referir-icono-marco" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="9" cy="8" r="3"></circle>
+                        <path d="M3.5 19v-1.5A4.5 4.5 0 0 1 8 13h2a4.5 4.5 0 0 1 4.5 4.5V19"></path>
+                        <path d="M17 8v6M14 11h6"></path>
+                    </svg>
+                </span>
                 <span>Referir</span>
             </a>
         </div>
