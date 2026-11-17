@@ -49,7 +49,7 @@ class MainActivity : Activity() {
             window.isNavigationBarContrastEnforced = false
             window.isStatusBarContrastEnforced = false
         }
-        GvrPaymentSyncScheduler.enqueue(this)
+        GvrPaymentSyncScheduler.enqueue(this, replaceExisting = true)
         render()
     }
 
@@ -92,7 +92,7 @@ class MainActivity : Activity() {
         addText(header, "⚡  GAMERS GOLD", 25f, cyan, true)
         addText(header, "PAYMENT READER", 12f, white, true)
         addText(header, "Lector privado de confirmaciones", 15f, muted)
-        addText(header, "DIAGNÓSTICO  ·  VERSIÓN 0.5.5", 11f, cyan, true)
+        addText(header, "DIAGNÓSTICO  ·  VERSIÓN 0.5.7", 11f, cyan, true)
         content.addView(header)
 
         val accessGranted = NotificationCaptureService.isAccessGranted(this)
@@ -209,7 +209,7 @@ class MainActivity : Activity() {
         panel.addView(syncWorkStatusView)
         if (lastAt > 0L) addText(panel, "Último intento: ${formatTime(lastAt)}", 11f, muted)
         addButton(panel, "Reintentar sincronización ahora") {
-            val queued = GvrPaymentSyncScheduler.enqueue(this)
+            val queued = GvrPaymentSyncScheduler.enqueue(this, replaceExisting = true)
             if (!queued) {
                 addText(panel, "No se pudo programar el reintento. Revisa el estado técnico mostrado arriba.", 12f, amber)
             } else {
