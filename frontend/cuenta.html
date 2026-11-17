@@ -806,11 +806,6 @@
         stroke-linejoin: round;
     }
 
-    .boton-notificaciones {
-        background: linear-gradient(90deg, #064c64, #087cff);
-        border: 1px solid #18c9ff;
-    }
-
     .boton-notificaciones:disabled,
     .boton-salud:disabled {
         opacity: 0.65;
@@ -1154,7 +1149,6 @@
     .boton-admin,
     .boton-soporte,
     .boton-cerrar,
-    .boton-notificaciones,
     .boton-salud {
         border: 1.5px solid #159dff !important;
         border-radius: 12px !important;
@@ -1166,7 +1160,6 @@
     .boton-admin:hover,
     .boton-soporte:hover,
     .boton-cerrar:hover,
-    .boton-notificaciones:hover,
     .boton-salud:hover {
         border-color: #75d7ff !important;
         box-shadow: inset 0 0 0 1px rgba(117, 215, 255, 0.2),
@@ -2954,41 +2947,6 @@
 
         </div>
 
-        <!-- NOTIFICACIONES -->
-
-        <section class="seccion-extra">
-            <h2 class="seccion-titulo">
-                <svg class="icono-seccion" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
-                    <path d="M10 21h4"></path>
-                </svg>
-                Notificaciones
-            </h2>
-
-            <p class="texto-ayuda">
-                Recibe avisos sobre tus solicitudes de compra de GVR.
-            </p>
-
-            <button
-                id="activarNotificacionesGVR"
-                class="boton boton-notificaciones"
-                type="button"
-            >
-                <svg class="icono-boton" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
-                    <path d="M10 21h4"></path>
-                </svg>
-                <span id="textoNotificacionesGVR">Activar notificaciones de compras GVR</span>
-            </button>
-
-            <div
-                id="estadoNotificacionesGVR"
-                class="estado-notificaciones"
-                role="status"
-                aria-live="polite"
-            ></div>
-        </section>
-
         <!-- SISTEMA DE SALUD: SOLO PROPIETARIO Y AL FINAL -->
 
         <section id="panelSaludSistema" class="salud-panel">
@@ -4425,185 +4383,6 @@ async function cargarCuenta() {
         }
     }).catch(error => console.warn("No se pudo comprobar el propietario:", error));
 }
-
-
-/* ==========================================
-   NOTIFICACIONES PUSH DE COMPRAS GVR
-========================================== */
-
-const VAPID_PUBLIC_KEY =
-    "BOTEc5uNWGMOVSZicoL3lqSEgQZdcOgQMiZF_JKbk-Yg9dmtU9Yp2yEuONOl3Y3IU42K0DevmR8vmSTCkpq69Ig";
-
-
-function mostrarEstadoNotificaciones(mensaje, tipo = "") {
-    const elemento = document.getElementById(
-        "estadoNotificacionesGVR"
-    );
-
-    elemento.textContent = mensaje;
-
-    elemento.className =
-        "estado-notificaciones visible" +
-        (tipo ? " " + tipo : "");
-}
-
-
-function convertirClaveVapid(clave) {
-    const base64 = clave
-        .replace(/-/g, "+")
-        .replace(/_/g, "/");
-
-    const rellenada =
-        base64 + "=".repeat((4 - base64.length % 4) % 4);
-
-    const binario = atob(rellenada);
-    const salida = new Uint8Array(binario.length);
-
-    for (let i = 0; i < binario.length; i++) {
-        salida[i] = binario.charCodeAt(i);
-    }
-
-    return salida;
-}
-
-
-async function activarNotificacionesGVR() {
-    const boton = document.getElementById(
-        "activarNotificacionesGVR"
-    );
-
-    const textoBoton = document.getElementById(
-        "textoNotificacionesGVR"
-    );
-
-    boton.disabled = true;
-    textoBoton.textContent = "Activando notificaciones...";
-
-    try {
-        if (!window.isSecureContext) {
-            throw new Error(
-                "Las notificaciones requieren una conexión HTTPS segura."
-            );
-        }
-
-        if (
-            !("Notification" in window) ||
-            !("serviceWorker" in navigator) ||
-            !("PushManager" in window)
-        ) {
-            throw new Error(
-                "Este navegador no admite notificaciones Push. Prueba con Chrome actualizado."
-            );
-        }
-
-        const {
-            data: sesion,
-            error: errorSesion
-        } = await supabaseClient.auth.getUser();
-
-        if (errorSesion || !sesion.user) {
-            throw new Error(
-                "Inicia sesión para activar las notificaciones."
-            );
-        }
-
-        let permiso = Notification.permission;
-
-        if (permiso === "default") {
-            permiso = await Notification.requestPermission();
-        }
-
-        if (permiso !== "granted") {
-            throw new Error(
-                permiso === "denied"
-                    ? "Las notificaciones están bloqueadas. Permítelas en los ajustes del navegador y vuelve a intentarlo."
-                    : "No se concedió permiso para mostrar notificaciones."
-            );
-        }
-
-        const registro =
-            await navigator.serviceWorker.register(
-                "service-worker.js"
-            );
-
-        await navigator.serviceWorker.ready;
-
-        let suscripcion =
-            await registro.pushManager.getSubscription();
-
-        if (!suscripcion) {
-            suscripcion =
-                await registro.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey:
-                        convertirClaveVapid(VAPID_PUBLIC_KEY)
-                });
-        }
-
-        const datos = suscripcion.toJSON();
-
-        if (
-            !datos.endpoint ||
-            !datos.keys?.p256dh ||
-            !datos.keys?.auth
-        ) {
-            throw new Error(
-                "El navegador no devolvió una suscripción Push válida."
-            );
-        }
-
-        const { error: errorGuardar } =
-            await supabaseClient
-                .from("user_push_subscriptions")
-                .upsert({
-                    user_id: sesion.user.id,
-                    endpoint: datos.endpoint,
-                    p256dh: datos.keys.p256dh,
-                    auth: datos.keys.auth,
-                    updated_at: new Date().toISOString()
-                }, {
-                    onConflict: "endpoint"
-                });
-
-        if (errorGuardar) {
-            throw errorGuardar;
-        }
-
-        mostrarEstadoNotificaciones(
-            "Notificaciones activadas. Te avisaremos cuando tu solicitud de compra de GVR sea aprobada o rechazada.",
-            "exito"
-        );
-
-        textoBoton.textContent =
-            "Notificaciones de GVR activadas";
-
-    } catch (error) {
-        console.error(
-            "Error activando notificaciones GVR:",
-            error
-        );
-
-        mostrarEstadoNotificaciones(
-            error.message ||
-            "No se pudieron activar las notificaciones. Inténtalo nuevamente.",
-            "error"
-        );
-
-        textoBoton.textContent =
-            "Activar notificaciones de compras GVR";
-
-        boton.disabled = false;
-    }
-}
-
-
-document
-    .getElementById("activarNotificacionesGVR")
-    .addEventListener(
-        "click",
-        activarNotificacionesGVR
-    );
-
 
 
 /* ==========================================
