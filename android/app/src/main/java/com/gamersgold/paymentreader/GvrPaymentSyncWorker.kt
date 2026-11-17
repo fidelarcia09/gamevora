@@ -15,20 +15,36 @@ class GvrPaymentSyncWorker(
 ) : Worker(appContext, workerParams) {
 
     override fun doWork(): Result {
-        if (!BuildConfig.GVR_SYNC_ENABLED) return Result.failure()
+        recordDiagnostic("worker", "worker_started")
+        if (!BuildConfig.GVR_SYNC_ENABLED) {
+            recordDiagnostic("worker", "sync_disabled_in_build")
+            return Result.failure()
+        }
         val auth = SupabaseAuthClient(applicationContext)
-        if (!auth.isConfigured()) return Result.failure()
-        val session = auth.sessionForSync() ?: return if (
-            SecureSessionStore(applicationContext).load() != null
-        ) Result.retry() else Result.failure()
-        if (session.expiresAtMillis <= System.currentTimeMillis() + 15_000L) return Result.retry()
+        if (!auth.isConfigured()) {
+            recordDiagnostic("worker", "supabase_not_configured")
+            return Result.failure()
+        }
+        val session = auth.sessionForSync() ?: run {
+            val hasStoredSession = SecureSessionStore(applicationContext).load() != null
+            recordDiagnostic("auth", if (hasStoredSession) "session_refresh_unavailable" else "session_missing")
+            return if (hasStoredSession) Result.retry() else Result.failure()
+        }
+        if (session.expiresAtMillis <= System.currentTimeMillis() + 15_000L) {
+            recordDiagnostic("auth", "session_expires_too_soon")
+            return Result.retry()
+        }
 
         val store = PaymentEventStore(applicationContext)
         try {
             var batchesProcessed = 0
             while (batchesProcessed < MAX_BATCHES_PER_RUN) {
                 val events = store.pendingSyncEvents(MAX_BATCH_SIZE)
-                if (events.isEmpty()) return Result.success()
+                if (events.isEmpty()) {
+                    recordDiagnostic("worker", "no_pending_events")
+                    return Result.success()
+                }
+                recordDiagnostic("worker", "sending_${events.size}_events")
 
                 val payload = JSONObject()
                     .put("deviceId", DeviceIdentity.get(applicationContext))
@@ -73,8 +89,11 @@ class GvrPaymentSyncWorker(
                     return Result.retry()
                 }
                 batchesProcessed++
+                recordDiagnostic("worker", "batch_stored_${accepted}_events")
             }
-            return if (store.pendingSyncCount() == 0) Result.success() else Result.retry()
+            val remaining = store.pendingSyncCount()
+            recordDiagnostic("worker", if (remaining == 0) "sync_finished" else "pending_${remaining}_events_remain")
+            return if (remaining == 0) Result.success() else Result.retry()
         } catch (_: AuthRejectedException) {
             recordDiagnostic("auth", "auth_rejected")
             return Result.failure()
