@@ -66,6 +66,26 @@ class PaymentEventStoreTest {
     }
 
     @Test
+    fun storesFiftySameAmountEtecsaEventsAsSeparatePendingRows() {
+        val store = PaymentEventStore(context)
+        try {
+            val base = etecsaEvent()
+            repeat(50) { index ->
+                val event = base.copy(
+                    receivedAtMillis = base.receivedAtMillis + index * 1_000L,
+                    localDedupeKey = "ET-burst-$index-50591030-26800"
+                )
+                assertTrue("El evento $index debe guardarse", store.insertIfNew(event))
+            }
+            assertEquals(50, store.count())
+            assertEquals(50, store.pendingSyncCount())
+            assertEquals(50, store.pendingSyncEvents(100).size)
+        } finally {
+            store.close()
+        }
+    }
+
+    @Test
     fun doesNotInsertTheSamePagoMovilTransactionTwice() {
         val store = PaymentEventStore(context)
         try {
