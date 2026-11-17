@@ -90,7 +90,7 @@ class MainActivity : Activity() {
         addText(header, "⚡  GAMERS GOLD", 25f, cyan, true)
         addText(header, "PAYMENT READER", 12f, white, true)
         addText(header, "Lector privado de confirmaciones", 15f, muted)
-        addText(header, "DIAGNÓSTICO  ·  VERSIÓN 0.5.2", 11f, cyan, true)
+        addText(header, "DIAGNÓSTICO  ·  VERSIÓN 0.5.5", 11f, cyan, true)
         content.addView(header)
 
         val accessGranted = NotificationCaptureService.isAccessGranted(this)
@@ -192,6 +192,20 @@ class MainActivity : Activity() {
         }
         addMetric(panel, "Eventos pendientes de enviar", pending)
         addMetric(panel, "Eventos recibidos por el servidor", synced)
+        val syncPrefs = getSharedPreferences("gvr_sync_diagnostics", MODE_PRIVATE)
+        val lastStage = syncPrefs.getString("last_stage", "sin_diagnostico") ?: "sin_diagnostico"
+        val lastCode = syncPrefs.getString("last_code", "Aún no hay un intento registrado") ?: "Aún no hay un intento registrado"
+        val lastAt = syncPrefs.getLong("last_at_millis", 0L)
+        addText(panel, "Último estado técnico: $lastStage · $lastCode", 12f, amber)
+        if (lastAt > 0L) addText(panel, "Último intento: ${formatTime(lastAt)}", 11f, muted)
+        addButton(panel, "Reintentar sincronización ahora") {
+            val queued = GvrPaymentSyncScheduler.enqueue(this)
+            if (!queued) {
+                addText(panel, "No se pudo programar el reintento. Revisa el estado técnico mostrado arriba.", 12f, amber)
+            } else {
+                addText(panel, "Reintento solicitado. El estado se actualizará cuando Android ejecute el trabajo.", 12f, green)
+            }
+        }
         if (BuildConfig.GVR_SYNC_ENABLED) {
             addText(
                 panel,
