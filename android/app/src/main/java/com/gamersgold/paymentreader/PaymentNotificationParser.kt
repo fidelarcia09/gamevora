@@ -13,6 +13,7 @@ internal data class ParsedPaymentEvent(
     val transactionReference: String?,
     val rawDate: String?,
     val receivedAtMillis: Long,
+    val capturedAtMillis: Long = receivedAtMillis,
     val localDedupeKey: String
 )
 
@@ -21,7 +22,8 @@ internal object PaymentNotificationParser {
         title: String,
         body: String,
         receivedAtMillis: Long,
-        notificationKey: String = receivedAtMillis.toString()
+        notificationKey: String = receivedAtMillis.toString(),
+        capturedAtMillis: Long = receivedAtMillis
     ): ParsedPaymentEvent? {
         if (title.isBlank() || body.isBlank() || receivedAtMillis <= 0L) return null
 
@@ -38,7 +40,7 @@ internal object PaymentNotificationParser {
             val phone = match.groupValues[2]
             return ParsedPaymentEvent(
                 "SALDO_MOVIL", amount, phone, null, null, null,
-                receivedAtMillis, "ET-$notificationKey-$phone-$amount"
+                receivedAtMillis, capturedAtMillis, "ET-$notificationKey-$phone-$amount"
             )
         }
 
@@ -52,7 +54,7 @@ internal object PaymentNotificationParser {
             return ParsedPaymentEvent(
                 "CUP", amount, match.groupValues[1], match.groupValues[2],
                 reference, match.groupValues[5].trim().trimEnd('.', ',', ';'), receivedAtMillis,
-                "PM-$reference"
+                capturedAtMillis, "PM-$reference"
             )
         }
         return null
