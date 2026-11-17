@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
-import { resolveGvrPaymentMatch } from "../_shared/gvr-payment-matching.ts";
+import { resolveGvrPaymentMatch } from "./gvr-payment-matching.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -68,7 +68,7 @@ Deno.serve(async (req: Request) => {
       return reply({ ok: true, matchStatus: "MATCHED", eventId: completedEvent.id, reviewStatus: "AUTO_APPROVED", credited: true, idempotent: true });
     }
   }
-  if (request.status !== "pending" || !request.proof_path || !request.expires_at) {
+  if (request.status !== "pending" || !request.proof_path) {
     return reply({ ok: false, error: "La solicitud todavía no está lista para comparar." }, 409);
   }
 
@@ -95,9 +95,8 @@ Deno.serve(async (req: Request) => {
   }
 
   const createdAt = new Date(request.created_at).getTime();
-  const expiresAt = new Date(request.expires_at).getTime();
-  if (!Number.isFinite(createdAt) || !Number.isFinite(expiresAt) || expiresAt < createdAt) {
-    return reply({ ok: false, error: "Ventana temporal de solicitud inválida." }, 409);
+  if (!Number.isFinite(createdAt)) {
+    return reply({ ok: false, error: "Fecha de creación de solicitud inválida." }, 409);
   }
 
   let transactionReference: string | null = null;
@@ -162,7 +161,6 @@ Deno.serve(async (req: Request) => {
     .eq("amount_minor_units", amountMinorUnits)
     .eq("sender_phone", phone)
     .gte("received_at", new Date(createdAt).toISOString())
-    .lte("received_at", new Date(expiresAt).toISOString())
     .is("matched_request_id", null)
     .eq("capture_quality", "TRUSTED")
     .limit(3);
@@ -195,7 +193,6 @@ Deno.serve(async (req: Request) => {
     .eq("payment_amount", amount)
     .eq("payment_sender_phone", phone)
     .lte("created_at", event.received_at)
-    .gte("expires_at", event.received_at)
     .limit(1000);
 
   if (method === "CUP") {
