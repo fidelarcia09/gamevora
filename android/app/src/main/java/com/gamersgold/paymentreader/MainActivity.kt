@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import android.provider.Settings
 import java.text.SimpleDateFormat
 import java.time.YearMonth
@@ -22,6 +24,7 @@ import java.util.Locale
 
 class MainActivity : Activity() {
     private lateinit var content: LinearLayout
+    private var syncWorkStatusView: TextView? = null
     private var selectedMonth: YearMonth = YearMonth.now()
 
     private val navy = Color.rgb(5, 11, 24)
@@ -46,8 +49,8 @@ class MainActivity : Activity() {
             window.isNavigationBarContrastEnforced = false
             window.isStatusBarContrastEnforced = false
         }
-        render()
         GvrPaymentSyncScheduler.enqueue(this)
+        render()
     }
 
     override fun onResume() {
@@ -58,7 +61,6 @@ class MainActivity : Activity() {
             return
         }
         if (::content.isInitialized) {
-            GvrPaymentSyncScheduler.enqueue(this)
             render()
         }
     }
@@ -176,6 +178,7 @@ class MainActivity : Activity() {
 
         addText(content, "GAMERS GOLD TOP-UP  ·  UNIVERSO GAMING", 11f, muted, true, Gravity.CENTER)
         setContentView(scroll)
+        refreshSyncWorkStatus()
     }
 
     private fun addSyncSection() {
@@ -197,13 +200,21 @@ class MainActivity : Activity() {
         val lastCode = syncPrefs.getString("last_code", "Aún no hay un intento registrado") ?: "Aún no hay un intento registrado"
         val lastAt = syncPrefs.getLong("last_at_millis", 0L)
         addText(panel, "Último estado técnico: $lastStage · $lastCode", 12f, amber)
+        syncWorkStatusView = TextView(this).apply {
+            text = "Estado real de WorkManager: consultando…"
+            textSize = 12f
+            setTextColor(cyan)
+            setPadding(0, dp(5), 0, dp(5))
+        }
+        panel.addView(syncWorkStatusView)
         if (lastAt > 0L) addText(panel, "Último intento: ${formatTime(lastAt)}", 11f, muted)
         addButton(panel, "Reintentar sincronización ahora") {
             val queued = GvrPaymentSyncScheduler.enqueue(this)
             if (!queued) {
                 addText(panel, "No se pudo programar el reintento. Revisa el estado técnico mostrado arriba.", 12f, amber)
             } else {
-                addText(panel, "Reintento solicitado. El estado se actualizará cuando Android ejecute el trabajo.", 12f, green)
+                addText(panel, "Reintento solicitado. Consultando el estado real de Android…", 12f, green)
+                refreshSyncWorkStatus()
             }
         }
         if (BuildConfig.GVR_SYNC_ENABLED) {
@@ -238,6 +249,37 @@ class MainActivity : Activity() {
         content.addView(panel)
     }
 
+    private fun refreshSyncWorkStatus() {
+        val target = syncWorkStatusView ?: return
+        Thread {
+            val status = try {
+                // WorkManager completa la escritura del enqueue de forma asíncrona.
+                Thread.sleep(600)
+                val infos = WorkManager.getInstance(applicationContext)
+                    .getWorkInfosForUniqueWork(GvrPaymentSyncScheduler.UNIQUE_WORK_NAME)
+                    .get()
+                val info = infos.lastOrNull()
+                if (info == null) {
+                    "Estado real de WorkManager: SIN_TRABAJO_REGISTRADO"
+                } else {
+                    val detail = when (info.state) {
+                        WorkInfo.State.ENQUEUED -> "ENQUEUED · esperando condiciones o turno"
+                        WorkInfo.State.RUNNING -> "RUNNING · trabajador ejecutándose"
+                        WorkInfo.State.BLOCKED -> "BLOCKED · esperando un trabajo anterior"
+                        WorkInfo.State.SUCCEEDED -> "SUCCEEDED · trabajo finalizado"
+                        WorkInfo.State.FAILED -> "FAILED · trabajo fallido"
+                        WorkInfo.State.CANCELLED -> "CANCELLED · trabajo cancelado"
+                    }
+                    "Estado real de WorkManager: $detail · intentos ${info.runAttemptCount} · trabajos ${infos.size}"
+                }
+            } catch (error: Exception) {
+                "Estado real de WorkManager: ERROR_${error.javaClass.simpleName}"
+            }
+            runOnUiThread {
+                if (syncWorkStatusView === target) target.text = status
+            }
+        }.start()
+    }
     private fun addCompletedPaymentsSection() {
         val panel = card()
         addText(panel, "PAGOS COMPLETADOS", 12f, cyan, true)
