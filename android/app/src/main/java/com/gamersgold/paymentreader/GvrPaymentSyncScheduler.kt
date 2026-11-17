@@ -54,9 +54,9 @@ internal object GvrPaymentSyncScheduler {
         try {
             val prefs = context.applicationContext.getSharedPreferences("gvr_sync_diagnostics", Context.MODE_PRIVATE)
             prefs.edit()
-                .putString("last_stage", stage)
-                .putString("last_code", code)
-                .putLong("last_at_millis", System.currentTimeMillis())
+                .putString("scheduler_last_stage", stage)
+                .putString("scheduler_last_code", code)
+                .putLong("scheduler_last_at_millis", System.currentTimeMillis())
                 .apply()
         } catch (_: Exception) {
             // El diagnóstico nunca debe impedir el registro local del pago.
