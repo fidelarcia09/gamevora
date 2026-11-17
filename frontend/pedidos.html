@@ -30,8 +30,7 @@
   .boton-atras:focus-visible,.filtro:focus-visible,.pedido summary:focus-visible{outline:2px solid #75d7ff;outline-offset:3px}
   .encabezado{margin:0 0 18px}
   h1{font-size:clamp(27px,6vw,34px);line-height:1.12;letter-spacing:-.9px;margin-bottom:7px;color:#fff;font-weight:900}
-  .descripcion{color:#91a5bf;font-size:13px;line-height:1.55}
-  .resumen-estadisticas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:17px 8px;margin:0 0 22px;background:linear-gradient(145deg,#0b203b,#071329);border:1px solid #173b64;border-radius:20px;box-shadow:0 12px 30px rgba(0,0,0,.2),0 0 18px rgba(0,140,255,.07)}
+  .selector-tipo{display:flex;justify-content:flex-end;gap:7px;margin:0 0 12px}\n  .tipo-boton{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 15px;border:1px solid #173b64;border-radius:999px;background:linear-gradient(145deg,#0a1b35,#071329);color:#b8cbe0;font-size:12px;font-weight:850;cursor:pointer;transition:all .18s}\n  .tipo-boton.activo{background:linear-gradient(110deg,#087cff,#00baff);border-color:#35caff;color:#fff;box-shadow:0 0 15px rgba(0,140,255,.24)}\n  .tipo-boton:focus-visible{outline:2px solid #75d7ff;outline-offset:3px}\n  .resumen-estadisticas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:17px 8px;margin:0 0 22px;background:linear-gradient(145deg,#0b203b,#071329);border:1px solid #173b64;border-radius:20px;box-shadow:0 12px 30px rgba(0,0,0,.2),0 0 18px rgba(0,140,255,.07)}
   .estadistica{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;padding:2px 5px;text-align:center}
   .estadistica+.estadistica{border-left:1px solid #17314f}
   .estadistica-icono{width:25px;height:25px;color:var(--cian);filter:drop-shadow(0 0 7px rgba(0,186,255,.35))}
@@ -86,7 +85,7 @@
   [hidden]{display:none!important}
   @media(max-width:520px){
     body{padding:17px 12px 118px}.contenedor{padding:0}.header{margin-bottom:19px}
-    .resumen-estadisticas{padding:14px 5px;margin-bottom:18px;border-radius:18px}
+    .selector-tipo{margin-bottom:10px}.tipo-boton{padding:9px 13px;font-size:12px}\n    .resumen-estadisticas{padding:14px 5px;margin-bottom:18px;border-radius:18px}
     .estadistica-numero{font-size:25px}.estadistica-etiqueta{font-size:11px}
     .filtro{padding:9px 12px;font-size:12px}
     .lista{gap:14px}.grupo-fecha{border-radius:16px}
@@ -138,10 +137,9 @@
 
     <section class="encabezado" aria-labelledby="titulo-pedidos">
       <h1 id="titulo-pedidos">Mis pedidos</h1>
-      <p class="descripcion">Consulta el estado y los detalles de tus compras.</p>
     </section>
 
-    <section class="resumen-estadisticas" aria-label="Resumen de pedidos">
+    <nav class="selector-tipo" aria-label="Tipo de historial">\n      <button class="tipo-boton activo" type="button" data-tipo="compras" aria-pressed="true">Compras</button>\n      <button class="tipo-boton" type="button" data-tipo="depositos" aria-pressed="false">Depósitos</button>\n    </nav>\n\n    <section class="resumen-estadisticas" aria-label="Resumen de pedidos">
       <div class="estadistica">
         <span class="estadistica-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/></svg></span>
         <strong class="estadistica-numero" id="statEntregadas">—</strong>
@@ -183,8 +181,7 @@
   const listaPedidos = document.getElementById("listaPedidos");
   const estadoCarga = document.getElementById("estadoCarga");
   const botonesFiltro = [...document.querySelectorAll(".filtro")];
-  let historialCompleto = [];
-  let filtroActual = "todos";
+  let historialCompleto = [];\n  let historialJuegos = [];\n  let historialDepositos = [];\n  let tipoHistorialActual = "compras";\n  let filtroActual = "todos";\n  const botonesTipo = [...document.querySelectorAll(".tipo-boton")];
 
   function escaparHTML(valor) {
     return String(valor ?? "").replace(/[&<>"']/g, caracter => ({
@@ -454,7 +451,7 @@
     listaPedidos.appendChild(fragmento);
   }
 
-  botonesFiltro.forEach(boton => {
+  botonesTipo.forEach(boton => {\n    boton.addEventListener("click", () => {\n      tipoHistorialActual = boton.dataset.tipo;\n      historialCompleto = tipoHistorialActual === "compras" ? historialJuegos : historialDepositos;\n      botonesTipo.forEach(otro => {\n        const activo = otro === boton;\n        otro.classList.toggle("activo", activo);\n        otro.setAttribute("aria-pressed", String(activo));\n      });\n      filtroActual = "todos";\n      botonesFiltro.forEach(otro => {\n        const activo = otro.dataset.filtro === "todos";\n        otro.classList.toggle("activo", activo);\n        otro.setAttribute("aria-pressed", String(activo));\n      });\n      actualizarResumen();\n      renderizarHistorial();\n    });\n  });\n\n  botonesFiltro.forEach(boton => {
     boton.addEventListener("click", () => {
       filtroActual = boton.dataset.filtro;
       botonesFiltro.forEach(otro => {
@@ -504,8 +501,7 @@
       return;
     }
 
-    const historial = [];
-    (resultadoJuegos.data || []).forEach(pedido => {
+    const historialJuegosNuevo = [];\n    const historialDepositosNuevo = [];\n    (resultadoJuegos.data || []).forEach(pedido => {
       const producto = Array.isArray(pedido.game_products) ? pedido.game_products[0] : pedido.game_products;
       const juego = producto?.game || "Recarga de juego";
       const nombreProducto = producto?.product_name || (producto?.game_currency_amount != null ? `${producto.game_currency_amount} unidades` : "Producto");
@@ -518,7 +514,7 @@
         campo("Fecha", fechaLegible(pedido.created_at)),
         ...(pedido.completed_at ? [campo("Completado", fechaLegible(pedido.completed_at))] : [])
       ].join("");
-      historial.push(prepararPedido("juego", pedido, pedido.created_at, `${juego} · ${nombreProducto}`, pedido.status, detalles));
+      historialJuegosNuevo.push(prepararPedido("juego", pedido, pedido.created_at, `${juego} · ${nombreProducto}`, pedido.status, detalles));
     });
 
     (resultadoVentas.data || []).forEach(venta => {
@@ -531,7 +527,7 @@
         campo("Pedido", codigoPedidoVisible(venta.id)),
         campo("Fecha", fechaLegible(venta.created_at))
       ].join("");
-      historial.push(prepararPedido("gvr_anterior", venta, venta.created_at, `Compra de GVR · ${venta.gvr_comprado || 0} GVR`, venta.estado, detalles));
+      historialDepositosNuevo.push(prepararPedido("gvr_anterior", venta, venta.created_at, `Compra de GVR · ${venta.gvr_comprado || 0} GVR`, venta.estado, detalles));
     });
 
     (resultadoSolicitudes.data || []).forEach(solicitud => {
@@ -545,11 +541,10 @@
         ...(solicitud.reviewed_at ? [campo("Revisada", fechaLegible(solicitud.reviewed_at))] : []),
         ...(solicitud.review_note ? [campo("Nota de revisión", solicitud.review_note)] : [])
       ].join("");
-      historial.push(prepararPedido("gvr_solicitud", solicitud, solicitud.created_at, `Solicitud de GVR · ${solicitud.gvr_amount ?? 0} GVR`, solicitud.status, detalles));
+      historialDepositosNuevo.push(prepararPedido("gvr_solicitud", solicitud, solicitud.created_at, `Solicitud de GVR · ${solicitud.gvr_amount ?? 0} GVR`, solicitud.status, detalles));
     });
 
-    historial.sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0));
-    historialCompleto = historial;
+    const ordenarHistorial = (a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0);\n    historialJuegosNuevo.sort(ordenarHistorial);\n    historialDepositosNuevo.sort(ordenarHistorial);\n    historialJuegos = historialJuegosNuevo;\n    historialDepositos = historialDepositosNuevo;\n    historialCompleto = tipoHistorialActual === "compras" ? historialJuegos : historialDepositos;
     actualizarResumen();
     renderizarHistorial();
   }
