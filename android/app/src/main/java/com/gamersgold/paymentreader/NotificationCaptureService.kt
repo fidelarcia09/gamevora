@@ -114,7 +114,26 @@ class NotificationCaptureService : NotificationListenerService() {
                 diagnostic("El pago ya estaba registrado; no se guardó por segunda vez.")
             }
         } catch (_: Exception) {
-            diagnostic("Pago reconocido, pero ocurrió un error al guardarlo localmente.")
+            // Si SQLite falla, permitir que una nueva publicación de esta misma notificación
+            // vuelva a intentarlo. No dejar el fingerprint marcado como si se hubiera guardado.
+            removeNotificationContentFingerprint(prefs, sbn.key, receivedAtMillis, title, body)
+            diagnostic("Pago reconocido, pero ocurrió un error al guardarlo localmente; se permite reintentar.")
+        }
+    }
+
+    private fun removeNotificationContentFingerprint(
+        prefs: android.content.SharedPreferences,
+        notificationKey: String,
+        notificationPostTime: Long,
+        title: String,
+        body: String
+    ) = synchronized(DEDUP_LOCK) {
+        val normalized = "$notificationKey|$notificationPostTime|${title.trim()}|${body.trim().replace(Regex("\\s+"), " ")}"
+        val fingerprint = sha256(normalized)
+        val recent = prefs.getStringSet(KEY_RECENT_FINGERPRINTS, emptySet())
+            ?.toMutableSet() ?: mutableSetOf()
+        if (recent.remove(fingerprint)) {
+            prefs.edit().putStringSet(KEY_RECENT_FINGERPRINTS, recent).apply()
         }
     }
 
