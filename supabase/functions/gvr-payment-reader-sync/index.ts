@@ -173,7 +173,6 @@ async function findRequestMatch(
     .eq("payment_amount", amount)
     .eq("payment_sender_phone", event.senderPhone)
     .lte("created_at", new Date(event.receivedAtMillis).toISOString())
-    .gte("expires_at", new Date(event.receivedAtMillis).toISOString())
     .limit(1000);
 
   if (event.method === "CUP") {
