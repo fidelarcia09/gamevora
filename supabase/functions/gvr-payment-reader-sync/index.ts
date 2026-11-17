@@ -23,6 +23,7 @@ type IncomingEvent = {
   rawDate?: string | null;
   receivedAtMillis: number;
   capturedAtMillis: number | null;
+  legacyTimestampAdjusted?: boolean;
 };
 
 function reply(body: unknown, status = 200) {
@@ -92,9 +93,20 @@ function validateEvent(value: unknown, eventIndex: number): IncomingEvent | null
       event.receivedAtMillis <= 0 || !Number.isFinite(new Date(event.receivedAtMillis).getTime())) {
     logValidationFailure("EVENT_RECEIVED_AT_INVALID", "event", "receivedAtMillis", "positive_safe_integer_valid_date", event.receivedAtMillis, eventIndex); return null;
   }
-  if (event.receivedAtMillis > Date.now() + 5 * 60 * 1000) {
+
+  // Los registros antiguos sin timestamp de captura no tienen una hora verificable.
+  // Si el reloj anterior dejó receivedAt en el futuro, se archivan con hora del servidor
+  // y quedan LEGACY_UNVERIFIED: nunca se concilian ni acreditan automáticamente.
+  const legacyCaptureTimestamp =
+    event.capturedAtMillis === undefined ||
+    event.capturedAtMillis === null ||
+    event.capturedAtMillis === 0;
+  const receivedAtIsFuture = event.receivedAtMillis > Date.now() + 5 * 60 * 1000;
+  if (receivedAtIsFuture && !legacyCaptureTimestamp) {
     logValidationFailure("EVENT_RECEIVED_AT_FUTURE", "event", "receivedAtMillis", "not_in_future_5min", event.receivedAtMillis, eventIndex); return null;
   }
+  const normalizedReceivedAtMillis = receivedAtIsFuture ? Date.now() : Number(event.receivedAtMillis);
+  const legacyTimestampAdjusted = receivedAtIsFuture && legacyCaptureTimestamp;
 
   let capturedAtMillis: number | null = null;
   if (event.capturedAtMillis !== undefined && event.capturedAtMillis !== null && event.capturedAtMillis !== 0) {
@@ -117,7 +129,7 @@ function validateEvent(value: unknown, eventIndex: number): IncomingEvent | null
       localEventKey: event.localEventKey, capturePackage: SOURCE_PACKAGE, method: "SALDO_MOVIL",
       amountMinorUnits: Number(event.amountMinorUnits), senderPhone: event.senderPhone,
       recipientAccount: null, transactionReference: null, rawDate: null,
-      receivedAtMillis: Number(event.receivedAtMillis), capturedAtMillis,
+      receivedAtMillis: normalizedReceivedAtMillis, capturedAtMillis, legacyTimestampAdjusted,
     };
   }
 
@@ -137,7 +149,7 @@ function validateEvent(value: unknown, eventIndex: number): IncomingEvent | null
     localEventKey: event.localEventKey, capturePackage: SOURCE_PACKAGE, method: "CUP",
     amountMinorUnits: Number(event.amountMinorUnits), senderPhone: event.senderPhone,
     recipientAccount: event.recipientAccount, transactionReference: event.transactionReference,
-    rawDate: event.rawDate.trim(), receivedAtMillis: Number(event.receivedAtMillis), capturedAtMillis,
+    rawDate: event.rawDate.trim(), receivedAtMillis: normalizedReceivedAtMillis, capturedAtMillis, legacyTimestampAdjusted,
   };
 }
 
@@ -350,7 +362,7 @@ Deno.serve(async (req: Request) => {
         // conflicting transaction reference or a reused local key.
         const { data: localDuplicate } = await admin
           .from("gvr_payment_notification_events")
-          .select("id,method,amount_minor_units,sender_phone,recipient_account,transaction_reference,received_at,captured_at,review_status")
+          .select("id,method,amount_minor_units,sender_phone,recipient_account,transaction_reference,received_at,captured_at,capture_quality,review_status")
           .eq("device_id", body.deviceId)
           .eq("local_event_key", event.localEventKey)
           .maybeSingle();
@@ -362,7 +374,12 @@ Deno.serve(async (req: Request) => {
             localDuplicate.sender_phone === event.senderPhone &&
             (localDuplicate.recipient_account ?? null) === (event.recipientAccount ?? null) &&
             (localDuplicate.transaction_reference ?? null) === (event.transactionReference ?? null) &&
-            new Date(localDuplicate.received_at).getTime() === event.receivedAtMillis &&
+            (
+              (event.legacyTimestampAdjusted === true &&
+                localDuplicate.capture_quality === "LEGACY_UNVERIFIED" &&
+                localDuplicate.captured_at === null) ||
+              new Date(localDuplicate.received_at).getTime() === event.receivedAtMillis
+            ) &&
             (localDuplicate.captured_at ? new Date(localDuplicate.captured_at).getTime() : null) === event.capturedAtMillis;
           results.push(sameLocalEvent
             ? { localEventKey: event.localEventKey, stored: true, duplicate: true, eventId: localDuplicate.id, reviewStatus: localDuplicate.review_status }
