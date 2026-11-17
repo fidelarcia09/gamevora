@@ -2161,7 +2161,35 @@
             }
         }
 
-        </style>
+        
+        /* Acciones Wallet: mismo degradado activo del selector de Pedidos. */
+        .acciones-wallet .accion-wallet,
+        .acciones-wallet .accion-wallet.enviar {
+            color: #fff;
+            background: linear-gradient(110deg, #087cff, #00baff);
+            border: 1px solid #35caff;
+            box-shadow: 0 0 15px rgba(0, 140, 255, .24);
+        }
+
+        .acciones-wallet .accion-wallet .icono-accion-wallet svg,
+        .acciones-wallet .accion-wallet.enviar .icono-accion-wallet svg {
+            stroke: #fff;
+        }
+
+        .acciones-wallet .accion-wallet:hover,
+        .acciones-wallet .accion-wallet.enviar:hover {
+            background: linear-gradient(110deg, #087cff, #00baff);
+            border-color: #75d7ff;
+            box-shadow: 0 0 20px rgba(0, 140, 255, .32);
+            filter: brightness(1.08);
+        }
+
+        .acciones-wallet .accion-wallet:active,
+        .acciones-wallet .accion-wallet.enviar:active {
+            transform: translateY(0) scale(.99);
+        }
+
+</style>
  
 <script>
 (function () {
@@ -2205,10 +2233,6 @@
         <main class="card">
 
             <h1>Mi Wallet</h1>
-
-            <p class="subtitulo">
-                Consulta tu saldo y administra tus GVR.
-            </p>
 
             <section class="saldo" aria-label="Saldo disponible">
                 <div class="saldo-contenido">
