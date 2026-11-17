@@ -465,7 +465,6 @@ footer {padding:0 16px 25px;text-align:center;color:#657995;font-size:12px}
             <label class="campo-txid" for="numeroTransaccionCup"><span>Número de transacción Transfermóvil</span><input type="text" id="numeroTransaccionCup" maxlength="32" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="Ej. KW6023ZJ0Z999"></label>
         </div>
 
-        <div class="temporizador-usdt" id="temporizadorUsdt"><div class="tiempo-label" id="tiempoLabel">Tiempo disponible para completar el pago</div><div class="tiempo" id="tiempoRestante">10:00</div></div>
 
          <section class="comprobante-card">
         <div class="paso-titulo"><span class="numero-paso">1</span><div><h2 class="seccion-titulo">Captura de la transferencia</h2></div></div>
@@ -555,12 +554,6 @@ let solicitudId = null;
 let rutaComprobanteSubido = null;
 let envioCompletado = false;
 let enviando = false;
-let vencimientoPago = null;
-let restanteInicialMs = 0;
-let inicioMonotonic = 0;
-let duracionPagoMinutos = 10;
-let intervaloTemporizador = null;
-let plazoVencido = false;
 const txidUsdt = document.getElementById("txidUsdt");
 const numeroOrigenSaldo = document.getElementById("numeroOrigenSaldo");
 const numeroOrigenCup = document.getElementById("numeroOrigenCup");
@@ -578,8 +571,6 @@ if (CUP_PAYMENT_READY) {
     cuentaReceptoraCup.textContent = "Pendiente de configuración";
     copiarCuentaCup.disabled = true;
 }
-const tiempoRestante = document.getElementById("tiempoRestante");
-const temporizadorUsdt = document.getElementById("temporizadorUsdt");
 
 function mostrarMensaje(texto, tipo) {
     mensaje.textContent = texto;
@@ -661,7 +652,7 @@ async function crearSolicitud(usuario) {
             payment_amount:importe,
             payment_currency:monedaDB
         })
-         .select("id,expires_at")
+         .select("id")
         .single();
 
     if (error) {
@@ -674,13 +665,13 @@ async function crearSolicitud(usuario) {
 
     if (!data?.id) throw new Error("Supabase no devolvió el ID de la solicitud.");
 
-    return {id:data.id,expires_at:data.expires_at || null};
+    return {id:data.id};
 }
 
 async function recuperarSolicitudPago(usuario) {
     const metodoDB = metodoTexto === "SALDO MOVIL" ? "SALDO_MOVIL" : metodoTexto;
     const {data,error} = await supabaseClient.from("gvr_purchase_requests")
-        .select("id,expires_at")
+        .select("id")
         .eq("user_id",usuario.id)
         .eq("payment_method",metodoDB)
         .eq("status","pending")
@@ -709,7 +700,7 @@ async function recuperarSolicitudDeRecarga(usuario) {
 
     const metodoDB = metodoTexto === "SALDO MOVIL" ? "SALDO_MOVIL" : metodoTexto;
     const {data,error} = await supabaseClient.from("gvr_purchase_requests")
-        .select("id,expires_at,proof_path,payment_sender_phone,payment_txid")
+        .select("id,proof_path,payment_sender_phone,payment_txid")
         .eq("id",idGuardado)
         .eq("user_id",usuario.id)
         .eq("payment_method",metodoDB)
@@ -718,51 +709,9 @@ async function recuperarSolicitudDeRecarga(usuario) {
 
     if (error || !data) return null;
 
-    // Si ya se envió el comprobante, la solicitud permanece pendiente
-    // de revisión y no debe volver a iniciar ni mostrar el temporizador.
+    // La solicitud no vence automáticamente aunque el cliente pierda conexión.
     if (data.proof_path) return {solicitud:data,enviado:true,reloj:null};
-
-    const lectura = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:data.id});
-    if (lectura.error || !lectura.data?.server_now || !lectura.data?.expires_at) return null;
-    // Aunque el plazo haya vencido, recuperamos la misma solicitud.
-    // Así una recarga no crea otra ni reinicia los 10 minutos.
-    return {solicitud:data,enviado:false,reloj:lectura.data};
-}
-
-function iniciarCuentaRegresiva(fechaVencimiento, fechaServidor) {
-    const vencimientoServidor = new Date(fechaVencimiento).getTime();
-    const ahoraServidor = new Date(fechaServidor).getTime();
-    if (!Number.isFinite(vencimientoServidor) || !Number.isFinite(ahoraServidor)) {
-        throw new Error("No se pudo sincronizar el temporizador con el servidor.");
-    }
-    restanteInicialMs = vencimientoServidor - ahoraServidor;
-    inicioMonotonic = performance.now();
-    vencimientoPago = inicioMonotonic + restanteInicialMs;
-    duracionPagoMinutos = 10;
-    document.getElementById("tiempoLabel").textContent = "Tiempo disponible para completar el pago";
-    if (intervaloTemporizador) clearInterval(intervaloTemporizador);
-    temporizadorUsdt.classList.remove("vencido");
-
-    const actualizar = () => {
-        const restante = Math.max(0,restanteInicialMs - (performance.now() - inicioMonotonic));
-        const segundos = Math.ceil(restante / 1000);
-        tiempoRestante.textContent = String(Math.floor(segundos / 60)).padStart(2,"0") + ":" + String(segundos % 60).padStart(2,"0");
-        if (restante <= 0) {
-            plazoVencido = true;
-            temporizadorUsdt.classList.add("vencido");
-            tiempoRestante.textContent = "00:00";
-            if (intervaloTemporizador) clearInterval(intervaloTemporizador);
-            botonContinuar.disabled = true;
-            botonContinuar.textContent = "Tiempo de pago vencido";
-            mostrarMensaje("El plazo de pago ha terminado. No envíes el comprobante de esta solicitud. Inicia una nueva compra para obtener un nuevo plazo.","error");
-        }
-    };
-
-    // Si el servidor indica que ya venció, se conserva el estado vencido.
-    plazoVencido = restanteInicialMs <= 0;
-    actualizar();
-    if (!plazoVencido) intervaloTemporizador = setInterval(actualizar,1000);
-    return !plazoVencido;
+    return {solicitud:data,enviado:false,reloj:null};
 }
 
 async function prepararSolicitudPago() {
@@ -774,17 +723,10 @@ async function prepararSolicitudPago() {
         // Al entrar nuevamente desde otra página, crear una solicitud nueva.
         const recuperada = await recuperarSolicitudDeRecarga(usuario);
         let solicitud;
-        let reloj;
         if (recuperada) {
             solicitud = recuperada.solicitud;
-            reloj = recuperada.reloj;
         } else {
             solicitud = await crearSolicitud(usuario);
-            const nuevaLectura = await supabaseClient.rpc("get_gvr_request_timer",{p_request_id:solicitud.id});
-            if (nuevaLectura.error || !nuevaLectura.data?.server_now || !nuevaLectura.data?.expires_at) {
-                throw new Error("No se pudo sincronizar el tiempo del pago con el servidor. Recarga la página.");
-            }
-            reloj = nuevaLectura.data;
         }
         try { sessionStorage.setItem(claveSolicitudSesion(),solicitud.id); } catch (_) {}
         solicitudId = solicitud.id;
@@ -800,7 +742,6 @@ async function prepararSolicitudPago() {
 
         if (recuperada?.enviado) {
             envioCompletado = true;
-            if (intervaloTemporizador) clearInterval(intervaloTemporizador);
             document.getElementById("estadoCompra").textContent = "Pendiente de revisión";
             archivoComprobante.disabled = true;
             if (txidUsdt) txidUsdt.disabled = true;
@@ -809,17 +750,12 @@ async function prepararSolicitudPago() {
             if (numeroTransaccionCup) numeroTransaccionCup.disabled = true;
             botonContinuar.disabled = true;
             botonContinuar.textContent = "Comprobante enviado";
-            tiempoRestante.textContent = "En revisión";
-            temporizadorUsdt.classList.add("vencido");
-            mostrarMensaje("Tu comprobante ya fue enviado. La solicitud continúa pendiente de revisión; el plazo ya no se aplica.","exito");
+            mostrarMensaje("Tu comprobante ya fue enviado. La solicitud continúa pendiente de revisión.","exito");
             return;
         }
 
-        const pagoVigente = iniciarCuentaRegresiva(reloj.expires_at,reloj.server_now);
-        if (pagoVigente) {
-            botonContinuar.disabled = false;
-            botonContinuar.textContent = "Enviar comprobante";
-        }
+        botonContinuar.disabled = false;
+        botonContinuar.textContent = "Enviar comprobante";
 
     } catch (error) {
         console.error("No se pudo preparar la solicitud de pago:",error);
@@ -976,7 +912,7 @@ if (metodoTexto === "CUP") {
 if (cantidadValida && metodo && metodoTexto !== "CUP") prepararSolicitudPago();
 
 // No reiniciamos ni borramos la solicitud al volver desde la caché del navegador.
-// El temporizador usa el vencimiento del servidor y conserva el estado original.
+// La solicitud no vence automáticamente y se conserva al volver a la página.
 
 /* Selector y vista previa */
 
@@ -1040,11 +976,6 @@ botonContinuar.addEventListener("click",async () => {
         return;
     }
 
-    if (plazoVencido || (vencimientoPago && performance.now() > vencimientoPago)) {
-        plazoVencido = true;
-        mostrarMensaje("El plazo de pago ha vencido. Inicia una nueva compra para obtener otro plazo.","error");
-        return;
-    }
     if (!solicitudId) {
         mostrarMensaje("Espera a que se prepare tu solicitud de pago.","info");
         return;
@@ -1240,7 +1171,6 @@ botonContinuar.addEventListener("click",async () => {
         if (numeroOrigenSaldo) numeroOrigenSaldo.disabled = true;
         if (numeroOrigenCup) numeroOrigenCup.disabled = true;
         if (numeroTransaccionCup) numeroTransaccionCup.disabled = true;
-        if (intervaloTemporizador) clearInterval(intervaloTemporizador);
         botonContinuar.disabled = true;
         botonContinuar.textContent = "Comprobante enviado";
 
@@ -1273,7 +1203,7 @@ botonContinuar.addEventListener("click",async () => {
         enviando = false;
 
         if (!envioCompletado) {
-            botonContinuar.disabled = plazoVencido;
+            botonContinuar.disabled = false;
         }
     }
 });
