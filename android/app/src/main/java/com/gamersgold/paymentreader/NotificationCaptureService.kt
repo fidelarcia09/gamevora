@@ -12,7 +12,8 @@ class NotificationCaptureService : NotificationListenerService() {
         if (sbn.packageName != TARGET_PACKAGE) return
 
         val prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        val now = sbn.postTime.takeIf { it > 0L } ?: System.currentTimeMillis()
+        val capturedAtMillis = System.currentTimeMillis()
+        val receivedAtMillis = sbn.postTime.takeIf { it > 0L } ?: capturedAtMillis
         val extras = sbn.notification.extras
         val title = extras?.getCharSequence(Notification.EXTRA_TITLE)?.toString().orEmpty()
         val bodyParts = mutableListOf<String>()
@@ -25,7 +26,7 @@ class NotificationCaptureService : NotificationListenerService() {
             prefs.edit()
                 .putString(KEY_LAST_DIAGNOSTIC, message)
                 .putString(KEY_LAST_NOTIFICATION_PACKAGE, sbn.packageName)
-                .putLong(KEY_LAST_NOTIFICATION_AT, now)
+                .putLong(KEY_LAST_NOTIFICATION_AT, capturedAtMillis)
                 .apply()
         }
 
@@ -44,7 +45,7 @@ class NotificationCaptureService : NotificationListenerService() {
 
         // Ignore only byte-for-byte-equivalent content updates. Changed content is still parsed,
         // while the local payment database independently prevents duplicate payment records.
-        if (!markNotificationContentAsNew(prefs, sbn.key, now, title, body)) {
+        if (!markNotificationContentAsNew(prefs, sbn.key, receivedAtMillis, title, body)) {
             diagnostic("Repetición exacta de una notificación; ignorada.")
             return
         }
@@ -78,9 +79,10 @@ class NotificationCaptureService : NotificationListenerService() {
         val event = PaymentNotificationParser.parse(
             title = title,
             body = body,
-            receivedAtMillis = now,
-            // Android reuses a notification key for a conversation; postTime distinguishes each SMS.
-            notificationKey = "${sbn.key}|${now}"
+            receivedAtMillis = receivedAtMillis,
+            // postTime identifica el SMS; capturedAtMillis detecta notificaciones antiguas procesadas tarde.
+            notificationKey = "${sbn.key}|${receivedAtMillis}",
+            capturedAtMillis = capturedAtMillis
         )
         if (event == null) {
             prefs.edit()
