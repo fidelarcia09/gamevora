@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
-import { resolveGvrPaymentMatch } from "../_shared/gvr-payment-matching.ts";
+import { resolveGvrPaymentMatch } from "./gvr-payment-matching.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -28,7 +28,7 @@ Deno.serve(async (req: Request) => {
 
   const url = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  const serviceKey = Deno.env.get("GVR_SUPABASE_SERVICE_ROLE_KEY");
   if (!url || !anonKey || !serviceKey) {
     return reply({ ok: false, error: "Servicio no configurado." }, 500);
   }
@@ -57,6 +57,16 @@ Deno.serve(async (req: Request) => {
   if (requestError) return reply({ ok: false, error: "No se pudo consultar la solicitud." }, 503);
   if (!request || request.user_id !== authData.user.id) {
     return reply({ ok: false, error: "Solicitud no encontrada." }, 404);
+  }
+  if (request.status === "approved") {
+    const { data: completedEvent } = await admin
+      .from("gvr_payment_notification_events")
+      .select("id,review_status")
+      .eq("matched_request_id", request.id)
+      .maybeSingle();
+    if (completedEvent?.review_status === "AUTO_APPROVED") {
+      return reply({ ok: true, matchStatus: "MATCHED", eventId: completedEvent.id, reviewStatus: "AUTO_APPROVED", credited: true, idempotent: true });
+    }
   }
   if (request.status !== "pending" || !request.proof_path || !request.expires_at) {
     return reply({ ok: false, error: "La solicitud todavía no está lista para comparar." }, 409);
@@ -106,13 +116,40 @@ Deno.serve(async (req: Request) => {
   // Idempotency: if the event was already matched to this exact request, return it.
   const { data: alreadyMatched, error: alreadyError } = await admin
     .from("gvr_payment_notification_events")
-    .select("id")
+    .select("id,review_status,capture_quality")
     .eq("matched_request_id", request.id)
     .eq("method", method)
     .limit(2);
   if (alreadyError) return reply({ ok: false, error: "No se pudo consultar coincidencias previas." }, 503);
   if ((alreadyMatched ?? []).length === 1) {
-    return reply({ ok: true, matchStatus: "MATCHED", eventId: alreadyMatched[0].id, idempotent: true });
+    if (alreadyMatched[0].capture_quality !== "TRUSTED") {
+      return reply({
+        ok: true,
+        matchStatus: "UNTRUSTED_CAPTURE",
+        eventId: alreadyMatched[0].id,
+        captureQuality: alreadyMatched[0].capture_quality,
+        credited: false,
+      });
+    }
+    const { data: approval, error: approvalError } = await admin.rpc(
+      "auto_approve_gvr_payment_event",
+      {
+        p_event_id: alreadyMatched[0].id,
+        p_expected_receiver_account: receiverAccount || null,
+      },
+    );
+    if (approvalError) {
+      return reply({ ok: false, matchStatus: "MATCHED", eventId: alreadyMatched[0].id, error: "No se pudo completar la acreditación automática." }, 503);
+    }
+    return reply({
+      ok: true,
+      matchStatus: "MATCHED",
+      eventId: alreadyMatched[0].id,
+      reviewStatus: approval?.status || alreadyMatched[0].review_status,
+      credited: approval?.credited === true,
+      autoApproval: approval,
+      idempotent: true,
+    });
   }
   if ((alreadyMatched ?? []).length > 1) {
     return reply({ ok: true, matchStatus: "AMBIGUOUS", reason: "MULTIPLE_EVENTS_ALREADY_LINKED" });
@@ -127,6 +164,7 @@ Deno.serve(async (req: Request) => {
     .gte("received_at", new Date(createdAt).toISOString())
     .lte("received_at", new Date(expiresAt).toISOString())
     .is("matched_request_id", null)
+    .eq("capture_quality", "TRUSTED")
     .limit(3);
 
   if (method === "CUP") {
@@ -238,11 +276,26 @@ Deno.serve(async (req: Request) => {
   }
   if (!linked) return reply({ ok: true, matchStatus: "ALREADY_CLAIMED" });
 
+  const { data: approval, error: approvalError } = await admin.rpc(
+    "auto_approve_gvr_payment_event",
+    {
+      p_event_id: linked.id,
+      p_expected_receiver_account: receiverAccount || null,
+    },
+  );
+  if (approvalError) {
+    return reply({ ok: false, matchStatus: "MATCHED", eventId: linked.id, error: "Coincidencia encontrada, pero no se pudo completar la acreditación automática." }, 503);
+  }
+
   return reply({
     ok: true,
     matchStatus: "MATCHED",
     eventId: linked.id,
-    reviewStatus: "PENDING_MANUAL_REVIEW",
-    note: "Coincidencia técnica encontrada. La aprobación y acreditación siguen siendo manuales.",
+    reviewStatus: approval?.status || "PENDING_MANUAL_REVIEW",
+    credited: approval?.credited === true,
+    autoApproval: approval,
+    note: approval?.credited === true
+      ? "Pago conciliado y GVR acreditado automáticamente."
+      : "Coincidencia encontrada; se conserva pendiente porque falta completar alguna validación.",
   });
 });
