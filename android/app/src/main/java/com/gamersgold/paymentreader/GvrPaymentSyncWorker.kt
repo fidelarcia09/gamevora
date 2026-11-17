@@ -45,6 +45,7 @@ class GvrPaymentSyncWorker(
                                     .put("transactionReference", event.transactionReference ?: JSONObject.NULL)
                                     .put("rawDate", event.rawDate ?: JSONObject.NULL)
                                     .put("receivedAtMillis", event.receivedAtMillis)
+                                    .put("capturedAtMillis", event.capturedAtMillis)
                             )
                         }
                     })
