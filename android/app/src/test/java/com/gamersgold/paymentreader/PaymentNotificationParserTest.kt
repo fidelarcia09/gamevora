@@ -64,6 +64,20 @@ class PaymentNotificationParserTest {
     }
 
     @Test
+    fun keepsNotificationTimeSeparateFromAndroidCaptureTime() {
+        val capturedAt = receivedAt + 2_500L
+        val event = PaymentNotificationParser.parse(
+            title = "ETECSA",
+            body = "Usted ha recibido 1.0 CUP del numero 53981204.",
+            receivedAtMillis = receivedAt,
+            capturedAtMillis = capturedAt
+        )
+        assertNotNull(event)
+        assertEquals(receivedAt, event?.receivedAtMillis)
+        assertEquals(capturedAt, event?.capturedAtMillis)
+    }
+
+    @Test
     fun parsesEtecsaWithCommaDecimal() {
         val event = PaymentNotificationParser.parse(
             title = "ETECSA",
