@@ -2290,7 +2290,61 @@
             text-align: center;
             line-height: 1.3;
         }
-</style>
+
+        /* Marco suave que agrupa las tres estadísticas y mantiene visible Movimientos */
+        .estadisticas-mes {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+            padding: 10px;
+            border: 1px solid rgba(53, 190, 255, .30);
+            border-radius: 19px;
+            background: rgba(8, 27, 48, .48);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .025),
+                        0 0 16px rgba(0, 153, 255, .055);
+        }
+
+        .estadisticas-mes > .estadistica-mes {
+            min-width: 0;
+            border: 1px solid rgba(105, 174, 220, .17);
+            border-radius: 13px;
+            background: rgba(12, 30, 51, .78);
+        }
+
+        .estadisticas-mes > .estadistica-mes + .estadistica-mes {
+            border-left: 1px solid rgba(105, 174, 220, .17);
+        }
+
+        .estadisticas-mes > .estadistica-movimientos {
+            display: flex !important;
+            grid-column: 1 / -1;
+            min-height: 68px;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .estadistica-movimientos .estadistica-cabecera {
+            display: flex;
+            min-height: 0;
+            flex: 1;
+            align-items: center;
+        }
+
+        .estadistica-movimientos .estadistica-etiqueta {
+            display: inline-block;
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .estadistica-movimientos .estadistica-valor {
+            display: block;
+            visibility: visible;
+            opacity: 1;
+            flex: 0 0 auto;
+            margin: 0 5px 0 0;
+        }
+
+    </style>
  
 <script>
 (function () {
