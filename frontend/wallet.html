@@ -2420,25 +2420,39 @@
         }
 
 
-        /* Alinear los tres importes en una misma fila y reservar el mismo espacio para sus etiquetas. */
+        /* Alineación uniforme: importes en la misma fila y etiquetas centradas debajo. */
+        .saldo > .estadisticas-mes > .estadistica-mes {
+            justify-content: flex-start;
+        }
+
         .saldo > .estadisticas-mes > .estadistica-mes .estadistica-valor {
             display: flex;
+            width: 100%;
+            height: 19px;
             min-height: 19px;
+            flex: 0 0 19px;
             align-items: center;
             justify-content: center;
             line-height: 19px;
         }
 
         .saldo > .estadisticas-mes > .estadistica-mes .estadistica-cabecera {
+            display: flex;
+            width: 100%;
+            height: 26px;
             min-height: 26px;
+            flex: 0 0 26px;
+            align-items: center;
+            justify-content: center;
             margin-top: 5px;
         }
 
         .saldo > .estadisticas-mes > .estadistica-mes .estadistica-etiqueta {
-            min-height: 26px;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
+            display: block;
+            width: 100%;
+            min-height: 0;
+            line-height: 13px;
+            text-align: center;
         }
 
     </style>
