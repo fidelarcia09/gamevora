@@ -22,6 +22,7 @@ type IncomingEvent = {
   transactionReference?: string | null;
   rawDate?: string | null;
   receivedAtMillis: number;
+  capturedAtMillis: number | null;
 };
 
 function reply(body: unknown, status = 200) {
@@ -95,12 +96,28 @@ function validateEvent(value: unknown, eventIndex: number): IncomingEvent | null
     logValidationFailure("EVENT_RECEIVED_AT_FUTURE", "event", "receivedAtMillis", "not_in_future_5min", event.receivedAtMillis, eventIndex); return null;
   }
 
+  let capturedAtMillis: number | null = null;
+  if (event.capturedAtMillis !== undefined && event.capturedAtMillis !== null && event.capturedAtMillis !== 0) {
+    if (typeof event.capturedAtMillis !== "number" ||
+        !Number.isSafeInteger(event.capturedAtMillis) ||
+        event.capturedAtMillis <= 0 ||
+        !Number.isFinite(new Date(event.capturedAtMillis).getTime())) {
+      logValidationFailure("EVENT_CAPTURED_AT_INVALID", "event", "capturedAtMillis", "positive_safe_integer_valid_date_or_legacy_zero", event.capturedAtMillis, eventIndex);
+      return null;
+    }
+    if (event.capturedAtMillis > Date.now() + 5 * 60 * 1000) {
+      logValidationFailure("EVENT_CAPTURED_AT_FUTURE", "event", "capturedAtMillis", "not_in_future_5min", event.capturedAtMillis, eventIndex);
+      return null;
+    }
+    capturedAtMillis = Number(event.capturedAtMillis);
+  }
+
   if (event.method === "SALDO_MOVIL") {
     return {
       localEventKey: event.localEventKey, capturePackage: SOURCE_PACKAGE, method: "SALDO_MOVIL",
       amountMinorUnits: Number(event.amountMinorUnits), senderPhone: event.senderPhone,
       recipientAccount: null, transactionReference: null, rawDate: null,
-      receivedAtMillis: Number(event.receivedAtMillis),
+      receivedAtMillis: Number(event.receivedAtMillis), capturedAtMillis,
     };
   }
 
@@ -120,7 +137,7 @@ function validateEvent(value: unknown, eventIndex: number): IncomingEvent | null
     localEventKey: event.localEventKey, capturePackage: SOURCE_PACKAGE, method: "CUP",
     amountMinorUnits: Number(event.amountMinorUnits), senderPhone: event.senderPhone,
     recipientAccount: event.recipientAccount, transactionReference: event.transactionReference,
-    rawDate: event.rawDate.trim(), receivedAtMillis: Number(event.receivedAtMillis),
+    rawDate: event.rawDate.trim(), receivedAtMillis: Number(event.receivedAtMillis), capturedAtMillis,
   };
 }
 
@@ -277,12 +294,25 @@ Deno.serve(async (req: Request) => {
       continue;
     }
 
+    const captureDelayMs = event.capturedAtMillis === null
+      ? null
+      : event.capturedAtMillis - event.receivedAtMillis;
+    const captureQuality = captureDelayMs === null
+      ? "LEGACY_UNVERIFIED"
+      : captureDelayMs < -30_000 || captureDelayMs > 120_000
+      ? "STALE_NOTIFICATION"
+      : "TRUSTED";
+
     let match: { status: string; requestId: string | null };
-    try {
-      match = await findRequestMatch(admin, event);
-    } catch {
-      results.push({ localEventKey: event.localEventKey, stored: false, error: "MATCH_LOOKUP_FAILED" });
-      continue;
+    if (captureQuality !== "TRUSTED") {
+      match = { status: "NO_MATCH", requestId: null };
+    } else {
+      try {
+        match = await findRequestMatch(admin, event);
+      } catch {
+        results.push({ localEventKey: event.localEventKey, stored: false, error: "MATCH_LOOKUP_FAILED" });
+        continue;
+      }
     }
 
     const row = {
@@ -298,6 +328,9 @@ Deno.serve(async (req: Request) => {
       transaction_reference: event.transactionReference,
       raw_date: event.rawDate,
       received_at: receivedAt.toISOString(),
+      captured_at: event.capturedAtMillis === null ? null : new Date(event.capturedAtMillis).toISOString(),
+      capture_delay_ms: captureDelayMs,
+      capture_quality: captureQuality,
       synced_by: authData.user.id,
       matched_request_id: match.requestId,
       match_status: match.status,
@@ -317,7 +350,7 @@ Deno.serve(async (req: Request) => {
         // conflicting transaction reference or a reused local key.
         const { data: localDuplicate } = await admin
           .from("gvr_payment_notification_events")
-          .select("method,amount_minor_units,sender_phone,recipient_account,transaction_reference,received_at")
+          .select("id,method,amount_minor_units,sender_phone,recipient_account,transaction_reference,received_at,captured_at,review_status")
           .eq("device_id", body.deviceId)
           .eq("local_event_key", event.localEventKey)
           .maybeSingle();
@@ -329,9 +362,10 @@ Deno.serve(async (req: Request) => {
             localDuplicate.sender_phone === event.senderPhone &&
             (localDuplicate.recipient_account ?? null) === (event.recipientAccount ?? null) &&
             (localDuplicate.transaction_reference ?? null) === (event.transactionReference ?? null) &&
-            new Date(localDuplicate.received_at).getTime() === event.receivedAtMillis;
+            new Date(localDuplicate.received_at).getTime() === event.receivedAtMillis &&
+            (localDuplicate.captured_at ? new Date(localDuplicate.captured_at).getTime() : null) === event.capturedAtMillis;
           results.push(sameLocalEvent
-            ? { localEventKey: event.localEventKey, stored: true, duplicate: true, reviewStatus: "PENDING_MANUAL_REVIEW" }
+            ? { localEventKey: event.localEventKey, stored: true, duplicate: true, eventId: localDuplicate.id, reviewStatus: localDuplicate.review_status }
             : { localEventKey: event.localEventKey, stored: false, error: "DUPLICATE_LOCAL_KEY_CONFLICT" });
           continue;
         }
@@ -339,7 +373,7 @@ Deno.serve(async (req: Request) => {
         if (event.method === "CUP" && event.transactionReference) {
           const { data: referenceDuplicate } = await admin
             .from("gvr_payment_notification_events")
-            .select("method,amount_minor_units,sender_phone,recipient_account")
+            .select("id,method,amount_minor_units,sender_phone,recipient_account,review_status")
             .eq("transaction_reference", event.transactionReference)
             .maybeSingle();
           if (referenceDuplicate) {
@@ -349,7 +383,7 @@ Deno.serve(async (req: Request) => {
               referenceDuplicate.sender_phone === event.senderPhone &&
               referenceDuplicate.recipient_account === event.recipientAccount;
             results.push(samePayment
-              ? { localEventKey: event.localEventKey, stored: true, duplicate: true, reviewStatus: "PENDING_MANUAL_REVIEW" }
+              ? { localEventKey: event.localEventKey, stored: true, duplicate: true, eventId: referenceDuplicate.id, reviewStatus: referenceDuplicate.review_status }
               : { localEventKey: event.localEventKey, stored: false, error: "DUPLICATE_CUP_REFERENCE_CONFLICT" });
             continue;
           }
@@ -397,6 +431,27 @@ Deno.serve(async (req: Request) => {
       continue;
     }
 
+    let autoApproval: Record<string, unknown> | null = null;
+    if (inserted.match_status === "MATCHED" && inserted.matched_request_id) {
+      const { data: approval, error: approvalError } = await admin.rpc(
+        "auto_approve_gvr_payment_event",
+        {
+          p_event_id: inserted.id,
+          p_expected_receiver_account: Deno.env.get("GVR_CUP_RECEIVER_ACCOUNT")?.trim() || null,
+        },
+      );
+      if (approvalError) {
+        console.error("GVR payment reader sync: auto-aprobación no completada:", approvalError.code);
+        autoApproval = { ok: false, status: "AUTO_APPROVAL_FAILED" };
+      } else {
+        autoApproval = approval as Record<string, unknown>;
+      }
+    }
+
+    const finalReviewStatus = autoApproval?.status === "AUTO_APPROVED"
+      ? "AUTO_APPROVED"
+      : "PENDING_MANUAL_REVIEW";
+
     results.push({
       localEventKey: event.localEventKey,
       stored: true,
@@ -404,7 +459,9 @@ Deno.serve(async (req: Request) => {
       eventId: inserted.id,
       matchStatus: inserted.match_status,
       matchedRequestId: inserted.matched_request_id,
-      reviewStatus: "PENDING_MANUAL_REVIEW",
+      reviewStatus: finalReviewStatus,
+      captureQuality,
+      autoApproval,
     });
   }
 
@@ -412,6 +469,6 @@ Deno.serve(async (req: Request) => {
     ok: true,
     storedCount: results.filter((item) => item.stored === true).length,
     results,
-    note: "Los eventos son notificaciones detectadas, no pagos verificados. No se aprueba ni acredita GVR.",
+    note: "Las notificaciones se concilian con solicitudes activas. Solo las coincidencias únicas que superan todas las validaciones se acreditan una vez; los casos incompletos o ambiguos quedan pendientes.",
   });
 });
