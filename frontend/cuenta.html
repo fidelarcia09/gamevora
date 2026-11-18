@@ -29,7 +29,7 @@
         inset: 0;
         z-index: 0;
         pointer-events: none;
-        background-image: linear-gradient(rgba(64,174,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(64,174,255,.055) 1px,transparent 1px);
+        background-image: linear-gradient(rgba(64,174,255,.012) 1px,transparent 1px),linear-gradient(90deg,rgba(64,174,255,.012) 1px,transparent 1px);
         background-size: 34px 34px;
         mask-image: linear-gradient(to bottom,#000,transparent 88%);
     }
@@ -2630,6 +2630,13 @@
         #pantallaSeguridad .gg-seguridad-proximamente-label {margin-left:76px}
     }
 
+
+    /* Dejar visible el fondo de cuadrícula detrás de las pantallas internas. */
+    #pantallaDatosPersonales.gg-datos-v2,
+    #pantallaSeguridad.gg-seguridad-v2,
+    #pantallaMetodosAcceso {
+        background: transparent !important;
+    }
 
     /* Ajuste fino: acercar cada título a su acceso correspondiente. */
     .lista-opciones > .titulo-seccion-cuenta:first-child {
