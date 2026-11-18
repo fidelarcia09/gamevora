@@ -10,6 +10,50 @@
     || (Number(navigator.hardwareConcurrency) > 0 && Number(navigator.hardwareConcurrency) <= 4)
     || navigator.connection?.saveData === true;
   if (lowEndDevice) document.documentElement.classList.add("gg-low-performance");
+
+  // El usuario ha pedido conservar las animaciones. Algunas páginas tenían reglas
+  // prefers-reduced-motion que las apagaban o reducían a 0.01ms. Retiramos solo
+  // las declaraciones de animación dentro de esas reglas y dejamos intactos los
+  // ajustes de scroll y las optimizaciones de rendimiento.
+  function restorePageAnimations() {
+    const animationProperty = /^(?:-webkit-)?animation(?:-|$)/i;
+    for (const sheet of Array.from(document.styleSheets)) {
+      try {
+        const visit = (rules, insideReducedMotion) => {
+          for (const rule of Array.from(rules)) {
+            const reduced = insideReducedMotion ||
+              (rule.type === CSSRule.MEDIA_RULE &&
+               /prefers-reduced-motion\\s*:\\s*reduce/i.test(rule.conditionText || ""));
+            if (reduced && rule.style) {
+              for (let i = rule.style.length - 1; i >= 0; i--) {
+                const property = rule.style.item(i);
+                if (animationProperty.test(property)) rule.style.removeProperty(property);
+              }
+            }
+            if (rule.cssRules) visit(rule.cssRules, reduced);
+          }
+        };
+        if (sheet.cssRules) visit(sheet.cssRules, false);
+      } catch (_) {
+        // Una hoja externa no accesible no debe interrumpir la página.
+      }
+    }
+  }
+  restorePageAnimations();
+  document.addEventListener("load", restorePageAnimations, true);
+  const motionStyleObserver = new MutationObserver((records) => {
+    for (const record of records) {
+      for (const node of record.addedNodes) {
+        if (node.nodeType === 1 &&
+            (node.tagName === "STYLE" || node.tagName === "LINK" ||
+             node.querySelector?.("style,link"))) {
+          restorePageAnimations();
+          return;
+        }
+      }
+    }
+  });
+  motionStyleObserver.observe(document.documentElement, { childList: true, subtree: true });
   const CSS = `
 :root{color-scheme:dark}
 *{box-sizing:border-box}
