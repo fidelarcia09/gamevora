@@ -1,7 +1,84 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<script>document.documentElement.classList.add("gg-maintenance-pending")</script><style>html.gg-maintenance-pending body{visibility:hidden!important}</style><script src="./maintenance.js" defer></script>
+<script>document.documentElement.classList.add("gg-maintenance-pending")</script><style>html.gg-maintenance-pending body{visibility:hidden!important}
+        /* El destello se limita al escudo GVR; la tarjeta de saldo queda estática. */
+        .saldo::after {
+            display: none !important;
+            animation: none !important;
+        }
+
+        .gvr-escudo-wrap {
+            position: relative;
+            isolation: isolate;
+            display: block;
+            flex: 0 0 54px;
+            width: 54px;
+            height: 60px;
+            overflow: hidden;
+            pointer-events: none;
+            -webkit-mask-image: url("./gvr-escudo.svg");
+            mask-image: url("./gvr-escudo.svg");
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            -webkit-mask-size: contain;
+            mask-size: contain;
+        }
+
+        .gvr-escudo-wrap .gvr-escudo-wallet {
+            position: relative;
+            z-index: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            flex: none;
+            object-fit: contain;
+        }
+
+        .gvr-escudo-wrap::after {
+            content: "";
+            position: absolute;
+            z-index: 2;
+            top: -25%;
+            bottom: -25%;
+            left: -85%;
+            width: 48%;
+            background: linear-gradient(
+                105deg,
+                transparent 0%,
+                rgba(255, 255, 255, .08) 28%,
+                rgba(190, 245, 255, .88) 50%,
+                rgba(255, 255, 255, .16) 68%,
+                transparent 100%
+            );
+            transform: skewX(-20deg);
+            animation: walletEscudoDestello 3.8s ease-in-out infinite;
+        }
+
+        @keyframes walletEscudoDestello {
+            0%, 8% { left: -85%; opacity: 0; }
+            18% { opacity: 1; }
+            58%, 100% { left: 145%; opacity: 0; }
+        }
+
+        @media (max-width: 400px) {
+            .gvr-escudo-wrap {
+                flex-basis: 46px;
+                width: 46px;
+                height: 52px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .gvr-escudo-wrap::after {
+                animation: none !important;
+                display: none !important;
+            }
+        }
+
+</style><script src="./maintenance.js" defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#050b18">
@@ -2549,13 +2626,14 @@
                     <div class="saldo-valor" id="saldoGVR" aria-live="polite">Cargando...</div>
                     <div class="saldo-equivalencia" id="saldoCUP" aria-live="polite">≈ — CUP</div>
                 </div>
-                <img
-                    class="gvr-escudo-wallet"
-                    src="./gvr-escudo.svg"
-                    alt=""
-                    aria-hidden="true"
-                    width="54"
-                    height="60">
+                <span class="gvr-escudo-wrap" aria-hidden="true">
+                    <img
+                        class="gvr-escudo-wallet"
+                        src="./gvr-escudo.svg"
+                        alt=""
+                        width="54"
+                        height="60">
+                </span>
                 <section class="estadisticas-mes" aria-label="Resumen del mes">
                 <div class="estadistica-mes">
                     <div class="estadistica-cabecera">
