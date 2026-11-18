@@ -110,7 +110,7 @@ html,body{margin:0;min-height:100%;background:#020611}
 /* Perfil de rendimiento: reduce efectos costosos en móviles de recursos limitados */
 @media (hover:none) and (pointer:coarse){
   html.gg-low-performance *,html.gg-low-performance *::before,html.gg-low-performance *::after{
-    animation-iteration-count:1!important;
+    /* No limitar animation-iteration-count: las animaciones continuas deben seguir repitiéndose. */
     transition-duration:.16s!important;
     transition-timing-function:ease-out!important;
     backdrop-filter:none!important;
