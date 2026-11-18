@@ -3,16 +3,13 @@
 <html lang="es">
 <head>
 <script>document.documentElement.classList.add("gg-maintenance-pending")</script><style>html.gg-maintenance-pending body{visibility:hidden!important}
-/* Fondo de cuadros de Datos personales: aplicado solo a la página de inicio */
-body{
+/* Solo el fondo de cuadros de Datos personales, sin las luces/degradados superiores */
+html body{
   background-color:#050b18!important;
   background-image:
     linear-gradient(rgba(64,174,255,.055) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(64,174,255,.055) 1px,transparent 1px),
-    radial-gradient(ellipse at 50% 12%,rgba(0,124,255,.22),transparent 37%),
-    radial-gradient(ellipse at 90% 76%,rgba(0,200,245,.12),transparent 32%),
-    linear-gradient(180deg,#050b18 0%,#081a35 54%,#050f20 100%)!important;
-  background-size:34px 34px,34px 34px,auto,auto,auto!important;
+    linear-gradient(90deg,rgba(64,174,255,.055) 1px,transparent 1px)!important;
+  background-size:34px 34px!important;
   background-attachment:fixed!important;
 }
 </style><script src="./maintenance.js" defer></script>
