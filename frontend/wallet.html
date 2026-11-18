@@ -2540,35 +2540,23 @@
             50% { transform: translate3d(0, -4px, 0) rotate(1deg); }
         }
 
+        /* Mismo destello original de Wallet, ahora limitado a la silueta del escudo. */
         .gvr-escudo-wrap::after {
             content: "";
             position: absolute;
+            top: -40%;
+            bottom: -40%;
+            left: -75%;
+            width: 42%;
             z-index: 2;
-            inset: 0;
-            opacity: 0;
             pointer-events: none;
-            background: linear-gradient(
-                105deg,
-                transparent 0%,
-                rgba(255, 255, 255, .16) 30%,
-                rgba(210, 250, 255, .98) 50%,
-                rgba(255, 255, 255, .25) 70%,
-                transparent 100%
-            );
+            background: linear-gradient(90deg, transparent, rgba(180, 239, 255, .10), transparent);
+            transform: skewX(-18deg);
             -webkit-mask: url("./gvr-escudo.svg") center / 100% 100% no-repeat;
             mask: url("./gvr-escudo.svg") center / 100% 100% no-repeat;
-            transform: translate3d(-135%, 0, 0) skewX(-20deg);
-            animation: walletEscudoDestelloContinuo 2.4s ease-in-out infinite !important;
+            animation: walletDestello 7s ease-in-out 1.4s infinite !important;
             animation-iteration-count: infinite !important;
-            animation-fill-mode: both !important;
-            will-change: transform, opacity;
-        }
-
-        @keyframes walletEscudoDestelloContinuo {
-            0%, 5% { transform: translate3d(-135%, 0, 0) skewX(-20deg); opacity: 0; }
-            12% { opacity: 1; }
-            52% { transform: translate3d(135%, 0, 0) skewX(-20deg); opacity: 0; }
-            100% { transform: translate3d(135%, 0, 0) skewX(-20deg); opacity: 0; }
+            will-change: left, opacity;
         }
 
         @media (max-width: 400px) {
