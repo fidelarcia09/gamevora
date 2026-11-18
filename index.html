@@ -793,7 +793,10 @@
                 }
 
                 const { error: errorMetadata } = await supabaseClient.auth.updateUser({
-                    data: { referral_code: codigoRaw }
+                    data: {
+                        ...(data.user.user_metadata || {}),
+                        referral_code: codigoRaw
+                    }
                 });
                 if (errorMetadata) throw errorMetadata;
 
