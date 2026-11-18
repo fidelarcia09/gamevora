@@ -5,6 +5,11 @@
   const SUPABASE_URL = "https://gsuhzcavghsiolmipnzi.supabase.co";
   const SUPABASE_KEY = "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx";
   const MESSAGE_DEFAULT = "Estamos realizando mejoras para ofrecerte un mejor servicio. Volveremos pronto.";
+  // Perfil ligero para móviles con recursos limitados.
+  const lowEndDevice = (Number(navigator.deviceMemory) > 0 && Number(navigator.deviceMemory) <= 4)
+    || (Number(navigator.hardwareConcurrency) > 0 && Number(navigator.hardwareConcurrency) <= 4)
+    || navigator.connection?.saveData === true;
+  if (lowEndDevice) document.documentElement.classList.add("gg-low-performance");
   const CSS = `
 :root{color-scheme:dark}
 *{box-sizing:border-box}
@@ -101,6 +106,20 @@ html,body{margin:0;min-height:100%;background:#020611}
 .gg-maintenance-admin{z-index:5}
 @media(max-width:420px){.gg-maintenance-scene{padding:18px 12px 25px}.gg-maintenance-brandline{margin-top:35px;min-height:80px}.gg-maintenance-hero{min-height:clamp(255px,78vw,330px)}.gg-maintenance-cone{top:clamp(360px,112vw,470px)}.gg-maintenance-messagebox{padding:25px 12px 29px}.gg-maintenance-heading{margin-bottom:20px}.gg-maintenance-footer{margin-top:34px}}
 @media(min-width:700px){.gg-maintenance-scene{padding-left:38px;padding-right:38px}}
+
+/* Perfil de rendimiento: reduce efectos costosos en móviles de recursos limitados */
+@media (hover:none) and (pointer:coarse){
+  html.gg-low-performance *,html.gg-low-performance *::before,html.gg-low-performance *::after{
+    animation-iteration-count:1!important;
+    transition-duration:.16s!important;
+    transition-timing-function:ease-out!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important}
+}
 
 /* Fondo global: únicamente la cuadrícula azul marino de los index */
 html{background:#050b18!important}
