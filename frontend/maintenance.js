@@ -23,7 +23,7 @@
           for (const rule of Array.from(rules)) {
             const reduced = insideReducedMotion ||
               (rule.type === CSSRule.MEDIA_RULE &&
-               /prefers-reduced-motion\\s*:\\s*reduce/i.test(rule.conditionText || ""));
+               /prefers-reduced-motion\s*:\s*reduce/i.test(rule.conditionText || ""));
             if (reduced && rule.style) {
               for (let i = rule.style.length - 1; i >= 0; i--) {
                 const property = rule.style.item(i);
