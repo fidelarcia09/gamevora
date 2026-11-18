@@ -768,6 +768,46 @@
             "sb_publishable_VEu9lvcUF1mp0xS0fXHPdA_592bfknx"
         );
 
+        // Finalizar la atribución del referido después del retorno de Google OAuth.
+        // La base de datos solo acepta esta primera asociación durante los 15 minutos
+        // posteriores a la creación de la cuenta y nunca reemplaza una relación existente.
+        (async function asociarReferidoTrasGoogle() {
+            const parametros = new URLSearchParams(window.location.search);
+            const codigoRaw = (parametros.get("ref") || parametros.get("codigo") || "")
+                .trim()
+                .toUpperCase();
+
+            if (!/^[A-Z0-9]{8}$/.test(codigoRaw)) return;
+
+            try {
+                const { data, error } = await supabaseClient.auth.getUser();
+                if (error) throw error;
+                if (!data.user) return;
+
+                const creadoEn = new Date(data.user.created_at).getTime();
+                const antiguedad = Date.now() - creadoEn;
+
+                // No asociar códigos a cuentas antiguas que abran una URL de referido.
+                if (!Number.isFinite(creadoEn) || antiguedad < 0 || antiguedad > 15 * 60 * 1000) {
+                    return;
+                }
+
+                const { error: errorMetadata } = await supabaseClient.auth.updateUser({
+                    data: { referral_code: codigoRaw }
+                });
+                if (errorMetadata) throw errorMetadata;
+
+                // Limpiar el código de la barra de direcciones tras guardarlo.
+                const urlLimpia = new URL(window.location.href);
+                urlLimpia.searchParams.delete("ref");
+                urlLimpia.searchParams.delete("codigo");
+                window.history.replaceState({}, document.title,
+                    urlLimpia.pathname + urlLimpia.search + urlLimpia.hash);
+            } catch (error) {
+                console.error("No se pudo asociar el referido del registro con Google:", error);
+            }
+        })();
+
         /* NOTIFICACIONES DEL USUARIO */
         (async function iniciarCampanitaNotificaciones() {
             const campanita = document.getElementById("ggNotificationsBell");
