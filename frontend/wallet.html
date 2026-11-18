@@ -2540,23 +2540,34 @@
             50% { transform: translate3d(0, -4px, 0) rotate(1deg); }
         }
 
-        /* Mismo destello original de Wallet, ahora limitado a la silueta del escudo. */
+        /* Destello original del escudo GVR, recuperado de su diseño inicial. */
         .gvr-escudo-wrap::after {
             content: "";
             position: absolute;
-            top: -40%;
-            bottom: -40%;
-            left: -75%;
-            width: 42%;
             z-index: 2;
+            top: -25%;
+            bottom: -25%;
+            left: -85%;
+            width: 48%;
             pointer-events: none;
-            background: linear-gradient(90deg, transparent, rgba(180, 239, 255, .10), transparent);
-            transform: skewX(-18deg);
+            background: linear-gradient(
+                105deg,
+                transparent 0%,
+                rgba(255, 255, 255, .08) 28%,
+                rgba(190, 245, 255, .88) 50%,
+                rgba(255, 255, 255, .16) 68%,
+                transparent 100%
+            );
             -webkit-mask: url("./gvr-escudo.svg") center / 100% 100% no-repeat;
             mask: url("./gvr-escudo.svg") center / 100% 100% no-repeat;
-            animation: walletDestello 7s ease-in-out 1.4s infinite !important;
-            animation-iteration-count: infinite !important;
-            will-change: left, opacity;
+            transform: skewX(-20deg);
+            animation: walletEscudoDestello 3.8s ease-in-out infinite;
+        }
+
+        @keyframes walletEscudoDestello {
+            0%, 8% { left: -85%; opacity: 0; }
+            18% { opacity: 1; }
+            58%, 100% { left: 145%; opacity: 0; }
         }
 
         @media (max-width: 400px) {
@@ -2567,7 +2578,7 @@
             }
         }
 
-        /* El escudo GVR conserva su destello y flotación incluso con reducción global de movimiento. */
+        /* El escudo conserva el efecto original y su flotación. */
 
 </style>
  
