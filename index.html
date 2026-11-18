@@ -352,6 +352,11 @@
         }
 
 
+/* Acceso para visitantes: mismo degradado del botón Añadir GVR de Wallet */
+.gg-enter-button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;margin-right:0;padding:0 14px;border:1px solid rgba(120,210,255,.3);border-radius:12px;background:linear-gradient(100deg,#087cff,#00baff);color:#fff;text-decoration:none;font-size:13px;font-weight:800;white-space:nowrap;box-shadow:0 5px 18px rgba(0,140,255,.16);transition:transform .2s,filter .2s}
+.gg-enter-button:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.gg-enter-button[hidden]{display:none!important}
+@media(max-width:600px){.gg-enter-button{min-height:39px;padding:0 11px;border-radius:11px;font-size:12px}}
 /* Campanita de notificaciones */
 .gg-notification-bell{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:0 0 42px;width:42px;height:42px;margin-left:8px;border:1px solid rgba(32,197,255,.25);border-radius:12px;background:linear-gradient(145deg,rgba(12,34,61,.98),rgba(7,17,34,.98));color:#eafaff;text-decoration:none;box-shadow:0 5px 18px rgba(0,0,0,.2);transition:border-color .2s ease,transform .2s ease}
 .gg-notification-bell:hover{border-color:rgba(32,197,255,.7);transform:translateY(-1px)}
@@ -671,7 +676,7 @@
                 <span class="logo-base" aria-hidden="true"></span>
             </span>
         </a>
-        <div class="navegacion"><a id="ggNotificationsBell" class="gg-notification-bell" href="frontend/notificaciones.html" aria-label="Notificaciones" title="Notificaciones"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span id="ggNotificationsDot" class="gg-notification-dot" hidden></span></a>
+        <div class="navegacion"><a id="ggEnterButton" class="gg-enter-button" href="frontend/login.html" hidden>Entrar</a><a id="ggNotificationsBell" class="gg-notification-bell" href="frontend/notificaciones.html" aria-label="Notificaciones" title="Notificaciones"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span id="ggNotificationsDot" class="gg-notification-dot" hidden></span></a>
             <div id="botonesCuenta" class="boton-cuenta"></div></div>
     </header>
 
@@ -815,6 +820,7 @@
         (async function iniciarCampanitaNotificaciones() {
             const campanita = document.getElementById("ggNotificationsBell");
             const punto = document.getElementById("ggNotificationsDot");
+            const botonEntrar = document.getElementById("ggEnterButton");
             if (!campanita || !punto) return;
 
             async function actualizarIndicador(userId) {
@@ -839,6 +845,7 @@
 
             try {
                 const { data, error } = await supabaseClient.auth.getUser();
+                if (botonEntrar) botonEntrar.hidden = !error && !!data.user;
                 if (error || !data.user) return;
 
                 await actualizarIndicador(data.user.id);
