@@ -101,6 +101,20 @@ html,body{margin:0;min-height:100%;background:#020611}
 .gg-maintenance-admin{z-index:5}
 @media(max-width:420px){.gg-maintenance-scene{padding:18px 12px 25px}.gg-maintenance-brandline{margin-top:35px;min-height:80px}.gg-maintenance-hero{min-height:clamp(255px,78vw,330px)}.gg-maintenance-cone{top:clamp(360px,112vw,470px)}.gg-maintenance-messagebox{padding:25px 12px 29px}.gg-maintenance-heading{margin-bottom:20px}.gg-maintenance-footer{margin-top:34px}}
 @media(min-width:700px){.gg-maintenance-scene{padding-left:38px;padding-right:38px}}
+
+/* Fondo global Gamers Gold: mismo degradado y cuadrícula de cuenta.html */
+html{background:#050b18!important}
+body{
+  background-color:#050b18!important;
+  background-image:
+    linear-gradient(rgba(64,174,255,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(64,174,255,.055) 1px,transparent 1px),
+    radial-gradient(ellipse at 50% 12%,rgba(0,124,255,.22),transparent 37%),
+    radial-gradient(ellipse at 90% 76%,rgba(0,200,245,.12),transparent 32%),
+    linear-gradient(180deg,#050b18 0%,#081a35 54%,#050f20 100%)!important;
+  background-size:34px 34px,34px 34px,auto,auto,auto!important;
+  background-attachment:fixed!important;
+}
 `;
 
   function loadSupabase() {
