@@ -17,13 +17,26 @@
     }
 
     body {
-        background: #050b18;
+        background: radial-gradient(ellipse at 50% 12%,rgba(0,124,255,.22),transparent 37%),radial-gradient(ellipse at 90% 76%,rgba(0,200,245,.12),transparent 32%),linear-gradient(180deg,#050b18 0%,#081a35 54%,#050f20 100%);
         color: #fff;
         min-height: 100vh;
         padding: 20px;
     }
 
+    body:before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(64,174,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(64,174,255,.055) 1px,transparent 1px);
+        background-size: 34px 34px;
+        mask-image: linear-gradient(to bottom,#000,transparent 88%);
+    }
+
     .contenedor {
+        position: relative;
+        z-index: 1;
         max-width: 500px;
         margin: auto;
     }
