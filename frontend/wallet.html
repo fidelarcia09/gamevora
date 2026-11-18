@@ -1233,7 +1233,7 @@
 
         @media (prefers-reduced-motion: reduce) {
             body, main.card > h1, .subtitulo, .saldo, .saldo::after,
-            .gvr-escudo-wallet, .movimiento {
+            .movimiento {
                 animation: none !important;
             }
 
@@ -2579,15 +2579,7 @@
             }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            .gvr-escudo-wrap::after {
-                animation: none !important;
-                display: none !important;
-            }
-            .gvr-escudo-wrap .gvr-escudo-wallet {
-                animation: none !important;
-            }
-        }
+        /* El escudo GVR conserva su destello y flotación incluso con reducción global de movimiento. */
 
 </style>
  
