@@ -2499,10 +2499,11 @@
         .saldo > .estadisticas-mes > .estadistica-mes .icono-estadistica {
             display: none !important;
         }
-/* El destello se limita al escudo GVR; la tarjeta de saldo queda estática. */
+/* Destello continuo solo dentro del SVG del escudo GVR. */
         .saldo::after {
             display: none !important;
             animation: none !important;
+            content: none !important;
         }
 
         .gvr-escudo-wrap {
@@ -2514,14 +2515,8 @@
             height: 60px;
             overflow: hidden;
             pointer-events: none;
-            -webkit-mask-image: url("./gvr-escudo.svg");
-            mask-image: url("./gvr-escudo.svg");
-            -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-            -webkit-mask-position: center;
-            mask-position: center;
-            -webkit-mask-size: contain;
-            mask-size: contain;
+            -webkit-mask: url("./gvr-escudo.svg") center / contain no-repeat;
+            mask: url("./gvr-escudo.svg") center / contain no-repeat;
         }
 
         .gvr-escudo-wrap .gvr-escudo-wallet {
@@ -2532,6 +2527,14 @@
             height: 100%;
             flex: none;
             object-fit: contain;
+            filter: none !important;
+            box-shadow: none !important;
+            animation: walletEscudoFlotarLimpio 3.4s ease-in-out infinite !important;
+        }
+
+        @keyframes walletEscudoFlotarLimpio {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
         }
 
         .gvr-escudo-wrap::after {
@@ -2540,24 +2543,30 @@
             z-index: 2;
             top: -25%;
             bottom: -25%;
-            left: -85%;
-            width: 48%;
+            left: -55%;
+            width: 42%;
+            opacity: 0;
+            pointer-events: none;
             background: linear-gradient(
                 105deg,
                 transparent 0%,
-                rgba(255, 255, 255, .08) 28%,
-                rgba(190, 245, 255, .88) 50%,
-                rgba(255, 255, 255, .16) 68%,
+                rgba(255, 255, 255, .12) 30%,
+                rgba(210, 250, 255, .95) 50%,
+                rgba(255, 255, 255, .22) 70%,
                 transparent 100%
             );
-            transform: skewX(-20deg);
-            animation: walletEscudoDestello 3.8s ease-in-out infinite;
+            transform: translate3d(0, 0, 0) skewX(-20deg);
+            animation: walletEscudoDestelloContinuo 2.8s linear infinite !important;
+            animation-iteration-count: infinite !important;
+            animation-fill-mode: none !important;
+            will-change: transform, opacity;
         }
 
-        @keyframes walletEscudoDestello {
-            0%, 8% { left: -85%; opacity: 0; }
-            18% { opacity: 1; }
-            58%, 100% { left: 145%; opacity: 0; }
+        @keyframes walletEscudoDestelloContinuo {
+            0% { transform: translate3d(0, 0, 0) skewX(-20deg); opacity: 0; }
+            8% { opacity: 1; }
+            42% { transform: translate3d(370%, 0, 0) skewX(-20deg); opacity: 0; }
+            100% { transform: translate3d(370%, 0, 0) skewX(-20deg); opacity: 0; }
         }
 
         @media (max-width: 400px) {
@@ -2572,6 +2581,9 @@
             .gvr-escudo-wrap::after {
                 animation: none !important;
                 display: none !important;
+            }
+            .gvr-escudo-wrap .gvr-escudo-wallet {
+                animation: none !important;
             }
         }
 
