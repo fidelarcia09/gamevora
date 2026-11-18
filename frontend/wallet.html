@@ -2540,17 +2540,14 @@
             50% { transform: translate3d(0, -4px, 0) rotate(1deg); }
         }
 
-        /* Destello original del escudo GVR, recuperado de su diseño inicial. */
+        /* Destello original del escudo GVR, recuperado y recortado a toda su silueta. */
         .gvr-escudo-wrap::after {
             content: "";
             position: absolute;
             z-index: 2;
-            top: -25%;
-            bottom: -25%;
-            left: -85%;
-            width: 48%;
+            inset: 0;
             pointer-events: none;
-            background: linear-gradient(
+            background-image: linear-gradient(
                 105deg,
                 transparent 0%,
                 rgba(255, 255, 255, .08) 28%,
@@ -2558,16 +2555,18 @@
                 rgba(255, 255, 255, .16) 68%,
                 transparent 100%
             );
+            background-repeat: no-repeat;
+            background-size: 48% 100%;
+            background-position: -85% center;
             -webkit-mask: url("./gvr-escudo.svg") center / 100% 100% no-repeat;
             mask: url("./gvr-escudo.svg") center / 100% 100% no-repeat;
-            transform: skewX(-20deg);
             animation: walletEscudoDestello 3.8s ease-in-out infinite;
         }
 
         @keyframes walletEscudoDestello {
-            0%, 8% { left: -85%; opacity: 0; }
+            0%, 8% { background-position: -85% center; opacity: 0; }
             18% { opacity: 1; }
-            58%, 100% { left: 145%; opacity: 0; }
+            58%, 100% { background-position: 145% center; opacity: 0; }
         }
 
         @media (max-width: 400px) {
