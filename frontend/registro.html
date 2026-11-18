@@ -217,10 +217,24 @@ document.getElementById("botonGoogle").addEventListener("click", async function(
     botonGoogle.disabled = true;
     botonGoogle.textContent = "Conectando con Google...";
     try {
+        // Conservar el referido durante la ida y vuelta con Google.
+        const parametrosRegistro = new URLSearchParams(window.location.search);
+        const codigoReferidoRaw = (
+            parametrosRegistro.get("ref") ||
+            parametrosRegistro.get("codigo") ||
+            ""
+        ).trim().toUpperCase();
+        const codigoReferido = /^[A-Z0-9]{8}$/.test(codigoReferidoRaw)
+            ? codigoReferidoRaw
+            : null;
+
+        const destinoOAuth = new URL("https://fidelarcia09.github.io/gamevora/index.html");
+        if (codigoReferido) destinoOAuth.searchParams.set("ref", codigoReferido);
+
         const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: "https://fidelarcia09.github.io/gamevora/index.html",
+                redirectTo: destinoOAuth.toString(),
                 queryParams: { prompt: "select_account" }
             }
         });
