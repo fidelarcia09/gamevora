@@ -1517,7 +1517,8 @@ function cambiarVista(vista) {
     vistaOfertas.classList.toggle(
         "vista-oculta",
         vista !== "ofertas"
-    );\npestanaDiamantes.classList.toggle(
+    );
+pestanaDiamantes.classList.toggle(
         "activa",
         vista === "diamantes"
     );
@@ -1525,7 +1526,8 @@ function cambiarVista(vista) {
     pestanaOfertas.classList.toggle(
         "activa",
         vista === "ofertas"
-    );\npestanaDiamantes.setAttribute(
+    );
+pestanaDiamantes.setAttribute(
         "aria-selected",
         String(vista === "diamantes")
     );
@@ -1533,7 +1535,8 @@ function cambiarVista(vista) {
     pestanaOfertas.setAttribute(
         "aria-selected",
         String(vista === "ofertas")
-    );\nproductoSeleccionado = null;
+    );
+productoSeleccionado = null;
 
     limpiarSeleccionVisual();
     reiniciarValidacionJugador();
