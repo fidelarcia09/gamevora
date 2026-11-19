@@ -116,7 +116,7 @@
         .selector-region-wrap { width: 100%; margin: 12px 0 0; }
         .selector-region-wrap + label.etiqueta { margin-top: 8px; }
         .selector-region-wrap .etiqueta { display:block; margin-top:0; margin-bottom:7px; }
-        .region-opciones { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:7px; width:100%; }
+        .region-opciones { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; width:100%; }
         .region-opcion {
             display:flex; align-items:center; justify-content:center; gap:5px;
             min-width:0; min-height:43px; padding:8px 5px;
@@ -135,7 +135,7 @@
         .region-opcion:focus-visible { outline:2px solid #00baff; outline-offset:2px; }
         .region-opcion:disabled { opacity:.55; cursor:not-allowed; }
         .ayuda-region { margin-top:6px; color:#8299b4; font-size:10px; line-height:1.4; }
-        @media(max-width:380px) { .region-opcion { gap:3px; padding:8px 3px; font-size:10px; } }
+        @media(max-width:380px) { .region-opcion { gap:3px; padding:8px 2px; font-size:clamp(9px,2.8vw,10px); white-space:nowrap; } }
 
         .estado {
             padding: 9px 10px;
@@ -973,7 +973,7 @@ h1{margin-bottom:3px!important}
 .descripcion{margin-bottom:8px!important}
 .etiqueta{margin:8px 0 5px!important}
 input{min-height:39px!important;padding:8px 10px!important}
-.selector-categorias{margin:8px 0!important}
+.selector-categorias{margin:13px 0!important}
 .estado{margin:7px 0!important;padding:7px 9px!important}
 .catalogo,#catalogoOfertas,#listaOfertas{gap:6px!important;margin-top:5px!important}
 .producto,#listaOfertas .boton-oferta{min-height:76px!important;padding:8px!important;gap:6px!important}
@@ -1205,7 +1205,7 @@ body{padding:0!important}
 
 
 <style id="gg-game-tab-icons-v1">
-.selector-categorias{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.selector-categorias{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin:13px 0!important}
 .pestana-categoria{white-space:nowrap!important;flex-wrap:nowrap!important;gap:5px!important;min-width:0!important;padding-left:5px!important;padding-right:5px!important;font-size:clamp(9px,2.7vw,12px)!important;line-height:1.1!important}
 .gg-tab-label{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:0;white-space:nowrap}
 .gg-tab-icon{display:inline-block;flex:0 0 14px;width:14px;height:14px;color:#fff;stroke:#fff}
@@ -1280,7 +1280,8 @@ body{padding:0!important}
                 class="pestana-categoria"
                 id="pestanaOfertas"
                 aria-selected="false"
-            ><span class="gg-tab-label"><svg class="gg-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.5 10h17v10.5h-17zM2.5 6.5h19v3.5h-19zM12 6.5v14M12 6.5H7.8a2.3 2.3 0 1 1 2.3-2.3c0 1.2 1.9 2.3 1.9 2.3Zm0 0h4.2a2.3 2.3 0 1 0-2.3-2.3c0 1.2-1.9 2.3-1.9 2.3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Ofertas Extras</span></span></button>\n</nav>
+            ><span class="gg-tab-label"><svg class="gg-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.5 10h17v10.5h-17zM2.5 6.5h19v3.5h-19zM12 6.5v14M12 6.5H7.8a2.3 2.3 0 1 1 2.3-2.3c0 1.2 1.9 2.3 1.9 2.3Zm0 0h4.2a2.3 2.3 0 1 0-2.3-2.3c0 1.2-1.9 2.3-1.9 2.3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Ofertas Extras</span></span></button>
+</nav>
 
         <div id="estadoCatalogo" class="estado" aria-live="polite">
             Conectando con el catálogo...
@@ -1295,7 +1296,8 @@ body{padding:0!important}
             
 
             <div id="catalogoOfertas" class="catalogo"></div>
-        </section>\n<button
+        </section>
+<button
             id="botonContinuar"
             class="boton continuar"
             type="button"
