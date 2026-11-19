@@ -69,8 +69,11 @@ export function resolveGvrPaymentMatch(
     if (phone !== event.senderPhone) return false;
 
     const createdAt = Date.parse(request.created_at);
-    // La solicitud no vence: el evento debe haber ocurrido después de crearla.
+    // El tiempo de conciliación lo proporciona el servidor, no el reloj del teléfono.
+    // Se exige que la solicitud ya existiera y que el evento llegue antes de su vencimiento.
+    const expiresAt = request.expires_at === null ? null : Date.parse(request.expires_at);
     if (!Number.isFinite(createdAt) || createdAt > receivedAt) return false;
+    if (expiresAt !== null && (!Number.isFinite(expiresAt) || receivedAt > expiresAt)) return false;
 
     if (event.method === "CUP") {
       const requestReference = String(request.payment_txid ?? "").trim().toUpperCase();
