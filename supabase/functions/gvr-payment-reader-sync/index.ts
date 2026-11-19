@@ -359,12 +359,7 @@ Deno.serve(async (req: Request) => {
             localDuplicate.sender_phone === event.senderPhone &&
             (localDuplicate.recipient_account ?? null) === (event.recipientAccount ?? null) &&
             (localDuplicate.transaction_reference ?? null) === (event.transactionReference ?? null) &&
-            (
-              (event.legacyTimestampAdjusted === true &&
-                localDuplicate.capture_quality === "LEGACY_UNVERIFIED" &&
-                localDuplicate.captured_at === null) ||
-              new Date(localDuplicate.received_at).getTime() === event.receivedAtMillis
-            ) &&
+            new Date(localDuplicate.received_at).getTime() === event.receivedAtMillis &&
             (localDuplicate.captured_at ? new Date(localDuplicate.captured_at).getTime() : null) === event.capturedAtMillis;
           results.push(sameLocalEvent
             ? { localEventKey: event.localEventKey, stored: true, duplicate: true, eventId: localDuplicate.id, reviewStatus: localDuplicate.review_status }
