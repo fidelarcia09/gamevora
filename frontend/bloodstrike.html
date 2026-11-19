@@ -594,11 +594,19 @@ body{padding:0!important}
 .region-opcion:disabled{opacity:.55!important;cursor:not-allowed!important}
 </style>
 
+
+<style id="gg-game-tab-icons-v1">
+.selector-categorias{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.pestana-categoria{white-space:nowrap!important;flex-wrap:nowrap!important;gap:5px!important;min-width:0!important;padding-left:5px!important;padding-right:5px!important;font-size:clamp(9px,2.7vw,12px)!important;line-height:1.1!important}
+.gg-tab-label{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:0;white-space:nowrap}
+.gg-tab-icon{display:inline-block;flex:0 0 14px;width:14px;height:14px;color:#fff;stroke:#fff}
+@media(max-width:360px){.pestana-categoria{gap:3px!important;padding-left:3px!important;padding-right:3px!important;font-size:9px!important}.gg-tab-icon{flex-basis:13px;width:13px;height:13px}}
+</style>
 </head><body><div class="contenedor"><header class="header"><a class="encabezado-pagina" href="juegos.html" aria-label="Volver atrás"><span class="encabezado-pagina-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/><path d="M9 12h11"/></svg></span><span class="encabezado-pagina-titulo">Blood Strike</span></a></header>
 <main class="card"><h1>Blood Strike</h1>
 <div class="selector-region-wrap"><div class="region-opciones" role="group" aria-label="Región de Blood Strike"><button type="button" class="region-opcion activa" data-region="global" aria-pressed="true">🌎 <span>Global</span></button><button type="button" class="region-opcion" data-region="mena" aria-pressed="false">🌍 <span>MENA</span></button></div></div>
 <label class="etiqueta" for="idjugador">ID del jugador</label><input type="text" id="idjugador" placeholder="Introduce tu ID de Blood Strike" autocomplete="off" maxlength="50"><input type="hidden" id="regionJugador" value="global">
-<div class="selector-categorias" role="tablist" aria-label="Tipo de producto"><button type="button" id="tabBC" class="pestana-categoria activa" role="tab" aria-selected="true">BC</button><button type="button" id="tabOfertas" class="pestana-categoria" role="tab" aria-selected="false">Ofertas especiales</button></div>
+<div class="selector-categorias" role="tablist" aria-label="Tipo de producto"><button type="button" id="tabBC" class="pestana-categoria activa" role="tab" aria-selected="true"><span class="gg-tab-label"><svg class="gg-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.5 8.5 7.2 3.8h9.6l3.7 4.7L12 20.2 3.5 8.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m3.8 8.5 16.4 0M7.2 3.8 9 8.5l3 11.7 3-11.7 1.8-4.7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span>BC</span></span></button><button type="button" id="tabOfertas" class="pestana-categoria" role="tab" aria-selected="false"><span class="gg-tab-label"><svg class="gg-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.5 10h17v10.5h-17zM2.5 6.5h19v3.5h-19zM12 6.5v14M12 6.5H7.8a2.3 2.3 0 1 1 2.3-2.3c0 1.2 1.9 2.3 1.9 2.3Zm0 0h4.2a2.3 2.3 0 1 0-2.3-2.3c0 1.2-1.9 2.3-1.9 2.3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Ofertas Extras</span></span></button></div>
 <div id="estadoCatalogo" class="estado" aria-live="polite">Cargando productos de Blood Strike...</div><div id="catalogo" class="catalogo"></div>
 <button id="botonContinuar" class="boton continuar" type="button" disabled>RECARGAR</button>
 </main></div>
