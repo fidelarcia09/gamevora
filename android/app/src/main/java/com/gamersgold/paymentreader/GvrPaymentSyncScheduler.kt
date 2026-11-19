@@ -26,13 +26,12 @@ internal object GvrPaymentSyncScheduler {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        // Never append notification-triggered work: APPEND_OR_REPLACE created a long
-        // serial chain where every later worker stayed BLOCKED behind an earlier retry.
-        // REPLACE keeps one active unique worker. The server deduplicates retries by
-        // device_id + local_event_key, and the local SQLite queue is never deleted.
+        // Keep retries predictable: retry every 15 seconds instead of exponential growth.
+        // Android may still defer execution due to OS scheduling or unavailable network.
+        // REPLACE avoids a serial chain; the local SQLite queue is never deleted.
         val request = OneTimeWorkRequestBuilder<GvrPaymentSyncWorker>()
             .setConstraints(constraints)
-            .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 10, TimeUnit.SECONDS)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, 15, TimeUnit.SECONDS)
             .build()
 
         return try {
