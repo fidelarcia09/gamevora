@@ -612,6 +612,60 @@ body{padding:0!important}
   .catalogo > .producto > .producto-precio{font-size:16px!important;padding:7px 10px!important}
 }
 </style>
+
+<style id="gg-seleccion-pedidos-v1">
+/* Selector de categorías y regiones: mismo diseño que Compras/Depósitos en Pedidos.
+   Solo afecta controles de selección; no modifica las tarjetas de productos. */
+.selector-categorias,
+.region-opciones{
+  gap:3px!important;
+  padding:3px!important;
+  border:1px solid #173b64!important;
+  border-radius:14px!important;
+  background:linear-gradient(145deg,#0a1b35,#071329)!important;
+  box-shadow:inset 0 1px 4px rgba(0,0,0,.22)!important;
+}
+.pestana-categoria,
+.region-opcion{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  min-width:0!important;
+  min-height:34px!important;
+  padding:7px 10px!important;
+  border:1px solid transparent!important;
+  border-radius:10px!important;
+  background:transparent!important;
+  color:#b8cbe0!important;
+  font-size:12px!important;
+  font-weight:850!important;
+  line-height:1.2!important;
+  text-align:center!important;
+  cursor:pointer!important;
+  transition:background .22s ease,color .22s ease,border-color .22s ease,box-shadow .22s ease,transform .22s ease!important;
+}
+.pestana-categoria:hover:not(:disabled),
+.region-opcion:hover:not(:disabled){
+  border-color:#35caff!important;
+  color:#fff!important;
+}
+.pestana-categoria.activa,
+.region-opcion.activa{
+  background:linear-gradient(110deg,#087cff,#00baff)!important;
+  border-color:#35caff!important;
+  color:#fff!important;
+  box-shadow:0 0 15px rgba(0,140,255,.24)!important;
+  transform:translateY(-1px)!important;
+}
+.pestana-categoria:focus-visible,
+.region-opcion:focus-visible{
+  outline:2px solid #45c8ff!important;
+  outline-offset:2px!important;
+}
+.region-opcion:disabled{opacity:.55!important;cursor:not-allowed!important}
+</style>
+
 </head>
 
 <body>
