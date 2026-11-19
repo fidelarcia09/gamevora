@@ -32,7 +32,7 @@ internal object GvrPaymentSyncScheduler {
         // device_id + local_event_key, and the local SQLite queue is never deleted.
         val request = OneTimeWorkRequestBuilder<GvrPaymentSyncWorker>()
             .setConstraints(constraints)
-            .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
+            .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 10, TimeUnit.SECONDS)
             .build()
 
         return try {
