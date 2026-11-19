@@ -1503,7 +1503,7 @@ let claveUltimaValidacion = "";
 /* CAMBIO DE CATEGORÍA */
 
 function cambiarVista(vista) {
-    if (!["diamantes", "ofertas", "nivel"].includes(vista)) {
+    if (!["diamantes", "ofertas"].includes(vista)) {
         return;
     }
 
@@ -1546,10 +1546,6 @@ function cambiarVista(vista) {
         );
     } else if (vista === "ofertas") {
         mostrarEstado("Selecciona una oferta especial.");
-    } else {
-        mostrarEstado(
-            "Los paquetes de nivel estarán disponibles próximamente."
-        );
     }
 
     actualizarBoton();
