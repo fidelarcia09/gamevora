@@ -151,9 +151,16 @@
             object-fit: cover;
             object-position: center 35%;
             transform: scale(1.025);
-            transition: transform 5.5s ease;
+            transition: none;
         }
-        .splash-slide.activo > img { transform: scale(1.09); }
+        /* El zoom comienza cuando las imágenes ya están listas y se reinicia en cada diapositiva. */
+        @keyframes splash-acercamiento {
+            from { transform: scale(1.025); }
+            to { transform: scale(1.13); }
+        }
+        .splash-juegos.imagenes-listas .splash-slide.activo > img {
+            animation: splash-acercamiento 5.5s ease-out both;
+        }
         .splash-overlay {
             position: absolute;
             inset: 0;
