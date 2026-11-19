@@ -23,7 +23,6 @@ type IncomingEvent = {
   rawDate?: string | null;
   receivedAtMillis: number;
   capturedAtMillis: number | null;
-  legacyTimestampAdjusted?: boolean;
 };
 
 function reply(body: unknown, status = 200) {
@@ -94,20 +93,9 @@ function validateEvent(value: unknown, eventIndex: number): IncomingEvent | null
     logValidationFailure("EVENT_RECEIVED_AT_INVALID", "event", "receivedAtMillis", "positive_safe_integer_valid_date", event.receivedAtMillis, eventIndex); return null;
   }
 
-  // Los registros antiguos sin timestamp de captura no tienen una hora verificable.
-  // Si el reloj anterior dejó receivedAt en el futuro, se archivan con hora del servidor
-  // y quedan LEGACY_UNVERIFIED: nunca se concilian ni acreditan automáticamente.
-  const legacyCaptureTimestamp =
-    event.capturedAtMillis === undefined ||
-    event.capturedAtMillis === null ||
-    event.capturedAtMillis === 0;
-  const receivedAtIsFuture = event.receivedAtMillis > Date.now() + 5 * 60 * 1000;
-  if (receivedAtIsFuture && !legacyCaptureTimestamp) {
-    logValidationFailure("EVENT_RECEIVED_AT_FUTURE", "event", "receivedAtMillis", "not_in_future_5min", event.receivedAtMillis, eventIndex); return null;
-  }
-  const normalizedReceivedAtMillis = receivedAtIsFuture ? Date.now() : Number(event.receivedAtMillis);
-  const legacyTimestampAdjusted = receivedAtIsFuture && legacyCaptureTimestamp;
-
+  // Los timestamps del dispositivo se conservan como metadatos de origen, pero no
+  // se usan para decidir si el servidor acepta el evento: el reloj local puede estar
+  // adelantado o atrasado. La conciliación usa la hora de recepción del servidor.
   let capturedAtMillis: number | null = null;
   if (event.capturedAtMillis !== undefined && event.capturedAtMillis !== null && event.capturedAtMillis !== 0) {
     if (typeof event.capturedAtMillis !== "number" ||
@@ -115,10 +103,6 @@ function validateEvent(value: unknown, eventIndex: number): IncomingEvent | null
         event.capturedAtMillis <= 0 ||
         !Number.isFinite(new Date(event.capturedAtMillis).getTime())) {
       logValidationFailure("EVENT_CAPTURED_AT_INVALID", "event", "capturedAtMillis", "positive_safe_integer_valid_date_or_legacy_zero", event.capturedAtMillis, eventIndex);
-      return null;
-    }
-    if (event.capturedAtMillis > Date.now() + 5 * 60 * 1000) {
-      logValidationFailure("EVENT_CAPTURED_AT_FUTURE", "event", "capturedAtMillis", "not_in_future_5min", event.capturedAtMillis, eventIndex);
       return null;
     }
     capturedAtMillis = Number(event.capturedAtMillis);
@@ -129,7 +113,7 @@ function validateEvent(value: unknown, eventIndex: number): IncomingEvent | null
       localEventKey: event.localEventKey, capturePackage: SOURCE_PACKAGE, method: "SALDO_MOVIL",
       amountMinorUnits: Number(event.amountMinorUnits), senderPhone: event.senderPhone,
       recipientAccount: null, transactionReference: null, rawDate: null,
-      receivedAtMillis: normalizedReceivedAtMillis, capturedAtMillis, legacyTimestampAdjusted,
+      receivedAtMillis: Number(event.receivedAtMillis), capturedAtMillis,
     };
   }
 
@@ -149,13 +133,14 @@ function validateEvent(value: unknown, eventIndex: number): IncomingEvent | null
     localEventKey: event.localEventKey, capturePackage: SOURCE_PACKAGE, method: "CUP",
     amountMinorUnits: Number(event.amountMinorUnits), senderPhone: event.senderPhone,
     recipientAccount: event.recipientAccount, transactionReference: event.transactionReference,
-    rawDate: event.rawDate.trim(), receivedAtMillis: normalizedReceivedAtMillis, capturedAtMillis, legacyTimestampAdjusted,
+    rawDate: event.rawDate.trim(), receivedAtMillis: Number(event.receivedAtMillis), capturedAtMillis,
   };
 }
 
 async function findRequestMatch(
   admin: ReturnType<typeof createClient<any>>,
   event: IncomingEvent,
+  serverReceivedAtMillis: number,
 ): Promise<{ status: string; requestId: string | null }> {
   const configuredAccount = Deno.env.get("GVR_CUP_RECEIVER_ACCOUNT")?.trim() ?? "";
   if (event.method === "CUP" &&
@@ -172,7 +157,7 @@ async function findRequestMatch(
     .eq("payment_currency", event.method === "CUP" ? "CUP" : "SALDO_MOVIL")
     .eq("payment_amount", amount)
     .eq("payment_sender_phone", event.senderPhone)
-    .lte("created_at", new Date(event.receivedAtMillis).toISOString())
+    .lte("created_at", new Date(serverReceivedAtMillis).toISOString())
     .limit(1000);
 
   if (event.method === "CUP") {
@@ -206,7 +191,7 @@ async function findRequestMatch(
       senderPhone: event.senderPhone,
       recipientAccount: event.recipientAccount,
       transactionReference: event.transactionReference,
-      receivedAt: event.receivedAtMillis,
+      receivedAt: serverReceivedAtMillis,
     },
     requests,
     linkedRequestIds,
@@ -300,6 +285,7 @@ Deno.serve(async (req: Request) => {
   const results: Array<Record<string, unknown>> = [];
   for (const event of events as IncomingEvent[]) {
     const receivedAt = new Date(event.receivedAtMillis);
+    const serverReceivedAtMillis = Date.now();
     if (!Number.isFinite(receivedAt.getTime())) {
       results.push({ localEventKey: event.localEventKey, stored: false, error: "INVALID_RECEIVED_AT" });
       continue;
@@ -319,7 +305,7 @@ Deno.serve(async (req: Request) => {
       match = { status: "NO_MATCH", requestId: null };
     } else {
       try {
-        match = await findRequestMatch(admin, event);
+        match = await findRequestMatch(admin, event, serverReceivedAtMillis);
       } catch {
         results.push({ localEventKey: event.localEventKey, stored: false, error: "MATCH_LOOKUP_FAILED" });
         continue;
